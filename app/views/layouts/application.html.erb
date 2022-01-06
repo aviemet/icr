@@ -8,11 +8,20 @@
 
     <%= stylesheet_link_tag "tailwind", "inter-font" %>
     <%= stylesheet_link_tag 'application' %>
-    
-    <%= javascript_importmap_tags 'application' %>
+
+    <%= javascript_pack_tag 'application' %>
+    <!--
+      If using a TypeScript entrypoint file:
+        vite_typescript_tag 'application'
+
+      If using a .jsx or .tsx entrypoint, add the extension:
+        vite_javascript_tag 'application.jsx'
+
+      Visit the guide for more information: https://vite-ruby.netlify.app/guide/rails
+    -->
   </head>
 
   <body>
-		<div id="app"></div>
+    <div id="app"></div>
   </body>
 </html>

@@ -1,0 +1,29 @@
+{
+  "name": "icr",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/aviemet/icr.git",
+  "author": "Avram Walden <aviemet@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "NODE_ENV=development foreman start -f Procfile.dev-server"
+  },
+  "dependencies": {
+    "@babel/preset-react": "^7.16.7",
+    "@inertiajs/inertia": "^0.10.1",
+    "@inertiajs/inertia-react": "^0.7.1",
+    "@inertiajs/progress": "^0.2.6",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
+    "prop-types": "^15.8.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.7",
+    "@rails/webpacker": "^5.4.3",
+    "webpack-dev-server": "^3"
+  }
+}

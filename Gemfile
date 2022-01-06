@@ -7,11 +7,11 @@ gem "rails", "~> 7.0.0"
 gem "sprockets-rails"
 gem "pg", "~> 1.1"
 gem "puma", "~> 5.0"
-gem "importmap-rails"
 
 gem "tailwindcss-rails"
 gem "jbuilder"
 gem "inertia_rails", "~> 1.11"
+gem "webpacker", "~> 5.4"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"

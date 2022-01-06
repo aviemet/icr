@@ -5,6 +5,8 @@ import { InertiaProgress } from '@inertiajs/progress'
 
 InertiaProgress.init()
 
+console.log('hello')
+
 createInertiaApp({
   resolve: name => require(`./Pages/${name}`),
   setup({ el, App, props }) {
