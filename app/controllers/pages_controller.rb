@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
 	def home
-		render inertia: 'Page/Home',
+		render inertia: 'Home',
 			props: {
 				key: 'value'
 			}

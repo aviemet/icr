@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
-    "@rails/webpacker": "^5.4.3",
+    "@rails/webpacker": "5.4.3",
     "webpack-dev-server": "^3"
   }
 }
