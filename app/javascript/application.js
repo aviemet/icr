@@ -1,1 +1,13 @@
-// Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
+import React from 'react'
+import { render } from 'react-dom'
+import { createInertiaApp } from '@inertiajs/inertia-react'
+import { InertiaProgress } from '@inertiajs/progress'
+
+InertiaProgress.init()
+
+createInertiaApp({
+  resolve: name => require(`./Pages/${name}`),
+  setup({ el, App, props }) {
+    render(<App {...props} />, el)
+  },
+})
