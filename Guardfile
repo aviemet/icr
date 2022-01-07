@@ -30,22 +30,20 @@ guard 'livereload' do
 
   # file types LiveReload may optimize refresh for
   compiled_exts = extensions.values.uniq
-  # watch(%r{public/.+\.(#{compiled_exts * '|'})})
+  watch(%r{public/.+\.(#{compiled_exts * '|'})})
 
-  watch(%r{app/assets/builds/.+\.css})
-
-  # extensions.each do |ext, type|
-  #   watch(%r{
-  #         (?:app|vendor)
-  #         (?:/assets/\w+/(?<path>[^.]+) # path+base without extension
-  #          (?<ext>\.#{ext})) # matching extension (must be first encountered)
-  #         (?:\.\w+|$) # other extensions
-  #         }x) do |m|
-  #     path = m[1]
-  #     puts path
-  #     "assets/#{path}.#{type}"
-  #   end
-  # end
+  extensions.each do |ext, type|
+    watch(%r{
+          (?:app|vendor)
+          (?:/assets/\w+/(?<path>[^.]+) # path+base without extension
+           (?<ext>\.#{ext})) # matching extension (must be first encountered)
+          (?:\.\w+|$) # other extensions
+          }x) do |m|
+      path = m[1]
+      puts path
+      "assets/#{path}.#{type}"
+    end
+  end
 
   # file needing a full reload of the page anyway
   watch(%r{app/views/.+\.(#{rails_view_exts * '|'})$})

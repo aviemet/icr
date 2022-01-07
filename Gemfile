@@ -11,7 +11,6 @@ gem "puma", "~> 5.0"
 gem "jbuilder"
 gem "inertia_rails", "~> 1.11"
 gem "webpacker", "6.0.0.rc.6"
-gem "tailwindcss-rails", "~> 2.0"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
@@ -56,4 +55,3 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
-
