@@ -1,4 +1,4 @@
-class PagesController < ApplicationController
+class PagesController < InertiaController
 	def home
 		render inertia: 'Home',
 			props: {

@@ -1,10 +1,14 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
+  mode: 'jit',
   content: [
     './app/helpers/**/*.rb',
     './app/javascript/**/*.js',
-    './app/views/**/*'
+    './app/javascript/**/*.jsx',
+    './app/javascript/**/*.ts',
+    './app/javascript/**/*.tsx',
+    './app/views/**/*.html.erb'
   ],
   theme: {
     extend: {
@@ -16,6 +20,6 @@ module.exports = {
   plugins: [
     require('@tailwindcss/forms'),
     require('@tailwindcss/aspect-ratio'),
-    require('@tailwindcss/typography'),
+    // require('@tailwindcss/typography'),
   ]
 }

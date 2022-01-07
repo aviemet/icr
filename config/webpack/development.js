@@ -1,5 +1,13 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'development'
 
-const environment = require('./environment')
+const webpackConfig = require('./base')
 
-module.exports = environment.toWebpackConfig()
+// const chokidar = require('chokidar')
+// webpackConfig.devServer.before = (app, server) => {
+// 	chokidar.watch([
+// 		'app/views/**/*.html.erb',
+// 		'app/assets/stylesheets/**/*/css'
+// 	]).on('change', () => server.sockWrite(server.sockets, 'content-changed'))
+// }
+
+module.exports = webpackConfig

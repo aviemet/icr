@@ -8,10 +8,10 @@ gem "sprockets-rails"
 gem "pg", "~> 1.1"
 gem "puma", "~> 5.0"
 
-gem "tailwindcss-rails"
 gem "jbuilder"
 gem "inertia_rails", "~> 1.11"
-gem "webpacker", "~> 5.4"
+gem "webpacker", "6.0.0.rc.6"
+gem "tailwindcss-rails", "~> 2.0"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
@@ -40,11 +40,14 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 
+  gem "rack-livereload", "~> 0.3.17"
+  gem "guard-livereload", "~> 2.5", require: false
+
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  # gem "spring"
+  gem "spring"
 end
 
 group :test do
