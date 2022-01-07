@@ -129,6 +129,7 @@ GEM
     http_parser.rb (0.8.0)
     i18n (1.8.11)
       concurrent-ruby (~> 1.0)
+    ice_cube (0.16.4)
     inertia_rails (1.11.1)
       rails (>= 5)
     io-console (0.5.11)
@@ -288,6 +289,7 @@ DEPENDENCIES
   devise (~> 4.8)
   factory_bot (~> 6.2)
   guard-livereload (~> 2.5)
+  ice_cube (~> 0.16.4)
   inertia_rails (~> 1.11)
   jbuilder
   pg (~> 1.1)
