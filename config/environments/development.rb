@@ -72,4 +72,7 @@ Rails.application.configure do
 
   # Allow Guard to live reload page on changes
   config.middleware.insert_before Rack::Runtime, Rack::LiveReload
+
+  # Disable digests until LiveReload can handle them properly
+  config.assets.digest = false
 end
