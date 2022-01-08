@@ -18,4 +18,3 @@ createInertiaApp({
     render(<App {...props} />, el)
   },
 })
-

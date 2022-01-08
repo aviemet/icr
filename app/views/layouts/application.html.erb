@@ -6,8 +6,10 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-
+    <%# <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <!-- start -->
+    <%= stylesheet_pack_tag 'application' %>
+    <!-- end -->
     <%= javascript_pack_tag 'application', defer: true %>
   </head>
 

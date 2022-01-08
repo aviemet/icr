@@ -3,14 +3,21 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.0.3"
 
+# Server
 gem "rails", "~> 7.0.0"
-gem "sprockets-rails"
 gem "pg", "~> 1.1"
 gem "puma", "~> 5.0"
 
+# Assets
 gem "jbuilder"
 gem "inertia_rails", "~> 1.11"
 gem "webpacker", "6.0.0.rc.6"
+gem "sprockets-rails", "~> 3.4"
+
+# Helpers
+gem "factory_bot", "~> 6.2"
+gem "devise", "~> 4.8"
+gem "ice_cube", "~> 0.16.4"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
@@ -55,9 +62,3 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
-
-gem "factory_bot", "~> 6.2"
-
-gem "devise", "~> 4.8"
-
-gem "ice_cube", "~> 0.16.4"
