@@ -10,10 +10,98 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_07_033824) do
+ActiveRecord::Schema.define(version: 2022_01_07_183230) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "addresses", force: :cascade do |t|
+    t.string "title"
+    t.string "address"
+    t.string "address_2"
+    t.string "city"
+    t.string "region"
+    t.string "country"
+    t.string "postal"
+    t.text "notes"
+    t.bigint "contact_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["contact_id"], name: "index_addresses_on_contact_id"
+  end
+
+  create_table "clients", force: :cascade do |t|
+    t.string "f_name", null: false
+    t.string "l_name", null: false
+    t.string "m_name"
+    t.string "slug", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["slug"], name: "index_clients_on_slug", unique: true
+  end
+
+  create_table "contacts", force: :cascade do |t|
+    t.string "contactable_type", null: false
+    t.bigint "contactable_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "primary_address_id"
+    t.bigint "primary_phone_id"
+    t.bigint "primary_email_id"
+    t.index ["contactable_type", "contactable_id"], name: "index_contacts_on_contactable"
+    t.index ["primary_address_id"], name: "index_contacts_on_primary_address_id"
+    t.index ["primary_email_id"], name: "index_contacts_on_primary_email_id"
+    t.index ["primary_phone_id"], name: "index_contacts_on_primary_phone_id"
+  end
+
+  create_table "emails", force: :cascade do |t|
+    t.string "title"
+    t.string "email"
+    t.text "notes"
+    t.bigint "contact_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["contact_id"], name: "index_emails_on_contact_id"
+  end
+
+  create_table "phones", force: :cascade do |t|
+    t.string "title"
+    t.string "number"
+    t.string "extension"
+    t.text "notes"
+    t.bigint "contact_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["contact_id"], name: "index_phones_on_contact_id"
+  end
+
+  create_table "shifts", force: :cascade do |t|
+    t.bigint "staff_id", null: false
+    t.datetime "starts_at", precision: 6
+    t.datetime "ends_at", precision: 6
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["staff_id"], name: "index_shifts_on_staff_id"
+  end
+
+  create_table "shifts_clients", force: :cascade do |t|
+    t.bigint "shift_id", null: false
+    t.bigint "client_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["client_id"], name: "index_shifts_clients_on_client_id"
+    t.index ["shift_id"], name: "index_shifts_clients_on_shift_id"
+  end
+
+  create_table "staffs", force: :cascade do |t|
+    t.string "f_name", null: false
+    t.string "l_name", null: false
+    t.string "m_name"
+    t.string "slug", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["slug"], name: "index_staffs_on_slug", unique: true
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -35,10 +123,20 @@ ActiveRecord::Schema.define(version: 2022_01_07_033824) do
     t.datetime "locked_at", precision: 6
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active", default: true
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  add_foreign_key "addresses", "contacts"
+  add_foreign_key "contacts", "addresses", column: "primary_address_id"
+  add_foreign_key "contacts", "emails", column: "primary_email_id"
+  add_foreign_key "contacts", "phones", column: "primary_phone_id"
+  add_foreign_key "emails", "contacts"
+  add_foreign_key "phones", "contacts"
+  add_foreign_key "shifts", "staffs"
+  add_foreign_key "shifts_clients", "clients"
+  add_foreign_key "shifts_clients", "shifts"
 end
