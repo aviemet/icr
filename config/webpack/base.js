@@ -1,12 +1,18 @@
 const { webpackConfig } = require('@rails/webpacker')
+const { merge } = require('lodash')
 
-webpackConfig.module.rules.push(
-	{
-		test: /\.less$/,
-		use: [{
-			loader: 'less-loader'
+module.exports = merge(webpackConfig, {
+	module: {
+		rules: [{
+			test: /\.less$/,
+			use: [{
+				loader: 'less-loader'
+			}]
 		}]
+	},
+	devServer: {
+		client: {
+			progress: false
+		}
 	}
-)
-
-module.exports = webpackConfig
+})
