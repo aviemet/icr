@@ -18,6 +18,22 @@ const cool: ColorScheme = {
 		neutral: colors.coolGray,
 	},
 }
+export const bee: ColorScheme = {
+	id: 'bee',
+	type: 'light',
+	colors: {
+		bg: {
+			base: colors.warmGray['100'],
+			fill: colors.warmGray['100'],
+		},
+		text: {
+			foreground: colors.warmGray['900'],
+			muted: colors.warmGray['700'],
+		},
+		primary: colors.amber,
+		neutral: colors.warmGray,
+	},
+}
 
 // or custom default color scheme
 const light: ColorScheme = {
@@ -42,7 +58,8 @@ const theme = extendTheme({
 	cursor: 'pointer',
 	colorSchemes: {
 		light,
-		cool
+		cool,
+		bee
 	},
 })
 

@@ -4,7 +4,6 @@ import { createInertiaApp } from '@inertiajs/inertia-react'
 import { InertiaProgress } from '@inertiajs/progress'
 import { LoginLayout, AppLayout } from '../layouts'
 import Providers from '../layouts/Providers'
-import theme from '../layouts/theme'
 
 InertiaProgress.init()
 
@@ -19,7 +18,7 @@ createInertiaApp({
 	setup({ el, App, props }) {
 		console.log({ props })
 		render(
-			<Providers theme={ theme }><App { ...props } /></Providers>,
+			<Providers><App { ...props } /></Providers>,
 			el
 		)
 	},

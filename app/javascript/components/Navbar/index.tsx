@@ -12,6 +12,7 @@ interface NavbarProps {
 const Navbar = ({ children, navbar = false, color, className, id }: NavbarProps) => {
 	return (
 		<>
+			{ /* purgecss: bg-primary-400 */}
 			<nav id={ id } className={ classnames('flex', 'flex-wrap', 'items-center', 'justify-between', 'py-2.5', 'px-3', 'mb-3', { 'rounded-lg': !navbar }, `bg-${color || 'primary-400'}`, className) }>
 				{children}
 			</nav>

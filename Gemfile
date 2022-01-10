@@ -14,6 +14,7 @@ gem "inertia_rails", "~> 1.11"
 gem "webpacker", "6.0.0.rc.6"
 gem "sprockets-rails", "~> 3.4"
 gem "cssbundling-rails", "~> 1.0"
+gem "tailwindcss-rails", "~> 2.0"
 
 # Helpers
 gem "factory_bot", "~> 6.2"
@@ -41,6 +42,10 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   gem "better_errors", "~> 2.9"
+  gem "solargraph", "~> 0.44.2"
+  gem "rubocop-rails", "~> 2.13"
+  gem "rubocop-rspec", "~> 2.7"
+  gem "rubocop-performance", "~> 1.13"
 end
 
 group :development do
@@ -63,5 +68,3 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
-
-gem "tailwindcss-rails", "~> 2.0"
