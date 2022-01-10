@@ -13,6 +13,7 @@ gem "jbuilder"
 gem "inertia_rails", "~> 1.11"
 gem "webpacker", "6.0.0.rc.6"
 gem "sprockets-rails", "~> 3.4"
+gem "cssbundling-rails", "~> 1.0"
 
 # Helpers
 gem "factory_bot", "~> 6.2"
@@ -62,3 +63,5 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+gem "tailwindcss-rails", "~> 2.0"

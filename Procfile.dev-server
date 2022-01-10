@@ -1,3 +1,4 @@
 webpack: bin/webpack-dev-server
+css: bin/rails tailwindcss:watch
 rails: rails s -b 0.0.0.0 -p 3000
 guard: bundle exec guard -g livereload
