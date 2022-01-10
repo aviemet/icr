@@ -6,13 +6,15 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_pack_tag 'application' %>
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= javascript_pack_tag 'application', defer: true %>
   </head>
 
   <body>
+  <!-- 
     <div class="notice"><%= notice %></div>
-    <div class="alert"><%= alert %></div>
+    <div class="alert"><%= alert %></div>-->
+
     <%= yield %>
   </body>
 </html>

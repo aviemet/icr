@@ -1,6 +1,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
+	mode: 'jit',
 	content: [
 		'./app/helpers/**/*.rb',
 		'./app/javascript/**/*.js',
@@ -9,6 +10,7 @@ module.exports = {
 		'./app/javascript/**/*.tsx',
 		'./app/views/**/*'
 	],
+	darkMode: 'class',
 	theme: {
 		extend: {
 			fontFamily: {
@@ -20,5 +22,6 @@ module.exports = {
 		require('@tailwindcss/forms'),
 		require('@tailwindcss/aspect-ratio'),
 		require('@tailwindcss/typography'),
+		require('@vechaiui/core'),
 	]
 }
