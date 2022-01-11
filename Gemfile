@@ -7,14 +7,13 @@ ruby "3.0.3"
 gem "rails", "~> 7.0.0"
 gem "pg", "~> 1.1"
 gem "puma", "~> 5.0"
+gem "webpacker", "~> 5.4"
 
 # Assets
 gem "jbuilder"
 gem "inertia_rails", "~> 1.11"
-gem "webpacker", "6.0.0.rc.6"
 gem "sprockets-rails", "~> 3.4"
 gem "cssbundling-rails", "~> 1.0"
-gem "tailwindcss-rails", "~> 2.0"
 
 # Helpers
 gem "factory_bot", "~> 6.2"

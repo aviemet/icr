@@ -1,0 +1,17 @@
+.column {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    @apply mb-2;
+  }
+}
+
+.cell {
+  @apply w-full;
+}

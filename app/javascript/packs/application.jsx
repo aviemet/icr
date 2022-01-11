@@ -5,6 +5,8 @@ import { InertiaProgress } from '@inertiajs/progress'
 import { LoginLayout, AppLayout } from '../layouts'
 import Providers from '../layouts/Providers'
 
+import './tailwind.css'
+
 InertiaProgress.init()
 
 createInertiaApp({

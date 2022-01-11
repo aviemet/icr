@@ -1,20 +1,19 @@
-const { webpackConfig } = require('@rails/webpacker')
+const { environment } = require('@rails/webpacker')
 const { merge } = require('lodash')
 
-module.exports = merge(webpackConfig, {
+// module.exports = environment
+
+module.exports = merge(environment, {
 	module: {
 		rules: [
 			{
 				test: /\.css$/,
 				type: 'asset/resource',
 				exclude: /node_modules/,
-				use: ['style-loader', 'postcss-loader'],
-				generator: {
-					filename: '[name][ext][query]',
-				},
+				use: ['style-loader', 'postcss-loader']
 			},
 			{
-				test: /\.jsx?$/,
+				test: /\.(tsx|jsx)?$/,
 				use: ['babel-loader', 'astroturf/loader'],
 			}
 		]

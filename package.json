@@ -7,8 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=development foreman start -f Procfile.dev-server",
-    "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css"
+    "start": "NODE_ENV=development foreman start -f Procfile.dev-server"
   },
   "dependencies": {
     "@babel/eslint-parser": "^7.16.5",
@@ -16,6 +15,7 @@
     "@inertiajs/inertia": "^0.10.1",
     "@inertiajs/inertia-react": "^0.7.1",
     "@inertiajs/progress": "^0.2.6",
+    "@radix-ui/react-icons": "^1.0.3",
     "@tailwindcss/aspect-ratio": "^0.4.0",
     "@tailwindcss/forms": "^0.4.0",
     "@tailwindcss/typography": "^0.5.0",
@@ -28,19 +28,21 @@
     "classnames": "^2.3.1",
     "lodash": "^4.17.21",
     "postcss": "^8.4.5",
+    "prop-types": "^15.8.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "tailwindcss": "^3.0.12",
-    "webpack": "^5.65.0",
-    "webpack-cli": "^4.9.1"
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
     "@babel/preset-typescript": "^7.16.7",
-    "@rails/webpacker": "6.0.0-rc.6",
+    "@rails/webpacker": "5.4.3",
     "@typescript-eslint/eslint-plugin": "^5.9.0",
     "@typescript-eslint/parser": "^5.9.0",
     "@webpack-cli/serve": "^1.6.0",
+    "astroturf": "^1.0.0",
     "css-loader": "^6.5.1",
     "eslint": "^8.6.0",
     "eslint-config-airbnb": "^19.0.4",
@@ -48,19 +50,15 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
-    "less": "^4.1.2",
-    "less-loader": "^10.2.0",
+    "mini-css-extract-plugin": "^2.4.6",
+    "postcss-cli": "^9.1.0",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-import": "^14.0.2",
+    "postcss-loader": "^6.2.1",
+    "postcss-nested": "^5.0.6",
+    "postcss-preset-env": "^7.2.0",
     "style-loader": "^3.3.1",
     "typescript": "^4.5.4",
-    "webpack-dev-server": "^4.7.2"
-  },
-  "babel": {
-    "presets": [
-      "./node_modules/@rails/webpacker/package/babel/preset.js"
-    ]
-  },
-  "browserslist": [
-    "defaults"
-  ],
-  "lint": "tslint --project tslint.json"
+    "webpack-dev-server": "^3"
+  }
 }
