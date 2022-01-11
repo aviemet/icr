@@ -1,1 +1,33 @@
-@import './tailwind/base.css';
+@import './tailwind/tailwind.css';
+@import './tailwind/base_styles.css';
+@import './tailwind/layout.css';
+
+:root {
+  --font-size-break: 6vw;
+
+  --topbar-height: 50px;
+
+  --sidebar-width-closed: 50px;
+  --sidebar-width-open: 200px;
+  --sidebar-transition-time: 100ms;
+  --sidebar-icon-left-padding: 8px;
+  --sidebar-link-height: 45px;
+  --sidebar-link-border-left: 3px;
+  --sidebar-link-border-bottom: 1px;
+  --sidebar-link-padding-left: 15px;
+
+  --label-width: 12rem;
+}
+
+@layer utilities {
+  .visually-hidden {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+  }
+}

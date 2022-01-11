@@ -1,6 +1,6 @@
 @layer base {
   *::selection {
-    @apply bg-brand-light;
+    /* @apply bg-neutral; */
   }
 
   body {
@@ -28,29 +28,28 @@
   }
 
   h6 {
-    @apply text-base;
   }
 
   a {
-    @apply text-link-dark dark:text-link-light;
+    /* @apply text-primary; */
 
     &:hover {
-      @apply text-link-dark-hover dark:text-link-light-hover;
+      /* @apply text-neutral; */
     }
 
     &:active {
-      @apply text-link-dark-active dark:text-link-light-active;
+      /* @apply text-primary; */
     }
 
     &:visited {
-      @apply text-link-dark-visited dark:text-link-light-visited;
+      /* @apply text-muted; */
     }
   }
 
   section {
-    @apply bg-white dark:bg-gray-600 shadow;
+    @apply bg-white shadow;
     @apply py-4 px-3;
-    @apply border-t-2 border-brand-light dark:border-brand-dark;
+    @apply border-t-2;
   }
 
   /**
@@ -62,16 +61,16 @@
     @apply border-separate;
     border-spacing: 0;
 
-    button,
+    /* button,
     .button {
       @apply py-1 px-2;
-    }
+    } */
   }
 
   thead {
     @apply shadow;
     @apply sticky top-0;
-    @apply bg-white dark:bg-gray-800;
+    @apply bg-white;
   }
 
   th {
@@ -87,7 +86,7 @@
       @apply pr-3;
 
       a {
-        @apply text-text-dark;
+        /* @apply text-foreground; */
       }
 
       /* Triangle Icons */
@@ -124,7 +123,7 @@
 
   tr {
     &:nth-child(even) {
-      @apply bg-coolGray-100 dark:bg-gray-700;
+      /* @apply bg-coolGray-100 dark:bg-gray-700; */
     }
   }
 
@@ -185,7 +184,7 @@
       }
 
       &:hover {
-        @apply bg-brand-light;
+        /* @apply bg-brand-light; */
       }
 
       &:first-of-type {
@@ -195,111 +194,6 @@
       &:last-of-type {
         @apply rounded-r border-r;
       }
-    }
-  }
-
-  /**
-  * Inputs
-  **/
-  input,
-  textarea {
-    @apply w-full;
-  }
-
-  input[type="text"],
-  input[type="email"],
-  input[type="url"],
-  input[type="password"],
-  input[type="number"],
-  input[type="date"],
-  input[type="datetime-local"],
-  input[type="month"],
-  input[type="search"],
-  input[type="tel"],
-  input[type="time"],
-  input[type="week"],
-  input[multiple],
-  textarea,
-  select {
-    @apply dark:bg-gray-500 border-gray-300;
-
-    &:focus {
-      @apply ring-0 border-brand;
-    }
-  }
-
-  [type="checkbox"] {
-    @apply cursor-pointer;
-    @apply text-brand-dark;
-
-    &:focus {
-      @apply ring-0;
-      @apply outline-none;
-    }
-
-    & + label {
-      @apply pl-2;
-    }
-  }
-
-  select {
-    @apply cursor-pointer;
-  }
-
-  button,
-  .button,
-  input[type="submit"] {
-    @apply font-bold leading-6 cursor-pointer;
-    @apply border rounded;
-    @apply py-2 px-3;
-
-    @apply transition;
-
-    @apply bg-brand text-text-light border-brand-dark;
-
-    &:visited {
-      @apply text-text-light;
-    }
-
-    &:hover {
-      @apply bg-brand-hover text-text-light;
-    }
-
-    &.success {
-      @apply bg-success text-white border-success-dark;
-
-      &:hover {
-        @apply bg-success-hover;
-      }
-    }
-
-    &.info {
-      @apply bg-info text-white border-info-dark;
-
-      &:hover {
-        @apply bg-info-hover;
-      }
-    }
-
-    &.warning {
-      @apply bg-warning text-white border-warning-dark;
-
-      &:hover {
-        @apply bg-warning-hover;
-      }
-    }
-
-    &.danger {
-      @apply bg-error text-white border-error-dark;
-
-      &:hover {
-        @apply bg-error-hover;
-      }
-    }
-
-    i.material-icons {
-      @apply align-bottom;
-      font-size: 21px;
     }
   }
 }

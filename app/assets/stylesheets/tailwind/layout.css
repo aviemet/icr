@@ -1,6 +1,6 @@
 html,
 body,
-#wrapper {
+#app {
   min-height: 100vh;
   width: 100%;
 }
@@ -9,64 +9,13 @@ body {
   @apply overflow-hidden;
 }
 
-#grid-layout {
-  @apply bg-gray-100 dark:bg-gray-700;
-  @apply grid gap-0;
-  @apply h-screen;
-  transition: var(--sidebar-transition-time);
-
-  /* Mobile Grid Definition */
-  grid-template-columns: 1fr;
-  grid-template-areas:
-    "topbar"
-    "content"
-    "footer";
-
-  #topbar {
-    grid-area: topbar;
-  }
-  #content {
-    grid-area: content;
-  }
-  #footer {
-    grid-area: footer;
-  }
-
-  /* Desktop Grid Definition */
-  @screen sm {
-    grid-template-columns: var(--sidebar-width-open) 1fr;
-    grid-template-rows: 53px 1fr 35px;
-    grid-template-areas:
-      "sidebar topbar"
-      "sidebar content"
-      "sidebar footer";
-
-    &.side-bar-closed {
-      grid-template-columns: var(--sidebar-width-closed) 1fr;
-    }
-
-    #sidebar {
-      grid-area: sidebar;
-    }
-    #topbar {
-      grid-area: topbar;
-    }
-    #content {
-      grid-area: content;
-    }
-    #footer {
-      grid-area: footer;
-    }
-  }
-}
-
 #topbar {
   @apply bg-white dark:bg-gray-600 shadow;
   @apply px-2 py-1;
   margin-bottom: 1px;
 
   h2 {
-    @apply text-text-dark;
+    /* @apply text-text-dark; */
   }
 }
 
@@ -86,7 +35,7 @@ body {
           span {
             @apply inline-block absolute left-0;
             @apply bg-white shadow;
-            @apply border-b border-brand-light;
+            @apply border-b border-primary-400;
             width: calc(
               var(--sidebar-width-open) - var(--sidebar-link-border-left)
             );
@@ -140,7 +89,7 @@ body {
 
   .link-hover:hover,
   li:hover {
-    @apply border-l-2 border-brand;
+    @apply border-l-2 border-primary-400;
 
     i.material-icons {
       @apply text-gray-600 dark:text-white;
@@ -196,13 +145,13 @@ body {
           }
 
           & > li:hover {
-            @apply bg-brand-light;
+            @apply bg-primary-400;
           }
         }
       }
 
       & > ul {
-        @apply block border-brand-light border-t-2;
+        @apply block border-primary-400 border-t-2;
         padding-left: 3.7rem;
 
         /* On Desktop hide submenus until hover state */
