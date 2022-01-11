@@ -1,8 +1,7 @@
-class PagesController < InertiaController
-	def home
-		render inertia: 'Home',
-			props: {
-				key: 'value'
-			}
+class PagesController < ApplicationController
+	def index
+		render inertia: 'Home', props: {
+			name: 'World',
+		}
 	end
 end

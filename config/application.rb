@@ -18,8 +18,6 @@ module Icr
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
-    
-    config.app_generators.stylesheet_engine :less
 
     config.generators do |generate|
       generate.helper false

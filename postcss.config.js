@@ -3,7 +3,7 @@ module.exports = {
 		require('postcss-import'),
 		require('postcss-flexbugs-fixes'),
 		require('tailwindcss/nesting'),
-		require('tailwindcss')('./app/javascript/css/application.js'),
+		require('tailwindcss'),
 		require('autoprefixer'),
 		require('postcss-preset-env')({
 			features: { 'nesting-rules': false },

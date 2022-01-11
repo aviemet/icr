@@ -1,9 +1,0 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  contactable: one
-  contactable_type: Contactable
-
-two:
-  contactable: two
-  contactable_type: Contactable

@@ -2,7 +2,8 @@
 # More info at https://github.com/guard/guard#readme
 
 ## Uncomment and set this to only include directories you want to watch
-# directories %w(app/assets/builds app/views lib config).select{|d| Dir.exist?(d) ? d : UI.warning("Directory #{d} does not exist")}
+# directories %w(app lib config test spec features) \
+#  .select{|d| Dir.exist?(d) ? d : UI.warning("Directory #{d} does not exist")}
 
 ## Note: if you are using the `directories` clause above and you are not
 ## watching the project directory ('.'), then you will want to move
@@ -17,16 +18,16 @@
 guard 'livereload' do
   extensions = {
     css: :css,
-    scss: :css,
-    sass: :css,
+    js: :js,
     html: :html,
     png: :png,
     gif: :gif,
     jpg: :jpg,
     jpeg: :jpeg,
+    # less: :less, # uncomment if you want LESS stylesheets done in browser
   }
 
-  rails_view_exts = %w(erb)
+  rails_view_exts = %w(erb haml slim)
 
   # file types LiveReload may optimize refresh for
   compiled_exts = extensions.values.uniq
@@ -40,8 +41,7 @@ guard 'livereload' do
           (?:\.\w+|$) # other extensions
           }x) do |m|
       path = m[1]
-      puts path
-      "assets/#{path}.#{type}"
+      "/assets/#{path}.#{type}"
     end
   end
 

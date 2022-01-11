@@ -83,4 +83,4 @@ production:
   <<: *default
   database: icr_production
   username: icr
-  password: <%= ENV["ICR_DATABASE_PASSWORD"] %>
+  password: <%= ENV["icr_DATABASE_PASSWORD"] %>

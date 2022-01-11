@@ -1,22 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Icr</title>
+    <title>ICR</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <!-- start -->
-    <%= stylesheet_pack_tag 'tailwind', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <!-- end -->
+    <%= stylesheet_link_tag "application", media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', defer: true %>
   </head>
 
   <body>
-  <!-- 
-    <div class="notice"><%= notice %></div>
-    <div class="alert"><%= alert %></div>-->
-
     <%= yield %>
   </body>
 </html>
