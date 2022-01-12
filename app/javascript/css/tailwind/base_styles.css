@@ -156,10 +156,10 @@
 
     tr {
       &.checked {
-        @apply bg-warmGray-100;
+        @apply bg-gray-100;
 
         &:nth-child(even) {
-          @apply bg-warmGray-200;
+          @apply bg-gray-200;
         }
       }
     }

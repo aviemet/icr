@@ -1,14 +1,14 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
-	mode: 'jit',
 	content: [
 		'./app/helpers/**/*.rb',
 		'./app/javascript/**/*.js',
 		'./app/javascript/**/*.jsx',
 		'./app/javascript/**/*.ts',
 		'./app/javascript/**/*.tsx',
-		'./app/views/**/*.html.erb'
+		'./app/views/**/*.html.erb',
+		'./public/packs/js/*.js'
 	],
 	darkMode: 'class',
 	theme: {

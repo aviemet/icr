@@ -10,9 +10,8 @@ gem "pg", "~> 1.1"
 gem "puma", "~> 5.0"
 
 # Assets
-gem "cssbundling-rails"
 gem "jbuilder"
-gem "webpacker", "~> 5.4"
+gem "webpacker", git: 'https://github.com/rails/webpacker.git'
 gem "inertia_rails", "~> 1.11"
 
 # Helpers

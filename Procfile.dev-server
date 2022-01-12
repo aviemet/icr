@@ -1,5 +1,4 @@
-webpack: bin/webpack-dev-server
+webpack-dev-server: bin/webpacker-dev-server
+webpack-watch: ./bin/webpack --watch --progress --color
 web: bin/rails server -p 3000
-css: yarn build:css --watch
 guard: bundle exec guard -g livereload
-
