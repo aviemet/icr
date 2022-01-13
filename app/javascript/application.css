@@ -1,0 +1,22 @@
+@import './css/tailwind/tailwind.css';
+@import './css/tailwind/base_styles.css';
+@import './css/tailwind/layout.css';
+
+@import "@material-tailwind/react/tailwind.css";
+
+:root {
+  --font-size-break: 6vw;
+}
+
+@layer utilities {
+  .visually-hidden {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+  }
+}

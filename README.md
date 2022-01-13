@@ -2,9 +2,9 @@
 
 ## Conventions
 
-For dynamic tailwind class names, add a comment starting with `purgecss:` containing a list of all the possible full classnames
+Use Radix primitives for components not present in Material UI Tailwind
 
-[https://www.viget.com/articles/a-better-approach-for-using-purgecss-with-tailwind/](https://www.viget.com/articles/a-better-approach-for-using-purgecss-with-tailwind/)
+[https://www.radix-ui.com/docs/primitives/overview/introduction](https://www.radix-ui.com/docs/primitives/overview/introduction)
 
 ## Debugging
 

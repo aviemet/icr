@@ -1,6 +1,7 @@
 import React from 'react'
 import { InertiaLink } from '@inertiajs/inertia-react'
-import { Button } from '@vechaiui/react'
+
+const Button: React.FC = ({ children }) => <button>{ children }</button>
 
 interface LinkProps {
 	children?: any,

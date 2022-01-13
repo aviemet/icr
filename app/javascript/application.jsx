@@ -1,11 +1,10 @@
-import { App, createInertiaApp } from '@inertiajs/inertia-react'
+import { createInertiaApp } from '@inertiajs/inertia-react'
 import React from 'react'
 import { render } from 'react-dom'
 import axios from 'axios'
 import { InertiaProgress } from '@inertiajs/progress'
-import { LoginLayout, AppLayout } from '../layouts'
-import Providers from '../layouts/Providers'
-
+import { LoginLayout, AppLayout } from './layouts'
+import Providers from './layouts/Providers'
 
 document.addEventListener('DOMContentLoaded', () => {
 	InertiaProgress.init()
@@ -15,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	createInertiaApp({
 		resolve: name => {
-			const page = require(`../pages/${name}`).default
+			const page = require(`./pages/${name}`).default
 			if(page.layout === undefined) {
 				page.layout = name.startsWith('Public/') ? LoginLayout : AppLayout
 			}
