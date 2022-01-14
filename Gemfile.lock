@@ -155,6 +155,8 @@ GEM
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
+    js-routes (2.2.0)
+      railties (>= 4)
     kramdown (2.3.1)
       rexml
     kramdown-parser-gfm (1.1.0)
@@ -368,6 +370,7 @@ DEPENDENCIES
   ice_cube (~> 0.16.4)
   inertia_rails (~> 1.11)
   jbuilder
+  js-routes (~> 2.2)
   pg (~> 1.1)
   puma (~> 5.0)
   rack-livereload (~> 0.3.17)

@@ -1,15 +1,13 @@
-import { useLocation } from 'react-router-dom'
+import React from 'react'
 import Button from '@material-tailwind/react/Button'
 import Icon from '@material-tailwind/react/Icon'
 import NavbarInput from '@material-tailwind/react/NavbarInput'
 import Image from '@material-tailwind/react/Image'
 import Dropdown from '@material-tailwind/react/Dropdown'
 import DropdownItem from '@material-tailwind/react/DropdownItem'
-import ProfilePicture from 'assets/img/team-1-800x800.jpg'
+// import ProfilePicture from 'assets/img/team-1-800x800.jpg'
 
-export default function AdminNavbar({ showSidebar, setShowSidebar }) {
-	const location = useLocation().pathname
-
+const AdminNavbar = ({ showSidebar, setShowSidebar }) => {
 	return (
 		<nav className="bg-light-blue-500 md:ml-64 px-3 py-6">
 			<div className="md:pr-8 md:pl-10 container flex items-center justify-between max-w-full mx-auto">
@@ -46,9 +44,7 @@ export default function AdminNavbar({ showSidebar, setShowSidebar }) {
 
 				<div className="flex items-center justify-between w-full">
 					<h4 className="mt-1 text-sm tracking-wider text-white uppercase">
-						{location === '/'
-							? 'DASHBOARD'
-							: location.toUpperCase().replace('/', '')}
+						DASHBOARD
 					</h4>
 
 					<div className="flex">
@@ -59,7 +55,7 @@ export default function AdminNavbar({ showSidebar, setShowSidebar }) {
 								color="transparent"
 								buttonText={
 									<div className="w-12">
-										<Image src={ ProfilePicture } rounded />
+										{/* <Image src={ ProfilePicture } rounded /> */}
 									</div>
 								}
 								rounded
@@ -85,3 +81,5 @@ export default function AdminNavbar({ showSidebar, setShowSidebar }) {
 		</nav>
 	)
 }
+
+export default AdminNavbar

@@ -3,7 +3,7 @@ import { InertiaLink } from '@inertiajs/inertia-react'
 
 const Button: React.FC = ({ children }) => <button>{ children }</button>
 
-interface LinkProps {
+export interface LinkProps {
 	children?: any,
 	as?: string,
 	data?: object,

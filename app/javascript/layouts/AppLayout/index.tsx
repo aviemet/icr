@@ -1,19 +1,21 @@
 import React from 'react'
 import { Container } from 'components'
 import classnames from 'classnames'
-import Topbar from './Topbar'
 import Sidebar from './Sidebar'
-import { stylesheet } from 'astroturf'
+import Footer from './Footer'
 
-const AppLayout = () => {
+const AppLayout = ({ children }) => {
 	return (
 		<>
 			<Sidebar />
-			<div id="content" className={ classnames('relative', 'ml-20') }>
-				<Topbar />
+			<div id="content" className={ classnames('relative', 'md:ml-64', 'min-h-screen') }>
+				<div className="bg-light-blue-500 md:px-8 h-40 px-3"></div>
+				<Container className="md:px-8 px-3 -mt-24">{ children }</Container>
 			</div>
+			<Footer />
 		</>
 	)
 }
 
-export default AppLayout
+export default (page: React.ReactNode) => <AppLayout>{ page }</AppLayout>
+
