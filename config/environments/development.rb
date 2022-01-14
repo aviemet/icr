@@ -73,4 +73,8 @@ Rails.application.configure do
 
   # Disable digests until LiveReload can handle them properly
   config.assets.digest = false
+
+  # Automatically update routes.js file
+  # when routes.rb is changed
+  config.middleware.use(JsRoutes::Middleware)
 end

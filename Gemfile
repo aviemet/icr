@@ -67,3 +67,5 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+gem "js-routes", "~> 2.2"

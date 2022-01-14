@@ -5,6 +5,7 @@ import Icon from '@material-tailwind/react/Icon'
 import H6 from '@material-tailwind/react/Heading6'
 import { css } from 'astroturf'
 import classnames from 'classnames'
+import * as Routes from 'routes'
 
 const navLiStyles = css`
 	@apply mb-4;
@@ -36,7 +37,7 @@ export default function Sidebar() {
 
 						<ul className="flex flex-col min-w-full list-none">
 							<li className={ classnames(navLiStyles) }>
-								<NavLink href="/">
+								<NavLink href={ Routes.root_path() }>
 									<Icon name="dashboard" size="2xl" />
 									Dashboard
 								</NavLink>
