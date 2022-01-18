@@ -1,6 +1,10 @@
+# frozen_string_literal: true
+
+require "rails/generators/rails/resource/resource_generator"
+
 module Inertia
   module Generators
-    class ScaffoldGenerator < Rails::Generators::NamedBase
+    class ScaffoldGenerator < Rails::Generators::NamedBase # :nodoc:
       remove_hook_for :resource_controller
       remove_class_option :actions
 
