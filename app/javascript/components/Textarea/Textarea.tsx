@@ -3,6 +3,11 @@ import { colorClass, Tcolors } from 'layouts/theme'
 import { TextAreaProps } from 'react-html-props'
 import classnames from 'classnames'
 
+const mtTextareaColors        = (color: Tcolors) => colorClass('mt-input', color, { default: 500, yellow: 600 })
+const mtTextareaOutlineColors = (color: Tcolors) => colorClass('mt-input-outline', color, { default:500, yellow: 600 })
+const borderColors            = (color: Tcolors) => colorClass('border', color, { default: 500, yellow: 600 })
+const focusBorderColors       = (color: Tcolors) => colorClass('focus:border', color, { default: 500, yellow: 600 })
+
 interface ThisTextareaProps extends TextAreaProps {
 	color?: Tcolors
 	size?: 'sm'|'regular'|'lg'
@@ -15,17 +20,10 @@ const Textarea = forwardRef<HTMLTextAreaElement, ThisTextareaProps>((
 	{ placeholder, color = 'lightBlue', size = 'regular', outline = false, error, success, ...props },
 	ref
 ) => {
-	const mtTextareaColors        = (color: Tcolors) => colorClass('mt-input', color, { default: 500, yellow: 600 })
-	const mtTextareaOutlineColors = (color: Tcolors) => colorClass('mt-input-outline', color, { default:500, yellow: 600 })
-	const borderColors            = (color: Tcolors) => colorClass('border', color, { default: 500, yellow: 600 })
-	const focusBorderColors       = (color: Tcolors) => colorClass('focus:border', color, { default: 500, yellow: 600 })
-
 	let labelBorderColor = 'border-gray-300'
 	let mtTextareaBorderColor = mtTextareaColors(color)
 	let mtTextareaOutlineColor = mtTextareaOutlineColors(color)
 	let mtTextareaOutlineFocusColor = borderColors(color)
-
-	let container = ['w-full', 'h-auto', 'relative']
 
 	if (error) {
 		labelBorderColor = borderColors('red')
@@ -69,13 +67,11 @@ const Textarea = forwardRef<HTMLTextAreaElement, ThisTextareaProps>((
 		'focus:text-gray-800',
 	]
 	const textareaSM = [
-		...sharedClasses,
 		`${outline ? 'px-3' : 'px-0'}`,
 		`${outline && 'pt-1.5 pb-0.5'}`,
 		'text-sm',
 	]
 	const textareaRegular = [
-		...sharedClasses,
 		`${outline ? 'px-3' : 'px-0'}`,
 		`${outline && 'pt-2.5 pb-1.5'}`,
 	]
@@ -100,33 +96,22 @@ const Textarea = forwardRef<HTMLTextAreaElement, ThisTextareaProps>((
 		'focus:border-2',
 	]
 
-	if (size === 'sm') {
-		textareaClasses.push(...textareaSM)
-	} else {
-		textareaClasses.push(...textareaRegular)
-	}
-
-	outline
-		? textareaClasses.push(...textareaOutline)
-		: textareaClasses.push(...textareaFilled)
-
-	container = container.join(' ')
-	label = label.join(' ')
-	textareaClasses = textareaClasses.join(' ')
-
 	return (
-		<div className={ container }>
+		<div className='relative w-full h-auto'>
 			<textarea
 				ref={ ref }
 				{ ...props }
 				placeholder=" "
-				className={ `
-                    ${textareaClasses}
-                    ${error && outline && 'mt-input-outline-error'}
-                    ${success && outline && 'mt-input-outline-success'}` }
-				rows="7"
+				className={ classnames(
+					sharedClasses,
+					size === 'sm' ? textareaSM : textareaRegular,
+					outline ? textareaOutline : textareaFilled,
+					{ 'mt-input-outline-error': error && outline },
+					{ 'mt-input-outline-success': success && outline }
+				) }
+				rows={ 7 }
 			/>
-			<label className={ label }>
+			<label className={ classnames(label) }>
 				{ outline ? (
 					placeholder
 				) : (

@@ -8,7 +8,7 @@ interface ThisH3Props extends H3Props {
 }
 
 const H3 = ({ children, color = 'gray', ...props }: ThisH3Props) => {
-	const colors = colorClass('text', color, { default: 500, yellow: 600 })
+	const colors = colorClass('text', color, { default: 500, gray: 900, yellow: 600 })
 	return (
 		<h3
 			{ ...props }

@@ -8,7 +8,7 @@ interface ThisH6Props extends H6Props {
 }
 
 const H6 = ({ children, color = 'gray', ...props }: ThisH6Props) => {
-	const colors = colorClass('text', color, { default: 500, yellow: 600 })
+	const colors = colorClass('text', color, { default: 500, gray: 900, yellow: 600 })
 	return (
 		<h6
 			{ ...props }

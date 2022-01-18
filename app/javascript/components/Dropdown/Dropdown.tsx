@@ -8,7 +8,7 @@ import classnames from 'classnames'
 type Placement = 'top'|'top-start'|'top-end'|'right'|'right-start'|'right-end'|'bottom'|'bottom-start'|'bottom-end'|'left'|'left-start'|'left-end'|'auto'|'auto-start'|'auto-end'
 
 interface DropdownProps extends ButtonProps {
-	buttonText: string
+	buttonText: string|React.ReactNode
 	color?: Tcolors
 	buttonType?: string
 	size?: string

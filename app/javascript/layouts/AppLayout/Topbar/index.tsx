@@ -3,17 +3,17 @@ import { Button, Icon, NavbarInput, Image, Dropdown, DropdownItem } from 'compon
 // import ProfilePicture from 'assets/img/team-1-800x800.jpg'
 
 interface TopbarProps {
-	showSidebar: boolean,
+	showSidebar: boolean
 	setShowSidebar: () => void
 }
 
 const Topbar = ({ showSidebar, setShowSidebar }: TopbarProps) => {
+	console.log('HI')
 	return (
 		<nav className="bg-light-blue-500 md:ml-64 px-3 py-6">
 			<div className="md:pr-8 md:pl-10 container flex items-center justify-between max-w-full mx-auto">
 				<div className="md:hidden">
 					<Button
-						color="transparent"
 						buttonType="link"
 						size="lg"
 						iconOnly
@@ -29,7 +29,6 @@ const Topbar = ({ showSidebar, setShowSidebar }: TopbarProps) => {
 						} z-50 transition-all duration-300` }
 					>
 						<Button
-							color="transparent"
 							buttonType="link"
 							size="lg"
 							iconOnly
@@ -52,10 +51,9 @@ const Topbar = ({ showSidebar, setShowSidebar }: TopbarProps) => {
 
 						<div className="ml-6 -mr-4">
 							<Dropdown
-								color="transparent"
 								buttonText={
 									<div className="w-12">
-										{/* <Image src={ ProfilePicture } rounded /> */}
+										{ /* <Image src={ ProfilePicture } rounded /> */ }
 									</div>
 								}
 								rounded
@@ -65,13 +63,13 @@ const Topbar = ({ showSidebar, setShowSidebar }: TopbarProps) => {
 								} }
 							>
 								<DropdownItem color="lightBlue">
-                                    Action
+                  Action
 								</DropdownItem>
 								<DropdownItem color="lightBlue">
-                                    Another Action
+                  Another Action
 								</DropdownItem>
 								<DropdownItem color="lightBlue">
-                                    Something Else
+                  Something Else
 								</DropdownItem>
 							</Dropdown>
 						</div>

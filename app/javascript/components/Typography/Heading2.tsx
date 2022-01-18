@@ -8,7 +8,7 @@ interface ThisH2Props extends H2Props {
 }
 
 const H2 = ({ children, color = 'gray', ...props }: ThisH2Props) => {
-	const colors = colorClass('text', color, { default: 500, yellow: 600 })
+	const colors = colorClass('text', color, { default: 500, gray: 900, yellow: 600 })
 
 	return (
 		<h2

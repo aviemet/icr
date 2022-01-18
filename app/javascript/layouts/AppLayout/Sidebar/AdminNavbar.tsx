@@ -8,7 +8,6 @@ const AdminNavbar = ({ showSidebar, setShowSidebar }) => {
 			<div className="md:pr-8 md:pl-10 container flex items-center justify-between max-w-full mx-auto">
 				<div className="md:hidden">
 					<Button
-						color="transparent"
 						buttonType="link"
 						size="lg"
 						iconOnly
@@ -24,7 +23,6 @@ const AdminNavbar = ({ showSidebar, setShowSidebar }) => {
 						} z-50 transition-all duration-300` }
 					>
 						<Button
-							color="transparent"
 							buttonType="link"
 							size="lg"
 							iconOnly
@@ -47,10 +45,9 @@ const AdminNavbar = ({ showSidebar, setShowSidebar }) => {
 
 						<div className="ml-6 -mr-4">
 							<Dropdown
-								color="transparent"
 								buttonText={
 									<div className="w-12">
-										{/* <Image src={ ProfilePicture } rounded /> */}
+										{ /* <Image src={ ProfilePicture } rounded /> */ }
 									</div>
 								}
 								rounded
@@ -60,13 +57,13 @@ const AdminNavbar = ({ showSidebar, setShowSidebar }) => {
 								} }
 							>
 								<DropdownItem color="lightBlue">
-                                    Action
+                  Action
 								</DropdownItem>
 								<DropdownItem color="lightBlue">
-                                    Another Action
+                  Another Action
 								</DropdownItem>
 								<DropdownItem color="lightBlue">
-                                    Something Else
+                  Something Else
 								</DropdownItem>
 							</Dropdown>
 						</div>

@@ -8,7 +8,7 @@ interface ThisH1Props extends H1Props {
 }
 
 const H1 = ({ children, color = 'gray', ...props }: ThisH1Props) => {
-	const colors = colorClass('text', color, { default: 500, yellow: 600 })
+	const colors = colorClass('text', color, { default: 500, gray: 900, yellow: 600 })
 
 	return (
 		<h1

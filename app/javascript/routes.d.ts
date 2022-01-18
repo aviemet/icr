@@ -85,6 +85,16 @@ export const serialize: RouterExposedMethods['serialize'];
 
 /**
  * Generates rails route to
+ * /clients(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const clients_path: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
  * /pages/:id/edit(.:format)
  * @param {any} id
  * @param {object | undefined} options
@@ -407,6 +417,36 @@ export const rails_service_blob_proxy_path: ((
  */
 export const root_path: ((
   options?: {} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /schedules(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const schedules_path: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /settings(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const settings_path: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /staff(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const staff_path: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
 /**

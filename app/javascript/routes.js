@@ -511,6 +511,14 @@ export const serialize = __jsr.serialize;
 
 /**
  * Generates rails route to
+ * /clients(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const clients_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"clients"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
  * /pages/:id/edit(.:format)
  * @param {any} id
  * @param {object | undefined} options
@@ -758,6 +766,30 @@ export const rails_service_blob_proxy_path = __jsr.r({"signed_id":{"r":true},"fi
  * @returns {string} route path
  */
 export const root_path = __jsr.r({}, [7,"/"]);
+
+/**
+ * Generates rails route to
+ * /schedules(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const schedules_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"schedules"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
+ * /settings(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const settings_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"settings"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
+ * /staff(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const staff_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"staff"],[1,[2,[8,"."],[3,"format"]]]]]);
 
 /**
  * Generates rails route to

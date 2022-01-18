@@ -3,8 +3,8 @@ export default {}
 export const colors = {
 	white: 'gray',
 	black: 'black',
-	blueGray: 'blue-gray',
 	gray: 'gray',
+	blueGray: 'blue-gray',
 	brown: 'brown',
 	deepOrange: 'deep-orange',
 	orange: 'orange',
@@ -25,12 +25,22 @@ export const colors = {
 }
 
 export const colorClass = (prefix: string, color: Tcolors, weight?: string|number|Record<string,number>) => {
-	let classWeight = weight
-	if(color === 'white' || color === 'black') {
-		weight = undefined
-	} else if(typeof weight === 'object' && weight?.hasOwnProperty(color)) {
-		classWeight = weight.color
+	let classWeight
+	if(typeof weight === 'object') {
+		if(weight.hasOwnProperty(color)) {
+			classWeight = weight[color]
+		} else if(weight.hasOwnProperty('default')) {
+			classWeight = weight.default
+		} else {
+			// TODO: Throw invalid options error
+		}
+	} else {
+		if(['white', 'black'].includes(color)) {
+			weight = undefined
+		} else {
+			classWeight = weight
+		}
 	}
 
-	return `${prefix}-${color}${weight && `-${classWeight}`}`
+	return `${prefix}-${color}${weight ? `-${classWeight}` : ''}`
 }

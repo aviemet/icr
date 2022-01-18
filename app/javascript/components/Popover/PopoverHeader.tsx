@@ -11,3 +11,5 @@ const PopoverHeader = ({ children, className, ...props }: DivProps) => {
 		</div>
 	)
 }
+
+export default PopoverHeader

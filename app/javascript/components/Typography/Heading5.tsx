@@ -8,7 +8,7 @@ interface ThisH5Props extends H5Props {
 }
 
 const H5 = ({ children, color = 'gray', ...props }: ThisH5Props) => {
-	const colors = colorClass('text', color, { default: 500, yellow: 600 })
+	const colors = colorClass('text', color, { default: 500, gray: 900, yellow: 600 })
 	return (
 		<h5
 			{ ...props }
