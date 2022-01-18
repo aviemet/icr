@@ -8,7 +8,6 @@ module Inertia
       remove_hook_for :resource_controller
       remove_class_option :actions
 
-      class_option :api, type: :boolean
       class_option :assets, type: :boolean
       class_option :resource_route, type: :boolean
 
