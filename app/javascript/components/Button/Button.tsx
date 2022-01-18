@@ -16,7 +16,7 @@ interface ThisButtonProps extends ButtonProps {
 export { ThisButtonProps as ButtonProps }
 
 const Button = forwardRef<HTMLButtonElement, ThisButtonProps>((
-	{ children, color = 'lightBlue', buttonType = 'filled', size = 'regular', rounded = false, iconOnly, block = false, ripple, className, ...props }: ThisButtonProps,
+	{ children, color = 'lightBlue', buttonType = 'filled', size = 'regular', rounded = false, iconOnly, block = false, ripple, className, ...props },
 	ref
 ) => {
 	const filledBg           = colorClass('bg', color, { default: 500, yellow: 600 })

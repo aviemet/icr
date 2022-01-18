@@ -1,45 +1,30 @@
 import React from 'react'
+import { colorClass, Tcolors } from 'layouts/theme'
+import { ULProps } from 'react-html-props'
+import classnames from 'classnames'
 
-import { colors } from 'layouts/theme'
-
-const shadowColors = {
-	blueGray: 'shadow-lg-blue-gray',
-	gray: 'shadow-lg-gray',
-	brown: 'shadow-lg-brown',
-	deepOrange: 'shadow-lg-deep-orange',
-	orange: 'shadow-lg-orange',
-	amber: 'shadow-lg-amber',
-	yellow: 'shadow-lg-yellow',
-	lime: 'shadow-lg-lime',
-	lightGreen: 'shadow-lg-light-green',
-	green: 'shadow-lg-green',
-	teal: 'shadow-lg-teal',
-	cyan: 'shadow-lg-cyan',
-	lightBlue: 'shadow-lg-light-blue',
-	blue: 'shadow-lg-blue',
-	indigo: 'shadow-lg-indigo',
-	deepPurple: 'shadow-lg-deep-purple',
-	purple: 'shadow-lg-purple',
-	pink: 'shadow-lg-pink',
-	red: 'shadow-lg-red',
+interface TabListProps extends ULProps {
+	color?: Tcolors
 }
 
-export default function TabList({ children, color, className }) {
+const TabList = ({ children, color = 'lightBlue', className, ...props }: TabListProps) => {
+	const colors = colorClass('bg', color, { default: 500, yellow: 600 })
+	const shadowColors = colorClass('shadow-lg', color)
+
 	return (
 		<ul
-			className={ `${colors[color]} w-full rounded-lg p-4 mx-5 flex justify-start -mt-12 mb-6 list-none ${shadowColors[color]} z-10 ${className}` }
+			{ ...props }
+			className={ classnames(
+				' w-full rounded-lg p-4 mx-5 flex justify-start -mt-12 mb-6 list-none z-10',
+				colors,
+				shadowColors,
+				className
+			) }
 			role="tablist"
 		>
-			{children}
+			{ children }
 		</ul>
 	)
 }
 
-TabList.defaultProps = {
-	color: 'lightBlue',
-}
-
-TabList.propTypes = {
-	children: PropTypes.node.isRequired,
-	color: PropTypes.string.isRequired,
-}
+export default TabList

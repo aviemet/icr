@@ -1,13 +1,18 @@
 import React from 'react'
+import { DivProps } from 'react-html-props'
 
-export default function NavbarInput({ fontAwesome, ...props }) {
+interface NavbarInput extends DivProps {
+	fontAwesome: boolean
+}
+
+const NavbarInput = ({ fontAwesome = false, ...props }) => {
 	return (
 		<div className="lg:w-60 sm:w-full bg-opacity-20 relative flex items-center px-3 py-1 bg-white rounded-lg">
 			{ fontAwesome ? (
 				<i className="fas fa-search text-xl text-white"></i>
 			) : (
 				<span className="material-icons mr-2 text-xl text-white">
-                    search
+          search
 				</span>
 			) }
 			<input
@@ -18,10 +23,4 @@ export default function NavbarInput({ fontAwesome, ...props }) {
 	)
 }
 
-NavbarInput.defaultProps = {
-	fontAwesome: false,
-}
-
-NavbarInput.propTypes = {
-	fontAwesome: PropTypes.bool.isRequired,
-}
+export default NavbarInput

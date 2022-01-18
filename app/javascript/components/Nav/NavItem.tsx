@@ -1,7 +1,15 @@
 import React from 'react'
 import Ripple from 'lib/material-ripple-effects'
+import { LIProps } from 'react-html-props'
+import classnames from 'classnames'
 
-export default function NavItem({ children, active, ripple, ...props }) {
+interface NavItem extends LIProps{
+	children: React.ReactNode
+	active: 'light'|'dark'
+	ripple: 'light'|'dark'
+}
+
+const NavItem = ({ children, active, ripple, ...props }) => {
 	const rippleEffect = new Ripple()
 
 	return (
@@ -20,9 +28,4 @@ export default function NavItem({ children, active, ripple, ...props }) {
 	)
 }
 
-NavItem.propTypes = {
-	children: PropTypes.node.isRequired,
-	active: PropTypes.string,
-	className: PropTypes.string,
-	ripple: PropTypes.string,
-}
+export default NavItem

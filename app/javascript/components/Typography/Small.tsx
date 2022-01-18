@@ -1,44 +1,23 @@
 import React from 'react'
+import { colorClass, Tcolors } from 'layouts/theme'
+import { DivProps } from 'react-html-props'
+import classnames from 'classnames'
 
-const colors = {
-	white: 'text-gray-200',
-	blueGray: 'text-blue-gray-700',
-	gray: 'text-gray-700',
-	brown: 'text-brown-700',
-	deepOrange: 'text-deep-orange-700',
-	orange: 'text-orange-700',
-	amber: 'text-amber-700',
-	yellow: 'text-yellow-600',
-	lime: 'text-lime-700',
-	lightGreen: 'text-light-green-700',
-	green: 'text-green-700',
-	teal: 'text-teal-700',
-	cyan: 'text-cyan-700',
-	lightBlue: 'text-light-blue-700',
-	blue: 'text-blue-700',
-	indigo: 'text-indigo-700',
-	deepPurple: 'text-deep-purple-700',
-	purple: 'text-purple-700',
-	pink: 'text-pink-700',
-	red: 'text-red-700',
+interface SmallProps extends DivProps {
+	color?: Tcolors
 }
 
-export default function Small({ children, color, ...props }) {
+const Small = ({ children, color = 'blueGray', ...props }: SmallProps) => {
+	const colors = colorClass('text', color, { default: 700, yellow: 600 })
+
 	return (
 		<small
 			{ ...props }
-			className={ `${colors[color]} font-normal leading-normal mt-0 mb-4` }
+			className={ classnames(colors, 'font-normal leading-normal mt-0 mb-4') }
 		>
 			{ children }
 		</small>
 	)
 }
 
-Small.defaultProps = {
-	color: 'blueGray',
-}
-
-Small.propTypes = {
-	children: PropTypes.node.isRequired,
-	color: PropTypes.string.isRequired,
-}
+export default Small

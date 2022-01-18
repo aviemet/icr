@@ -1,44 +1,22 @@
 import React from 'react'
+import { colorClass, Tcolors } from 'layouts/theme'
+import { H3Props } from 'react-html-props'
+import classnames from 'classnames'
 
-const colors = {
-	white: 'text-white',
-	blueGray: 'text-blue-gray-500',
-	gray: 'text-gray-900',
-	brown: 'text-brown-500',
-	deepOrange: 'text-deep-orange-500',
-	orange: 'text-orange-500',
-	amber: 'text-amber-500',
-	yellow: 'text-yellow-600',
-	lime: 'text-lime-500',
-	lightGreen: 'text-light-green-500',
-	green: 'text-green-500',
-	teal: 'text-teal-500',
-	cyan: 'text-cyan-500',
-	lightBlue: 'text-light-blue-500',
-	blue: 'text-blue-500',
-	indigo: 'text-indigo-500',
-	deepPurple: 'text-deep-purple-500',
-	purple: 'text-purple-500',
-	pink: 'text-pink-500',
-	red: 'text-red-500',
+interface ThisH3Props extends H3Props {
+	color?: Tcolors
 }
 
-export default function H3({ children, color, ...props }) {
+const H3 = ({ children, color = 'gray', ...props }: ThisH3Props) => {
+	const colors = colorClass('text', color, { default: 500, yellow: 600 })
 	return (
 		<h3
 			{ ...props }
-			className={ `${colors[color]} text-4xl font-serif font-bold leading-normal mt-0 mb-2` }
+			className={ classnames(colors, 'text-4xl font-serif font-bold leading-normal mt-0 mb-2') }
 		>
 			{ children }
 		</h3>
 	)
 }
 
-H3.defaultProps = {
-	color: 'gray',
-}
-
-H3.propTypes = {
-	children: PropTypes.node.isRequired,
-	color: PropTypes.string.isRequired,
-}
+export default H3

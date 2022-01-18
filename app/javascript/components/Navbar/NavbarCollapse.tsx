@@ -1,18 +1,19 @@
 import React from 'react'
+import { DivProps } from 'react-html-props'
+import classnames from 'classnames'
 
-export default function NavbarCollapse({ children, className, open }) {
+interface NavbarCollapse extends DivProps {
+	open: boolean
+}
+
+const NavbarCollapse = ({ children, className, open }: NavbarCollapse) => {
 	return (
 		<div
-			className={ `lg:flex flex-grow items-center ${
-				open ? 'block' : 'hidden'
-			} ${className}` }
+			className={ classnames('lg:flex flex-grow items-center', open ? 'block' : 'hidden', className) }
 		>
-			{children}
+			{ children }
 		</div>
 	)
 }
 
-NavbarCollapse.propTypes = {
-	children: PropTypes.node.isRequired,
-	open: PropTypes.bool.isRequired,
-}
+export default NavbarCollapse

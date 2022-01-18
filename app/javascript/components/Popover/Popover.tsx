@@ -2,12 +2,20 @@ import React, { forwardRef } from 'react'
 import Tippy from '@tippyjs/react'
 import { roundArrow } from 'tippy.js'
 
-const Popover = forwardRef(({ children, placement }, ref) => {
+interface PopoverProps {
+	children?: React.ReactNode
+	placement?: 'left'|'right'|'top'|'bottom'
+}
+
+const Popover = forwardRef<Element, PopoverProps>((
+	{ children, placement = 'top' },
+	ref
+) => {
 	return (
 		<Tippy
 			content={ children }
 			placement={ placement }
-			reference={ ref }
+			ref={ ref }
 			trigger="click"
 			animation="shift-away"
 			arrow={ roundArrow }
@@ -16,14 +24,5 @@ const Popover = forwardRef(({ children, placement }, ref) => {
 		/>
 	)
 })
-
-Popover.defaultProps = {
-	placement: 'top',
-}
-
-Popover.propTypes = {
-	children: PropTypes.node.isRequired,
-	placement: PropTypes.string.isRequired,
-}
 
 export default Popover

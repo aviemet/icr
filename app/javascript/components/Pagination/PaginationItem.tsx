@@ -1,17 +1,19 @@
 import React from 'react'
 import Ripple from 'lib/material-ripple-effects'
+import { colorClass, Tcolors } from 'layouts/theme'
+import { LIProps } from 'react-html-props'
+import classnames from 'classnames'
 
-import { colors } from 'layouts/theme'
+interface PaginationItemProps extends LIProps {
+	color: Tcolors
+	button?: boolean
+	ripple: 'light'|'dark'
+}
 
-export default function PaginationItem({
-	children,
-	color,
-	button,
-	ripple,
-	className,
-	...props
-}) {
+const PaginationItem = ({ children, color, button, ripple, className, ...props }: PaginationItemProps) =>{
 	const rippleEffect = new Ripple()
+
+	const colors = colorClass('bg', color, { default: 500, yellow: 600 })
 
 	return (
 		<li className="place-items-center grid">
@@ -26,10 +28,7 @@ export default function PaginationItem({
 						? `${colors[color]} text-white`
 						: 'bg-transparent text-gray-700 hover:bg-gray-500 hover:bg-opacity-20 focus:bg-gray-500 focus:bg-opacity-20 active:bg-gray-500 active:bg-opacity-40'
 				} transition-all duration-300 ${className}` }
-				onMouseUp={ (e) => {
-					ripple === 'dark' && rippleEffect.create(e, 'dark')
-					ripple === 'light' && rippleEffect.create(e, 'light')
-				} }
+				onMouseUp={ e => rippleEffect.create(e, ripple) }
 			>
 				{ children }
 			</a>
@@ -37,13 +36,5 @@ export default function PaginationItem({
 	)
 }
 
-PaginationItem.defaultProps = {
-	button: false,
-}
+export default PaginationItem
 
-PaginationItem.propTypes = {
-	children: PropTypes.node.isRequired,
-	color: PropTypes.string,
-	button: PropTypes.bool.isRequired,
-	ripple: PropTypes.string,
-}

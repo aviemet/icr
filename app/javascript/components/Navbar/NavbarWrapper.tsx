@@ -1,15 +1,17 @@
 import React from 'react'
+import { colorClass, Tcolors } from 'layouts/theme'
+import { DivProps } from 'react-html-props'
+import classnames from 'classnames'
 
-export default function NavbarWrapper({ children, className }) {
+const NavbarWrapper = ({ children, className, ...props }: DivProps) => {
 	return (
 		<div
-			className={ `w-full flex justify-between lg:w-auto lg:static lg:block lg:justify-start ${className}` }
+			{ ...props }
+			className={ classnames('w-full flex justify-between lg:w-auto lg:static lg:block lg:justify-start', className) }
 		>
-			{children}
+			{ children }
 		</div>
 	)
 }
 
-NavbarWrapper.propTypes = {
-	children: PropTypes.node.isRequired,
-}
+export default NavbarWrapper

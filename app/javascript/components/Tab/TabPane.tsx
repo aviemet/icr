@@ -1,18 +1,16 @@
 import React from 'react'
+import { DivProps } from 'react-html-props'
 
-export default function TabPane({ children, active, className }) {
+interface TabPaneProps extends DivProps {
+	active?: boolean
+}
+
+const TabPane = ({ children, active = false, className }: TabPaneProps) => {
 	return (
 		<div className={ `${active ? 'block' : 'hidden'} ${className}` }>
-			{children}
+			{ children }
 		</div>
 	)
 }
 
-TabPane.defaultProps = {
-	active: false,
-}
-
-TabPane.propTypes = {
-	children: PropTypes.node.isRequired,
-	active: PropTypes.bool.isRequired,
-}
+export default TabPane

@@ -1,28 +1,25 @@
 import React from 'react'
+import { colorClass, Tcolors } from 'layouts/theme'
+import { DivProps } from 'react-html-props'
+import classnames from 'classnames'
 
-import { colors } from 'layouts/theme'
+interface NavbarProps extends DivProps {
+	color?: Tcolors
+	navbar?: boolean
+}
 
-export default function Navbar({ children, color, navbar, className }) {
+const Navbar = ({ children, color = 'lightBlue', navbar = false, className }: NavbarProps) => {
+	const colors = colorClass('bg', color, { default: 500, yellow: 600 })
+
 	return (
-		<>
-			<nav
-				className={ `flex flex-wrap items-center justify-between py-2.5 px-3 mb-3 ${
-					colors[color]
-				} ${!navbar && 'rounded-lg'} ${className}` }
-			>
-				{children}
-			</nav>
-		</>
+		<nav className={ classnames(
+			'flex flex-wrap items-center justify-between py-2.5 px-3 mb-3',
+			colors,
+			{ 'rounded-lg': !navbar }, className
+		) }>
+			{ children }
+		</nav>
 	)
 }
 
-Navbar.defaultProps = {
-	color: 'lightBlue',
-	navbar: false,
-}
-
-Navbar.propTypes = {
-	children: PropTypes.node.isRequired,
-	color: PropTypes.string.isRequired,
-	navbar: PropTypes.bool,
-}
+export default Navbar

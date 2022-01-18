@@ -2,12 +2,20 @@ import React, { forwardRef } from 'react'
 import Tippy from '@tippyjs/react'
 import { roundArrow } from 'tippy.js'
 
-const Tooltip = forwardRef(({ children, placement }, ref) => {
+interface TooltopProps {
+	children?: React.ReactNode
+	placement?: 'left'|'right'|'top'|'bottom'
+}
+
+const Tooltip = forwardRef<Element, TooltopProps>((
+	{ children, placement = 'top' },
+	ref
+) => {
 	return (
 		<Tippy
 			content={ children }
 			placement={ placement }
-			reference={ ref }
+			ref={ ref }
 			animation="shift-away"
 			arrow={ roundArrow }
 			className="arrow-dark"
@@ -15,14 +23,5 @@ const Tooltip = forwardRef(({ children, placement }, ref) => {
 		/>
 	)
 })
-
-Tooltip.defaultProps = {
-	placement: 'top',
-}
-
-Tooltip.propTypes = {
-	children: PropTypes.node.isRequired,
-	placement: PropTypes.string.isRequired,
-}
 
 export default Tooltip

@@ -1,75 +1,32 @@
 import React from 'react'
+import { colorClass, Tcolors } from 'layouts/theme'
+import classnames from 'classnames'
 
-const wrapperBgColors = {
-	blueGray: 'bg-blue-gray-200',
-	gray: 'bg-gray-200',
-	brown: 'bg-brown-200',
-	deepOrange: 'bg-deep-orange-200',
-	orange: 'bg-orange-200',
-	amber: 'bg-amber-200',
-	yellow: 'bg-yellow-200',
-	lime: 'bg-lime-200',
-	lightGreen: 'bg-light-green-200',
-	green: 'bg-green-200',
-	teal: 'bg-teal-200',
-	cyan: 'bg-cyan-200',
-	lightBlue: 'bg-light-blue-200',
-	blue: 'bg-blue-200',
-	indigo: 'bg-indigo-200',
-	deepPurple: 'bg-deep-purple-200',
-	purple: 'bg-purple-200',
-	pink: 'bg-pink-200',
-	red: 'bg-red-200',
+interface ProgressProps {
+	color?: Tcolors
+	value: string
+	percentage?: boolean
 }
 
-const bgColors = {
-	blueGray: 'bg-blue-gray-500',
-	gray: 'bg-gray-500',
-	brown: 'bg-brown-500',
-	deepOrange: 'bg-deep-orange-500',
-	orange: 'bg-orange-500',
-	amber: 'bg-amber-500',
-	yellow: 'bg-yellow-600',
-	lime: 'bg-lime-500',
-	lightGreen: 'bg-light-green-500',
-	green: 'bg-green-500',
-	teal: 'bg-teal-500',
-	cyan: 'bg-cyan-500',
-	lightBlue: 'bg-light-blue-500',
-	blue: 'bg-blue-500',
-	indigo: 'bg-indigo-500',
-	deepPurple: 'bg-deep-purple-500',
-	purple: 'bg-purple-500',
-	pink: 'bg-pink-500',
-	red: 'bg-red-500',
-}
+const Progress = ({ color = 'lightBlue', value, percentage = false }: ProgressProps) => {
+	const wrapperBgColors = colorClass('bg', color, 200)
+	const bgColors = colorClass('bg', color, { default: 500, yellow: 600 })
 
-export default function Progress({ color, value, percentage }) {
 	return (
-		<>
+		<div
+			className={ classnames(
+				'overflow-hidden flex rounded',
+				percentage ? 'h-6' : 'h-2',
+				wrapperBgColors
+			) }>
 			<div
-				className={ `overflow-hidden ${
-					percentage ? 'h-6' : 'h-2'
-				} flex rounded ${wrapperBgColors[color]}` }
+				style={ { width: `${value}%` } }
+				className={ classnames('flex justify-center items-center rounded text-xs font-medium text-white', bgColors) }
 			>
-				<div
-					style={ { width: `${value}%` } }
-					className={ `flex justify-center items-center rounded text-xs font-medium ${bgColors[color]} text-white` }
-				>
-					{percentage ? `${value}% Completed` : ''}
-				</div>
+				{ percentage && `${value}% Completed` }
 			</div>
-		</>
+		</div>
 	)
 }
 
-Progress.defaultProps = {
-	color: 'lightBlue',
-	percentage: false,
-}
-
-Progress.propTypes = {
-	color: PropTypes.string.isRequired,
-	value: PropTypes.string.isRequired,
-	percentage: PropTypes.bool.isRequired,
-}
+export default Progress

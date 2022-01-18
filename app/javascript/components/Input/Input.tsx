@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { Icon } from 'components'
 import { IconProps } from 'components/Icon/Icon'
 import { colorClass, Tcolors } from 'layouts/theme'
@@ -23,7 +23,10 @@ const borderColors = (color: Tcolors) => colorClass('border', color, { default: 
 const mtInputColors = (color: Tcolors) => colorClass('mt-input', color, { default: 500, yellow: 600 })
 const mtInputOutlineColors = (color: Tcolors) => colorClass('mt-input-outline', color, { default: 500, yellow: 600 })
 
-const Input = ({ placeholder, color = 'lightBlue', size = 'regular', outline = false, error, success, icon, ...props }: InputProps) => {
+const Input = forwardRef<HTMLInputElement, InputProps>((
+	{ placeholder, color = 'lightBlue', size = 'regular', outline = false, error, success, icon, ...props },
+	ref
+) => {
 	const iconProps: IconProps = { name: '' } // TODO: I think I can do better than this
 	if(typeof icon === 'string') {
 		iconProps.name = icon
@@ -107,6 +110,7 @@ const Input = ({ placeholder, color = 'lightBlue', size = 'regular', outline = f
 		<div className={ classnames('w-full relative', containerHeight) }>
 			{ icon && <Icon { ...iconProps } /> }
 			<input
+				ref={ ref }
 				{ ...props }
 				placeholder=" "
 				className={ classnames(
@@ -138,6 +142,6 @@ const Input = ({ placeholder, color = 'lightBlue', size = 'regular', outline = f
 			) }
 		</div>
 	)
-}
+})
 
 export default Input

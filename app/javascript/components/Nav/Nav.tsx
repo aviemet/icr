@@ -1,22 +1,23 @@
 import React from 'react'
+import classnames from 'classnames'
 
-export default function Nav({ children, leftSide, className }) {
+interface Nav {
+	children: React.ReactNode
+	leftSide: boolean
+	className: string
+}
+
+const Nav = ({ children, leftSide = false, className }) => {
 	return (
 		<ul
-			className={ `flex lg:items-center flex-col lg:flex-row list-none ${
-				leftSide ? 'mr-auto' : 'ml-auto'
-			} ${className}` }
+			className={ classnames(
+				`flex lg:items-center flex-col lg:flex-row list-none ${leftSide ? 'mr-auto' : 'ml-auto'}`,
+				className
+			) }
 		>
-			{children}
+			{ children }
 		</ul>
 	)
 }
 
-Nav.defaultProps = {
-	leftSide: false,
-}
-
-Nav.propTypes = {
-	children: PropTypes.node.isRequired,
-	leftSide: PropTypes.bool.isRequired,
-}
+export default Nav
