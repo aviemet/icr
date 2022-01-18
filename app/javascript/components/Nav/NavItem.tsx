@@ -1,12 +1,12 @@
 import React from 'react'
 import Ripple from 'lib/material-ripple-effects'
 
-export default function NavItem({ children, active, ripple, ...rest }) {
+export default function NavItem({ children, active, ripple, ...props }) {
 	const rippleEffect = new Ripple()
 
 	return (
 		<li
-			{ ...rest }
+			{ ...props }
 			className={ `${active === 'dark' && 'bg-black bg-opacity-20'} ${
 				active === 'light' && 'bg-white bg-opacity-20'
 			} px-5 py-4 flex gap-1 items-center text-xs uppercase font-medium leading text-white rounded-lg` }
@@ -15,7 +15,7 @@ export default function NavItem({ children, active, ripple, ...rest }) {
 				ripple === 'light' && rippleEffect.create(e, 'light')
 			} }
 		>
-			{children}
+			{ children }
 		</li>
 	)
 }

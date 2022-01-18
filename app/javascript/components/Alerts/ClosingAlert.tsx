@@ -7,7 +7,7 @@ interface ClosingAlertProps extends DivProps {
 	color?: Tcolors
 }
 
-const ClosingAlert = ({ children, color = 'lightBlue', ...rest }: ClosingAlertProps) => {
+const ClosingAlert = ({ children, color = 'lightBlue', ...props }: ClosingAlertProps) => {
 	const [showAlert, setShowAlert] = React.useState(true)
 
 	const closeAlert = (e) => {
@@ -35,7 +35,7 @@ const ClosingAlert = ({ children, color = 'lightBlue', ...rest }: ClosingAlertPr
 
 	return (
 		<div
-			{ ...rest }
+			{ ...props }
 			className={ classnames('flex items-center gap-3 text-white p-4 pr-12 border-0 rounded-lg relative mb-4 transition-all duration-300', colors) }
 		>
 			{ children }

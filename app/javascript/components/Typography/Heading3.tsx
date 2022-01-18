@@ -23,13 +23,13 @@ const colors = {
 	red: 'text-red-500',
 }
 
-export default function H3({ children, color, ...rest }) {
+export default function H3({ children, color, ...props }) {
 	return (
 		<h3
-			{ ...rest }
+			{ ...props }
 			className={ `${colors[color]} text-4xl font-serif font-bold leading-normal mt-0 mb-2` }
 		>
-			{children}
+			{ children }
 		</h3>
 	)
 }

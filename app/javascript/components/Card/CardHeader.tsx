@@ -4,9 +4,9 @@ import { DivProps } from 'react-html-props'
 import classnames from 'classnames'
 
 interface CardHeaderProps extends DivProps {
-	size?: string,
-	color?: Tcolors,
-	contentPosition?: string,
+	size?: string
+	color?: Tcolors
+	contentPosition?: string
 	iconOnly?: boolean
 }
 
@@ -16,7 +16,7 @@ const positions = {
 	center: 'justify-center',
 }
 
-const CardHeader = ({ children, color = 'lightBlue', size = 'regular', contentPosition = 'center', iconOnly = false, className, ...rest }: CardHeaderProps) => {
+const CardHeader = ({ children, color = 'lightBlue', size = 'regular', contentPosition = 'center', iconOnly = false, className, ...props }: CardHeaderProps) => {
 	const fromWeights = {
 		default: 500,
 		yellow: 600
@@ -67,7 +67,7 @@ const CardHeader = ({ children, color = 'lightBlue', size = 'regular', contentPo
 	return (
 		<div
 			className={ classnames('bg-gradient-to-tr -mt-10 mb-4 rounded-xl text-white grid items-center',headerSize, shadowColors, fromColors, toColors, className) }
-			{ ...rest }
+			{ ...props }
 		>
 			{ children }
 		</div>

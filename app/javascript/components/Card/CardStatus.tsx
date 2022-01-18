@@ -6,11 +6,11 @@ interface CardStatusProps extends DivProps {
 	amount: string
 }
 
-const CardStatus = ({ title, amount, className, ...rest }: CardStatusProps) => {
+const CardStatus = ({ title, amount, className, ...props }: CardStatusProps) => {
 	return (
 		<div
 			className={ classnames('w-full pl-4 max-w-full flex-grow flex-1 mb-2 text-right', className) }
-			{ ...rest }
+			{ ...props }
 		>
 			<h5 className="mb-1 text-base font-light tracking-wide text-gray-500">
 				{ title }

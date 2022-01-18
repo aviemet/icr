@@ -13,10 +13,11 @@ interface ThisButtonProps extends ButtonProps {
 	block?: boolean
 	ripple?: string
 }
+export { ThisButtonProps as ButtonProps }
 
-const Button = forwardRef((
-	{ children, color = 'lightBlue', buttonType = 'filled', size = 'regular', rounded = false, iconOnly, block = false, ripple, className, ...rest }: ThisButtonProps,
-	ref: React.ForwardedRef<any>
+const Button = forwardRef<HTMLButtonElement, ThisButtonProps>((
+	{ children, color = 'lightBlue', buttonType = 'filled', size = 'regular', rounded = false, iconOnly, block = false, ripple, className, ...props }: ThisButtonProps,
+	ref
 ) => {
 	const filledBg           = colorClass('bg', color, { default: 500, yellow: 600 })
 	const filledBgHover      = colorClass('hover:bg', color, 700)
@@ -119,9 +120,9 @@ const Button = forwardRef((
 
 	return (
 		<button
-			{ ...rest }
-			className={ classnames(sharedClasses, classes) }
 			ref={ ref }
+			{ ...props }
+			className={ classnames(sharedClasses, classes) }
 			onMouseUp={ (e) => {
 				ripple === 'dark' && rippleEffect.create(e, 'dark')
 				ripple === 'light' && rippleEffect.create(e, 'light')

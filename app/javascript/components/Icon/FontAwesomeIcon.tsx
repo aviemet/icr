@@ -2,15 +2,15 @@ import React from 'react'
 import classnames from 'classnames'
 import { DivProps } from 'react-html-props'
 
-interface FontAwesomeIcon extends DivProps {
+interface FontAwesomeIconProps extends DivProps {
 	name: string
 	className: string
 }
 
-const FontAwesomeIcon = ({ name, className, ...rest }) => {
+const FontAwesomeIcon = ({ name, className, ...props }: FontAwesomeIconProps) => {
 	return (
 		<i
-			{ ...rest }
+			{ ...props }
 			className={ classnames(name, className) }
 		/>
 	)

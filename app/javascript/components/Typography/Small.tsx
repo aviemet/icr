@@ -23,13 +23,13 @@ const colors = {
 	red: 'text-red-700',
 }
 
-export default function Small({ children, color, ...rest }) {
+export default function Small({ children, color, ...props }) {
 	return (
 		<small
-			{ ...rest }
+			{ ...props }
 			className={ `${colors[color]} font-normal leading-normal mt-0 mb-4` }
 		>
-			{children}
+			{ children }
 		</small>
 	)
 }

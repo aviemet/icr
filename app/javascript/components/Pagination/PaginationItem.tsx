@@ -9,14 +9,14 @@ export default function PaginationItem({
 	button,
 	ripple,
 	className,
-	...rest
+	...props
 }) {
 	const rippleEffect = new Ripple()
 
 	return (
 		<li className="place-items-center grid">
 			<a
-				{ ...rest }
+				{ ...props }
 				className={ `text-sm leading-none flex ${
 					button
 						? 'tracking-wider rounded-lg w-14'
@@ -31,7 +31,7 @@ export default function PaginationItem({
 					ripple === 'light' && rippleEffect.create(e, 'light')
 				} }
 			>
-				{children}
+				{ children }
 			</a>
 		</li>
 	)

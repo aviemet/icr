@@ -95,7 +95,7 @@ export default function Textarea({
 	outline,
 	error,
 	success,
-	...rest
+	...props
 }) {
 	let labelBorderColor,
 					mtTextareaBorderColor,
@@ -200,7 +200,7 @@ export default function Textarea({
 	return (
 		<div className={ container }>
 			<textarea
-				{ ...rest }
+				{ ...props }
 				placeholder=" "
 				className={ `
                     ${textareaClasses}
@@ -209,7 +209,7 @@ export default function Textarea({
 				rows="7"
 			/>
 			<label className={ label }>
-				{outline ? (
+				{ outline ? (
 					placeholder
 				) : (
 					<span
@@ -217,28 +217,28 @@ export default function Textarea({
 							size === 'sm' && 'text-sm'
 						} absolute top-0 transition-all duration-300` }
 					>
-						{placeholder}
+						{ placeholder }
 					</span>
-				)}
+				) }
 			</label>
-			{error && (
+			{ error && (
 				<span
 					className={ `block absolute ${
 						outline ? '-bottom-4' : '-bottom-5'
 					} text-xs text-red-500` }
 				>
-					{error}
+					{ error }
 				</span>
-			)}
-			{success && (
+			) }
+			{ success && (
 				<span
 					className={ `block absolute ${
 						outline ? '-bottom-4' : '-bottom-5'
 					} text-xs text-green-500` }
 				>
-					{success}
+					{ success }
 				</span>
-			)}
+			) }
 		</div>
 	)
 }

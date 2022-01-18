@@ -1,14 +1,18 @@
 import React from 'react'
 
-export default function Modal({ children, size, active, toggler }) {
-	let modalSize
+interface Modal {
+	children?: React.ReactNode
+	size?: 'sm'|'regular'|'lg'
+	active: boolean
+	toggler: () => void
+}
 
+const Modal = ({ children, size = 'regular', active, toggler }: Modal) => {
+	let modalSize = 'max-w-3xl'
 	if (size === 'sm') {
 		modalSize = 'max-w-sm'
 	} else if (size === 'lg') {
 		modalSize = 'max-w-6xl'
-	} else {
-		modalSize = 'max-w-3xl'
 	}
 
 	return (
@@ -36,7 +40,7 @@ export default function Modal({ children, size, active, toggler }) {
 						} flex flex-col w-full bg-white outline-none focus:outline-none` }
 						onClick={ (e) => e.stopPropagation() }
 					>
-						{children}
+						{ children }
 					</div>
 				</div>
 			</div>
@@ -51,13 +55,5 @@ export default function Modal({ children, size, active, toggler }) {
 	)
 }
 
-Modal.defaultProps = {
-	size: 'regular',
-}
+export default Modal
 
-Modal.propTypes = {
-	children: PropTypes.node.isRequired,
-	size: PropTypes.string.isRequired,
-	active: PropTypes.bool.isRequired,
-	toggler: PropTypes.func.isRequired,
-}

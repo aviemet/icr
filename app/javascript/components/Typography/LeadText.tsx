@@ -23,13 +23,13 @@ const colors = {
 	red: 'text-red-700',
 }
 
-export default function LeadText({ children, color, ...rest }) {
+export default function LeadText({ children, color, ...props }) {
 	return (
 		<p
-			{ ...rest }
+			{ ...props }
 			className={ `${colors[color]} text-lg font-light leading-relaxed mt-6 mb-4` }
 		>
-			{children}
+			{ children }
 		</p>
 	)
 }

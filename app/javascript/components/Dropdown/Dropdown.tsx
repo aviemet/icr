@@ -30,7 +30,7 @@ const Dropdown = forwardRef((
 		block = false,
 		ripple,
 		className,
-		...rest
+		...props
 	}: DropdownProps,
 	ref: React.ForwardedRef<any>
 ) => {
@@ -153,7 +153,7 @@ const Dropdown = forwardRef((
 			>
 				<button
 					ref={ ref }
-					{ ...rest }
+					{ ...props }
 					className={ classnames(sharedClasses, classes, className) }
 					type="button"
 					onClick={ () => setDropdownShow(!dropdownShow) }

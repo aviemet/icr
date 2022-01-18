@@ -22,11 +22,11 @@ const colors = {
 	red: 'mt-radio-red-500',
 }
 
-export default function Radio({ color, text, id, ...rest }) {
+export default function Radio({ color, text, id, ...props }) {
 	return (
 		<div className="flex items-center">
 			<input
-				{ ...rest }
+				{ ...props }
 				id={ id }
 				type="radio"
 				className={ `mt-radio ${colors[color]} hidden overflow-hidden` }

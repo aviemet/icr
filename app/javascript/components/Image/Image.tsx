@@ -7,10 +7,10 @@ interface ImageProps extends ImgProps {
 	rounded?: boolean
 }
 
-const Image = ({ raised = false, rounded = false, className, ...rest }: ImageProps) => {
+const Image = ({ raised = false, rounded = false, className, ...props }: ImageProps) => {
 	return (
 		<img
-			{ ...rest }
+			{ ...props }
 			className={ classnames('max-w-full h-auto align-middle border-none', `rounded-${rounded ? 'full' : 'xl'}`, { 'shadow-lg': raised }, className) }
 		/>
 	)

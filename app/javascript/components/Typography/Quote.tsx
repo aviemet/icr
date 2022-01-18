@@ -46,16 +46,16 @@ const citeColors = {
 	red: 'text-red-800',
 }
 
-export default function Quote({ children, color, footer, cite, ...rest }) {
+export default function Quote({ children, color, footer, cite, ...props }) {
 	return (
-		<div { ...rest } className="mb-2">
+		<div { ...props } className="mb-2">
 			<p
 				className={ `${textColors[color]} text-base font-light leading-relaxed mt-0 mb-2` }
 			>
-				{children}
+				{ children }
 			</p>
 			<footer className={ `block ${citeColors[color]}` }>
-                - {footer} <cite>{cite}</cite>
+                - { footer } <cite>{ cite }</cite>
 			</footer>
 		</div>
 	)

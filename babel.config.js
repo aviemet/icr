@@ -1,36 +1,9 @@
 module.exports = function(api) {
-	// const defaultConfigFunc = require('@rails/webpacker/package/babel/preset.js')
-	// const resultConfig = defaultConfigFunc(api)
 	const validEnv = ['development', 'test', 'production']
 	const currentEnv = api.env()
 	const isDevelopmentEnv = api.env('development')
 	const isProductionEnv = api.env('production')
 	const isTestEnv = api.env('test')
-
-	// const changesOnDefault = {
-	// 	presets: [
-	// 		[
-	// 			'@babel/preset-react',
-	// 			{
-	// 				development: isDevelopmentEnv || isTestEnv,
-	// 				useBuiltIns: true
-	// 			}
-	// 		],
-	// 		isProductionEnv && ['babel-plugin-transform-react-remove-prop-types',
-	// 			{
-	// 				removeImport: true
-	// 			}
-	// 		]
-	// 	].filter(Boolean),
-	// 	plugins: [
-	// 		process.env.WEBPACK_SERVE && 'react-refresh/babel'
-	// 	].filter(Boolean),
-	// }
-
-	// resultConfig.presets = [...resultConfig.presets, ...changesOnDefault.presets]
-	// resultConfig.plugins = [...resultConfig.plugins, ...changesOnDefault.plugins ]
-
-	// return resultConfig
 
 	if (!validEnv.includes(currentEnv)) {
 		throw new Error(

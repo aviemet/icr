@@ -2,16 +2,15 @@ import React from 'react'
 import { DivProps } from 'react-html-props'
 import classnames from 'classnames'
 
-interface FontAwesomeIcon extends DivProps {
+interface MaterialIconProps extends DivProps {
 	name: string
 	className: string
 }
 
-const MaterialIcon = ({ name, className, ...rest }: FontAwesomeIcon) => {
+const MaterialIcon = ({ name, className, ...props }: MaterialIconProps) => {
 	return (
-
 		<span
-			{ ...rest }
+			{ ...props }
 			className={ classnames('material-icons leading-none', className) }
 		>
 			{ name }

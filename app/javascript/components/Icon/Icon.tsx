@@ -5,11 +5,11 @@ import { colorClass, Tcolors } from 'layouts/theme'
 import { DivProps } from 'react-html-props'
 import classnames from 'classnames'
 
-interface IconProps extends DivProps{
-	family: 'material-icons'|'font-awesome'
+export interface IconProps extends DivProps{
 	name: string
+	family?: 'material-icons'|'font-awesome'
 	color?: Tcolors
-	size: keyof typeof sizes
+	size?: keyof typeof sizes
 }
 
 const sizes = {
@@ -28,12 +28,12 @@ const sizes = {
 	'9xl': 'text-9xl',
 }
 
-const Icon = ({ family = 'material-icons', name, color, size = 'base', className, ...rest }: IconProps) => {
+const Icon = ({ name, family = 'material-icons', color, size = 'base', className, ...props }: IconProps) => {
 	const IconComponent = family === 'material-icons' ? MaterialIcon : FontAwesomeIcon
 
 	const textColor = color ? colorClass('text', color, { default: 500, yellow: 600 }) : color
 
-	return <IconComponent name={ name } className={ classnames({ [`${textColor}`]: !!color }) } />
+	return <IconComponent name={ name } className={ classnames({ [`${textColor}`]: !!color }) } { ...props } />
 }
 
 export default Icon

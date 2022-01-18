@@ -9,7 +9,7 @@ interface CheckboxProps extends InputProps {
 }
 
 const Checkbox = forwardRef((
-	{ color = 'lightBlue', text, id, ...rest }: CheckboxProps,
+	{ color = 'lightBlue', text, id, ...props }: CheckboxProps,
 	ref: React.ForwardedRef<any>
 ) => {
 	const colors = colorClass('mt-checkbox', color, { default: 500, yellow: 600 })
@@ -18,7 +18,7 @@ const Checkbox = forwardRef((
 		<div className="flex items-center">
 			<input
 				ref={ ref }
-				{ ...rest }
+				{ ...props }
 				id={ id }
 				type="checkbox"
 				className={ classnames('mt-checkbox hidden overflow-hidden', colors) }

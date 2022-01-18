@@ -6,14 +6,14 @@ export default function TabItem({
 	active,
 	ripple,
 	className,
-	...rest
+	...props
 }) {
 	const rippleEffect = new Ripple()
 
 	return (
 		<li className="text-center">
 			<a
-				{ ...rest }
+				{ ...props }
 				className={ `flex items-center justify-center gap-1 rounded-lg text-sm font-medium py-4 px-6 leading-normal text-white transition-all duration-300 ${
 					active && 'bg-white bg-opacity-20'
 				} ${className}` }
@@ -23,7 +23,7 @@ export default function TabItem({
 					ripple === 'light' && rippleEffect.create(e, 'light')
 				} }
 			>
-				{children}
+				{ children }
 			</a>
 		</li>
 	)

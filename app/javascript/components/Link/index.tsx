@@ -1,36 +1,21 @@
 import React from 'react'
-import { InertiaLink } from '@inertiajs/inertia-react'
+import { InertiaLink, InertiaLinkProps } from '@inertiajs/inertia-react'
+import { Button } from 'components'
+import { ButtonProps } from 'components/Button/Button'
 
-const Button: React.FC = ({ children }) => <button>{ children }</button>
-
-export interface LinkProps {
-	children?: any,
-	as?: string,
-	data?: object,
-	href: string,
-	method?: string,
-	preserveScroll?: boolean,
-	preserveState?: null | boolean,
-	replace?: boolean,
-	only?: Array<string>,
-	headers?: object,
-	className?: string,
-	id?: string,
-	buttonProps?: object,
-	rest?: any
+export interface LinkProps extends InertiaLinkProps {
+	buttonProps?: ButtonProps
 }
 
-const Link = ({ children, as = 'a', href, buttonProps, ...props }: LinkProps) => {
-	let asProp = as
-	if(props.method !== undefined && props.method !== 'get'){
-		asProp = 'button'
-	}
+const Link = ({ children, as = 'a', method, buttonProps, ...props }: LinkProps) => {
+	// Only present standard GET requests as anchor tags, all others as buttons
+	as = (method !== undefined && method !== 'get') ? 'button' : as
 
-	const asButton = asProp === 'button'
+	const asButton = as === 'button'
 	return (
-		<InertiaLink href={ href } { ...props } type={ asButton ? 'button' : undefined }>{
-			asButton ? <Button { ...buttonProps }>{ children }</Button> : children
-		}</InertiaLink>
+		<InertiaLink { ...props } as={ asButton ? 'a' : as }>
+			{ asButton ? <Button>{ children }</Button> : children }
+		</InertiaLink>
 	)
 }
 

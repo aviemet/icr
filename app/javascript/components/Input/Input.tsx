@@ -1,149 +1,121 @@
 import React from 'react'
+import { Icon } from 'components'
+import { IconProps } from 'components/Icon/Icon'
 import { colorClass, Tcolors } from 'layouts/theme'
 import { InputProps as IProps } from 'react-html-props'
 import classnames from 'classnames'
 
-interface InputProps extends IProps {
-	color: Tcolors
-	size: string
-	outline: boolean
-	error: string
-	success: string
+interface InputProps extends Omit<IProps, 'size'> {
+	color?: Tcolors
+	size?: string
+	outline?: boolean
+	error?: string
+	success?: string
+	icon?: string|{
+		name: string
+		family?: 'material-icons'|'font-awesome'
+		position?: 'left'|'right'
+		color?: Tcolors
+	}
 }
 
-const Input = ({
-	placeholder,
-	color = 'lightBlue',
-	size = 'regular',
-	outline = false,
-	error,
-	success,
-	...rest
-}: InputProps) => {
-	let labelBorderColor,
-					mtInputBorderColor,
-					mtInputOutlineColor,
-					mtInputOutlineFocusColor,
-					inputClasses = []
+const borderColors = (color: Tcolors) => colorClass('border', color, { default: 500, yellow: 600 })
+const mtInputColors = (color: Tcolors) => colorClass('mt-input', color, { default: 500, yellow: 600 })
+const mtInputOutlineColors = (color: Tcolors) => colorClass('mt-input-outline', color, { default: 500, yellow: 600 })
 
-	let container = ['w-full', 'relative']
+const Input = ({ placeholder, color = 'lightBlue', size = 'regular', outline = false, error, success, icon, ...props }: InputProps) => {
+	const iconProps: IconProps = { name: '' } // TODO: I think I can do better than this
+	if(typeof icon === 'string') {
+		iconProps.name = icon
+	} else if(typeof icon === 'object') {
+		iconProps.name = icon.name
+		if(icon?.family) iconProps.family = icon.family
+		if(icon?.color)  iconProps.color = icon.color
+	}
 
-	const mtInputColors = colorClass('mt-input', color, { default: 500, yellow: 600 })
-	const mtInputOutlineColors = colorClass('mt-input-outline', color, { default: 500, yellow: 600 })
-	const borderColors = colorClass('border', color, { default: 500, yellow: 600 })
+	let labelBorderColor = 'border-gray-300'
+	let mtInputBorderColor = mtInputColors(color)
+	let mtInputOutlineColor = mtInputOutlineColors(color)
+	let mtInputOutlineFocusColor = borderColors(color)
 
 	if (error) {
-		labelBorderColor = borderColors['red']
-		mtInputBorderColor = mtInputColors['red']
-		mtInputOutlineColor = mtInputOutlineColors['red']
-		mtInputOutlineFocusColor = borderColors['red']
+		labelBorderColor = borderColors('red')
+		mtInputBorderColor = mtInputColors('red')
+		mtInputOutlineColor = mtInputOutlineColors('red')
+		mtInputOutlineFocusColor = borderColors('red')
 	} else if (success) {
-		labelBorderColor = borderColors['green']
-		mtInputBorderColor = mtInputColors['green']
-		mtInputOutlineColor = mtInputOutlineColors['green']
-		mtInputOutlineFocusColor = borderColors['green']
-	} else {
-		labelBorderColor = 'border-gray-300'
-		mtInputBorderColor = mtInputColors[color]
-		mtInputOutlineColor = mtInputOutlineColors[color]
-		mtInputOutlineFocusColor = borderColors[color]
+		labelBorderColor = borderColors('green')
+		mtInputBorderColor = mtInputColors('green')
+		mtInputOutlineColor = mtInputOutlineColors('green')
+		mtInputOutlineFocusColor = borderColors('green')
 	}
 
 	let label = [
 		'text-gray-400',
 		'absolute',
 		'left-0',
-		`${outline ? '-top-1.5' : '-top-0.5'}`,
+		`-top-${outline ? '1.5' : '0.5'}`,
 		'w-full',
 		'h-full',
-		`${!outline && 'border border-t-0 border-l-0 border-r-0 border-b-1'}`,
 		labelBorderColor,
 		'pointer-events-none',
-		`${outline && 'flex'}`,
-		`${outline && size === 'sm' && 'text-sm'}`,
-		`${outline && 'leading-10'}`,
-		`${outline && 'transition-all'}`,
-		`${outline && 'duration-300'}`,
+		{ 'border border-t-0 border-l-0 border-r-0 border-b-1': !outline },
+		{ 'flex leading-10 transition-all duration-300': outline },
+		{ 'text-sm': outline && size === 'sm' }
 	]
 
-	const sharedClasses = [
-		'w-full',
-		'h-full',
-		'text-gray-800',
-		'leading-normal',
-		'shadow-none',
-		'outline-none',
-		'focus:outline-none',
-		'focus:ring-0',
-		'focus:text-gray-800',
-	]
-
-	const inputSM = [
-		...sharedClasses,
+	const inputClasses = [
 		`${outline ? 'px-3' : 'px-0'}`,
-		`${outline && 'pt-1.5 pb-0.5'}`,
-		'text-sm',
-	]
-	const inputRegular = [
-		...sharedClasses,
-		`${outline ? 'px-3' : 'px-0'}`,
-		`${outline && 'pt-2.5 pb-1.5'}`,
-	]
-	const inputLG = [
-		...sharedClasses,
-		`${outline ? 'px-3' : 'px-0'}`,
-		`${outline && 'pt-3.5 pb-2.5'}`,
 	]
 
-	const inputFilled = [
-		mtInputBorderColor,
-		'mt-input',
-		'bg-transparent',
-		'border-none',
-	]
+	inputClasses.concat(
+		outline ? [
+			mtInputOutlineColor,
+			labelBorderColor,
+			'mt-input-outline',
+			'bg-transparent',
+			'border',
+			'border-1',
+			'border-gray-300',
+			'rounded-lg',
+			'focus:border-2',
+			`focus:${mtInputOutlineFocusColor}`,
+		] : [
+			mtInputBorderColor,
+			'mt-input',
+			'bg-transparent',
+			'border-none',
+		]
+	)
 
-	const inputOutline = [
-		mtInputOutlineColor,
-		labelBorderColor,
-		'mt-input-outline',
-		'bg-transparent',
-		'border',
-		'border-1',
-		'border-gray-300',
-		'rounded-lg',
-		'focus:border-2',
-		`focus:${mtInputOutlineFocusColor}`,
-	]
+	let containerHeight = 'h-11'
 
 	if (size === 'sm') {
-		container.push('h-9')
-		inputClasses.push(...inputSM)
+		containerHeight = 'h-9'
+		inputClasses.concat([
+			`${outline && 'pt-1.5 pb-0.5'}`,
+			'text-sm',
+		])
 	} else if (size === 'lg') {
-		container.push('h-12')
-		inputClasses.push(...inputLG)
+		containerHeight = 'h-12'
+		inputClasses.push(`${outline && 'pt-3.5 pb-2.5'}`)
 	} else {
-		container.push('h-11')
-		inputClasses.push(...inputRegular)
+		inputClasses.push(`${outline && 'pt-2.5 pb-1.5'}`)
 	}
 
-	outline
-		? inputClasses.push(...inputOutline)
-		: inputClasses.push(...inputFilled)
-
-	container = container.join(' ')
-	label = label.join(' ')
-	inputClasses = inputClasses.join(' ')
-
 	return (
-		<div className={ container }>
+		<div className={ classnames('w-full relative', containerHeight) }>
+			{ icon && <Icon { ...iconProps } /> }
 			<input
-				{ ...rest }
+				{ ...props }
 				placeholder=" "
-				className={ `${inputClasses} ${
-					error && 'mt-input-outline-error'
-				} ${success && 'mt-input-outline-success'}` }
+				className={ classnames(
+					'w-full h-full text-gray-800 leading-normal shadow-none outline-none focus:outline-none focus:ring-0 focus:text-gray-800',
+					{ 'mt-input-outline-error': error, 'mt-input-outline-success': success },
+					inputClasses
+				) }
 			/>
-			<label className={ label }>
+			<label className={ classnames(label) }>
 				{ outline ? (
 					placeholder
 				) : (
@@ -169,18 +141,3 @@ const Input = ({
 }
 
 export default Input
-
-Input.defaultProps = {
-	color: 'lightBlue',
-	size: 'regular',
-	outline: false,
-}
-
-Input.propTypes = {
-	placeholder: PropTypes.string.isRequired,
-	color: PropTypes.string.isRequired,
-	size: PropTypes.string.isRequired,
-	outline: PropTypes.bool.isRequired,
-	error: PropTypes.string,
-	success: PropTypes.string,
-}
