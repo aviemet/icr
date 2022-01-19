@@ -511,6 +511,15 @@ export const serialize = __jsr.serialize;
 
 /**
  * Generates rails route to
+ * /clients/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const client_path = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"clients"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
  * /clients(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
@@ -519,12 +528,21 @@ export const clients_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"clients"],[
 
 /**
  * Generates rails route to
- * /pages/:id/edit(.:format)
+ * /clients/:id/edit(.:format)
  * @param {any} id
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const edit_page_path = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"pages"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+export const edit_client_path = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"clients"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /employees/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const edit_employee_path = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"employees"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
 
 /**
  * Generates rails route to
@@ -537,11 +555,36 @@ export const edit_rails_conductor_inbound_email_path = __jsr.r({"id":{"r":true},
 
 /**
  * Generates rails route to
- * /pages/new(.:format)
+ * /employees/:id(.:format)
+ * @param {any} id
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const new_page_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"pages"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+export const employee_path = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"employees"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /employees(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const employees_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"employees"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
+ * /clients/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const new_client_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"clients"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /employees/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const new_employee_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"employees"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
 
 /**
  * Generates rails route to
@@ -558,23 +601,6 @@ export const new_rails_conductor_inbound_email_path = __jsr.r({"format":{}}, [2,
  * @returns {string} route path
  */
 export const new_rails_conductor_inbound_email_source_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"rails"],[2,[7,"/"],[2,[6,"conductor"],[2,[7,"/"],[2,[6,"action_mailbox"],[2,[7,"/"],[2,[6,"inbound_emails"],[2,[7,"/"],[2,[6,"sources"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]]]]]]]]]);
-
-/**
- * Generates rails route to
- * /pages/:id(.:format)
- * @param {any} id
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const page_path = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"pages"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
-
-/**
- * Generates rails route to
- * /pages(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const pages_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"pages"],[1,[2,[8,"."],[3,"format"]]]]]);
 
 /**
  * Generates rails route to
@@ -782,14 +808,6 @@ export const schedules_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"schedules
  * @returns {string} route path
  */
 export const settings_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"settings"],[1,[2,[8,"."],[3,"format"]]]]]);
-
-/**
- * Generates rails route to
- * /staff(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const staff_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"staff"],[1,[2,[8,"."],[3,"format"]]]]]);
 
 /**
  * Generates rails route to

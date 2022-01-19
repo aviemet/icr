@@ -13,11 +13,13 @@ gem "puma", "~> 5.0"
 gem "jbuilder"
 gem "webpacker", git: 'https://github.com/rails/webpacker.git'
 gem "inertia_rails", "~> 1.11"
+gem "js-routes", "~> 2.2"
 
 # Helpers
 gem "factory_bot", "~> 6.2"
 gem "devise", "~> 4.8"
 gem "ice_cube", "~> 0.16.4"
+gem "slug", "~> 4.1"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
@@ -43,10 +45,12 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   gem "better_errors", "~> 2.9"
+  gem "awesome_print", "~> 1.9"
   gem "solargraph", "~> 0.44.2"
   gem "rubocop-rails", "~> 2.13"
   gem "rubocop-rspec", "~> 2.7"
   gem "rubocop-performance", "~> 1.13"
+  gem "rubocop-daemon", "~> 0.3.2"
 end
 
 group :development do
@@ -67,5 +71,3 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
-
-gem "js-routes", "~> 2.2"

@@ -85,6 +85,18 @@ export const serialize: RouterExposedMethods['serialize'];
 
 /**
  * Generates rails route to
+ * /clients/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const client_path: ((
+  id: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
  * /clients(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
@@ -95,12 +107,24 @@ export const clients_path: ((
 
 /**
  * Generates rails route to
- * /pages/:id/edit(.:format)
+ * /clients/:id/edit(.:format)
  * @param {any} id
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const edit_page_path: ((
+export const edit_client_path: ((
+  id: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /employees/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const edit_employee_path: ((
   id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
@@ -119,11 +143,43 @@ export const edit_rails_conductor_inbound_email_path: ((
 
 /**
  * Generates rails route to
- * /pages/new(.:format)
+ * /employees/:id(.:format)
+ * @param {any} id
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const new_page_path: ((
+export const employee_path: ((
+  id: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /employees(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const employees_path: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /clients/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const new_client_path: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /employees/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const new_employee_path: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -144,28 +200,6 @@ export const new_rails_conductor_inbound_email_path: ((
  * @returns {string} route path
  */
 export const new_rails_conductor_inbound_email_source_path: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /pages/:id(.:format)
- * @param {any} id
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const page_path: ((
-  id: RequiredRouteParameter,
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /pages(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const pages_path: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -436,16 +470,6 @@ export const schedules_path: ((
  * @returns {string} route path
  */
 export const settings_path: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /staff(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const staff_path: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 

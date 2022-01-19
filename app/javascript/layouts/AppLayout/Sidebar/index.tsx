@@ -46,7 +46,7 @@ const Sidebar = () => {
 								</NavLink>
 							</li>
 							<li className={ classnames(navLiStyles) }>
-								<NavLink href={ Routes.staff_path() }>
+								<NavLink href={ Routes.employees_path() }>
 									<Icon name="manage_accounts" size="2xl" />
 									Staff
 								</NavLink>

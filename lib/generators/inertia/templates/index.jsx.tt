@@ -1,0 +1,20 @@
+import React from 'react'
+
+const Index = ({ <%= plural_table_name %> }) => {
+	return (
+		<div>
+			<h1><%= human_name %></h1>
+
+			<table>
+				<thead>
+					
+				</thead>
+				<tbody>
+
+				</tbody>
+			</table>
+		</div>
+	)
+}
+
+export default Index

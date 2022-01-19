@@ -1,6 +1,6 @@
-class CreateStaffs < ActiveRecord::Migration[7.0]
+class CreateEmployees < ActiveRecord::Migration[7.0]
   def change
-    create_table :staffs do |t|
+    create_table :employees do |t|
       t.string :f_name, null: false
       t.string :l_name, null: false
       t.string :m_name

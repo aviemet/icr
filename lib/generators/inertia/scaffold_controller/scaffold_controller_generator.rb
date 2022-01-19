@@ -1,26 +1,24 @@
 # frozen_string_literal: true
 
-require "rails/generators/resource_helpers"
-
-module Rails
+module Inertia
   module Generators
-    class ScaffoldControllerGenerator < NamedBase # :nodoc:
-      include ResourceHelpers
+    class ScaffoldControllerGenerator < Rails::Generators::NamedBase # :nodoc:
+      include Rails::Generators::ResourceHelpers
+
+      source_root File.expand_path("../templates", __dir__)
 
       check_class_collision suffix: "Controller"
 
       class_option :helper, type: :boolean
       class_option :orm, banner: "NAME", type: :string, required: true,
                          desc: "ORM to generate the controller for"
-      class_option :api, type: :boolean,
-                         desc: "Generates API controller"
 
       class_option :skip_routes, type: :boolean, desc: "Don't add routes to config/routes.rb."
 
       argument :attributes, type: :array, default: [], banner: "field:type field:type"
 
       def create_controller_files
-        template_file = options.api? ? "api_controller.rb" : "controller.rb"
+        template_file = "controller.rb"
         template template_file,
                  File.join("app/controllers", controller_class_path, "#{controller_file_name}_controller.rb")
       end
