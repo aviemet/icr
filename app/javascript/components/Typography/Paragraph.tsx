@@ -7,13 +7,13 @@ interface ParagraphProps extends PProps {
 	color?: Tcolors
 }
 
-const Paragraph = ({ children, color = 'blueGray', ...props }: ParagraphProps) => {
+const Paragraph = ({ children, color = 'blueGray', className, ...props }: ParagraphProps) => {
 	const colors = colorClass('text-gray', color, 700)
 
 	return (
 		<p
 			{ ...props }
-			className={ classnames(colors, 'text-base font-light leading-relaxed mt-0 mb-4') }
+			className={ classnames(colors, 'text-base font-light leading-relaxed mt-0 mb-4', className) }
 		>
 			{ children }
 		</p>

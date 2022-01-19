@@ -7,7 +7,7 @@ interface LeadText extends PProps {
 	color: Tcolors
 }
 
-const LeadText = ({ children, color = 'blueGray', ...props }: LeadText) => {
+const LeadText = ({ children, color = 'blueGray', className, ...props }: LeadText) => {
 	const colors = colorClass('text', color, {
 		default: 700,
 		gray: 200,
@@ -17,7 +17,7 @@ const LeadText = ({ children, color = 'blueGray', ...props }: LeadText) => {
 	return (
 		<p
 			{ ...props }
-			className={ classnames(colors, 'text-lg font-light leading-relaxed mt-6 mb-4') }
+			className={ classnames(colors, 'text-lg font-light leading-relaxed mt-6 mb-4', className) }
 		>
 			{ children }
 		</p>
