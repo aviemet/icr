@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { FormProps } from 'react-html-props'
-import { Input } from 'components'
+import Input from 'components/Input/Input'
 
 interface ThisFormProps extends FormProps {
 	onSubmit?: () => void
@@ -12,13 +12,12 @@ interface FormComponent extends React.FunctionComponent{
 }
 
 const Form: FormComponent = (
-	{ children, onSubmit = () => {}, ...props }: ThisFormProps,
-	ref
+	{ children, onSubmit = () => {}, ...props }: ThisFormProps
 ) => {
 	const { register, handleSubmit, watch, formState: { errors } } = useForm()
 
 	return (
-		<form ref={ ref } onSubmit={ handleSubmit(onSubmit) } { ...props }>
+		<form onSubmit={ handleSubmit(onSubmit) } { ...props }>
 			{ children }
 		</form>
 	)

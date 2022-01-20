@@ -2,6 +2,8 @@
 @import './css/tailwind/base_styles.css';
 @import './css/tailwind/layout.css';
 
+@import './css/tailwind/material-tailwind.css';
+
 :root {
   --font-size-break: 6vw;
 }
