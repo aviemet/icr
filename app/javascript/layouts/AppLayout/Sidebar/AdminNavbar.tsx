@@ -37,7 +37,7 @@ const AdminNavbar = ({ showSidebar, setShowSidebar }) => {
 
 				<div className="flex items-center justify-between w-full">
 					<h4 className="mt-1 text-sm tracking-wider text-white uppercase">
-						DASHBOARD
+						{  }
 					</h4>
 
 					<div className="flex">

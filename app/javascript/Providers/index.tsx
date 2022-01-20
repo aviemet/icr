@@ -1,12 +1,15 @@
 import React from 'react'
-import theme from '../theme'
+import theme from '../layouts/theme'
+
 interface ProvidersProps {
 	children: React.ReactNode
 }
 
 const Providers = ({ children }: ProvidersProps) => {
 	return(
-		<div id="providers">{ children }</div>
+		<>
+			{ children }
+		</>
 	)
 }
 

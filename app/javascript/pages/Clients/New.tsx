@@ -3,7 +3,7 @@ import React from 'react'
 const New = ({ client }) => {
 	return (
 		<div>
-			<pre>{ client }</pre>
+			<h1>New Client</h1>
 		</div>
 	)
 }

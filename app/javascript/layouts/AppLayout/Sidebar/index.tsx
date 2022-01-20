@@ -4,7 +4,7 @@ import AdminNavbar from './AdminNavbar'
 import NavLink from './NavLink'
 import { css } from 'astroturf'
 import classnames from 'classnames'
-import * as Routes from 'routes'
+import { Routes } from 'lib'
 
 const navLiStyles = css`
 	@apply mb-4;

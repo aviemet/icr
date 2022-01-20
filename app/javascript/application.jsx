@@ -4,7 +4,7 @@ import { render } from 'react-dom'
 import axios from 'axios'
 import { InertiaProgress } from '@inertiajs/progress'
 import { LoginLayout, AppLayout } from './layouts'
-import Providers from './layouts/Providers'
+import Providers from './Providers'
 
 document.addEventListener('DOMContentLoaded', () => {
 	InertiaProgress.init()
@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	axios.defaults.headers.common['X-CSRF-Token'] = csrfToken
 
 	createInertiaApp({
+		title: title => `ICR - ${title}`,
 		resolve: name => {
 			const page = require(`./pages/${name}`).default
 			if(page.layout === undefined) {
@@ -21,10 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			return page
 		},
 		setup({ el, App, props }) {
-			render(
-				<Providers><App { ...props } /></Providers>,
-				el
-			)
+			render(<Providers><App { ...props } /></Providers>, el)
 		},
 	})
 })
