@@ -1,15 +1,35 @@
 import React from 'react'
-import theme from '../layouts/theme'
+
+import themes from 'layouts/themes'
+import { ThemeProvider } from '@mui/material/styles'
+import { CssBaseline, StyledEngineProvider } from '@mui/material'
+
+const config = {
+	// basename: only at build time to set, and Don't add '/' at end off BASENAME for breadcrumbs, also Don't put only '/' use blank('') instead,
+	// like '/berry-material-react/react/default'
+	basename: '/free',
+	defaultPath: '/dashboard/default',
+	fontFamily: '\'Roboto\', sans-serif',
+	borderRadius: 12
+}
 
 interface ProvidersProps {
 	children: React.ReactNode
 }
 
 const Providers = ({ children }: ProvidersProps) => {
+	const customization = {
+		isOpen: [], // for active default menu
+		fontFamily: config.fontFamily,
+		borderRadius: config.borderRadius,
+		opened: true
+	}
 	return(
-		<>
-			{ children }
-		</>
+		<StyledEngineProvider injectFirst>
+			<ThemeProvider theme={ themes(customization) }>
+				{ children }
+			</ThemeProvider>
+		</StyledEngineProvider>
 	)
 }
 
