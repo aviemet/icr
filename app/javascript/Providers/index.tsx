@@ -3,6 +3,7 @@ import React from 'react'
 import themes from 'layouts/themes'
 import { ThemeProvider } from '@mui/material/styles'
 import { CssBaseline, StyledEngineProvider } from '@mui/material'
+import { MenuContextProvider } from 'Store'
 
 const config = {
 	// basename: only at build time to set, and Don't add '/' at end off BASENAME for breadcrumbs, also Don't put only '/' use blank('') instead,
@@ -27,7 +28,9 @@ const Providers = ({ children }: ProvidersProps) => {
 	return(
 		<StyledEngineProvider injectFirst>
 			<ThemeProvider theme={ themes(customization) }>
-				{ children }
+				<MenuContextProvider>
+					{ children }
+				</MenuContextProvider>
 			</ThemeProvider>
 		</StyledEngineProvider>
 	)

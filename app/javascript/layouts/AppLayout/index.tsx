@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Head } from '@inertiajs/inertia-react'
 
 import { styled, useTheme } from '@mui/material/styles'
 import { AppBar, Box, CssBaseline, Toolbar, useMediaQuery } from '@mui/material'
 import Header from './Header'
 import Sidebar from './Sidebar'
+import { useMenuState, actions } from 'Store'
 
 const AppLayout = ({ children }) => {
-
 	const theme = useTheme()
 	const matchDownMd = useMediaQuery(theme.breakpoints.down('lg'))
 
-	// Handle left drawer
-	const [leftDrawerOpened, setLeftDrawerOpened] = useState(true)
+	const [ { sideMenuOpen }, dispatch ] = useMenuState()
+
 	const handleLeftDrawerToggle = () => {
-		setLeftDrawerOpened(!leftDrawerOpened)
+		dispatch(actions.TOGGLE_SIDE_MENU)
 	}
 
 	useEffect(() => {
-		setLeftDrawerOpened(!matchDownMd)
+		dispatch(actions.OPEN_SIDE_MENU)
 	}, [matchDownMd])
 
 	return (
@@ -35,7 +35,7 @@ const AppLayout = ({ children }) => {
 					elevation={ 0 }
 					sx={ {
 						bgcolor: theme.palette.background.default,
-						transition: leftDrawerOpened ? theme.transitions.create('width') : 'none'
+						transition: sideMenuOpen ? theme.transitions.create('width') : 'none'
 					} }
 				>
 					<Toolbar>
@@ -44,10 +44,10 @@ const AppLayout = ({ children }) => {
 				</AppBar>
 
 				{ /* drawer */ }
-				<Sidebar drawerOpen={ leftDrawerOpened } drawerToggle={ handleLeftDrawerToggle } />
+				<Sidebar drawerOpen={ sideMenuOpen } drawerToggle={ handleLeftDrawerToggle } />
 
 				{ /* main content */ }
-				<Main theme={ theme } open={ leftDrawerOpened }>
+				<Main theme={ theme } open={ sideMenuOpen }>
 					{ /* breadcrumb */ }
 					{ /* <Breadcrumbs separator={ IconChevronRight } navigation={ navigation } icon title rightAlign /> */ }
 					{ children }
@@ -67,30 +67,30 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
 			duration: theme.transitions.duration.leavingScreen
 		}),
 		[theme.breakpoints.up('md')]: {
-			// marginLeft: -(drawerWidth - 20),
-			// width: `calc(100% - ${drawerWidth}px)`
+			marginLeft: 20,
+			width: `calc(100% - ${theme.constants.drawerWidth}px)`
 		},
 		[theme.breakpoints.down('md')]: {
 			marginLeft: '20px',
-			// width: `calc(100% - ${drawerWidth}px)`,
+			width: `calc(100% - ${theme.constants.drawerWidth}px)`,
 			padding: '16px'
 		},
 		[theme.breakpoints.down('sm')]: {
 			marginLeft: '10px',
-			// width: `calc(100% - ${drawerWidth}px)`,
+			width: `calc(100% - ${theme.constants.drawerWidth}px)`,
 			padding: '16px',
 			marginRight: '10px'
 		}
 	}),
 	...(open && {
+		marginLeft: (theme.constants.drawerWidth - 20),
 		transition: theme.transitions.create('margin', {
 			easing: theme.transitions.easing.easeOut,
 			duration: theme.transitions.duration.enteringScreen
 		}),
-		marginLeft: 0,
 		borderBottomLeftRadius: 0,
 		borderBottomRightRadius: 0,
-		// width: `calc(100% - ${drawerWidth}px)`,
+		width: `calc(100% - ${theme.constants.drawerWidth}px)`,
 		[theme.breakpoints.down('md')]: {
 			marginLeft: '20px'
 		},

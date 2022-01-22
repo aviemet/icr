@@ -116,7 +116,12 @@ export const theme = (customization) => {
 				}
 			}
 		},
-		typography: themeTypography(themeOption)
+		typography: themeTypography(themeOption),
+		constants: {
+			gridSpacing: 3,
+			drawerWidth: 260,
+			appDrawerWidth: 320,
+		}
 	}
 
 	const themes = createTheme(themeOptions)
