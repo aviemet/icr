@@ -9,10 +9,8 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 // ==============================|| SIDEBAR MENU LIST ITEMS ||============================== //
 
 const NavItem = ({ item, level }) => {
-	const theme = useTheme()
-
-	// const customization = theme.customization
-	const matchesSM = useMediaQuery(theme.breakpoints.down('lg'))
+	const { breakpoints } = useTheme()
+	const matchesSM = useMediaQuery(breakpoints.down('lg'))
 
 	const Icon = item.icon
 	const itemIcon = item?.icon ? (
@@ -20,6 +18,8 @@ const NavItem = ({ item, level }) => {
 	) : (
 		<FiberManualRecordIcon
 			sx={ {
+				width: 8,
+				height: 8
 				// width: customization.isOpen.findIndex((id) => id === item?.id) > -1 ? 8 : 6,
 				// height: customization.isOpen.findIndex((id) => id === item?.id) > -1 ? 8 : 6
 			} }
@@ -33,7 +33,7 @@ const NavItem = ({ item, level }) => {
 	}
 
 	let listItemProps = {
-		// component: forwardRef((props, ref) => <Link ref={ ref } { ...props } href="/" target={ itemTarget } />)
+		component: forwardRef((props, ref) => <Link ref={ ref } { ...props } href={ item.url ? item.url : '#' } target={ itemTarget } />)
 	}
 	if (item?.external) {
 		// listItemProps = { component: 'a', href: item.url, target: itemTarget }

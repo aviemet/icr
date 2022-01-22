@@ -1,18 +1,10 @@
 import React, { useState } from 'react'
-
-// material-ui
 import { useTheme } from '@mui/material/styles'
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material'
-
-// project imports
 import NavItem from '../NavItem'
-
-// assets
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-
-// ==============================|| SIDEBAR MENU LIST COLLAPSE ITEMS ||============================== //
 
 const NavCollapse = ({ menu, level }) => {
 	const theme = useTheme()
@@ -78,7 +70,7 @@ const NavCollapse = ({ menu, level }) => {
 					}
 					secondary={
 						menu.caption && (
-							<Typography variant="caption" sx={ { /* ...theme.typography.subMenuCaption */ } } display="block" gutterBottom>
+							<Typography variant="caption" sx={ { ...theme.typography.subMenuCaption } } display="block" gutterBottom>
 								{ menu.caption }
 							</Typography>
 						)
