@@ -4,7 +4,6 @@ import { Box, Drawer, useMediaQuery } from '@mui/material'
 import { BrowserView, MobileView } from 'react-device-detect'
 import MenuList from './MenuList'
 import LogoSection from '../LogoSection'
-import MenuCard from './MenuCard'
 
 // ==============================|| SIDEBAR DRAWER ||============================== //
 
@@ -33,7 +32,7 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }: { drawerOpen: boolean, dr
 	const container = window !== undefined ? () => window.document.body : undefined
 
 	return (
-		<Box component="nav" sx={ { flexShrink: { md: 0 }, width: /* matchUpMd ? drawerWidth :*/ 'auto' } } aria-label="mailbox folders">
+		<Box component="nav" sx={ { flexShrink: { md: 0 }, width: matchUpMd ? theme.constants.drawerWidth : 'auto' } } aria-label="mailbox folders">
 			<Drawer
 				container={ container }
 				variant={ matchUpMd ? 'persistent' : 'temporary' }
@@ -42,7 +41,7 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }: { drawerOpen: boolean, dr
 				onClose={ drawerToggle }
 				sx={ {
 					'& .MuiDrawer-paper': {
-						// width: drawerWidth,
+						width: theme.constants.drawerWidth,
 						background: theme.palette.background.default,
 						color: theme.palette.text.primary,
 						borderRight: 'none',

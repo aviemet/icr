@@ -3,11 +3,30 @@ import DashboardIcon from '@mui/icons-material/Dashboard'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import PersonIcon from '@mui/icons-material/Person'
 
-const menuItems = { items: [
+type TMenuGroup = {
+	id: string
+	title: string
+	caption?: string
+	children: TMenuItem[]
+}
+
+type TMenuItem = {
+	id: string
+	title: string
+	caption?: string
+	type: 'item'|'collapse'
+	url?: string
+	icon?: React.ReactNode
+	external?: boolean
+	target?: boolean
+	breadcrumbs?: boolean
+	children?: TMenuItem[]
+}
+
+const menuItems: TMenuGroup[] = [
 	{
 		id: 'dashboard',
 		title: 'Dashboard',
-		type: 'group',
 		children: [
 			{
 				id: 'default',
@@ -32,7 +51,6 @@ const menuItems = { items: [
 		id: 'data',
 		title: 'Information',
 		caption: 'Staff and Client Data',
-		type: 'group',
 		children: [
 			{
 				id: 'clients',
@@ -50,6 +68,6 @@ const menuItems = { items: [
 			}
 		]
 	}
-] }
+]
 
 export default menuItems

@@ -1,11 +1,9 @@
-/**
- * Typography used in theme
- * @param {JsonObject} theme theme customization object
- */
+import type { TypographyOptions } from '@mui/material/styles/createTypography'
 
-export default function themeTypography(theme) {
+export default function themeTypography(theme): TypographyOptions {
+	console.log({ theme, bg: theme.background })
 	return {
-		fontFamily: theme?.customization?.fontFamily,
+		fontFamily: theme?.fontFamily,
 		h6: {
 			fontWeight: 500,
 			color: theme.heading,
@@ -85,16 +83,6 @@ export default function themeTypography(theme) {
 			'& fieldset': {
 				top: 0
 			}
-		},
-		mainContent: {
-			backgroundColor: theme.background,
-			width: '100%',
-			minHeight: 'calc(100vh - 88px)',
-			flexGrow: 1,
-			padding: '20px',
-			marginTop: '88px',
-			marginRight: '20px',
-			borderRadius: `${theme?.customization?.borderRadius}px`
 		},
 		menuCaption: {
 			fontSize: '0.875rem',

@@ -1,18 +1,9 @@
-export type TMenuGroup = {
-	id: string
-	title: string
-	type: 'group'
-	catption?: string
-	children?: [MenuItemObject]
-}
-
-export type TMenuItem = {
-	id: string
-	title: string
-	type: 'group'|'item'|'collapse'
-	catption?: string
-	icon?: React.ReactNode
-	url?: string
-	breadcrumbs?: boolean
-	children?: [MenuItemObject]
+export declare module '@mui/material/styles' {
+	export interface Theme {
+		constants: Record<string, any>
+	}
+	// allow configuration using `createTheme`
+	export interface ThemeOptions {
+		constants?: Record<string, any>
+	}
 }

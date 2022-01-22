@@ -58,7 +58,14 @@ const AppLayout = ({ children }) => {
 }
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
-	...theme.typography.mainContent,
+	backgroundColor: theme.constants.background,
+	width: '100%',
+	minHeight: 'calc(100vh - 88px)',
+	flexGrow: 1,
+	padding: '20px',
+	marginTop: '88px',
+	marginRight: '20px',
+	borderRadius: `${theme.constants.borderRadius}px`,
 	...(!open && {
 		borderBottomLeftRadius: 0,
 		borderBottomRightRadius: 0,
@@ -67,7 +74,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
 			duration: theme.transitions.duration.leavingScreen
 		}),
 		[theme.breakpoints.up('md')]: {
-			marginLeft: 20,
+			marginLeft: -(theme.constants.drawerWidth - 20),
 			width: `calc(100% - ${theme.constants.drawerWidth}px)`
 		},
 		[theme.breakpoints.down('md')]: {
@@ -83,11 +90,11 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
 		}
 	}),
 	...(open && {
-		marginLeft: (theme.constants.drawerWidth - 20),
 		transition: theme.transitions.create('margin', {
 			easing: theme.transitions.easing.easeOut,
 			duration: theme.transitions.duration.enteringScreen
 		}),
+		marginLeft: 0,
 		borderBottomLeftRadius: 0,
 		borderBottomRightRadius: 0,
 		width: `calc(100% - ${theme.constants.drawerWidth}px)`,
@@ -95,10 +102,10 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
 			marginLeft: '20px'
 		},
 		[theme.breakpoints.down('sm')]: {
-			marginLeft: '10px'
+			marginLeft: '10px',
+			marginRight: '10px'
 		}
 	})
 }))
 
 export default (page: React.ReactNode) => <AppLayout>{ page }</AppLayout>
-
