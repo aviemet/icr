@@ -3,7 +3,7 @@ import { Avatar, Box, ButtonBase } from '@mui/material'
 import LogoSection from '../LogoSection'
 import SearchSection from './SearchSection'
 import ProfileSection from './ProfileSection'
-import NotificationSection from './NotificationSection'
+// import NotificationSection from './NotificationSection'
 import MenuIcon from '@mui/icons-material/Menu'
 
 const Header = ({ handleLeftDrawerToggle }) => {
@@ -19,15 +19,15 @@ const Header = ({ handleLeftDrawerToggle }) => {
 					}
 				}) }
 			>
-				<Box id="THIS" component="span" sx={ {
-					display: { xs: 'none', md: 'inline-block' },
+				<Box component="span" sx={ {
+					display: { xs: 'none', md: 'block' },
 					flexGrow: 1,
 					overflow: 'hidden',
 					width: 10
 				} }>
 					<LogoSection />
 				</Box>
-				<ButtonBase sx={ theme => ({ borderRadius: theme.constants.borderRadius, overflow: 'hidden' }) }>
+				<ButtonBase>
 					<Avatar
 						variant="rounded"
 						sx={ theme => ({
@@ -55,7 +55,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
 			<Box sx={ { flexGrow: 1 } } />
 
 			{ /* notification & profile */ }
-			<NotificationSection />
+			{ /* <NotificationSection /> */ }
 			<ProfileSection />
 		</>
 	)

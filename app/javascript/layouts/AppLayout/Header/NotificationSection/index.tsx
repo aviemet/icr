@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Link } from 'components'
+// import { Link } from 'components'
 import { useTheme } from '@mui/material/styles'
 import {
 	Avatar,
@@ -11,6 +11,7 @@ import {
 	ClickAwayListener,
 	Divider,
 	Grid,
+	Link,
 	Paper,
 	Popper,
 	Stack,
@@ -52,9 +53,10 @@ const NotificationSection = () => {
 
 	const [open, setOpen] = useState(false)
 	const [value, setValue] = useState('')
+
 	/**
-     * anchorRef is used on different componets and specifying one type leads to other components throwing an error
-     * */
+	 * anchorRef is used on different componets and specifying one type leads to other components throwing an error
+	 * */
 	const anchorRef = useRef(null)
 
 	const handleToggle = () => {
@@ -62,9 +64,9 @@ const NotificationSection = () => {
 	}
 
 	const handleClose = (event) => {
-		// if (anchorRef.current && anchorRef.current.contains(event.target)) {
-		// 	return
-		// }
+		if (anchorRef.current && anchorRef.current.contains(event.target)) {
+			return
+		}
 		setOpen(false)
 	}
 
@@ -95,8 +97,8 @@ const NotificationSection = () => {
 					<Avatar
 						variant="rounded"
 						sx={ {
-							// ...theme.typography.commonAvatar,
-							// ...theme.typography.mediumAvatar,
+							...theme.constants.commonAvatar,
+							...theme.constants.mediumAvatar,
 							transition: 'all .2s ease-in-out',
 							background: theme.palette.secondary.light,
 							color: theme.palette.secondary.dark,
@@ -155,7 +157,7 @@ const NotificationSection = () => {
 													</Stack>
 												</Grid>
 												<Grid item>
-													<Typography { ...{/* component={ Link } */} } href="#" variant="subtitle2" color="primary">
+													<Typography component={ Link } href="#" variant="subtitle2" color="primary">
                             Mark as all read
 													</Typography>
 												</Grid>
@@ -193,7 +195,7 @@ const NotificationSection = () => {
 									<Divider />
 									<CardActions sx={ { p: 1.25, justifyContent: 'center' } }>
 										<Button size="small" disableElevation>
-                                            View All
+											View All
 										</Button>
 									</CardActions>
 								</MainCard>

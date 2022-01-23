@@ -1,21 +1,12 @@
 import React, { useState } from 'react'
-
-// material-ui
-import { useTheme, styled } from '@mui/material/styles'
+import { styled } from '@mui/material/styles'
 import { Avatar, Box, ButtonBase, Card, Grid, InputAdornment, OutlinedInput, Popper } from '@mui/material'
-
-// third-party
 import PopupState, { bindPopper, bindToggle } from 'material-ui-popup-state'
-
-// project imports
 import Transitions from 'components/extended/Transitions'
-
-// assets
 import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
 import { shouldForwardProp } from '@mui/system'
 
-// styles
 const PopperStyle = styled(Popper, { shouldForwardProp })(({ theme }) => ({
 	zIndex: 1100,
 	width: '99%',
@@ -59,7 +50,6 @@ const HeaderAvatarStyle = styled(Avatar, { shouldForwardProp })(({ theme }) => (
 // ==============================|| SEARCH INPUT - MOBILE||============================== //
 
 const MobileSearch = ({ value, setValue, popupState }) => {
-	const theme = useTheme()
 
 	return (
 		<OutlineInputStyle
@@ -78,16 +68,16 @@ const MobileSearch = ({ value, setValue, popupState }) => {
 						<ButtonBase sx={ { borderRadius: '12px' } }>
 							<Avatar
 								variant="rounded"
-								sx={ {
-									// ...theme.typography.commonAvatar,
-									// ...theme.typography.mediumAvatar,
-									// background: theme.palette.orange.light,
-									// color: theme.palette.orange.dark,
-									// '&:hover': {
-									// 	background: theme.palette.orange.dark,
-									// 	color: theme.palette.orange.light
-									// }
-								} }
+								sx={ theme => ({
+									...theme.constants.commonAvatar,
+									...theme.constants.mediumAvatar,
+									background: theme.palette.orange.light,
+									color: theme.palette.orange.dark,
+									'&:hover': {
+										background: theme.palette.orange.dark,
+										color: theme.palette.orange.light
+									}
+								}) }
 								{ ...bindToggle(popupState) }
 							>
 								<CloseIcon />
@@ -105,7 +95,6 @@ const MobileSearch = ({ value, setValue, popupState }) => {
 // ==============================|| SEARCH INPUT ||============================== //
 
 const SearchSection = () => {
-	const theme = useTheme()
 	const [value, setValue] = useState('')
 
 	return (
@@ -126,13 +115,13 @@ const SearchSection = () => {
 									<>
 										<Transitions type="zoom" { ...TransitionProps } sx={ { transformOrigin: 'center left' } }>
 											<Card
-												sx={ {
+												sx={ theme => ({
 													background: '#fff',
 													[theme.breakpoints.down('sm')]: {
 														border: 0,
 														boxShadow: 'none'
 													}
-												} }
+												}) }
 											>
 												<Box sx={ { p: 2 } }>
 													<Grid container alignItems="center" justifyContent="space-between">

@@ -1,98 +1,83 @@
 import React from 'react'
 import { forwardRef } from 'react'
-
-// material-ui
 import { Collapse, Fade, Box, Grow, Slide, Zoom } from '@mui/material'
 
-interface TransitionProps extends React.FunctionComponent {
+interface TransitionsProps extends React.HTMLProps<HTMLDivElement> {
 	position: 'top-left'|'top-right'|'top'|'bottom-left'|'bottom-right'|'bottom'
 	type: 'grow'|'fade'|'collapse'|'slide'|'zoom'
 	direction: 'up'|'down'|'left'|'right'
 }
 
-// ==============================|| TRANSITIONS ||============================== //
+const Transitions = forwardRef<HTMLDivElement, TransitionsProps>(({ children, position = 'top-left', type = 'grow', direction = 'up', ...others }, ref) => {
 
-const Transitions = forwardRef<HTMLDivElement, TransitionProps>(({ children, position = 'top-left', type = 'grow', direction = 'up', ...others }, ref) => {
-	let positionSX = {
-		transformOrigin: '0 0 0'
-	}
+	let transformOrigin = '0 0 0'
 
 	switch (position) {
 		case 'top-right':
-			positionSX = {
-				transformOrigin: 'top right'
-			}
+			transformOrigin = 'top right'
 			break
 		case 'top':
-			positionSX = {
-				transformOrigin: 'top'
-			}
+			transformOrigin = 'top'
 			break
 		case 'bottom-left':
-			positionSX = {
-				transformOrigin: 'bottom left'
-			}
+			transformOrigin = 'bottom left'
 			break
 		case 'bottom-right':
-			positionSX = {
-				transformOrigin: 'bottom right'
-			}
+			transformOrigin = 'bottom right'
 			break
 		case 'bottom':
-			positionSX = {
-				transformOrigin: 'bottom'
-			}
+			transformOrigin = 'bottom'
 			break
 		case 'top-left':
 		default:
-			positionSX = {
-				transformOrigin: '0 0 0'
-			}
 			break
 	}
 
+	const positionSX = { transformOrigin }
+
 	return (
 		<Box ref={ ref }>
-			{ type === 'grow' && (
-				<Grow { ...others }>
-					<Box sx={ positionSX }>{ children }</Box>
-				</Grow>
-			) }
-			{ type === 'collapse' && (
-				<Collapse { ...others } sx={ positionSX }>
-					{ children }
-				</Collapse>
-			) }
-			{ type === 'fade' && (
-				<Fade
-					{ ...others }
-					timeout={ {
-						appear: 500,
-						enter: 600,
-						exit: 400
-					} }
-				>
-					<Box sx={ positionSX }>{ children }</Box>
-				</Fade>
-			) }
-			{ type === 'slide' && (
-				<Slide
-					{ ...others }
-					timeout={ {
-						appear: 0,
-						enter: 400,
-						exit: 200
-					} }
-					direction={ direction }
-				>
-					<Box sx={ positionSX }>{ children }</Box>
-				</Slide>
-			) }
-			{ type === 'zoom' && (
-				<Zoom { ...others }>
-					<Box sx={ positionSX }>{ children }</Box>
-				</Zoom>
-			) }
+			{ {
+				grow:
+					<Grow { ...others }>
+						<Box sx={ positionSX }>{ children }</Box>
+					</Grow>,
+
+				collapse:
+					<Collapse { ...others } sx={ positionSX }>
+						{ children }
+					</Collapse>,
+
+				fade:
+					<Fade
+						{ ...others }
+						timeout={ {
+							appear: 500,
+							enter: 600,
+							exit: 400
+						} }
+					>
+						<Box sx={ positionSX }>{ children }</Box>
+					</Fade>,
+
+				slide:
+					<Slide
+						{ ...others }
+						timeout={ {
+							appear: 0,
+							enter: 400,
+							exit: 200
+						} }
+						direction={ direction }
+					>
+						<Box sx={ positionSX }>{ children }</Box>
+					</Slide>,
+
+				zoom:
+					<Zoom { ...others }>
+						<Box sx={ positionSX }>{ children }</Box>
+					</Zoom>
+			}[type] }
 		</Box>
 	)
 })

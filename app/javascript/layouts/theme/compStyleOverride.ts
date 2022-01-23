@@ -1,11 +1,12 @@
 export default function componentStyleOverrides(theme) {
 	const bgColor = theme.colors?.grey50
+
 	return {
 		MuiButton: {
 			styleOverrides: {
 				root: {
-					// fontWeight: 500,
-					// borderRadius: '4px'
+					fontWeight: 500,
+					borderRadius: '4px'
 				}
 			}
 		},

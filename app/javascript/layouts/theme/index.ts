@@ -6,6 +6,7 @@ import themeTypography from './typography'
 
 
 const themeOptions = {
+	fontFamily: '\'Roboto\', sans-serif',
 	heading: colors.grey900,
 	paper: colors.paper,
 	backgroundDefault: colors.paper,
@@ -16,10 +17,10 @@ const themeOptions = {
 	menuSelected: colors.secondaryDark,
 	menuSelectedBack: colors.secondaryLight,
 	divider: colors.grey200,
-	borderRadius: 12
+	borderRadius: 8
 }
 
-export const theme = () => createTheme({
+export const theme = createTheme({
 	direction: 'ltr',
 	palette: themePalette({ ...themeOptions, colors }),
 	typography: themeTypography({ ...themeOptions, colors }),
@@ -46,17 +47,20 @@ export const theme = () => createTheme({
 		smallAvatar: {
 			width: '22px',
 			height: '22px',
-			fontSize: '1rem'
+			fontSize: '1rem',
+			lineHeight: '1rem',
 		},
 		mediumAvatar: {
 			width: '34px',
 			height: '34px',
-			fontSize: '1.2rem'
+			fontSize: '1.2rem',
+			lineHeight: '1.2rem',
 		},
 		largeAvatar: {
 			width: '44px',
 			height: '44px',
-			fontSize: '1.5rem'
+			fontSize: '1.5rem',
+			lineHeight: '1.5rem',
 		}
 	}
 })

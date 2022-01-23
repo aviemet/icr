@@ -22,8 +22,6 @@ import StoreIcon from '@mui/icons-material/Store'
 import MailIcon from '@mui/icons-material/Mail'
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary'
 
-import User1 from '../../../../../assets/images/user-round.svg'
-
 // styles
 const ListItemWrapper = styled('div')(({ theme }) => ({
 	cursor: 'pointer',
@@ -87,7 +85,7 @@ const NotificationList = () => {
 			<ListItemWrapper>
 				<ListItem alignItems="center">
 					<ListItemAvatar>
-						<Avatar alt="John Doe" src={ User1 } />
+						<Avatar alt="John Doe">JD</Avatar>
 					</ListItemAvatar>
 					<ListItemText primary="John Doe" />
 					<ListItemSecondaryAction>
@@ -200,7 +198,7 @@ const NotificationList = () => {
 			<ListItemWrapper>
 				<ListItem alignItems="center">
 					<ListItemAvatar>
-						<Avatar alt="John Doe" src={ User1 } />
+						<Avatar alt="John Doe">JD</Avatar>
 					</ListItemAvatar>
 					<ListItemText primary={ <Typography variant="subtitle1">John Doe</Typography> } />
 					<ListItemSecondaryAction>
@@ -250,7 +248,7 @@ const NotificationList = () => {
 			<ListItemWrapper>
 				<ListItem alignItems="center">
 					<ListItemAvatar>
-						<Avatar alt="John Doe" src={ User1 } />
+						<Avatar alt="John Doe">JD</Avatar>
 					</ListItemAvatar>
 					<ListItemText primary={ <Typography variant="subtitle1">John Doe</Typography> } />
 					<ListItemSecondaryAction>

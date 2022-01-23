@@ -1,8 +1,5 @@
-import React from 'react'
-import { ImgProps } from 'react-html-props'
+import styled from 'styled-components'
 
-const Image = ({ src, ...props }: ImgProps) => {
-	return <img src={ src } { ...props } />
-}
-
-export default Image
+export default styled.img`
+	max-width: 100%;
+`

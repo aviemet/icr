@@ -1,7 +1,6 @@
 import type { TypographyOptions } from '@mui/material/styles/createTypography'
 
 export default function themeTypography(theme): TypographyOptions {
-	console.log({ theme, bg: theme.background })
 	return {
 		fontFamily: theme?.fontFamily,
 		h6: {

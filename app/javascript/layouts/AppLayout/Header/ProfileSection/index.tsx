@@ -9,6 +9,7 @@ import {
 	ClickAwayListener,
 	Divider,
 	Grid,
+	Grow,
 	InputAdornment,
 	List,
 	ListItemButton,
@@ -29,11 +30,8 @@ import PersonIcon from '@mui/icons-material/Person'
 import MainCard from 'components/cards/MainCard'
 import Transitions from 'components/extended/Transitions'
 
-import User1 from '../../../../../assets/images/user-round.svg'
-
 const ProfileSection = () => {
 	const theme = useTheme()
-	// const customization = theme.customization
 	// const navigate = useNavigate()
 
 	const [sdm, setSdm] = useState(true)
@@ -41,19 +39,20 @@ const ProfileSection = () => {
 	const [notification, setNotification] = useState(false)
 	const [selectedIndex, setSelectedIndex] = useState(-1)
 	const [open, setOpen] = useState(false)
+
 	/**
-     * anchorRef is used on different componets and specifying one type leads to other components throwing an error
-     * */
+	 * anchorRef is used on different componets and specifying one type leads to other components throwing an error
+	 * */
 	const anchorRef = useRef(null)
 	const handleLogout = async () => {
 		console.log('Logout')
 	}
 
 	const handleClose = (event) => {
-		// if (anchorRef.current && anchorRef.current.contains(event.target)) {
-		// 	return
-		// }
-		// setOpen(false)
+		if (anchorRef.current && anchorRef.current.contains(event.target)) {
+			return
+		}
+		setOpen(false)
 	}
 
 	const handleListItemClick = (event, index, route = '') => {
@@ -71,7 +70,7 @@ const ProfileSection = () => {
 	const prevOpen = useRef(open)
 	useEffect(() => {
 		if (prevOpen.current === true && open === false) {
-			// anchorRef.current.focus()
+			anchorRef.current.focus()
 		}
 
 		prevOpen.current = open
@@ -101,9 +100,8 @@ const ProfileSection = () => {
 				} }
 				icon={
 					<Avatar
-						src={ User1 }
 						sx={ {
-							// ...theme.typography.mediumAvatar,
+							...theme.constants.mediumAvatar,
 							margin: '8px 0 8px 8px !important',
 							cursor: 'pointer'
 						} }
@@ -111,7 +109,7 @@ const ProfileSection = () => {
 						aria-controls={ open ? 'menu-list-grow' : undefined }
 						aria-haspopup="true"
 						color="inherit"
-					/>
+					>JD</Avatar>
 				}
 				label={ <SettingsIcon /> }
 				variant="outlined"
@@ -140,8 +138,8 @@ const ProfileSection = () => {
 				} }
 			>
 				{ ({ TransitionProps }) => (
-					<Transitions in={ open } { ...TransitionProps }>
-						<Paper>
+					<Grow { ...TransitionProps }>
+						<Transitions in={ open } position="top-right" { ...TransitionProps }>
 							<ClickAwayListener onClickAway={ handleClose }>
 								<MainCard border={ false } elevation={ 16 } content={ false } boxShadow shadow={ theme.shadows[16] }>
 									<Box sx={ { p: 2 } }>
@@ -149,7 +147,7 @@ const ProfileSection = () => {
 											<Stack direction="row" spacing={ 0.5 } alignItems="center">
 												<Typography variant="h4">Good Morning,</Typography>
 												<Typography component="span" variant="h4" sx={ { fontWeight: 400 } }>
-                                                    Johne Doe
+													John Doe
 												</Typography>
 											</Stack>
 											<Typography variant="subtitle2">Project Admin</Typography>
@@ -272,7 +270,7 @@ const ProfileSection = () => {
 												/>
 											</ListItemButton>
 											<ListItemButton
-												sx={ { /*borderRadius: `${customization.borderRadius}px`*/ } }
+												sx={ theme => ({ borderRadius: `${theme.constants.borderRadius}px` }) }
 												selected={ selectedIndex === 4 }
 												onClick={ handleLogout }
 											>
@@ -285,8 +283,8 @@ const ProfileSection = () => {
 									</Box>
 								</MainCard>
 							</ClickAwayListener>
-						</Paper>
-					</Transitions>
+						</Transitions>
+					</Grow>
 				) }
 			</Popper>
 		</>
