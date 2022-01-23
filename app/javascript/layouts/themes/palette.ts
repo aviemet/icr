@@ -1,17 +1,6 @@
-<<<<<<< HEAD
-/**
- * Color intention that you want to used in your theme
- * @param {JsonObject} theme Theme customization object
- */
-
-export default function themePalette(theme) {
-	return {
-		mode: theme?.customization?.navType,
-=======
 export default function themePalette(theme) {
 	return {
 		mode: theme?.navType,
->>>>>>> mui
 		common: {
 			black: theme.colors?.darkPaper
 		},
