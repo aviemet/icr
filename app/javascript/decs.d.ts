@@ -7,3 +7,7 @@ export declare module '@mui/material/styles' {
 		constants?: Record<string, any>
 	}
 }
+
+declare module '**/*.jpg' {
+	export default '' as string
+}

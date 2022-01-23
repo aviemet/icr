@@ -2,10 +2,9 @@ import React from 'react'
 import { useTheme } from '@mui/material/styles'
 import { Box, Drawer, useMediaQuery } from '@mui/material'
 import { BrowserView, MobileView } from 'react-device-detect'
+import PerfectScrollbar from 'react-perfect-scrollbar'
 import MenuList from './MenuList'
 import LogoSection from '../LogoSection'
-
-// ==============================|| SIDEBAR DRAWER ||============================== //
 
 const Sidebar = ({ drawerOpen, drawerToggle, window }: { drawerOpen: boolean, drawerToggle: () => void, window?: any}) => {
 	const theme = useTheme()
@@ -19,7 +18,16 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }: { drawerOpen: boolean, dr
 				</Box>
 			</Box>
 			<BrowserView>
-				<MenuList />
+				<PerfectScrollbar
+					component="div"
+					style={ {
+						height: !matchUpMd ? 'calc(100vh - 56px)' : 'calc(100vh - 88px)',
+						paddingLeft: '16px',
+						paddingRight: '16px'
+					} }
+				>
+					<MenuList />
+				</PerfectScrollbar>
 			</BrowserView>
 			<MobileView>
 				<Box sx={ { px: 2 } }>

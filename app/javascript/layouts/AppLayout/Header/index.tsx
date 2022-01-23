@@ -1,5 +1,4 @@
 import React from 'react'
-import { useTheme } from '@mui/material/styles'
 import { Avatar, Box, ButtonBase } from '@mui/material'
 import LogoSection from '../LogoSection'
 import SearchSection from './SearchSection'
@@ -8,29 +7,32 @@ import NotificationSection from './NotificationSection'
 import MenuIcon from '@mui/icons-material/Menu'
 
 const Header = ({ handleLeftDrawerToggle }) => {
-	const theme = useTheme()
-
 	return (
 		<>
 			{ /* logo & toggler button */ }
 			<Box
-				sx={ {
+				sx={ theme => ({
 					width: 228,
 					display: 'flex',
 					[theme.breakpoints.down('md')]: {
 						width: 'auto'
 					}
-				} }
+				}) }
 			>
-				<Box component="span" sx={ { display: { xs: 'none', md: 'block' }, flexGrow: 1 } }>
+				<Box id="THIS" component="span" sx={ {
+					display: { xs: 'none', md: 'inline-block' },
+					flexGrow: 1,
+					overflow: 'hidden',
+					width: 10
+				} }>
 					<LogoSection />
 				</Box>
-				<ButtonBase sx={ { borderRadius: '12px', overflow: 'hidden' } }>
+				<ButtonBase sx={ theme => ({ borderRadius: theme.constants.borderRadius, overflow: 'hidden' }) }>
 					<Avatar
 						variant="rounded"
-						sx={ {
-							// ...theme.typography.commonAvatar,
-							// ...theme.typography.mediumAvatar,
+						sx={ theme => ({
+							...theme.constants.commonAvatar,
+							...theme.constants.mediumAvatar,
 							transition: 'all .2s ease-in-out',
 							background: theme.palette.secondary.light,
 							color: theme.palette.secondary.dark,
@@ -38,7 +40,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
 								background: theme.palette.secondary.dark,
 								color: theme.palette.secondary.light
 							}
-						} }
+						}) }
 						onClick={ handleLeftDrawerToggle }
 						color="inherit"
 					>
