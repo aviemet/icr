@@ -1,39 +1,18 @@
 import React from 'react'
-import { useTheme } from '@mui/material/styles'
 import { Divider, List, Typography } from '@mui/material'
 import NavItem from '../NavItem'
 import NavCollapse from '../NavCollapse'
-
-const GroupTitle = ({ children }) => {
-	const theme = useTheme()
-
-	return (
-		<Typography variant="caption" sx={ { ...theme.typography.menuCaption } } display="block" gutterBottom>
-			{ children }
-		</Typography>
-	)
-}
-
-const GroupCaption = ({ children }) => {
-	const theme = useTheme()
-
-	return (
-		<Typography variant="caption" sx={ { ...theme.typography.subMenuCaption } } display="block" gutterBottom>
-			{ children }
-		</Typography>
-	)
-}
+import MenuTitle from '../MenuTitle'
+import MenuCaption from '../MenuCaption'
 
 const NavGroup = ({ item }) => {
-	const theme = useTheme()
-
 	return (
 		<>
 			<List subheader={ item.title &&
-				<GroupTitle>
+				<MenuTitle>
 					{ item.title }
-					{ item.caption && <GroupCaption>{ item.caption }</GroupCaption> }
-				</GroupTitle>
+					{ item.caption && <MenuCaption>{ item.caption }</MenuCaption> }
+				</MenuTitle>
 			}>
 				{ item.children?.map((menu) => {
 					switch (menu.type) {

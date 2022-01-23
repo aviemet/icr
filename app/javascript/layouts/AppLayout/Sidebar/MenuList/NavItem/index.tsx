@@ -2,30 +2,12 @@ import React, { forwardRef, useEffect } from 'react'
 import { Link } from 'components'
 import { useTheme } from '@mui/material/styles'
 import { Avatar, Chip, ListItemButton, ListItemIcon, ListItemText, Typography, useMediaQuery } from '@mui/material'
-
-// assets
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
-
-// ==============================|| SIDEBAR MENU LIST ITEMS ||============================== //
+import MenuCaption from '../MenuCaption'
 
 const NavItem = ({ item, level }) => {
 	const { breakpoints } = useTheme()
 	const matchesSM = useMediaQuery(breakpoints.down('lg'))
-
-	const Icon = item.icon
-	const itemIcon = item?.icon ? (
-		<Icon stroke={ 1.5 } size="1.3rem" />
-	) : (
-		<FiberManualRecordIcon
-			sx={ {
-				width: 8,
-				height: 8
-				// width: customization.isOpen.findIndex((id) => id === item?.id) > -1 ? 8 : 6,
-				// height: customization.isOpen.findIndex((id) => id === item?.id) > -1 ? 8 : 6
-			} }
-			fontSize={ level > 0 ? 'inherit' : 'medium' }
-		/>
-	)
 
 	let itemTarget = '_self'
 	if (item.target) {
@@ -33,7 +15,7 @@ const NavItem = ({ item, level }) => {
 	}
 
 	let listItemProps = {
-		component: forwardRef((props, ref) => <Link ref={ ref } { ...props } href={ item.url ? item.url : '#' } target={ itemTarget } />)
+		component: forwardRef((props, ref) => <Link { ...props } href={ item.url ? item.url : '#' } target={ itemTarget } />)
 	}
 	if (item?.external) {
 		// listItemProps = { component: 'a', href: item.url, target: itemTarget }
@@ -53,48 +35,53 @@ const NavItem = ({ item, level }) => {
 		if (currentIndex > -1) {
 			// dispatch({ type: MENU_OPEN, id: item.id })
 		}
-		// eslint-disable-next-line
-    }, []);
+	}, [])
+
+	const Icon = item.icon
 
 	return (
 		<ListItemButton
 			{ ...listItemProps }
 			disabled={ item.disabled }
-			sx={ {
-				// borderRadius: `${customization.borderRadius}px`,
+			sx={ theme => ({
+				borderRadius: `${theme.constants.borderRadius}px`,
 				mb: 0.5,
 				alignItems: 'flex-start',
 				backgroundColor: level > 1 ? 'transparent !important' : 'inherit',
 				py: level > 1 ? 1 : 1.25,
 				pl: `${level * 24}px`
-			} }
+			}) }
 			// selected={ customization.isOpen.findIndex((id) => id === item.id) > -1 }
 			onClick={ () => itemHandler(item.id) }
 		>
-			<ListItemIcon sx={ { my: 'auto', minWidth: !item?.icon ? 18 : 36 } }>{ itemIcon }</ListItemIcon>
+			<ListItemIcon sx={ { my: 'auto', minWidth: !item?.icon ? 18 : 36 } }>
+				{ item?.icon ? (
+					<Icon stroke={ 1.5 } size="1.3rem" />
+				) : (
+					<FiberManualRecordIcon
+						sx={ {
+							width: 8,
+							height: 8
+						} }
+						fontSize={ level > 0 ? 'inherit' : 'medium' }
+					/>
+				) }
+			</ListItemIcon>
 			<ListItemText
 				primary={
 					<Typography variant={ 'body1' /* customization.isOpen.findIndex((id) => id === item.id) > -1 ? 'h5' : 'body1' */ } color="inherit">
 						{ item.title }
 					</Typography>
 				}
-				secondary={
-					item.caption && (
-						<Typography variant="caption" sx={ { /* ...theme.typography.subMenuCaption */ }  } display="block" gutterBottom>
-							{ item.caption }
-						</Typography>
-					)
-				}
+				secondary={ item.caption && <MenuCaption>{ item.caption }</MenuCaption> }
 			/>
-			{ item.chip && (
-				<Chip
-					color={ item.chip.color }
-					variant={ item.chip.variant }
-					size={ item.chip.size }
-					label={ item.chip.label }
-					avatar={ item.chip.avatar && <Avatar>{ item.chip.avatar }</Avatar> }
-				/>
-			) }
+			{ item.chip && <Chip
+				color={ item.chip.color }
+				variant={ item.chip.variant }
+				size={ item.chip.size }
+				label={ item.chip.label }
+				avatar={ item.chip.avatar && <Avatar>{ item.chip.avatar }</Avatar> }
+			/> }
 		</ListItemButton>
 	)
 }
