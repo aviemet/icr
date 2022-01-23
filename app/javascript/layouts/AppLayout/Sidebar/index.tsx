@@ -1,70 +1,61 @@
-import React, { useState } from 'react'
-import { H6, Icon } from 'components'
-import AdminNavbar from './AdminNavbar'
-import NavLink from './NavLink'
-import { css } from 'astroturf'
-import classnames from 'classnames'
-import { Routes } from 'lib'
+import React from 'react'
+import { useTheme } from '@mui/material/styles'
+import { Box, Drawer, useMediaQuery } from '@mui/material'
+import { BrowserView, MobileView } from 'react-device-detect'
+import MenuList from './MenuList'
+import LogoSection from '../LogoSection'
 
-const navLiStyles = css`
-	@apply mb-4;
-	@apply rounded-lg;
-`
+// ==============================|| SIDEBAR DRAWER ||============================== //
 
-const Sidebar = () => {
-	const [showSidebar, setShowSidebar] = useState('-left-64')
+const Sidebar = ({ drawerOpen, drawerToggle, window }: { drawerOpen: boolean, drawerToggle: () => void, window?: any}) => {
+	const theme = useTheme()
+	const matchUpMd = useMediaQuery(theme.breakpoints.up('md'))
+
+	const drawer = (
+		<>
+			<Box sx={ { display: { xs: 'block', md: 'none' } } }>
+				<Box sx={ { display: 'flex', p: 2, mx: 'auto' } }>
+					<LogoSection />
+				</Box>
+			</Box>
+			<BrowserView>
+				<MenuList />
+			</BrowserView>
+			<MobileView>
+				<Box sx={ { px: 2 } }>
+					<MenuList />
+				</Box>
+			</MobileView>
+		</>
+	)
+
+	const container = window !== undefined ? () => window.document.body : undefined
 
 	return (
-		<>
-			<AdminNavbar
-				showSidebar={ showSidebar }
-				setShowSidebar={ setShowSidebar }
-			/>
-			<div className={ `h-screen fixed top-0 md:left-0 ${showSidebar} overflow-y-auto flex-row flex-nowrap overflow-hidden shadow-xl bg-white w-64 z-10 py-4 px-6 transition-all duration-300 text-gray-700` } >
-				<div className="flex-nowrap relative flex-col items-stretch min-h-full px-0">
-					<H6 color="gray" className="inline-block w-full mt-2 text-center">Inclusive Community Resources</H6>
-					<div className="flex flex-col">
-						<hr className="min-w-full my-4" />
-
-						<ul className="flex flex-col min-w-full list-none">
-							<li className={ classnames(navLiStyles) }>
-								<NavLink href={ Routes.root_path() }>
-									<Icon name="dashboard" size="2xl" />
-									Dashboard
-								</NavLink>
-							</li>
-							<li className={ classnames(navLiStyles) }>
-								<NavLink href={ Routes.schedules_path() }>
-									<Icon name="calendar_month" size="2xl" />
-									Schedules
-								</NavLink>
-							</li>
-							<li className={ classnames(navLiStyles) }>
-								<NavLink href={ Routes.clients_path() }>
-									<Icon name="people" size="2xl" />
-									Clients
-								</NavLink>
-							</li>
-							<li className={ classnames(navLiStyles) }>
-								<NavLink href={ Routes.employees_path() }>
-									<Icon name="manage_accounts" size="2xl" />
-									Staff
-								</NavLink>
-							</li>
-						</ul>
-
-						<ul className="absolute bottom-0 flex flex-col min-w-full list-none">
-							<li className="bg-gradient-to-tr from-light-blue-500 to-light-blue-700 px-4 mb-2 text-white rounded-lg">
-								<NavLink href={ Routes.settings_path() }>
-									<Icon name="settings" size="2xl" />
-									Settings
-								</NavLink>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</>
+		<Box component="nav" sx={ { flexShrink: { md: 0 }, width: matchUpMd ? theme.constants.drawerWidth : 'auto' } } aria-label="mailbox folders">
+			<Drawer
+				container={ container }
+				variant={ matchUpMd ? 'persistent' : 'temporary' }
+				anchor="left"
+				open={ drawerOpen }
+				onClose={ drawerToggle }
+				sx={ {
+					'& .MuiDrawer-paper': {
+						width: theme.constants.drawerWidth,
+						background: theme.palette.background.default,
+						color: theme.palette.text.primary,
+						borderRight: 'none',
+						[theme.breakpoints.up('md')]: {
+							top: '88px'
+						}
+					}
+				} }
+				ModalProps={ { keepMounted: true } }
+				color="inherit"
+			>
+				{ drawer }
+			</Drawer>
+		</Box>
 	)
 }
 

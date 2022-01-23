@@ -1,4 +1,3 @@
 webpack-dev-server: bin/webpacker-dev-server
-webpack-watch: ./bin/webpacker --watch --color
 web: bin/rails server -b 0.0.0.0 -p 3000
 guard: bundle exec guard -g livereload

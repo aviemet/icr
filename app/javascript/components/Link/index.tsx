@@ -1,13 +1,8 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { InertiaLink, InertiaLinkProps } from '@inertiajs/inertia-react'
-import { Button } from 'components'
-import { ButtonProps } from 'components/Button/Button'
+import { Button } from '@mui/material'
 
-export interface LinkProps extends InertiaLinkProps {
-	buttonProps?: ButtonProps
-}
-
-const Link = ({ children, as = 'a', method, buttonProps, ...props }: LinkProps) => {
+const Link = forwardRef<HTMLAnchorElement, InertiaLinkProps>(({ children, as = 'a', method, ...props }, ref) => {
 	// Only present standard GET requests as anchor tags, all others as buttons
 	as = (method !== undefined && method !== 'get') ? 'button' : as
 
@@ -17,6 +12,6 @@ const Link = ({ children, as = 'a', method, buttonProps, ...props }: LinkProps) 
 			{ asButton ? <Button>{ children }</Button> : children }
 		</InertiaLink>
 	)
-}
+})
 
 export default Link

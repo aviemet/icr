@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+<<<<<<< HEAD
 
 // material-ui
 import { useTheme } from '@mui/material/styles'
@@ -8,16 +9,25 @@ import { Collapse, List, ListItemButton, ListItemIcon, ListItemText, Typography 
 import NavItem from '../NavItem'
 
 // assets
+=======
+import { Collapse, List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import NavItem from '../NavItem'
+import MenuCaption from '../MenuCaption'
+>>>>>>> mui
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 
+<<<<<<< HEAD
 // ==============================|| SIDEBAR MENU LIST COLLAPSE ITEMS ||============================== //
 
 const NavCollapse = ({ menu, level }) => {
 	const theme = useTheme()
 	// const customization = theme.customization
 
+=======
+const NavCollapse = ({ menu, level }) => {
+>>>>>>> mui
 	const [open, setOpen] = useState(false)
 	const [selected, setSelected] = useState(null)
 
@@ -58,14 +68,23 @@ const NavCollapse = ({ menu, level }) => {
 	return (
 		<>
 			<ListItemButton
+<<<<<<< HEAD
 				sx={ {
 					// borderRadius: `${customization.borderRadius}px`,
+=======
+				sx={ theme => ({
+					borderRadius: theme.constants.borderRadius,
+>>>>>>> mui
 					mb: 0.5,
 					alignItems: 'flex-start',
 					backgroundColor: level > 1 ? 'transparent !important' : 'inherit',
 					py: level > 1 ? 1 : 1.25,
 					pl: `${level * 24}px`
+<<<<<<< HEAD
 				} }
+=======
+				}) }
+>>>>>>> mui
 				selected={ selected === menu.id }
 				onClick={ handleClick }
 			>
@@ -76,6 +95,7 @@ const NavCollapse = ({ menu, level }) => {
 							{ menu.title }
 						</Typography>
 					}
+<<<<<<< HEAD
 					secondary={
 						menu.caption && (
 							<Typography variant="caption" sx={ { /* ...theme.typography.subMenuCaption */ } } display="block" gutterBottom>
@@ -83,6 +103,9 @@ const NavCollapse = ({ menu, level }) => {
 							</Typography>
 						)
 					}
+=======
+					secondary={ menu.caption && <MenuCaption>{ menu.caption }</MenuCaption> }
+>>>>>>> mui
 				/>
 				{ open ? (
 					<KeyboardArrowUpIcon />
@@ -94,7 +117,11 @@ const NavCollapse = ({ menu, level }) => {
 				<List
 					component="div"
 					disablePadding
+<<<<<<< HEAD
 					sx={ {
+=======
+					sx={ theme => ({
+>>>>>>> mui
 						position: 'relative',
 						'&:after': {
 							content: '\'\'',
@@ -106,7 +133,11 @@ const NavCollapse = ({ menu, level }) => {
 							opacity: 1,
 							background: theme.palette.primary.light
 						}
+<<<<<<< HEAD
 					} }
+=======
+					}) }
+>>>>>>> mui
 				>
 					{ menus }
 				</List>

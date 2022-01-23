@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * Typography used in theme
  * @param {JsonObject} theme theme customization object
@@ -6,6 +7,14 @@
 export default function themeTypography(theme) {
 	return {
 		fontFamily: theme?.customization?.fontFamily,
+=======
+import type { TypographyOptions } from '@mui/material/styles/createTypography'
+
+export default function themeTypography(theme): TypographyOptions {
+	console.log({ theme, bg: theme.background })
+	return {
+		fontFamily: theme?.fontFamily,
+>>>>>>> mui
 		h6: {
 			fontWeight: 500,
 			color: theme.heading,
@@ -64,6 +73,7 @@ export default function themeTypography(theme) {
 		},
 		button: {
 			textTransform: 'capitalize'
+<<<<<<< HEAD
 		},
 		customInput: {
 			marginTop: 1,
@@ -128,6 +138,8 @@ export default function themeTypography(theme) {
 			width: '44px',
 			height: '44px',
 			fontSize: '1.5rem'
+=======
+>>>>>>> mui
 		}
 	}
 }

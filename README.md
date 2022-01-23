@@ -2,13 +2,9 @@
 
 ## Conventions
 
-Use Radix primitives for components not present in Material UI Tailwind
-
-[https://www.radix-ui.com/docs/primitives/overview/introduction](https://www.radix-ui.com/docs/primitives/overview/introduction)
-
 ## Debugging
 
-Use to increase log depth for server side node output:
+Use to increase log depth for server side node output for debugging webpack:
 
     const util = require('util')
     

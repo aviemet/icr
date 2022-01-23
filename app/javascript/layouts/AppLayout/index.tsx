@@ -1,22 +1,111 @@
-import React from 'react'
-import { Container } from 'components'
-import Sidebar from './Sidebar'
-import Footer from './Footer'
+import React, { useEffect } from 'react'
 import { Head } from '@inertiajs/inertia-react'
 
+import { styled, useTheme } from '@mui/material/styles'
+import { AppBar, Box, CssBaseline, Toolbar, useMediaQuery } from '@mui/material'
+import Header from './Header'
+import Sidebar from './Sidebar'
+import { useMenuState, actions } from 'Store'
+
 const AppLayout = ({ children }) => {
+	const theme = useTheme()
+	const matchDownMd = useMediaQuery(theme.breakpoints.down('lg'))
+
+	const [ { sideMenuOpen }, dispatch ] = useMenuState()
+
+	const handleLeftDrawerToggle = () => {
+		dispatch(actions.TOGGLE_SIDE_MENU)
+	}
+
+	useEffect(() => {
+		dispatch(actions.OPEN_SIDE_MENU)
+	}, [matchDownMd])
+
 	return (
 		<>
 			<Head title="Inclusive Community Resources" />
-			<Sidebar />
-			<div id="content" className='md:ml-64 relative min-h-screen'>
-				<div className="bg-light-blue-500 md:px-8 h-40 px-3"></div>
-				<Container className="md:px-8 px-3 -mt-24">{ children }</Container>
-			</div>
-			<Footer />
+
+			<Box sx={ { display: 'flex' } }>
+				<CssBaseline />
+				{ /* header */ }
+				<AppBar
+					enableColorOnDark
+					position="fixed"
+					color="inherit"
+					elevation={ 0 }
+					sx={ {
+						bgcolor: theme.palette.background.default,
+						transition: sideMenuOpen ? theme.transitions.create('width') : 'none'
+					} }
+				>
+					<Toolbar>
+						<Header handleLeftDrawerToggle={ handleLeftDrawerToggle } />
+					</Toolbar>
+				</AppBar>
+
+				{ /* drawer */ }
+				<Sidebar drawerOpen={ sideMenuOpen } drawerToggle={ handleLeftDrawerToggle } />
+
+				{ /* main content */ }
+				<Main theme={ theme } open={ sideMenuOpen }>
+					{ /* breadcrumb */ }
+					{ /* <Breadcrumbs separator={ IconChevronRight } navigation={ navigation } icon title rightAlign /> */ }
+					{ children }
+				</Main>
+			</Box>
 		</>
 	)
 }
 
-export default (page: React.ReactNode) => <AppLayout>{ page }</AppLayout>
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
+	backgroundColor: theme.constants.background,
+	width: '100%',
+	minHeight: 'calc(100vh - 88px)',
+	flexGrow: 1,
+	padding: '20px',
+	marginTop: '88px',
+	marginRight: '20px',
+	borderRadius: `${theme.constants.borderRadius}px`,
+	...(!open && {
+		borderBottomLeftRadius: 0,
+		borderBottomRightRadius: 0,
+		transition: theme.transitions.create('margin', {
+			easing: theme.transitions.easing.sharp,
+			duration: theme.transitions.duration.leavingScreen
+		}),
+		[theme.breakpoints.up('md')]: {
+			marginLeft: -(theme.constants.drawerWidth - 20),
+			width: `calc(100% - ${theme.constants.drawerWidth}px)`
+		},
+		[theme.breakpoints.down('md')]: {
+			marginLeft: '20px',
+			width: `calc(100% - ${theme.constants.drawerWidth}px)`,
+			padding: '16px'
+		},
+		[theme.breakpoints.down('sm')]: {
+			marginLeft: '10px',
+			width: `calc(100% - ${theme.constants.drawerWidth}px)`,
+			padding: '16px',
+			marginRight: '10px'
+		}
+	}),
+	...(open && {
+		transition: theme.transitions.create('margin', {
+			easing: theme.transitions.easing.easeOut,
+			duration: theme.transitions.duration.enteringScreen
+		}),
+		marginLeft: 0,
+		borderBottomLeftRadius: 0,
+		borderBottomRightRadius: 0,
+		width: `calc(100% - ${theme.constants.drawerWidth}px)`,
+		[theme.breakpoints.down('md')]: {
+			marginLeft: '20px'
+		},
+		[theme.breakpoints.down('sm')]: {
+			marginLeft: '10px',
+			marginRight: '10px'
+		}
+	})
+}))
 
+export default (page: React.ReactNode) => <AppLayout>{ page }</AppLayout>
