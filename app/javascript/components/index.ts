@@ -7,6 +7,7 @@ export { default as Breadcrumbs } from './extended/Breadcrumbs'
 export { default as AuthFooter } from './cards/AuthFooter'
 export { default as MainCard } from './cards/MainCard'
 export { default as SubCard } from './cards/AuthFooter'
+export { default as SearchInput } from './SearchInput'
 
 import Transition from './extended/Transition'
 
