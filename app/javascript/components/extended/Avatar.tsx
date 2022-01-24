@@ -1,5 +1,4 @@
 import React from 'react'
-// material-ui
 import { useTheme } from '@mui/material/styles'
 import MuiAvatar, { AvatarProps } from '@mui/material/Avatar'
 
@@ -11,6 +10,9 @@ interface IAvatarProps extends AvatarProps {
 	outline?: boolean
 	size?: string
 	sx?: object
+	component?: React.ReactNode|string
+	href?: string
+	target?: string
 }
 
 const Avatar = ({ children, color, outline, size, sx, ...others }: IAvatarProps) => {

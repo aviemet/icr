@@ -3,9 +3,10 @@ import { forwardRef } from 'react'
 import { Collapse, Fade, Box, Grow, Slide, Zoom } from '@mui/material'
 
 interface TransitionProps {
-	position: 'top-left'|'top-right'|'top'|'bottom-left'|'bottom-right'|'bottom'
-	type: 'grow'|'fade'|'collapse'|'slide'|'zoom'
-	direction: 'up'|'down'|'left'|'right'
+	children?: React.ReactNode
+	position?: 'top-left'|'top-right'|'top'|'bottom-left'|'bottom-right'|'bottom'
+	type?: 'grow'|'fade'|'collapse'|'slide'|'zoom'
+	direction?: 'up'|'down'|'left'|'right'
 }
 
 const Transition = forwardRef<React.Ref<unknown>, TransitionProps>((

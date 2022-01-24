@@ -1,9 +1,7 @@
 import React from 'react'
 import { useTheme } from '@mui/material/styles'
 import { ButtonBase, Link, Tooltip } from '@mui/material'
-
-// project imports
-import Avatar from '../extended/Avatar'
+import { Avatar } from 'components'
 
 // ==============================|| CARD SECONDARY ACTION ||============================== //
 
