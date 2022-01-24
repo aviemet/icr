@@ -2,38 +2,39 @@ import React from 'react'
 import { forwardRef } from 'react'
 import { Collapse, Fade, Box, Grow, Slide, Zoom } from '@mui/material'
 
-interface TransitionsProps extends React.HTMLProps<HTMLDivElement> {
+interface TransitionProps {
 	position: 'top-left'|'top-right'|'top'|'bottom-left'|'bottom-right'|'bottom'
 	type: 'grow'|'fade'|'collapse'|'slide'|'zoom'
 	direction: 'up'|'down'|'left'|'right'
 }
 
-const Transitions = forwardRef<HTMLDivElement, TransitionsProps>(({ children, position = 'top-left', type = 'grow', direction = 'up', ...others }, ref) => {
-
-	let transformOrigin = '0 0 0'
+const Transition = forwardRef<React.Ref<unknown>, TransitionProps>((
+	{ children, position = 'top-left', type = 'grow', direction = 'up', ...others },
+	ref
+) => {
+	const positionSX = {
+		transformOrigin: '0 0 0'
+	 }
 
 	switch (position) {
 		case 'top-right':
-			transformOrigin = 'top right'
+			positionSX.transformOrigin = 'top right'
 			break
 		case 'top':
-			transformOrigin = 'top'
+			positionSX.transformOrigin = 'top'
 			break
 		case 'bottom-left':
-			transformOrigin = 'bottom left'
+			positionSX.transformOrigin = 'bottom left'
 			break
 		case 'bottom-right':
-			transformOrigin = 'bottom right'
+			positionSX.transformOrigin = 'bottom right'
 			break
 		case 'bottom':
-			transformOrigin = 'bottom'
+			positionSX.transformOrigin = 'bottom'
 			break
-		case 'top-left':
-		default:
+		default: // default case must be 'top-left' if relying on prop type
 			break
 	}
-
-	const positionSX = { transformOrigin }
 
 	return (
 		<Box ref={ ref }>
@@ -82,4 +83,4 @@ const Transitions = forwardRef<HTMLDivElement, TransitionsProps>(({ children, po
 	)
 })
 
-export default Transitions
+export default Transition

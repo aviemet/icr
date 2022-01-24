@@ -8,6 +8,25 @@ export declare module '@mui/material/styles' {
 	}
 }
 
+
+declare module '@mui/material/styles/createPalette' {
+	export interface Palette {
+		orange: Partial<Color>
+		dark: Partial<Color>
+	}
+
+	export interface PaletteOptions {
+		orange: Partial<Color>
+		dark: Partial<Color>
+	}
+
+	export interface TypeText {
+		dark: string
+		hint: string
+	}
+}
+
+
 declare module '**/*.jpg' {
 	export default '' as string
 }

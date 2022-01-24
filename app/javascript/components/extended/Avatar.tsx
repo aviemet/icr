@@ -1,11 +1,11 @@
 import React from 'react'
 // material-ui
 import { useTheme } from '@mui/material/styles'
-import MuiAvatar from '@mui/material/Avatar'
+import MuiAvatar, { AvatarProps } from '@mui/material/Avatar'
 
 // ==============================|| AVATAR ||============================== //
 
-interface AvatarProps extends React.FunctionComponent {
+interface IAvatarProps extends AvatarProps {
 	className?: string
 	color?: string
 	outline?: boolean
@@ -13,7 +13,7 @@ interface AvatarProps extends React.FunctionComponent {
 	sx?: object
 }
 
-const Avatar = ({ color, outline, size, sx, ...others }: AvatarProps) => {
+const Avatar = ({ children, color, outline, size, sx, ...others }: IAvatarProps) => {
 	const theme = useTheme()
 
 	const colorSX = color && !outline && { color: theme.palette.background.paper, bgcolor: `${color}.main` }
@@ -65,7 +65,7 @@ const Avatar = ({ color, outline, size, sx, ...others }: AvatarProps) => {
 			sizeSX = {}
 	}
 
-	return <MuiAvatar sx={ { ...colorSX, ...outlineSX, ...sizeSX, ...sx } } { ...others } />
+	return <MuiAvatar sx={ { ...colorSX, ...outlineSX, ...sizeSX, ...sx } } { ...others }>{ children }</MuiAvatar>
 }
 
 export default Avatar

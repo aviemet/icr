@@ -1,6 +1,7 @@
 import React from 'react'
 import { Head } from '@inertiajs/inertia-react'
-import { Avatar } from '@mui/material'
+import Avatar from 'components/extended/Avatar'
+// import { Avatar } from '@mui/material'
 
 const Home = ({ name }) => {
 	return (

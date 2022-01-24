@@ -16,7 +16,7 @@ import {
 	ListItemIcon,
 	ListItemText,
 	OutlinedInput,
-	Paper,
+	// Paper,
 	Popper,
 	Stack,
 	Switch,
@@ -28,7 +28,7 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import PersonIcon from '@mui/icons-material/Person'
 
 import MainCard from 'components/cards/MainCard'
-import Transitions from 'components/extended/Transitions'
+import { Transition } from 'components'
 
 const ProfileSection = () => {
 	const theme = useTheme()
@@ -43,13 +43,13 @@ const ProfileSection = () => {
 	/**
 	 * anchorRef is used on different componets and specifying one type leads to other components throwing an error
 	 * */
-	const anchorRef = useRef(null)
+	const anchorRef = useRef<HTMLDivElement>(null)
 	const handleLogout = async () => {
 		console.log('Logout')
 	}
 
 	const handleClose = (event) => {
-		if (anchorRef.current && anchorRef.current.contains(event.target)) {
+		if(anchorRef.current && anchorRef.current.contains(event.target)) {
 			return
 		}
 		setOpen(false)
@@ -59,7 +59,7 @@ const ProfileSection = () => {
 		setSelectedIndex(index)
 		handleClose(event)
 
-		if (route && route !== '') {
+		if(route && route !== '') {
 			// navigate(route)
 		}
 	}
@@ -69,8 +69,8 @@ const ProfileSection = () => {
 
 	const prevOpen = useRef(open)
 	useEffect(() => {
-		if (prevOpen.current === true && open === false) {
-			anchorRef.current.focus()
+		if(prevOpen.current === true && open === false) {
+			anchorRef.current?.focus()
 		}
 
 		prevOpen.current = open
@@ -139,7 +139,7 @@ const ProfileSection = () => {
 			>
 				{ ({ TransitionProps }) => (
 					<Grow { ...TransitionProps }>
-						<Transitions in={ open } position="top-right" { ...TransitionProps }>
+						<Transition in={ open } position="top-right" { ...TransitionProps }>
 							<ClickAwayListener onClickAway={ handleClose }>
 								<MainCard border={ false } elevation={ 16 } content={ false } boxShadow shadow={ theme.shadows[16] }>
 									<Box sx={ { p: 2 } }>
@@ -283,7 +283,7 @@ const ProfileSection = () => {
 									</Box>
 								</MainCard>
 							</ClickAwayListener>
-						</Transitions>
+						</Transition>
 					</Grow>
 				) }
 			</Popper>

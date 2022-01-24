@@ -1,24 +1,21 @@
 import React from 'react'
 import { forwardRef } from 'react'
-import { Card, CardContent, CardHeader, Divider, Typography } from '@mui/material'
+import Card, { CardProps } from '@mui/material/Card'
+import { CardContent, CardHeader, Divider, Typography } from '@mui/material'
 
 const headerSX = {
 	'& .MuiCardHeader-action': { mr: 0 }
 }
 
-// ==============================|| CUSTOM MAIN CARD ||============================== //
-
-interface MainCardProps {
-	border: boolean
+interface MainCardProps extends CardProps {
+	border?: boolean
 	boxShadow: boolean
-	content: boolean
-	contentClass: string
-	contentSX: object
-	darkTitle: boolean
-	secondary: React.ReactNode|string|object
+	content?: boolean
+	contentClass?: string
+	contentSX?: object
+	darkTitle?: boolean
+	secondary?: React.ReactNode|string|object
 	shadow: string
-	sx: object
-	title: React.ReactNode|string|object
 }
 
 const MainCard = forwardRef<HTMLDivElement, MainCardProps>((

@@ -4,7 +4,6 @@ import colors from './colors'
 import themePalette from './palette'
 import themeTypography from './typography'
 
-
 const themeOptions = {
 	fontFamily: '\'Roboto\', sans-serif',
 	heading: colors.grey900,

@@ -1,4 +1,6 @@
-export default function themePalette(theme) {
+import { PaletteOptions } from '@mui/material/styles/createPalette'
+
+export default function themePalette(theme): PaletteOptions {
 	return {
 		mode: theme?.navType,
 		common: {

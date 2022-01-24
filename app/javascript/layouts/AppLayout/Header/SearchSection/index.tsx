@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { styled } from '@mui/material/styles'
 import { Avatar, Box, ButtonBase, Card, Grid, InputAdornment, OutlinedInput, Popper } from '@mui/material'
 import PopupState, { bindPopper, bindToggle } from 'material-ui-popup-state'
-import Transitions from 'components/extended/Transitions'
 import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
 import { shouldForwardProp } from '@mui/system'
+import { Transition } from 'components'
 
 const PopperStyle = styled(Popper, { shouldForwardProp })(({ theme }) => ({
 	zIndex: 1100,
@@ -113,7 +113,7 @@ const SearchSection = () => {
 							<PopperStyle { ...bindPopper(popupState) } transition>
 								{ ({ TransitionProps }) => (
 									<>
-										<Transitions type="zoom" { ...TransitionProps } sx={ { transformOrigin: 'center left' } }>
+										<Transition type="zoom" { ...TransitionProps } sx={ { transformOrigin: 'center left' } }>
 											<Card
 												sx={ theme => ({
 													background: '#fff',
@@ -131,7 +131,7 @@ const SearchSection = () => {
 													</Grid>
 												</Box>
 											</Card>
-										</Transitions>
+										</Transition>
 									</>
 								) }
 							</PopperStyle>

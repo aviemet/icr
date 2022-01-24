@@ -20,10 +20,7 @@ import {
 	useMediaQuery
 } from '@mui/material'
 import NotificationsIcon from '@mui/icons-material/Notifications'
-
-// project imports
-import MainCard from 'components/cards/MainCard'
-import Transitions from 'components/extended/Transitions'
+import { Transition, MainCard } from 'components'
 import NotificationList from './NotificationList'
 
 
@@ -57,7 +54,7 @@ const NotificationSection = () => {
 	/**
 	 * anchorRef is used on different componets and specifying one type leads to other components throwing an error
 	 * */
-	const anchorRef = useRef(null)
+	const anchorRef = useRef<HTMLDivElement>(null)
 
 	const handleToggle = () => {
 		setOpen((prevOpen) => !prevOpen)
@@ -136,7 +133,7 @@ const NotificationSection = () => {
 				} }
 			>
 				{ ({ TransitionProps }) => (
-					<Transitions position={ matchesXs ? 'top' : 'top-right' } in={ open } { ...TransitionProps }>
+					<Transition position={ matchesXs ? 'top' : 'top-right' } in={ open } { ...TransitionProps }>
 						<Paper>
 							<ClickAwayListener onClickAway={ handleClose }>
 								<MainCard border={ false } elevation={ 16 } content={ false } boxShadow shadow={ theme.shadows[16] }>
@@ -201,7 +198,7 @@ const NotificationSection = () => {
 								</MainCard>
 							</ClickAwayListener>
 						</Paper>
-					</Transitions>
+					</Transition>
 				) }
 			</Popper>
 		</>
