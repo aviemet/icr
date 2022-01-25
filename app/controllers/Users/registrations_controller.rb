@@ -6,7 +6,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # GET /resource/sign_up
   def new
-    super
+    build_resource
+    yield resource if block_given?
+		render inertia: "Public/Register", props: {
+			user: resource
+		}
   end
 
   # POST /resource

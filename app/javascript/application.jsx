@@ -3,7 +3,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import axios from 'axios'
 import { InertiaProgress } from '@inertiajs/progress'
-import { LoginLayout, AppLayout } from './layouts'
+import { AuthLayout, AppLayout } from './layouts'
 import Providers from './Providers'
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		resolve: name => {
 			const page = require(`./pages/${name}`).default
 			if(page.layout === undefined) {
-				page.layout = name.startsWith('Public/') ? LoginLayout : AppLayout
+				page.layout = name.startsWith('Public/') ? AuthLayout : AppLayout
 			}
 			return page
 		},

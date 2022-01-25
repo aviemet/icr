@@ -1,4 +1,4 @@
 import AppLayout from './AppLayout'
-import LoginLayout from './LoginLayout'
+import AuthLayout from './AuthLayout'
 
-export { AppLayout, LoginLayout }
+export { AppLayout, AuthLayout }

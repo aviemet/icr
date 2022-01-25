@@ -1,87 +1,72 @@
 import React, { useState } from 'react'
+import { Link, AnimateButton } from 'components'
+import { Routes } from 'lib'
+import { useForm, Controller } from 'react-hook-form'
 import { useTheme } from '@mui/material/styles'
 import {
 	Box,
 	Button,
 	Checkbox,
 	Divider,
-	FormControl,
 	FormControlLabel,
 	FormHelperText,
 	Grid,
 	IconButton,
 	InputAdornment,
 	InputLabel,
-	OutlinedInput,
 	Stack,
+	TextField,
 	Typography,
 	useMediaQuery
 } from '@mui/material'
-import { AnimateButton } from 'components'
-import { Routes } from 'lib'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { Inertia } from '@inertiajs/inertia'
 import Google from 'images/social-google.svg'
-
-const customInput = theme => ({
-	marginTop: 1,
-	marginBottom: 1,
-	'& > label': {
-		top: 23,
-		left: 0,
-		color: theme.grey500,
-		'&[data-shrink="false"]': {
-			top: 5
-		}
-	},
-	'& > div > input': {
-		padding: '30.5px 14px 11.5px !important'
-	},
-	'& legend': {
-		display: 'none'
-	},
-	'& fieldset': {
-		top: 0
-	}
-})
 
 const Login = ({ ...others }) => {
 	const theme = useTheme()
 	const matchDownSM = useMediaQuery(theme.breakpoints.down('md'))
 	const [checked, setChecked] = useState(true)
 
-	const [email, setEmail] = useState('')
-	const [password, setPassword] = useState('')
+	const { control, handleSubmit } = useForm({
+		defaultValues: {
+			email: '',
+			password: '',
+		}
+	})
 
 	const googleHandler = async () => {
 		console.error('Login')
 	}
 
 	const [showPassword, setShowPassword] = useState(false)
-	const handleClickShowPassword = () => {
-		setShowPassword(!showPassword)
-	}
 
 	const handleMouseDownPassword = event => {
 		event.preventDefault()
 	}
 
-	const handleLoginFormSubmit = event => {
-		event.preventDefault()
-		Inertia.post(Routes.user_session_path(), {
-			user: {
-				email: email,
-				password: password
-			}
-		})
+	const onSubmit = data => {
+		console.log({ data })
+		// Inertia.post(Routes.user_session_path(), {
+		// 	user: {
+		// 		email: email,
+		// 		password: password
+		// 	}
+		// })
 	}
-
-	const customInputStyles = customInput(theme)
 
 	return (
 		<>
 			<Grid container direction="column" justifyContent="center" spacing={ 2 }>
+
+				<Grid item xs={ 12 }>
+					<Stack alignItems="center" justifyContent="center" spacing={ 1 }>
+						<Typography color={ theme.palette.secondary.main } gutterBottom variant={ matchDownSM ? 'h3' : 'h2' }>
+							Hi, Welcome Back
+						</Typography>
+					</Stack>
+				</Grid>
 
 				<Grid item xs={ 12 }>
 					<AnimateButton>
@@ -127,43 +112,45 @@ const Login = ({ ...others }) => {
 				</Grid>
 			</Grid>
 
-			<form noValidate onSubmit={ handleLoginFormSubmit } { ...others }>
-				<FormControl fullWidth sx={ customInputStyles }>
-					<InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
-					<OutlinedInput
-						id="outlined-adornment-email-login"
-						type="email"
-						name="email"
-						label="Email Address / Username"
-						value={ email }
-						onChange={ e => setEmail(e.target.value) }
-					/>
-				</FormControl>
+			<form noValidate onSubmit={ handleSubmit(onSubmit) } { ...others }>
+				<Grid container spacing={ matchDownSM ? 0 : 2 }>
+					<Grid item xs={ 12 }>
+						<Controller name="email" control={ control } render={ ({ field }) =>
+							<TextField
+								{ ...field }
+								fullWidth
+								type="email"
+								name="email"
+								label="Email Address / Username"
+							/>
+						} />
+					</Grid>
 
-				<FormControl fullWidth sx={ customInputStyles }>
-					<InputLabel htmlFor="outlined-adornment-password-login">Password</InputLabel>
-					<OutlinedInput
-						id="outlined-adornment-password-login"
-						type={ showPassword ? 'text' : 'password' }
-						name="password"
-						label="Password"
-						value={ password }
-						onChange={ e => setPassword(e.target.value) }
-						endAdornment={
-							<InputAdornment position="end">
-								<IconButton
-									aria-label="toggle password visibility"
-									onClick={ handleClickShowPassword }
-									onMouseDown={ handleMouseDownPassword }
-									edge="end"
-									size="large"
-								>
-									{ showPassword ? <Visibility /> : <VisibilityOff /> }
-								</IconButton>
-							</InputAdornment>
-						}
-					/>
-				</FormControl>
+					<Grid item xs={ 12 }>
+						<Controller name="email" control={ control } render={ ({ field }) =>
+							<TextField
+								{ ...field }
+								fullWidth
+								type={ showPassword ? 'text' : 'password' }
+								name="password"
+								label="Password"
+								InputProps={ { endAdornment:
+									<InputAdornment position="end">
+										<IconButton
+											aria-label="toggle password visibility"
+											onClick={ () => setShowPassword(!showPassword) }
+											onMouseDown={ handleMouseDownPassword }
+											edge="end"
+											size="large"
+										>
+											{ showPassword ? <Visibility /> : <VisibilityOff /> }
+										</IconButton>
+									</InputAdornment>
+								} }
+							/>
+						} />
+					</Grid>
+				</Grid>
 
 				<Stack direction="row" alignItems="center" justifyContent="space-between" spacing={ 1 }>
 					<FormControlLabel label="Remember me" control={
@@ -182,6 +169,17 @@ const Login = ({ ...others }) => {
 					</AnimateButton>
 				</Box>
 			</form>
+
+
+			<Grid item xs={ 12 }>
+				<Box sx={ { mt: 2 } }>
+					<Grid item container direction="column" alignItems="center" xs={ 12 }>
+						<Typography variant="subtitle1">
+							<Link href={ Routes.new_user_registration_path() }>Don&apos;t have an account?</Link>
+						</Typography>
+					</Grid>
+				</Box>
+			</Grid>
 		</>
 	)
 }
