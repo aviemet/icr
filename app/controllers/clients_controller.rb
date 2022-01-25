@@ -32,7 +32,7 @@ class ClientsController < ApplicationController
 
   # POST /clients
   def create
-    @client = Client.new(example_params)
+    @client = Client.new(client_params)
 
     if @client.save
       redirect_to client_url(@client), notice: "Client was successfully created."
@@ -59,7 +59,7 @@ class ClientsController < ApplicationController
   private
 
   def set_client
-    @client = Client.find(class_name, params[:id])
+    @client = Client.find_by_slug(params[:slug])
   end
 
   def set_clients
