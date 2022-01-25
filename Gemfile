@@ -11,7 +11,7 @@ gem "puma", "~> 5.0"
 
 # Assets
 gem "jbuilder"
-gem "webpacker", git: 'https://github.com/rails/webpacker.git'
+gem "webpacker", git: "https://github.com/rails/webpacker.git"
 gem "inertia_rails", "~> 1.11"
 gem "js-routes", "~> 2.2"
 
@@ -41,9 +41,11 @@ gem "bootsnap", require: false
 
 group :development, :test do
   gem "rspec-rails", "~> 5.0"
+  gem "factory_bot_rails", "~> 6.2"
+  gem "faker", "~> 2.19"
 
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  gem "debug", platforms: %i[mri mingw x64_mingw]
   gem "better_errors", "~> 2.9"
   gem "awesome_print", "~> 1.9"
   gem "solargraph", "~> 0.44.2"

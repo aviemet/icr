@@ -17,13 +17,13 @@ interface InertiaPageProps extends PageProps {
 	props: LayoutWrapperProps
 }
 
-const LayoutWrapper = ({ children, auth }: LayoutWrapperProps) => {
+const LayoutWrapper = React.memo(({ children, auth }: LayoutWrapperProps) => {
 	return(
 		<Providers auth={ auth }>
 			{ children }
 		</Providers>
 	)
-}
+})
 
 const AppLayoutLayout = (page: InertiaPageProps) => {
 	return(

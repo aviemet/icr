@@ -11,4 +11,10 @@ if Rails.env == "development"
     user.save
 	end
 
+	if Client.count == 0
+		6.times do
+			FactoryBot.create :client
+		end
+	end
+
 end

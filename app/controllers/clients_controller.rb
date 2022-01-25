@@ -5,7 +5,7 @@ class ClientsController < ApplicationController
   # GET /clients
   def index
     render inertia: "Clients/Index", props: {
-      clients: @clients.as_json,
+      clients: @clients.to_a,
     }
   end
 
