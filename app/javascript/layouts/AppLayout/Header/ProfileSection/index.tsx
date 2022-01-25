@@ -1,4 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { Routes } from 'lib'
+import { Inertia } from '@inertiajs/inertia'
+import { useAuthState } from 'Store'
 import { useTheme } from '@mui/material/styles'
 import {
 	Avatar,
@@ -29,6 +32,7 @@ import { Transition, SearchInput } from 'components'
 import { greeting } from 'lib'
 
 const ProfileSection = () => {
+	const [auth, _] = useAuthState()
 	const theme = useTheme()
 
 	const [sdm, setSdm] = useState(true)
@@ -42,7 +46,7 @@ const ProfileSection = () => {
 	 * */
 	const anchorRef = useRef<HTMLDivElement>(null)
 	const handleLogout = async () => {
-		console.log('Logout')
+		Inertia.delete(Routes.destroy_user_session_path())
 	}
 
 	const handleClose = (event) => {
@@ -106,7 +110,7 @@ const ProfileSection = () => {
 						aria-controls={ open ? 'menu-list-grow' : undefined }
 						aria-haspopup="true"
 						color="inherit"
-					>JD</Avatar>
+					>{ auth.user && `${auth.user.f_name.charAt(0)}${auth.user.l_name.charAt(0)}` }</Avatar>
 				}
 				label={ <SettingsIcon /> }
 				variant="outlined"
@@ -144,7 +148,7 @@ const ProfileSection = () => {
 											<Stack direction="row" spacing={ 0.5 } alignItems="center">
 												<Typography variant="h4">{ greeting() },</Typography>
 												<Typography component="span" variant="h4" sx={ { fontWeight: 400 } }>
-													John Doe
+													{ auth.user && auth.user.f_name }
 												</Typography>
 											</Stack>
 											<Typography variant="subtitle2">{ /* role, title, permissions something */ }</Typography>

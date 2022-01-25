@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react'
 import { Head } from '@inertiajs/inertia-react'
-
 import { styled, useTheme } from '@mui/material/styles'
 import { AppBar, Box, CssBaseline, Toolbar, useMediaQuery } from '@mui/material'
 import Header from './Header'
 import Sidebar from './Sidebar'
-import { useMenuState, actions } from 'Store'
+import { useMenuState, menuActions, AuthContextProvider } from 'Store'
 
 const AppLayout = ({ children }) => {
 	const theme = useTheme()
@@ -14,15 +13,15 @@ const AppLayout = ({ children }) => {
 	const [ { sideMenuOpen }, dispatch ] = useMenuState()
 
 	const handleLeftDrawerToggle = () => {
-		dispatch(actions.TOGGLE_SIDE_MENU)
+		dispatch(menuActions.TOGGLE_SIDE_MENU)
 	}
 
 	useEffect(() => {
-		dispatch(actions.OPEN_SIDE_MENU)
+		dispatch(menuActions.OPEN_SIDE_MENU)
 	}, [matchDownMd])
 
 	return (
-		<>
+		<AuthContextProvider auth={ children.props.auth }>
 			<Head title="Inclusive Community Resources" />
 
 			<Box sx={ { display: 'flex' } }>
@@ -53,7 +52,7 @@ const AppLayout = ({ children }) => {
 					{ children }
 				</Main>
 			</Box>
-		</>
+		</AuthContextProvider>
 	)
 }
 

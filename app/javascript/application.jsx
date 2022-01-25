@@ -7,6 +7,8 @@ import { AuthLayout, AppLayout } from './layouts'
 import Providers from './Providers'
 
 document.addEventListener('DOMContentLoaded', () => {
+	const csrfToken = document.querySelector('meta[name=csrf-token]').content
+	axios.defaults.headers.common['X-CSRF-Token'] = csrfToken
 
 	InertiaProgress.init()
 
@@ -20,9 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			return page
 		},
 		setup({ el, App, props }) {
-			const csrfToken = document.querySelector('meta[name=csrf-token]').content
-			axios.defaults.headers.common['X-CSRF-Token'] = csrfToken
-
 			render(<Providers><App { ...props } /></Providers>, el)
 		},
 	})
