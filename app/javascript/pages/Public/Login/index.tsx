@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, AnimateButton } from 'components'
 import { Routes } from 'lib'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from '@inertiajs/inertia-react'
 import { useTheme } from '@mui/material/styles'
 import {
 	Box,
@@ -21,39 +21,29 @@ import {
 } from '@mui/material'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import { Inertia } from '@inertiajs/inertia'
 import Google from 'images/social-google.svg'
 
 const Login = ({ ...others }) => {
 	const theme = useTheme()
 	const matchDownSM = useMediaQuery(theme.breakpoints.down('md'))
 	const [checked, setChecked] = useState(true)
+	const [showPassword, setShowPassword] = useState(false)
 
-	const { control, handleSubmit } = useForm({
-		defaultValues: {
-			email: '',
-			password: '',
-		}
+	const { data, setData, post, transform, processing, errors } = useForm({
+		'email': '',
+		'password': '',
 	})
+
+	const onSubmit = event => {
+		event.preventDefault()
+		transform(data => ({
+			user: data
+		}))
+		post(Routes.user_session_path())
+	}
 
 	const googleHandler = async () => {
 		console.error('Login')
-	}
-
-	const [showPassword, setShowPassword] = useState(false)
-
-	const handleMouseDownPassword = event => {
-		event.preventDefault()
-	}
-
-	const onSubmit = data => {
-		console.log({ data })
-		// Inertia.post(Routes.user_session_path(), {
-		// 	user: {
-		// 		email: email,
-		// 		password: password
-		// 	}
-		// })
 	}
 
 	return (
@@ -112,43 +102,44 @@ const Login = ({ ...others }) => {
 				</Grid>
 			</Grid>
 
-			<form noValidate onSubmit={ handleSubmit(onSubmit) } { ...others }>
+			<form noValidate onSubmit={ onSubmit } { ...others }>
 				<Grid container spacing={ matchDownSM ? 0 : 2 }>
 					<Grid item xs={ 12 }>
-						<Controller name="email" control={ control } render={ ({ field }) =>
-							<TextField
-								{ ...field }
-								fullWidth
-								type="email"
-								name="email"
-								label="Email Address / Username"
-							/>
-						} />
+						<TextField
+							fullWidth
+							type="email"
+							name="email"
+							label="Email Address / Username"
+							value={ data['email'] }
+							onChange={ e => setData('email', e.target.value) }
+							aria-describedby="email-error-text"
+						/>
+						{ errors.email && <FormHelperText id="email-error-text">{ errors.email }</FormHelperText> }
 					</Grid>
 
 					<Grid item xs={ 12 }>
-						<Controller name="email" control={ control } render={ ({ field }) =>
-							<TextField
-								{ ...field }
-								fullWidth
-								type={ showPassword ? 'text' : 'password' }
-								name="password"
-								label="Password"
-								InputProps={ { endAdornment:
+						<TextField
+							fullWidth
+							type={ showPassword ? 'text' : 'password' }
+							name="password"
+							label="Password"
+							value={ data['password'] }
+							onChange={ e => setData('password', e.target.value) }
+							aria-describedby="password-error-text"
+							InputProps={ { endAdornment:
 									<InputAdornment position="end">
 										<IconButton
 											aria-label="toggle password visibility"
 											onClick={ () => setShowPassword(!showPassword) }
-											onMouseDown={ handleMouseDownPassword }
 											edge="end"
 											size="large"
 										>
 											{ showPassword ? <Visibility /> : <VisibilityOff /> }
 										</IconButton>
 									</InputAdornment>
-								} }
-							/>
-						} />
+							} }
+						/>
+						{ errors.password && <FormHelperText id="password-error-text">{ errors.password }</FormHelperText> }
 					</Grid>
 				</Grid>
 
@@ -163,7 +154,7 @@ const Login = ({ ...others }) => {
 
 				<Box sx={ { mt: 2 } }>
 					<AnimateButton>
-						<Button disableElevation fullWidth size="large" type="submit" variant="contained" color="secondary">
+						<Button disableElevation fullWidth size="large" type="submit" variant="contained" color="secondary" disabled={ processing }>
 							Sign in
 						</Button>
 					</AnimateButton>

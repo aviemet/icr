@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'components'
 import { Routes } from 'lib'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from '@inertiajs/inertia-react'
 import { useTheme } from '@mui/material/styles'
 import {
 	Box,
@@ -20,54 +20,45 @@ import {
 } from '@mui/material'
 import Google from 'images/social-google.svg'
 import AnimateButton from 'components/extended/AnimateButton'
-// import { strengthColor, strengthIndicator } from 'utils/password-strength'
+import { strengthColor, strengthIndicator } from 'lib/passwordStrength'
 
 // assets
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
 const Register = ({ ...others }) => {
-	// const passwordRef = useRef<HTMLInputElement>(null)
-
 	const theme = useTheme()
 	const matchDownSM = useMediaQuery(theme.breakpoints.down('md'))
 
-	const { control, handleSubmit } = useForm({
-		defaultValues: {
-			f_name: '',
-			l_name: '',
-			email: '',
-			password: '',
-		}
+	const [showPassword, setShowPassword] = useState(false)
+
+	const { data, setData, post, transform, processing, errors } = useForm({
+		'f_name': '',
+		'l_name': '',
+		'email': '',
+		'password': '',
 	})
 
-	const [showPassword, setShowPassword] = useState(false)
-	const [checked, setChecked] = useState(true)
+	const onSubmit = event => {
+		event.preventDefault()
+		transform(data => ({
+			user: data
+		}))
+		post(Routes.user_registration_path())
+	}
 
-	const [strength, setStrength] = useState(0)
-	const [level, setLevel] = useState()
+	// const [strength, setStrength] = useState(1)
+	// const [level, setLevel] = useState({ label: '', color: })
+
+	// const passwordStrength = (value) => {
+	// 	const temp = strengthIndicator(value)
+	// 	setStrength(temp)
+	// 	setLevel(strengthColor(temp))
+	// }
 
 	const googleHandler = async () => {
-		console.error('Register')
+		console.error('Google coming later')
 	}
-
-	const handleMouseDownPassword = (event) => {
-		// event.preventDefault()
-	}
-
-	const changePassword = (value) => {
-		// const temp = strengthIndicator(value)
-		// setStrength(temp)
-		// setLevel(strengthColor(temp))
-	}
-
-	const onSubmit = event => {
-		console.log({ event })
-	}
-
-	useEffect(() => {
-		changePassword('123456')
-	}, [])
 
 	return (
 		<>
@@ -130,95 +121,100 @@ const Register = ({ ...others }) => {
 				</Grid>
 			</Grid>
 
-			<form noValidate onSubmit={ handleSubmit(onSubmit) } autoComplete="off" { ...others }>
+			<form noValidate onSubmit={ onSubmit } autoComplete="off" { ...others }>
 				<Grid container spacing={ matchDownSM ? 0 : 2 }>
 
 					<Grid item xs={ 12 } sm={ 6 }>
-						<Controller name="f_name" control={ control } render={ ({ field }) =>
+						<FormControl error={ !!errors.f_name } fullWidth>
 							<TextField
-								{ ...field }
-								fullWidth
 								label="First Name"
 								margin="normal"
 								name="f_name"
-								autoComplete="off"
-								data-lpignore="true"
+								InputProps={ { autoComplete: 'off' } }
+								value={ data['f_name'] }
+								onChange={ e => setData('f_name', e.target.value) }
+								aria-describedby="f_name-error-text"
 							/>
-						} />
+							{ errors.f_name && <FormHelperText id="f_name-error-text">{ errors.f_name }</FormHelperText> }
+						</FormControl>
 					</Grid>
 
 					<Grid item xs={ 12 } sm={ 6 }>
-						<Controller name="l_name" control={ control } render={ ({ field }) =>
+						<FormControl error={ !!errors.l_name } fullWidth>
 							<TextField
-								{ ...field }
-								fullWidth
 								label="Last Name"
 								margin="normal"
 								name="l_name"
-								InputProps={ { 'data-lpignore': true, autoComplete: 'off' } }
+								InputProps={ { autoComplete: 'off' } }
+								value={ data['l_name'] }
+								onChange={ e => setData('l_name', e.target.value) }
+								aria-describedby="l_name-error-text"
 							/>
-						} />
+							{ errors.l_name && <FormHelperText id="l_name-error-text">{ errors.l_name }</FormHelperText> }
+						</FormControl>
 					</Grid>
 
 
 					<Grid item xs={ 12 }>
-						<Controller name="email" control={ control } render={ ({ field }) =>
+						<FormControl error={ !!errors.email } fullWidth>
 							<TextField
-								{ ...field }
-								fullWidth
 								type="email"
 								name="email"
 								label="Email Address"
-								autoComplete="email"
-								data-lpignore="true"
+								InputProps={ { autoComplete: 'email' } }
+								value={ data['email'] }
+								onChange={ e => setData('email', e.target.value) }
+								aria-describedby="email-error-text"
 							/>
-						} />
+							{ errors.email && <FormHelperText id="email-error-text">{ errors.email }</FormHelperText> }
+						</FormControl>
 					</Grid>
 
 					<Grid item xs={ 12 }>
-						<Controller name="password" control={ control } render={ ({ field }) =>
+						<FormControl error={ !!errors.password } fullWidth>
 							<TextField
-								{ ...field }
-								fullWidth
 								type={ showPassword ? 'text' : 'password' }
 								name="password"
 								label="Password"
-								autoComplete="password"
-								data-lpignore="true"
 								onBlur={ () => setShowPassword(false) }
-								InputProps={ { endAdornment:
-									<InputAdornment position="end">
-										<IconButton
-											aria-label="toggle password visibility"
-											onClick={ () => setShowPassword(!showPassword) }
-											onMouseDown={ handleMouseDownPassword }
-											edge="end"
-											size="large"
-										>
-											{ showPassword ? <Visibility /> : <VisibilityOff /> }
-										</IconButton>
-									</InputAdornment>
+								value={ data['password'] }
+								onChange={ e => {
+									setData('password', e.target.value)
+									// passwordStrength(e.target.value)
+								} }
+								aria-describedby="password-error-text"
+								InputProps={ { autoComplete: 'off', endAdornment:
+								<InputAdornment position="end">
+									<IconButton
+										aria-label="toggle password visibility"
+										onClick={ () => setShowPassword(!showPassword) }
+										edge="end"
+										size="large"
+									>
+										{ showPassword ? <Visibility /> : <VisibilityOff /> }
+									</IconButton>
+								</InputAdornment>
 								} }
 							/>
-						} />
+							{ errors.password && <FormHelperText id="password-error-text">{ errors.password }</FormHelperText> }
+						</FormControl>
+						{ /* { strength !== 0 && (
+							<FormControl fullWidth>
+								<Box sx={ { mb: 2 } }>
+									<Grid container spacing={ 2 } alignItems="center">
+										<Grid item>
+											<Box style={ { backgroundColor: level?.color } } sx={ { width: 85, height: 8, borderRadius: '7px' } } />
+										</Grid>
+										<Grid item>
+											<Typography variant="subtitle1" fontSize="0.75rem">
+											</Typography>
+										</Grid>
+									</Grid>
+								</Box>
+							</FormControl>
+						) } */ }
 					</Grid>
 				</Grid>
-
-				{ strength !== 0 && (
-					<FormControl fullWidth>
-						<Box sx={ { mb: 2 } }>
-							<Grid container spacing={ 2 } alignItems="center">
-								<Grid item>
-									<Box sx={ { width: 85, height: 8, borderRadius: '7px' } } />
-								</Grid>
-								<Grid item>
-									<Typography variant="subtitle1" fontSize="0.75rem">
-									</Typography>
-								</Grid>
-							</Grid>
-						</Box>
-					</FormControl>
-				) }
 
 				{ /* <Grid container alignItems="center" justifyContent="space-between">
 					<Grid item>
@@ -237,7 +233,7 @@ const Register = ({ ...others }) => {
 
 				<Box sx={ { mt: 2 } }>
 					<AnimateButton>
-						<Button disableElevation fullWidth size="large" type="submit" variant="contained" color="secondary">
+						<Button disableElevation fullWidth size="large" type="submit" variant="contained" color="secondary" disabled={ processing }>
 							Sign up
 						</Button>
 					</AnimateButton>
