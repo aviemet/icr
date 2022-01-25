@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Head } from '@inertiajs/inertia-react'
 import { styled, useTheme } from '@mui/material/styles'
-import { AppBar, Box, CssBaseline, Toolbar, useMediaQuery } from '@mui/material'
+import { AppBar, Box, Toolbar, useMediaQuery } from '@mui/material'
 import Header from './Header'
 import Sidebar from './Sidebar'
 import { useMenuState, menuActions, AuthContextProvider } from 'Store'
@@ -21,11 +21,10 @@ const AppLayout = ({ children }) => {
 	}, [matchDownMd])
 
 	return (
-		<AuthContextProvider auth={ children.props.auth }>
+		<>
 			<Head title="Inclusive Community Resources" />
 
 			<Box sx={ { display: 'flex' } }>
-				<CssBaseline />
 				{ /* header */ }
 				<AppBar
 					enableColorOnDark
@@ -52,7 +51,7 @@ const AppLayout = ({ children }) => {
 					{ children }
 				</Main>
 			</Box>
-		</AuthContextProvider>
+		</>
 	)
 }
 
@@ -107,4 +106,4 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
 	})
 }))
 
-export default (page: React.ReactNode) => <AppLayout>{ page }</AppLayout>
+export default AppLayout

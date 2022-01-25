@@ -4,7 +4,6 @@ import { render } from 'react-dom'
 import axios from 'axios'
 import { InertiaProgress } from '@inertiajs/progress'
 import { AuthLayout, AppLayout } from './layouts'
-import Providers from './Providers'
 
 document.addEventListener('DOMContentLoaded', () => {
 	const csrfToken = document.querySelector('meta[name=csrf-token]').content
@@ -22,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			return page
 		},
 		setup({ el, App, props }) {
-			render(<Providers><App { ...props } /></Providers>, el)
+			render(<App { ...props } />, el)
 		},
 	})
 })

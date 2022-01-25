@@ -6,20 +6,19 @@ import { MenuContextProvider } from 'Store'
 
 interface ProvidersProps {
 	children: React.ReactNode
-	auth: any
 }
 
 const Providers = ({ children }: ProvidersProps) => {
+	console.log({ children })
 	return(
-		<CssBaseline>
-			<StyledEngineProvider injectFirst>
-				<ThemeProvider theme={ theme }>
-					<MenuContextProvider>
-						{ children }
-					</MenuContextProvider>
-				</ThemeProvider>
-			</StyledEngineProvider>
-		</CssBaseline>
+		<StyledEngineProvider injectFirst>
+			<ThemeProvider theme={ theme }>
+				<CssBaseline />
+				<MenuContextProvider>
+					{ children }
+				</MenuContextProvider>
+			</ThemeProvider>
+		</StyledEngineProvider>
 	)
 }
 
