@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			return page
 		},
 		setup({ el, App, props }) {
+			console.log({ props })
 			render(<App { ...props } />, el)
 		},
 	})

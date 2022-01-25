@@ -1,4 +1,9 @@
 import React, { useContext, useReducer } from 'react'
+import axios from 'axios'
+
+const setCsrfTokenHeader = token => {
+	axios.defaults.headers.common['X-CSRF-Token'] = token
+}
 
 type TAuthState = typeof initialAuthState
 const initialAuthState = {
@@ -26,6 +31,8 @@ export const useAuthState = () => useContext(AuthContext)
 
 export const AuthContextProvider = ({ children, auth }: AuthContextProviderProps) => {
 	const [authState, dispatch] = useReducer(reducer, auth)
+
+	if(auth.form_authenticity_token) setCsrfTokenHeader(auth.form_authenticity_token)
 
 	return <AuthContext.Provider value={ [authState, dispatch] }>
 		{ children }

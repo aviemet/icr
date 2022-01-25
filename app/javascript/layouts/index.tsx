@@ -1,52 +1,46 @@
 import React from 'react'
 import type { PageProps } from '@inertiajs/inertia'
-import axios from 'axios'
 import Providers from 'Providers'
-import { AuthContextProvider } from 'Store'
 
 import AppLayout from './AppLayout'
 import AuthLayout from './AuthLayout'
 
-const setCsrfTokenHeader = token => {
-	axios.defaults.headers.common['X-CSRF-Token'] = token
-}
-
-interface InertiaPageProps extends PageProps {
-	props: {
-		auth: {
-			user: Record<string, string>
-			form_authenticity_token: string
-		}
+interface LayoutWrapperProps {
+	children: React.ReactNode
+	auth: {
+		user: Record<string, string>
+		form_authenticity_token: string
 	}
 }
 
-const AppLayoutLayout = (page: InertiaPageProps) => {
-	if(page.props.auth.form_authenticity_token) setCsrfTokenHeader(page.props.auth.form_authenticity_token)
+interface InertiaPageProps extends PageProps {
+	props: LayoutWrapperProps
+}
 
-	console.log({ props: page.props })
-
+const LayoutWrapper = ({ children, auth }: LayoutWrapperProps) => {
 	return(
-		<AuthContextProvider auth={ page.props.auth }>
-			<Providers>
-				<AppLayout>{ page }</AppLayout>
-			</Providers>
-		</AuthContextProvider>
+		<Providers auth={ auth }>
+			{ children }
+		</Providers>
+	)
+}
+
+const AppLayoutLayout = (page: InertiaPageProps) => {
+	return(
+		<LayoutWrapper auth={ page.props.auth }>
+			<AppLayout>{ page }</AppLayout>
+		</LayoutWrapper>
 	)
 }
 
 const AuthLayoutLayout = (page: InertiaPageProps) => {
-	if(page.props.auth.form_authenticity_token) setCsrfTokenHeader(page.props.auth.form_authenticity_token)
-
-	console.log({ props: page.props })
-
 	return(
-		<AuthContextProvider auth={ page.props.auth }>
-			<Providers>
-				<AuthLayout>{ page }</AuthLayout>
-			</Providers>
-		</AuthContextProvider>
+		<LayoutWrapper auth={ page.props.auth }>
+			<AuthLayout>{ page }</AuthLayout>
+		</LayoutWrapper>
 	)
 }
+
 
 export {
 	AppLayoutLayout as AppLayout,
