@@ -7,15 +7,15 @@ const headerSX = {
 	'& .MuiCardHeader-action': { mr: 0 }
 }
 
-interface MainCardProps extends CardProps {
+export interface MainCardProps extends CardProps {
 	border?: boolean
-	boxShadow: boolean
+	boxShadow?: boolean
 	content?: boolean
 	contentClass?: string
 	contentSX?: object
 	darkTitle?: boolean
 	secondary?: React.ReactNode|string|object
-	shadow: string
+	shadow?: string
 }
 
 const MainCard = forwardRef<HTMLDivElement, MainCardProps>((

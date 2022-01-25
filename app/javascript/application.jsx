@@ -7,10 +7,8 @@ import { LoginLayout, AppLayout } from './layouts'
 import Providers from './Providers'
 
 document.addEventListener('DOMContentLoaded', () => {
-	InertiaProgress.init()
 
-	const csrfToken = document.querySelector('meta[name=csrf-token]').content
-	axios.defaults.headers.common['X-CSRF-Token'] = csrfToken
+	InertiaProgress.init()
 
 	createInertiaApp({
 		title: title => `ICR - ${title}`,
@@ -22,6 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			return page
 		},
 		setup({ el, App, props }) {
+			const csrfToken = document.querySelector('meta[name=csrf-token]').content
+			axios.defaults.headers.common['X-CSRF-Token'] = csrfToken
+
 			render(<Providers><App { ...props } /></Providers>, el)
 		},
 	})

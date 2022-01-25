@@ -1,15 +1,13 @@
 import React from 'react'
 import { forwardRef } from 'react'
-// third-party
 import { motion, useCycle } from 'framer-motion'
+import { DivProps } from 'react-html-props'
 
-// ==============================|| ANIMATION BUTTON ||============================== //
-
-interface AnimateButtonProps extends React.FunctionComponent {
-	type: 'slide'|'scale'|'rotate'
-	direction: 'up'|'down'|'left'|'right'
-	scale: number|object
-	offset: number
+interface AnimateButtonProps extends DivProps {
+	type?: 'slide'|'scale'|'rotate'
+	direction?: 'up'|'down'|'left'|'right'
+	scale?: number|{ hover?: number, tap?: number }
+	offset?: number
 }
 
 const AnimateButton = forwardRef<HTMLDivElement, AnimateButtonProps>(({ children, type = 'scale', direction = 'right', offset = 10, scale = { hover: 1, tap: 0.9 } }, ref) => {
@@ -76,7 +74,7 @@ const AnimateButton = forwardRef<HTMLDivElement, AnimateButtonProps>(({ children
 				}
 			}
 			return (
-				<motion.div ref={ ref } whileHover={ { /* scale: scale?.hover */ } } whileTap={ { /* scale: scale?.tap */ } }>
+				<motion.div ref={ ref } whileHover={ { scale: scale?.hover } } whileTap={ { scale: scale?.tap } }>
 					{ children }
 				</motion.div>
 			)

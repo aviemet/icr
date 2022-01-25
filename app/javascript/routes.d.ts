@@ -85,6 +85,16 @@ export const serialize: RouterExposedMethods['serialize'];
 
 /**
  * Generates rails route to
+ * /users/cancel(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const cancel_user_registration_path: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
  * /clients/:id(.:format)
  * @param {any} id
  * @param {object | undefined} options
@@ -102,6 +112,16 @@ export const client_path: ((
  * @returns {string} route path
  */
 export const clients_path: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /users/sign_out(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const destroy_user_session_path: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -138,6 +158,26 @@ export const edit_employee_path: ((
  */
 export const edit_rails_conductor_inbound_email_path: ((
   id: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /users/password/edit(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const edit_user_password_path: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /users/edit(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const edit_user_registration_path: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -200,6 +240,36 @@ export const new_rails_conductor_inbound_email_path: ((
  * @returns {string} route path
  */
 export const new_rails_conductor_inbound_email_source_path: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /users/password/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const new_user_password_path: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /users/sign_up(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const new_user_registration_path: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /users/sign_in(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const new_user_session_path: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -482,6 +552,36 @@ export const settings_path: ((
  */
 export const update_rails_disk_service_path: ((
   encoded_token: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /users/password(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const user_password_path: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /users(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const user_registration_path: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /users/sign_in(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const user_session_path: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 

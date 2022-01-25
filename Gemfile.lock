@@ -312,7 +312,7 @@ GEM
       activerecord (> 3.0.0)
       activesupport (> 3.0.0)
       rake
-    solargraph (0.44.2)
+    solargraph (0.44.3)
       backport (~> 1.2)
       benchmark
       bundler (>= 1.17.2)

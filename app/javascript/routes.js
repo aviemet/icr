@@ -511,6 +511,14 @@ export const serialize = __jsr.serialize;
 
 /**
  * Generates rails route to
+ * /users/cancel(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const cancel_user_registration_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"users"],[2,[7,"/"],[2,[6,"cancel"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
  * /clients/:id(.:format)
  * @param {any} id
  * @param {object | undefined} options
@@ -525,6 +533,14 @@ export const client_path = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,
  * @returns {string} route path
  */
 export const clients_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"clients"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
+ * /users/sign_out(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const destroy_user_session_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"users"],[2,[7,"/"],[2,[6,"sign_out"],[1,[2,[8,"."],[3,"format"]]]]]]]);
 
 /**
  * Generates rails route to
@@ -552,6 +568,22 @@ export const edit_employee_path = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"
  * @returns {string} route path
  */
 export const edit_rails_conductor_inbound_email_path = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"rails"],[2,[7,"/"],[2,[6,"conductor"],[2,[7,"/"],[2,[6,"action_mailbox"],[2,[7,"/"],[2,[6,"inbound_emails"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /users/password/edit(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const edit_user_password_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"users"],[2,[7,"/"],[2,[6,"password"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /users/edit(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const edit_user_registration_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"users"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]);
 
 /**
  * Generates rails route to
@@ -601,6 +633,30 @@ export const new_rails_conductor_inbound_email_path = __jsr.r({"format":{}}, [2,
  * @returns {string} route path
  */
 export const new_rails_conductor_inbound_email_source_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"rails"],[2,[7,"/"],[2,[6,"conductor"],[2,[7,"/"],[2,[6,"action_mailbox"],[2,[7,"/"],[2,[6,"inbound_emails"],[2,[7,"/"],[2,[6,"sources"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /users/password/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const new_user_password_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"users"],[2,[7,"/"],[2,[6,"password"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /users/sign_up(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const new_user_registration_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"users"],[2,[7,"/"],[2,[6,"sign_up"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /users/sign_in(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const new_user_session_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"users"],[2,[7,"/"],[2,[6,"sign_in"],[1,[2,[8,"."],[3,"format"]]]]]]]);
 
 /**
  * Generates rails route to
@@ -817,4 +873,28 @@ export const settings_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"settings"]
  * @returns {string} route path
  */
 export const update_rails_disk_service_path = __jsr.r({"encoded_token":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"rails"],[2,[7,"/"],[2,[6,"active_storage"],[2,[7,"/"],[2,[6,"disk"],[2,[7,"/"],[2,[3,"encoded_token"],[1,[2,[8,"."],[3,"format"]]]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /users/password(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const user_password_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"users"],[2,[7,"/"],[2,[6,"password"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /users(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const user_registration_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"users"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
+ * /users/sign_in(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const user_session_path = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"users"],[2,[7,"/"],[2,[6,"sign_in"],[1,[2,[8,"."],[3,"format"]]]]]]]);
 
