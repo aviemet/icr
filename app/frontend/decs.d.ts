@@ -25,9 +25,3 @@ declare module '@mui/material/styles/createPalette' {
 		hint: string
 	}
 }
-
-
-// export declare module 'images/logo.jpg' {
-// 	const src: string
-// 	export default src
-// }

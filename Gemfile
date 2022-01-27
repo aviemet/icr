@@ -11,9 +11,8 @@ gem "puma", "~> 5.0"
 
 # Assets
 gem "jbuilder"
-gem "webpacker", git: "https://github.com/rails/webpacker.git"
 gem "inertia_rails", "~> 1.11"
-gem "js-routes", "~> 2.2"
+gem "vite_rails", "~> 3.0"
 
 # Helpers
 gem "factory_bot", "~> 6.2"
@@ -65,6 +64,8 @@ group :development do
   # Live Reload
   gem "rack-livereload", "~> 0.3.17"
   gem "guard-livereload", "~> 2.5", require: false
+
+  # Routes
 end
 
 group :test do
@@ -73,3 +74,5 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+gem "js-routes", "~> 2.2"

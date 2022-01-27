@@ -41,9 +41,8 @@ const Register = ({ ...others }) => {
 
 	const onSubmit = event => {
 		event.preventDefault()
-		transform(data => ({
-			user: data
-		}))
+		// @ts-ignore
+		transform(data => ({ user: data }))
 		post(Routes.user_registration_path())
 	}
 
