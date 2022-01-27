@@ -1,7 +1,7 @@
 import React from 'react'
-import { Link, AnimateButton } from 'components'
+import { Link, AnimateButton } from '@/components'
 import { useForm } from '@inertiajs/inertia-react'
-import { Routes } from 'lib'
+import { Routes } from '@/lib'
 import { useTheme } from '@mui/material/styles'
 import {
 	Box,

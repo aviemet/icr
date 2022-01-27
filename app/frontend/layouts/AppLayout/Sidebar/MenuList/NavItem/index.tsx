@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect } from 'react'
-import { Link } from 'components'
+import { Link } from '@/components'
 import { useTheme } from '@mui/material/styles'
 import { Avatar, Chip, ListItemButton, ListItemIcon, ListItemText, Typography, useMediaQuery } from '@mui/material'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
@@ -14,7 +14,7 @@ const NavItem = ({ item, level }) => {
 		itemTarget = '_blank'
 	}
 
-	let listItemProps = {
+	const listItemProps = {
 		component: forwardRef((props, ref) => <Link { ...props } href={ item.url ? item.url : '#' } target={ itemTarget } />)
 	}
 	if (item?.external) {

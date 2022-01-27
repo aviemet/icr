@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'components'
+import { Link } from '@/components'
 import { ButtonBase } from '@mui/material'
 import Logo from './Logo'
 

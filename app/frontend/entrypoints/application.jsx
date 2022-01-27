@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	createInertiaApp({
 		title: title => `ICR - ${title}`,
 		resolve: async name => {
+			/* @vite-ignore */
 			const page = (await import(`../pages/${name}`)).default
 			if(page.layout === undefined) {
 				page.layout = name.startsWith('Public/') ? AuthLayout : AppLayout

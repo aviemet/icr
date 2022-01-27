@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box } from '@mui/material'
-import MainCard, { MainCardProps } from 'components/cards/MainCard'
+import MainCard, { MainCardProps } from '@/components/cards/MainCard'
 
 const AuthCardWrapper = ({ children, ...other }: MainCardProps) => (
 	<MainCard

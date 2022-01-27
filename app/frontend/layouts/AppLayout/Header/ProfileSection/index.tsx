@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Routes } from 'lib'
+import { Routes } from '@/lib'
 import { Inertia } from '@inertiajs/inertia'
-import { useAuthState } from 'Store'
+import { useAuthState } from '@/Store'
 import { useTheme } from '@mui/material/styles'
 import {
 	Avatar,
@@ -27,9 +27,9 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import PersonIcon from '@mui/icons-material/Person'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import ProfileLink from './ProfileLink'
-import MainCard from 'components/cards/MainCard'
-import { Transition, SearchInput } from 'components'
-import { greeting } from 'lib'
+import MainCard from '@/components/cards/MainCard'
+import { Transition, SearchInput } from '@/components'
+import { greeting } from '@/lib'
 
 const ProfileSection = () => {
 	const [auth, _] = useAuthState()

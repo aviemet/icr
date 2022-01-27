@@ -1,6 +1,6 @@
 import React from 'react'
 import type { PageProps } from '@inertiajs/inertia'
-import Providers from 'Providers'
+import Providers from '@/Providers'
 
 import AppLayout from './AppLayout'
 import AuthLayout from './AuthLayout'

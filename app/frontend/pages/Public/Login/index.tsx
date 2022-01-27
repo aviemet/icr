@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Link, AnimateButton } from 'components'
-import { Routes } from 'lib'
+import { Link, AnimateButton } from '@/components'
+import { Routes } from '@/lib'
 import { useForm } from '@inertiajs/inertia-react'
 import { useTheme } from '@mui/material/styles'
 import {
@@ -21,7 +21,7 @@ import {
 } from '@mui/material'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import Google from 'images/social-google.svg'
+import Google from '@/images/social-google.svg'
 
 const Login = ({ ...others }) => {
 	const theme = useTheme()

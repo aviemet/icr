@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Link } from 'components'
-import { Routes } from 'lib'
+import { Link } from '@/components'
+import { Routes } from '@/lib'
 import { useForm } from '@inertiajs/inertia-react'
 import { useTheme } from '@mui/material/styles'
 import {
@@ -18,11 +18,9 @@ import {
 	Typography,
 	useMediaQuery
 } from '@mui/material'
-import Google from 'images/social-google.svg'
-import AnimateButton from 'components/extended/AnimateButton'
-import { strengthColor, strengthIndicator } from 'lib/passwordStrength'
-
-// assets
+import Google from '@/images/social-google.svg'
+import AnimateButton from '@/components/extended/AnimateButton'
+import { strengthColor, strengthIndicator } from '@/lib/passwordStrength'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 

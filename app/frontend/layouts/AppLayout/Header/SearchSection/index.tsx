@@ -5,7 +5,7 @@ import PopupState, { bindPopper, bindToggle } from 'material-ui-popup-state'
 import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
 import { shouldForwardProp } from '@mui/system'
-import { Transition } from 'components'
+import { Transition } from '@/components'
 
 const PopperStyle = styled(Popper, { shouldForwardProp })(({ theme }) => ({
 	zIndex: 1100,

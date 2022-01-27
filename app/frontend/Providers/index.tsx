@@ -1,8 +1,8 @@
 import React from 'react'
-import theme from 'layouts/theme'
+import theme from '@/layouts/theme'
 import { ThemeProvider } from '@mui/material/styles'
 import { CssBaseline, StyledEngineProvider } from '@mui/material'
-import { MenuContextProvider, AuthContextProvider } from 'Store'
+import { MenuContextProvider, AuthContextProvider } from '@/Store'
 
 interface ProvidersProps {
 	children: React.ReactNode

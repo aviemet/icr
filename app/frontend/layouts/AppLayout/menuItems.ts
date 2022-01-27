@@ -1,4 +1,4 @@
-import { Routes } from 'lib'
+import { Routes } from '@/lib'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import PersonIcon from '@mui/icons-material/Person'

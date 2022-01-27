@@ -102,6 +102,6 @@
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
   "exclude": ["**/*.spec.ts", "node_modules", "vendor", "public"],
-  "include": ["app/frontend/**/*.ts", "app/frontend/**/*.tsx"],
+  "include": ["app/frontend/**/*.ts", "app/frontend/**/*.tsx", "app/frontend/entrypoints/application.jsx"],
   "compileOnSave": false
 }

@@ -1,12 +1,12 @@
 import React from 'react'
-import { Link } from 'components'
-import { Routes } from 'lib'
+import { Link } from '@/components'
+import { Routes } from '@/lib'
 import { useTheme } from '@mui/material/styles'
 import { Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material'
 
 import AuthCardWrapper from './AuthCardWrapper'
-import Logo from 'layouts/AppLayout/LogoSection/Logo'
-import AuthFooter from 'components/cards/AuthFooter'
+import Logo from '@/layouts/AppLayout/LogoSection/Logo'
+import AuthFooter from '@/components/cards/AuthFooter'
 
 const AuthLayout = ({ children }) => {
 	const theme = useTheme()
