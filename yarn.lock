@@ -629,6 +629,16 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.2.tgz#830beaec4b4091a9e9398ac50f865ddea52186b9"
   integrity sha512-92FRmppjjqz29VMJ2dn+xdyXZBrMlE42AV6Kq6BwjWV7CNUW1hs2FtxSNLQE+gJhaZ6AAmYuO9y8dshhcBl7vA==
 
+"@rollup/plugin-dynamic-import-vars@^1.4.2":
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/@rollup/plugin-dynamic-import-vars/-/plugin-dynamic-import-vars-1.4.2.tgz#f43c319f781934ffdb80fd23be66c08ed9ff9fdf"
+  integrity sha512-SEaS9Pf0RyaZ/oJ1knLZT+Fu0X6DlyTfUcoE7XKkiKJjNaB+8SLoHmDVRhomo5RpWHPyd+B00G/bE5R5+Q+HEg==
+  dependencies:
+    "@rollup/pluginutils" "^4.1.2"
+    estree-walker "^2.0.1"
+    fast-glob "^3.2.7"
+    magic-string "^0.25.7"
+
 "@rollup/pluginutils@^4.1.2":
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-4.1.2.tgz#ed5821c15e5e05e32816f5fb9ec607cdf5a75751"
