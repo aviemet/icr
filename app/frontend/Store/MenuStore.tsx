@@ -15,7 +15,6 @@ export const actions = {
 const reducer = (state: TMenuState, action: TActionKeys) => {
 	switch(action) {
 		case actions.TOGGLE_SIDE_MENU:
-			console.log({ newState: { ...state, sideMenuOpen: !state.sideMenuOpen } })
 			return { ...state, sideMenuOpen: !state.sideMenuOpen }
 		case actions.OPEN_SIDE_MENU:
 			return { ...state, sideMenuOpen: true }

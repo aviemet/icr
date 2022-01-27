@@ -1,4 +1,4 @@
-import React, { useContext, useReducer } from 'react'
+import React, { useContext, useReducer, useEffect } from 'react'
 import axios from 'axios'
 
 const setCsrfTokenHeader = token => {
@@ -9,17 +9,28 @@ type TAuthState = typeof initialAuthState
 const initialAuthState = {
 }
 
-type TActionKeys = keyof typeof actions
-export const actions = {
+type TActions = {
+	UPDATE_USER: 'UPDATE_USER'
 }
+export const actions: TActions = {
+	UPDATE_USER: 'UPDATE_USER'
+}
+type TActionKeys = keyof typeof actions
 
 interface AuthContextProviderProps {
 	children?: React.ReactNode
 	auth: any
 }
 
-const reducer = (state: TAuthState, action: TActionKeys) => {
-	switch(action) {
+interface IReducerActionProps {
+	type: TActionKeys
+	payload: any
+}
+
+const reducer = (state: TAuthState, { type, payload }: IReducerActionProps): TAuthState => {
+	switch(type) {
+		case actions.UPDATE_USER:
+			return { ...state,  user: payload }
 		default:
 			return state
 	}
@@ -32,7 +43,13 @@ export const useAuthState = () => useContext(AuthContext)
 export const AuthContextProvider = ({ children, auth }: AuthContextProviderProps) => {
 	const [authState, dispatch] = useReducer(reducer, auth)
 
-	if(auth.form_authenticity_token) setCsrfTokenHeader(auth.form_authenticity_token)
+	useEffect(() => {
+		if(auth.form_authenticity_token) setCsrfTokenHeader(auth.form_authenticity_token)
+	}, [auth.form_authenticity_token])
+
+	useEffect(() => {
+		dispatch({ type: actions.UPDATE_USER, payload: auth.user })
+	}, [auth.user])
 
 	return <AuthContext.Provider value={ [authState, dispatch] }>
 		{ children }

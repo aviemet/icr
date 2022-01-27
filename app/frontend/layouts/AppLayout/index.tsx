@@ -4,7 +4,7 @@ import { styled, useTheme } from '@mui/material/styles'
 import { AppBar, Box, Toolbar, useMediaQuery } from '@mui/material'
 import Header from './Header'
 import Sidebar from './Sidebar'
-import { useMenuState, menuActions, AuthContextProvider } from '@/Store'
+import { useMenuState, menuActions } from '@/Store'
 
 const AppLayout = ({ children }) => {
 	const theme = useTheme()
