@@ -31,18 +31,7 @@ Metrics/MethodLength:
   Enabled: false
 
 Metrics/BlockLength:
-  CountComments: false
-  Max: 5
-  IgnoredMethods:
-    - context
-    - describe
-    - it
-    - shared_examples
-    - shared_examples_for
-    - namespace
-    - draw
-    - configure
-    - group
+  Enabled: false
 
 # Style Cops
 
@@ -135,6 +124,9 @@ Layout/ArgumentAlignment:
   Exclude:
     - 'config/initializers/*'
 
+Layout/FirstHashElementIndentation:
+  Enabled: false
+
 Layout/FirstArgumentIndentation:
   Enabled: false
 
@@ -167,6 +159,10 @@ Layout/MultilineMethodCallIndentation:
 Rails/Delegate:
   Description: 'Prefer delegate method for delegations.'
   Enabled: false
+
+Rails/Output:
+  Enabled: false
+
 
 # Bundler Cops
 

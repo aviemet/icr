@@ -1,12 +1,11 @@
-class Client < ApplicationRecord
-  include Contactable
+class Client < Person
+  before_validation :set_person_type
 
-  slug :name_for_slug
+  default_scope { where(person_type: :client) }
 
-  validates :f_name, presence: true
-  validates :l_name, presence: true
+  private
 
-  def name_for_slug
-    "#{f_name}-#{l_name}"
+  def set_person_type
+    self.person_type = :client
   end
 end

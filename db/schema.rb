@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_07_183230) do
+ActiveRecord::Schema.define(version: 2022_01_07_182834) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,25 +28,6 @@ ActiveRecord::Schema.define(version: 2022_01_07_183230) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["contact_id"], name: "index_addresses_on_contact_id"
-  end
-
-  create_table "clients", force: :cascade do |t|
-    t.string "f_name", null: false
-    t.string "l_name", null: false
-    t.string "m_name"
-    t.string "slug", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["slug"], name: "index_clients_on_slug", unique: true
-  end
-
-  create_table "clients_shifts", force: :cascade do |t|
-    t.bigint "shift_id", null: false
-    t.bigint "client_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["client_id"], name: "index_clients_shifts_on_client_id"
-    t.index ["shift_id"], name: "index_clients_shifts_on_shift_id"
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -73,14 +54,17 @@ ActiveRecord::Schema.define(version: 2022_01_07_183230) do
     t.index ["contact_id"], name: "index_emails_on_contact_id"
   end
 
-  create_table "employees", force: :cascade do |t|
-    t.string "f_name", null: false
-    t.string "l_name", null: false
+  create_table "people", force: :cascade do |t|
+    t.string "f_name"
     t.string "m_name"
+    t.string "l_name"
     t.string "slug", null: false
+    t.integer "person_type"
+    t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["slug"], name: "index_employees_on_slug", unique: true
+    t.index ["slug"], name: "index_people_on_slug", unique: true
+    t.index ["user_id"], name: "index_people_on_user_id"
   end
 
   create_table "phones", force: :cascade do |t|
@@ -95,17 +79,19 @@ ActiveRecord::Schema.define(version: 2022_01_07_183230) do
   end
 
   create_table "shifts", force: :cascade do |t|
-    t.bigint "employee_id"
     t.datetime "starts_at", precision: 6
     t.datetime "ends_at", precision: 6
+    t.bigint "client_id"
+    t.bigint "employee_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["client_id"], name: "index_shifts_on_client_id"
     t.index ["employee_id"], name: "index_shifts_on_employee_id"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
+    t.string "email", null: false
+    t.string "encrypted_password", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at", precision: 6
     t.datetime "remember_created_at", precision: 6
@@ -124,8 +110,6 @@ ActiveRecord::Schema.define(version: 2022_01_07_183230) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "active", default: true
-    t.string "f_name", null: false
-    t.string "l_name", null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -133,12 +117,12 @@ ActiveRecord::Schema.define(version: 2022_01_07_183230) do
   end
 
   add_foreign_key "addresses", "contacts"
-  add_foreign_key "clients_shifts", "clients"
-  add_foreign_key "clients_shifts", "shifts"
   add_foreign_key "contacts", "addresses", column: "primary_address_id"
   add_foreign_key "contacts", "emails", column: "primary_email_id"
   add_foreign_key "contacts", "phones", column: "primary_phone_id"
   add_foreign_key "emails", "contacts"
+  add_foreign_key "people", "users"
   add_foreign_key "phones", "contacts"
-  add_foreign_key "shifts", "employees"
+  add_foreign_key "shifts", "people", column: "client_id"
+  add_foreign_key "shifts", "people", column: "employee_id"
 end

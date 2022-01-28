@@ -110,7 +110,7 @@ const ProfileSection = () => {
 						aria-controls={ open ? 'menu-list-grow' : undefined }
 						aria-haspopup="true"
 						color="inherit"
-					>{ auth.user && `${auth.user.f_name.charAt(0)}${auth.user.l_name.charAt(0)}` }</Avatar>
+					>{ auth.user?.person && `${auth.user.person.f_name.charAt(0)}${auth.user.person.l_name.charAt(0)}` }</Avatar>
 				}
 				label={ <SettingsIcon /> }
 				variant="outlined"
