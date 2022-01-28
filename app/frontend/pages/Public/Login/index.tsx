@@ -38,7 +38,7 @@ const Login = ({ ...others }) => {
 		event.preventDefault()
 		// @ts-ignore
 		transform(data => ({ user: data }))
-		post(Routes.user_session_path())
+		post(Routes.userSession())
 	}
 
 	const googleHandler = async () => {
@@ -165,7 +165,7 @@ const Login = ({ ...others }) => {
 				<Box sx={ { mt: 2 } }>
 					<Grid item container direction="column" alignItems="center" xs={ 12 }>
 						<Typography variant="subtitle1">
-							<Link href={ Routes.new_user_registration_path() }>Don&apos;t have an account?</Link>
+							<Link href={ Routes.newUserRegistration() }>Don&apos;t have an account?</Link>
 						</Typography>
 					</Grid>
 				</Box>

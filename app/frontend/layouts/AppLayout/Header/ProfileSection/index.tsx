@@ -46,7 +46,7 @@ const ProfileSection = () => {
 	 * */
 	const anchorRef = useRef<HTMLDivElement>(null)
 	const handleLogout = async () => {
-		Inertia.delete(Routes.destroy_user_session_path())
+		Inertia.delete(Routes.destroy_user_session())
 	}
 
 	const handleClose = (event) => {

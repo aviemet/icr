@@ -89,7 +89,7 @@ export const serialize: RouterExposedMethods['serialize'];
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const cancel_user_registration_path: ((
+export const cancelUserRegistration: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -100,7 +100,7 @@ export const cancel_user_registration_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const client_path: ((
+export const client: ((
   id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
@@ -111,7 +111,7 @@ export const client_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const clients_path: ((
+export const clients: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -121,7 +121,7 @@ export const clients_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const destroy_user_session_path: ((
+export const destroyUserSession: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -132,7 +132,7 @@ export const destroy_user_session_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const edit_client_path: ((
+export const editClient: ((
   id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
@@ -144,7 +144,7 @@ export const edit_client_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const edit_employee_path: ((
+export const editEmployee: ((
   id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
@@ -156,7 +156,7 @@ export const edit_employee_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const edit_rails_conductor_inbound_email_path: ((
+export const editRailsConductorInboundEmail: ((
   id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
@@ -167,7 +167,7 @@ export const edit_rails_conductor_inbound_email_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const edit_user_password_path: ((
+export const editUserPassword: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -177,7 +177,7 @@ export const edit_user_password_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const edit_user_registration_path: ((
+export const editUserRegistration: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -188,7 +188,7 @@ export const edit_user_registration_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const employee_path: ((
+export const employee: ((
   id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
@@ -199,7 +199,7 @@ export const employee_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const employees_path: ((
+export const employees: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -209,7 +209,7 @@ export const employees_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const new_client_path: ((
+export const newClient: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -219,27 +219,7 @@ export const new_client_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const new_employee_path: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/conductor/action_mailbox/inbound_emails/new(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const new_rails_conductor_inbound_email_path: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/conductor/action_mailbox/inbound_emails/sources/new(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const new_rails_conductor_inbound_email_source_path: ((
+export const newEmployee: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -249,7 +229,7 @@ export const new_rails_conductor_inbound_email_source_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const new_user_password_path: ((
+export const newUserPassword: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -259,7 +239,7 @@ export const new_user_password_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const new_user_registration_path: ((
+export const newUserRegistration: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -269,247 +249,7 @@ export const new_user_registration_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const new_user_session_path: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/active_storage/representations/redirect/:signed_blob_id/:variation_key/*filename(.:format)
- * @param {any} signed_blob_id
- * @param {any} variation_key
- * @param {any} filename
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_blob_representation_path: ((
-  signed_blob_id: RequiredRouteParameter,
-  variation_key: RequiredRouteParameter,
-  filename: RequiredRouteParameter,
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/active_storage/representations/proxy/:signed_blob_id/:variation_key/*filename(.:format)
- * @param {any} signed_blob_id
- * @param {any} variation_key
- * @param {any} filename
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_blob_representation_proxy_path: ((
-  signed_blob_id: RequiredRouteParameter,
-  variation_key: RequiredRouteParameter,
-  filename: RequiredRouteParameter,
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/conductor/action_mailbox/inbound_emails/:id(.:format)
- * @param {any} id
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_conductor_inbound_email_path: ((
-  id: RequiredRouteParameter,
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/conductor/action_mailbox/:inbound_email_id/incinerate(.:format)
- * @param {any} inbound_email_id
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_conductor_inbound_email_incinerate_path: ((
-  inbound_email_id: RequiredRouteParameter,
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/conductor/action_mailbox/:inbound_email_id/reroute(.:format)
- * @param {any} inbound_email_id
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_conductor_inbound_email_reroute_path: ((
-  inbound_email_id: RequiredRouteParameter,
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/conductor/action_mailbox/inbound_emails/sources(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_conductor_inbound_email_sources_path: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/conductor/action_mailbox/inbound_emails(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_conductor_inbound_emails_path: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/active_storage/direct_uploads(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_direct_uploads_path: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/active_storage/disk/:encoded_key/*filename(.:format)
- * @param {any} encoded_key
- * @param {any} filename
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_disk_service_path: ((
-  encoded_key: RequiredRouteParameter,
-  filename: RequiredRouteParameter,
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/info(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_info_path: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/info/properties(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_info_properties_path: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/info/routes(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_info_routes_path: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/mailers(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_mailers_path: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/action_mailbox/mailgun/inbound_emails/mime(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_mailgun_inbound_emails_path: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/action_mailbox/mandrill/inbound_emails(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_mandrill_inbound_emails_path: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/action_mailbox/mandrill/inbound_emails(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_mandrill_inbound_health_check_path: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/action_mailbox/postmark/inbound_emails(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_postmark_inbound_emails_path: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/action_mailbox/relay/inbound_emails(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_relay_inbound_emails_path: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/action_mailbox/sendgrid/inbound_emails(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_sendgrid_inbound_emails_path: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/active_storage/blobs/redirect/:signed_id/*filename(.:format)
- * @param {any} signed_id
- * @param {any} filename
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_service_blob_path: ((
-  signed_id: RequiredRouteParameter,
-  filename: RequiredRouteParameter,
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/active_storage/blobs/proxy/:signed_id/*filename(.:format)
- * @param {any} signed_id
- * @param {any} filename
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const rails_service_blob_proxy_path: ((
-  signed_id: RequiredRouteParameter,
-  filename: RequiredRouteParameter,
+export const newUserSession: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -519,7 +259,7 @@ export const rails_service_blob_proxy_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const root_path: ((
+export const root: ((
   options?: {} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -529,7 +269,7 @@ export const root_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const schedules_path: ((
+export const schedules: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -539,19 +279,19 @@ export const schedules_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const settings_path: ((
+export const settings: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
 /**
  * Generates rails route to
  * /rails/active_storage/disk/:encoded_token(.:format)
- * @param {any} encoded_token
+ * @param {any} encodedToken
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const update_rails_disk_service_path: ((
-  encoded_token: RequiredRouteParameter,
+export const updateRailsDiskService: ((
+  encodedToken: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -561,7 +301,7 @@ export const update_rails_disk_service_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const user_password_path: ((
+export const userPassword: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -571,7 +311,7 @@ export const user_password_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const user_registration_path: ((
+export const userRegistration: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -581,7 +321,7 @@ export const user_registration_path: ((
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const user_session_path: ((
+export const userSession: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 

@@ -27,7 +27,7 @@ const Index = ({ employees }) => {
 					<h1>Employees</h1>
 				</Grid>
 				<Grid item xs={ 2 }>
-					<Link href={ Routes.new_client_path() } as="button">New Client</Link>
+					<Link href={ Routes.newClient() } as="button">New Client</Link>
 				</Grid>
 
 				<Grid item xs={ 12 }>
