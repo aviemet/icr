@@ -76,3 +76,5 @@ group :test do
 end
 
 gem "js-routes", "~> 2.2"
+
+gem "schema2type", "~> 0.4.0"

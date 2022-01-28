@@ -298,6 +298,8 @@ GEM
       rubocop (~> 1.19)
     ruby-progressbar (1.11.0)
     rubyzip (2.3.2)
+    schema2type (0.4.0)
+      activesupport
     selenium-webdriver (4.1.0)
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
@@ -395,6 +397,7 @@ DEPENDENCIES
   rubocop-performance (~> 1.13)
   rubocop-rails (~> 2.13)
   rubocop-rspec (~> 2.7)
+  schema2type (~> 0.4.0)
   selenium-webdriver
   slug (~> 4.1)
   solargraph (~> 0.44.2)
