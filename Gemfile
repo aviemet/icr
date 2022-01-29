@@ -66,6 +66,10 @@ group :development do
   gem "guard-livereload", "~> 2.5", require: false
 
   # Routes
+	gem "js-routes", "~> 2.2"
+
+	# Typescript schema generation
+	gem "schema2type", "~> 0.4.0"
 end
 
 group :test do
@@ -74,7 +78,3 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
-
-gem "js-routes", "~> 2.2"
-
-gem "schema2type", "~> 0.4.0"

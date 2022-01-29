@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { Routes } from '@/lib'
+import { Link } from '@/components'
 import { alpha } from '@mui/material/styles'
 import {
 	Box,
@@ -296,7 +298,6 @@ const EnhancedTable = ({ clients }: { clients: schema.Client[] }) => {
 									return (
 										<TableRow
 											hover
-											onClick={ (event) => handleClick(event, row.id) }
 											role="checkbox"
 											aria-checked={ isItemSelected }
 											tabIndex={ -1 }
@@ -306,6 +307,7 @@ const EnhancedTable = ({ clients }: { clients: schema.Client[] }) => {
 											<TableCell padding="checkbox">
 												<Checkbox
 													color="primary"
+													onClick={ (event) => handleClick(event, row.id) }
 													checked={ isItemSelected }
 													inputProps={ {
 														'aria-labelledby': labelId,
@@ -318,10 +320,10 @@ const EnhancedTable = ({ clients }: { clients: schema.Client[] }) => {
 												scope="row"
 												padding="none"
 											>
-												{ row.f_name }
+												<Link href={ Routes.client(row.slug) }>{ row.f_name }</Link>
 											</TableCell>
-											<TableCell>{ row.l_name }</TableCell>
-											<TableCell>{ row.slug }</TableCell>
+											<TableCell><Link href={ Routes.client(row.slug) }>{ row.l_name }</Link></TableCell>
+											<TableCell><Link href={ Routes.client(row.slug) }>{ row.slug }</Link></TableCell>
 										</TableRow>
 									)
 								}) }

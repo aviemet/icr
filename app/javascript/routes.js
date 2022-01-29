@@ -562,6 +562,15 @@ export const editEmployee = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2
 
 /**
  * Generates rails route to
+ * /people/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const editPerson = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"people"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
  * /rails/conductor/action_mailbox/inbound_emails/:id/edit(.:format)
  * @param {any} id
  * @param {object | undefined} options
@@ -620,6 +629,14 @@ export const newEmployee = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"employees"],
 
 /**
  * Generates rails route to
+ * /people/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newPerson = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"people"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
  * /users/password/new(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
@@ -644,11 +661,46 @@ export const newUserSession = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"users"],[
 
 /**
  * Generates rails route to
+ * /people(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const people = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"people"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
+ * /people/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const person = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"people"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
  * /
  * @param {object | undefined} options
  * @returns {string} route path
  */
 export const root = __jsr.r({}, [7,"/"]);
+
+/**
+ * Generates rails route to
+ * /clients/:id/schedule(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const scheduleClient = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"clients"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"schedule"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /employees/:id/schedule(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const scheduleEmployee = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"employees"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"schedule"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
 
 /**
  * Generates rails route to

@@ -30,6 +30,13 @@ class ClientsController < ApplicationController
     }
   end
 
+	# GET /clients/:id/schedule
+	def schedule
+		render inertia: "Clients/Schedule", props: {
+
+		}
+	end
+
   # POST /clients
   def create
     @client = Client.new(client_params)
@@ -59,7 +66,7 @@ class ClientsController < ApplicationController
   private
 
   def set_client
-    @client = Client.find_by_slug(params[:slug])
+    @client = Client.find_by_slug(params[:id])
   end
 
   def set_clients
