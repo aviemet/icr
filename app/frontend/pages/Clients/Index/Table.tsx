@@ -200,10 +200,12 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 	)
 }
 
+type Id = string | number
+
 const EnhancedTable = ({ clients }: { clients: schema.Client[] }) => {
 	const [order, setOrder] = React.useState<Order>('asc')
 	const [orderBy, setOrderBy] = React.useState<keyof schema.Client>('f_name')
-	const [selected, setSelected] = React.useState<readonly string[]>([])
+	const [selected, setSelected] = React.useState<readonly Id[]>([])
 	const [page, setPage] = React.useState(0)
 	const [dense, setDense] = React.useState(false)
 	const [rowsPerPage, setRowsPerPage] = React.useState(5)
@@ -219,19 +221,19 @@ const EnhancedTable = ({ clients }: { clients: schema.Client[] }) => {
 
 	const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (event.target.checked) {
-			const newSelecteds = clients.map((n) => n.f_name)
+			const newSelecteds = clients.map((n) => n.id)
 			setSelected(newSelecteds)
 			return
 		}
 		setSelected([])
 	}
 
-	const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-		const selectedIndex = selected.indexOf(name)
-		let newSelected: readonly string[] = []
+	const handleClick = (event: React.MouseEvent<unknown>, id: Id) => {
+		const selectedIndex = selected.indexOf(id)
+		let newSelected: readonly Id[] = []
 
 		if (selectedIndex === -1) {
-			newSelected = newSelected.concat(selected, name)
+			newSelected = newSelected.concat(selected, id)
 		} else if (selectedIndex === 0) {
 			newSelected = newSelected.concat(selected.slice(1))
 		} else if (selectedIndex === selected.length - 1) {
@@ -259,7 +261,7 @@ const EnhancedTable = ({ clients }: { clients: schema.Client[] }) => {
 		setDense(event.target.checked)
 	}
 
-	const isSelected = (name: string) => selected.indexOf(name) !== -1
+	const isSelected = (id: Id) => selected.indexOf(id) !== -1
 
 	// Avoid a layout jump when reaching the last page with empty rows.
 	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - clients.length) : 0
@@ -285,20 +287,20 @@ const EnhancedTable = ({ clients }: { clients: schema.Client[] }) => {
 						<TableBody>
 							{ /* if you don't need to support IE11, you can replace the `stableSort` call with:
               clients.slice().sort(getComparator(order, orderBy)) */ }
-							{ stableSort(clients, getComparator(order, orderBy))
+							{ stableSort<schema.Client>(clients, getComparator(order, orderBy))
 								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 								.map((row, index) => {
-									const isItemSelected = isSelected(row.f_name)
+									const isItemSelected = isSelected(row.id)
 									const labelId = `enhanced-table-checkbox-${index}`
 
 									return (
 										<TableRow
 											hover
-											onClick={ (event) => handleClick(event, row.f_name) }
+											onClick={ (event) => handleClick(event, row.id) }
 											role="checkbox"
 											aria-checked={ isItemSelected }
 											tabIndex={ -1 }
-											key={ row.f_name }
+											key={ row.id }
 											selected={ isItemSelected }
 										>
 											<TableCell padding="checkbox">

@@ -41,7 +41,7 @@ const Register = ({ ...others }) => {
 		event.preventDefault()
 		// @ts-ignore
 		transform(data => ({ user: data }))
-		post(Routes.user_registration_path())
+		post(Routes.userRegistration())
 	}
 
 	// const [strength, setStrength] = useState(1)
@@ -242,7 +242,7 @@ const Register = ({ ...others }) => {
 				<Box sx={ { mt: 2 } }>
 					<Grid item container direction="column" alignItems="center" xs={ 12 }>
 						<Typography variant="subtitle1">
-							<Link href={ Routes.new_user_session_path() }>
+							<Link href={ Routes.newUserSession() }>
 								Already have an account?
 							</Link>
 						</Typography>

@@ -32,7 +32,7 @@ const menuItems: TMenuGroup[] = [
 				id: 'default',
 				title: 'Dashboard',
 				type: 'item',
-				url: Routes.root_path(),
+				url: Routes.root(),
 				icon: DashboardIcon,
 				breadcrumbs: false
 			},
@@ -40,7 +40,7 @@ const menuItems: TMenuGroup[] = [
 				id: 'schedules',
 				title: 'Schedules',
 				type: 'item',
-				url: Routes.schedules_path(),
+				url: Routes.schedules(),
 				icon: CalendarTodayIcon,
 				breadcrumbs: false
 			}
@@ -57,14 +57,14 @@ const menuItems: TMenuGroup[] = [
 				title: 'Clients',
 				type: 'item',
 				icon: PersonIcon,
-				url: Routes.clients_path()
+				url: Routes.clients()
 			},
 			{
 				id: 'employees',
 				title: 'Employees',
 				type: 'item',
 				icon: PersonIcon,
-				url: Routes.employees_path()
+				url: Routes.employees()
 			}
 		]
 	}

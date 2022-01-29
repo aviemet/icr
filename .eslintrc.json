@@ -26,6 +26,10 @@
 		"@typescript-eslint",
     "import"
 	],
+	"ignorePatterns": [
+		"app/frontend/types/**/*",
+		"app/javascript/**/*"
+	],
 	"rules": {
 		"indent": "off",
 		"@typescript-eslint/indent": [ "error", "tab", {

@@ -27,7 +27,7 @@ const Form = ({ client }) => {
 		transform(data => ({
 			client: data
 		}))
-		post(Routes.clients_path())
+		post(Routes.clients())
 	}
 
 	return (
