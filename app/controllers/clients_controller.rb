@@ -32,8 +32,11 @@ class ClientsController < ApplicationController
 
 	# GET /clients/:id/schedule
 	def schedule
+		@employees = Employee.all
 		@shifts = @client.shifts.includes(:clients, :employee)
 		render inertia: "Clients/Schedule", props: {
+			client: @client,
+			employees: @employees,
 			shifts: @shifts.as_json({
 				title: :title,
 				include: [:clients, :employee]

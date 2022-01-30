@@ -6,21 +6,12 @@
     <%= csp_meta_tag %>
   	<base href=".">
 
-    <%# <%= stylesheet_link_tag "application", media: 'all', 'data-turbolinks-track': 'reload' %> 
+    <%= stylesheet_link_tag "application", media: 'all', 'data-turbolinks-track': 'reload' %> 
     <%# <%= stylesheet_pack_tag "application", media: 'all' %>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <%# <%= vite_client_tag %>
     <%= vite_react_refresh_tag %>
     <%= vite_typescript_tag 'application.jsx' %>
-    <!--
-      If using a TypeScript entrypoint file:
-        vite_typescript_tag 'application'
-
-      If using a .jsx or .tsx entrypoint, add the extension:
-        vite_javascript_tag 'application.jsx'
-
-      Visit the guide for more information: https://vite-ruby.netlify.app/guide/rails
-    -->
   </head>
 
   <body>

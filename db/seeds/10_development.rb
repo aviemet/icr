@@ -5,6 +5,7 @@ if Rails.env == "development"
 			email: "aviemet@gmail.com",
 			password: "Complex1!",
 			confirmed_at: Date.new,
+			time_zone: "America/Los_Angeles"
 		})
 		Person.create({
 			f_name: "Avram",

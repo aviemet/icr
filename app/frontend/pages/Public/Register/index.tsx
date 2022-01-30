@@ -35,6 +35,7 @@ const Register = ({ ...others }) => {
 		'l_name': '',
 		'email': '',
 		'password': '',
+		'time_zone': Intl.DateTimeFormat().resolvedOptions().timeZone,
 	})
 
 	const onSubmit = event => {
@@ -119,6 +120,11 @@ const Register = ({ ...others }) => {
 			</Grid>
 
 			<form noValidate onSubmit={ onSubmit } autoComplete="off" { ...others }>
+				<input
+					type="hidden"
+					name="time_zone"
+					value={ data['time_zone'] }
+				/>
 				<Grid container spacing={ matchDownSM ? 0 : 2 }>
 
 					<Grid item xs={ 12 } sm={ 6 }>
