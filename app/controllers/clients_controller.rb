@@ -1,5 +1,5 @@
 class ClientsController < ApplicationController
-  before_action :set_client, only: %i[show edit update destroy]
+  before_action :set_client, only: %i[show edit schedule update destroy]
   before_action :set_clients, only: %i[index]
 
   # GET /clients
@@ -32,8 +32,12 @@ class ClientsController < ApplicationController
 
 	# GET /clients/:id/schedule
 	def schedule
+		@shifts = @client.shifts.includes(:clients, :employee)
 		render inertia: "Clients/Schedule", props: {
-
+			shifts: @shifts.as_json({
+				title: :title,
+				include: [:clients, :employee]
+			})
 		}
 	end
 

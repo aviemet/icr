@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_07_182834) do
+ActiveRecord::Schema.define(version: 2022_01_30_172147) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,13 @@ ActiveRecord::Schema.define(version: 2022_01_07_182834) do
     t.index ["user_id"], name: "index_people_on_user_id"
   end
 
+  create_table "people_shifts", id: false, force: :cascade do |t|
+    t.bigint "shift_id", null: false
+    t.bigint "person_id", null: false
+    t.index ["person_id"], name: "index_people_shifts_on_person_id"
+    t.index ["shift_id"], name: "index_people_shifts_on_shift_id"
+  end
+
   create_table "phones", force: :cascade do |t|
     t.string "title"
     t.string "number"
@@ -78,15 +85,43 @@ ActiveRecord::Schema.define(version: 2022_01_07_182834) do
     t.index ["contact_id"], name: "index_phones_on_contact_id"
   end
 
+  create_table "recurring_patterns", force: :cascade do |t|
+    t.bigint "shift_id", null: false
+    t.integer "recurring_type"
+    t.integer "separation_count"
+    t.integer "max_occurances"
+    t.integer "day_of_week"
+    t.integer "week_of_month"
+    t.integer "day_of_month"
+    t.integer "month_of_year"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["shift_id"], name: "index_recurring_patterns_on_shift_id"
+  end
+
+  create_table "shift_exceptions", force: :cascade do |t|
+    t.bigint "shift_id", null: false
+    t.datetime "rescheduled"
+    t.datetime "cancelled"
+    t.datetime "starts_at", precision: 6
+    t.datetime "ends_at", precision: 6
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["shift_id"], name: "index_shift_exceptions_on_shift_id"
+  end
+
   create_table "shifts", force: :cascade do |t|
     t.datetime "starts_at", precision: 6
     t.datetime "ends_at", precision: 6
-    t.bigint "client_id"
+    t.boolean "is_recurring", default: false
     t.bigint "employee_id"
+    t.bigint "created_by_id", null: false
+    t.bigint "parent_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["client_id"], name: "index_shifts_on_client_id"
+    t.index ["created_by_id"], name: "index_shifts_on_created_by_id"
     t.index ["employee_id"], name: "index_shifts_on_employee_id"
+    t.index ["parent_id"], name: "index_shifts_on_parent_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -123,6 +158,9 @@ ActiveRecord::Schema.define(version: 2022_01_07_182834) do
   add_foreign_key "emails", "contacts"
   add_foreign_key "people", "users"
   add_foreign_key "phones", "contacts"
-  add_foreign_key "shifts", "people", column: "client_id"
+  add_foreign_key "recurring_patterns", "shifts"
+  add_foreign_key "shift_exceptions", "shifts"
   add_foreign_key "shifts", "people", column: "employee_id"
+  add_foreign_key "shifts", "shifts", column: "parent_id"
+  add_foreign_key "shifts", "users", column: "created_by_id"
 end

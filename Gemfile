@@ -19,6 +19,7 @@ gem "factory_bot", "~> 6.2"
 gem "devise", "~> 4.8"
 gem "ice_cube", "~> 0.16.4"
 gem "slug", "~> 4.1"
+gem "time_for_a_boolean", "~> 0.2.1"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
@@ -42,11 +43,11 @@ group :development, :test do
   gem "rspec-rails", "~> 5.0"
   gem "factory_bot_rails", "~> 6.2"
   gem "faker", "~> 2.19"
+	gem "amazing_print", "~> 1.4"
 
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri mingw x64_mingw]
   gem "better_errors", "~> 2.9"
-  gem "awesome_print", "~> 1.9"
   gem "solargraph", "~> 0.44.2"
   gem "rubocop-rails", "~> 2.13"
   gem "rubocop-rspec", "~> 2.7"

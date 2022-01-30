@@ -4,7 +4,6 @@ class Person < ApplicationRecord
   enum person_type: { employee: 10, client: 20 }
 
   belongs_to :user, optional: true
-  has_many :shifts, dependent: :destroy
 
   slug :name_for_slug
 

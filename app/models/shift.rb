@@ -1,4 +1,15 @@
 class Shift < ApplicationRecord
-  belongs_to :client
+	has_and_belongs_to_many :clients, class_name: 'Person'
   belongs_to :employee
+	belongs_to :created_by, class_name: 'User'
+
+	def title
+		"#{starts_at.strftime("%-I %p")} - #{employee.f_name}"
+	end
+
+	def as_json(options = {})
+		super((options || {}).merge({
+			:methods => [:title]
+		}))
+	end
 end

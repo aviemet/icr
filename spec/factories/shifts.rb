@@ -12,7 +12,8 @@ FactoryBot.define do
   factory :shift do |time|
 		starts_at { generate(:start_time) }
 		ends_at { generate(:end_time) }
-		client { Client.first }
+		created_by { User.first }
 		employee { Employee.first }
+		clients { [Client.first] }
   end
 end

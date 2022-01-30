@@ -68,8 +68,8 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
+    amazing_print (1.4.0)
     ast (2.4.2)
-    awesome_print (1.9.2)
     backport (1.2.0)
     bcrypt (3.1.16)
     benchmark (0.2.0)
@@ -335,6 +335,9 @@ GEM
     strscan (3.0.1)
     thor (1.2.1)
     tilt (2.0.10)
+    time_for_a_boolean (0.2.1)
+      activerecord
+      railties
     timeout (0.2.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
@@ -374,7 +377,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  awesome_print (~> 1.9)
+  amazing_print (~> 1.4)
   better_errors (~> 2.9)
   bootsnap
   capybara
@@ -403,6 +406,7 @@ DEPENDENCIES
   solargraph (~> 0.44.2)
   spring
   sprockets-rails
+  time_for_a_boolean (~> 0.2.1)
   tzinfo-data
   vite_rails (~> 3.0)
   web-console

@@ -29,37 +29,16 @@ const localizer = dateFnsLocalizer({
 	locales,
 })
 
-const events = [
+const processShifts = shifts => shifts.map(shift => (
 	{
-		title: 'A thing',
-		start: new Date(),
-		end: add(new Date(), { hours: 1 }),
-	},
-	{
-		title: 'More things',
-		start: add(new Date(), { hours: 1 }),
-		end: add(new Date(), { hours: 2 }),
-	},
-	{
-		title: 'Things again',
-		start: add(new Date(), { hours: 2 }),
-		end: add(new Date(), { hours: 3 }),
-	},
-	{
-		title: 'Something else',
-		start: add(new Date(), { hours: 3 }),
-		end: add(new Date(), { hours: 4 }),
-	},
-	{
-		title: 'And Again',
-		start: add(new Date(), { hours: 4 }),
-		end: add(new Date(), { hours: 5 }),
+		title: shift.title,
+		start: new Date(shift.starts_at),
+		end: new Date(shift.ends_at)
 	}
-]
+))
 
-
-const Schedule = props => {
-
+const Schedule = ({ shifts }) => {
+	console.log({ shifts })
 
 	const handleSelect = ({ start, end }) => {
 		const title = window.prompt('New Event name')
@@ -71,7 +50,7 @@ const Schedule = props => {
 				selectable
 				showAllEvents={ true }
 				localizer={ localizer }
-				events={ events }
+				events={ processShifts(shifts) }
 				startAccessor="start"
 				endAccessor="end"
 				style={ { height: '100vh' } }
