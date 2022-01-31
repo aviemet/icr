@@ -1,5 +1,6 @@
-class SchedulesController < ApplicationController
+class ShiftsController < ApplicationController
 	# GET /schedules
+	# Routes.shifts()
 	def index
 		@clients = Client.all
 		render inertia: "Schedules/Index", props: {
@@ -8,24 +9,24 @@ class SchedulesController < ApplicationController
 	end
 
   # POST /schedules
+	# Routes.shifts()
   def create
-    @shift = Shift.new(shift_params)
-		ap({ params: params, shift: @shift })
+    @shift = Shift.create(shift_params)
 
-    if @shift.save
-			ap "SUCCESS"
+    if @shift.persisted?
+			redirect_to schedule_client_path(@shift.clients[0])
     else
-			ap "ERROR"
-			ap({errors: @shift.errors})
+			redirect_to schedule_client_path(@shift.clients[0]), inertia: { errors: @shift.errors }
     end
   end
 
   # PATCH/PUT /schedules/:id
+	# Routes.shifts(id)
   def update
     if @shift.update(shift_params)
-      redirect_to shift_url(@shift), notice: "Client was successfully updated."
+			
     else
-      render :edit, status: :unprocessable_entity
+			
     end
   end
 
@@ -40,6 +41,6 @@ class SchedulesController < ApplicationController
   end
 
   def shift_params
-    params.require(:shift).permit(:starts_at, :ends_at, :employee_id, :client_ids, :created_by_id)
+    params.require(:shift).permit(:starts_at, :ends_at, :employee_id, :created_by_id, client_ids: [])
   end
 end

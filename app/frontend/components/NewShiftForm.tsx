@@ -42,7 +42,7 @@ interface INewShiftFormProps {
 	employees: schema.Person[]
 }
 
-const NewShiftForm = ({ start, end, client, employees }: INewShiftFormProps) => {
+const NewShiftForm = ({ start, client, employees, setShowModal }: INewShiftFormProps) => {
 	const [auth, _] = useAuthState()
 	const theme = useTheme()
 	const matchDownSM = useMediaQuery(theme.breakpoints.down('md'))
@@ -55,7 +55,7 @@ const NewShiftForm = ({ start, end, client, employees }: INewShiftFormProps) => 
 		created_by_id: number
 	}>({
 		starts_at: start,
-		ends_at: add(end, { hours: 8 }),
+		ends_at: add(start, { hours: 8 }),
 		client_ids: [client.id],
 		employee_id: undefined,
 		created_by_id: auth.user.id
@@ -73,12 +73,14 @@ const NewShiftForm = ({ start, end, client, employees }: INewShiftFormProps) => 
 				created_by_id: data.created_by_id
 			}
 		}))
-		post(Routes.schedules())
+		post(Routes.shifts(), {
+			onSuccess: () => setShowModal(false)
+		})
 	}
 
 	useEffect(() => {
-		console.log({ data })
-	}, [data])
+		console.log({ errors })
+	}, [errors])
 
 	return (
 		<form noValidate onSubmit={ onSubmit }>
@@ -112,16 +114,19 @@ const NewShiftForm = ({ start, end, client, employees }: INewShiftFormProps) => 
 						})) }
 						sx={ { width: 300 } }
 						onChange={ (_, newValue) => setData('employee_id', newValue?.id) }
+						aria-describedby="employee-error-text"
 						renderInput={ params => {
 							params.fullWidth = true
 							return <TextField
 								{ ...params }
 								inputProps={ { ...params.inputProps } }
+								error={ !!errors.employee }
 								value={ `${data['employee_id']}` }
-								label="Employe"
+								label="Employee"
 							/>
 						} }
 					/>
+					{ errors.employee && <FormHelperText id="employee-error-text">{ errors.employee }</FormHelperText> }
 				</Grid>
 
 				<Grid item xs={ 12 }>

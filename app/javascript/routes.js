@@ -686,15 +686,6 @@ export const root = __jsr.r({}, [7,"/"]);
 
 /**
  * Generates rails route to
- * /schedules/:id(.:format)
- * @param {any} id
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const schedule = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"schedules"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
-
-/**
- * Generates rails route to
  * /clients/:id/schedule(.:format)
  * @param {any} id
  * @param {object | undefined} options
@@ -713,19 +704,28 @@ export const scheduleEmployee = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"
 
 /**
  * Generates rails route to
- * /schedules(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const schedules = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"schedules"],[1,[2,[8,"."],[3,"format"]]]]]);
-
-/**
- * Generates rails route to
  * /settings(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
 export const settings = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"settings"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
+ * /schedule/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const shift = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"schedule"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /schedule(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const shifts = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"schedule"],[1,[2,[8,"."],[3,"format"]]]]]);
 
 /**
  * Generates rails route to

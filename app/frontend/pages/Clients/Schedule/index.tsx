@@ -1,7 +1,7 @@
 import React, { useState }  from 'react'
 import { Calendar, Views, dateFnsLocalizer } from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
-import { format, parse, startOfWeek, getDay, add } from 'date-fns'
+import { format, parse, startOfWeek, getDay, add, set } from 'date-fns'
 import enUS from 'date-fns/locale/en-US'
 import {
 	Box,
@@ -16,24 +16,14 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 
 const DragAndDropCalendar = withDragAndDrop(Calendar)
 
-type Event = {
-	title: string
-	start: Date
-	end: Date
-	allDay?: boolean
-	resource?: any
-}
-
-const locales = {
-	'en-US': enUS,
-}
-
 const localizer = dateFnsLocalizer({
 	format,
 	parse,
 	startOfWeek,
 	getDay,
-	locales,
+	locales: {
+		'en-US': enUS,
+	}
 })
 
 const processShifts = shifts => shifts.map(shift => (
@@ -47,11 +37,9 @@ const processShifts = shifts => shifts.map(shift => (
 const Schedule = ({ client, employees, shifts }) => {
 	const [showModal, setShowModal] = useState(false)
 	const [newShiftStart, setNewShiftStart] = useState<Date>()
-	const [newShiftEnd, setNewShiftEnd] = useState<Date>()
 
-	const handleSelect = ({ start, end }) => {
-		setNewShiftStart(start)
-		setNewShiftEnd(end)
+	const handleSelect = ({ start }: { start: Date }) => {
+		setNewShiftStart(set(start, { hours: 8 }))
 		setShowModal(true)
 	}
 
@@ -90,9 +78,9 @@ const Schedule = ({ client, employees, shifts }) => {
 						<Typography id="modal-modal-title" variant="h6" component="h2">Add New Shift</Typography>
 						<NewShiftForm
 							start={ newShiftStart }
-							end={ newShiftEnd }
 							client={ client }
 							employees={ employees }
+							setShowModal={ setShowModal }
 						/>
 					</Grid>
 				</Box>

@@ -13,18 +13,18 @@ interface ProvidersProps {
 
 const Providers = ({ children, auth }: ProvidersProps) => {
 	return(
-		<AuthContextProvider auth={ auth }>
-			<StyledEngineProvider injectFirst>
-				<ThemeProvider theme={ theme }>
-					<LocalizationProvider dateAdapter={ AdapterDateFns }>
+		<LocalizationProvider dateAdapter={ AdapterDateFns }>
+			<AuthContextProvider auth={ auth }>
+				<StyledEngineProvider injectFirst>
+					<ThemeProvider theme={ theme }>
 						<CssBaseline />
 						<MenuContextProvider>
 							{ children }
 						</MenuContextProvider>
-					</LocalizationProvider>
-				</ThemeProvider>
-			</StyledEngineProvider>
-		</AuthContextProvider>
+					</ThemeProvider>
+				</StyledEngineProvider>
+			</AuthContextProvider>
+		</LocalizationProvider>
 	)
 }
 

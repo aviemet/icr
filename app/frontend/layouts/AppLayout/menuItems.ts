@@ -40,7 +40,7 @@ const menuItems: TMenuGroup[] = [
 				id: 'schedules',
 				title: 'Schedules',
 				type: 'item',
-				url: Routes.schedules(),
+				url: Routes.shifts(),
 				icon: CalendarTodayIcon,
 				breadcrumbs: false
 			}

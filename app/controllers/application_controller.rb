@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
-  append_before_action :log_person
+	around_action :set_time_zone, if: :current_user
+  # append_before_action :log_person
 
   inertia_share auth: -> { {
     user: current_user.as_json({
@@ -13,4 +14,10 @@ class ApplicationController < ActionController::Base
   def log_person
     ap({ user: current_user.as_json(except: [:password]) })
   end
+
+	private
+
+	def set_time_zone(&block)
+		Time.use_zone(current_user.time_zone, &block)
+	end
 end

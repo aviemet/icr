@@ -309,18 +309,6 @@ export const root: ((
 
 /**
  * Generates rails route to
- * /schedules/:id(.:format)
- * @param {any} id
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const schedule: ((
-  id: RequiredRouteParameter,
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
  * /clients/:id/schedule(.:format)
  * @param {any} id
  * @param {object | undefined} options
@@ -345,21 +333,33 @@ export const scheduleEmployee: ((
 
 /**
  * Generates rails route to
- * /schedules(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const schedules: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
  * /settings(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
 export const settings: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /schedule/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const shift: ((
+  id: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /schedule(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const shifts: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
