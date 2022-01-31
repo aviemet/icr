@@ -3,8 +3,14 @@ import { Calendar, Views, dateFnsLocalizer } from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import { format, parse, startOfWeek, getDay, add } from 'date-fns'
 import enUS from 'date-fns/locale/en-US'
-import { Box, Modal, Typography } from '@mui/material'
-import { NewShiftForm } from '@/components'
+import {
+	Box,
+	Button,
+	Grid,
+	Modal,
+	Typography
+} from '@mui/material'
+import { NewShiftForm, AnimateButton } from '@/components'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 
@@ -80,8 +86,15 @@ const Schedule = ({ client, employees, shifts }) => {
 					boxShadow: 24,
 					p: 4,
 				} }>
-					<Typography id="modal-modal-title" variant="h6" component="h2">Add New Shift</Typography>
-					<NewShiftForm start={ newShiftStart } end={ newShiftEnd } client={ client } employees={ employees } />
+					<Grid container spacing={ 2 }>
+						<Typography id="modal-modal-title" variant="h6" component="h2">Add New Shift</Typography>
+						<NewShiftForm
+							start={ newShiftStart }
+							end={ newShiftEnd }
+							client={ client }
+							employees={ employees }
+						/>
+					</Grid>
 				</Box>
 			</Modal>
 		</>

@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react'
 import { useForm } from '@inertiajs/inertia-react'
 import { add } from 'date-fns'
+import { Link, AnimateButton } from '@/components'
+import { Routes } from '@/lib'
+import { useTheme } from '@mui/material/styles'
 import {
 	Autocomplete,
 	Box,
@@ -18,7 +21,8 @@ import {
 	Typography,
 	useMediaQuery
 } from '@mui/material'
-import { TimePicker } from '@mui/lab'
+import { DateTimePicker } from '@mui/lab'
+import { useAuthState } from '@/Store'
 
 /**
  * TextField for TimePicker - full width and readonly
@@ -28,7 +32,6 @@ const TimeTextField = params => {
 	params.fullWidth = true
 	params.inputProps = params.inputProps || {}
 	params.inputProps.readOnly = true
-	console.log({ params })
 	return <TextField { ...params } />
 }
 
@@ -40,32 +43,48 @@ interface INewShiftFormProps {
 }
 
 const NewShiftForm = ({ start, end, client, employees }: INewShiftFormProps) => {
-	const { data, setData, post, processing, errors } = useForm<{
+	const [auth, _] = useAuthState()
+	const theme = useTheme()
+	const matchDownSM = useMediaQuery(theme.breakpoints.down('md'))
+
+	const { data, setData, post, transform, processing, errors } = useForm<{
 		starts_at: Date|null
 		ends_at: Date|null
-		client_id: number|null
+		client_ids: number[]
+		employee_id: number|undefined
+		created_by_id: number
 	}>({
 		starts_at: start,
 		ends_at: add(end, { hours: 8 }),
-		client_id: client.id
+		client_ids: [client.id],
+		employee_id: undefined,
+		created_by_id: auth.user.id
 	})
 
 	const onSubmit = e => {
 		e.preventDefault()
-		post('/login')
+		// @ts-ignore
+		transform(data => ({
+			shift: {
+				starts_at: data.starts_at,
+				ends_at: data.ends_at,
+				client_ids: data.client_ids,
+				employee_id: data.employee_id,
+				created_by_id: data.created_by_id
+			}
+		}))
+		post(Routes.schedules())
 	}
-
-	console.log({ employees })
 
 	useEffect(() => {
 		console.log({ data })
-	}, [data.starts_at])
+	}, [data])
 
 	return (
 		<form noValidate onSubmit={ onSubmit }>
-			<Grid container>
+			<Grid container spacing={ matchDownSM ? 0 : 2 }>
 				<Grid item xs={ 12 }>
-					<TimePicker
+					<DateTimePicker
 						label="Start Time"
 						value={ data['starts_at'] }
 						onChange={ val => setData('starts_at', val) }
@@ -74,7 +93,7 @@ const NewShiftForm = ({ start, end, client, employees }: INewShiftFormProps) => 
 				</Grid>
 
 				<Grid item xs={ 12 }>
-					<TimePicker
+					<DateTimePicker
 						label="End Time"
 						value={ data['ends_at'] }
 						onChange={ val => setData('ends_at', val) }
@@ -92,8 +111,27 @@ const NewShiftForm = ({ start, end, client, employees }: INewShiftFormProps) => 
 							id: e.id
 						})) }
 						sx={ { width: 300 } }
-						renderInput={ (params) => <TextField { ...params } label="Employe" fullWidth /> }
+						onChange={ (_, newValue) => setData('employee_id', newValue?.id) }
+						renderInput={ params => {
+							params.fullWidth = true
+							return <TextField
+								{ ...params }
+								inputProps={ { ...params.inputProps } }
+								value={ `${data['employee_id']}` }
+								label="Employe"
+							/>
+						} }
 					/>
+				</Grid>
+
+				<Grid item xs={ 12 }>
+					<Box sx={ { mt: 2 } }>
+						<AnimateButton>
+							<Button disableElevation fullWidth size="large" type="submit" variant="contained" color="secondary" disabled={ processing }>
+			Save Shift
+							</Button>
+						</AnimateButton>
+					</Box>
 				</Grid>
 			</Grid>
 		</form>

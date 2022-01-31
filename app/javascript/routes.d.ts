@@ -309,6 +309,18 @@ export const root: ((
 
 /**
  * Generates rails route to
+ * /schedules/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const schedule: ((
+  id: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
  * /clients/:id/schedule(.:format)
  * @param {any} id
  * @param {object | undefined} options

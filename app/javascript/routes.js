@@ -686,6 +686,15 @@ export const root = __jsr.r({}, [7,"/"]);
 
 /**
  * Generates rails route to
+ * /schedules/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const schedule = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"schedules"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
  * /clients/:id/schedule(.:format)
  * @param {any} id
  * @param {object | undefined} options

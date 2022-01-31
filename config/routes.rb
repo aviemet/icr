@@ -16,7 +16,7 @@ Rails.application.routes.draw do
 		end
 	end
 
-	resources :schedules, only: [:index]
+	resources :schedules, only: [:index, :create, :update]
 	resources :clients, concerns: :schedulable
   resources :employees, concerns: :schedulable
 	resources :people

@@ -65,7 +65,7 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
 
 interface HeadCell {
 	disablePadding: boolean
-	id: keyof schema.Client
+	id: keyof schema.Person
 	label: string
 	numeric: boolean
 }
@@ -93,7 +93,7 @@ const headCells: readonly HeadCell[] = [
 
 interface EnhancedTableProps {
 	numSelected: number
-	onRequestSort: (event: React.MouseEvent<unknown>, property: keyof schema.Client) => void
+	onRequestSort: (event: React.MouseEvent<unknown>, property: keyof schema.Person) => void
 	onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void
 	order: Order
 	orderBy: string
@@ -104,7 +104,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 	const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
     props
 	const createSortHandler =
-    (property: keyof schema.Client) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof schema.Person) => (event: React.MouseEvent<unknown>) => {
     	onRequestSort(event, property)
     }
 
@@ -204,17 +204,17 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 
 type Id = string | number
 
-const EnhancedTable = ({ clients }: { clients: schema.Client[] }) => {
+const EnhancedTable = ({ clients }: { clients: schema.Person[] }) => {
 	const [order, setOrder] = React.useState<Order>('asc')
-	const [orderBy, setOrderBy] = React.useState<keyof schema.Client>('f_name')
+	const [orderBy, setOrderBy] = React.useState<keyof schema.Person>('f_name')
 	const [selected, setSelected] = React.useState<readonly Id[]>([])
 	const [page, setPage] = React.useState(0)
 	const [dense, setDense] = React.useState(false)
-	const [rowsPerPage, setRowsPerPage] = React.useState(5)
+	const [rowsPerPage, setRowsPerPage] = React.useState(10)
 
 	const handleRequestSort = (
 		event: React.MouseEvent<unknown>,
-		property: keyof schema.Client,
+		property: keyof schema.Person,
 	) => {
 		const isAsc = orderBy === property && order === 'asc'
 		setOrder(isAsc ? 'desc' : 'asc')
@@ -289,7 +289,7 @@ const EnhancedTable = ({ clients }: { clients: schema.Client[] }) => {
 						<TableBody>
 							{ /* if you don't need to support IE11, you can replace the `stableSort` call with:
               clients.slice().sort(getComparator(order, orderBy)) */ }
-							{ stableSort<schema.Client>(clients, getComparator(order, orderBy))
+							{ stableSort<schema.Person>(clients, getComparator(order, orderBy))
 								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 								.map((row, index) => {
 									const isItemSelected = isSelected(row.id)
