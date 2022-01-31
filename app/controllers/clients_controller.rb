@@ -30,19 +30,18 @@ class ClientsController < ApplicationController
     }
   end
 
-	# GET /clients/:id/schedule
-	def schedule
-		@employees = Employee.all
-		@shifts = @client.shifts.includes(:clients, :employee)
-		render inertia: "Clients/Schedule", props: {
-			client: @client,
-			employees: @employees,
-			shifts: @shifts.as_json({
-				title: :title,
-				include: [:clients, :employee]
-			})
-		}
-	end
+  # GET /clients/:id/schedule
+  def schedule
+    @employees = Employee.all
+    @shifts = @client.shifts.includes(:clients, :employee)
+    render inertia: "Clients/Schedule", props: {
+      client: @client.as_json,
+      employees: @employees,
+      shifts: @shifts.as_json({
+        include: [:clients, :employee],
+      }),
+    }
+  end
 
   # POST /clients
   def create

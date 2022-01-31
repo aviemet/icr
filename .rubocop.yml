@@ -163,6 +163,8 @@ Rails/Delegate:
 Rails/Output:
   Enabled: false
 
+Rails/HasAndBelongsToMany:
+  Enabled: false
 
 # Bundler Cops
 

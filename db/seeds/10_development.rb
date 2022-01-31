@@ -33,4 +33,10 @@ if Rails.env == "development"
 		end
 	end
 
+	if Household.count == 0
+		h = Household.create({ name: "Test Household" })
+		h.clients << Clients.first
+		h.clients << Clients.second
+	end
+
 end

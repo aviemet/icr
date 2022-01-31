@@ -64,15 +64,7 @@ const NewShiftForm = ({ start, client, employees, setShowModal }: INewShiftFormP
 	const onSubmit = e => {
 		e.preventDefault()
 		// @ts-ignore
-		transform(data => ({
-			shift: {
-				starts_at: data.starts_at,
-				ends_at: data.ends_at,
-				client_ids: data.client_ids,
-				employee_id: data.employee_id,
-				created_by_id: data.created_by_id
-			}
-		}))
+		transform(data => ({ shift: data }))
 		post(Routes.shifts(), {
 			onSuccess: () => setShowModal(false)
 		})
@@ -112,7 +104,6 @@ const NewShiftForm = ({ start, client, employees, setShowModal }: INewShiftFormP
 							label: `${e.f_name} ${e.l_name}`,
 							id: e.id
 						})) }
-						sx={ { width: 300 } }
 						onChange={ (_, newValue) => setData('employee_id', newValue?.id) }
 						aria-describedby="employee-error-text"
 						renderInput={ params => {

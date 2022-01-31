@@ -35,6 +35,7 @@ const processShifts = shifts => shifts.map(shift => (
 ))
 
 const Schedule = ({ client, employees, shifts }) => {
+	console.log({ client, shifts })
 	const [showModal, setShowModal] = useState(false)
 	const [newShiftStart, setNewShiftStart] = useState<Date>()
 
@@ -45,6 +46,7 @@ const Schedule = ({ client, employees, shifts }) => {
 
 	return (
 		<>
+			<h1>{ client.name }</h1>
 			<Box sx={ { backgroundColor: 'white', padding: '10px' } }>
 				<DragAndDropCalendar
 					selectable

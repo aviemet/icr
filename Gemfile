@@ -43,7 +43,7 @@ group :development, :test do
   gem "rspec-rails", "~> 5.0"
   gem "factory_bot_rails", "~> 6.2"
   gem "faker", "~> 2.19"
-	gem "amazing_print", "~> 1.4"
+  gem "amazing_print", "~> 1.4"
 
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri mingw x64_mingw]
@@ -67,10 +67,10 @@ group :development do
   gem "guard-livereload", "~> 2.5", require: false
 
   # Routes
-	gem "js-routes", "~> 2.2"
+  gem "js-routes", "~> 2.2"
 
-	# Typescript schema generation
-	gem "schema2type", "~> 0.4.0"
+  # Typescript schema generation
+  gem "schema2type", "~> 0.4.0"
 end
 
 group :test do
