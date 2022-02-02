@@ -20,6 +20,7 @@ gem "devise", "~> 4.8"
 gem "ice_cube", "~> 0.16.4"
 gem "slug", "~> 4.1"
 gem "time_for_a_boolean", "~> 0.2.1"
+gem "draper", "~> 4.0"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"

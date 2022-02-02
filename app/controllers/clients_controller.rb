@@ -5,14 +5,14 @@ class ClientsController < ApplicationController
   # GET /clients
   def index
     render inertia: "Clients/Index", props: {
-      clients: @clients.to_a,
+      clients: @clients.decorate.to_a,
     }
   end
 
   # GET /clients/:id
   def show
     render inertia: "Clients/Show", props: {
-      client: @client.as_json,
+      client: @client.decorate.as_json,
     }
   end
 
@@ -34,10 +34,11 @@ class ClientsController < ApplicationController
   def schedule
     @employees = Employee.all
     @shifts = @client.shifts.includes(:clients, :employee)
+
     render inertia: "Clients/Schedule", props: {
-      client: @client.as_json,
-      employees: @employees,
-      shifts: @shifts.as_json({
+      client: @client.decorate.as_json,
+      employees: @employees.decorate,
+      shifts: @shifts.decorate.as_json({
         include: [:clients, :employee],
       }),
     }

@@ -166,6 +166,9 @@ Rails/Output:
 Rails/HasAndBelongsToMany:
   Enabled: false
 
+Rails/DynamicFindBy:
+  Enabled: false
+
 # Bundler Cops
 
 Bundler/OrderedGems:

@@ -5,14 +5,14 @@ class EmployeesController < ApplicationController
   # GET /employees
   def index
     render inertia: "Employees/Index", props: {
-      employees: @employees.as_json,
+      employees: @employees.decorate.as_json,
     }
   end
 
   # GET /employees/:id
   def show
     render inertia: "Employees/Show", props: {
-      employee: @employee.as_json,
+      employee: @employee.decorate.as_json,
     }
   end
 

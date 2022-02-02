@@ -4,7 +4,7 @@ class ShiftsController < ApplicationController
   def index
     @clients = Client.all
     render inertia: "Schedules/Index", props: {
-      clients: @clients.as_json,
+      clients: @clients.decorate.as_json,
     }
   end
 
