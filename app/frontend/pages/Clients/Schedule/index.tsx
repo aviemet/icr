@@ -1,4 +1,5 @@
-import React, { useState }  from 'react'
+import React, { useState, useEffect }  from 'react'
+import { Inertia } from '@inertiajs/inertia'
 import { Calendar, Views, dateFnsLocalizer } from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import { format, parse, startOfWeek, getDay, add, set } from 'date-fns'
@@ -13,6 +14,7 @@ import {
 import { NewShiftForm, AnimateButton } from '@/components'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
+import { Routes } from '@/lib'
 
 const DragAndDropCalendar = withDragAndDrop(Calendar)
 
@@ -26,22 +28,25 @@ const localizer = dateFnsLocalizer({
 	}
 })
 
-const processShifts = shifts => shifts.map(shift => (
-	{
-		title: shift.title,
-		start: new Date(shift.starts_at),
-		end: new Date(shift.ends_at)
-	}
-))
-
 const Schedule = ({ client, employees, shifts }) => {
-	console.log({ client, shifts })
-	const [showModal, setShowModal] = useState(false)
+	const [modalOpen, setModalOpen] = useState(false)
 	const [newShiftStart, setNewShiftStart] = useState<Date>()
 
 	const handleSelect = ({ start }: { start: Date }) => {
 		setNewShiftStart(set(start, { hours: 8 }))
-		setShowModal(true)
+		setModalOpen(true)
+	}
+
+	const handleDateChange = params => {
+		console.log({ params })
+	}
+
+	const handleViewChange = params => {
+		console.log({ params })
+	}
+
+	const handleRangeChange = params => {
+		console.log({ params })
 	}
 
 	return (
@@ -52,17 +57,26 @@ const Schedule = ({ client, employees, shifts }) => {
 					selectable
 					showAllEvents={ true }
 					localizer={ localizer }
-					events={ processShifts(shifts) }
+					events={ shifts.map(shift => (
+						{
+							title: shift.title,
+							start: new Date(shift.starts_at),
+							end: new Date(shift.ends_at)
+						}
+					)) }
 					startAccessor="start"
 					endAccessor="end"
 					style={ { height: '100vh' } }
 					onSelectEvent={ event => alert(event.title) }
 					onSelectSlot={ handleSelect }
+					onNavigate={ handleDateChange }
+					onView={ handleViewChange }
+					onRangeChange={ handleRangeChange }
 				/>
 			</Box>
 			<Modal
-				open={ showModal }
-				onClose={ () => setShowModal(false) }
+				open={ modalOpen }
+				onClose={ () => setModalOpen(false) }
 				aria-labelledby="modal-modal-title"
 			>
 				<Box sx={ {
@@ -82,7 +96,7 @@ const Schedule = ({ client, employees, shifts }) => {
 							start={ newShiftStart }
 							client={ client }
 							employees={ employees }
-							setShowModal={ setShowModal }
+							setModalOpen={ setModalOpen }
 						/>
 					</Grid>
 				</Box>

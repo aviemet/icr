@@ -37,10 +37,10 @@ class ClientsController < ApplicationController
 
     render inertia: "Clients/Schedule", props: {
       client: @client.decorate.as_json,
-      employees: @employees.decorate,
-      shifts: @shifts.decorate.as_json({
+      employees: -> { @employees.decorate },
+      shifts: -> { @shifts.decorate.as_json({
         include: [:clients, :employee],
-      }),
+      }) },
     }
   end
 
