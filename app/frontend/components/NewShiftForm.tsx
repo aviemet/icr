@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useForm } from '@inertiajs/inertia-react'
 import { add } from 'date-fns'
 import { Link, AnimateButton } from '@/components'
@@ -10,6 +10,7 @@ import {
 	Button,
 	Checkbox,
 	Divider,
+	FormGroup,
 	FormControlLabel,
 	FormHelperText,
 	Grid,
@@ -17,6 +18,7 @@ import {
 	InputAdornment,
 	InputLabel,
 	Stack,
+	Switch,
 	TextField,
 	Typography,
 	useMediaQuery
@@ -42,10 +44,12 @@ interface INewShiftFormProps {
 	employees: schema.Person[]
 }
 
-const NewShiftForm = ({ start, client, employees, setShowModal }: INewShiftFormProps) => {
+const NewShiftForm = ({ start, client, employees, onSubmit }: INewShiftFormProps) => {
 	const [auth, _] = useAuthState()
 	const theme = useTheme()
 	const matchDownSM = useMediaQuery(theme.breakpoints.down('md'))
+
+	const [repeats, setRepeats] = useState(false)
 
 	const { data, setData, post, transform, processing, errors } = useForm<{
 		starts_at: Date|null
@@ -60,13 +64,13 @@ const NewShiftForm = ({ start, client, employees, setShowModal }: INewShiftFormP
 		employee_id: undefined,
 		created_by_id: auth.user.id
 	})
-
-	const onSubmit = e => {
+	useState
+	const handleSubmit = e => {
 		e.preventDefault()
 		// @ts-ignore
 		transform(data => ({ shift: data }))
 		post(Routes.shifts(), {
-			onSuccess: () => setShowModal(false)
+			onSuccess: () => onSubmit(false)
 		})
 	}
 
@@ -75,7 +79,7 @@ const NewShiftForm = ({ start, client, employees, setShowModal }: INewShiftFormP
 	}, [errors])
 
 	return (
-		<form noValidate onSubmit={ onSubmit }>
+		<form noValidate onSubmit={ handleSubmit }>
 			<Grid container spacing={ matchDownSM ? 0 : 2 }>
 				<Grid item xs={ 12 }>
 					<DateTimePicker
@@ -122,9 +126,21 @@ const NewShiftForm = ({ start, client, employees, setShowModal }: INewShiftFormP
 
 				<Grid item xs={ 12 }>
 					<Box sx={ { mt: 2 } }>
+						<FormGroup>
+							<FormControlLabel control={ <Switch checked={ repeats } onChange={ e => setRepeats(!repeats) } /> } label="Repeating Event" />
+						</FormGroup>
+					</Box>
+				</Grid>
+
+				{ repeats && <Box sx={ { mt: 2 } }>
+					<p>Repeating</p>
+				</Box> }
+
+				<Grid item xs={ 12 }>
+					<Box sx={ { mt: 2 } }>
 						<AnimateButton>
 							<Button disableElevation fullWidth size="large" type="submit" variant="contained" color="secondary" disabled={ processing }>
-			Save Shift
+								Save Shift
 							</Button>
 						</AnimateButton>
 					</Box>

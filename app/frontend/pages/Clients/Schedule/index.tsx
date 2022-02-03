@@ -1,5 +1,6 @@
 import React, { useState, useEffect }  from 'react'
 import { Inertia } from '@inertiajs/inertia'
+import { Routes } from '@/lib'
 import { Calendar, Views, dateFnsLocalizer } from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import { format, parse, startOfWeek, getDay, add, set } from 'date-fns'
@@ -12,9 +13,9 @@ import {
 	Typography
 } from '@mui/material'
 import { NewShiftForm, AnimateButton } from '@/components'
+import { ModalPrompt } from '@/components/Modal'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
-import { Routes } from '@/lib'
 
 const DragAndDropCalendar = withDragAndDrop(Calendar)
 
@@ -74,33 +75,14 @@ const Schedule = ({ client, employees, shifts }) => {
 					onRangeChange={ handleRangeChange }
 				/>
 			</Box>
-			<Modal
-				open={ modalOpen }
-				onClose={ () => setModalOpen(false) }
-				aria-labelledby="modal-modal-title"
-			>
-				<Box sx={ {
-					position: 'absolute' as 'absolute',
-					top: '50%',
-					left: '50%',
-					transform: 'translate(-50%, -50%)',
-					width: 400,
-					bgcolor: 'background.paper',
-					border: '2px solid #000',
-					boxShadow: 24,
-					p: 4,
-				} }>
-					<Grid container spacing={ 2 }>
-						<Typography id="modal-modal-title" variant="h6" component="h2">Add New Shift</Typography>
-						<NewShiftForm
-							start={ newShiftStart }
-							client={ client }
-							employees={ employees }
-							setModalOpen={ setModalOpen }
-						/>
-					</Grid>
-				</Box>
-			</Modal>
+			<ModalPrompt open={ modalOpen } handleClose={ () => setModalOpen(false) }>
+				<NewShiftForm
+					start={ newShiftStart }
+					client={ client }
+					employees={ employees }
+					onSubmit={ () => setModalOpen(false) }
+				/>
+			</ModalPrompt>
 		</>
 	)
 }
