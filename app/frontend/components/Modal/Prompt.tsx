@@ -31,15 +31,19 @@ const Prompt = ({ children, title, open, handleClose }: IPromptProps) => {
 				top: '50%',
 				left: '50%',
 				transform: 'translate(-50%, -50%)',
-				width: 400,
 				bgcolor: 'background.paper',
 				border: '2px solid #000',
 				boxShadow: 24,
 				p: 4,
+				width: {
+					xs: '95%',
+					sm: 'clamp(400px, 90%, 550px)',
+					md: 'clamp(400px, 80%, 600px)',
+				}
 			} }>
 				<Grid container spacing={ 2 }>
 					<Grid item>
-						<Typography id="modal-modal-title" variant="h6" component="h2">{ title }</Typography>
+						<Typography id="modal-modal-title" variant="h2" component="h2">{ title }</Typography>
 					</Grid>
 					<Grid item>
 						{ children }

@@ -75,7 +75,7 @@ const Schedule = ({ client, employees, shifts }) => {
 					onRangeChange={ handleRangeChange }
 				/>
 			</Box>
-			<ModalPrompt open={ modalOpen } handleClose={ () => setModalOpen(false) }>
+			<ModalPrompt title="New Shift" open={ modalOpen } handleClose={ () => setModalOpen(false) }>
 				<NewShiftForm
 					start={ newShiftStart }
 					client={ client }

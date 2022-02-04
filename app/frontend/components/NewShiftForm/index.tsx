@@ -11,12 +11,15 @@ import {
 	Checkbox,
 	Divider,
 	FormGroup,
+	FormControl,
 	FormControlLabel,
 	FormHelperText,
 	Grid,
 	IconButton,
 	InputAdornment,
 	InputLabel,
+	MenuItem,
+	Select,
 	Stack,
 	Switch,
 	TextField,
@@ -42,6 +45,7 @@ interface INewShiftFormProps {
 	end: Date
 	client: schema.Person
 	employees: schema.Person[]
+	onSubmit: () => void
 }
 
 const NewShiftForm = ({ start, client, employees, onSubmit }: INewShiftFormProps) => {
@@ -49,34 +53,58 @@ const NewShiftForm = ({ start, client, employees, onSubmit }: INewShiftFormProps
 	const theme = useTheme()
 	const matchDownSM = useMediaQuery(theme.breakpoints.down('md'))
 
-	const [repeats, setRepeats] = useState(false)
+	console.log({ theme })
 
 	const { data, setData, post, transform, processing, errors } = useForm<{
-		starts_at: Date|null
-		ends_at: Date|null
+		starts_at: Date
+		ends_at: Date
 		client_ids: number[]
-		employee_id: number|undefined
+		employee: number|undefined
 		created_by_id: number
+		recurring_type?: 'daily'|'weekly'|'monthly'|'yearly'
+		separation_count?: number
+		max_occurances?: string
+		day_of_week?: string
+		day_of_month?: string
+		month_of_year?: string
 	}>({
 		starts_at: start,
 		ends_at: add(start, { hours: 8 }),
 		client_ids: [client.id],
-		employee_id: undefined,
+		employee: undefined,
 		created_by_id: auth.user.id
 	})
-	useState
+
 	const handleSubmit = e => {
 		e.preventDefault()
 		// @ts-ignore
-		transform(data => ({ shift: data }))
+		transform(data => ({
+			shift: {
+				starts_at: data.starts_at,
+				ends_at: data.ends_at,
+				client_ids: data.client_ids,
+				employee_id: data.employee,
+				created_by_id: data.created_by_id,
+				recurring_pattern_attributes: {
+					recurring_type: data.recurring_type,
+					separation_count: data.separation_count,
+					max_occurances: data.max_occurances,
+					day_of_week: data.day_of_week,
+					day_of_month: data.day_of_month,
+					month_of_year: data.month_of_year,
+				}
+			}
+		}))
 		post(Routes.shifts(), {
-			onSuccess: () => onSubmit(false)
+			onSuccess: () => { if(onSubmit) onSubmit() }
 		})
 	}
 
-	useEffect(() => {
-		console.log({ errors })
-	}, [errors])
+	const pluralize = () => {
+		if(data.separation_count && data.separation_count > 1) {
+			return 's'
+		}
+	}
 
 	return (
 		<form noValidate onSubmit={ handleSubmit }>
@@ -85,7 +113,10 @@ const NewShiftForm = ({ start, client, employees, onSubmit }: INewShiftFormProps
 					<DateTimePicker
 						label="Start Time"
 						value={ data['starts_at'] }
-						onChange={ val => setData('starts_at', val) }
+						onChange={ val => {
+							if(val === null) return
+							setData('starts_at', val)
+						} }
 						renderInput={ TimeTextField }
 					/>
 				</Grid>
@@ -94,7 +125,10 @@ const NewShiftForm = ({ start, client, employees, onSubmit }: INewShiftFormProps
 					<DateTimePicker
 						label="End Time"
 						value={ data['ends_at'] }
-						onChange={ val => setData('ends_at', val) }
+						onChange={ val => {
+							if(val === null) return
+							setData('ends_at', val)
+						} }
 						renderInput={ TimeTextField }
 					/>
 				</Grid>
@@ -108,7 +142,7 @@ const NewShiftForm = ({ start, client, employees, onSubmit }: INewShiftFormProps
 							label: `${e.f_name} ${e.l_name}`,
 							id: e.id
 						})) }
-						onChange={ (_, newValue) => setData('employee_id', newValue?.id) }
+						onChange={ (_, newValue) => setData('employee', newValue?.id) }
 						aria-describedby="employee-error-text"
 						renderInput={ params => {
 							params.fullWidth = true
@@ -116,7 +150,7 @@ const NewShiftForm = ({ start, client, employees, onSubmit }: INewShiftFormProps
 								{ ...params }
 								inputProps={ { ...params.inputProps } }
 								error={ !!errors.employee }
-								value={ `${data['employee_id']}` }
+								value={ `${data['employee']}` }
 								label="Employee"
 							/>
 						} }
@@ -126,15 +160,36 @@ const NewShiftForm = ({ start, client, employees, onSubmit }: INewShiftFormProps
 
 				<Grid item xs={ 12 }>
 					<Box sx={ { mt: 2 } }>
-						<FormGroup>
-							<FormControlLabel control={ <Switch checked={ repeats } onChange={ e => setRepeats(!repeats) } /> } label="Repeating Event" />
-						</FormGroup>
+						<FormControl>
+							<label>Repeat Every</label>
+							<TextField
+								label="Every"
+								name="interval"
+								value={ data.separation_count || '' }
+								onChange={ e => {
+									const val = parseInt(e.target.value)
+									setData('separation_count', val === NaN ? undefined : val)
+								} }
+							/>
+							<InputLabel id="repeat-shift-select-label">Repeat Every</InputLabel>
+							<Select
+								label="Repeat Every"
+								labelId="repeat-shift-select-label"
+								id="repeat-shift-select"
+								value={ data.recurring_type }
+								onChange={ e => {
+									setData('recurring_type', e.target.value)
+								} }
+							>
+								<MenuItem>Never</MenuItem>
+								<MenuItem value='daily'>Day{ pluralize }</MenuItem>
+								<MenuItem value='weekly'>Week{ pluralize }</MenuItem>
+								<MenuItem value='monthly'>Month{ pluralize }</MenuItem>
+								<MenuItem value='yearly'>Year{ pluralize }</MenuItem>
+							</Select>
+						</FormControl>
 					</Box>
 				</Grid>
-
-				{ repeats && <Box sx={ { mt: 2 } }>
-					<p>Repeating</p>
-				</Box> }
 
 				<Grid item xs={ 12 }>
 					<Box sx={ { mt: 2 } }>

@@ -136,9 +136,7 @@ Layout/DotPosition:
   Enabled: false
 
 Layout/LineLength:
-  Description: 'Limit lines to 120 characters.'
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#80-character-limits'
-  Max: 120
+  Enabled: false
 
 Layout/MultilineOperationIndentation:
   Description: >-

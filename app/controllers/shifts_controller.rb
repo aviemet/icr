@@ -41,6 +41,20 @@ class ShiftsController < ApplicationController
   end
 
   def shift_params
-    params.require(:shift).permit(:starts_at, :ends_at, :employee_id, :created_by_id, client_ids: [])
+    params.require(:shift).permit(
+      :starts_at,
+      :ends_at,
+      :employee_id,
+      :created_by_id,
+      client_ids: [],
+      recurring_pattern_attributes: [
+        :recurring_type,
+        :separation_count,
+        :max_occurances,
+        :day_of_week,
+        :day_of_month,
+        :month_of_year,
+      ],
+    )
   end
 end
