@@ -14,6 +14,7 @@ import {
 	FormControl,
 	FormControlLabel,
 	FormHelperText,
+	FormLabel,
 	Grid,
 	IconButton,
 	InputAdornment,
@@ -28,6 +29,7 @@ import {
 } from '@mui/material'
 import { DateTimePicker } from '@mui/lab'
 import { useAuthState } from '@/Store'
+import DaysPicker from './DaysPicker'
 
 /**
  * TextField for TimePicker - full width and readonly
@@ -48,12 +50,10 @@ interface INewShiftFormProps {
 	onSubmit: () => void
 }
 
-const NewShiftForm = ({ start, client, employees, onSubmit }: INewShiftFormProps) => {
+const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, client, employees, onSubmit }) => {
 	const [auth, _] = useAuthState()
 	const theme = useTheme()
 	const matchDownSM = useMediaQuery(theme.breakpoints.down('md'))
-
-	console.log({ theme })
 
 	const { data, setData, post, transform, processing, errors } = useForm<{
 		starts_at: Date
@@ -105,6 +105,10 @@ const NewShiftForm = ({ start, client, employees, onSubmit }: INewShiftFormProps
 			return 's'
 		}
 	}
+
+	useEffect(() => {
+		console.log(data)
+	}, [data])
 
 	return (
 		<form noValidate onSubmit={ handleSubmit }>
@@ -160,36 +164,43 @@ const NewShiftForm = ({ start, client, employees, onSubmit }: INewShiftFormProps
 
 				<Grid item xs={ 12 }>
 					<Box sx={ { mt: 2 } }>
+						<label>Repeat Every</label>
+						<TextField
+							label="Every"
+							name="interval"
+							value={ data.separation_count || '' }
+							onChange={ e => {
+								const val = parseInt(e.target.value)
+								setData('separation_count', isNaN(val) ? undefined : val)
+							} }
+						/>
 						<FormControl>
-							<label>Repeat Every</label>
-							<TextField
-								label="Every"
-								name="interval"
-								value={ data.separation_count || '' }
-								onChange={ e => {
-									const val = parseInt(e.target.value)
-									setData('separation_count', val === NaN ? undefined : val)
-								} }
-							/>
 							<InputLabel id="repeat-shift-select-label">Repeat Every</InputLabel>
 							<Select
 								label="Repeat Every"
 								labelId="repeat-shift-select-label"
 								id="repeat-shift-select"
-								value={ data.recurring_type }
-								onChange={ e => {
-									setData('recurring_type', e.target.value)
+								value={ data.recurring_type || '' }
+								onChange={ (e: SelectChangeEvent<typeof data.recurring_type>) => {
+									const val = e.target.value
+									setData('recurring_type', val === '' ? undefined : val)
 								} }
 							>
-								<MenuItem>Never</MenuItem>
-								<MenuItem value='daily'>Day{ pluralize }</MenuItem>
-								<MenuItem value='weekly'>Week{ pluralize }</MenuItem>
-								<MenuItem value='monthly'>Month{ pluralize }</MenuItem>
-								<MenuItem value='yearly'>Year{ pluralize }</MenuItem>
+								<MenuItem value=""><em>Never</em></MenuItem>
+								<MenuItem value='daily'>Day{ pluralize() }</MenuItem>
+								<MenuItem value='weekly'>Week{ pluralize() }</MenuItem>
+								<MenuItem value='monthly'>Month{ pluralize() }</MenuItem>
+								<MenuItem value='yearly'>Year{ pluralize() }</MenuItem>
 							</Select>
 						</FormControl>
 					</Box>
 				</Grid>
+
+				{ data.recurring_type === 'daily' && <Grid item xs={ 12 }>
+					<Box sx={ { mt: 2 } }>
+						<DaysPicker setData={ setData } />
+					</Box>
+				</Grid> }
 
 				<Grid item xs={ 12 }>
 					<Box sx={ { mt: 2 } }>
