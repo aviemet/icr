@@ -28,7 +28,7 @@ import PersonIcon from '@mui/icons-material/Person'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import ProfileLink from './ProfileLink'
 import MainCard from '@/components/cards/MainCard'
-import { Transition, SearchInput } from '@/components'
+import { Transition, SearchInput, DarknessToggle } from '@/components'
 import { greeting } from '@/lib'
 
 const ProfileSection = () => {
@@ -172,13 +172,7 @@ const ProfileSection = () => {
 																<Typography variant="subtitle1">Toggle Light/Dark Theme</Typography>
 															</Grid>
 															<Grid item>
-																<Switch
-																	color="primary"
-																	checked={ sdm }
-																	onChange={ (e) => setSdm(e.target.checked) }
-																	name="sdm"
-																	size="small"
-																/>
+																<DarknessToggle />
 															</Grid>
 														</Grid>
 													</Grid>
