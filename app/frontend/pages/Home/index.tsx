@@ -2,7 +2,6 @@ import React from 'react'
 import { Head } from '@inertiajs/inertia-react'
 
 const Home = (props) => {
-
 	return (
 		<>
 			<Head title="Home"></Head>

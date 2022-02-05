@@ -88,7 +88,7 @@ declare namespace schema {
     id: number;
     shift_id: number;
     recurring_type: number | null;
-    separation_count: number | null;
+    offset: number | null;
     max_occurances: number | null;
     day_of_week: number | null;
     week_of_month: number | null;

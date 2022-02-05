@@ -101,7 +101,7 @@ ActiveRecord::Schema.define(version: 2022_01_31_203313) do
   create_table "recurring_patterns", force: :cascade do |t|
     t.bigint "shift_id", null: false
     t.integer "recurring_type"
-    t.integer "separation_count"
+    t.integer "offset"
     t.integer "max_occurances"
     t.integer "day_of_week"
     t.integer "week_of_month"
