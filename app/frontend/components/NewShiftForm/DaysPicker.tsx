@@ -1,34 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { useForm } from '@inertiajs/inertia-react'
-import { add } from 'date-fns'
-import { Link, AnimateButton } from '@/components'
-import { Routes } from '@/lib'
-import { useTheme } from '@mui/material/styles'
 import {
-	Autocomplete,
-	Box,
-	Button,
 	Checkbox,
-	Divider,
 	FormGroup,
 	FormControl,
 	FormControlLabel,
-	FormHelperText,
-	FormLabel,
-	Grid,
-	IconButton,
-	InputAdornment,
-	InputLabel,
-	MenuItem,
-	Select,
-	Stack,
-	Switch,
-	TextField,
-	Typography,
-	useMediaQuery
 } from '@mui/material'
-import { DateTimePicker } from '@mui/lab'
-import { useAuthState } from '@/Store'
 import { Set } from 'immutable'
 
 const DaysPicker = ({ setData }) => {

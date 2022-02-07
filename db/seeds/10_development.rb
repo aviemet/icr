@@ -35,8 +35,8 @@ if Rails.env == "development"
 
 	if Household.count == 0
 		h = Household.create({ name: "Test Household" })
-		h.clients << Clients.first
-		h.clients << Clients.second
+		h.clients << Client.first
+		h.clients << Client.second
 	end
 
 end

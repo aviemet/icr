@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react'
+import React, { useCallback } from 'react'
 import { useForm } from '@inertiajs/inertia-react'
 import { add, format } from 'date-fns'
 import { Link, AnimateButton } from '@/components'
+import { Form, Autocomplete, DateTimePicker, Submit } from '@/components/Form'
 import { Routes } from '@/lib'
 import { useTheme } from '@mui/material/styles'
 import {
-	Autocomplete,
+	// Autocomplete,
 	Box,
 	Button,
 	Checkbox,
@@ -30,19 +31,7 @@ import {
 // import { DateTimePicker } from '@mui/lab'
 import { useAuthState } from '@/Store'
 import DaysPicker from './DaysPicker'
-import DateTimePicker, { DatePicker, TimePicker } from './DateTimePicker'
 import Repeats from './Repeats'
-
-/**
- * TextField for TimePicker - full width and readonly
- * @param params TextField params
- */
-const TimeTextField = params => {
-	params.fullWidth = true
-	params.inputProps = params.inputProps || {}
-	params.inputProps.readOnly = true
-	return <TextField { ...params } />
-}
 
 interface INewShiftFormProps {
 	start: Date
@@ -57,28 +46,35 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, client, employees, 
 	const theme = useTheme()
 	const matchDownSM = useMediaQuery(theme.breakpoints.down('md'))
 
-	const { data, setData, post, transform, processing, errors } = useForm<{
-		starts_at: Date
-		ends_at: Date
-		client_ids: number[]
-		employee: number|undefined
-		created_by_id: number
-		recurring_type?: 'daily'|'weekly'|'monthly'|'yearly'
-		offset?: number
-		max_occurances?: string
-		day_of_week?: string
-		day_of_month?: string
-		month_of_year?: string
-	}>({
+	const data = {
 		starts_at: start,
 		ends_at: add(start, { hours: 8 }),
 		client_ids: [client.id],
 		employee: undefined,
 		created_by_id: auth.user.id
-	})
+	}
 
-	const handleSubmit = e => {
-		e.preventDefault()
+	// const { data, setData, post, transform, processing, errors } = useForm<{
+	// 	starts_at: Date
+	// 	ends_at: Date
+	// 	client_ids: number[]
+	// 	employee: number|undefined
+	// 	created_by_id: number
+	// 	recurring_type?: 'daily'|'weekly'|'monthly'|'yearly'
+	// 	offset?: number
+	// 	max_occurances?: string
+	// 	day_of_week?: string
+	// 	day_of_month?: string
+	// 	month_of_year?: string
+	// }>({
+	// 	starts_at: start,
+	// 	ends_at: add(start, { hours: 8 }),
+	// 	client_ids: [client.id],
+	// 	employee: undefined,
+	// 	created_by_id: auth.user.id
+	// })
+
+	const handleSubmit = ({ transform, post }) => {
 		// @ts-ignore
 		transform(data => ({
 			shift: {
@@ -102,60 +98,35 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, client, employees, 
 		})
 	}
 
-	useEffect(() => {
-		console.log({ offsetForm: data.offset })
-	}, [data.offset])
-
 	return (
-		<form noValidate onSubmit={ handleSubmit }>
+		<Form noValidate onSubmit={ handleSubmit }>
 			<Grid container spacing={ matchDownSM ? 0 : 2 }>
 				{ /* Employee */ }
 				<Grid item xs={ 12 }>
 					<Autocomplete
-						fullWidth
-						disablePortal
-						size="small"
-						id="combo-box-demo"
-						options={ employees.map(e => ({
+						label="Employee"
+						name="employee"
+						options={ useCallback(() => employees.map(e => ({
 							label: `${e.f_name} ${e.l_name}`,
 							id: e.id
-						})) }
-						onChange={ (_, newValue) => setData('employee', newValue?.id) }
-						aria-describedby="employee-error-text"
-						renderInput={ params => {
-							params.fullWidth = true
-							return <TextField
-								variant="standard"
-								{ ...params }
-								inputProps={ { ...params.inputProps } }
-								error={ !!errors.employee }
-								value={ `${data['employee']}` }
-								label="Employee"
-							/>
-						} }
+						})), [employees])() }
 					/>
-					{ errors.employee && <FormHelperText id="employee-error-text">{ errors.employee }</FormHelperText> }
 				</Grid>
 
 				{ /* Start */ }
 				<Grid container item xs={ 12 } md={ 6 }>
 					<Grid item xs={ 8 }>
-						<DatePicker
+						<DateTimePicker
+							name="starts_at"
 							label="Start"
-							value={ data['starts_at'] }
-							onChange={ val => {
-								if(!(val instanceof Date)) return
-								setData('starts_at', val)
-							} }
+							inputFormat="EEEE, MMM do"
 						/>
 					</Grid>
 					<Grid item xs={ 4 }>
-						<TimePicker
-							value={ data['starts_at'] }
-							onChange={ val => {
-								if(!(val instanceof Date)) return
-								setData('starts_at', val)
-							} }
+						<DateTimePicker
+							name="starts_at"
+							openTo="hours"
+							inputFormat="hh:mm a"
 						/>
 					</Grid>
 				</Grid>
@@ -163,40 +134,31 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, client, employees, 
 				{ /* End */ }
 				<Grid container item xs={ 12 } md={ 6 }>
 					<Grid item xs={ 4 }>
-						<TimePicker
-							value={ data['ends_at'] }
-							onChange={ val => {
-								if(!(val instanceof Date)) return
-								setData('ends_at', val)
-							} }
+						<DateTimePicker
+							name="ends_at"
+							openTo="hours"
+							inputFormat="hh:mm a"
 						/>
 					</Grid>
 					<Grid item xs={ 8 }>
-						<DatePicker
+						<DateTimePicker
+							name="ends_at"
 							label="End"
-							value={ data['ends_at'] }
-							onChange={ val => {
-								if(!(val instanceof Date)) return
-								setData('ends_at', val)
-							} }
+							inputFormat="EEEE, MMM do"
 						/>
 					</Grid>
 				</Grid>
 
 				{ /* Repeats */ }
-				<Repeats data={ data } setData={ setData } />
+				{ /* <Repeats data={ data } setData={ setData } /> */ }
 
 				<Grid item xs={ 12 }>
 					<Box sx={ { mt: 2 } }>
-						<AnimateButton>
-							<Button disableElevation fullWidth size="large" type="submit" variant="contained" color="secondary" disabled={ processing }>
-								Save Shift
-							</Button>
-						</AnimateButton>
+						<Submit />
 					</Box>
 				</Grid>
 			</Grid>
-		</form>
+		</Form>
 	)
 }
 
