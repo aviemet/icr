@@ -3,7 +3,7 @@ import { Inertia } from '@inertiajs/inertia'
 import { Routes } from '@/lib'
 import { Calendar, Views, dateFnsLocalizer } from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
-import { format, parse, startOfWeek, getDay, add, set } from 'date-fns'
+import { format, parse, startOfWeek, getDay, set } from 'date-fns'
 import enUS from 'date-fns/locale/en-US'
 import {
 	Box,

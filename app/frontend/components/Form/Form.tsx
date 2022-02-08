@@ -9,19 +9,22 @@ export const useForm = () => useContext(FormContext)
 
 interface IFormProps extends FormProps {
 	data: Record<string, string>
+	to: string
 	onSubmit: (object) => void
 }
 
-const Form = ({ children, data, onSubmit, ...props }: IFormProps) => {
+const Form = ({ children, data, method = 'post', to, onSubmit, ...props }: IFormProps) => {
+	console.log('render')
 	const form = useInertiaForm(data)
 
 	const handleSubmit = e => {
 		e.preventDefault()
 		onSubmit(form)
+		form[method.toLocaleLowerCase()](to)
 	}
 
 	useEffect(() => {
-		console.log({ data: form.data })
+		console.log(form.data)
 	}, [form.data])
 
 	return (
@@ -33,4 +36,4 @@ const Form = ({ children, data, onSubmit, ...props }: IFormProps) => {
 	)
 }
 
-export default Form
+export default React.memo(Form)

@@ -33,12 +33,26 @@ import { useAuthState } from '@/Store'
 import DaysPicker from './DaysPicker'
 import Repeats from './Repeats'
 
+type TFormData = {
+	starts_at: Date
+	ends_at: Date
+	client_ids: number[]
+	employee: number|undefined
+	created_by_id: number
+	recurring_type?: 'daily'|'weekly'|'monthly'|'yearly'
+	offset?: number
+	max_occurances?: string
+	day_of_week?: string
+	day_of_month?: string
+	month_of_year?: string
+}
+
 interface INewShiftFormProps {
 	start: Date
 	end: Date
 	client: schema.Person
 	employees: schema.Person[]
-	onSubmit: () => void
+	onSubmit?: () => void
 }
 
 const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, client, employees, onSubmit }) => {
@@ -46,7 +60,7 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, client, employees, 
 	const theme = useTheme()
 	const matchDownSM = useMediaQuery(theme.breakpoints.down('md'))
 
-	const data = {
+	const data: TFormData = {
 		starts_at: start,
 		ends_at: add(start, { hours: 8 }),
 		client_ids: [client.id],
@@ -54,28 +68,7 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, client, employees, 
 		created_by_id: auth.user.id
 	}
 
-	// const { data, setData, post, transform, processing, errors } = useForm<{
-	// 	starts_at: Date
-	// 	ends_at: Date
-	// 	client_ids: number[]
-	// 	employee: number|undefined
-	// 	created_by_id: number
-	// 	recurring_type?: 'daily'|'weekly'|'monthly'|'yearly'
-	// 	offset?: number
-	// 	max_occurances?: string
-	// 	day_of_week?: string
-	// 	day_of_month?: string
-	// 	month_of_year?: string
-	// }>({
-	// 	starts_at: start,
-	// 	ends_at: add(start, { hours: 8 }),
-	// 	client_ids: [client.id],
-	// 	employee: undefined,
-	// 	created_by_id: auth.user.id
-	// })
-
-	const handleSubmit = ({ transform, post }) => {
-		// @ts-ignore
+	const handleSubmit = ({ transform, wasSuccessful, post }) => {
 		transform(data => ({
 			shift: {
 				starts_at: data.starts_at,
@@ -93,13 +86,11 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, client, employees, 
 				}
 			}
 		}))
-		post(Routes.shifts(), {
-			onSuccess: () => { if(onSubmit) onSubmit() }
-		})
+		if(wasSuccessful && onSubmit) onSubmit()
 	}
 
 	return (
-		<Form noValidate onSubmit={ handleSubmit }>
+		<Form noValidate onSubmit={ handleSubmit } to={ Routes.shifts() } data={ data }>
 			<Grid container spacing={ matchDownSM ? 0 : 2 }>
 				{ /* Employee */ }
 				<Grid item xs={ 12 }>
@@ -150,13 +141,14 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, client, employees, 
 				</Grid>
 
 				{ /* Repeats */ }
-				{ /* <Repeats data={ data } setData={ setData } /> */ }
+				<Repeats />
 
 				<Grid item xs={ 12 }>
 					<Box sx={ { mt: 2 } }>
 						<Submit />
 					</Box>
 				</Grid>
+
 			</Grid>
 		</Form>
 	)

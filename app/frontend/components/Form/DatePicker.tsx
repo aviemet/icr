@@ -1,19 +1,19 @@
 import React, { useState } from 'react'
 import { TextField } from '@mui/material'
-import MuiDateTimePicker, { DateTimePickerProps } from '@mui/lab/DateTimePicker'
+import MuiDatePicker, { DatePickerProps } from '@mui/lab/DatePicker'
 import { useForm } from './Form'
 
-interface IDTPickerProps extends Omit<DateTimePickerProps, 'renderInput'>{
+interface IDatePickerProps extends Omit<DatePickerProps, 'renderInput'>{
 	name: string
 }
 
-const DateTimePicker = ({ name, label, value, onChange, ...props }: IDTPickerProps) => {
+const DateTimePicker = ({ name, label, value, onChange, ...props }: IDatePickerProps) => {
 	const [open, setOpen] = useState(false)
 
 	const { data, setData, errors } = useForm()
 
 	return (
-		<MuiDateTimePicker
+		<MuiDatePicker
 			open={ open }
 			onOpen={ () => setOpen(true) }
 			onClose={ () => setOpen(false) }

@@ -3,31 +3,25 @@ import {
 	Box,
 	Button,
 	ButtonGroup,
-	Divider,
 	FormGroup,
 	FormControl,
 	FormControlLabel,
-	FormHelperText,
 	FormLabel,
 	Grid,
-	IconButton,
-	InputAdornment,
 	InputBase,
-	InputLabel,
 	MenuItem,
-	OutlinedInput,
 	Paper,
+	Radio,
+	RadioGroup,
 	Select,
-	Stack,
 	Switch,
-	TextField,
-	Typography,
-	useMediaQuery
 } from '@mui/material'
 import DaysPicker from './DaysPicker'
-import DateTimePicker, { DatePicker, TimePicker } from './DateTimePicker'
+import { useForm, DatePicker, NumberInput } from '@/components/Form'
 
-const Repeats = ({ data, setData }) => {
+const Repeats = () => {
+	const { data, setData } = useForm()
+
 	const [repeats, setRepeats] = useState(false)
 
 	const pluralize = () => {
@@ -38,9 +32,20 @@ const Repeats = ({ data, setData }) => {
 
 	useEffect(() => {
 		setData({
+			...data,
 			offset: repeats ? 1 : undefined,
 			recurring_type: repeats ? 'daily' : undefined
 		})
+		if(!repeats) {
+			setData({
+				...data,
+				max_occurances: undefined,
+				day_of_week: undefined,
+				week_of_month: undefined,
+				day_of_month: undefined,
+				month_of_year: undefined
+			})
+		}
 	}, [repeats])
 
 	return (
@@ -48,6 +53,7 @@ const Repeats = ({ data, setData }) => {
 			<Grid item xs={ 12 }>
 				<FormGroup>
 					<Grid container>
+						{ /* Toggle */ }
 						<Grid item xs={ 4 }>
 							<FormControlLabel
 					 			label={ repeats ? 'Repeats Every' : 'Does Not Repeat' }
@@ -59,10 +65,12 @@ const Repeats = ({ data, setData }) => {
 						</Grid>
 
 						{ repeats && <>
+							{ /* Offset */ }
 							<Grid item xs={ 3 }>
-								<GroupedButtons value={ data['offset'] } onChange={ count => setData('offset', count) } min={ 1 } />
+								<NumberInput name="offset" min={ 1 } />
 							</Grid>
 
+							{ /* Reccurance Type */ }
 							<Grid item xs={ 5 }>
 								<FormControl>
 									<Select
@@ -82,30 +90,53 @@ const Repeats = ({ data, setData }) => {
 									</Select>
 								</FormControl>
 							</Grid>
+
+							{ /* Weekday Checkboxes */ }
+							{ data.recurring_type === 'weekly' &&
+								<Grid item xs={ 12 }>
+									<Box sx={ { mt: 2 } }>
+										<DaysPicker setData={ setData } />
+									</Box>
+								</Grid>
+							}
+
+							{ /* Recurrance End Criteria */ }
+							<Grid item xs={ 12 }>
+								<FormControl>
+									<FormLabel id="recurrance-ending-label">Ends</FormLabel>
+									<RadioGroup
+										aria-labelledby="recurrance-ending-label"
+										defaultValue="never"
+										name="radio-buttons-group"
+									>
+										<FormControlLabel value="never" control={ <Radio /> } label="Never" />
+										<FormControlLabel value="date" control={ <Radio /> } label={ <>
+											<label>On</label><DatePicker name="end_date" inputFormat="EEEE, MMM do" />
+										</> } />
+										<FormControlLabel value="occurances" control={ <Radio /> } label="After" />
+									</RadioGroup>
+								</FormControl>
+							</Grid>
 						</> }
+
 					</Grid>
 				</FormGroup>
 			</Grid>
 
-			{ data.recurring_type === 'weekly' && <Grid item xs={ 12 }>
-				<Box sx={ { mt: 2 } }>
-					<DaysPicker setData={ setData } />
-				</Box>
-			</Grid> }
 		</>
 	)
 }
 
 export default Repeats
 
-interface IGroupedButtonsProps {
+interface IWeekdayButtonsProps {
 	value: number
 	onChange: (count: number) => void
 	min?: number
 	max?: number
 }
 
-const GroupedButtons = ({ value, min, max, onChange }: IGroupedButtonsProps) => {
+const WeekdayButtons = ({ value, min, max, onChange }: IWeekdayButtonsProps) => {
 	const handleIncrement = () => {
 		if(max === undefined || value + 1 <= max) onChange(value + 1)
 	}

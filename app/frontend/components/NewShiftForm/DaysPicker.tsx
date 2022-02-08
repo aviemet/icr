@@ -20,7 +20,6 @@ const DaysPicker = ({ setData }) => {
 
 	useEffect(() => {
 		setData('day_of_week', days.toArray().join(' '))
-		console.log(days.toArray())
 	}, [days])
 
 	useEffect(() => {

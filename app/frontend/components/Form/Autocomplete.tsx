@@ -17,11 +17,8 @@ const Autocomplete = ({ label, id, valueKey, name, options, ...props }: IAutocom
 	const { data, setData, errors } = useForm()
 
 	const handleChange = (event, value) => {
-		console.log({ name, value })
 		setData(name, value?.[valueKey || 'id'])
 	}
-
-	console.log({ data })
 
 	return (
 		<>

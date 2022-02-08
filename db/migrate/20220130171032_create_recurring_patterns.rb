@@ -5,6 +5,7 @@ class CreateRecurringPatterns < ActiveRecord::Migration[7.0]
       t.integer :recurring_type
       t.integer :offset
       t.integer :max_occurances
+      t.integer :end_date
       t.integer :day_of_week
       t.integer :week_of_month
       t.integer :day_of_month
