@@ -54,6 +54,9 @@ group :development, :test do
   gem "rubocop-rspec", "~> 2.7"
   gem "rubocop-performance", "~> 1.13"
   gem "rubocop-daemon", "~> 0.3.2"
+
+  # Routes
+  gem "js-routes", "~> 2.2"
 end
 
 group :development do
@@ -66,9 +69,6 @@ group :development do
   # Live Reload
   gem "rack-livereload", "~> 0.3.17"
   gem "guard-livereload", "~> 2.5", require: false
-
-  # Routes
-  gem "js-routes", "~> 2.2"
 
   # Typescript schema generation
   gem "schema2type", "~> 0.4.0"

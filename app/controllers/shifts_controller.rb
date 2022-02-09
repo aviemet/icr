@@ -49,7 +49,7 @@ class ShiftsController < InertiaController
       :created_by_id,
       :is_recurring,
       client_ids: [],
-      recurring_pattern: [
+      recurring_pattern_attributes: [
         :recurring_type,
         :separation_count,
         :offset,
