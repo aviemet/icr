@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useForm } from '@inertiajs/inertia-react'
 import { add, format } from 'date-fns'
 import { Link, AnimateButton } from '@/components'
@@ -39,10 +39,14 @@ type TFormData = {
 	client_ids: number[]
 	employee: number|undefined
 	created_by_id: number
+	is_recurring?: boolean
 	recurring_type?: 'daily'|'weekly'|'monthly'|'yearly'
 	offset?: number
+	end_type?: 'never'|'date'|'occurances'
+	end_date?: Date
 	max_occurances?: string
 	day_of_week?: string
+	week_of_month?: string
 	day_of_month?: string
 	month_of_year?: string
 }
@@ -60,37 +64,47 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, client, employees, 
 	const theme = useTheme()
 	const matchDownSM = useMediaQuery(theme.breakpoints.down('md'))
 
-	const data: TFormData = {
+	const defaultData: TFormData = {
 		starts_at: start,
 		ends_at: add(start, { hours: 8 }),
 		client_ids: [client.id],
 		employee: undefined,
-		created_by_id: auth.user.id
+		created_by_id: auth.user.id,
+		is_recurring: false,
 	}
 
-	const handleSubmit = ({ transform, wasSuccessful, post }) => {
-		transform(data => ({
+	const handleSubmit = ({ transform, wasSuccessful }) => {
+		const dataForRails = data => Object.assign({
 			shift: {
 				starts_at: data.starts_at,
 				ends_at: data.ends_at,
 				client_ids: data.client_ids,
 				employee_id: data.employee,
-				created_by_id: data.created_by_id,
-				recurring_pattern_attributes: {
+				created_by_id: data.created_by_id
+			}
+		}, data.is_recurring ? {
+			shift: {
+				recurring_pattern: {
 					recurring_type: data.recurring_type,
 					offset: data.offset,
-					max_occurances: data.max_occurances,
+					end_date: data.end_type === 'date' ? data.end_date : undefined,
+					max_occurances: data.end_type === 'occurances' ? data.max_occurances : undefined,
 					day_of_week: data.day_of_week,
+					week_of_month: data.week_of_month,
 					day_of_month: data.day_of_month,
 					month_of_year: data.month_of_year,
 				}
 			}
-		}))
+		} : {} )
+		transform(data => {
+			console.log({ submit: dataForRails(data) })
+			return dataForRails(data)
+		})
 		if(wasSuccessful && onSubmit) onSubmit()
 	}
 
 	return (
-		<Form noValidate onSubmit={ handleSubmit } to={ Routes.shifts() } data={ data }>
+		<Form noValidate onSubmit={ handleSubmit } to={ Routes.shifts() } data={ defaultData }>
 			<Grid container spacing={ matchDownSM ? 0 : 2 }>
 				{ /* Employee */ }
 				<Grid item xs={ 12 }>

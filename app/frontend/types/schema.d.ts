@@ -86,10 +86,10 @@ declare namespace schema {
 
   type RecurringPattern = {
     id: number;
-    shift_id: number;
-    recurring_type: number | null;
-    offset: number | null;
+    recurring_type: number;
+    offset: number;
     max_occurances: number | null;
+    end_date: number | null;
     day_of_week: number | null;
     week_of_month: number | null;
     day_of_month: number | null;
@@ -113,7 +113,7 @@ declare namespace schema {
     id: number;
     starts_at: string | null;
     ends_at: string | null;
-    is_recurring: boolean | null;
+    recurring_pattern_id: number | null;
     employee_id: number | null;
     created_by_id: number;
     parent_id: number | null;

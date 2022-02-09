@@ -70,7 +70,7 @@ const NumberInput = ({ name, min, max, onChange }: INumberInputProps) => {
 	return (
 		<Paper
 			variant="outlined"
-			sx={ { pl: '4px', flex: 1, display: 'flex', alignItems: 'center', width: 60 } }
+			sx={ { pl: '4px', flex: 1, display: 'inline-flex', alignItems: 'center', width: 60 } }
 		>
 			<InputBase
 				size="small"

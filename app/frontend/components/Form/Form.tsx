@@ -10,22 +10,21 @@ export const useForm = () => useContext(FormContext)
 interface IFormProps extends FormProps {
 	data: Record<string, string>
 	to: string
-	onSubmit: (object) => void
+	onSubmit?: (object) => boolean|void
 }
 
 const Form = ({ children, data, method = 'post', to, onSubmit, ...props }: IFormProps) => {
-	console.log('render')
 	const form = useInertiaForm(data)
 
 	const handleSubmit = e => {
 		e.preventDefault()
-		onSubmit(form)
-		form[method.toLocaleLowerCase()](to)
+		let submit = true
+		if(onSubmit) {
+			const val = onSubmit(form)
+			if(val === true || val === false) submit = val
+		}
+		if(submit) form[method.toLocaleLowerCase()](to)
 	}
-
-	useEffect(() => {
-		console.log(form.data)
-	}, [form.data])
 
 	return (
 		<FormContext.Provider value={ form }>

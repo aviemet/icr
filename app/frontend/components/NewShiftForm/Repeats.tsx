@@ -18,11 +18,10 @@ import {
 } from '@mui/material'
 import DaysPicker from './DaysPicker'
 import { useForm, DatePicker, NumberInput } from '@/components/Form'
+import { add } from 'date-fns'
 
 const Repeats = () => {
 	const { data, setData } = useForm()
-
-	const [repeats, setRepeats] = useState(false)
 
 	const pluralize = () => {
 		if(data.offset && data.offset > 1) {
@@ -31,22 +30,34 @@ const Repeats = () => {
 	}
 
 	useEffect(() => {
-		setData({
-			...data,
-			offset: repeats ? 1 : undefined,
-			recurring_type: repeats ? 'daily' : undefined
-		})
-		if(!repeats) {
+		if(data.is_recurring) {
 			setData({
 				...data,
+				offset: 1,
+				end_type: 'never',
+				max_occurances: 10,
+				end_date: add(data.ends_at, { weeks: 1 }),
+				recurring_type: 'daily'
+			})
+		} else {
+			setData({
+				...data,
+				offset: undefined,
+				recurring_type: undefined,
+				end_type: undefined,
+				end_date: undefined,
 				max_occurances: undefined,
 				day_of_week: undefined,
 				week_of_month: undefined,
 				day_of_month: undefined,
-				month_of_year: undefined
+				month_of_year: undefined,
 			})
 		}
-	}, [repeats])
+	}, [data.is_recurring])
+
+	useEffect(() => {
+		console.log({ is_recurring: data.is_recurring })
+	}, [data.is_recurring])
 
 	return (
 		<>
@@ -56,15 +67,15 @@ const Repeats = () => {
 						{ /* Toggle */ }
 						<Grid item xs={ 4 }>
 							<FormControlLabel
-					 			label={ repeats ? 'Repeats Every' : 'Does Not Repeat' }
+					 			label={ data.is_recurring ? 'Repeats Every' : 'Does Not Repeat' }
 								control={ <Switch
-									checked={ repeats }
-									onChange={ e => setRepeats(e.target.checked) }
+									checked={ data.is_recurring }
+									onChange={ e => setData('is_recurring', e.target.checked) }
 								/> }
 							/>
 						</Grid>
 
-						{ repeats && <>
+						{ data.is_recurring && data['recurring_type'] !== undefined && <>
 							{ /* Offset */ }
 							<Grid item xs={ 3 }>
 								<NumberInput name="offset" min={ 1 } />
@@ -77,10 +88,10 @@ const Repeats = () => {
 										fullWidth
 										variant="standard"
 										id="repeat-shift-select"
-										value={ data.recurring_type || '' }
+										value={ data.recurring_type }
 										onChange={ (e) => {
 											const val = e.target.value
-											setData('recurring_type', val === '' ? undefined : val)
+											setData('recurring_type', val /*=== '' ? undefined : val*/)
 										} }
 									>
 										<MenuItem value='daily' selected>Day{ pluralize() }</MenuItem>
@@ -108,12 +119,18 @@ const Repeats = () => {
 										aria-labelledby="recurrance-ending-label"
 										defaultValue="never"
 										name="radio-buttons-group"
+										value={ data.end_type }
+										onChange={ e => setData('end_type', e.target.value) }
 									>
 										<FormControlLabel value="never" control={ <Radio /> } label="Never" />
 										<FormControlLabel value="date" control={ <Radio /> } label={ <>
-											<label>On</label><DatePicker name="end_date" inputFormat="EEEE, MMM do" />
+											On
+											<DatePicker name="end_date" inputFormat="EEEE, MMM do" />
 										</> } />
-										<FormControlLabel value="occurances" control={ <Radio /> } label="After" />
+										<FormControlLabel value="occurances" control={ <Radio /> } label={ <>
+											After
+											<NumberInput name="max_occurances" min={ 1 } />
+										</> } />
 									</RadioGroup>
 								</FormControl>
 							</Grid>
@@ -128,61 +145,3 @@ const Repeats = () => {
 }
 
 export default Repeats
-
-interface IWeekdayButtonsProps {
-	value: number
-	onChange: (count: number) => void
-	min?: number
-	max?: number
-}
-
-const WeekdayButtons = ({ value, min, max, onChange }: IWeekdayButtonsProps) => {
-	const handleIncrement = () => {
-		if(max === undefined || value + 1 <= max) onChange(value + 1)
-	}
-
-	const handleDecrement = () => {
-		if(min === undefined || value - 1 >= min) onChange(value - 1)
-	}
-
-	const buttonSx = {
-		lineHeight: 0.5,
-		padding: '5px 5px',
-		borderRadius: '7px',
-		borderBottomLeftRadius: 0,
-		borderTopLeftRadius: 0,
-	}
-
-	return (
-		<Paper
-			variant="outlined"
-			sx={ { pl: '4px', flex: 1, display: 'flex', alignItems: 'center', width: 60 } }
-		>
-			<InputBase
-				size="small"
-				inputProps={ {
-					inputMode: 'numeric',
-					pattern: '[0-9]*',
-				} }
-				name="interval"
-				value={ value || 0 }
-				onChange={ e => onChange(parseInt(e.target.value)) }
-				sx={ {
-					paddingTop: '4px',
-					width: 50,
-					ml: 1,
-					flex: 1
-				} }
-			/>
-			<ButtonGroup size="small" orientation="vertical" aria-label="small outlined button group" sx={ {
-				'.MuiButtonGroup-grouped': {
-					minWidth: 10
-				}
-			} }>
-				<Button onClick={ handleIncrement } sx={ buttonSx }>+</Button>
-				<Button onClick={ handleDecrement } sx={ buttonSx }>-</Button>
-			</ButtonGroup>
-		</Paper>
-	)
-}
-

@@ -1,4 +1,4 @@
-class ShiftsController < ApplicationController
+class ShiftsController < InertiaController
   # GET /schedules
   # Routes.shifts()
   def index
@@ -11,6 +11,7 @@ class ShiftsController < ApplicationController
   # POST /schedules
   # Routes.shifts()
   def create
+    ap({ shift_params: shift_params, params: params })
     @shift = Shift.create(shift_params)
 
     if @shift.persisted?
@@ -46,10 +47,13 @@ class ShiftsController < ApplicationController
       :ends_at,
       :employee_id,
       :created_by_id,
+      :is_recurring,
       client_ids: [],
-      recurring_pattern_attributes: [
+      recurring_pattern: [
         :recurring_type,
         :separation_count,
+        :offset,
+        :end_date,
         :max_occurances,
         :day_of_week,
         :day_of_month,

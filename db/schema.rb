@@ -99,17 +99,16 @@ ActiveRecord::Schema.define(version: 2022_01_31_203313) do
   end
 
   create_table "recurring_patterns", force: :cascade do |t|
-    t.bigint "shift_id", null: false
-    t.integer "recurring_type"
-    t.integer "offset"
+    t.integer "recurring_type", null: false
+    t.integer "offset", default: 1, null: false
     t.integer "max_occurances"
+    t.integer "end_date"
     t.integer "day_of_week"
     t.integer "week_of_month"
     t.integer "day_of_month"
     t.integer "month_of_year"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["shift_id"], name: "index_recurring_patterns_on_shift_id"
   end
 
   create_table "shift_exceptions", force: :cascade do |t|
@@ -126,7 +125,7 @@ ActiveRecord::Schema.define(version: 2022_01_31_203313) do
   create_table "shifts", force: :cascade do |t|
     t.datetime "starts_at", precision: 6
     t.datetime "ends_at", precision: 6
-    t.boolean "is_recurring", default: false
+    t.bigint "recurring_pattern_id"
     t.bigint "employee_id"
     t.bigint "created_by_id", null: false
     t.bigint "parent_id"
@@ -135,6 +134,7 @@ ActiveRecord::Schema.define(version: 2022_01_31_203313) do
     t.index ["created_by_id"], name: "index_shifts_on_created_by_id"
     t.index ["employee_id"], name: "index_shifts_on_employee_id"
     t.index ["parent_id"], name: "index_shifts_on_parent_id"
+    t.index ["recurring_pattern_id"], name: "index_shifts_on_recurring_pattern_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -172,9 +172,9 @@ ActiveRecord::Schema.define(version: 2022_01_31_203313) do
   add_foreign_key "emails", "contacts"
   add_foreign_key "people", "users"
   add_foreign_key "phones", "contacts"
-  add_foreign_key "recurring_patterns", "shifts"
   add_foreign_key "shift_exceptions", "shifts"
   add_foreign_key "shifts", "people", column: "employee_id"
+  add_foreign_key "shifts", "recurring_patterns"
   add_foreign_key "shifts", "shifts", column: "parent_id"
   add_foreign_key "shifts", "users", column: "created_by_id"
 end

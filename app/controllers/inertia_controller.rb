@@ -1,0 +1,2 @@
+class InertiaController < ApplicationController
+end

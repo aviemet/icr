@@ -1,4 +1,4 @@
-class ClientsController < ApplicationController
+class ClientsController < InertiaController
   before_action :set_client, only: %i[show edit schedule update destroy]
   before_action :set_clients, only: %i[index]
 

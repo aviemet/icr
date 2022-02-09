@@ -1,9 +1,8 @@
 class CreateRecurringPatterns < ActiveRecord::Migration[7.0]
   def change
     create_table :recurring_patterns do |t|
-      t.references :shift, null: false, foreign_key: true
-      t.integer :recurring_type
-      t.integer :offset
+      t.integer :recurring_type, null: false
+      t.integer :offset, null: false, default: 1
       t.integer :max_occurances
       t.integer :end_date
       t.integer :day_of_week
