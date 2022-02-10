@@ -1,5 +1,5 @@
 class Employee < Person
-	has_many :shifts, dependent: :nullify
+  has_many :shifts, dependent: :nullify
 
   before_validation :set_person_type
 

@@ -411,10 +411,10 @@ DEPENDENCIES
   rack-livereload (~> 0.3.17)
   rails (~> 7.0.1)
   rspec-rails (~> 5.0)
-  rubocop-daemon (~> 0.3.2)
-  rubocop-performance (~> 1.13)
-  rubocop-rails (~> 2.13)
-  rubocop-rspec (~> 2.7)
+  rubocop-daemon
+  rubocop-performance
+  rubocop-rails
+  rubocop-rspec
   schema2type (~> 0.4.0)
   selenium-webdriver
   slug (~> 4.1)

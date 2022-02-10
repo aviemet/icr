@@ -1,4 +1,4 @@
-require 'tzinfo'
+require "tzinfo"
 
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
@@ -8,5 +8,5 @@ class User < ApplicationRecord
 
   has_one :person, dependent: :nullify
 
-	validates_inclusion_of :time_zone, :in => TZInfo::Timezone.all_data_zone_identifiers
+  validates :time_zone, inclusion: { in: TZInfo::Timezone.all_data_zone_identifiers }
 end

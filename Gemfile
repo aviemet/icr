@@ -50,10 +50,10 @@ group :development, :test do
   gem "debug", platforms: %i[mri mingw x64_mingw]
   gem "better_errors", "~> 2.9"
   gem "solargraph", "~> 0.44.2"
-  gem "rubocop-rails", "~> 2.13"
-  gem "rubocop-rspec", "~> 2.7"
-  gem "rubocop-performance", "~> 1.13"
-  gem "rubocop-daemon", "~> 0.3.2"
+  gem "rubocop-rails", require: false
+  gem "rubocop-rspec", require: false
+  gem "rubocop-performance", require: false
+  gem "rubocop-daemon", require: false
 
   # Routes
   gem "js-routes", "~> 2.2"
