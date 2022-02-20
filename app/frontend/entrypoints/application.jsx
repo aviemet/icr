@@ -3,7 +3,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import axios from 'axios'
 import { InertiaProgress } from '@inertiajs/progress'
-import { AuthLayout, AppLayout } from '../layouts'
+import { AuthLayout, AppLayout } from '../Layouts'
 import dynamicImport from '../dynamicImport'
 
 document.addEventListener('DOMContentLoaded', () => {

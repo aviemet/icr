@@ -21,7 +21,7 @@ RSpec.describe "Shifts", type: :request do
 
       expect {
         post shifts_url, params: message
-      }.to change { Shift.count }.by(1)
+      }.to change(Shift, :count).by(1)
       shift = Shift.last
       expect(shift.recurring_pattern).to exist
     end

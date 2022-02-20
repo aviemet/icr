@@ -1,7 +1,7 @@
 /**
  * Password validator for login pages
  */
-import colors from 'layouts/theme/colors'
+import colors from '@/Layouts/theme/colors'
 
 // has number
 const hasNumber = str => new RegExp(/[0-9]/).test(str)

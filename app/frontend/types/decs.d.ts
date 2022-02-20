@@ -8,7 +8,6 @@ export declare module '@mui/material/styles' {
 	}
 }
 
-
 declare module '@mui/material/styles/createPalette' {
 	export interface Palette {
 		orange: Partial<Color>

@@ -174,3 +174,11 @@ Rails/DynamicFindBy:
 
 Bundler/OrderedGems:
   Enabled: false
+
+# RSpec Cops
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false

@@ -1,5 +1,5 @@
 import React from 'react'
-import theme from '@/layouts/theme'
+import theme from '@/Layouts/theme'
 import { ThemeProvider } from '@mui/material/styles'
 import { CssBaseline, StyledEngineProvider } from '@mui/material'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'

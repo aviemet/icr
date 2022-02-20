@@ -24,11 +24,6 @@ class ShiftsController < InertiaController
   # PATCH/PUT /schedules/:id
   # Routes.shifts(id)
   def update
-    if @shift.update(shift_params)
-      
-    else
-      
-    end
   end
 
   private

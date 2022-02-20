@@ -1,5 +1,7 @@
 import React from 'react'
 
+const PagesDir = 'Pages'
+
 /**
  * Explicit import paths for rollup dyanimc import plugin
  * This limits directory nesting for page entry points to 3 levels
@@ -13,11 +15,11 @@ const dynamicImport = async (name: string): Promise<React.ReactNode|void> => {
 	const path = name.split('/')
 	switch (path.length) {
 		case 1:
-			return (await import(`./pages/${name}/index.tsx`)).default
+			return (await import(`./${PagesDir}/${name}/index.tsx`)).default
 		case 2:
-			return (await import(`./pages/${path[0]}/${path[1]}/index.tsx`)).default
+			return (await import(`./${PagesDir}/${path[0]}/${path[1]}/index.tsx`)).default
 		case 3:
-			return (await import(`./pages/${path[0]}/${path[1]}/${path[2]}/index.tsx`)).default
+			return (await import(`./${PagesDir}/${path[0]}/${path[1]}/${path[2]}/index.tsx`)).default
 		default:
 			console.error(`Provided path ${path} is not supported. Must be between 1 and 3 levels deep only`)
 	}
