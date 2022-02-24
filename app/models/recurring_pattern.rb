@@ -1,5 +1,5 @@
 class RecurringPattern < ApplicationRecord
-  belongs_to :shift
+  has_one :shift, dependent: :destroy
 
   enum recurring_type: {
     daily: 10,

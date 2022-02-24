@@ -75,7 +75,7 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, client, employees, 
 
 	const handleSubmit = ({ transform, wasSuccessful }) => {
 		const dataForRails = data => {
-			const shift: Record<string, any> = {
+			const submitData: Record<string, any> = {
 				shift: {
 					starts_at: data.starts_at,
 					ends_at: data.ends_at,
@@ -86,7 +86,7 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, client, employees, 
 			}
 
 			if(data.is_recurring) {
-				shift.recurring_pattern_attributes = {
+				submitData.shift.recurring_pattern_attributes = {
 					recurring_type: data.recurring_type,
 					offset: data.offset,
 					end_date: data.end_type === 'date' ? data.end_date : undefined,
@@ -97,7 +97,7 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, client, employees, 
 					month_of_year: data.month_of_year,
 				}
 			}
-			return shift
+			return submitData
 		}
 		transform(data => {
 			console.log({ submit: dataForRails(data) })
