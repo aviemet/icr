@@ -53,20 +53,20 @@ type TFormData = {
 
 interface INewShiftFormProps {
 	start: Date
-	end: Date
+	end?: Date
 	client: schema.Person
 	employees: schema.Person[]
 	onSubmit?: () => void
 }
 
-const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, client, employees, onSubmit }) => {
+const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, end, client, employees, onSubmit }) => {
 	const [auth, _] = useAuthState()
 	const theme = useTheme()
 	const matchDownSM = useMediaQuery(theme.breakpoints.down('md'))
 
 	const defaultData: TFormData = {
 		starts_at: start,
-		ends_at: add(start, { hours: 8 }),
+		ends_at: end || add(start, { hours: 8 }),
 		client_ids: [client.id],
 		employee: undefined,
 		created_by_id: auth.user.id,

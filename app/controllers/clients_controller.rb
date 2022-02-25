@@ -38,9 +38,11 @@ class ClientsController < InertiaController
     render inertia: "Clients/Schedule", props: {
       client: @client.decorate.as_json,
       employees: -> { @employees.decorate },
-      shifts: -> { @shifts.decorate.as_json({
-        include: [:clients, :employee],
-      }) },
+      shifts: lambda {
+                @shifts.decorate.as_json({
+                  include: [:clients, :employee, :recurring_pattern],
+                })
+              },
     }
   end
 

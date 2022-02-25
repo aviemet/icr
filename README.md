@@ -2,6 +2,16 @@
 
 ## Conventions
 
+### Vite tsconfig-paths
+
+Using tsconfig-paths allows static imports, but it does not recognize `baseUrl`. Use `@/` as an alias for the root directory as such:
+
+```javascript
+import Component from '@/Components/Component'
+```
+
+### Vite Dynamic Imports
+
 Using Vite with the dynamic import plugin for rollup requires dynamic imports to be explicitly defined by path depth and must end with a file extension:
 
 ```javascript
@@ -15,7 +25,7 @@ import(`some-library/${bar}.js`)
 import(`./foo/${bar}.js`)
 ```
 
-The dynamic imports for Inertia have been explicitly defined in `app/frontend/dynamicImports.ts` to adhere to these requirements, which imposes specific constraints on folder structure.
+The dynamic imports for Inertia have been explicitly defined in `app/frontend/dynamicImports.ts` to adhere to these requirements, which imposes specific constraints on folder structure in the Pages directory.
 
 * All entrypoints must be an `index.tsx` file in a directory named for the route
 * Maximum depth of 3 folder levels for any page entrypoint

@@ -1,6 +1,6 @@
 import React, { useState, useEffect }  from 'react'
 import { Inertia } from '@inertiajs/inertia'
-import { Routes } from '@/lib'
+import { Routes, expandRecurringShifts } from '@/lib'
 import { Calendar, Views, dateFnsLocalizer } from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import { format, parse, startOfWeek, getDay, set } from 'date-fns'
@@ -31,7 +31,7 @@ const localizer = dateFnsLocalizer({
 
 const Schedule = ({ client, employees, shifts }) => {
 	const [modalOpen, setModalOpen] = useState(false)
-	const [newShiftStart, setNewShiftStart] = useState<Date>()
+	const [newShiftStart, setNewShiftStart] = useState<Date>(new Date())
 
 	const handleSelect = ({ start }: { start: Date }) => {
 		setNewShiftStart(set(start, { hours: 8 }))
@@ -50,6 +50,8 @@ const Schedule = ({ client, employees, shifts }) => {
 		console.log({ params })
 	}
 
+
+
 	return (
 		<>
 			<h1>{ client.full_name }</h1>
@@ -58,7 +60,7 @@ const Schedule = ({ client, employees, shifts }) => {
 					selectable
 					showAllEvents={ true }
 					localizer={ localizer }
-					events={ shifts.map(shift => (
+					events={ expandRecurringShifts(shifts).map(shift => (
 						{
 							title: shift.title,
 							start: new Date(shift.starts_at),
