@@ -1,6 +1,4 @@
 class ShiftsController < InertiaController
-  before_action :log_things
-
   # GET /schedules
   # Routes.shifts()
   def index
@@ -28,10 +26,6 @@ class ShiftsController < InertiaController
   def update; end
 
   private
-
-  def log_things
-    ap({ params: params })
-  end
 
   def set_shift
     @shift = Shift.find(params[:id])

@@ -124,8 +124,18 @@ Style/BlockComments:
 # Layout Cops
 
 Layout/ArgumentAlignment:
+  EnforcedStyle: with_fixed_indentation
   Exclude:
     - 'config/initializers/*'
+  Enabled: true
+
+Layout/ArrayAlignment:
+  EnforcedStyle: with_fixed_indentation
+  Enabled: true
+
+Layout/BlockAlignment:
+  EnforcedStyleAlignWith: start_of_block
+  Enabled: true
 
 Layout/FirstHashElementIndentation:
   Enabled: false

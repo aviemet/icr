@@ -1,9 +1,9 @@
 import React, { useState, useEffect }  from 'react'
 import { Inertia } from '@inertiajs/inertia'
-import { Routes, expandRecurringShifts } from '@/lib'
+import { Routes } from '@/lib'
 import { Calendar, Views, dateFnsLocalizer } from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
-import { format, parse, startOfWeek, getDay, set } from 'date-fns'
+import { format, parse, startOfWeek, getDay, set, add, differenceInDays } from 'date-fns'
 import enUS from 'date-fns/locale/en-US'
 import {
 	Box,
@@ -32,6 +32,7 @@ const localizer = dateFnsLocalizer({
 const Schedule = ({ client, employees, shifts }) => {
 	const [modalOpen, setModalOpen] = useState(false)
 	const [newShiftStart, setNewShiftStart] = useState<Date>(new Date())
+	const [initialDay, setInitialDay] = useState<Date>()
 
 	const handleSelect = ({ start }: { start: Date }) => {
 		setNewShiftStart(set(start, { hours: 8 }))
@@ -39,18 +40,40 @@ const Schedule = ({ client, employees, shifts }) => {
 	}
 
 	const handleDateChange = params => {
-		console.log({ params })
+		console.log({ date: params })
 	}
 
 	const handleViewChange = params => {
-		console.log({ params })
+		console.log({ view: params })
 	}
 
 	const handleRangeChange = params => {
-		console.log({ params })
+		const start = format(params.start, 'y-MM-dd')
+		const end = format(params.end, 'y-MM-dd')
+		console.log({ start, end })
+		Inertia.get(`/clients/${client.slug}/schedule`,
+			{ start, end },
+			{
+				only: ['shifts'],
+				preserveState: true,
+				preserveScroll: true,
+			}
+		)
 	}
 
+	const defaultDate = () => {
+		const params = new URLSearchParams(window.location.search)
+		const start = params.get('start')
+		const end = params.get('end')
+		if(start && end) {
+			const startDate = new Date(start)
+			const days = Math.abs(differenceInDays(startDate, new Date(end)))
+			const defaultDate = add(startDate, { days: days })
+			return defaultDate
+		}
+	}
 
+	console.log({ shifts })
 
 	return (
 		<>
@@ -60,13 +83,14 @@ const Schedule = ({ client, employees, shifts }) => {
 					selectable
 					showAllEvents={ true }
 					localizer={ localizer }
-					events={ expandRecurringShifts(shifts).map(shift => (
+					events={ shifts.map(shift => (
 						{
 							title: shift.title,
 							start: new Date(shift.starts_at),
 							end: new Date(shift.ends_at)
 						}
 					)) }
+					defaultDate={ defaultDate() }
 					startAccessor="start"
 					endAccessor="end"
 					style={ { height: '100vh' } }

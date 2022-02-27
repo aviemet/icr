@@ -33,16 +33,16 @@ class ClientsController < InertiaController
   # GET /clients/:id/schedule
   def schedule
     @employees = Employee.all
-    @shifts = @client.shifts.includes(:clients, :employee)
+    @shifts = @client.shifts.includes(:clients, :employee).between(range_start, range_end)
 
     render inertia: "Clients/Schedule", props: {
       client: @client.decorate.as_json,
       employees: -> { @employees.decorate },
       shifts: lambda {
-                @shifts.decorate.as_json({
-                  include: [:clients, :employee, :recurring_pattern],
-                })
-              },
+        @shifts.decorate.as_json({
+          include: [:clients, :employee, :recurring_pattern],
+        })
+      },
     }
   end
 
@@ -73,6 +73,14 @@ class ClientsController < InertiaController
   end
 
   private
+
+  def range_start
+    params[:start] || Time.zone.now.beginning_of_month.prev_occurring(:sunday)
+  end
+
+  def range_end
+    params[:end] || Time.zone.now.end_of_month.next_occurring(:saturday)
+  end
 
   def set_client
     @client = Client.find_by_slug(params[:id])

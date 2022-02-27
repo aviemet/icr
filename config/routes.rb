@@ -10,16 +10,16 @@ Rails.application.routes.draw do
     unlocks: "users/unlocks",
   }
 
-	concern :schedulable do
-		member do
-			get "schedule"
-		end
-	end
+  concern :schedulable do
+    member do
+      get "schedule"
+    end
+  end
 
-	resources :shifts, path: :schedule, only: [:index, :create, :update]
-	resources :clients, concerns: :schedulable
+  resources :shifts, path: :schedule, only: [:index, :create, :update]
+  resources :clients, concerns: :schedulable
   resources :employees, concerns: :schedulable
-	resources :people
+  resources :people
 
   get "settings", to: "pages#index", as: :settings
 end
