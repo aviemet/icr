@@ -3,7 +3,7 @@ import { useForm as useInertiaForm, InertiaFormProps } from '@inertiajs/inertia-
 
 import { FormProps } from 'react-html-props'
 
-const FormContext = React.createContext()
+const FormContext = React.createContext<InertiaFormProps<Record<string, string>> | null>(null)
 
 export const useForm = () => useContext(FormContext)
 

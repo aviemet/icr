@@ -53,6 +53,7 @@ declare type KeywordUrlOptions = Optional<{
     port: string | number;
     anchor: string;
     trailing_slash: boolean;
+    params: RouteParameters;
 }>;
 declare type RouteOptions = KeywordUrlOptions & RouteParameters;
 declare type PartsTable = Record<string, {
@@ -63,10 +64,10 @@ declare type ModuleType = "CJS" | "AMD" | "UMD" | "ESM" | "DTS" | "NIL";
 declare const RubyVariables: {
     PREFIX: string;
     DEPRECATED_GLOBBING_BEHAVIOR: boolean;
+    DEPRECATED_FALSE_PARAMETER_BEHAVIOR: boolean;
     SPECIAL_OPTIONS_KEY: string;
     DEFAULT_URL_OPTIONS: RouteParameters;
     SERIALIZER: Serializer;
-    NAMESPACE: string;
     ROUTES_OBJECT: RouteHelpers;
     MODULE_TYPE: ModuleType;
     WRAPPER: <T>(callback: T) => T;

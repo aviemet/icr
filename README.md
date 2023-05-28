@@ -30,6 +30,10 @@ The dynamic imports for Inertia have been explicitly defined in `app/frontend/dy
 * All entrypoints must be an `index.tsx` file in a directory named for the route
 * Maximum depth of 3 folder levels for any page entrypoint
 
+## Handling Shifts in DB
+
+The shift exception table is an instance of a recurring shift which has been altered for a single instance. The `shift_id` field points to a *new* shift record, which itself points to the original shift through the `parent_id` field.
+
 ## Debugging
 
 Use to increase log depth for server side node output for debugging webpack:

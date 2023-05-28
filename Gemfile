@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.0.3"
+ruby "3.1.2"
 
 # Server
 gem "rails", "~> 7.0.1"
@@ -11,7 +11,7 @@ gem "puma", "~> 5.0"
 
 # Assets
 gem "jbuilder"
-gem "inertia_rails", "~> 1.11"
+gem "inertia_rails", "~> 3.0.0"
 gem "vite_rails", "~> 3.0"
 
 # Helpers
@@ -21,6 +21,8 @@ gem "ice_cube", "~> 0.16.4"
 gem "slug", "~> 4.1"
 gem "time_for_a_boolean", "~> 0.2.1"
 gem "draper", "~> 4.0"
+gem "ts_schema", "~> 0.1.9"
+gem "js-routes", "~> 2.2"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
@@ -41,22 +43,20 @@ gem "bootsnap", require: false
 # gem "image_processing", "~> 1.2"
 
 group :development, :test do
-  gem "rspec-rails", "~> 5.0"
+  gem "rspec-rails", "~> 6.0.1"
   gem "factory_bot_rails", "~> 6.2"
   gem "faker", "~> 2.19"
   gem "amazing_print", "~> 1.4"
 
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri mingw x64_mingw]
-  gem "better_errors", "~> 2.9"
-  gem "solargraph", "~> 0.44.2"
+  # gem "solargraph", "~> 0.44.2"
   gem "rubocop-rails", require: false
   gem "rubocop-rspec", require: false
   gem "rubocop-performance", require: false
   gem "rubocop-daemon", require: false
 
-  # Routes
-  gem "js-routes", "~> 2.2"
+  gem "dotenv-rails", "~> 2.8"
 end
 
 group :development do
@@ -65,10 +65,6 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   gem "spring"
-
-  # Live Reload
-  gem "rack-livereload", "~> 0.3.17"
-  gem "guard-livereload", "~> 2.5", require: false
 
   # Typescript schema generation
   gem "schema2type", "~> 0.4.0"
@@ -79,4 +75,9 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+  gem "generator_spec", "~> 0.9.4"
+  gem "database_cleaner-active_record", "~> 2.0"
+  gem "shoulda-matchers", "~> 5.1"
+  gem "bullet", "~> 7.0"
+  gem "simplecov", "~> 0.22.0"
 end

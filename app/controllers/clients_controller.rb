@@ -32,16 +32,21 @@ class ClientsController < InertiaController
 
   # GET /clients/:id/schedule
   def schedule
+    # TODO: Employee query is for the form dropdown, employees should be scoped to clients
     @employees = Employee.all
-    @shifts = @client.shifts.includes(:clients, :employee).between(range_start, range_end)
+    @shifts = @client.shifts_in_range(range_start, range_end)
 
     render inertia: "Clients/Schedule", props: {
       client: @client.decorate.as_json,
       employees: -> { @employees.decorate },
       shifts: lambda {
         @shifts.decorate.as_json({
-          include: [:clients, :employee, :recurring_pattern],
+          include: [:clients, :employee, :recurring_pattern, :shift_exceptions],
         })
+      },
+      dateRange: {
+        start: range_start,
+        end: range_end,
       },
     }
   end
@@ -75,11 +80,11 @@ class ClientsController < InertiaController
   private
 
   def range_start
-    params[:start] || Time.zone.now.beginning_of_month.prev_occurring(:sunday)
+    params[:start] || Time.current.beginning_of_month.prev_occurring(:sunday)
   end
 
   def range_end
-    params[:end] || Time.zone.now.end_of_month.next_occurring(:saturday)
+    params[:end] || Time.current.end_of_month.next_occurring(:saturday)
   end
 
   def set_client

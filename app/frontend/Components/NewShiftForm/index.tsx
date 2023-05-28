@@ -99,10 +99,12 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, end, client, employ
 			}
 			return submitData
 		}
+
 		transform(data => {
 			console.log({ submit: dataForRails(data) })
 			return dataForRails(data)
 		})
+
 		if(wasSuccessful && onSubmit) onSubmit()
 	}
 

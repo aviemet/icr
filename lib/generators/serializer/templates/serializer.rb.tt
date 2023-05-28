@@ -1,0 +1,7 @@
+class Orders::EditSerializer < ApplicationSerializer
+  object_as :order
+
+  attributes(
+    
+  )
+end

@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_31_203313) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_01_31_203313) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -25,16 +24,16 @@ ActiveRecord::Schema.define(version: 2022_01_31_203313) do
     t.string "postal"
     t.text "notes"
     t.bigint "contact_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["contact_id"], name: "index_addresses_on_contact_id"
   end
 
   create_table "contacts", force: :cascade do |t|
     t.string "contactable_type", null: false
     t.bigint "contactable_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "primary_address_id"
     t.bigint "primary_phone_id"
     t.bigint "primary_email_id"
@@ -49,15 +48,15 @@ ActiveRecord::Schema.define(version: 2022_01_31_203313) do
     t.string "email"
     t.text "notes"
     t.bigint "contact_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["contact_id"], name: "index_emails_on_contact_id"
   end
 
   create_table "households", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "households_people", id: false, force: :cascade do |t|
@@ -74,8 +73,8 @@ ActiveRecord::Schema.define(version: 2022_01_31_203313) do
     t.string "slug", null: false
     t.integer "person_type"
     t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_people_on_slug", unique: true
     t.index ["user_id"], name: "index_people_on_user_id"
   end
@@ -93,8 +92,8 @@ ActiveRecord::Schema.define(version: 2022_01_31_203313) do
     t.string "extension"
     t.text "notes"
     t.bigint "contact_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["contact_id"], name: "index_phones_on_contact_id"
   end
 
@@ -107,30 +106,30 @@ ActiveRecord::Schema.define(version: 2022_01_31_203313) do
     t.integer "week_of_month"
     t.integer "day_of_month"
     t.integer "month_of_year"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "shift_exceptions", force: :cascade do |t|
     t.bigint "shift_id", null: false
-    t.datetime "rescheduled"
-    t.datetime "cancelled"
-    t.datetime "starts_at", precision: 6
-    t.datetime "ends_at", precision: 6
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "rescheduled", precision: nil
+    t.datetime "cancelled", precision: nil
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["shift_id"], name: "index_shift_exceptions_on_shift_id"
   end
 
   create_table "shifts", force: :cascade do |t|
-    t.datetime "starts_at", precision: 6
-    t.datetime "ends_at", precision: 6
+    t.datetime "starts_at"
+    t.datetime "ends_at"
     t.bigint "recurring_pattern_id"
     t.bigint "employee_id"
     t.bigint "created_by_id", null: false
     t.bigint "parent_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["created_by_id"], name: "index_shifts_on_created_by_id"
     t.index ["employee_id"], name: "index_shifts_on_employee_id"
     t.index ["parent_id"], name: "index_shifts_on_parent_id"
@@ -141,22 +140,22 @@ ActiveRecord::Schema.define(version: 2022_01_31_203313) do
     t.string "email", null: false
     t.string "encrypted_password", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at", precision: 6
-    t.datetime "remember_created_at", precision: 6
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
     t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at", precision: 6
-    t.datetime "last_sign_in_at", precision: 6
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.string "confirmation_token"
-    t.datetime "confirmed_at", precision: 6
-    t.datetime "confirmation_sent_at", precision: 6
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
     t.integer "failed_attempts", default: 0, null: false
     t.string "unlock_token"
-    t.datetime "locked_at", precision: 6
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "locked_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "active", default: true
     t.string "time_zone", default: "UTC"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true

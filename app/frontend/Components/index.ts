@@ -9,6 +9,7 @@ export { default as SubCard } from './cards/AuthFooter'
 export { default as SearchInput } from './SearchInput'
 export { default as NewShiftForm } from './NewShiftForm'
 export { default as DarknessToggle } from './DarknessToggle'
+export { default as ShiftCalendar } from './ShiftCalendar'
 
 import Transition from './extended/Transition'
 

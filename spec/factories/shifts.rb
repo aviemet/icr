@@ -1,12 +1,12 @@
-now = Time.zone.now
+now = Time.current
 
 FactoryBot.define do
   sequence :start_time do |n|
-    Time.zone.new(now.year, now.month, now.day, n + 10)
+    Time.new(now.year, now.month, now.day, n + 10)
   end
 
   sequence :end_time do |n|
-    Time.zone.new(now.year, now.month, now.day, n + 11)
+    Time.new(now.year, now.month, now.day, n + 11)
   end
 
   factory :shift do |_time|
