@@ -1,48 +1,65 @@
 import React, { forwardRef } from 'react'
-import { InertiaLink, InertiaLinkProps } from '@inertiajs/inertia-react'
-import { Button, Link as MuiLink } from '@mui/material'
-import { Routes } from '@/lib'
-import { Inertia, Method, Visit } from '@inertiajs/inertia'
+import { type Method, type Visit } from '@inertiajs/core'
+import InertiaLink from './InertiaLink'
+import ExternalLink from './ExternalLink'
+import { type AnchorProps, type ButtonProps } from '@mantine/core'
 
-interface LinkProps extends InertiaLinkProps {
+export interface ILinkProps extends Omit<AnchorProps, 'onClick'|'onProgress'> {
+	children?: React.ReactNode
+	href: string
 	method?: Method
 	visit?: Omit<Visit, 'method'>
+	external?: boolean
+	compact?: boolean
+	as?: 'a'|'button'
+	onProgress?: React.ReactEventHandler<HTMLAnchorElement>
+	target?: string
+	rel?: string
+	tabIndex?: number
+	disabled?: boolean
+	buttonProps?: ButtonProps
+	preserveScroll?: boolean
 }
 
-const Link = forwardRef<HTMLAnchorElement, LinkProps>(({ children, href, as = 'a', method, visit, ...props }, ref) => {
-	const handleHTTP = e => {
-		Inertia.visit(href, {
-			method,
-			...visit
+const externalPrefix = ['http', 'www']
+
+const Link = forwardRef<HTMLAnchorElement, ILinkProps>((
+	{ children, href, as = 'a', method, visit, external, onProgress, preserveScroll, ...props },
+	ref,
+) => {
+	let renderExternal = external
+
+	if(external === undefined) {
+		externalPrefix.some(prefix => {
+			if(href.startsWith(prefix)) {
+				renderExternal = true
+			}
 		})
 	}
 
-	if(method !== undefined && method !== 'get') {
-		// Only present standard GET requests as anchor tags, all others as buttons
-		as = 'button'
-
-		return (
-			<MuiLink href={ href } onClick={ e => e.preventDefault() }>
-				<Button onClick={ handleHTTP }>{ children }</Button>
-			</MuiLink>
-		)
+	if(renderExternal) {
+		return <ExternalLink
+			href={ href }
+			ref={ ref }
+			{ ...onProgress }
+			{ ...props }
+		>
+			{ children }
+		</ExternalLink>
 	}
 
-	const asButton = as === 'button'
-	return (
-		<InertiaLink href={ href } { ...props } as={ asButton ? 'a' : as }>
-			{ asButton ? <Button>{ children }</Button> : children }
-		</InertiaLink>
-	)
+	return <InertiaLink
+		href={ href }
+		as={ as }
+		method={ method }
+		visit={ visit }
+		ref={ ref }
+		preserveScroll={ preserveScroll }
+		{ ...onProgress }
+		{ ...props }
+	>
+		{ children }
+	</InertiaLink>
 })
 
 export default Link
-
-
-/*
-
-If the method is specified and is not GET, use a button
-
-
-
-*/

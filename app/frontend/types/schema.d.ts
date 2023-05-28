@@ -1,3 +1,5 @@
+export {}
+
 declare namespace schema {
 	interface User {
 		id: number;
