@@ -3,6 +3,7 @@ export { default as Image } from './Image'
 export { default as Table } from './Table'
 export { default as Button } from './Button'
 export { default as Menu } from './Menu'
+export { default as Heading } from './Heading'
 export { default as Section } from './Section'
 export { default as AnimateButton } from './extended/AnimateButton'
 export { default as Avatar } from './extended/Avatar'
@@ -18,3 +19,20 @@ export { default as ShiftCalendar } from './ShiftCalendar'
 import Transition from './extended/Transition'
 
 export { Transition }
+
+// Export UI library components as a proxy to allow easy refactoring
+export {
+	Box,
+	Badge,
+	Center,
+	Container,
+	Flex,
+	Group,
+	List,
+	Modal,
+	Paper,
+	SimpleGrid,
+	Stack,
+	Tooltip,
+	ThemeIcon as Icon,
+} from '@mantine/core'
