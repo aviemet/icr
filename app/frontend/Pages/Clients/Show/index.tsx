@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box } from '@/Components'
 import React from 'react'
 
 const Show = ({ client }) => {

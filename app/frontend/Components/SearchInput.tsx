@@ -1,5 +1,5 @@
 import React from 'react'
-import { InputAdornment,OutlinedInput } from '@mui/material'
+import { InputAdornment,OutlinedInput } from '@/Components'
 import SearchIcon from '@mui/icons-material/Search'
 
 const SearchInput = ({ value, setValue }) => (

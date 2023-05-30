@@ -5,7 +5,7 @@ import {
 	FormHelperText,
 	TextField,
 } from '@mui/material'
-import { useForm } from './Form'
+import { useForm } from 'use-inertia-form'
 
 interface IAutocompleteProps extends Omit<AutocompleteProps<object, true, false, false>, 'renderInput'> {
 	label: string

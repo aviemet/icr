@@ -1,8 +1,9 @@
 import React, { useRef } from 'react'
 import { Form, Field, TextInput, PasswordInput, Checkbox, Submit } from '@/Components/Form'
 import { Routes } from '@/lib'
-import { Heading, Link } from '@/Components'
+import { Box, Button, Heading, Link } from '@/Components'
 import { type UseFormProps } from 'use-inertia-form'
+import Google from '@/Images/social-google.svg'
 
 type LoginFormData = {
 	user: {
@@ -30,46 +31,59 @@ const Login = () => {
 		}
 	}
 
+	const googleHandler = async () => {
+		console.error('Login')
+	}
+
 	return (
-		<Form model="user" data={ defaultData } to={ Routes.newUserSession() } onSubmit={ handleSubmit } grid={ false }>
+		<>
+			<Button onClick={ googleHandler }>
+				<Box sx={ { mr: { xs: 1, sm: 2, width: 20 } } }>
+					<img src={ Google } alt="google" width={ 16 } height={ 16 } />
+				</Box>
+							Sign in with Google
+			</Button>
 
-			<div>
-				<Heading>Inventory</Heading>
-			</div>
+			<Form model="user" data={ defaultData } to={ Routes.newUserSession() } onSubmit={ handleSubmit } grid={ false }>
 
-			<Field>
-				<TextInput
-					name="email"
-					placeholder="Email"
-					autoFocus
-					autoComplete="Email"
-					required
-					ref={ emailInputRef }
-					pattern=".+@.+\..+"
-				/>
-			</Field>
+				<div>
+					<Heading>ICR</Heading>
+				</div>
 
-			<Field>
-				<PasswordInput
-					name="password"
-					placeholder="Password"
-					autoComplete="current-password"
-					required
-				/>
-			</Field>
+				<Field>
+					<TextInput
+						name="email"
+						placeholder="Email"
+						autoFocus
+						autoComplete="Email"
+						required
+						ref={ emailInputRef }
+						pattern=".+@.+\..+"
+					/>
+				</Field>
 
-			<Field>
-				<Submit>Log In</Submit>
-			</Field>
+				<Field>
+					<PasswordInput
+						name="password"
+						placeholder="Password"
+						autoComplete="current-password"
+						required
+					/>
+				</Field>
 
-			<Field>
-				<Checkbox name="remember_me" label="Remember Me" />
-			</Field>
+				<Field>
+					<Submit>Log In</Submit>
+				</Field>
 
-			<Link href={ Routes.newUserPassword() }>Reset Password</Link>
-			<Link href={ Routes.newUserRegistration() }>Register</Link>
+				<Field>
+					<Checkbox name="remember_me" label="Remember Me" />
+				</Field>
 
-		</Form>
+				<Link href={ Routes.newUserPassword() }>Reset Password</Link>
+				<Link href={ Routes.newUserRegistration() }>Register</Link>
+
+			</Form>
+		</>
 	)
 }
 

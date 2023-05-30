@@ -44,6 +44,7 @@ export {
 
 export {
 	BsCheck2Circle as CheckIcon,
+	BsCalendar2Range as ShiftsIcons,
 } from 'react-icons/bs'
 
 export {

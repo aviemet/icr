@@ -6,11 +6,10 @@ import enUS from 'date-fns/locale/en-US'
 import {
 	Box,
 	Button,
-	Grid,
-	Modal,
-	Typography
-} from '@mui/material'
-import { ShiftCalendar, NewShiftForm, AnimateButton } from '@/Components'
+	Heading,
+	ShiftCalendar,
+	NewShiftForm
+} from '@/Components'
 import { ModalPrompt } from '@/Components/Modal'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
@@ -49,7 +48,7 @@ const Schedule = ({ client, employees, shifts, dateRange }) => {
 
 	return (
 		<>
-			<Typography component="h1" variant="h1">{ client.full_name }</Typography>
+			<Heading>{ client.full_name }</Heading>
 			<Box sx={ { backgroundColor: 'white', padding: '10px' } }>
 				<ShiftCalendar
 					shifts={ shifts }
