@@ -4,5 +4,6 @@ FactoryBot.define do
     password { Faker::Internet.password }
     confirmed_at { Date.new }
     time_zone { "America/Los_Angeles" }
+    person
   end
 end

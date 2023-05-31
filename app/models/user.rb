@@ -6,7 +6,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_one :person, dependent: :nullify
+  belongs_to :person, dependent: :destroy
 
   validates :time_zone, inclusion: { in: TZInfo::Timezone.all_data_zone_identifiers }
 end

@@ -12,8 +12,8 @@ const EmployeesTable = ({ employees }: { employees: Schema.Employee[] }) => {
 			<Table>
 				<Table.Head>
 					<Table.Row>
-						<Table.Cell sort="f_name">First Name</Table.Cell>
-						<Table.Cell sort="l_name">Last Name</Table.Cell>
+						<Table.Cell sort="first_name">First Name</Table.Cell>
+						<Table.Cell sort="last_name">Last Name</Table.Cell>
 						<Table.Cell className="actions">Actions</Table.Cell>
 					</Table.Row>
 				</Table.Head>
@@ -21,10 +21,10 @@ const EmployeesTable = ({ employees }: { employees: Schema.Employee[] }) => {
 					<Table.RowIterator render={ (employee: Schema.Employee) => (
 						<Table.Row key={ employee.id }>
 							<Table.Cell>
-								<Link href={ Routes.employee(employee.id) }>{ employee.f_name }</Link>
+								<Link href={ Routes.employee(employee.id) }>{ employee.first_name }</Link>
 							</Table.Cell>
 							<Table.Cell>
-								<Link href={ Routes.employee(employee.id) }>{ employee.l_name }</Link>
+								<Link href={ Routes.employee(employee.id) }>{ employee.last_name }</Link>
 							</Table.Cell>
 							<Table.Cell>
 								<EditButton href={ Routes.editEmployee(employee.id) } />

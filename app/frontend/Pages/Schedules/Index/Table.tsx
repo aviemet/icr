@@ -35,10 +35,10 @@ const SchedulesTable = ({ schedules, pagination }: IScheduleIndexProps) => {
 					<Table.RowIterator render={ (schedule: Schema.Schedule) => (
 						<Table.Row>
 							<Table.Cell>
-								<Link href={ Routes.scheduleClient(schedule.slug) }>{ schedule.f_name }</Link>
+								<Link href={ Routes.scheduleClient(schedule.slug) }>{ schedule.first_name }</Link>
 							</Table.Cell>
 
-							<Table.Cell><Link href={ Routes.scheduleClient(schedule.slug) }>{ schedule.l_name }</Link></Table.Cell>
+							<Table.Cell><Link href={ Routes.scheduleClient(schedule.slug) }>{ schedule.last_name }</Link></Table.Cell>
 							<Table.Cell>
 								<EditButton href={ Routes.editSchedule(schedule.id) } />
 							</Table.Cell>

@@ -2,7 +2,7 @@ class ShiftDecorator < ApplicationDecorator
   delegate_all
 
   def title
-    "#{starts_at.strftime('%-I %p')} - #{employee.f_name}"
+    "#{starts_at.strftime('%-I %p')} - #{employee.first_name}"
   end
 
   private

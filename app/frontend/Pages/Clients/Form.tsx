@@ -25,21 +25,21 @@ const ClientsForm = ({ client, method = 'post' }: IClientFormProps) => {
 			<Grid>
 				<Grid.Col xs={ 12 } md={ 4 }>
 					<TextInput
-						name="f_name"
+						name="first_name"
 						label="First Name"
 					/>
 				</Grid.Col>
 
 				<Grid.Col xs={ 12 } md={ 4 }>
 					<TextInput
-						name="m_name"
+						name="middle_name"
 						label="Middle Name"
 					/>
 				</Grid.Col>
 
 				<Grid.Col xs={ 12 } md={ 4 }>
 					<TextInput
-						name="l_name"
+						name="last_name"
 						label="Last Name"
 					/>
 				</Grid.Col>

@@ -1,17 +1,16 @@
 if Rails.env == "development"
 
   if User.count == 0
-    user = User.create({
+    User.create({
       email: "aviemet@gmail.com",
       password: "Complex1!",
       confirmed_at: Time.current,
-      time_zone: "America/Los_Angeles"
-    })
-    Person.create({
-      f_name: "Avram",
-      m_name: "True",
-      l_name: "Walden",
-      user: user
+      time_zone: "America/Los_Angeles",
+      person:  Person.create({
+        first_name: "Avram",
+        middle_name: "True",
+        last_name: "Walden",
+      })
     })
   end
 
@@ -37,7 +36,7 @@ if Rails.env == "development"
       ends_at: Time.zone.now - 29,
       employee: Employee.first,
     })
-    s.recurring_pattern = RecurringPattern.new({ recurring_pattern: 'daily' })
+    s.recurring_pattern = RecurringPattern.new({ recurring_type: 'daily' })
     s.shift_exceptions << ShiftException.new({
       rescheduled: Time.zone.now,
       starts_at: Time.zone.tomorrow,

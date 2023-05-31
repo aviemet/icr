@@ -11,8 +11,8 @@ const ClientsTable = ({ clients }: { clients: Schema.Client[] }) => {
 		<Table>
 			<Table.Head>
 				<Table.Row>
-					<Table.Cell sort="f_name">First Name</Table.Cell>
-					<Table.Cell sort="l_name">Last Name</Table.Cell>
+					<Table.Cell sort="first_name">First Name</Table.Cell>
+					<Table.Cell sort="last_name">Last Name</Table.Cell>
 					<Table.Cell className="actions">Actions</Table.Cell>
 				</Table.Row>
 			</Table.Head>

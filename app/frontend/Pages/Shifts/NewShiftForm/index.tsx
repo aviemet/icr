@@ -94,7 +94,7 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, end, client, employ
 						label="Employee"
 						name="employee"
 						options={ useCallback(() => employees.map(e => ({
-							label: `${e.f_name} ${e.l_name}`,
+							label: `${e.first_name} ${e.last_name}`,
 							id: e.id
 						})), [employees])() }
 					/>

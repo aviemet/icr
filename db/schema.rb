@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_01_31_203313) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_31_231947) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -27,6 +27,23 @@ ActiveRecord::Schema[7.0].define(version: 2022_01_31_203313) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["contact_id"], name: "index_addresses_on_contact_id"
+  end
+
+  create_table "clients", force: :cascade do |t|
+    t.integer "number"
+    t.bigint "person_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["person_id"], name: "index_clients_on_person_id"
+  end
+
+  create_table "clients_shifts", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.bigint "shift_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_clients_shifts_on_client_id"
+    t.index ["shift_id"], name: "index_clients_shifts_on_shift_id"
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -53,30 +70,38 @@ ActiveRecord::Schema[7.0].define(version: 2022_01_31_203313) do
     t.index ["contact_id"], name: "index_emails_on_contact_id"
   end
 
+  create_table "employees", force: :cascade do |t|
+    t.integer "number"
+    t.bigint "person_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["person_id"], name: "index_employees_on_person_id"
+  end
+
+  create_table "household_members", force: :cascade do |t|
+    t.bigint "household_id", null: false
+    t.bigint "client_id"
+    t.bigint "employee_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_household_members_on_client_id"
+    t.index ["employee_id"], name: "index_household_members_on_employee_id"
+    t.index ["household_id"], name: "index_household_members_on_household_id"
+  end
+
   create_table "households", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "households_people", id: false, force: :cascade do |t|
-    t.bigint "household_id", null: false
-    t.bigint "person_id", null: false
-    t.index ["household_id"], name: "index_households_people_on_household_id"
-    t.index ["person_id"], name: "index_households_people_on_person_id"
-  end
-
   create_table "people", force: :cascade do |t|
-    t.string "f_name"
-    t.string "m_name"
-    t.string "l_name"
-    t.string "slug", null: false
+    t.string "first_name"
+    t.string "middle_name"
+    t.string "last_name"
     t.integer "person_type"
-    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["slug"], name: "index_people_on_slug", unique: true
-    t.index ["user_id"], name: "index_people_on_user_id"
   end
 
   create_table "people_shifts", id: false, force: :cascade do |t|
@@ -158,22 +183,31 @@ ActiveRecord::Schema[7.0].define(version: 2022_01_31_203313) do
     t.datetime "updated_at", null: false
     t.boolean "active", default: true
     t.string "time_zone", default: "UTC"
+    t.bigint "person_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["person_id"], name: "index_users_on_person_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
   add_foreign_key "addresses", "contacts"
+  add_foreign_key "clients", "people"
+  add_foreign_key "clients_shifts", "clients"
+  add_foreign_key "clients_shifts", "shifts"
   add_foreign_key "contacts", "addresses", column: "primary_address_id"
   add_foreign_key "contacts", "emails", column: "primary_email_id"
   add_foreign_key "contacts", "phones", column: "primary_phone_id"
   add_foreign_key "emails", "contacts"
-  add_foreign_key "people", "users"
+  add_foreign_key "employees", "people"
+  add_foreign_key "household_members", "clients"
+  add_foreign_key "household_members", "employees"
+  add_foreign_key "household_members", "households"
   add_foreign_key "phones", "contacts"
   add_foreign_key "shift_exceptions", "shifts"
   add_foreign_key "shifts", "people", column: "employee_id"
   add_foreign_key "shifts", "recurring_patterns"
   add_foreign_key "shifts", "shifts", column: "parent_id"
   add_foreign_key "shifts", "users", column: "created_by_id"
+  add_foreign_key "users", "people"
 end

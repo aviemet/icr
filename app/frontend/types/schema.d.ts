@@ -29,8 +29,8 @@ declare namespace schema {
 
 	interface Person {
 		id: number;
-		f_name?: string | null;
-		m_name?: string | null;
+		first_name?: string | null;
+		middle_name?: string | null;
 		l_name?: string | null;
 		slug: string;
 		person_type?: 'employee' | 'client' | null;

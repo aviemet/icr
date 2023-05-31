@@ -7,7 +7,7 @@ const Show = ({ client }) => {
 			<h1>Client Information</h1>
 			<Box>
 				<h4>Name</h4>
-				<div>{ client.f_name } { client.m_name } { client.l_name }</div>
+				<div>{ client.first_name } { client.middle_name } { client.last_name }</div>
 			</Box>
 		</div>
 	)

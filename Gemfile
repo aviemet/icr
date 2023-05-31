@@ -21,12 +21,12 @@ gem "ice_cube", "~> 0.16.4"
 gem "slug", "~> 4.1"
 gem "time_for_a_boolean", "~> 0.2.1"
 gem "draper", "~> 4.0"
-gem "ts_schema", "~> 0.1.9"
 gem "js-routes", "~> 2.2"
 gem "amazing_print", "~> 1.4"
 
 # Models
 gem "kaminari", "~> 1.2"
+gem "decent_exposure", "~> 3.0"
 gem "oj_serializers", "~> 2.0"
 gem "types_from_serializers", "~> 2.0", git: "https://github.com/aviemet/types_from_serializers"
 
@@ -87,4 +87,3 @@ group :test do
   gem "bullet", "~> 7.0"
   gem "simplecov", "~> 0.22.0"
 end
-

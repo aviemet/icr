@@ -1,39 +1,28 @@
 class ShiftsController < ApplicationController
+  expose :shifts, ->{ Shift.all }
+  expose :shift
+
   # GET /schedules
-  # Routes.shifts()
   def index
-    @clients = Client.all
+    clients = Client.all
     render inertia: "Schedules/Index", props: {
-      clients: @clients.decorate.as_json,
+      clients: clients.render,
     }
   end
 
   # POST /schedules
-  # Routes.shifts()
   def create
-    ap({ shift_params: shift_params, params: params })
-    @shift = Shift.create(shift_params)
-
-    if @shift.persisted?
-      redirect_to schedule_client_path(@shift.clients[0])
+    if shift.persisted?
+      redirect_to schedule_client_path(shift.clients[0])
     else
-      redirect_to schedule_client_path(@shift.clients[0]), inertia: { errors: @shift.errors }
+      redirect_to schedule_client_path(shift.clients[0]), inertia: { errors: shift.errors }
     end
   end
 
   # PATCH/PUT /schedules/:id
-  # Routes.shifts(id)
   def update; end
 
   private
-
-  def set_shift
-    @shift = Shift.find(params[:id])
-  end
-
-  def set_shifts
-    @shifts = Shift.all
-  end
 
   def shift_params
     params.require(:shift).permit(

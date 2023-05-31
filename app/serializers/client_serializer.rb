@@ -1,9 +1,8 @@
-class Users::ShareSerializer < ApplicationSerializer
-  object_as :user
+class ClientSerializer < ApplicationSerializer
+  object_as :client
 
   attributes(
-    :id,
-    :email,
+    :number,
     :created_at,
     :updated_at,
   )
