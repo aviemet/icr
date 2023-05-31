@@ -15,6 +15,20 @@ class ApplicationController < ActionController::Base
   include Inertia::Flash
   include Inertia::Auth
 
+  def pagination_data(model)
+    return if !model.respond_to? :total_pages
+
+    {
+      pages: model.total_pages,
+      limit: model.limit_value,
+      current_page: model.current_page,
+      next_page: model.next_page,
+      prev_page: model.prev_page,
+      is_first_page: model.first_page?,
+      is_last_page: model.last_page?
+    }
+  end
+
   private
 
   def apply_user_time_zone(&)

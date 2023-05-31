@@ -1,35 +1,14 @@
-import React, { useCallback, useEffect } from 'react'
-import { useForm } from '@inertiajs/inertia-react'
+import React, { useCallback } from 'react'
+import { usePage } from '@inertiajs/react'
 import { add, format } from 'date-fns'
-import { Link, AnimateButton } from '@/Components'
-import { Form, Autocomplete, DateTimePicker, Submit } from '@/Components/Form'
+import { Form, Autocomplete, DateTime, Submit } from '@/Components/Form'
 import { Routes } from '@/lib'
-import { useTheme } from '@mui/material/styles'
 import {
-	// Autocomplete,
 	Box,
 	Button,
-	Checkbox,
-	Divider,
-	FormGroup,
-	FormControl,
-	FormControlLabel,
-	FormHelperText,
-	FormLabel,
 	Grid,
-	IconButton,
-	InputAdornment,
-	InputLabel,
-	MenuItem,
-	Select,
-	Stack,
-	Switch,
-	TextField,
-	Typography,
-	useMediaQuery
+	Link
 } from '@/Components'
-// import { DateTimePicker } from '@mui/lab'
-import { useAuthState } from '@/Store'
 import DaysPicker from './DaysPicker'
 import Repeats from './Repeats'
 
@@ -60,9 +39,7 @@ interface INewShiftFormProps {
 }
 
 const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, end, client, employees, onSubmit }) => {
-	const [auth, _] = useAuthState()
-	const theme = useTheme()
-	const matchDownSM = useMediaQuery(theme.breakpoints.down('md'))
+	const { auth } = usePage<SharedInertiaProps>().props
 
 	const defaultData: TFormData = {
 		starts_at: start,
@@ -126,14 +103,14 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, end, client, employ
 				{ /* Start */ }
 				<Grid.Col xs={ 12 } md={ 6 }>
 					<Grid.Col xs={ 8 }>
-						<DateTimePicker
+						<DateTime
 							name="starts_at"
 							label="Start"
 							inputFormat="EEEE, MMM do"
 						/>
 					</Grid.Col>
 					<Grid.Col xs={ 4 }>
-						<DateTimePicker
+						<DateTime
 							name="starts_at"
 							openTo="hours"
 							inputFormat="hh:mm a"
@@ -144,14 +121,14 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, end, client, employ
 				{ /* End */ }
 				<Grid.Col xs={ 12 } md={ 6 }>
 					<Grid.Col xs={ 4 }>
-						<DateTimePicker
+						<DateTime
 							name="ends_at"
 							openTo="hours"
 							inputFormat="hh:mm a"
 						/>
 					</Grid.Col>
 					<Grid.Col xs={ 8 }>
-						<DateTimePicker
+						<DateTime
 							name="ends_at"
 							label="End"
 							inputFormat="EEEE, MMM do"

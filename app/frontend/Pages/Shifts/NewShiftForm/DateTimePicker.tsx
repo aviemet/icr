@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { TextField } from '@/Components'
-import DateTimePicker, { DateTimePickerProps } from '@mui/lab/DateTimePicker'
+import DateTimePicker, { DateTimePickerProps } from '@mantine/dates'
 
-interface IDTPickerProps extends Omit<DateTimePickerProps, 'renderInput'> {
+interface IDTPickerProps extends DateTimePickerProps {
 	type?: 'start'|'end'
 }
 
@@ -16,24 +15,7 @@ export const DatePicker = ({ label, ...props }: Omit<DateTimePickerProps, 'rende
 
 	return (
 		<DateTimePicker
-			open={ open }
-			onOpen={ () => setOpen(true) }
-			onClose={ () => setOpen(false) }
 			inputFormat="EEEE, MMM do"
-			components={ { OpenPickerIcon: () => <></> } }
-			{ ...props }
-			renderInput={ params => {
-				params.inputProps = params.inputProps || {}
-				params.inputProps.readOnly = true
-				return (
-					<TextField
-						{ ...params }
-						onClick={ () => setOpen(true) }
-						variant="standard"
-						helperText={ label }
-					/>
-				)
-			} }
 		/>
 	)
 }
@@ -43,25 +25,7 @@ export const TimePicker = ({ label, ...props }: Omit<DateTimePickerProps, 'rende
 
 	return (
 		<DateTimePicker
-			open={ open }
-			onOpen={ () => setOpen(true) }
-			onClose={ () => setOpen(false) }
-			openTo="hours"
 			inputFormat="hh:mm a"
-			components={ { OpenPickerIcon: () => <></> } }
-			{ ...props }
-			renderInput={ params => {
-				params.inputProps = params.inputProps || {}
-				params.inputProps.readOnly = true
-				return (
-					<TextField
-						{ ...params }
-						onClick={ () => setOpen(true) }
-						variant="standard"
-						helperText={ label }
-					/>
-				)
-			} }
 		/>
 	)
 }

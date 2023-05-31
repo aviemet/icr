@@ -1,2 +1,0 @@
-class InertiaController < ApplicationController
-end

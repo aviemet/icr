@@ -8,7 +8,6 @@ import { Routes } from '@/lib'
 const Header = () => {
 	const { props } = usePage<SharedInertiaProps>()
 
-	const u = props.auth.user.circles.map
 	return (
 		<Flex align="center" sx={ { width: '100%' } }>
 			<Box sx={ { flex: 1 } }>

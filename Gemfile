@@ -23,6 +23,12 @@ gem "time_for_a_boolean", "~> 0.2.1"
 gem "draper", "~> 4.0"
 gem "ts_schema", "~> 0.1.9"
 gem "js-routes", "~> 2.2"
+gem "amazing_print", "~> 1.4"
+
+# Models
+gem "kaminari", "~> 1.2"
+gem "oj_serializers", "~> 2.0"
+gem "types_from_serializers", "~> 2.0", git: "https://github.com/aviemet/types_from_serializers"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
@@ -45,16 +51,16 @@ gem "bootsnap", require: false
 group :development, :test do
   gem "rspec-rails", "~> 6.0.1"
   gem "factory_bot_rails", "~> 6.2"
-  gem "faker", "~> 2.19"
-  gem "amazing_print", "~> 1.4"
+  gem "pry-rails", "~> 0.3.9"
+  gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'main'
+
+  gem "rubocop-rails", "~> 2.14", require: false
+  gem "rubocop-rspec", "~> 2.9", require: false
+  gem "rubocop-performance", "~> 1.13", require: false
+  gem "rubocop-daemon", "~> 0.3.2", require: false
 
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri mingw x64_mingw]
-  # gem "solargraph", "~> 0.44.2"
-  gem "rubocop-rails", require: false
-  gem "rubocop-rspec", require: false
-  gem "rubocop-performance", require: false
-  gem "rubocop-daemon", require: false
 
   gem "dotenv-rails", "~> 2.8"
 end
@@ -81,3 +87,4 @@ group :test do
   gem "bullet", "~> 7.0"
   gem "simplecov", "~> 0.22.0"
 end
+

@@ -2,7 +2,6 @@ import { type InertiaFormProps as DefaultInertiaFormProps, InertiaHeadProps } fr
 import { Page, PageProps, Errors, ErrorBag } from '@inertiajs/core'
 
 declare global {
-
 	interface SharedInertiaProps extends PageProps {
 		auth: {
 			form_authenticty_token: string

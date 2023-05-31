@@ -1,53 +1,28 @@
 import React from 'react'
-import {
-	Autocomplete as MuiAutocomplete,
-	AutocompleteProps,
-	FormHelperText,
-	TextField,
-} from '@mui/material'
 import { useForm } from 'use-inertia-form'
+import { Autocomplete, type AutocompleteProps, type AutocompleteItem } from '@mantine/core'
 
-interface IAutocompleteProps extends Omit<AutocompleteProps<object, true, false, false>, 'renderInput'> {
-	label: string
+interface IAutocompleteProps extends Omit<AutocompleteProps, 'data'> {
 	name: string
-	valueKey?: string
+	options: readonly (string | AutocompleteItem)[]
 }
 
-const Autocomplete = ({ label, id, valueKey, name, options, ...props }: IAutocompleteProps) => {
-	const { data, setData, errors } = useForm()
+const AutocompleteComponent = ({ label, id, name, options, ...props }: IAutocompleteProps) => {
+	const { setData } = useForm()
 
-	const handleChange = (event, value) => {
-		setData(name, value?.[valueKey || 'id'])
+	const handleChange = (value: string) => {
+		setData(name, value)
 	}
 
 	return (
-		<>
-			<MuiAutocomplete
-				fullWidth
-				disablePortal
-				size="small"
-				id={ id || `${name}-input` }
-				options={ options }
-				onChange={ handleChange }
-				aria-describedby={ `${name}-error-text` }
-				{ ...props }
-				renderInput={ params => {
-					params.fullWidth = true
-					return <TextField
-						variant="standard"
-						{ ...params }
-						inputProps={ { ...params.inputProps } }
-						error={ !!errors[name] }
-						value={ `${data?.[name]}` || '' }
-						label={ label }
-					/>
-				} }
-			/>
-			{ errors[name] && <FormHelperText id={ `${name}-error-text` }>
-				{ errors[name] }
-			</FormHelperText> }
-		</>
+		<Autocomplete
+			data={ options }
+			label={ label }
+			id={ id || `${name}-input` }
+			onChange={ handleChange }
+			{ ...props }
+		/>
 	)
 }
 
-export default Autocomplete
+export default AutocompleteComponent

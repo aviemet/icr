@@ -1,4 +1,4 @@
-class ShiftsController < InertiaController
+class ShiftsController < ApplicationController
   # GET /schedules
   # Routes.shifts()
   def index

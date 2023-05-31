@@ -1,4 +1,4 @@
-class EmployeesController < InertiaController
+class EmployeesController < ApplicationController
   before_action :set_employee, only: %i[show edit update destroy]
   before_action :set_employees, only: %i[index]
 
