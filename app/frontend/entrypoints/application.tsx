@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	axios.defaults.headers.common['X-CSRF-Token'] = csrfToken
 
 	createInertiaApp({
-		title: title => `Giving Circle - ${title}`,
+		title: title => `ICR SLS - ${title}`,
 
 		resolve: async name => {
 			let checkedName = name

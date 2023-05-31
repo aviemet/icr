@@ -8,27 +8,32 @@ import { EditButton } from '@/Components/Button'
 
 const EmployeesTable = ({ employees }: { employees: Schema.Employee[] }) => {
 	return (
-		<Table>
-			<Table.Head>
-				<Table.Row>
-					<Table.Cell sort="f_name">First Name</Table.Cell>
-					<Table.Cell sort="l_name">Last Name</Table.Cell>
-					<Table.Cell className="actions">Actions</Table.Cell>
-				</Table.Row>
-			</Table.Head>
-			<Table.Body>
-				<Table.RowIterator render={ (employee: Schema.Employee) => (
-					<Table.Row key={ employee.id }>
-						<Table.Cell>
-							<Link href={ Routes.employee(employee.id) }>{ employee.name }</Link>
-						</Table.Cell>
-						<Table.Cell>
-							<EditButton href={ Routes.editEmployee(employee.id) } />
-						</Table.Cell>
+		<Table.TableProvider model="employee" rows={ employees }>
+			<Table>
+				<Table.Head>
+					<Table.Row>
+						<Table.Cell sort="f_name">First Name</Table.Cell>
+						<Table.Cell sort="l_name">Last Name</Table.Cell>
+						<Table.Cell className="actions">Actions</Table.Cell>
 					</Table.Row>
-				) } />
-			</Table.Body>
-		</Table>
+				</Table.Head>
+				<Table.Body>
+					<Table.RowIterator render={ (employee: Schema.Employee) => (
+						<Table.Row key={ employee.id }>
+							<Table.Cell>
+								<Link href={ Routes.employee(employee.id) }>{ employee.f_name }</Link>
+							</Table.Cell>
+							<Table.Cell>
+								<Link href={ Routes.employee(employee.id) }>{ employee.l_name }</Link>
+							</Table.Cell>
+							<Table.Cell>
+								<EditButton href={ Routes.editEmployee(employee.id) } />
+							</Table.Cell>
+						</Table.Row>
+					) } />
+				</Table.Body>
+			</Table>
+		</Table.TableProvider>
 	)
 }
 

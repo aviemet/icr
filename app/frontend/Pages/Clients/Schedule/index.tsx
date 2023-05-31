@@ -1,5 +1,5 @@
 import React, { useState, useEffect }  from 'react'
-import { Inertia } from '@inertiajs/inertia'
+import { router } from '@inertiajs/react'
 import { Routes } from '@/lib'
 import { format, set } from 'date-fns'
 import enUS from 'date-fns/locale/en-US'
@@ -34,7 +34,7 @@ const Schedule = ({ client, employees, shifts, dateRange }) => {
 	const handleRangeChange = (params, start, end) => {
 		console.log({ range: params, start, end })
 
-		Inertia.get(`/clients/${client.slug}/schedule`,
+		router.get(`/clients/${client.slug}/schedule`,
 			{ start, end },
 			{
 				only: ['shifts'],

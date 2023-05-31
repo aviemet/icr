@@ -1,5 +1,5 @@
 import React from 'react'
-import type { PageProps } from '@inertiajs/inertia'
+import type { PageProps } from '@inertiajs/core'
 import Providers from './Providers'
 
 import AppLayout from './AppLayout'

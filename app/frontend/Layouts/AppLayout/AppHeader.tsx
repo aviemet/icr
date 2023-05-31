@@ -11,7 +11,7 @@ const Header = () => {
 	return (
 		<Flex align="center" sx={ { width: '100%' } }>
 			<Box sx={ { flex: 1 } }>
-				<Text>Giving Circle</Text>
+				<Text>ICR SLS</Text>
 			</Box>
 			<Box>
 				<Menu position="bottom-end">

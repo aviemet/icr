@@ -1,5 +1,10 @@
-import { type InertiaFormProps as DefaultInertiaFormProps, InertiaHeadProps } from '@inertiajs/core-react';
-import { Page, PageProps, Errors, ErrorBag } from '@inertiajs/core'
+import { 
+	Page, 
+	PageProps, 
+	Errors, ErrorBag, 
+	InertiaHeadProps, 
+	type InertiaFormProps as DefaultInertiaFormProps, 
+} from '@inertiajs/core'
 
 declare global {
 	interface SharedInertiaProps extends PageProps {

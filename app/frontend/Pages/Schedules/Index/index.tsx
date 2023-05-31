@@ -1,6 +1,6 @@
 import React from 'react'
 import { Routes } from '@/lib'
-import { Head } from '@inertiajs/inertia-react'
+import { Head } from '@inertiajs/react'
 import { Link } from '@/Components'
 import { Grid } from '@/Components'
 import Table from './Table'
