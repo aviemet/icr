@@ -1,32 +1,34 @@
 import React from 'react'
-import { Divider, Navbar, Text } from '@mantine/core'
-import { Heading, Link } from '@/Components'
-import { Routes } from '@/lib'
+import { Divider, Navbar } from '@mantine/core'
+import { Heading } from '@/Components'
 import MobileMenuToggle from '../MobileMenuToggle'
-import { DashboardIcon, ShiftsIcons } from '@/Components/Icons'
 import menuItems from './menuItems'
+import MainLink from './MainLink'
 
 const AppSidebar = () => {
 	return (
 		<>
 			<Navbar.Section>
 				<MobileMenuToggle />
-				<Text>ICR SLS</Text>
+				<Heading order={ 2 }>ICR SLS</Heading>
 			</Navbar.Section>
 
 			<Divider />
 
 			<Navbar.Section grow>
-				{ menuItems.map(group => <>
-					<Heading key={ group.id }>{ group.title }</Heading>
-					{ group.children.map(item => <>
-						<Link href={ item.url } key={ item.id }>
-							{ React.createElement(item.icon) }
+				{ menuItems.map(group => <React.Fragment key={ group.id }>
+					<Heading key={ group.id } order={ 4 }>{ group.title }</Heading>
+					{ group.children.map(item => (
+						<MainLink
+							key={ item.id }
+							href={ item.url }
+							icon={ React.createElement(item.icon) }
+						>
 							{ item.title }
-						</Link>
-					</> ) }
+						</MainLink>
+					) ) }
 					<Divider />
-				</>) }
+				</React.Fragment>) }
 			</Navbar.Section>
 
 			<Divider />

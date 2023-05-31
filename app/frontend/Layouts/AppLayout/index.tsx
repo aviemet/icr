@@ -45,10 +45,12 @@ const AppLayout = ({ children }: { children: any }) => {
 				<Navbar
 					className={ cx(classes.navbar) }
 					hiddenBreakpoint={ sidebarBreakpoint }
-					p={ 0 }
 					hidden={ !sidebarOpen }
 					width={ { sm: 200, lg: 300 } }
-					sx={ { overflow: 'hidden' } }
+					p="sm"
+					sx={ {
+						overflow: 'hidden'
+					} }
 				>
 					<AppSidebar />
 				</Navbar>
