@@ -7,7 +7,6 @@ import {
 	useMantineTheme,
 	Flex,
 	Box,
-	ScrollArea,
 } from '@mantine/core'
 import useAppLayoutStyles from './useAppLayoutStyles'
 import AppHeader from './AppHeader'
@@ -61,7 +60,7 @@ const AppLayout = ({ children }: { children: any }) => {
 				</Footer>
 			}
 		>
-			<Box component={ ScrollArea }>{ children }</Box>
+			<Box>{ children }</Box>
 		</AppShell>
 	)
 }
