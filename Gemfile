@@ -14,6 +14,14 @@ gem "jbuilder"
 gem "inertia_rails", "~> 3.0.0"
 gem "vite_rails", "~> 3.0"
 
+# Models
+gem "activerecord", "~> 7.0"
+gem "kaminari", "~> 1.2"
+gem "decent_exposure", "~> 3.0"
+gem "jsonb_accessor", "~> 1.3"
+gem "oj_serializers", "~> 2.0"
+gem "types_from_serializers", "~> 2.0", git: "https://github.com/aviemet/types_from_serializers"
+
 # Helpers
 gem "factory_bot", "~> 6.2"
 gem "devise", "~> 4.8"
@@ -23,12 +31,6 @@ gem "time_for_a_boolean", "~> 0.2.1"
 gem "draper", "~> 4.0"
 gem "js-routes", "~> 2.2"
 gem "amazing_print", "~> 1.4"
-
-# Models
-gem "kaminari", "~> 1.2"
-gem "decent_exposure", "~> 3.0"
-gem "oj_serializers", "~> 2.0"
-gem "types_from_serializers", "~> 2.0", git: "https://github.com/aviemet/types_from_serializers"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
@@ -71,9 +73,6 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   gem "spring"
-
-  # Typescript schema generation
-  gem "schema2type", "~> 0.4.0"
 end
 
 group :test do

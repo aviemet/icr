@@ -118,7 +118,7 @@ export const clients: ((
 
 /**
  * Generates rails route to
- * /users/sign_out(.:format)
+ * /logout(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
@@ -258,7 +258,7 @@ export const newUserPassword: ((
 
 /**
  * Generates rails route to
- * /users/sign_up(.:format)
+ * /users/register(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
@@ -268,7 +268,7 @@ export const newUserRegistration: ((
 
 /**
  * Generates rails route to
- * /users/sign_in(.:format)
+ * /login(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
@@ -398,7 +398,7 @@ export const userRegistration: ((
 
 /**
  * Generates rails route to
- * /users/sign_in(.:format)
+ * /login(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */

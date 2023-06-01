@@ -538,11 +538,11 @@ export const clients = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"clients"],[1,[2,
 
 /**
  * Generates rails route to
- * /users/sign_out(.:format)
+ * /logout(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const destroyUserSession = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"users"],[2,[7,"/"],[2,[6,"sign_out"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+export const destroyUserSession = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"logout"],[1,[2,[8,"."],[3,"format"]]]]]);
 
 /**
  * Generates rails route to
@@ -647,19 +647,19 @@ export const newUserPassword = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"users"],
 
 /**
  * Generates rails route to
- * /users/sign_up(.:format)
+ * /users/register(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const newUserRegistration = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"users"],[2,[7,"/"],[2,[6,"sign_up"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+export const newUserRegistration = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"users"],[2,[7,"/"],[2,[6,"register"],[1,[2,[8,"."],[3,"format"]]]]]]]);
 
 /**
  * Generates rails route to
- * /users/sign_in(.:format)
+ * /login(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const newUserSession = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"users"],[2,[7,"/"],[2,[6,"sign_in"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+export const newUserSession = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"login"],[1,[2,[8,"."],[3,"format"]]]]]);
 
 /**
  * Generates rails route to
@@ -756,9 +756,9 @@ export const userRegistration = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"users"]
 
 /**
  * Generates rails route to
- * /users/sign_in(.:format)
+ * /login(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const userSession = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"users"],[2,[7,"/"],[2,[6,"sign_in"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+export const userSession = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"login"],[1,[2,[8,"."],[3,"format"]]]]]);
 
