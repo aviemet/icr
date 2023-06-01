@@ -21,10 +21,10 @@ const EmployeesTable = ({ employees }: { employees: Schema.Employee[] }) => {
 					<Table.RowIterator render={ (employee: Schema.Employee) => (
 						<Table.Row key={ employee.id }>
 							<Table.Cell>
-								<Link href={ Routes.employee(employee.id) }>{ employee.first_name }</Link>
+								<Link href={ Routes.employee(employee.id) }>{ employee.person.first_name }</Link>
 							</Table.Cell>
 							<Table.Cell>
-								<Link href={ Routes.employee(employee.id) }>{ employee.last_name }</Link>
+								<Link href={ Routes.employee(employee.id) }>{ employee.person.last_name }</Link>
 							</Table.Cell>
 							<Table.Cell>
 								<EditButton href={ Routes.editEmployee(employee.id) } />

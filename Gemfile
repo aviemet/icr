@@ -28,7 +28,6 @@ gem "devise", "~> 4.8"
 gem "ice_cube", "~> 0.16.4"
 gem "slug", "~> 4.1"
 gem "time_for_a_boolean", "~> 0.2.1"
-gem "draper", "~> 4.0"
 gem "js-routes", "~> 2.2"
 gem "amazing_print", "~> 1.4"
 
