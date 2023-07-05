@@ -5,7 +5,13 @@ import { Link } from '@/Components'
 import { Grid } from '@/Components'
 import Table from './Table'
 
-const Index = ({ clients }) => {
+interface SchedulesIndexProps {
+	clients: Schema.ClientsIndex[]
+	// pagination: Schema.Pagination
+}
+
+const SchedulesIndex = ({ clients }: SchedulesIndexProps) => {
+
 	return (
 		<>
 			<Head title="Clients"></Head>
@@ -17,11 +23,13 @@ const Index = ({ clients }) => {
 				</Grid.Col>
 
 				<Grid.Col xs={ 2 }>
-					<Link href={ Routes.newClient() } as="button">New Client</Link>
+					{ /* <Link href={ Routes.newClient() } as="button">New Client</Link> */ }
 				</Grid.Col>
 
 				<Grid.Col xs={ 12 }>
-					<Table clients={ clients } />
+					<Table
+						clients={ clients }
+					/>
 				</Grid.Col>
 
 			</Grid>
@@ -29,4 +37,4 @@ const Index = ({ clients }) => {
 	)
 }
 
-export default Index
+export default SchedulesIndex

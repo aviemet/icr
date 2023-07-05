@@ -1,6 +1,6 @@
 class Client < ApplicationRecord
   belongs_to :person, dependent: :destroy
-  has_and_belongs_to_many :shifts, foreign_key: :person_id
+  has_and_belongs_to_many :shifts
   has_many :household_members
   has_many :households, through: :household_members
 

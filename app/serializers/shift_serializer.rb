@@ -9,7 +9,7 @@ class ShiftSerializer < ApplicationSerializer
   )
 
   attribute :title do
-    "#{starts_at.strftime('%-I %p')} - #{employee.first_name}"
+    "#{shift.starts_at.strftime('%-I %p')} - #{shift.employee.person.first_name}"
   end
 
   belongs_to :employee, serializer: EmployeeSerializer

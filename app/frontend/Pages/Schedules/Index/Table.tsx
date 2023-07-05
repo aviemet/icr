@@ -8,42 +8,45 @@ import {
 import { EditButton } from '@/Components/Button'
 
 interface IScheduleIndexProps {
-	schedules: Schema.Schedule[]
-	pagination: Schema.Pagination
+	clients: Schema.ClientsIndex[]
+	// pagination: Schema.Pagination
 }
 
-const SchedulesTable = ({ schedules, pagination }: IScheduleIndexProps) => {
+const SchedulesTable = ({ clients }: IScheduleIndexProps) => {
+
 	return (
 		<Container>
 			<Table.TableProvider
-				model="schedule"
-				rows={ schedules }
-				pagination={ pagination }
+				model="client"
+				rows={ clients }
 			>
 				<Table>
 					<Table.Head>
 						<Table.Row>
 							<Table.Cell>First Name</Table.Cell>
 							<Table.Cell>Last Name</Table.Cell>
-							<Table.Cell>Actions Name</Table.Cell>
+							<Table.Cell style={ { textAlign: 'right', paddingRight: '1rem' } }>Actions</Table.Cell>
 						</Table.Row>
 					</Table.Head>
 
 					<Table.Body>
+						<Table.RowIterator render={ (client: Schema.ClientsIndex) => {
+							console.log({ person: client.person })
+							return(
+								<Table.Row key={ client.id }>
+									<Table.Cell>
+										<Link href={ Routes.scheduleClient(client.id) }>{ client.person.first_name }</Link>
+									</Table.Cell>
 
+									<Table.Cell><Link href={ Routes.scheduleClient(client.id) }>{ client.person.last_name }</Link></Table.Cell>
+
+									<Table.Cell>
+										<EditButton href={ ''/* Routes.editSchedule(client.id) */ } />
+									</Table.Cell>
+								</Table.Row>
+							)
+						} } />
 					</Table.Body>
-					<Table.RowIterator render={ (schedule: Schema.Schedule) => (
-						<Table.Row>
-							<Table.Cell>
-								<Link href={ Routes.scheduleClient(schedule.slug) }>{ schedule.first_name }</Link>
-							</Table.Cell>
-
-							<Table.Cell><Link href={ Routes.scheduleClient(schedule.slug) }>{ schedule.last_name }</Link></Table.Cell>
-							<Table.Cell>
-								<EditButton href={ Routes.editSchedule(schedule.id) } />
-							</Table.Cell>
-						</Table.Row>
-					) } />
 				</Table>
 			</Table.TableProvider>
 		</Container>

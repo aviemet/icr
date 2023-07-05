@@ -7,7 +7,4 @@ class UserSerializer < ApplicationSerializer
     :updated_at,
   )
 
-  has_one :client, serializer: ClientSerializer
-  has_one :employee, serializer: EmployeeSerializer
-  has_one :user, serializer: UserSerializer
 end

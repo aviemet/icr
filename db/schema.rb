@@ -38,8 +38,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_31_231947) do
   end
 
   create_table "clients_shifts", force: :cascade do |t|
-    t.bigint "client_id", null: false
-    t.bigint "shift_id", null: false
+    t.bigint "client_id"
+    t.bigint "shift_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_clients_shifts_on_client_id"
@@ -193,8 +193,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_31_231947) do
 
   add_foreign_key "addresses", "contacts"
   add_foreign_key "clients", "people"
-  add_foreign_key "clients_shifts", "clients"
-  add_foreign_key "clients_shifts", "shifts"
   add_foreign_key "contacts", "addresses", column: "primary_address_id"
   add_foreign_key "contacts", "emails", column: "primary_email_id"
   add_foreign_key "contacts", "phones", column: "primary_phone_id"

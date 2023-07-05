@@ -6,7 +6,7 @@ class ShiftsController < ApplicationController
   def index
     clients = Client.all
     render inertia: "Schedules/Index", props: {
-      clients: clients.render,
+      clients: clients.render
     }
   end
 

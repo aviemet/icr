@@ -8,4 +8,8 @@ class PersonSerializer < ApplicationSerializer
     :created_at,
     :updated_at,
   )
+
+  has_one :client, serializer: Clients::ShallowSerializer
+  has_one :employee, serializer: Employees::ShallowSerializer
+  has_one :user, serializer: UserSerializer
 end
