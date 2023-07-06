@@ -123,7 +123,7 @@ declare namespace schema {
 		id: number;
 		recurring_type: 'daily' | 'weekly' | 'monthly' | 'yearly';
 		offset: number;
-		max_occurances?: number | null;
+		max_occurrences?: number | null;
 		end_date?: number | null;
 		day_of_week?: number | null;
 		week_of_month?: number | null;

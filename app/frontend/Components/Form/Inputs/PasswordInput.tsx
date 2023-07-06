@@ -4,10 +4,9 @@ import Field from '../Field'
 import cx from 'clsx'
 import { useInertiaInput } from 'use-inertia-form'
 import ConditionalWrapper from '@/Components/ConditionalWrapper'
+import { type IFormInputProps } from '.'
 
-interface IPasswordFormInputProps extends Omit<IPasswordInputProps, 'onBlur'|'onChange'|'name'>, IInertiaInputProps {
-	field?: boolean
-}
+interface IPasswordFormInputProps extends Omit<IPasswordInputProps, 'onBlur'|'onChange'|'name'>, IFormInputProps<string> {}
 
 const FormInput = forwardRef<HTMLInputElement, IPasswordFormInputProps>((
 	{

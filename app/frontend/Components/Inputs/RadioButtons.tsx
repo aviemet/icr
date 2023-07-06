@@ -1,6 +1,6 @@
 import React from 'react'
 import { SegmentedControl, SegmentedControlProps } from '@mantine/core'
-import Label from '../Label'
+import Label from './Label'
 
 export type TOption = {
 	label: string
@@ -16,7 +16,17 @@ export interface IRadioButtonsProps extends Omit<SegmentedControlProps, 'data'> 
 	required?: boolean
 }
 
-const RadioButtons = ({ label, labelPosition = 'start', options, name, id, value, required, onChange }: IRadioButtonsProps) => {
+const RadioButtons = ({
+	label,
+	labelPosition = 'start',
+	options,
+	name,
+	id,
+	value,
+	required,
+	onChange,
+	mt = 'md',
+}: IRadioButtonsProps) => {
 	const LabelComponent = () => <Label required={ required } htmlFor={ id }>{ label }</Label>
 
 	return (
@@ -28,6 +38,7 @@ const RadioButtons = ({ label, labelPosition = 'start', options, name, id, value
 					if(onChange) onChange(choice)
 				} }
 				data={ options }
+				mt={ mt }
 			/>
 			{ label && labelPosition === 'end' && <LabelComponent /> }
 		</>

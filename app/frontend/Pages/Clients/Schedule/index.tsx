@@ -44,8 +44,6 @@ const Schedule = ({ client, employees, shifts, dateRange }) => {
 		)
 	}
 
-	console.log({ shifts })
-
 	return (
 		<>
 			<Heading>{ client.full_name }</Heading>

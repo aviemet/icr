@@ -1,14 +1,16 @@
-import React, { forwardRef, useMemo } from 'react'
+import React, { forwardRef, useCallback } from 'react'
 import { Select, type SelectProps } from '@mantine/core'
-import Label from '../Label'
+import Label from './Label'
+import { router } from '@inertiajs/react'
+import { coerceArray } from '@/lib'
 
 export interface ISearchableDropdownProps extends Omit<SelectProps, 'data'> {
-	options: Array<Record<string, any>>
+	options?: Array<Record<string, any>>
 	getLabel?: (option: Record<string, any>) => any
 	getValue?: (option: Record<string, any>) => string
 	disabledOptions?: (label: string, value: string | number) => boolean
 	onOpen?: () => void
-	filterMatchKeys?: string[]
+	fetchOnOpen?: string
 }
 
 const SearchableDropdownComponent = forwardRef<HTMLInputElement, ISearchableDropdownProps>((
@@ -17,32 +19,46 @@ const SearchableDropdownComponent = forwardRef<HTMLInputElement, ISearchableDrop
 		getLabel = option => option.name,
 		getValue = option => String(option.id),
 		disabledOptions,
-		filterMatchKeys,
 		label,
 		required,
 		id,
 		name,
 		searchable = true,
 		clearable = true,
+		fetchOnOpen,
+		onDropdownOpen,
+		mt = 'md',
 		...props
 	},
 	ref,
 ) => {
 	const inputId = id || name
 
-	const data = useMemo(() => options.map(option => {
-		const optionPart = {
-			label: getLabel(option),
-			value: getValue(option),
-			disabled: false,
-		}
+	const data = useCallback(() => {
+		if(!options) return []
 
-		if(disabledOptions) {
-			optionPart.disabled = disabledOptions(optionPart.label, optionPart.value)
-		}
+		return options.map(option => {
+			const optionPart = {
+				label: getLabel(option),
+				value: getValue(option),
+				disabled: false,
+			}
 
-		return optionPart
-	}), [options])
+			if(disabledOptions) {
+				optionPart.disabled = disabledOptions(optionPart.label, optionPart.value)
+			}
+
+			return optionPart
+		})
+	}, [options])
+
+	const fetchNewRecords = (query?: string) => {
+		if(!fetchOnOpen) return
+
+		router.reload({ only: coerceArray(fetchOnOpen) })
+
+		if(onDropdownOpen) onDropdownOpen()
+	}
 
 	return (
 		<>
@@ -56,10 +72,12 @@ const SearchableDropdownComponent = forwardRef<HTMLInputElement, ISearchableDrop
 				searchable={ searchable }
 				clearable={ clearable }
 				size="md"
-				data={ data }
+				data={ data() }
 				required={ required }
 				maxDropdownHeight={ 400 }
 				nothingFound="No Results"
+				onDropdownOpen={ fetchNewRecords }
+				mt={ mt }
 				{ ...props }
 			/>
 		</>

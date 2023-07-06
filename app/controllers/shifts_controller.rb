@@ -37,7 +37,7 @@ class ShiftsController < ApplicationController
         :separation_count,
         :offset,
         :end_date,
-        :max_occurances,
+        :max_occurrences,
         :day_of_week,
         :day_of_month,
         :month_of_year,

@@ -1,11 +1,13 @@
 import React, { forwardRef } from 'react'
+import { type Sx } from '@mantine/core'
 import Field from '../Field'
 import CheckboxInput, { type ICheckboxProps } from '@/Components/Inputs/Checkbox'
 import { useInertiaInput } from 'use-inertia-form'
 import ConditionalWrapper from '@/Components/ConditionalWrapper'
+import { type IFormInputProps } from '.'
 
-interface IFormCheckboxProps extends Omit<ICheckboxProps, 'name'|'onBlur'|'onChange'|'defaultChecked'>, IInertiaInputProps {
-	field?: boolean
+interface IFormCheckboxProps extends Omit<ICheckboxProps, 'name'|'onBlur'|'onChange'|'defaultChecked'>, IFormInputProps<boolean> {
+	sx?: Sx
 }
 
 const FormCheckboxComponent = forwardRef<HTMLInputElement, IFormCheckboxProps>((
@@ -18,6 +20,7 @@ const FormCheckboxComponent = forwardRef<HTMLInputElement, IFormCheckboxProps>((
 		className,
 		model,
 		field = true,
+		sx,
 		 ...props
 	},
 	ref,
@@ -26,7 +29,7 @@ const FormCheckboxComponent = forwardRef<HTMLInputElement, IFormCheckboxProps>((
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setValue(e.target.checked)
-		if(onChange) onChange(e, form)
+		if(onChange) onChange(e.target.checked, form)
 	}
 
 	const handleBlur = () => {
@@ -40,7 +43,6 @@ const FormCheckboxComponent = forwardRef<HTMLInputElement, IFormCheckboxProps>((
 					type="checkbox"
 					required={ required }
 					errors={ !!error }
-					grid={ false }
 				>
 					{ children }
 				</Field>
@@ -57,6 +59,7 @@ const FormCheckboxComponent = forwardRef<HTMLInputElement, IFormCheckboxProps>((
 				onBlur={ handleBlur }
 				error={ error }
 				ref={ ref }
+				sx={ [{ padding: '14px 10px' }, sx] }
 				{ ...props }
 			/>
 		</ConditionalWrapper>

@@ -3,8 +3,9 @@ import Field from '../Field'
 import DateTimeInput, { type IDateTimeProps } from '@/Components/Inputs/DateTime'
 import { useInertiaInput } from 'use-inertia-form'
 import ConditionalWrapper from '@/Components/ConditionalWrapper'
+import { type IFormInputProps } from '.'
 
-interface IDateTimeFormProps extends Omit<IDateTimeProps, 'name'|'onChange'|'onBlur'>, IInertiaInputProps {
+interface IDateTimeFormProps extends Omit<IDateTimeProps, 'name'|'onChange'|'onBlur'>, IFormInputProps<Date> {
 	field?: boolean
 }
 

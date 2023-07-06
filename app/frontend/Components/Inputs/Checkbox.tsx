@@ -1,12 +1,10 @@
 import React, { forwardRef } from 'react'
-import { Checkbox, Sx, type CheckboxProps } from '@mantine/core'
+import { Checkbox, type CheckboxProps } from '@mantine/core'
 
-export interface ICheckboxProps extends CheckboxProps {
-	sx?: Sx
-}
+export interface ICheckboxProps extends CheckboxProps {}
 
 const CheckboxComponent = forwardRef<HTMLInputElement, ICheckboxProps>((
-	{ id, name, sx, ...props },
+	{ id, name, mt = 'md', ...props },
 	ref,
 ) => {
 	const inputId = id ?? name
@@ -16,7 +14,7 @@ const CheckboxComponent = forwardRef<HTMLInputElement, ICheckboxProps>((
 			ref={ ref }
 			id={ inputId }
 			name={ name }
-			sx={ [{  }, sx] }
+			mt={ mt }
 			{ ...props }
 		/>
 	)

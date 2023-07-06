@@ -46,7 +46,7 @@ export default Repeats
 // 				...data,
 // 				offset: 1,
 // 				end_type: 'never',
-// 				max_occurances: 10,
+// 				max_occurrences: 10,
 // 				end_date: add(data.ends_at, { weeks: 1 }),
 // 				recurring_type: 'daily'
 // 			})
@@ -57,7 +57,7 @@ export default Repeats
 // 				recurring_type: undefined,
 // 				end_type: undefined,
 // 				end_date: undefined,
-// 				max_occurances: undefined,
+// 				max_occurrences: undefined,
 // 				day_of_week: undefined,
 // 				week_of_month: undefined,
 // 				day_of_month: undefined,
@@ -92,7 +92,7 @@ export default Repeats
 // 								<NumberInput name="offset" min={ 1 } />
 // 							</Grid>
 
-// 							{ /* Reccurance Type */ }
+// 							{ /* Recurrence Type */ }
 // 							<Grid item xs={ 5 }>
 // 								<FormControl>
 // 									<Select
@@ -122,12 +122,12 @@ export default Repeats
 // 								</Grid>
 // 							}
 
-// 							{ /* Recurrance End Criteria */ }
+// 							{ /* Recurrence End Criteria */ }
 // 							<Grid item xs={ 12 }>
 // 								<FormControl>
-// 									<FormLabel id="recurrance-ending-label">Ends</FormLabel>
+// 									<FormLabel id="recurrence-ending-label">Ends</FormLabel>
 // 									<RadioGroup
-// 										aria-labelledby="recurrance-ending-label"
+// 										aria-labelledby="recurrence-ending-label"
 // 										defaultValue="never"
 // 										name="radio-buttons-group"
 // 										value={ data.end_type }
@@ -138,9 +138,9 @@ export default Repeats
 // 											On
 // 											<DatePicker name="end_date" inputFormat="EEEE, MMM do" />
 // 										</> } />
-// 										<FormControlLabel value="occurances" control={ <Radio /> } label={ <>
+// 										<FormControlLabel value="occurrences" control={ <Radio /> } label={ <>
 // 											After
-// 											<NumberInput name="max_occurances" min={ 1 } />
+// 											<NumberInput name="max_occurrences" min={ 1 } />
 // 										</> } />
 // 									</RadioGroup>
 // 								</FormControl>

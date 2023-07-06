@@ -5,7 +5,7 @@ export interface ISwitchProps extends SwitchProps {
 	sx?: Sx
 }
 
-const SwitchComponent = ({ id, name, sx, ...props }: ISwitchProps) => {
+const SwitchComponent = ({ id, name, mt = 'md', sx, ...props }: ISwitchProps) => {
 	const inputId = id ?? name
 
 	return (
@@ -15,6 +15,7 @@ const SwitchComponent = ({ id, name, sx, ...props }: ISwitchProps) => {
 				name={ name }
 				required={ props.required }
 				sx={ [{ padding: '14px 10px' }, sx] }
+				mt={ mt }
 				{ ...props }
 			/>
 		</>

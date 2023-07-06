@@ -1,10 +1,19 @@
 import React from 'react'
 import { Textarea, type TextareaProps } from '@mantine/core'
-import Label from '../Label'
+import Label from './Label'
 
 export interface ITextareaProps extends TextareaProps { }
 
-const TextareaComponent = ({ label, name, required = false, value, id, radius = 'xs', ...props }: ITextareaProps) => {
+const TextareaComponent = ({
+	label,
+	name,
+	required = false,
+	value,
+	id,
+	radius = 'xs',
+	mt = 'md',
+	...props
+}: ITextareaProps) => {
 	const inputId = id || name
 
 	return (

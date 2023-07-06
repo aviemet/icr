@@ -1,15 +1,9 @@
 import React, { useCallback } from 'react'
 import { usePage } from '@inertiajs/react'
-import { add, format } from 'date-fns'
+import { add } from 'date-fns'
 import { Form, Autocomplete, DateTime, Submit } from '@/Components/Form'
 import { Routes } from '@/lib'
-import {
-	Box,
-	Button,
-	Grid,
-	Link
-} from '@/Components'
-import DaysPicker from './DaysPicker'
+import { Box } from '@/Components'
 import Repeats from './Repeats'
 
 type TFormData = {
@@ -21,9 +15,9 @@ type TFormData = {
 	is_recurring?: boolean
 	recurring_type?: 'daily'|'weekly'|'monthly'|'yearly'
 	offset?: number
-	end_type?: 'never'|'date'|'occurances'
+	end_type?: 'never'|'date'|'occurrences'
 	end_date?: Date
-	max_occurances?: string
+	max_occurrences?: string
 	day_of_week?: string
 	week_of_month?: string
 	day_of_month?: string
@@ -33,8 +27,8 @@ type TFormData = {
 interface INewShiftFormProps {
 	start: Date
 	end?: Date
-	client: Schema.Person
-	employees: Schema.Person[]
+	client: Schema.Client
+	employees: Schema.Employee[]
 	onSubmit?: () => void
 }
 
@@ -44,7 +38,7 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, end, client, employ
 	const defaultData: TFormData = {
 		starts_at: start,
 		ends_at: end || add(start, { hours: 8 }),
-		client_ids: [client.id],
+		client_ids: [client.id!],
 		employee: undefined,
 		created_by_id: auth.user.id,
 		is_recurring: false,
@@ -67,7 +61,7 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, end, client, employ
 					recurring_type: data.recurring_type,
 					offset: data.offset,
 					end_date: data.end_type === 'date' ? data.end_date : undefined,
-					max_occurances: data.end_type === 'occurances' ? data.max_occurances : undefined,
+					max_occurrences: data.end_type === 'occurrences' ? data.max_occurrences : undefined,
 					day_of_week: data.day_of_week,
 					week_of_month: data.week_of_month,
 					day_of_month: data.day_of_month,
@@ -87,65 +81,36 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ start, end, client, employ
 
 	return (
 		<Form noValidate onSubmit={ handleSubmit } to={ Routes.shifts() } data={ defaultData }>
-			<Grid>
-				{ /* Employee */ }
-				<Grid.Col xs={ 12 }>
-					<Autocomplete
-						label="Employee"
-						name="employee"
-						options={ useCallback(() => employees.map(e => ({
-							label: `${e.first_name} ${e.last_name}`,
-							id: e.id
-						})), [employees])() }
-					/>
-				</Grid.Col>
+			{ /* Employee */ }
+			<Autocomplete
+				label="Employee"
+				name="employee"
+				options={ useCallback(() => employees.map(e => ({
+					label: `${e.person.first_name} ${e.person.last_name}`,
+					value: String(e.id)
+				})), [employees])() }
+			/>
 
-				{ /* Start */ }
-				<Grid.Col xs={ 12 } md={ 6 }>
-					<Grid.Col xs={ 8 }>
-						<DateTime
-							name="starts_at"
-							label="Start"
-							inputFormat="EEEE, MMM do"
-						/>
-					</Grid.Col>
-					<Grid.Col xs={ 4 }>
-						<DateTime
-							name="starts_at"
-							openTo="hours"
-							inputFormat="hh:mm a"
-						/>
-					</Grid.Col>
-				</Grid.Col>
+			{ /* Start */ }
+			<DateTime
+				name="starts_at"
+				label="Start"
+				dropdownType="modal"
+			/>
 
-				{ /* End */ }
-				<Grid.Col xs={ 12 } md={ 6 }>
-					<Grid.Col xs={ 4 }>
-						<DateTime
-							name="ends_at"
-							openTo="hours"
-							inputFormat="hh:mm a"
-						/>
-					</Grid.Col>
-					<Grid.Col xs={ 8 }>
-						<DateTime
-							name="ends_at"
-							label="End"
-							inputFormat="EEEE, MMM do"
-						/>
-					</Grid.Col>
-				</Grid.Col>
+			{ /* End */ }
+			<DateTime
+				name="ends_at"
+				label="End"
+				dropdownType="modal"
+			/>
 
-				{ /* Repeats */ }
-				<Repeats />
+			{ /* Repeats */ }
+			<Repeats />
 
-				<Grid.Col xs={ 12 }>
-					<Box sx={ { mt: 2 } }>
-						<Submit />
-					</Box>
-				</Grid.Col>
-
-			</Grid>
+			<Box sx={ { mt: 2 } }>
+				<Submit />
+			</Box>
 		</Form>
 	)
 }

@@ -4,10 +4,9 @@ import TextareaInput, { type ITextareaProps } from '@/Components/Inputs/Textarea
 import cx from 'clsx'
 import { useInertiaInput } from 'use-inertia-form'
 import ConditionalWrapper from '@/Components/ConditionalWrapper'
+import { type IFormInputProps } from '.'
 
-interface IFormTextareaProps extends Omit<ITextareaProps, 'onBlur'|'onChange'|'name'>, IInertiaInputProps {
-	field?: boolean
-}
+interface IFormTextareaProps extends Omit<ITextareaProps, 'onBlur'|'onChange'|'name'>, IFormInputProps<string> {}
 
 const Textarea = ({
 	label,

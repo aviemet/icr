@@ -13,7 +13,7 @@ FactoryBot.define do
     starts_at { generate(:start_time) }
     ends_at { generate(:end_time) }
     created_by { User.first }
-    employee { Employee.first }
+    employee { Employee.order("RANDOM()").first }
     clients { [Client.first] }
   end
 end

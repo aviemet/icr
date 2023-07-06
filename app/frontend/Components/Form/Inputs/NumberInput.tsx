@@ -4,10 +4,9 @@ import Field from '../Field'
 import cx from 'clsx'
 import { useInertiaInput } from 'use-inertia-form'
 import ConditionalWrapper from '@/Components/ConditionalWrapper'
+import { type IFormInputProps } from '.'
 
-interface INumberFormInputProps extends Omit<INumberInputProps, 'onBlur'|'onChange'|'name'>, IInertiaInputProps {
-	field?: boolean
-}
+interface INumberFormInputProps extends Omit<INumberInputProps, 'onBlur'|'onChange'|'name'>, IFormInputProps<number> {}
 
 const FormInput = forwardRef<HTMLInputElement, INumberFormInputProps>((
 	{
@@ -23,7 +22,7 @@ const FormInput = forwardRef<HTMLInputElement, INumberFormInputProps>((
 	},
 	ref,
 ) => {
-	const { form, inputName, inputId, value, setValue, error } = useInertiaInput({ name, model })
+	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<number>({ name, model })
 
 	const handleChange = (e: number) => {
 		const v = e
