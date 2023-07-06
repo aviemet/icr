@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { MultiSelect } from '@mantine/core'
-import { Set } from 'immutable'
 
 const days = [
 	{ value: 'sun', label: 'Sunday' },

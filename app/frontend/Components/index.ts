@@ -9,6 +9,7 @@ export { default as Page } from './Page'
 export { default as Section } from './Section'
 export { default as SearchInput } from './SearchInput'
 export { default as NewShiftForm } from '../Pages/Shifts/NewShiftForm'
+export { default as Calendar } from './Calendar'
 export { default as ShiftCalendar } from './ShiftCalendar'
 
 // Export UI library components as a proxy to allow easy refactoring
