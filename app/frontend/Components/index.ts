@@ -1,6 +1,5 @@
 export { default as ConditionalWrapper } from './ConditionalWrapper'
 export { default as Link } from './Link'
-export { default as Image } from './Image'
 export { default as Table } from './Table'
 export { default as Button } from './Button'
 export { default as Menu } from './Menu'
@@ -21,6 +20,7 @@ export {
 	Flex,
 	Grid,
 	Group,
+	Image,
 	List,
 	Modal,
 	Paper,
