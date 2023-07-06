@@ -1,12 +1,22 @@
 import * as React from 'react'
 import { Routes } from '@/lib'
 import {
+	Box,
+	ColorPicker,
+	Group,
 	Link,
 	Table,
 } from '@/Components'
 import { EditButton } from '@/Components/Button'
+import { updateEmployee } from '@/queries/clients'
+import ShiftColorPicker from './ShiftColorPicker'
 
-const EmployeesTable = ({ employees }: { employees: Schema.Employee[] }) => {
+interface EmployeesTableProps {
+	employees: Schema.EmployeesIndex[]
+}
+
+const EmployeesTable = ({ employees }: EmployeesTableProps) => {
+	console.log('break')
 	return (
 		<Table.TableProvider model="employee" rows={ employees }>
 			<Table>
@@ -14,21 +24,30 @@ const EmployeesTable = ({ employees }: { employees: Schema.Employee[] }) => {
 					<Table.Row>
 						<Table.Cell sort="first_name">First Name</Table.Cell>
 						<Table.Cell sort="last_name">Last Name</Table.Cell>
+						<Table.Cell>Shift Color</Table.Cell>
 						<Table.Cell className="actions">Actions</Table.Cell>
 					</Table.Row>
 				</Table.Head>
 				<Table.Body>
-					<Table.RowIterator render={ (employee: Schema.Employee) => (
+					<Table.RowIterator render={ (employee: Schema.EmployeesIndex) => (
 						<Table.Row key={ employee.id }>
+
 							<Table.Cell>
 								<Link href={ Routes.employee(employee.id) }>{ employee.person.first_name }</Link>
 							</Table.Cell>
+
 							<Table.Cell>
 								<Link href={ Routes.employee(employee.id) }>{ employee.person.last_name }</Link>
 							</Table.Cell>
+
+							<Table.Cell>
+								<ShiftColorPicker employee={ employee } />
+							</Table.Cell>
+
 							<Table.Cell>
 								<EditButton href={ Routes.editEmployee(employee.id) } />
 							</Table.Cell>
+
 						</Table.Row>
 					) } />
 				</Table.Body>

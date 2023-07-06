@@ -2234,6 +2234,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-core@npm:4.29.19":
+  version: 4.29.19
+  resolution: "@tanstack/query-core@npm:4.29.19"
+  checksum: 91a79dbebebc139d118542a5fe83fb54a6f6448bbe1563db1a0bed0c6d44e1d023613efde3c4ac747c72d067110013ac56f90611bf8affc390eda1ac3f99066e
+  languageName: node
+  linkType: hard
+
 "@tanstack/react-query-devtools@npm:^4.29.15":
   version: 4.29.19
   resolution: "@tanstack/react-query-devtools@npm:4.29.19"
@@ -2246,6 +2253,25 @@ __metadata:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: f077028c109da225b8e8e907a8fb4ad47d3049f6f5d16e5613adb135c531abf62c8975384edbb4d502bb064c98c3c513ee4f3df7c686198e644808311145e79c
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:^4.29.19":
+  version: 4.29.19
+  resolution: "@tanstack/react-query@npm:4.29.19"
+  dependencies:
+    "@tanstack/query-core": 4.29.19
+    use-sync-external-store: ^1.2.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-native: "*"
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+    react-native:
+      optional: true
+  checksum: 2780ac35b4d1dabcd3e708b95891376e7e609109270d40442b33f4747c508c23e46bcadc692f997f81d38f62b5ab31f8e42bc9a785dfa4afe0c390adb6f37e52
   languageName: node
   linkType: hard
 
@@ -2611,6 +2637,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/date-arithmetic@npm:*":
+  version: 4.1.1
+  resolution: "@types/date-arithmetic@npm:4.1.1"
+  checksum: 4222f5bd378a4e71225f3a1bf5d9e65acbeb7b832bfcd6d61fe03ec5eb6ccf488c235e0e421f15f2b64d862f674f8faa1ae78fee108d82849fbcf0a4e8e13a26
+  languageName: node
+  linkType: hard
+
 "@types/estree@npm:^1.0.0":
   version: 1.0.1
   resolution: "@types/estree@npm:1.0.1"
@@ -2687,6 +2720,17 @@ __metadata:
   dependencies:
     parchment: ^1.1.2
   checksum: e629157d11a8398c945e9d9e6b3ebb678f996b195976ddfcabd9771ac7e55a4ebbab3b0c320dc8eb0033715ea5fd197758ac14b4f50bf1d12fd3648fe24d1cb5
+  languageName: node
+  linkType: hard
+
+"@types/react-big-calendar@npm:^1.6.4":
+  version: 1.6.4
+  resolution: "@types/react-big-calendar@npm:1.6.4"
+  dependencies:
+    "@types/date-arithmetic": "*"
+    "@types/prop-types": "*"
+    "@types/react": "*"
+  checksum: 8bb6e70ee10e5807943992ab572a9d81c7ab8eac2fa9cbacb17aeb64380b44f1693208299d4c5a736816842d9294da4c3da0980c972597c7a23f024925fbd409
   languageName: node
   linkType: hard
 
@@ -5439,6 +5483,7 @@ __metadata:
     "@mantine/tiptap": ^6.0.14
     "@rollup/plugin-dynamic-import-vars": ^2.0.3
     "@tabler/icons-react": ^2.23.0
+    "@tanstack/react-query": ^4.29.19
     "@tanstack/react-query-devtools": ^4.29.15
     "@tiptap/extension-highlight": ^2.0.3
     "@tiptap/extension-link": ^2.0.3
@@ -5450,6 +5495,7 @@ __metadata:
     "@tiptap/react": ^2.0.3
     "@tiptap/starter-kit": ^2.0.3
     "@types/react": ^18.2.14
+    "@types/react-big-calendar": ^1.6.4
     "@types/react-dom": ^18.2.6
     "@typescript-eslint/eslint-plugin": ^5.61.0
     "@typescript-eslint/parser": ^5.61.0

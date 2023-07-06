@@ -43,4 +43,9 @@ Rails.application.routes.draw do
   # TEMPORARY #
 
   get "settings", to: "pages#index", as: :settings
+
+  namespace :api do
+    resources :employees, only: [:update]
+    patch "employees/:id/update_settings" => "employees#update_settings", as: :update_employee_settings
+  end
 end

@@ -1,7 +1,8 @@
-class EmployeeSerializer < ApplicationSerializer
+class Employees::IndexSerializer < ApplicationSerializer
   object_as :employee
 
   attributes(
+    :id,
     :number,
     :settings,
     :created_at,

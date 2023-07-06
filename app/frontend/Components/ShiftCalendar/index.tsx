@@ -6,6 +6,7 @@ import enUS from 'date-fns/locale/en-US'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
+import { Box } from '@mantine/core'
 
 const DragAndDropCalendar = withDragAndDrop(Calendar)
 
@@ -16,7 +17,7 @@ const localizer = dateFnsLocalizer({
 	getDay,
 	locales: {
 		'en-US': enUS,
-	}
+	},
 })
 
 const getDateRange = data => {
@@ -74,22 +75,71 @@ const ShiftCalendar = ({ shifts, onSelectEvent, onSelectSlot, onNavigate, onView
 		}
 	}
 
+	const eventStyleGetter = (event: Schema.Shift, start, end, isSelected) => {
+		var backgroundColor = '#' + event.hexColor
+
+		console.log({ event, backgroundColor, start, end, isSelected })
+		var style = {
+			backgroundColor: backgroundColor,
+			borderRadius: '0px',
+			opacity: 0.8,
+			color: 'black',
+			border: '0px',
+			display: 'block',
+		}
+
+		return {
+			style: style,
+		}
+	}
+
 	return (
-		<DragAndDropCalendar
-			selectable
-			showAllEvents={ true }
-			localizer={ localizer }
-			events={ shifts }
-			defaultDate={ defaultDate() }
-			startAccessor="starts_at"
-			endAccessor="ends_at"
-			style={ { height: '100vh' } }
-			onSelectEvent={ handleSelectEvent }
-			onSelectSlot={ handleSelectSlot }
-			onNavigate={ handleNavigate }
-			onView={ handleView }
-			onRangeChange={ handleRangeChange }
-		/>
+		<Box sx={ (theme) => {
+			console.log({ white: theme.white })
+			const styles = {}
+
+			if(theme.colorScheme === 'dark') {
+				styles['.rbc-toolbar'] = {
+					'button': {
+						color: theme.white,
+						'&.rbc-active': {
+							backgroundColor: theme.fn.primaryColor(),
+						},
+					},
+				}
+
+				styles['.rbc-off-range-bg'] = {
+					backgroundColor: theme.colors.gray[9],
+				}
+
+				styles['.rbc-today'] = {
+					backgroundColor: theme.colors.gray[8],
+				}
+
+				styles['.rbc-day-bg + .rbc-day-bg'] = {
+					borderLeft: `1px solid ${theme.colors.gray[9]}`,
+				}
+			}
+
+			return styles
+		} }>
+			<DragAndDropCalendar
+				selectable
+				showAllEvents={ true }
+				localizer={ localizer }
+				events={ shifts }
+				defaultDate={ defaultDate() }
+				startAccessor="starts_at"
+				endAccessor="ends_at"
+				eventPropGetter={ eventStyleGetter }
+				style={ { height: '100vh' } }
+				onSelectEvent={ handleSelectEvent }
+				onSelectSlot={ handleSelectSlot }
+				onNavigate={ handleNavigate }
+				onView={ handleView }
+				onRangeChange={ handleRangeChange }
+			/>
+		</Box>
 	)
 }
 

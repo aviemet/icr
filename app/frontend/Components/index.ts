@@ -1,3 +1,4 @@
+export { default as ColorPicker } from './ColorPicker'
 export { default as ConditionalWrapper } from './ConditionalWrapper'
 export { default as Link } from './Link'
 export { default as Table } from './Table'

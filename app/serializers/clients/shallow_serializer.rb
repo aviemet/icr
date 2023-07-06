@@ -4,6 +4,7 @@ class Clients::ShallowSerializer < ApplicationSerializer
   attributes(
     :id,
     :number,
+    :settings,
     :created_at,
     :updated_at,
   )

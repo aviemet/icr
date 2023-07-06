@@ -47,7 +47,7 @@ const Schedule = ({ client, employees, shifts, dateRange }) => {
 	return (
 		<>
 			<Heading>{ client.full_name }</Heading>
-			<Box sx={ { backgroundColor: 'white', padding: '10px' } }>
+			<Box sx={ { padding: '10px' } }>
 				<ShiftCalendar
 					shifts={ shifts }
 					onSelectEvent={ shift => console.log({ shift }) }

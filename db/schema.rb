@@ -31,7 +31,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_31_231947) do
 
   create_table "clients", force: :cascade do |t|
     t.integer "number"
-    t.bigint "person_id", null: false
+    t.bigint "person_id"
+    t.jsonb "settings", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["person_id"], name: "index_clients_on_person_id"
@@ -72,7 +73,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_31_231947) do
 
   create_table "employees", force: :cascade do |t|
     t.integer "number"
-    t.bigint "person_id", null: false
+    t.bigint "person_id"
+    t.jsonb "settings", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["person_id"], name: "index_employees_on_person_id"
@@ -91,6 +93,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_31_231947) do
 
   create_table "households", force: :cascade do |t|
     t.string "name"
+    t.jsonb "settings", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -183,6 +186,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_31_231947) do
     t.datetime "updated_at", null: false
     t.boolean "active", default: true
     t.string "time_zone", default: "UTC"
+    t.jsonb "settings", default: {}
     t.bigint "person_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
@@ -192,12 +196,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_31_231947) do
   end
 
   add_foreign_key "addresses", "contacts"
-  add_foreign_key "clients", "people"
   add_foreign_key "contacts", "addresses", column: "primary_address_id"
   add_foreign_key "contacts", "emails", column: "primary_email_id"
   add_foreign_key "contacts", "phones", column: "primary_phone_id"
   add_foreign_key "emails", "contacts"
-  add_foreign_key "employees", "people"
   add_foreign_key "household_members", "clients"
   add_foreign_key "household_members", "employees"
   add_foreign_key "household_members", "households"
