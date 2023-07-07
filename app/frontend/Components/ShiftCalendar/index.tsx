@@ -1,87 +1,83 @@
-import React, { useMemo } from 'react'
-import { Calendar, Views, dateFnsLocalizer, type CalendarProps } from 'react-big-calendar'
+import React, { useCallback } from 'react'
+import { Box, useMantineTheme } from '@mantine/core'
+import { useLocation } from '@/lib/hooks'
+
+import dayjs from 'dayjs'
+import timezone from 'dayjs/plugin/timezone'
+import { Calendar, dayjsLocalizer, type CalendarProps, View } from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
-import { format, parse, startOfWeek, getDay, set, add, differenceInDays, endOfDay } from 'date-fns'
-import enUS from 'date-fns/locale/en-US'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
-import { Box, useMantineTheme } from '@mantine/core'
+import { router } from '@inertiajs/react'
 
-const DragAndDropCalendar = withDragAndDrop(Calendar)
+const DragAndDropCalendar = withDragAndDrop(Calendar<Schema.Shift>)
 
-const localizer = dateFnsLocalizer({
-	format,
-	parse,
-	startOfWeek,
-	getDay,
-	locales: {
-		'en-US': enUS,
-	},
-})
+dayjs.extend(timezone)
+const localizer = dayjsLocalizer(dayjs)
 
-const getDateRange = data => {
-	let start, end
-
-	if(Array.isArray(data)) {
-		start = data[0]
-		if(data.length > 1) {
-			end = data[data.length - 1]
-		} else {
-			end = data[0]
-		}
-	} else if(typeof data === 'object') {
-		start = data.start
-		end = data.end
-	}
-	end = endOfDay(end)
-	return { start, end }
-}
-
-interface ShiftCalendarProps extends CalendarProps {
+type OmittedCalendarProps = 'localizer'|'onRangeChange'|'events'|'startAccessor'|'endAccessor'|'eventPropGetter'
+interface ShiftCalendarProps extends Omit<CalendarProps<Schema.Shift>, OmittedCalendarProps> {
 	shifts: Schema.Shift[]
+	onRangeChange?: (start: Date, end: Date, view?: View) => void
 }
 
-const ShiftCalendar = ({ shifts, onSelectEvent, onSelectSlot, onNavigate, onView, onRangeChange }: ShiftCalendarProps) => {
+const ShiftCalendar = ({
+	shifts,
+	onRangeChange,
+	showAllEvents = true,
+	...props
+}: ShiftCalendarProps) => {
 	const theme = useMantineTheme()
+	const location = useLocation()
 
-	const searchParams = new URLSearchParams(window.location.search)
+	const navigateParams = useCallback((params) => {
+		router.get(location.path, params, {
+			preserveScroll: true,
+			preserveState: true,
+		})
+	}, [])
 
-	const handleSelectEvent = data => {
-		if(onSelectEvent) onSelectEvent(data)
-	}
+	// Change onRangeChange signature to be consistent
+	const handleRangeChange = (range: Date[] | {
+		start: Date
+		end: Date
+	}, view?: View | undefined) => {
+		let start, end
 
-	const handleSelectSlot = data => {
-		if(onSelectSlot) onSelectSlot(data)
-	}
+		if(Array.isArray(range)) {
+			start = range[0]
 
-	const handleNavigate = data => {
-		if(onNavigate) onNavigate(data)
-	}
+			if(range.length === 1) {
+				end = dayjs(start).endOf('day').toDate()
+			} else {
+				end = range[range.length - 1]
+			}
+		} else {
+			start = range.start
+			end = range.end
+		}
 
-	const handleView = data => {
-		if(onView) onView(data)
-	}
+		navigateParams({ start, end, view })
 
-	const handleRangeChange = data => {
-		const { start, end } = data
-
-		if(onRangeChange) onRangeChange(data, start, end)
+		if(onRangeChange) onRangeChange(start, end, view)
 	}
 
 	const defaultDate = () => {
-		const start = searchParams.get('start')
-		const end = searchParams.get('end')
+		const start = location.params.get('start')
+		const end = location.params.get('end')
 
 		if(start && end) {
-			const startDate = new Date(start)
-			const days = Math.abs(differenceInDays(startDate, new Date(end))) / 2
-			const defaultDate = add(startDate, { days: days })
-			return defaultDate
+			const startDate = dayjs(start)
+			const endDate = dayjs(end)
+
+			const days = Math.abs(startDate.diff(endDate, 'day')) / 2
+			const defaultDate = startDate.add(days, 'day')
+			return defaultDate.toDate()
 		}
 	}
 
-	const eventStyleGetter = (event: Schema.Shift, start, end, isSelected) => {
+	const eventStyleGetter = (event: Schema.Shift, start: Date, end: Date, isSelected: boolean) => {
 		var backgroundColor = event.employee.settings?.shift_color
 
 		// console.log({ event, backgroundColor, start, end, isSelected })
@@ -130,19 +126,15 @@ const ShiftCalendar = ({ shifts, onSelectEvent, onSelectSlot, onNavigate, onView
 		} }>
 			<DragAndDropCalendar
 				selectable
-				showAllEvents={ true }
+				showAllEvents={ showAllEvents }
 				localizer={ localizer }
 				events={ shifts }
-				defaultDate={ defaultDate() }
-				startAccessor="starts_at"
-				endAccessor="ends_at"
+				startAccessor={ event => new Date(event.starts_at!) }
+				endAccessor={ event => new Date(event.ends_at!) }
 				eventPropGetter={ eventStyleGetter }
 				style={ { height: '100vh' } }
-				onSelectEvent={ handleSelectEvent }
-				onSelectSlot={ handleSelectSlot }
-				onNavigate={ handleNavigate }
-				onView={ handleView }
 				onRangeChange={ handleRangeChange }
+				{ ...props }
 			/>
 		</Box>
 	)

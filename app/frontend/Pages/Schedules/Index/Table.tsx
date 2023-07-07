@@ -31,8 +31,7 @@ const SchedulesTable = ({ clients }: IScheduleIndexProps) => {
 
 					<Table.Body>
 						<Table.RowIterator render={ (client: Schema.ClientsIndex) => {
-							console.log({ person: client.person })
-							return(
+							return (
 								<Table.Row key={ client.id }>
 									<Table.Cell>
 										<Link href={ Routes.scheduleClient(client.id) }>{ client.person.first_name }</Link>
