@@ -1,6 +1,5 @@
 import React, { forwardRef, useCallback } from 'react'
 import { Select, type SelectProps } from '@mantine/core'
-import Label from './Label'
 import { router } from '@inertiajs/react'
 import { coerceArray } from '@/lib'
 
@@ -19,8 +18,6 @@ const SearchableDropdownComponent = forwardRef<HTMLInputElement, ISearchableDrop
 		getLabel = option => option.name,
 		getValue = option => String(option.id),
 		disabledOptions,
-		label,
-		required,
 		id,
 		name,
 		searchable = true,
@@ -61,26 +58,20 @@ const SearchableDropdownComponent = forwardRef<HTMLInputElement, ISearchableDrop
 	}
 
 	return (
-		<>
-			{ label && <Label required={ required } htmlFor={ inputId }>
-				{ label }
-			</Label> }
-			<Select
-				ref={ ref }
-				id={ inputId }
-				name={ name }
-				searchable={ searchable }
-				clearable={ clearable }
-				size="md"
-				data={ data() }
-				required={ required }
-				maxDropdownHeight={ 400 }
-				nothingFound="No Results"
-				onDropdownOpen={ fetchNewRecords }
-				mt={ mt }
-				{ ...props }
-			/>
-		</>
+		<Select
+			ref={ ref }
+			id={ inputId }
+			name={ name }
+			searchable={ searchable }
+			clearable={ clearable }
+			size="md"
+			data={ data() }
+			maxDropdownHeight={ 400 }
+			nothingFound="No Results"
+			onDropdownOpen={ fetchNewRecords }
+			mt={ mt }
+			{ ...props }
+		/>
 	)
 })
 

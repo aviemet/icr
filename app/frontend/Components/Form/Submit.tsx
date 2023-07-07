@@ -10,13 +10,14 @@ interface ISubmitButtonProps extends ButtonProps {
 }
 
 const Submit = forwardRef<HTMLButtonElement, ISubmitButtonProps>((
-	{ children, disabled, wrapperSx, sx, cancelRoute, ...props },
+	{ children, disabled, wrapperSx, mt = 'md', sx, cancelRoute, ...props },
 	ref,
 ) => {
 	const { processing, isDirty } = useForm()
 	return (
-		<Flex gap="md" className="submit" sx={ wrapperSx }>
+		<Flex gap="md" className="submit" sx={ wrapperSx } mt={ mt }>
 			<SubmitButton
+				sx={ { flex: 1 } }
 				component={ Button }
 				ref={ ref }
 				disabled={ disabled || processing || !isDirty }
@@ -24,8 +25,16 @@ const Submit = forwardRef<HTMLButtonElement, ISubmitButtonProps>((
 			>
 				{ children }
 			</SubmitButton>
+
 			{ cancelRoute && (
-				<Link mt={ 10 } href={ cancelRoute } as="button">Cancel</Link>
+				<Link
+					mt={ 10 }
+					href={ cancelRoute }
+					as="button"
+					sx={ { flex: 1 } }
+				>
+					Cancel
+				</Link>
 			) }
 		</Flex>
 	)

@@ -4,6 +4,8 @@ class Client < ApplicationRecord
   has_many :household_members
   has_many :households, through: :household_members
 
+  scope :includes_associated, -> { includes(:person) }
+
   def shifts_in_range(range_start, range_end)
     shifts
       .includes(:clients, :employee, :shift_exceptions)

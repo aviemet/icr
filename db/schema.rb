@@ -152,6 +152,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_31_231947) do
   create_table "shifts", force: :cascade do |t|
     t.datetime "starts_at"
     t.datetime "ends_at"
+    t.string "title"
     t.bigint "recurring_pattern_id"
     t.bigint "employee_id"
     t.bigint "created_by_id", null: false

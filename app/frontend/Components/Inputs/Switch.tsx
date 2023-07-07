@@ -9,16 +9,14 @@ const SwitchComponent = ({ id, name, mt = 'md', sx, ...props }: ISwitchProps) =>
 	const inputId = id ?? name
 
 	return (
-		<>
-			<Switch
-				id={ inputId }
-				name={ name }
-				required={ props.required }
-				sx={ [{ padding: '14px 10px' }, sx] }
-				mt={ mt }
-				{ ...props }
-			/>
-		</>
+		<Switch
+			id={ inputId }
+			name={ name }
+			required={ props.required }
+			sx={ [{ padding: '14px 10px' }, sx] }
+			mt={ mt }
+			{ ...props }
+		/>
 	)
 }
 

@@ -1,42 +1,27 @@
-import React, { useState }  from 'react'
-import { set } from 'date-fns'
+import React from 'react'
 import {
 	Box,
 	Heading,
 	ShiftCalendar,
-	NewShiftForm,
 } from '@/Components'
-import { ModalPrompt } from '@/Components/Modal'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 
-const Schedule = ({ client, employees, shifts, dateRange }) => {
-	const [formModalOpen, setFormModalOpen] = useState(false)
-	const [newShiftStart, setNewShiftStart] = useState<Date>(new Date())
+interface ScheduleProps {
+	client: Schema.Client
+	shifts: Schema.Shift[]
+}
 
-	const handleSelect = ({ start }: { start: Date }) => {
-		setNewShiftStart(set(start, { hours: 8 }))
-		setFormModalOpen(true)
-	}
-
+const Schedule = ({ client, shifts }: ScheduleProps) => {
 	return (
 		<>
-			<Heading>{ client.full_name }</Heading>
+			<Heading>{ client.person.name }</Heading>
 			<Box sx={ { padding: '10px' } }>
 				<ShiftCalendar
+					client={ client }
 					shifts={ shifts }
-					onSelectEvent={ shift => console.log({ shift }) }
-					onSelectSlot={ handleSelect }
 				/>
 			</Box>
-			<ModalPrompt title="New Shift" open={ formModalOpen } handleClose={ () => setFormModalOpen(false) }>
-				<NewShiftForm
-					start={ newShiftStart }
-					client={ client }
-					employees={ employees }
-					onSubmit={ () => setFormModalOpen(false) }
-				/>
-			</ModalPrompt>
 		</>
 	)
 }

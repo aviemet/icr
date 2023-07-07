@@ -44,7 +44,7 @@ const Login = () => {
 							Sign in with Google
 			</Button>
 
-			<Form model="user" data={ defaultData } to={ Routes.newUserSession() } onSubmit={ handleSubmit } grid={ false }>
+			<Form model="user" data={ defaultData } to={ Routes.newUserSession() } onSubmit={ handleSubmit }>
 
 				<div>
 					<Heading>ICR</Heading>

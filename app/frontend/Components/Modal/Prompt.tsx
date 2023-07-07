@@ -1,32 +1,26 @@
 import React from 'react'
 import {
-	Grid,
-	Heading,
+	Box,
 	Modal,
 } from '@/Components'
+import { ModalProps } from '@mantine/core'
 
-interface IPromptProps {
+interface ModalPromptProps extends ModalProps {
 	children: React.ReactNode
 	title: string
-	open: boolean
-	handleClose: () => void
 }
 
-const Prompt = ({ children, title, open, handleClose }: IPromptProps) => {
+const Prompt = ({ children, title, ...props }: ModalPromptProps) => {
 	return (
 		<Modal
-			opened={ open }
-			onClose={ handleClose }
-			aria-labelledby="modal-modal-title"
+			closeButtonProps={ { 'aria-label': 'Close modal' } }
+			title={ title }
+			transitionProps={ { duration: 100 } }
+			{ ...props }
 		>
-			<Grid>
-				<Grid.Col>
-					<Heading order={ 2 }>{ title }</Heading>
-				</Grid.Col>
-				<Grid.Col>
-					{ children }
-				</Grid.Col>
-			</Grid>
+			<Box>
+				{ children }
+			</Box>
 		</Modal>
 
 	)

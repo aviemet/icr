@@ -1,6 +1,6 @@
 import { Routes } from '@/lib'
 import axios from 'axios'
-import { query, mutation } from '..'
+import { query, mutation } from '.'
 
 export const updateEmployee = <T = { employee: Partial<Schema.Employee> }>(
 	id: string|number,

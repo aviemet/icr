@@ -1,6 +1,7 @@
 import React from 'react'
 
 const Repeats = () => {
+	return <></>
 	return (
 		<div>Repeats</div>
 	)

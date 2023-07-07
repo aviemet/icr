@@ -1,15 +1,23 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Box, useMantineTheme } from '@mantine/core'
 import { useLocation } from '@/lib/hooks'
 
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
-import { Calendar, dayjsLocalizer, type CalendarProps, View } from 'react-big-calendar'
+import {
+	Calendar,
+	dayjsLocalizer,
+	type CalendarProps,
+	type View,
+	type SlotInfo,
+} from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
 import { router } from '@inertiajs/react'
+import { ModalPrompt } from '../Modal'
+import NewShiftForm from './NewShiftForm'
 
 const DragAndDropCalendar = withDragAndDrop(Calendar<Schema.Shift>)
 
@@ -19,17 +27,24 @@ const localizer = dayjsLocalizer(dayjs)
 type OmittedCalendarProps = 'localizer'|'onRangeChange'|'events'|'startAccessor'|'endAccessor'|'eventPropGetter'
 interface ShiftCalendarProps extends Omit<CalendarProps<Schema.Shift>, OmittedCalendarProps> {
 	shifts: Schema.Shift[]
+	client?: Schema.Client
+	employee?: Schema.Employee
 	onRangeChange?: (start: Date, end: Date, view?: View) => void
 }
 
 const ShiftCalendar = ({
 	shifts,
+	client,
+	employee,
 	onRangeChange,
 	showAllEvents = true,
 	...props
 }: ShiftCalendarProps) => {
 	const theme = useMantineTheme()
 	const location = useLocation()
+
+	const [formModalOpen, setFormModalOpen] = useState(false)
+	const [newShiftStart, setNewShiftStart] = useState<Date>(new Date())
 
 	const navigateParams = useCallback((params) => {
 		router.get(location.path, params, {
@@ -77,10 +92,16 @@ const ShiftCalendar = ({
 		}
 	}
 
+	const getTitle = (event: Schema.Shift) => {
+		const start = dayjs(event.starts_at)
+		const end = dayjs(event.ends_at)
+
+		return `${start.format('ha')} - ${end.format('ha')}: ${event.title || event.employee.person.first_name}`
+	}
+
 	const eventStyleGetter = (event: Schema.Shift, start: Date, end: Date, isSelected: boolean) => {
 		var backgroundColor = event.employee.settings?.shift_color
 
-		// console.log({ event, backgroundColor, start, end, isSelected })
 		var style = {
 			backgroundColor: backgroundColor || theme.fn.primaryColor(),
 			borderRadius: '0px',
@@ -95,48 +116,70 @@ const ShiftCalendar = ({
 		}
 	}
 
+	const handleSelectSlot = (slot: SlotInfo) => {
+		setNewShiftStart(slot.start)
+		setFormModalOpen(true)
+	}
+
 	return (
-		<Box sx={ (theme) => {
-			const styles = {}
+		<>
+			<Box sx={ (theme) => {
+				const styles = {}
 
-			if(theme.colorScheme === 'dark') {
-				styles['.rbc-toolbar'] = {
-					'button': {
-						color: theme.white,
-						'&.rbc-active': {
-							backgroundColor: theme.fn.primaryColor(),
+				if(theme.colorScheme === 'dark') {
+					styles['.rbc-toolbar'] = {
+						'button': {
+							color: theme.white,
+							'&.rbc-active': {
+								backgroundColor: theme.fn.primaryColor(),
+							},
 						},
-					},
+					}
+
+					styles['.rbc-off-range-bg'] = {
+						backgroundColor: theme.colors.gray[9],
+					}
+
+					styles['.rbc-today'] = {
+						backgroundColor: theme.colors.gray[8],
+					}
+
+					styles['.rbc-day-bg + .rbc-day-bg'] = {
+						borderLeft: `1px solid ${theme.colors.gray[9]}`,
+					}
 				}
 
-				styles['.rbc-off-range-bg'] = {
-					backgroundColor: theme.colors.gray[9],
-				}
-
-				styles['.rbc-today'] = {
-					backgroundColor: theme.colors.gray[8],
-				}
-
-				styles['.rbc-day-bg + .rbc-day-bg'] = {
-					borderLeft: `1px solid ${theme.colors.gray[9]}`,
-				}
-			}
-
-			return styles
-		} }>
-			<DragAndDropCalendar
-				selectable
-				showAllEvents={ showAllEvents }
-				localizer={ localizer }
-				events={ shifts }
-				startAccessor={ event => new Date(event.starts_at!) }
-				endAccessor={ event => new Date(event.ends_at!) }
-				eventPropGetter={ eventStyleGetter }
-				style={ { height: '100vh' } }
-				onRangeChange={ handleRangeChange }
-				{ ...props }
-			/>
-		</Box>
+				return styles
+			} }>
+				<DragAndDropCalendar
+					selectable
+					showAllEvents={ showAllEvents }
+					localizer={ localizer }
+					events={ shifts }
+					defaultDate={ defaultDate() }
+					startAccessor={ event => new Date(event.starts_at!) }
+					endAccessor={ event => new Date(event.ends_at!) }
+					titleAccessor={ getTitle }
+					eventPropGetter={ eventStyleGetter }
+					style={ { height: '100vh' } }
+					onRangeChange={ handleRangeChange }
+					onSelectSlot={ handleSelectSlot }
+					{ ...props }
+				/>
+			</Box>
+			<ModalPrompt
+				centered
+				title="New Shift"
+				opened={ formModalOpen }
+				onClose={ () => setFormModalOpen(false) }
+			>
+				<NewShiftForm
+					start={ newShiftStart }
+					client={ client }
+					employee={ employee }
+				/>
+			</ModalPrompt>
+		</>
 	)
 }
 

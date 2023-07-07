@@ -86,6 +86,16 @@ export const serialize: RouterExposedMethods['serialize'];
 
 /**
  * Generates rails route to
+ * /api/options/clients(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiClientsOptions: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
  * /api/employees/:id(.:format)
  * @param {any} id
  * @param {object | undefined} options
@@ -93,6 +103,26 @@ export const serialize: RouterExposedMethods['serialize'];
  */
 export const apiEmployee: ((
   id: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /api/options/employees(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiEmployeesOptions: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /api/options/people(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiPeopleOptions: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 

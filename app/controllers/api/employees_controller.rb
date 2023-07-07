@@ -1,5 +1,11 @@
 class Api::EmployeesController < Api::ApiController
+  expose :employees, -> { Employee.all }
   expose :employee
+
+  # GET api/options/employees
+  def options
+    render json: employees.render(view: :options)
+  end
 
   # PATCH/PUT /api/employees/:id
   def update

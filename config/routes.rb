@@ -46,5 +46,11 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :employees, only: [:update]
+
+    scope :options do
+      [:employees, :clients, :people].each do |model|
+        get model.to_s => "#{model}#options", as: "#{model}_options"
+      end
+    end
   end
 end

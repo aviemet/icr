@@ -7,6 +7,7 @@ class PersonSerializer < ApplicationSerializer
     :last_name,
     :created_at,
     :updated_at,
+    name: { type: :string },
   )
 
   has_one :client, serializer: Clients::ShallowSerializer

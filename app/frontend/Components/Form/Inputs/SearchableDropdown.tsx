@@ -5,17 +5,8 @@ import { ConditionalWrapper } from '@/Components'
 import { useInertiaInput, type UseFormProps } from 'use-inertia-form'
 import { type IFormInputProps } from '.'
 
-export interface IDropdownWithModalButton {
-	name?: string
-	model?: string
-	label?: string
-	fetchOnOpen?: string
-	required?: boolean
-	errorKey?: string
-}
-
 type OmittedDropdownTypes = 'name'|'defaultValue'|'onBlur'|'onChange'|'onDropdownOpen'|'onDropdownClose'
-export interface ISearchableDropdownFormProps extends Omit<ISearchableDropdownProps, OmittedDropdownTypes>, IFormInputProps<string> {
+export interface SearchableDropdownFormProps extends Omit<ISearchableDropdownProps, OmittedDropdownTypes>, IFormInputProps<string> {
 	defaultValue?: string
 	onChange?: ((value: string|null, form: UseFormProps<unknown>) => void) | undefined
 	onDropdownOpen?: (form: UseFormProps<any>) => void
@@ -24,7 +15,11 @@ export interface ISearchableDropdownFormProps extends Omit<ISearchableDropdownPr
 	field?: boolean
 }
 
-const SearchableDropdown = forwardRef<HTMLInputElement, ISearchableDropdownFormProps>((
+export interface AsyncSearchableDropdownProps<T> extends Omit<SearchableDropdownFormProps, 'filter'> {
+	filter?: (employee: T) => boolean
+}
+
+const SearchableDropdown = forwardRef<HTMLInputElement, SearchableDropdownFormProps>((
 	{
 		name,
 		label,
