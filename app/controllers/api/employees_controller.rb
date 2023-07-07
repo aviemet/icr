@@ -10,18 +10,9 @@ class Api::EmployeesController < Api::ApiController
     end
   end
 
-  def update_settings
-    if employee.update_column(
-      :settings,
-      employee.settings.deep_merge(request.params[:employee][:settings]),
-    )
-      head :ok, content_type: "text/html"
-    end
-  end
-
   private
 
   def employee_params
-    params.require(:employee).permit(:first_name, :last_name, :middle_name, :slug, :settings)
+    params.require(:employee).permit(:first_name, :last_name, :middle_name, :slug, settings: [:shift_color])
   end
 end

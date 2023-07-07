@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Popover, ColorPicker, Button, useMantineTheme, ColorSwatch } from '@mantine/core'
+import { Popover, ColorPicker, Button, useMantineTheme, ColorSwatch, Text, Box } from '@mantine/core'
 import { useBooleanToggle } from '@/lib/hooks'
+import { useClickOutside, useDisclosure } from '@mantine/hooks'
 
 interface ColorPickerProps {
 	defaultColor?: string
@@ -10,37 +11,48 @@ interface ColorPickerProps {
 
 const ColorPickerComponent = ({ defaultColor, onChange, onSave }: ColorPickerProps) => {
 	const theme = useMantineTheme()
-	const [opened, toggleOpen] = useBooleanToggle(false)
+
 	const [color, setColor] = useState(defaultColor || theme.fn.primaryColor())
+
+	const [opened, toggleOpened] = useBooleanToggle(false)
+
+	const handleClickAway = () => {
+		setColor(defaultColor || theme.fn.primaryColor())
+		toggleOpened(false)
+	}
+
+	const ref = useClickOutside(handleClickAway)
 
 	useEffect(() => {
 		if(onChange) onChange(color)
 	}, [])
 
-	const handleClickAway = () => {
-		setColor(defaultColor || theme.fn.primaryColor())
-		toggleOpen(false)
-	}
-
 	const handleSetColor = () => {
 		if(onSave) onSave(color)
-		toggleOpen(false)
+		toggleOpened(false)
 	}
 
 	return (
-		<Popover opened={ opened }>
+		<Popover
+			withinPortal
+			opened={ opened }
+			trapFocus
+			position="right"
+			withArrow
+			shadow="md"
+		>
 			<Popover.Target>
-				<div onBlurCapture={ handleClickAway }>
-					<ColorSwatch
-						component={ Button }
-						color={ color }
-						onClick={ () => toggleOpen() }
-					/>
-				</div>
+				<ColorSwatch
+					component={ Button }
+					color={ color }
+					onClick={ toggleOpened }
+				/>
 			</Popover.Target>
-			<Popover.Dropdown>
-				<ColorPicker value={ color } onChange={ setColor } />
-				<Button onClick={ handleSetColor }>Set Color</Button>
+			<Popover.Dropdown p={ 0 }>
+				<Box ref={ ref } p="sm">
+					<ColorPicker value={ color } onChange={ setColor } />
+					<Button onClick={ handleSetColor } mt="md" sx={ { width: '100%' } }>Set Color</Button>
+				</Box>
 			</Popover.Dropdown>
 		</Popover>
 	)

@@ -1,5 +1,5 @@
 class EmployeesController < ApplicationController
-  expose :employees, ->{ Employee.all }
+  expose :employees, ->{ Employee.includes(:person).order("people.first_name").all }
   expose :employee
 
   # GET /employees

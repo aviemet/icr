@@ -3,8 +3,8 @@ class Employees::ShallowSerializer < ApplicationSerializer
 
   attributes(
     :number,
-    :settings,
     :created_at,
     :updated_at,
+    settings: { type: "EmployeeSettings"},
   )
 end

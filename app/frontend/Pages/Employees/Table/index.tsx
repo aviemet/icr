@@ -1,14 +1,7 @@
 import * as React from 'react'
 import { Routes } from '@/lib'
-import {
-	Box,
-	ColorPicker,
-	Group,
-	Link,
-	Table,
-} from '@/Components'
+import { Link, Table } from '@/Components'
 import { EditButton } from '@/Components/Button'
-import { updateEmployee } from '@/queries/clients'
 import ShiftColorPicker from './ShiftColorPicker'
 
 interface EmployeesTableProps {
@@ -16,7 +9,6 @@ interface EmployeesTableProps {
 }
 
 const EmployeesTable = ({ employees }: EmployeesTableProps) => {
-	console.log('break')
 	return (
 		<Table.TableProvider model="employee" rows={ employees }>
 			<Table>

@@ -4,9 +4,9 @@ declare global {
 	type HTTPVerb = 'post' | 'put' | 'get' | 'patch' | 'delete'
 
 	type TInputType = 'button'|'checkbox'|'color'|'currency'|'date'|'datetime-local'|'email'|'file'|'hidden'|'image'|'month'|'number'|'password'|'radio'|'range'|'reset'|'search'|'select'|'submit'|'tel'|'text'|'textarea'|'time'|'url'
-	
+
 	type FlashMessage = Record<'success' | 'alert' | 'info' | 'warning', string>
-	
+
 	declare namespace Schema {
 
 		interface Pagination {

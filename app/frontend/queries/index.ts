@@ -1,4 +1,10 @@
-import { useMutation, useQuery, type UseMutationOptions, type UseQueryOptions } from '@tanstack/react-query'
+import {
+	useMutation,
+	useQuery,
+	type UseMutationOptions,
+	type UseQueryOptions,
+	type MutationKey,
+} from '@tanstack/react-query'
 
 export const query = <T>(
 	key: (string|number)[],
@@ -11,11 +17,13 @@ export const query = <T>(
 })
 
 export const mutation = <T>(
-	key: (string|number)[],
-	fn: (data: Partial<T>) => Promise<T>,
-	options?: UseMutationOptions<T>,
-) => useMutation({
-	mutationKey: key,
-	mutationFn: (data: Partial<T>) => fn(data),
-	...options,
-})
+	key: MutationKey,
+	fn: (data: Partial<T>) => Promise<Partial<T>>,
+	options?: Omit<UseMutationOptions<Partial<T>>, 'mutationKey'|'mutationFn'>,
+) => {
+	return useMutation({
+		mutationFn: fn,
+		mutationKey: key,
+		// ...options,
+	})
+}

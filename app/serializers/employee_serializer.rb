@@ -3,9 +3,9 @@ class EmployeeSerializer < ApplicationSerializer
 
   attributes(
     :number,
-    :settings,
     :created_at,
     :updated_at,
+    settings: { type: "EmployeeSettings"},
   )
 
   belongs_to :person, serializer: PersonSerializer

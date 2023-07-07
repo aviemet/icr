@@ -98,18 +98,6 @@ export const apiEmployee: ((
 
 /**
  * Generates rails route to
- * /api/employees/:id/update_settings(.:format)
- * @param {any} id
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const apiUpdateEmployeeSettings: ((
-  id: RequiredRouteParameter,
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
  * /users/cancel(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
