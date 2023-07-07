@@ -1,12 +1,12 @@
 import React, { forwardRef } from 'react'
 import Field from '../Field'
-import SearchableDropdownInput, { type ISearchableDropdownProps } from '@/Components/Inputs/SearchableDropdown'
+import DropdownInput, { type IDropdownProps } from '@/Components/Inputs/Dropdown'
 import { ConditionalWrapper } from '@/Components'
 import { useInertiaInput, type UseFormProps } from 'use-inertia-form'
 import { type IFormInputProps } from '.'
 
 type OmittedDropdownTypes = 'name'|'defaultValue'|'onBlur'|'onChange'|'onDropdownOpen'|'onDropdownClose'
-export interface SearchableDropdownFormProps extends Omit<ISearchableDropdownProps, OmittedDropdownTypes>, IFormInputProps<string> {
+export interface DropdownFormProps extends Omit<IDropdownProps, OmittedDropdownTypes>, IFormInputProps<string> {
 	defaultValue?: string
 	onChange?: ((value: string|null, form: UseFormProps<unknown>) => void) | undefined
 	onDropdownOpen?: (form: UseFormProps<any>) => void
@@ -15,11 +15,11 @@ export interface SearchableDropdownFormProps extends Omit<ISearchableDropdownPro
 	field?: boolean
 }
 
-export interface AsyncSearchableDropdownProps<T> extends Omit<SearchableDropdownFormProps, 'filter'> {
+export interface AsyncDropdownProps<T> extends Omit<DropdownFormProps, 'filter'> {
 	filter?: (employee: T) => boolean
 }
 
-const SearchableDropdown = forwardRef<HTMLInputElement, SearchableDropdownFormProps>((
+const Dropdown = forwardRef<HTMLInputElement, DropdownFormProps>((
 	{
 		name,
 		label,
@@ -74,7 +74,7 @@ const SearchableDropdown = forwardRef<HTMLInputElement, SearchableDropdownFormPr
 			) }
 			condition={ field }
 		>
-			<SearchableDropdownInput
+			<DropdownInput
 				ref={ ref }
 				id={ id || inputId }
 				name={ inputName }
@@ -93,4 +93,4 @@ const SearchableDropdown = forwardRef<HTMLInputElement, SearchableDropdownFormPr
 	)
 })
 
-export default SearchableDropdown
+export default Dropdown

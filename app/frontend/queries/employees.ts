@@ -1,7 +1,7 @@
 import { Routes } from '@/lib'
 import axios from 'axios'
 import { UseQueryOptions } from '@tanstack/react-query'
-import { query } from '.'
+import { query, mutation } from '.'
 
 export const getEmployeesAsOptions = <T = Schema.EmployeesOptions[]>(
 	options?: UseQueryOptions<T>,
@@ -19,3 +19,13 @@ export const getEmployee = <T = Schema.Employee[]>(
 	() => axios.get(Routes.apiEmployee(id)).then(res => res.data),
 	options,
 )
+
+export const updateEmployee = <T = { employee: Partial<Schema.Employee> }>(
+	id: string|number,
+) => {
+	const route = Routes.apiEmployee(id)
+	return mutation<T>(
+		['client', id],
+		(data: Record<string, any>) => axios.patch(route, data),
+	)
+}

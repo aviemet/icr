@@ -1,9 +1,9 @@
 import React from 'react'
-import { SearchableDropdown } from '@/Components/Form'
-import { AsyncSearchableDropdownProps } from '../Inputs/SearchableDropdown'
+import { Dropdown } from '@/Components/Form'
+import { AsyncDropdownProps } from '../Inputs/Dropdown'
 import { getEmployeesAsOptions } from '@/queries'
 
-interface EmployeesDropdown extends Omit<AsyncSearchableDropdownProps<Schema.EmployeesOptions>, 'name'> {
+interface EmployeesDropdown extends Omit<AsyncDropdownProps<Schema.EmployeesOptions>, 'name'> {
 	name?: string
 }
 
@@ -18,7 +18,7 @@ const EmployeesDropdown = ({
 	})
 
 	return (
-		<SearchableDropdown
+		<Dropdown
 			label={ label }
 			name={ name }
 			options={ data }

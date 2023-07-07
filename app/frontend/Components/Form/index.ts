@@ -10,7 +10,7 @@ export { default as RichText } from './Inputs/RichText'
 export { default as Checkbox } from './Inputs/Checkbox'
 export { default as Switch } from './Inputs/Switch'
 export { default as RadioButtons } from './Inputs/RadioButtons'
-export { default as SearchableDropdown } from './Inputs/SearchableDropdown'
+export { default as Dropdown } from './Inputs/Dropdown'
 
 export { default as Autocomplete } from './Autocomplete'
 

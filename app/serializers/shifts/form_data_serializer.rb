@@ -10,6 +10,7 @@ class Shifts::FormDataSerializer < ApplicationSerializer
     :updated_at,
   )
 
+  belongs_to :recurring_pattern, serializer: RecurringPatterns::FormDataSerializer
   belongs_to :clients, serializer: ClientSerializer
   belongs_to :employee, serializer: EmployeeSerializer
   belongs_to :created_by, serializer: UserSerializer

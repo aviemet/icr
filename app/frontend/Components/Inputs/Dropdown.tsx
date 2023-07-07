@@ -3,7 +3,7 @@ import { Select, type SelectProps } from '@mantine/core'
 import { router } from '@inertiajs/react'
 import { coerceArray } from '@/lib'
 
-export interface ISearchableDropdownProps extends Omit<SelectProps, 'data'> {
+export interface IDropdownProps extends Omit<SelectProps, 'data'> {
 	options?: Array<Record<string, any>>
 	getLabel?: (option: Record<string, any>) => any
 	getValue?: (option: Record<string, any>) => string
@@ -12,7 +12,7 @@ export interface ISearchableDropdownProps extends Omit<SelectProps, 'data'> {
 	fetchOnOpen?: string
 }
 
-const SearchableDropdownComponent = forwardRef<HTMLInputElement, ISearchableDropdownProps>((
+const DropdownComponent = forwardRef<HTMLInputElement, IDropdownProps>((
 	{
 		options = [],
 		getLabel = option => option.name,
@@ -75,4 +75,4 @@ const SearchableDropdownComponent = forwardRef<HTMLInputElement, ISearchableDrop
 	)
 })
 
-export default React.memo(SearchableDropdownComponent)
+export default React.memo(DropdownComponent)

@@ -1,16 +1,26 @@
 import React, { forwardRef } from 'react'
 import { type Sx } from '@mantine/core'
-import Field from '../Field'
+import { Field } from '@/Components/Form'
 import CheckboxInput, { type ICheckboxProps } from '@/Components/Inputs/Checkbox'
 import { useInertiaInput } from 'use-inertia-form'
 import ConditionalWrapper from '@/Components/ConditionalWrapper'
-import { type IFormInputProps } from '.'
+import { type IFormInputProps } from '..'
 
 interface IFormCheckboxProps extends Omit<ICheckboxProps, 'name'|'onBlur'|'onChange'|'defaultChecked'>, IFormInputProps<boolean> {
 	sx?: Sx
 }
 
-const FormCheckboxComponent = forwardRef<HTMLInputElement, IFormCheckboxProps>((
+type TFormCheckboxComponent = (({
+	name,
+	model,
+	options,
+}: IFormCheckboxProps) => JSX.Element)
+
+type TCheckboxGroupObjects = {
+	Group: typeof CheckboxInput.Group
+}
+
+const FormCheckboxComponent: TFormCheckboxComponent & TCheckboxGroupObjects = forwardRef<HTMLInputElement, IFormCheckboxProps>((
 	{
 		name,
 		onChange,
@@ -65,5 +75,7 @@ const FormCheckboxComponent = forwardRef<HTMLInputElement, IFormCheckboxProps>((
 		</ConditionalWrapper>
 	)
 })
+
+FormCheckboxComponent.Group = CheckboxInput.Group
 
 export default FormCheckboxComponent

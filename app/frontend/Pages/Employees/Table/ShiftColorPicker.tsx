@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { ColorPicker } from '@/Components'
-import { updateEmployee } from '@/queries/clients'
+import { updateEmployee } from '@/queries'
 
 interface ShiftColorPickerProps {
 	employee: Schema.EmployeesIndex

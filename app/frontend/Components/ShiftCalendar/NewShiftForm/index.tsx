@@ -5,6 +5,8 @@ import { Routes } from '@/lib'
 import { Box } from '@/Components'
 import Repeats from './Repeats'
 import EmployeesDropdown from '@/Components/Form/Dropdowns/EmployeesDropdown'
+import { useBooleanToggle } from '@/lib/hooks'
+import SwitchInput from '@/Components/Inputs/Switch'
 
 type TFormData = {
 	shift: Schema.ShiftsFormData & {
@@ -21,13 +23,24 @@ interface INewShiftFormProps {
 }
 
 const NewShiftForm: React.FC<INewShiftFormProps> = ({ client, employee, start, end }) => {
+	const [showRecurring, toggleShowRecurring] = useBooleanToggle(false)
 
 	const defaultData: TFormData = {
 		shift: {
 			starts_at: start || '',
 			ends_at: end || '',
 			employee_id: undefined,
-			is_recurring: false,
+			title: '',
+			recurring_pattern: {
+				recurring_type: '',
+				offset: '',
+				max_occurrences: '',
+				end_date: '',
+				day_of_week: '',
+				week_of_month: '',
+				day_of_month: '',
+				month_of_year: '',
+			},
 		},
 	}
 
@@ -53,7 +66,8 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ client, employee, start, e
 			/>
 
 			{ /* Repeats */ }
-			<Repeats />
+			<SwitchInput onChange={ () => toggleShowRecurring } label="Recurring" />
+			{ showRecurring && <Repeats /> }
 
 			<Submit>Save Shift</Submit>
 		</Form>
