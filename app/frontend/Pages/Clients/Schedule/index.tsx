@@ -8,7 +8,7 @@ import {
 	Button,
 	Heading,
 	ShiftCalendar,
-	NewShiftForm
+	NewShiftForm,
 } from '@/Components'
 import { ModalPrompt } from '@/Components/Modal'
 
@@ -40,7 +40,7 @@ const Schedule = ({ client, employees, shifts, dateRange }) => {
 				only: ['shifts'],
 				preserveState: true,
 				preserveScroll: true,
-			}
+			},
 		)
 	}
 

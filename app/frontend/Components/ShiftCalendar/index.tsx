@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react'
-import { Calendar, Views, dateFnsLocalizer } from 'react-big-calendar'
+import { Calendar, Views, dateFnsLocalizer, type CalendarProps } from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import { format, parse, startOfWeek, getDay, set, add, differenceInDays, endOfDay } from 'date-fns'
 import enUS from 'date-fns/locale/en-US'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
-import { Box } from '@mantine/core'
+import { Box, useMantineTheme } from '@mantine/core'
 
 const DragAndDropCalendar = withDragAndDrop(Calendar)
 
@@ -38,7 +38,13 @@ const getDateRange = data => {
 	return { start, end }
 }
 
-const ShiftCalendar = ({ shifts, onSelectEvent, onSelectSlot, onNavigate, onView, onRangeChange }) => {
+interface ShiftCalendarProps extends CalendarProps {
+	shifts: Schema.Shift[]
+}
+
+const ShiftCalendar = ({ shifts, onSelectEvent, onSelectSlot, onNavigate, onView, onRangeChange }: ShiftCalendarProps) => {
+	const theme = useMantineTheme()
+
 	const searchParams = new URLSearchParams(window.location.search)
 
 	const handleSelectEvent = data => {
@@ -76,11 +82,11 @@ const ShiftCalendar = ({ shifts, onSelectEvent, onSelectSlot, onNavigate, onView
 	}
 
 	const eventStyleGetter = (event: Schema.Shift, start, end, isSelected) => {
-		var backgroundColor = '#' + event.hexColor
+		var backgroundColor = event.employee.settings?.shift_color
 
-		console.log({ event, backgroundColor, start, end, isSelected })
+		// console.log({ event, backgroundColor, start, end, isSelected })
 		var style = {
-			backgroundColor: backgroundColor,
+			backgroundColor: backgroundColor || theme.fn.primaryColor(),
 			borderRadius: '0px',
 			opacity: 0.8,
 			color: 'black',
@@ -95,7 +101,6 @@ const ShiftCalendar = ({ shifts, onSelectEvent, onSelectSlot, onNavigate, onView
 
 	return (
 		<Box sx={ (theme) => {
-			console.log({ white: theme.white })
 			const styles = {}
 
 			if(theme.colorScheme === 'dark') {
