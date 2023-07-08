@@ -4,6 +4,8 @@ import { createRoot } from 'react-dom/client'
 import axios from 'axios'
 import { AppLayout, AuthLayout } from '../Layouts'
 
+import '@total-typescript/ts-reset'
+
 type PagesObject = { default: React.ComponentType<any> & {
 	layout?: React.ComponentType<any>
 } }

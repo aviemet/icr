@@ -3,7 +3,7 @@ import { Dropdown } from '@/Components/Form'
 import { AsyncDropdownProps } from '../Inputs/Dropdown'
 import { getEmployeesAsOptions } from '@/queries'
 
-interface EmployeesDropdown extends Omit<AsyncDropdownProps<Schema.EmployeesOptions>, 'name'> {
+interface EmployeesDropdown extends Omit<AsyncDropdownProps<Schema.EmployeesOptions>, 'name'|'data'> {
 	name?: string
 }
 
@@ -21,7 +21,7 @@ const EmployeesDropdown = ({
 		<Dropdown
 			label={ label }
 			name={ name }
-			options={ data }
+			data={ data?.map(employee => ({ label: employee.name, value: employee.id })) }
 			{ ...props }
 		/>
 	)

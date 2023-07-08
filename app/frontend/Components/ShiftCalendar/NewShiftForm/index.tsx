@@ -32,8 +32,8 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ client, employee, start, e
 			employee_id: undefined,
 			title: '',
 			recurring_pattern: {
-				recurring_type: '',
-				offset: '',
+				recurring_type: 1,
+				offset: 1,
 				max_occurrences: '',
 				end_date: '',
 				day_of_week: '',
@@ -47,7 +47,7 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ client, employee, start, e
 	return (
 		<Form model="shift" to={ Routes.shifts() } data={ defaultData } remember={ false }>
 
-			<FormConsumer>{ ({ data }) => { console.log({ data }); return <></> } }</FormConsumer>
+			{ /* <FormConsumer>{ ({ data }) => { console.log({ data }); return <></> } }</FormConsumer> */ }
 			{ client && <EmployeesDropdown /> }
 			{ /* employee && <ClientsDropdown /> */ }
 
@@ -66,8 +66,8 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ client, employee, start, e
 			/>
 
 			{ /* Repeats */ }
-			<SwitchInput onChange={ () => toggleShowRecurring } label="Recurring" />
-			{ showRecurring && <Repeats /> }
+			<SwitchInput checked={ showRecurring } onChange={ () => toggleShowRecurring() } label="Repeat" />
+			{ showRecurring && <Repeats date={ start } /> }
 
 			<Submit>Save Shift</Submit>
 		</Form>

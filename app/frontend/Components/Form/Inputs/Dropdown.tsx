@@ -36,7 +36,6 @@ const Dropdown = forwardRef<HTMLInputElement, DropdownFormProps>((
 		field = true,
 		id,
 		errorKey,
-		options,
 		...props
 	},
 	ref,
@@ -86,7 +85,6 @@ const Dropdown = forwardRef<HTMLInputElement, DropdownFormProps>((
 				onDropdownOpen={ handleDropdownOpen }
 				defaultValue={ defaultValue ?? String(value) }
 				error={ error }
-				options={ options }
 				{ ...props }
 			/>
 		</ConditionalWrapper>

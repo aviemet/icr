@@ -1,64 +1,82 @@
-import React, { useState, useEffect } from 'react'
-import {
-	Box,
-	Grid,
-} from '@/Components'
+import React from 'react'
+import { Box } from '@/Components'
 import {  Dropdown, FormGroup, NumberInput } from '@/Components/Form'
 import { useForm } from 'use-inertia-form'
-import { usePage } from '@inertiajs/react'
-import { Group } from '@mantine/core'
-import { Checkbox } from '@/Components/Inputs'
+import { Group, Tooltip } from '@mantine/core'
+import { Checkbox, RadioInput } from '@/Components/Inputs'
+import { Heading } from '@/Components'
+import dayjs from 'dayjs'
 
-const Repeats = () => {
-	const { data, getData } = useForm<{ shift: Schema.ShiftsFormData }>()
-	const { props } = usePage<SharedInertiaProps>()
+interface RepeatsProps {
+	date: Date
+}
 
-	const pluralize = () => {
-		if(data.offset && data.offset > 1) {
-			return 's'
+const weekDays = [
+	'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
+]
+
+const Repeats = ({ date }) => {
+	const { getData } = useForm<{ shift: Schema.ShiftsFormData }>()
+
+	const pluralize = (str: string) => {
+		// @ts-ignore
+		const offset = getData('shift.recurring_pattern.offset')
+		if(offset && offset > 1) {
+			return `${str}s`
 		}
+		return str
 	}
 
 	return (
 		<FormGroup model="recurring_pattern">
-			<NumberInput name="offset" min={ 1 } />
+			<Group noWrap>
+				<Box mt="md">Every</Box>
+				<NumberInput name="offset" min={ 1 } sx={ { width: 75 } } />
 
-			<Dropdown
-				searchable={ false }
-				name="recurring_types"
-				options={ props.recurring_pattern_types }
-			/>
+				<Dropdown
+					searchable={ false }
+					name="recurring_type"
+					data={ [
+						{ label: pluralize('Day'), value: '0' },
+						{ label: pluralize('Week'), value: '1' },
+						{ label: pluralize('Month'), value: '2' },
+						{ label: pluralize('Year'), value: '3' },
+					] }
+				/>
+			</Group>
 
 			{ /* Weekday Checkboxes */ }
-			{ getData('shift.recurring_pattern.recurring_type') === 'weekly' &&
+			{ String(getData('shift.recurring_pattern.recurring_type')) === '1' &&
 				<Checkbox.Group>
-					<Group>{ ['Sun','Mon','Tue','Wed','Thur','Fri','Sat'].map((day, i) => (
-						<Checkbox key={ day } value={ i } label={ day } />
-					))
+					<Group sx={ { justifyContent: 'space-evenly' } } noWrap>{
+						weekDays.map((day, i) => (
+							<Tooltip key={ day } label={ day }>
+								<Checkbox.Chip value={ i } noCheck defaultChecked={ dayjs(date).format('dddd') === day }>
+									{ day.charAt(0) }
+								</Checkbox.Chip>
+							</Tooltip>
+						))
 					}</Group>
 				</Checkbox.Group>
 			}
 
 			{ /* Recurrence End Criteria */ }
-			<FormLabel id="recurrence-ending-label">Ends</FormLabel>
-			<RadioGroup
-				aria-labelledby="recurrence-ending-label"
-				defaultValue="never"
-				name="radio-buttons-group"
-				value={ data.end_type }
-				onChange={ e => setData('end_type', e.target.value) }
-			>
-				<FormControlLabel value="never" control={ <Radio /> } label="Never" />
-				<FormControlLabel value="date" control={ <Radio /> } label={ <>
-											On
-					<DatePicker name="end_date" inputFormat="EEEE, MMM do" />
-				</> } />
-				<FormControlLabel value="occurrences" control={ <Radio /> } label={ <>
-											After
-					<NumberInput name="max_occurrences" min={ 1 } />
-				</> } />
-			</RadioGroup>
+			<Group mt="md">
+				<Box>
+					<Heading order={ 4 }>Ends</Heading>
+					<RadioInput
+						name="end_type"
+						options={ [
+							{ label: 'Never', value: 'never' },
+							{ label: 'On', value: 'on' },
+							{ label: 'After', value: 'after' },
+						] }
+					/>
+				</Box>
+				<Box sx={ { flex: 1 } }>
 
+				</Box>
+			</Group>
 		</FormGroup>
 	)
 }

@@ -7,7 +7,7 @@ export interface ISwitchProps extends SwitchProps {
 
 const SwitchComponent = ({ id, name, mt = 'md', sx, ...props }: ISwitchProps) => {
 	const inputId = id ?? name
-
+	console.log({ checked: props.checked, onChange: props.onChange })
 	return (
 		<Switch
 			id={ inputId }

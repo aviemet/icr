@@ -5,7 +5,8 @@ class Employees::OptionsSerializer < ApplicationSerializer
     :id,
   )
 
-  attribute :name do
+  type :string
+  def name
     employee.person.name
   end
 end

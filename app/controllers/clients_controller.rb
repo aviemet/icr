@@ -37,7 +37,6 @@ class ClientsController < ApplicationController
       client: client.render,
       employees: -> { Employee.includes_associated.render },
       shifts: client.shifts_in_range(range_start, range_end).render,
-      recurring_pattern_types: RecurringPattern.recurring_types.to_a.map{ |k, v| { label: k, value: v } },
       dateRange: {
         start: range_start,
         end: range_end,

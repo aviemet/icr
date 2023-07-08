@@ -2609,6 +2609,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@total-typescript/ts-reset@npm:^0.4.2":
+  version: 0.4.2
+  resolution: "@total-typescript/ts-reset@npm:0.4.2"
+  checksum: e3681b8fb48cf63538c19e7f203de5ec8b1abdcd0db5c6bd48e0881e2a86977771118c6c2930691947d11213b10a654bc2328b479c4dc0ddec7dfde129d08569
+  languageName: node
+  linkType: hard
+
 "@tsconfig/node10@npm:^1.0.7":
   version: 1.0.9
   resolution: "@tsconfig/node10@npm:1.0.9"
@@ -5485,6 +5492,7 @@ __metadata:
     "@tiptap/pm": ^2.0.3
     "@tiptap/react": ^2.0.3
     "@tiptap/starter-kit": ^2.0.3
+    "@total-typescript/ts-reset": ^0.4.2
     "@types/react": ^18.2.14
     "@types/react-big-calendar": ^1.6.4
     "@types/react-dom": ^18.2.6

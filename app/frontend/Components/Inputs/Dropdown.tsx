@@ -1,23 +1,21 @@
-import React, { forwardRef, useCallback } from 'react'
-import { Select, type SelectProps } from '@mantine/core'
+import React, { forwardRef } from 'react'
+import { Select, SelectItem, type SelectProps } from '@mantine/core'
 import { router } from '@inertiajs/react'
 import { coerceArray } from '@/lib'
 
+interface DataItem extends Omit<SelectItem, 'value'> {
+	value: string|number
+}
+
 export interface IDropdownProps extends Omit<SelectProps, 'data'> {
-	options?: Array<Record<string, any>>
-	getLabel?: (option: Record<string, any>) => any
-	getValue?: (option: Record<string, any>) => string
-	disabledOptions?: (label: string, value: string | number) => boolean
+	data?: DataItem[]
 	onOpen?: () => void
 	fetchOnOpen?: string
 }
 
 const DropdownComponent = forwardRef<HTMLInputElement, IDropdownProps>((
 	{
-		options = [],
-		getLabel = option => option.name,
-		getValue = option => String(option.id),
-		disabledOptions,
+		data,
 		id,
 		name,
 		searchable = true,
@@ -31,24 +29,6 @@ const DropdownComponent = forwardRef<HTMLInputElement, IDropdownProps>((
 ) => {
 	const inputId = id || name
 
-	const data = useCallback(() => {
-		if(!options) return []
-
-		return options.map(option => {
-			const optionPart = {
-				label: getLabel(option),
-				value: getValue(option),
-				disabled: false,
-			}
-
-			if(disabledOptions) {
-				optionPart.disabled = disabledOptions(optionPart.label, optionPart.value)
-			}
-
-			return optionPart
-		})
-	}, [options])
-
 	const fetchNewRecords = (query?: string) => {
 		if(!fetchOnOpen) return
 
@@ -59,13 +39,13 @@ const DropdownComponent = forwardRef<HTMLInputElement, IDropdownProps>((
 
 	return (
 		<Select
+			data={ data?.map(datum => ({ ...datum, value: String(datum.value) })) || [] }
 			ref={ ref }
 			id={ inputId }
 			name={ name }
 			searchable={ searchable }
 			clearable={ clearable }
 			size="md"
-			data={ data() }
 			maxDropdownHeight={ 400 }
 			nothingFound="No Results"
 			onDropdownOpen={ fetchNewRecords }
