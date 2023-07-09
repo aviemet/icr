@@ -10,6 +10,7 @@ import {
 	type CalendarProps,
 	type View,
 	type SlotInfo,
+	NavigateAction,
 } from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 
@@ -76,6 +77,12 @@ const ShiftCalendar = ({
 		navigateParams({ start, end, view })
 
 		if(onRangeChange) onRangeChange(start, end, view)
+	}
+
+	// TODO: Clear search params when navigating to today
+	const handleNavigate = (newDate: Date, view: View, action: NavigateAction) => {
+		// navigateParams({ start: '', end: '', view: '' })
+		// console.log({ newDate, view, action })
 	}
 
 	const defaultDate = () => {
@@ -163,6 +170,7 @@ const ShiftCalendar = ({
 					eventPropGetter={ eventStyleGetter }
 					style={ { height: '100vh' } }
 					onRangeChange={ handleRangeChange }
+					onNavigate={ handleNavigate }
 					onSelectSlot={ handleSelectSlot }
 					{ ...props }
 				/>
