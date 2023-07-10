@@ -86,6 +86,16 @@ export const serialize: RouterExposedMethods['serialize'];
 
 /**
  * Generates rails route to
+ * /api/options/client_activities(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiClientActivitiesOptions: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
  * /api/options/clients(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
@@ -150,6 +160,28 @@ export const client: ((
 
 /**
  * Generates rails route to
+ * /client_activities(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const clientActivities: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /client_activities/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const clientActivity: ((
+  id: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
  * /clients(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
@@ -176,6 +208,18 @@ export const destroyUserSession: ((
  * @returns {string} route path
  */
 export const editClient: ((
+  id: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /client_activities/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const editClientActivity: ((
   id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
@@ -265,6 +309,16 @@ export const employees: ((
  * @returns {string} route path
  */
 export const newClient: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /client_activities/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newClientActivity: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 

@@ -176,7 +176,6 @@ const ShiftCalendar = ({
 				/>
 			</Box>
 			<ModalPrompt
-				centered
 				title="New Shift"
 				opened={ formModalOpen }
 				onClose={ () => setFormModalOpen(false) }

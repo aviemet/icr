@@ -9,4 +9,5 @@ class ClientSerializer < ApplicationSerializer
   )
 
   belongs_to :person, serializer: PersonSerializer
+  has_many :employees, serializer: Employees::ShallowSerializer
 end

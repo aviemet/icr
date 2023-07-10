@@ -4,9 +4,10 @@ import { Form, Autocomplete, DateTime, Submit, FormConsumer } from '@/Components
 import { Routes } from '@/lib'
 import { Box } from '@/Components'
 import Repeats from './Repeats'
-import EmployeesDropdown from '@/Components/Form/Dropdowns/EmployeesDropdown'
+import { EmployeesDropdown } from '@/Components/Form/Dropdowns'
 import { useBooleanToggle } from '@/lib/hooks'
 import SwitchInput from '@/Components/Inputs/Switch'
+import { employees } from '../../../../javascript/routes'
 
 type TFormData = {
 	shift: Schema.ShiftsFormData & {
@@ -48,7 +49,15 @@ const NewShiftForm: React.FC<INewShiftFormProps> = ({ client, employee, start, e
 		<Form model="shift" to={ Routes.shifts() } data={ defaultData } remember={ false }>
 
 			{ /* <FormConsumer>{ ({ data }) => { console.log({ data }); return <></> } }</FormConsumer> */ }
-			{ client && <EmployeesDropdown /> }
+			{ client && <EmployeesDropdown
+				group={ (employee) => {
+					const includes = client.employees.find(emp => String(emp.id) === String(employee.value))
+					return includes ?
+						{ ...employee, group: 'Regular Employees' }
+						:
+						{ ...employee, group: 'Other Employees' }
+				} }
+			/> }
 			{ /* employee && <ClientsDropdown /> */ }
 
 			{ /* Start */ }

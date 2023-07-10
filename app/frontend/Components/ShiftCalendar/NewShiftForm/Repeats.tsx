@@ -15,7 +15,7 @@ const weekDays = [
 	'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
 ]
 
-const Repeats = ({ date }) => {
+const Repeats = ({ date }: RepeatsProps) => {
 	const { getData } = useForm<{ shift: Schema.ShiftsFormData }>()
 
 	const pluralize = (str: string) => {

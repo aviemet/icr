@@ -9,4 +9,6 @@ class Employees::OptionsSerializer < ApplicationSerializer
   def name
     employee.person.name
   end
+
+  has_many :clients, serializer: Clients::ShallowSerializer
 end

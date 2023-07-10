@@ -38,6 +38,7 @@ Rails.application.routes.draw do
   resources :shifts, path: :schedule, only: [:index, :create, :update]
   resources :clients, concerns: :schedulable
   resources :employees, concerns: :schedulable
+  resources :client_activities
   resources :people
 
   # TEMPORARY #
@@ -48,7 +49,7 @@ Rails.application.routes.draw do
     resources :employees, only: [:update]
 
     scope :options do
-      [:employees, :clients, :people].each do |model|
+      [:employees, :clients, :people, :client_activities].each do |model|
         get model.to_s => "#{model}#options", as: "#{model}_options"
       end
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_31_231947) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_10_195306) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -27,6 +27,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_31_231947) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["contact_id"], name: "index_addresses_on_contact_id"
+  end
+
+  create_table "caregiver_assignments", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.bigint "employee_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_caregiver_assignments_on_client_id"
+    t.index ["employee_id"], name: "index_caregiver_assignments_on_employee_id"
+  end
+
+  create_table "client_activities", force: :cascade do |t|
+    t.string "title"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "clients", force: :cascade do |t|
@@ -197,6 +213,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_31_231947) do
   end
 
   add_foreign_key "addresses", "contacts"
+  add_foreign_key "caregiver_assignments", "clients"
+  add_foreign_key "caregiver_assignments", "employees"
   add_foreign_key "contacts", "addresses", column: "primary_address_id"
   add_foreign_key "contacts", "emails", column: "primary_email_id"
   add_foreign_key "contacts", "phones", column: "primary_phone_id"

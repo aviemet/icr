@@ -35,7 +35,6 @@ class ClientsController < ApplicationController
     # TODO: Employee query is for the form dropdown, employees should be scoped to clients
     render inertia: "Clients/Schedule", props: {
       client: client.render,
-      employees: -> { Employee.includes_associated.render },
       shifts: client.shifts_in_range(range_start, range_end).render,
       dateRange: {
         start: range_start,

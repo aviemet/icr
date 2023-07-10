@@ -513,6 +513,14 @@ export const serialize = __jsr.serialize;
 
 /**
  * Generates rails route to
+ * /api/options/client_activities(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiClientActivitiesOptions = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"api"],[2,[7,"/"],[2,[6,"options"],[2,[7,"/"],[2,[6,"client_activities"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
  * /api/options/clients(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
@@ -563,6 +571,23 @@ export const client = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"c
 
 /**
  * Generates rails route to
+ * /client_activities(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const clientActivities = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"client_activities"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
+ * /client_activities/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const clientActivity = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"client_activities"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
  * /clients(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
@@ -585,6 +610,15 @@ export const destroyUserSession = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"logou
  * @returns {string} route path
  */
 export const editClient = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"clients"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /client_activities/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const editClientActivity = __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"client_activities"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
 
 /**
  * Generates rails route to
@@ -653,6 +687,14 @@ export const employees = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"employees"],[1
  * @returns {string} route path
  */
 export const newClient = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"clients"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /client_activities/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newClientActivity = __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"client_activities"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
 
 /**
  * Generates rails route to
