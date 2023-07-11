@@ -2,11 +2,11 @@ now = Time.current
 
 FactoryBot.define do
   sequence :start_time do |n|
-    Time.new(now.year, now.month, now.day, n + 10)
+    Time.new(now.year, now.month, now.day, 0) + ((n + (n * 8)) * 3600)
   end
 
   sequence :end_time do |n|
-    Time.new(now.year, now.month, now.day, n + 11)
+    Time.new(now.year, now.month, now.day, 0) + ((n + (n * 8) + 9) * 3600)
   end
 
   factory :shift do |_time|

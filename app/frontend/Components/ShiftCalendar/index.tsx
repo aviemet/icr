@@ -1,6 +1,9 @@
 import React, { useCallback, useState } from 'react'
 import { Box, useMantineTheme } from '@mantine/core'
 import { useLocation } from '@/lib/hooks'
+import { router } from '@inertiajs/react'
+import { ModalPrompt } from '../Modal'
+import NewShiftForm from './NewShiftForm'
 
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
@@ -16,9 +19,6 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
-import { router } from '@inertiajs/react'
-import { ModalPrompt } from '../Modal'
-import NewShiftForm from './NewShiftForm'
 
 const DragAndDropCalendar = withDragAndDrop(Calendar<Schema.Shift>)
 
@@ -45,7 +45,7 @@ const ShiftCalendar = ({
 	const location = useLocation()
 
 	const [formModalOpen, setFormModalOpen] = useState(false)
-	const [newShiftStart, setNewShiftStart] = useState<Date>(new Date())
+	const [newShiftStart, setNewShiftStart] = useState<Date>()
 
 	const navigateParams = useCallback((params) => {
 		router.get(location.path, params, {

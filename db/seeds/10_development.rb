@@ -27,7 +27,7 @@ if Rails.env == "development"
   end
 
   if Shift.count == 0
-    4.times do
+    20.times do
       FactoryBot.create :shift
     end
 

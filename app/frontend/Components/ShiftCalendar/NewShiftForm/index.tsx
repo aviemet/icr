@@ -2,12 +2,14 @@ import React, { useCallback, useEffect } from 'react'
 import { usePage } from '@inertiajs/react'
 import { Form, Autocomplete, DateTime, Submit, FormConsumer } from '@/Components/Form'
 import { Routes } from '@/lib'
-import { Box } from '@/Components'
+import { Box, Group } from '@/Components'
 import Repeats from './Repeats'
 import { EmployeesDropdown } from '@/Components/Form/Dropdowns'
 import { useBooleanToggle } from '@/lib/hooks'
 import SwitchInput from '@/Components/Inputs/Switch'
 import { employees } from '../../../../javascript/routes'
+import { TimeInput } from '@mantine/dates'
+import dayjs from 'dayjs'
 
 type TFormData = {
 	shift: Schema.ShiftsFormData & {
@@ -17,19 +19,18 @@ type TFormData = {
 
 interface INewShiftFormProps {
 	start?: Date
-	end?: Date
 	client?: Schema.Client
 	employee?: Schema.Employee
 	onSubmit?: () => void
 }
 
-const NewShiftForm: React.FC<INewShiftFormProps> = ({ client, employee, start, end }) => {
+const NewShiftForm: React.FC<INewShiftFormProps> = ({ client, employee, start = new Date() }) => {
 	const [showRecurring, toggleShowRecurring] = useBooleanToggle(false)
 
 	const defaultData: TFormData = {
 		shift: {
 			starts_at: start || '',
-			ends_at: end || '',
+			ends_at: start ? dayjs(start).add(8, 'hour').toDate() : '',
 			employee_id: undefined,
 			title: '',
 			recurring_pattern: {

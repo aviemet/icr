@@ -66,6 +66,7 @@ const Repeats = ({ date }: RepeatsProps) => {
 					<Heading order={ 4 }>Ends</Heading>
 					<RadioInput
 						name="end_type"
+						defaultValue={ 'never' }
 						options={ [
 							{ label: 'Never', value: 'never' },
 							{ label: 'On', value: 'on' },
