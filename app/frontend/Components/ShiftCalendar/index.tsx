@@ -27,7 +27,7 @@ const localizer = dayjsLocalizer(dayjs)
 
 type OmittedCalendarProps = 'localizer'|'onRangeChange'|'events'|'startAccessor'|'endAccessor'|'eventPropGetter'
 interface ShiftCalendarProps extends Omit<CalendarProps<Schema.Shift>, OmittedCalendarProps> {
-	shifts: Schema.Shift[]
+	shifts: Schema.ShiftsCalendar[]
 	client?: Schema.Client
 	employee?: Schema.Employee
 	onRangeChange?: (start: Date, end: Date, view?: View) => void

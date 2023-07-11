@@ -9,7 +9,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 
 interface ScheduleProps {
 	client: Schema.Client
-	shifts: Schema.Shift[]
+	shifts: Schema.ShiftsCalendar[]
 }
 
 const Schedule = ({ client, shifts }: ScheduleProps) => {

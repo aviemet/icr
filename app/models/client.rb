@@ -6,7 +6,7 @@ class Client < ApplicationRecord
   has_many :caregiver_assignments
   has_many :employees, through: :caregiver_assignments
 
-  scope :includes_associated, -> { includes(:person, :employees) }
+  scope :includes_associated, -> { includes(:person, employees: :person) }
 
   def shifts_in_range(range_start, range_end)
     shifts
