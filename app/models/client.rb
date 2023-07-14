@@ -9,6 +9,7 @@ class Client < ApplicationRecord
   scope :includes_associated, -> { includes(:person, employees: :person) }
 
   def shifts_in_range(range_start, range_end)
+    ap({ range_start:, range_end: })
     shifts
       .includes(:clients, :employee, :shift_exceptions)
       .between(range_start, range_end)
