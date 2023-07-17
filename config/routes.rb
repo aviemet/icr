@@ -47,6 +47,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :employees, only: [:update]
+    get "client/:id/shifts" => "client#shifts", as: "client_shifts"
 
     scope :options do
       [:employees, :clients, :people, :client_activities].each do |model|

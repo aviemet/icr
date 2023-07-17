@@ -96,6 +96,18 @@ export const apiClientActivitiesOptions: ((
 
 /**
  * Generates rails route to
+ * /api/client/:id/shifts(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiClientShifts: ((
+  id: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
  * /api/options/clients(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
