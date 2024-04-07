@@ -1,6 +1,14 @@
 class AddOtherColumnsToUser < ActiveRecord::Migration[7.0]
   def change
-    add_column :users, :active, :boolean, default: true
-		add_column :users, :time_zone, :string, default: "UTC"
+    change_table :users, bulk: true do |t|
+      t.boolean :active, default: true, null: false
+      t.string :time_zone, default: "UTC"
+
+      t.jsonb :table_preferences, default: {}
+      t.index :table_preferences, using: :gin
+
+      t.jsonb :user_preferences, default: {}
+      t.index :user_preferences, using: :gin
+    end
   end
 end

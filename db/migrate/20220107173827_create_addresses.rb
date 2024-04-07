@@ -6,10 +6,11 @@ class CreateAddresses < ActiveRecord::Migration[7.0]
       t.string :address_2
       t.string :city
       t.string :region
-      t.string :country
+      t.integer :country
       t.string :postal
       t.text :notes
       t.references :contact, null: false, foreign_key: true
+      t.references :category, null: true, foreign_key: true
 
       t.timestamps
     end

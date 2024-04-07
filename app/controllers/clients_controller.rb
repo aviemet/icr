@@ -1,18 +1,18 @@
 class ClientsController < InertiaController
-  before_action :set_client, only: %i[show edit schedule update destroy]
-  before_action :set_clients, only: %i[index]
+  expose :client, find_by: :slug
+  expose :clients
 
   # GET /clients
   def index
     render inertia: "Clients/Index", props: {
-      clients: @clients.decorate.to_a,
+      clients: clients.render,
     }
   end
 
   # GET /clients/:id
   def show
     render inertia: "Clients/Show", props: {
-      client: @client.decorate.as_json,
+      client: client.decorate.as_json,
     }
   end
 
@@ -26,17 +26,17 @@ class ClientsController < InertiaController
   # GET /clients/:id/edit
   def edit
     render inertia: "Clients/Edit", props: {
-      client: @client.as_json,
+      client: client.as_json,
     }
   end
 
   # GET /clients/:id/schedule
   def schedule
     @employees = Employee.all
-    @shifts = @client.shifts.includes(:clients, :employee).between(range_start, range_end)
+    @shifts = client.shifts.includes(:clients, :employee).between(range_start, range_end)
 
     render inertia: "Clients/Schedule", props: {
-      client: @client.decorate.as_json,
+      client: client.decorate.as_json,
       employees: -> { @employees.decorate },
       shifts: lambda {
         @shifts.decorate.as_json({
@@ -48,10 +48,10 @@ class ClientsController < InertiaController
 
   # POST /clients
   def create
-    @client = Client.new(client_params)
+    client = Client.new(client_params)
 
-    if @client.save
-      redirect_to client_url(@client), notice: "Client was successfully created."
+    if client.save
+      redirect_to client_url(client), notice: "Client was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -59,8 +59,8 @@ class ClientsController < InertiaController
 
   # PATCH/PUT /clients/:id
   def update
-    if @client.update(client_params)
-      redirect_to client_url(@client), notice: "Client was successfully updated."
+    if client.update(client_params)
+      redirect_to client_url(client), notice: "Client was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -68,7 +68,7 @@ class ClientsController < InertiaController
 
   # DELETE /clients/:id
   def destroy
-    @client.destroy
+    client.destroy
     redirect_to clients_url, notice: "Client was successfully destroyed."
   end
 
@@ -83,11 +83,11 @@ class ClientsController < InertiaController
   end
 
   def set_client
-    @client = Client.find_by_slug(params[:id])
+    client = Client.find_by_slug(params[:id])
   end
 
   def set_clients
-    @clients = Client.all
+    clients = Client.all
   end
 
   def client_params
