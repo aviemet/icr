@@ -17,7 +17,7 @@ const EditClient = ({ client }: IEditClientProps) => {
 				
 				<ClientsForm
 					method='put'
-					to={ Routes.client() }
+					to={ Routes.client(client.slug) }
 					client={ client }
 				/>
 			</Section>

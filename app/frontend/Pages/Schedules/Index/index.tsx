@@ -18,7 +18,7 @@ const Index = ({ clients }: SchedulsIndexProps) => {
 
 			<Link href={ Routes.newClient() } as="button">New Client</Link>
 
-					<Table clients={ clients } />
+			<Table clients={ clients } />
 		</>
 	)
 }

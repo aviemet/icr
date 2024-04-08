@@ -43,7 +43,7 @@ class Address < ApplicationRecord
   tracked owner: proc { |controller| controller&.current_user }
   resourcify
 
-  enum :country, Country.codes
+  enum :country, ISO3166::Country.codes
 
   belongs_to :contact
 end

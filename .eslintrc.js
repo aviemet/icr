@@ -7,8 +7,9 @@ module.exports = {
 		'plugin:react/recommended',
 		'plugin:import/typescript',
 		'plugin:@tanstack/eslint-plugin-query/recommended',
+		'plugin:eslint-plugin-json',
 	],
-	'plugins': ['react', '@typescript-eslint', 'import'],
+	'plugins': ['react', '@typescript-eslint', 'import', 'json'],
 	'settings': {
 		'import/resolver': {
 			'typescript': {},
@@ -88,5 +89,7 @@ module.exports = {
 			},
 		}],
 		'comma-dangle': ['error', 'always-multiline'],
+
+		'json/*': ["error", "allowComments"]
 	},
 }

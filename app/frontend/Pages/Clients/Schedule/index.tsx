@@ -1,33 +1,21 @@
 import React, { useState, useEffect }  from 'react'
-import { Inertia } from '@inertiajs/inertia'
+import { router } from '@inertiajs/react'
 import { Routes } from '@/lib'
-import { Calendar, Views, dateFnsLocalizer } from 'react-big-calendar'
+import { Calendar, Views, dayjsLocalizer } from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
-import { format, parse, startOfWeek, getDay, set, add, differenceInDays } from 'date-fns'
-import enUS from 'date-fns/locale/en-US'
+import dayjs from 'dayjs'
 import {
 	Box,
 	Button,
-	Grid,
 	Modal,
-	Typography
-} from '@mui/material'
-import { NewShiftForm, AnimateButton } from '@/Components'
-import { ModalPrompt } from '@/Components/Modal'
+} from '@/Components'
+import ShiftForm from '@/Pages/Shifts/Form'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 
 const DragAndDropCalendar = withDragAndDrop(Calendar)
 
-const localizer = dateFnsLocalizer({
-	format,
-	parse,
-	startOfWeek,
-	getDay,
-	locales: {
-		'en-US': enUS,
-	}
-})
+const localizer = dayjsLocalizer(dayjs)
 
 const Schedule = ({ client, employees, shifts }) => {
 	const [modalOpen, setModalOpen] = useState(false)
