@@ -1,48 +1,77 @@
-import React, { forwardRef } from 'react'
-import { InertiaLink, InertiaLinkProps } from '@inertiajs/inertia-react'
-import { Button, Link as MuiLink } from '@mui/material'
-import { Routes } from '@/lib'
-import { Inertia, Method, Visit } from '@inertiajs/inertia'
+import React, { forwardRef, useMemo } from 'react'
+import { type Method, type Visit } from '@inertiajs/core'
+import cx from 'clsx'
+import InertiaLink from './InertiaLink'
+import ExternalLink from './ExternalLink'
+import { type AnchorProps, type ButtonProps } from '@mantine/core'
+import * as classes from './Link.css'
 
-interface LinkProps extends InertiaLinkProps {
+export { default as NavLink } from './NavLink'
+
+export interface LinkProps extends Omit<AnchorProps, 'onClick'|'onProgress'> {
+	children?: React.ReactNode
+	href: string
 	method?: Method
 	visit?: Omit<Visit, 'method'>
+	external?: boolean
+	as?: 'a'|'button'
+	onProgress?: React.ReactEventHandler<HTMLAnchorElement>
+	target?: string
+	rel?: string
+	tabIndex?: number
+	disabled?: boolean
+	buttonProps?: ButtonProps
+	preserveScroll?: boolean
 }
 
-const Link = forwardRef<HTMLAnchorElement, LinkProps>(({ children, href, as = 'a', method, visit, ...props }, ref) => {
-	const handleHTTP = e => {
-		Inertia.visit(href, {
-			method,
-			...visit
+const externalPrefix = ['http', 'www']
+
+const Link = forwardRef<HTMLAnchorElement, LinkProps>((
+	{ children, href, as = 'a', method, visit, external, onProgress, preserveScroll, buttonProps, className, ...props },
+	ref,
+) => {
+	const renderExternal = useMemo(() => {
+		if(external !== undefined) return external
+
+		let localExternal = false
+		externalPrefix.some(prefix => {
+			if(href.startsWith(prefix)) {
+				const url = new URL(href)
+				localExternal = url.hostname !== window.location.hostname
+			}
 		})
-	}
+		return localExternal
+	}, [href, external])
 
-	if(method !== undefined && method !== 'get') {
-		// Only present standard GET requests as anchor tags, all others as buttons
-		as = 'button'
-
+	if(renderExternal) {
 		return (
-			<MuiLink href={ href } onClick={ e => e.preventDefault() }>
-				<Button onClick={ handleHTTP }>{ children }</Button>
-			</MuiLink>
+			<ExternalLink
+				href={ href }
+				ref={ ref }
+				className={ cx(className, classes.link ) }
+				{ ...onProgress }
+				{ ...props }
+			>
+				{ children }
+			</ExternalLink>
 		)
 	}
 
-	const asButton = as === 'button'
 	return (
-		<InertiaLink href={ href } { ...props } as={ asButton ? 'a' : as }>
-			{ asButton ? <Button>{ children }</Button> : children }
+		<InertiaLink
+			href={ href }
+			as={ as }
+			method={ method }
+			visit={ visit }
+			ref={ ref }
+			preserveScroll={ preserveScroll }
+			className={ cx(className, classes.link ) }
+			{ ...onProgress }
+			{ ...props }
+		>
+			{ children }
 		</InertiaLink>
 	)
 })
 
 export default Link
-
-
-/*
-
-If the method is specified and is not GET, use a button
-
-
-
-*/

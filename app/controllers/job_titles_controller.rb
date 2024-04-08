@@ -4,7 +4,7 @@ class JobTitlesController < ApplicationController
   expose :job_titles, -> { search(JobTitle.includes_associated, sortable_fields) }
     expose :job_title, find: ->(id, scope){ scope.includes_associated.find(id) }
   
-  # GET /job_titles
+  # @route GET /job_titles (job_titles)
   def index
     authorize job_titles
 
@@ -15,7 +15,7 @@ class JobTitlesController < ApplicationController
     }
   end
 
-  # GET /job_titles/:id
+  # @route GET /job_titles/:id (job_title)
   def show
     authorize job_title
     render inertia: "JobTitles/Show", props: {
@@ -23,7 +23,7 @@ class JobTitlesController < ApplicationController
     }
   end
 
-  # GET /job_titles/new
+  # @route GET /job_titles/new (new_job_title)
   def new
     authorize JobTitle.new
     render inertia: "JobTitles/New", props: {
@@ -31,7 +31,7 @@ class JobTitlesController < ApplicationController
     }
   end
 
-  # GET /job_titles/:id/edit
+  # @route GET /job_titles/:id/edit (edit_job_title)
   def edit
     authorize job_title
     render inertia: "JobTitles/Edit", props: {
@@ -39,7 +39,7 @@ class JobTitlesController < ApplicationController
     }
   end
 
-  # POST /job_titles
+  # @route POST /job_titles (job_titles)
   def create
     authorize JobTitle.new
     if job_title.save
@@ -49,7 +49,8 @@ class JobTitlesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /job_titles/:id
+  # @route PATCH /job_titles/:id (job_title)
+  # @route PUT /job_titles/:id (job_title)
   def update
     authorize job_title
     if job_title.update(job_title_params)
@@ -59,7 +60,7 @@ class JobTitlesController < ApplicationController
     end
   end
 
-  # DELETE /job_titles/:id
+  # @route DELETE /job_titles/:id (job_title)
   def destroy
     authorize job_title
     job_title.destroy!

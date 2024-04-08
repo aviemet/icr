@@ -1,16 +1,33 @@
-import { Box } from '@mui/material'
 import React from 'react'
+import { Group, Heading, Menu, Page, Section } from '@/Components'
+import { Routes } from '@/lib'
 
-const Show = ({ client }) => {
+interface IShowClientProps {
+	client: Schema.ClientsShow
+}
+
+const ShowClient = ({ client }: IShowClientProps) => {
+	const title =  'Client'
+
 	return (
-		<div>
-			<h1>Client Information</h1>
-			<Box>
-				<h4>Name</h4>
-				<div>{ client.f_name } { client.m_name } { client.l_name }</div>
-			</Box>
-		</div>
+		<Page title={ title }>
+			<Section>
+				<Group position="apart">
+					<Heading>{ title }</Heading>
+
+					<Menu position="bottom-end">
+						<Menu.Target />
+						<Menu.Dropdown>
+							<Menu.Link href={ Routes.editClient(client.id) }>
+								Edit Client
+							</Menu.Link>
+						</Menu.Dropdown>
+					</Menu>
+				</Group>
+
+			</Section>
+		</Page>
 	)
 }
 
-export default Show
+export default ShowClient

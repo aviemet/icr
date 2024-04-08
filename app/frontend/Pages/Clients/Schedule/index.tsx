@@ -77,7 +77,7 @@ const Schedule = ({ client, employees, shifts }) => {
 
 	return (
 		<>
-			<h1>{ client.full_name }</h1>
+			<h1>{ client.fullast_name }</h1>
 			<Box sx={ { backgroundColor: 'white', padding: '10px' } }>
 				<DragAndDropCalendar
 					selectable

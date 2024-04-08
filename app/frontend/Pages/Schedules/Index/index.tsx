@@ -1,29 +1,24 @@
 import React from 'react'
 import { Routes } from '@/lib'
-import { Head } from '@inertiajs/inertia-react'
-import { Link } from '@/Components'
-import { Grid } from '@mui/material'
+import { Head } from '@inertiajs/react'
+import { Link, Grid } from '@/Components'
 import Table from './Table'
+import { Schema } from '@tiptap/pm/model'
 
-const Index = ({ clients }) => {
+interface SchedulsIndexProps {
+	clients: Schema.Client[]
+}
+
+const Index = ({ clients }: SchedulsIndexProps) => {
 	return (
 		<>
 			<Head title="Clients"></Head>
 
-			<Grid container spacing={ 2 }>
+			<h1>Clients</h1>
 
-				<Grid item xs={ 10 }>
-					<h1>Clients</h1>
-				</Grid>
-				<Grid item xs={ 2 }>
-					<Link href={ Routes.newClient() } as="button">New Client</Link>
-				</Grid>
+			<Link href={ Routes.newClient() } as="button">New Client</Link>
 
-				<Grid item xs={ 12 }>
 					<Table clients={ clients } />
-				</Grid>
-
-			</Grid>
 		</>
 	)
 }

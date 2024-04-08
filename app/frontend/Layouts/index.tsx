@@ -1,48 +1,60 @@
 import React from 'react'
-import type { PageProps } from '@inertiajs/inertia'
-import Providers from '@/Providers'
+import { type PageProps } from '@inertiajs/core'
+import Providers from '@/Layouts/Providers'
+import { Flash } from '@/Components'
 
 import AppLayout from './AppLayout'
 import AuthLayout from './AuthLayout'
+import PublicLayout from './PublicLayout'
+
+import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+
+dayjs.extend(localizedFormat)
 
 interface LayoutWrapperProps {
 	children: React.ReactNode
-	auth: {
-		user: Record<string, string>
-		form_authenticity_token: string
-	}
 }
 
 interface InertiaPageProps extends PageProps {
 	props: LayoutWrapperProps
 }
 
-const LayoutWrapper = React.memo(({ children, auth }: LayoutWrapperProps) => {
-	return(
-		<Providers auth={ auth }>
+const LayoutWrapper = React.memo(({ children }: LayoutWrapperProps) => {
+	return (
+		<Providers>
+			<Flash />
 			{ children }
 		</Providers>
 	)
 })
 
 const AppLayoutLayout = (page: InertiaPageProps) => {
-	return(
-		<LayoutWrapper auth={ page.props.auth }>
+	return (
+		<LayoutWrapper>
 			<AppLayout>{ page }</AppLayout>
 		</LayoutWrapper>
 	)
 }
 
 const AuthLayoutLayout = (page: InertiaPageProps) => {
-	return(
-		<LayoutWrapper auth={ page.props.auth }>
+	return (
+		<LayoutWrapper>
 			<AuthLayout>{ page }</AuthLayout>
 		</LayoutWrapper>
 	)
 }
 
+const PublicLayoutLayout = (page: InertiaPageProps) => {
+	return (
+		<LayoutWrapper>
+			<PublicLayout>{ page }</PublicLayout>
+		</LayoutWrapper>
+	)
+}
 
 export {
 	AppLayoutLayout as AppLayout,
-	AuthLayoutLayout as AuthLayout
+	AuthLayoutLayout as AuthLayout,
+	PublicLayoutLayout as PublicLayout,
 }

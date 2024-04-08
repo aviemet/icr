@@ -27,6 +27,9 @@
 #  fk_rails_...  (recurring_pattern_id => recurring_patterns.id)
 #
 class Shift < ApplicationRecord
+  include PgSearch::Model
+  include PublicActivity::Model
+
   has_and_belongs_to_many :clients, class_name: "Person"
   belongs_to :employee
   belongs_to :created_by, class_name: "User"

@@ -15,16 +15,15 @@
 #  index_roles_on_resource                                (resource_type,resource_id)
 #
 class Role < ApplicationRecord
-  has_and_belongs_to_many :users, :join_table => :users_roles
-  
+  has_and_belongs_to_many :users, join_table: :users_roles
+
   belongs_to :resource,
-             :polymorphic => true,
-             :optional => true
-  
+    polymorphic: true,
+    optional: true
 
   validates :resource_type,
-            :inclusion => { :in => Rolify.resource_types },
-            :allow_nil => true
+    inclusion: { in: Rolify.resource_types },
+    allow_nil: true
 
   scopify
   include PgSearch::Model
@@ -34,12 +33,11 @@ class Role < ApplicationRecord
     against: [],
     using: {
       tsearch: { prefix: true },
-      trigram: {}
+      trigram: {},
     },
   )
 
   resourcify
-
 
   scope :includes_associated, -> { includes([]) }
 end

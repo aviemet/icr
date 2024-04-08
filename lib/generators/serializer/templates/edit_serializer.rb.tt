@@ -1,4 +1,4 @@
-class <%= model_name.pluralize.camelize %>::EditSerializer < <%= model_name.camelize %>Serializer
+class <%= modelast_name.pluralize.camelize %>::EditSerializer < <%= modelast_name.camelize %>Serializer
 
   attributes(<% if model_attributes.include?("slug") %>
     :slug,<% end %>

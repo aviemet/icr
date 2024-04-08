@@ -27,7 +27,7 @@
 #  reset_password_token   :string
 #  sign_in_count          :integer          default(0), not null
 #  table_preferences      :jsonb
-#  time_zone              :string           default("UTC")
+#  time_zone              :string           default("Pacific Time (US & Canada)")
 #  unconfirmed_email      :string
 #  unlock_token           :string
 #  user_preferences       :jsonb
@@ -50,11 +50,14 @@
 require "tzinfo"
 
 class User < ApplicationRecord
+  include PgSearch::Model
+  include PublicActivity::Model
+
   rolify
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+    :recoverable, :rememberable, :validatable
 
   has_one :person, dependent: :nullify
 

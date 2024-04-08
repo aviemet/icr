@@ -1,109 +1,51 @@
-import React, { useEffect } from 'react'
-import { Head } from '@inertiajs/inertia-react'
-import { styled, useTheme } from '@mui/material/styles'
-import { AppBar, Box, Toolbar, useMediaQuery } from '@mui/material'
-import Header from './Header'
-import Sidebar from './Sidebar'
-import { useMenuState, menuActions } from '@/Store'
+import React from 'react'
+import { AppShell, Burger, Container, Menu, Title } from '@/Components'
+import { useAuth, useLocation } from '@/lib/hooks'
+import menuItems from './menuItems'
 
-const AppLayout = ({ children }) => {
-	const theme = useTheme()
-	const matchDownMd = useMediaQuery(theme.breakpoints.down('lg'))
+import * as classes from './AppLayout.css'
 
-	const [ { sideMenuOpen }, dispatch ] = useMenuState()
-
-	const handleLeftDrawerToggle = () => {
-		dispatch(menuActions.TOGGLE_SIDE_MENU)
-	}
-
-	useEffect(() => {
-		dispatch(menuActions.OPEN_SIDE_MENU)
-	}, [matchDownMd])
+const AppLayout = ({ children }: { children: any }) => {
+	const { isLoggedIn } = useAuth()
+	const location = useLocation()
+	console.log({ location})
 
 	return (
-		<>
-			<Head title="Inclusive Community Resources" />
+		<AppShell
+			header={ { height: 45 } }
+		>
 
-			<Box sx={ { display: 'flex' } }>
-				{ /* header */ }
-				<AppBar
-					enableColorOnDark
-					position="fixed"
-					color="inherit"
-					elevation={ 0 }
-					sx={ {
-						bgcolor: theme.palette.background.default,
-						transition: sideMenuOpen ? theme.transitions.create('width') : 'none'
-					} }
-				>
-					<Toolbar>
-						<Header handleLeftDrawerToggle={ handleLeftDrawerToggle } />
-					</Toolbar>
-				</AppBar>
+			<AppShell.Header className={ classes.layout } p="xs">
+				<Title size="h3">OSC Commands Interface</Title>
+				<Menu shadow="sm">
+					<Menu.Target>
+						<Burger size="sm" className={ classes.menu }></Burger>
+					</Menu.Target>
 
-				{ /* drawer */ }
-				<Sidebar drawerOpen={ sideMenuOpen } drawerToggle={ handleLeftDrawerToggle } />
+					<Menu.Dropdown>
+						{ isLoggedIn ? menuItems.map(menuGroup =>(
+							<React.Fragment key={ menuGroup.id }>
+								<Menu.Label >{ menuGroup.title }</Menu.Label>
+								{ menuGroup.children.map(menuItem => (
+									<Menu.Link key={ menuItem.id } href={ menuItem.url }>{ menuItem.title }</Menu.Link>
+								))}
+							</React.Fragment>
+						))
+							:
+							<Menu.Label>Sign In</Menu.Label>
+						}
+					</Menu.Dropdown>
+				</Menu>
+			</AppShell.Header>
 
-				{ /* main content */ }
-				<Main theme={ theme } open={ sideMenuOpen }>
-					{ /* breadcrumb */ }
-					{ /* <Breadcrumbs separator={ IconChevronRight } navigation={ navigation } icon title rightAlign /> */ }
+			<AppShell.Main>
+				<Container pt="sm">
 					{ children }
-				</Main>
-			</Box>
-		</>
+				</Container>
+			</AppShell.Main>
+
+		</AppShell>
 	)
 }
-
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
-	backgroundColor: theme.constants.background,
-	width: '100%',
-	minHeight: 'calc(100vh - 88px)',
-	flexGrow: 1,
-	padding: '20px',
-	marginTop: '88px',
-	marginRight: '20px',
-	borderRadius: `${theme.constants.borderRadius}px`,
-	...(!open && {
-		borderBottomLeftRadius: 0,
-		borderBottomRightRadius: 0,
-		transition: theme.transitions.create('margin', {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.leavingScreen
-		}),
-		[theme.breakpoints.up('md')]: {
-			marginLeft: -(theme.constants.drawerWidth - 20),
-			width: `calc(100% - ${theme.constants.drawerWidth}px)`
-		},
-		[theme.breakpoints.down('md')]: {
-			marginLeft: '20px',
-			width: `calc(100% - ${theme.constants.drawerWidth}px)`,
-			padding: '16px'
-		},
-		[theme.breakpoints.down('sm')]: {
-			marginLeft: '10px',
-			width: `calc(100% - ${theme.constants.drawerWidth}px)`,
-			padding: '16px',
-			marginRight: '10px'
-		}
-	}),
-	...(open && {
-		transition: theme.transitions.create('margin', {
-			easing: theme.transitions.easing.easeOut,
-			duration: theme.transitions.duration.enteringScreen
-		}),
-		marginLeft: 0,
-		borderBottomLeftRadius: 0,
-		borderBottomRightRadius: 0,
-		width: `calc(100% - ${theme.constants.drawerWidth}px)`,
-		[theme.breakpoints.down('md')]: {
-			marginLeft: '20px'
-		},
-		[theme.breakpoints.down('sm')]: {
-			marginLeft: '10px',
-			marginRight: '10px'
-		}
-	})
-}))
 
 export default AppLayout

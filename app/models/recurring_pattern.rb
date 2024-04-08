@@ -15,6 +15,9 @@
 #  updated_at     :datetime         not null
 #
 class RecurringPattern < ApplicationRecord
+  include PgSearch::Model
+  include PublicActivity::Model
+
   has_one :shift, dependent: :destroy
 
   enum recurring_type: {

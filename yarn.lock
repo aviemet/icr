@@ -2030,6 +2030,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-devtools@npm:5.28.10":
+  version: 5.28.10
+  resolution: "@tanstack/query-devtools@npm:5.28.10"
+  checksum: 10c0/7d055a1f189096a60a0e45623042aeeca285176d15bc0830a0c71c551f7065961ead1a1ae4dce8e189af11b39e2ee0c07aa05f4cf0e32e9e245881b02d7504e5
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query-devtools@npm:^5.29.0":
+  version: 5.29.0
+  resolution: "@tanstack/react-query-devtools@npm:5.29.0"
+  dependencies:
+    "@tanstack/query-devtools": "npm:5.28.10"
+  peerDependencies:
+    "@tanstack/react-query": ^5.29.0
+    react: ^18.0.0
+  checksum: 10c0/b2af91dfd8cb83a51dc6438d19ae623082a22b76f982086eb61721833d6ba80a81daf72c323a02fe3af06751a1389249d76939b2ee040b701a649d135d7e9c57
+  languageName: node
+  linkType: hard
+
 "@tanstack/react-query@npm:^5.29.0":
   version: 5.29.0
   resolution: "@tanstack/react-query@npm:5.29.0"
@@ -2602,7 +2621,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
+"@types/node@npm:*, @types/node@npm:^20.12.5":
   version: 20.12.5
   resolution: "@types/node@npm:20.12.5"
   dependencies:
@@ -6548,6 +6567,7 @@ __metadata:
     "@tabler/icons-react": "npm:^3.1.0"
     "@tanstack/eslint-plugin-query": "npm:^5.28.11"
     "@tanstack/react-query": "npm:^5.29.0"
+    "@tanstack/react-query-devtools": "npm:^5.29.0"
     "@testing-library/jest-dom": "npm:^6.4.2"
     "@testing-library/react": "npm:^14.2.2"
     "@testing-library/user-event": "npm:^14.5.2"
@@ -6562,6 +6582,7 @@ __metadata:
     "@tiptap/starter-kit": "npm:^2.2.6"
     "@types/jest": "npm:^29.5.12"
     "@types/lodash": "npm:^4.17.0"
+    "@types/node": "npm:^20.12.5"
     "@types/react": "npm:^18.2.74"
     "@types/react-dom": "npm:^18.2.24"
     "@typescript-eslint/eslint-plugin": "npm:^7.5.0"

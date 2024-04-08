@@ -1,5 +1,5 @@
-class <%= model_name.camelize %>Serializer < ApplicationSerializer
-  object_as :<%= model_name %>
+class <%= modelast_name.camelize %>Serializer < ApplicationSerializer
+  object_as :<%= modelast_name %>
 
   <% if model_attributes.include?("slug") %>identifier :slug<% end %>
 

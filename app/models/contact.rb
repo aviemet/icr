@@ -26,6 +26,9 @@
 #  fk_rails_...  (primary_phone_id => phones.id)
 #
 class Contact < ApplicationRecord
+  include PgSearch::Model
+  include PublicActivity::Model
+
   has_many :addresses, dependent: :delete_all
   has_many :emails, dependent: :delete_all
   has_many :phones, dependent: :delete_all

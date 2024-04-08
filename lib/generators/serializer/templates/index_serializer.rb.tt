@@ -1,4 +1,4 @@
-class <%= model_name.pluralize.camelize %>::IndexSerializer < <%= model_name.camelize %>Serializer
+class <%= modelast_name.pluralize.camelize %>::IndexSerializer < <%= modelast_name.camelize %>Serializer
   attributes(<% if model_attributes.include?("slug") %>
     :slug,<% end %>
     :id,

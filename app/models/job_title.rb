@@ -10,18 +10,18 @@
 #
 class JobTitle < ApplicationRecord
   include PgSearch::Model
+  include PublicActivity::Model
 
   pg_search_scope(
     :search,
     against: [:title, :description],
     using: {
       tsearch: { prefix: true },
-      trigram: {}
+      trigram: {},
     },
   )
 
   resourcify
-
 
   scope :includes_associated, -> { includes([]) }
 end

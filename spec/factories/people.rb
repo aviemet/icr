@@ -26,8 +26,8 @@
 #
 FactoryBot.define do
   factory :person do
-    f_name { Faker::Name.first_name }
-    m_name { Faker::Name.middle_name }
-    l_name { Faker::Name.last_name }
+    first_name { Faker::Name.first_name }
+    middle_name { Faker::Name.middle_name }
+    last_name { Faker::Name.last_name }
   end
 end

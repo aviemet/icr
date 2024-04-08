@@ -72,13 +72,13 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
 	{
-		id: 'f_name',
+		id: 'first_name',
 		numeric: false,
 		disablePadding: true,
 		label: 'First Name',
 	},
 	{
-		id: 'l_name',
+		id: 'last_name',
 		numeric: false,
 		disablePadding: false,
 		label: 'Last Name',
@@ -206,7 +206,7 @@ type Id = string | number
 
 const EnhancedTable = ({ clients }: { clients: schema.Person[] }) => {
 	const [order, setOrder] = React.useState<Order>('asc')
-	const [orderBy, setOrderBy] = React.useState<keyof schema.Person>('f_name')
+	const [orderBy, setOrderBy] = React.useState<keyof schema.Person>('first_name')
 	const [selected, setSelected] = React.useState<readonly Id[]>([])
 	const [page, setPage] = React.useState(0)
 	const [dense, setDense] = React.useState(false)
@@ -320,9 +320,9 @@ const EnhancedTable = ({ clients }: { clients: schema.Person[] }) => {
 												scope="row"
 												padding="none"
 											>
-												<Link href={ Routes.scheduleClient(row.slug) }>{ row.f_name }</Link>
+												<Link href={ Routes.scheduleClient(row.slug) }>{ row.first_name }</Link>
 											</TableCell>
-											<TableCell><Link href={ Routes.scheduleClient(row.slug) }>{ row.l_name }</Link></TableCell>
+											<TableCell><Link href={ Routes.scheduleClient(row.slug) }>{ row.last_name }</Link></TableCell>
 											<TableCell><Link href={ Routes.scheduleClient(row.slug) }>{ row.slug }</Link></TableCell>
 										</TableRow>
 									)

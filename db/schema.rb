@@ -210,7 +210,7 @@ ActiveRecord::Schema[7.1].define(version: 2022_01_31_203313) do
     t.bigint "invited_by_id"
     t.integer "invitations_count", default: 0
     t.boolean "active", default: true, null: false
-    t.string "time_zone", default: "UTC"
+    t.string "time_zone", default: "Pacific Time (US & Canada)"
     t.jsonb "table_preferences", default: {}
     t.jsonb "user_preferences", default: {}
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true

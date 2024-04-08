@@ -1,7 +1,5 @@
 import { Routes } from '@/lib'
-import DashboardIcon from '@mui/icons-material/Dashboard'
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
-import PersonIcon from '@mui/icons-material/Person'
+import { DashboardIcon, PeopleIcon } from '@/Components/Icons'
 
 type TMenuGroup = {
 	id: string
@@ -41,7 +39,7 @@ const menuItems: TMenuGroup[] = [
 				title: 'Schedules',
 				type: 'item',
 				url: Routes.shifts(),
-				icon: CalendarTodayIcon,
+				icon: undefined,
 				breadcrumbs: false
 			}
 		]

@@ -20,5 +20,8 @@
 #  fk_rails_...  (shift_id => shifts.id)
 #
 class ShiftException < ApplicationRecord
+  include PgSearch::Model
+  include PublicActivity::Model
+
   belongs_to :event
 end

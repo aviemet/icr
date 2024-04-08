@@ -7,10 +7,11 @@ if Rails.env == "development"
 			confirmed_at: Date.new,
 			time_zone: "America/Los_Angeles"
 		})
+
 		Person.create({
-			f_name: "Avram",
-			m_name: "True",
-			l_name: "Walden",
+			first_name: "Avram",
+			middle_name: "True",
+			last_name: "Walden",
 			user: user
 		})
 	end

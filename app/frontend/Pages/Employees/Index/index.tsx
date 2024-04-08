@@ -9,8 +9,8 @@ import { useTheme } from '@mui/material/styles'
 
 const columns: GridColDef[] = [
 	{ field: 'id', headerName: 'ID', width: 40 },
-	{ field: 'f_name', headerName: 'First Name', width: 160 },
-	{ field: 'l_name', headerName: 'Last Name', width: 160 },
+	{ field: 'first_name', headerName: 'First Name', width: 160 },
+	{ field: 'last_name', headerName: 'Last Name', width: 160 },
 	{ field: 'created_at', headerName: 'Created Date', width: 160	},
 ]
 

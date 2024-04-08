@@ -2,35 +2,35 @@ class ClientsController < InertiaController
   expose :client, find_by: :slug
   expose :clients
 
-  # GET /clients
+  # @route GET /clients (clients)
   def index
     render inertia: "Clients/Index", props: {
       clients: clients.render,
     }
   end
 
-  # GET /clients/:id
+  # @route GET /clients/:id (client)
   def show
     render inertia: "Clients/Show", props: {
       client: client.decorate.as_json,
     }
   end
 
-  # GET /clients/new
+  # @route GET /clients/new (new_client)
   def new
     render inertia: "Clients/New", props: {
       client: Client.new.as_json,
     }
   end
 
-  # GET /clients/:id/edit
+  # @route GET /clients/:id/edit (edit_client)
   def edit
     render inertia: "Clients/Edit", props: {
       client: client.as_json,
     }
   end
 
-  # GET /clients/:id/schedule
+  # @route GET /clients/:id/schedule (schedule_client)
   def schedule
     @employees = Employee.all
     @shifts = client.shifts.includes(:clients, :employee).between(range_start, range_end)
@@ -46,7 +46,7 @@ class ClientsController < InertiaController
     }
   end
 
-  # POST /clients
+  # @route POST /clients (clients)
   def create
     client = Client.new(client_params)
 
@@ -57,7 +57,8 @@ class ClientsController < InertiaController
     end
   end
 
-  # PATCH/PUT /clients/:id
+  # @route PATCH /clients/:id (client)
+  # @route PUT /clients/:id (client)
   def update
     if client.update(client_params)
       redirect_to client_url(client), notice: "Client was successfully updated."
@@ -66,7 +67,7 @@ class ClientsController < InertiaController
     end
   end
 
-  # DELETE /clients/:id
+  # @route DELETE /clients/:id (client)
   def destroy
     client.destroy
     redirect_to clients_url, notice: "Client was successfully destroyed."
@@ -91,6 +92,6 @@ class ClientsController < InertiaController
   end
 
   def client_params
-    params.require(:client).permit(:f_name, :l_name, :m_name, :slug)
+    params.require(:client).permit(:first_name, :last_name, :middle_name, :slug)
   end
 end

@@ -1,6 +1,6 @@
 class ShiftsController < InertiaController
-  # GET /schedules
   # Routes.shifts()
+  # @route GET /schedule (shifts)
   def index
     @clients = Client.all
     render inertia: "Schedules/Index", props: {
@@ -8,8 +8,8 @@ class ShiftsController < InertiaController
     }
   end
 
-  # POST /schedules
   # Routes.shifts()
+  # @route POST /schedule (shifts)
   def create
     ap({ shift_params: shift_params, params: params })
     @shift = Shift.create(shift_params)
@@ -21,8 +21,9 @@ class ShiftsController < InertiaController
     end
   end
 
-  # PATCH/PUT /schedules/:id
   # Routes.shifts(id)
+  # @route PATCH /schedule/:id (shift)
+  # @route PUT /schedule/:id (shift)
   def update; end
 
   private
