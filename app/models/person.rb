@@ -51,7 +51,7 @@ class Person < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :manager, class_name: "Person", optional: true
 
-  slug :fullast_name
+  slug :full_name
 
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -59,7 +59,7 @@ class Person < ApplicationRecord
   accepts_nested_attributes_for :user
   accepts_nested_attributes_for :contact
 
-  def fullast_name(include_middle_name: false)
+  def full_name(include_middle_name: false)
     "#{first_name}#{include_middle_name ? " #{middle_name}" : ''} #{last_name}"
   end
 end

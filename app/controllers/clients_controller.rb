@@ -1,47 +1,45 @@
 class ClientsController < InertiaController
   expose :client, find_by: :slug
-  expose :clients
+  expose :clients, -> { Client.all }
+  expose :employees, -> { Employee.all }
 
   # @route GET /clients (clients)
   def index
     render inertia: "Clients/Index", props: {
-      clients: clients.render,
+      clients: clients.render(view: :index),
     }
   end
 
   # @route GET /clients/:id (client)
   def show
     render inertia: "Clients/Show", props: {
-      client: client.decorate.as_json,
+      client: client.render(view: :show),
     }
   end
 
   # @route GET /clients/new (new_client)
   def new
     render inertia: "Clients/New", props: {
-      client: Client.new.as_json,
+      client: Client.new.render(view: :form_data),
     }
   end
 
   # @route GET /clients/:id/edit (edit_client)
   def edit
     render inertia: "Clients/Edit", props: {
-      client: client.as_json,
+      client: client.render(view: :edit),
     }
   end
 
   # @route GET /clients/:id/schedule (schedule_client)
   def schedule
-    @employees = Employee.all
-    @shifts = client.shifts.includes(:clients, :employee).between(range_start, range_end)
+    shifts = client.shifts.includes(:clients, :employee, :recurring_pattern).between(range_start, range_end)
 
     render inertia: "Clients/Schedule", props: {
-      client: client.decorate.as_json,
-      employees: -> { @employees.decorate },
+      client: client.render,
+      employees: -> { employees.render },
       shifts: lambda {
-        @shifts.decorate.as_json({
-          include: [:clients, :employee, :recurring_pattern],
-        })
+        shifts.render
       },
     }
   end
@@ -81,14 +79,6 @@ class ClientsController < InertiaController
 
   def range_end
     params[:end] || Time.zone.now.end_of_month.next_occurring(:saturday)
-  end
-
-  def set_client
-    client = Client.find_by_slug(params[:id])
-  end
-
-  def set_clients
-    clients = Client.all
   end
 
   def client_params

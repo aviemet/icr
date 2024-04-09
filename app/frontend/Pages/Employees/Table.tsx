@@ -4,23 +4,19 @@ import { Table, Link } from '@/Components'
 import { EditButton } from '@/Components/Button'
 import { type ITableProps } from '@/Components/Table/Table'
 
-const ClientTable = (props: ITableProps) => {
+const EmployeeTable = (props: ITableProps) => {
 	return (
-		<Table { ...props }>
+		<Table>
 			<Table.Head>
 				<Table.Row>
-					<Table.Cell>First Name</Table.Cell>
-					<Table.Cell>Last Name</Table.Cell>
 					<Table.Cell className="actions">Actions</Table.Cell>
 				</Table.Row>
 			</Table.Head>
 			<Table.Body>
-				<Table.RowIterator render={ (client: Schema.ClientsIndex) => (
-					<Table.Row key={ client.id }>
-					<Table.Cell>{ client.first_name }</Table.Cell>
-					<Table.Cell>{ client.last_name }</Table.Cell>
+				<Table.RowIterator render={ (employee: Schema.EmployeesIndex) => (
+					<Table.Row key={ employee.id }>
 						<Table.Cell>
-							<EditButton href={ Routes.editClient(client.id) } />
+							<EditButton href={ Routes.editEmployee(employee.id) } />
 						</Table.Cell>
 					</Table.Row>
 				) } />
@@ -29,4 +25,4 @@ const ClientTable = (props: ITableProps) => {
 	)
 }
 
-export default ClientTable
+export default EmployeeTable

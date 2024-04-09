@@ -9,6 +9,7 @@ import {
 	Button,
 	Modal,
 } from '@/Components'
+import { useModalContext } from '@/Components/Modal'
 import ShiftForm from '@/Pages/Shifts/Form'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
@@ -17,14 +18,21 @@ const DragAndDropCalendar = withDragAndDrop(Calendar)
 
 const localizer = dayjsLocalizer(dayjs)
 
-const Schedule = ({ client, employees, shifts }) => {
-	const [modalOpen, setModalOpen] = useState(false)
+interface ScheduleProps {
+	client: Schema.Client
+	employees: Schema.Employee[]
+	shifts: Schema.Shift[]
+}
+
+const Schedule = ({ client, employees, shifts }: ScheduleProps) => {
 	const [newShiftStart, setNewShiftStart] = useState<Date>(new Date())
 	const [initialDay, setInitialDay] = useState<Date>()
 
+	// const modalContext = useModalContext()
+
 	const handleSelect = ({ start }: { start: Date }) => {
 		setNewShiftStart(set(start, { hours: 8 }))
-		setModalOpen(true)
+		modalContext.open()
 	}
 
 	const handleDateChange = params => {
@@ -61,12 +69,10 @@ const Schedule = ({ client, employees, shifts }) => {
 		}
 	}
 
-	console.log({ shifts })
-
 	return (
 		<>
-			<h1>{ client.fullast_name }</h1>
-			<Box sx={ { backgroundColor: 'white', padding: '10px' } }>
+			<h1>{ client.full_name }</h1>
+			<Box>
 				<DragAndDropCalendar
 					selectable
 					showAllEvents={ true }
@@ -74,8 +80,8 @@ const Schedule = ({ client, employees, shifts }) => {
 					events={ shifts.map(shift => (
 						{
 							title: shift.title,
-							start: new Date(shift.starts_at),
-							end: new Date(shift.ends_at)
+							start: new Date(shift.starts_at!),
+							end: new Date(shift.ends_at!)
 						}
 					)) }
 					defaultDate={ defaultDate() }
@@ -89,14 +95,14 @@ const Schedule = ({ client, employees, shifts }) => {
 					onRangeChange={ handleRangeChange }
 				/>
 			</Box>
-			<ModalPrompt title="New Shift" open={ modalOpen } handleClose={ () => setModalOpen(false) }>
-				<NewShiftForm
+			{/* <Modal title="New Shift" open={ modalContext.open } handleClose={ modalContext.close }>
+				<ShiftForm
 					start={ newShiftStart }
 					client={ client }
 					employees={ employees }
-					onSubmit={ () => setModalOpen(false) }
+					onSubmit={ modalContext.close }
 				/>
-			</ModalPrompt>
+			</Modal> */}
 		</>
 	)
 }

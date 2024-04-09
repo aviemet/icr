@@ -26,23 +26,16 @@
 #  fk_rails_...  (parent_id => shifts.id)
 #  fk_rails_...  (recurring_pattern_id => recurring_patterns.id)
 #
-class Shift < ApplicationRecord
-  include PgSearch::Model
-  include PublicActivity::Model
+class ShiftSerializer < ApplicationSerializer
+  object_as :shift
 
-  has_and_belongs_to_many :clients, class_name: "Person"
-  belongs_to :employee
-  belongs_to :created_by, class_name: "User"
-  belongs_to :recurring_pattern, optional: true, dependent: :destroy
-
-  accepts_nested_attributes_for :clients
-  accepts_nested_attributes_for :recurring_pattern
-
-  scope :before, ->(time) { where("starts_at > ?", time) }
-  scope :after, ->(time) { where("ends_at < ?", time) }
-  scope :between, ->(start_time, end_time) { before(start_time).after(end_time) }
-
-  def title
-    "Shift Title"
-  end
+  attributes(
+    :title,
+    :starts_at,
+    :ends_at,
+    :recurring_pattern_id,
+    :employee_id,
+    :created_by_id,
+    :parent_id,
+  )
 end

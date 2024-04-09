@@ -1,27 +1,17 @@
 import React, { useEffect, useMemo } from 'react'
 import { MantineProvider, createTheme, px, type CSSVariablesResolver } from '@mantine/core'
-import { Notifications } from '@mantine/notifications'
-import { useLayoutStore } from '@/lib/store'
-import { usePageProps } from '@/lib/hooks'
-import { DatesProvider } from '@mantine/dates'
-import { theme as themeObject, vars } from '@/lib/theme'
 import { type CSSVariables } from '@mantine/core/lib/core/MantineProvider/convert-css-variables/css-variables-object-to-string'
+import { ModalsProvider } from '@mantine/modals'
+import { Notifications } from '@mantine/notifications'
+import { theme as themeObject, vars } from '@/lib/theme'
+import useLayoutStore from '@/lib/store/LayoutStore'
 import { toKebabCase } from '@/lib'
 
 const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
-	const { auth } = usePageProps()
-
 	/**
 	 * Primary color customization
 	 */
-	const { primaryColor, setPrimaryColor } = useLayoutStore()
-
-	useEffect(() => {
-		const companyColor = auth?.user?.active_company?.settings?.primary_color || primaryColor
-		if(companyColor === primaryColor) return
-
-		setPrimaryColor(companyColor)
-	}, [auth?.user?.active_company?.settings?.primary_color])
+	const { primaryColor } = useLayoutStore()
 
 	const theme = useMemo(() => createTheme({ ...themeObject, primaryColor }), [primaryColor])
 
@@ -48,6 +38,7 @@ const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 	}, [primaryColor])
 
+
 	useEffect(() => {
 		/* eslint-disable no-console */
 		if(process.env.NODE_ENV && process.env.NODE_ENV === 'development') {
@@ -64,15 +55,15 @@ const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<MantineProvider
 			theme={ theme }
-			defaultColorScheme="auto"
+			defaultColorScheme="dark"
 			cssVariablesResolver={ cssVariablesResolver }
 		>
-			<DatesProvider settings={ { locale: 'en' } }>
+			<ModalsProvider labels={ { confirm: 'Submit', cancel: 'Cancel' } }>
 				<Notifications />
 				{ children }
-			</DatesProvider>
+			</ModalsProvider>
 		</MantineProvider>
 	)
 }
 
-export default React.memo(UiFrameworkProvider)
+export default UiFrameworkProvider

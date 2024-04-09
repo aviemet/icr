@@ -40,6 +40,7 @@ export {
 } from 'react-icons/bi'
 
 export {
+	IoPerson as PersonIcon
 } from 'react-icons/io5'
 
 export {
@@ -47,6 +48,7 @@ export {
 } from 'react-icons/bs'
 
 export {
+	FaHome as HomeIcon,
 } from 'react-icons/fa'
 
 export {

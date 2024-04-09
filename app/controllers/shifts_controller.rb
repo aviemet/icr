@@ -1,17 +1,19 @@
 class ShiftsController < InertiaController
-  # Routes.shifts()
+  expose :shifts
+  expose :shift
+
   # @route GET /schedule (shifts)
   def index
     @clients = Client.all
     render inertia: "Schedules/Index", props: {
-      clients: @clients.decorate.as_json,
+      clients: @clients.render(view: :index),
     }
   end
 
   # Routes.shifts()
   # @route POST /schedule (shifts)
   def create
-    ap({ shift_params: shift_params, params: params })
+    ap({ shift_params:, params: })
     @shift = Shift.create(shift_params)
 
     if @shift.persisted?
@@ -21,7 +23,6 @@ class ShiftsController < InertiaController
     end
   end
 
-  # Routes.shifts(id)
   # @route PATCH /schedule/:id (shift)
   # @route PUT /schedule/:id (shift)
   def update; end

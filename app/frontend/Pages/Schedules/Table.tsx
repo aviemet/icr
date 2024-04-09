@@ -1,12 +1,13 @@
-import React from 'react'
+import * as React from 'react'
 import { Routes } from '@/lib'
-import { Table, Link } from '@/Components'
+import { Box, Link, Paper, Table } from '@/Components'
 import { EditButton } from '@/Components/Button'
 import { type ITableProps } from '@/Components/Table/Table'
 
-const ClientTable = (props: ITableProps) => {
+
+const ScheduleTable = (props: ITableProps) => {
 	return (
-		<Table { ...props }>
+		<Table>
 			<Table.Head>
 				<Table.Row>
 					<Table.Cell>First Name</Table.Cell>
@@ -17,8 +18,8 @@ const ClientTable = (props: ITableProps) => {
 			<Table.Body>
 				<Table.RowIterator render={ (client: Schema.ClientsIndex) => (
 					<Table.Row key={ client.id }>
-					<Table.Cell>{ client.first_name }</Table.Cell>
-					<Table.Cell>{ client.last_name }</Table.Cell>
+						<Table.Cell><Link href={ Routes.scheduleClient(client.slug) }>{ client.first_name }</Link></Table.Cell>
+						<Table.Cell>{ client.last_name }</Table.Cell>
 						<Table.Cell>
 							<EditButton href={ Routes.editClient(client.id) } />
 						</Table.Cell>
@@ -29,4 +30,4 @@ const ClientTable = (props: ITableProps) => {
 	)
 }
 
-export default ClientTable
+export default ScheduleTable

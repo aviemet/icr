@@ -8,15 +8,13 @@ import * as classes from './AppLayout.css'
 const AppLayout = ({ children }: { children: any }) => {
 	const { isLoggedIn } = useAuth()
 	const location = useLocation()
-	console.log({ location})
 
 	return (
 		<AppShell
 			header={ { height: 45 } }
 		>
-
 			<AppShell.Header className={ classes.layout } p="xs">
-				<Title size="h3">OSC Commands Interface</Title>
+				<Title size="h3">Schedule Thing</Title>
 				<Menu shadow="sm">
 					<Menu.Target>
 						<Burger size="sm" className={ classes.menu }></Burger>

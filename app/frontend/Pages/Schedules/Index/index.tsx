@@ -2,24 +2,27 @@ import React from 'react'
 import { Routes } from '@/lib'
 import { Head } from '@inertiajs/react'
 import { Link, Grid } from '@/Components'
-import Table from './Table'
+import Table from '../Table'
 import { Schema } from '@tiptap/pm/model'
+import { IndexPageTemplate } from '@/Features'
+import SchedulesTable from '../Table'
 
-interface SchedulsIndexProps {
+interface ScheduleIndexProps {
 	clients: Schema.Client[]
+	pagination: Schema.Pagination
 }
 
-const Index = ({ clients }: SchedulsIndexProps) => {
+const Index = ({ clients, pagination }: ScheduleIndexProps) => {
 	return (
-		<>
-			<Head title="Clients"></Head>
-
-			<h1>Clients</h1>
-
-			<Link href={ Routes.newClient() } as="button">New Client</Link>
-
-			<Table clients={ clients } />
-		</>
+		<IndexPageTemplate
+			title="Clients"
+			model="clients"
+			rows={ clients }
+			pagination={ pagination }
+			deleteRoute={ Routes.clients() }
+		>
+			<SchedulesTable />
+		</IndexPageTemplate>
 	)
 }
 

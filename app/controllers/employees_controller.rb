@@ -5,28 +5,28 @@ class EmployeesController < InertiaController
   # @route GET /employees (employees)
   def index
     render inertia: "Employees/Index", props: {
-      employees: @employees.decorate.as_json,
+      employees: @employees.render(view: :index),
     }
   end
 
   # @route GET /employees/:id (employee)
   def show
     render inertia: "Employees/Show", props: {
-      employee: @employee.decorate.as_json,
+      employee: @employee.render(view: :show),
     }
   end
 
   # @route GET /employees/new (new_employee)
   def new
     render inertia: "Employees/New", props: {
-      employee: Employee.new.as_json,
+      employee: Employee.new.render(view: :form_data),
     }
   end
 
   # @route GET /employees/:id/edit (edit_employee)
   def edit
     render inertia: "Employees/Edit", props: {
-      employee: @employee.as_json,
+      employee: @employee.render(view: :edit),
     }
   end
 
@@ -58,14 +58,6 @@ class EmployeesController < InertiaController
   end
 
   private
-
-  def set_employee
-    @employee = Employee.find(class_name, params[:id])
-  end
-
-  def set_employees
-    @employees = Employee.all
-  end
 
   def employee_params
     params.require(:employee).permit(:first_name, :last_name, :middle_name, :slug)

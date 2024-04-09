@@ -1,6 +1,5 @@
 export { default as Button } from './Button'
 export { default as ConditionalWrapper } from './ConditionalWrapper'
-export { default as Control, EditControl } from './Control'
 export { default as DangerousHtml } from './DangerousHtml'
 export { default as Flash } from './Flash'
 export { default as Heading } from './Heading'

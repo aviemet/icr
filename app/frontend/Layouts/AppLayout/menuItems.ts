@@ -1,5 +1,5 @@
 import { Routes } from '@/lib'
-import { DashboardIcon, PeopleIcon } from '@/Components/Icons'
+import { DashboardIcon, PeopleIcon, PersonIcon } from '@/Components/Icons'
 
 type TMenuGroup = {
 	id: string

@@ -36,5 +36,6 @@ class ClientSerializer < ApplicationSerializer
     :person_type,
     :user_id,
     :job_title_id,
+    full_name: { type: :string },
   )
 end

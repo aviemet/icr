@@ -4,16 +4,16 @@ import RowInContext from './RowInContext'
 import { Box, type BoxProps } from '@mantine/core'
 import { ElementProps } from '@mantine/core'
 
-export interface ITableRow extends BoxProps, ElementProps<'tr'> {
-	children?: JSX.Element[]
+export interface TableRowProps extends BoxProps, ElementProps<'tr'> {
+	children?: JSX.Element | JSX.Element[]
 }
 
-interface IRowProps extends Omit<ITableRow, 'ref'> {
+interface RowComponentProps extends Omit<TableRowProps, 'ref'> {
 	render?: any
 	name?: string
 }
 
-const Row = ({ children, render, name, ...props }: IRowProps) => {
+const Row = ({ children, render, name, ...props }: RowComponentProps) => {
 	try {
 		const { tableState: { rows, selectable, selected } } = useTableContext()
 

@@ -29,6 +29,21 @@ Rails.application.routes.draw do
     only: [:sessions],
   )
 
+  devise_for(
+    :users,
+    controllers: {
+      passwords: "users/passwords",
+      registrations: "users/registrations",
+      unlocks: "users/unlocks",
+      confirmations: "users/confirmations",
+      # omniauth_callbacks: "users/omniauth_callbacks",
+    },
+    path_names: {
+      sign_up: :register,
+    },
+    skip: [:sessions],
+  )
+
   # RESOURCEFUL PATHS #
 
   resources :shifts, path: :schedule, only: [:index, :create, :update]

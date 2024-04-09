@@ -18,7 +18,6 @@ export const globals = css`
 		.fullHeight {
 			display: flex;
 			flex-direction: column;
-			min-height: calc(100vh - ${theme.other.header.height}px - ${theme.other.footer.height}px - 20px);
 		}
 
 		label {

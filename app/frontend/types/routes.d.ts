@@ -32,8 +32,8 @@ declare type RequiredParameters<T extends number> = T extends 1 ? [RequiredRoute
     RequiredRouteParameter,
     RequiredRouteParameter
 ] : RequiredRouteParameter[];
-declare type RouteHelperOptions<T extends string> = RouteOptions & Optional<Record<T, OptionalRouteParameter>>;
-declare type RouteHelper<T extends number = number, U extends string = string> = ((...args: [...RequiredParameters<T>, RouteHelperOptions<U>]) => string) & RouteHelperExtras;
+declare type RouteHelperOptions = RouteOptions & Record<string, OptionalRouteParameter>;
+declare type RouteHelper<T extends number = number> = ((...args: [...RequiredParameters<T>, RouteHelperOptions]) => string) & RouteHelperExtras;
 declare type RouteHelpers = Record<string, RouteHelper>;
 declare type Configuration = {
     prefix: string;
@@ -53,6 +53,7 @@ declare type KeywordUrlOptions = Optional<{
     port: string | number;
     anchor: string;
     trailing_slash: boolean;
+    params: RouteParameters;
 }>;
 declare type RouteOptions = KeywordUrlOptions & RouteParameters;
 declare type PartsTable = Record<string, {
@@ -63,10 +64,10 @@ declare type ModuleType = "CJS" | "AMD" | "UMD" | "ESM" | "DTS" | "NIL";
 declare const RubyVariables: {
     PREFIX: string;
     DEPRECATED_GLOBBING_BEHAVIOR: boolean;
+    DEPRECATED_FALSE_PARAMETER_BEHAVIOR: boolean;
     SPECIAL_OPTIONS_KEY: string;
     DEFAULT_URL_OPTIONS: RouteParameters;
     SERIALIZER: Serializer;
-    NAMESPACE: string;
     ROUTES_OBJECT: RouteHelpers;
     MODULE_TYPE: ModuleType;
     WRAPPER: <T>(callback: T) => T;
@@ -82,6 +83,62 @@ export const configure: RouterExposedMethods['configure'];
 export const config: RouterExposedMethods['config'];
 
 export const serialize: RouterExposedMethods['serialize'];
+
+/**
+ * Generates rails route to
+ * /api/spotlights(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiSpotlights: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /api/users/:id/update_table_preferences(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiUpdateTablePreferences: ((
+  id: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /api/users/:id/update_user_preferences(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiUpdateUserPreferences: ((
+  id: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /api/users/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiUser: ((
+  id: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /api/users(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiUsers: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
 
 /**
  * Generates rails route to
@@ -117,7 +174,7 @@ export const clients: ((
 
 /**
  * Generates rails route to
- * /users/sign_out(.:format)
+ * /logout(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
@@ -151,24 +208,24 @@ export const editEmployee: ((
 
 /**
  * Generates rails route to
- * /people/:id/edit(.:format)
+ * /job_titles/:id/edit(.:format)
  * @param {any} id
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const editPerson: ((
+export const editJobTitle: ((
   id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
 /**
  * Generates rails route to
- * /rails/conductor/action_mailbox/inbound_emails/:id/edit(.:format)
+ * /people/:id/edit(.:format)
  * @param {any} id
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const editRailsConductorInboundEmail: ((
+export const editPerson: ((
   id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
@@ -217,6 +274,28 @@ export const employees: ((
 
 /**
  * Generates rails route to
+ * /job_titles/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const jobTitle: ((
+  id: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /job_titles(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const jobTitles: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
  * /clients/new(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
@@ -232,6 +311,16 @@ export const newClient: ((
  * @returns {string} route path
  */
 export const newEmployee: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /job_titles/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newJobTitle: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -257,7 +346,7 @@ export const newUserPassword: ((
 
 /**
  * Generates rails route to
- * /users/sign_up(.:format)
+ * /users/register(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
@@ -267,7 +356,7 @@ export const newUserRegistration: ((
 
 /**
  * Generates rails route to
- * /users/sign_in(.:format)
+ * /login(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
@@ -397,7 +486,7 @@ export const userRegistration: ((
 
 /**
  * Generates rails route to
- * /users/sign_in(.:format)
+ * /login(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */

@@ -1,7 +1,4 @@
-import React, { useEffect } from 'react'
-import { Head } from '@inertiajs/react'
-
-import { Form } from '@/Components/Form'
+import React from 'react'
 import { Page } from '@/Components'
 
 const Home = () => {
