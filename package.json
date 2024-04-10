@@ -43,6 +43,7 @@
     "@tiptap/starter-kit": "^2.3.0",
     "@xstate/react": "^4.1.0",
     "classnames": "^2.5.1",
+    "clsx": "^2.1.0",
     "dayjs": "^1.11.10",
     "dinero.js": "^1.9.1",
     "google-libphonenumber": "^3.2.34",
@@ -56,7 +57,7 @@
     "react-icons": "^5.0.1",
     "react-use-url": "^1.0.5",
     "use-inertia-form": "^3.3.3",
-    "xstate": "^5.9.1",
+    "xstate": "^5.10.0",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
@@ -72,8 +73,8 @@
     "@testing-library/user-event": "^14.5.2",
     "@types/jest": "^29.5.12",
     "@types/lodash": "^4.17.0",
-    "@types/node": "^20.12.6",
-    "@types/postcss-flexbugs-fixes": "^5",
+    "@types/node": "^20.12.7",
+    "@types/postcss-flexbugs-fixes": "^5.0.3",
     "@types/react": "^18.2.75",
     "@types/react-big-calendar": "^1.8.9",
     "@types/react-dom": "^18.2.24",
@@ -86,7 +87,7 @@
     "babel-plugin-macros": "^3.1.0",
     "babel-plugin-styled-components": "^2.1.4",
     "commitizen": "^4.3.0",
-    "eslint": "8.56.0",
+    "eslint": "8.57.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-better-styled-components": "^1.1.2",
     "eslint-plugin-import": "^2.29.1",
@@ -103,17 +104,21 @@
     "postcss-import": "^16.1.0",
     "postcss-nesting": "^12.1.1",
     "postcss-preset-env": "^9.5.4",
-    "postcss-preset-mantine": "^1.13.0",
+    "postcss-preset-mantine": "^1.14.0",
     "postcss-simple-vars": "^7.0.1",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.4",
+    "typescript": "^5.4.5",
     "vite": "^5.2.8",
     "vite-plugin-dynamic-import": "^1.5.0",
     "vite-plugin-full-reload": "^1.1.0",
     "vite-plugin-ruby": "^5.0.0",
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^1.4.0"
+  },
+  "resolutions": {
+    "@types/react": "^18.2.75",
+    "@types/react-dom": "^18.2.24"
   },
   "browserslist": [
     "defaults"

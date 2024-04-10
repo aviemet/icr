@@ -1,4 +1,5 @@
 export { default as Button } from './Button'
+export { default as Calendar } from './Calendar'
 export { default as ConditionalWrapper } from './ConditionalWrapper'
 export { default as DangerousHtml } from './DangerousHtml'
 export { default as Flash } from './Flash'

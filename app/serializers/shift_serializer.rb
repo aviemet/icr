@@ -30,12 +30,12 @@ class ShiftSerializer < ApplicationSerializer
   object_as :shift
 
   attributes(
-    :title,
     :starts_at,
     :ends_at,
     :recurring_pattern_id,
     :employee_id,
     :created_by_id,
     :parent_id,
+    title: { type: :string },
   )
 end

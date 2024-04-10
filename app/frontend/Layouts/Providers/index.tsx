@@ -8,6 +8,8 @@ import '@mantine/tiptap/styles.css'
 import './global.css'
 import QueryProvider from './QueryProvider'
 
+import 'react-big-calendar/lib/css/react-big-calendar.css'
+
 interface IProviderProps {
 	children?: React.ReactNode
 }

@@ -10,7 +10,7 @@ interface IClientIndexProps {
 }
 
 const ClientsIndex = ({ clients, pagination }: IClientIndexProps) => {
-	console.log({ clients})
+	// console.log({ clients})
 	return (
 		<IndexPageTemplate
 			title="Clients"

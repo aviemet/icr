@@ -43,6 +43,6 @@ class Shift < ApplicationRecord
   scope :between, ->(start_time, end_time) { before(start_time).after(end_time) }
 
   def title
-    "Shift Title"
+    "#{starts_at.hour} - #{employee.first_name}"
   end
 end
