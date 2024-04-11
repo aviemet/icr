@@ -28,12 +28,6 @@ if Rails.env == "development"
 		end
 	end
 
-	if Shift.count == 0
-		4.times do
-			FactoryBot.create :shift
-		end
-	end
-
 	if Household.count == 0
 		h = Household.create({ name: "Test Household" })
 		h.clients << Client.first

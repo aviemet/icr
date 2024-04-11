@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { Calendar, Views, dayjsLocalizer, type CalendarProps, type DateLocalizer, type Event, type View } from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import dayjs from 'dayjs'
@@ -25,8 +25,11 @@ const CalendarComponent = ({
 	className,
 	...props
 }: CalendarComponentProps) => {
+	const viewRef = useRef(defaultView)
 
 	const handleRangeChange = (range: Date[] | { start: Date, end: Date }, view?: View | undefined) => {
+		if(view) viewRef.current = view
+
 		if(!onRangeChange) return
 
 		let start, end
@@ -38,7 +41,7 @@ const CalendarComponent = ({
 			end = range.end
 		}
 
-		onRangeChange(start, end, view || Views.MONTH)
+		onRangeChange(start, end, viewRef.current)
 	}
 
 	return (

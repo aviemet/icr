@@ -1,13 +1,12 @@
 import React from 'react'
-import { AppShell, Burger, Container, Menu, Title } from '@/Components'
-import { useAuth, useLocation } from '@/lib/hooks'
+import { AppShell, Burger, Menu, Title } from '@/Components'
+import { useAuth } from '@/lib/hooks'
 import menuItems from './menuItems'
 
 import * as classes from './AppLayout.css'
 
 const AppLayout = ({ children }: { children: any }) => {
 	const { isLoggedIn } = useAuth()
-	const location = useLocation()
 
 	return (
 		<AppShell
@@ -26,7 +25,7 @@ const AppLayout = ({ children }: { children: any }) => {
 								<Menu.Label >{ menuGroup.title }</Menu.Label>
 								{ menuGroup.children.map(menuItem => (
 									<Menu.Link key={ menuItem.id } href={ menuItem.url }>{ menuItem.title }</Menu.Link>
-								))}
+								)) }
 							</React.Fragment>
 						))
 							:
@@ -37,9 +36,7 @@ const AppLayout = ({ children }: { children: any }) => {
 			</AppShell.Header>
 
 			<AppShell.Main>
-				<Container pt="sm">
-					{ children }
-				</Container>
+				{ children }
 			</AppShell.Main>
 
 		</AppShell>

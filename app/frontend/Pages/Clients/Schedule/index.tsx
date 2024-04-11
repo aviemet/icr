@@ -7,12 +7,14 @@ import {
 	Box,
 	Button,
 	Calendar,
+	DateFormat,
 	Modal,
 } from '@/Components'
 import { useModalContext } from '@/Components/Modal'
 import ShiftForm from '@/Pages/Shifts/Form'
-import { type NavigateAction, type View } from 'react-big-calendar'
+import { type NavigateAction, type View, type Event } from 'react-big-calendar'
 import { useLocation } from '@/lib/hooks'
+import { modals } from '@mantine/modals'
 
 interface ScheduleProps {
 	client: Schema.Client
@@ -21,7 +23,20 @@ interface ScheduleProps {
 }
 
 const Schedule = ({ client, employees, shifts }: ScheduleProps) => {
-	const handleSelect = ({ start }: { start: Date }) => {
+	const handleSelectEvent = (event: Event, e: React.SyntheticEvent<HTMLElement, globalThis.Event>) => {
+		modals.open({
+			title: 'Event Details',
+			children: (
+				<>
+					<Box>{ event.title }</Box>
+					{ event.start && <Box><DateFormat>{ event.start }</DateFormat></Box> }
+					{ event.end && <Box><DateFormat>{ event?.end }</DateFormat></Box> }
+				</>
+			),
+		})
+	}
+
+	const handleSelectSlot = ({ start }: { start: Date }) => {
 	}
 
 	const handleDateChange = (newDate: Date, view: View, action: NavigateAction) => {
@@ -33,8 +48,11 @@ const Schedule = ({ client, employees, shifts }: ScheduleProps) => {
 	}
 
 	const handleRangeChange = (start: Date, end: Date, view: View) => {
+		const startDate = dayjs(start).format('DD-MM-YYYY')
+		const endDate = dayjs(end).format('DD-MM-YYYY')
+
 		router.get(`/clients/${client.slug}/schedule`,
-			{ start, end },
+			{ startDate, endDate, view },
 			{
 				only: ['shifts'],
 				preserveState: true,
@@ -55,8 +73,8 @@ const Schedule = ({ client, employees, shifts }: ScheduleProps) => {
 							end: new Date(shift.ends_at!),
 						}
 					)) }
-					onSelectEvent={ event => alert(event.title) }
-					onSelectSlot={ handleSelect }
+					onSelectEvent={ handleSelectEvent }
+					onSelectSlot={ handleSelectSlot }
 					onNavigate={ handleDateChange }
 					onView={ handleViewChange }
 					onRangeChange={ handleRangeChange }
