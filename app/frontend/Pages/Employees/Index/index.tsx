@@ -18,7 +18,7 @@ const EmployeesIndex = ({ employees, pagination }: EmployeeIndexProps) => {
 			pagination={ pagination }
 			deleteRoute={ Routes.employees() }
 			menuOptions={ [
-				{ label: 'New Employee', href: Routes.newEmployee(), icon: NewIcon },
+				{ label: 'New Employee', href: Routes.newEmployee(), icon: <NewIcon /> },
 			] }
 		>
 			<EmployeesTable />

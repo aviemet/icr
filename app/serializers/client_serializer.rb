@@ -1,28 +1,22 @@
 # == Schema Information
 #
-# Table name: people
+# Table name: clients
 #
-#  id           :bigint           not null, primary key
-#  first_name   :string
-#  last_name    :string
-#  middle_name  :string
-#  person_type  :integer
-#  slug         :string           not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  job_title_id :bigint
-#  user_id      :bigint
+#  id          :bigint           not null, primary key
+#  active_at   :date
+#  inactive_at :date
+#  number      :string
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  person_id   :bigint           not null
 #
 # Indexes
 #
-#  index_people_on_job_title_id  (job_title_id)
-#  index_people_on_slug          (slug) UNIQUE
-#  index_people_on_user_id       (user_id)
+#  index_clients_on_person_id  (person_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (job_title_id => job_titles.id)
-#  fk_rails_...  (user_id => users.id)
+#  fk_rails_...  (person_id => people.id)
 #
 class ClientSerializer < ApplicationSerializer
   object_as :client

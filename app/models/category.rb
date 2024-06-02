@@ -28,7 +28,6 @@ class Category < ApplicationRecord
 
   slug :slug_from_category_type
 
-  tracked
   resourcify
 
   @categorizable_types = %w(Address Email Person Phone User Website)

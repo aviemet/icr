@@ -21,6 +21,8 @@ class ApplicationRecord < ActiveRecord::Base
     ignoring: :accents,
   )
 
+  scope :includes_associated, -> { includes([]) }
+
   ##
   # Dynamic search scope for terms searching against specific fields
   ##

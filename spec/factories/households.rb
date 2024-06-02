@@ -9,6 +9,6 @@
 #
 FactoryBot.define do
   factory :household do
-    name { "MyString" }
+    name { "#{Faker::Name.last_name} & #{Faker::Name.last_name}" }
   end
 end

@@ -8,9 +8,20 @@
 #  updated_at :datetime         not null
 #
 class Household < ApplicationRecord
-  include PgSearch::Model
-  include PublicActivity::Model
   include Contactable
 
-  has_and_belongs_to_many :clients, class_name: "Person"
+  pg_search_scope(
+    :search,
+    against: [:name],
+    associated_against: {
+      employee: [],
+      client: [],
+    },
+    using: {
+      tsearch: { prefix: true },
+      trigram: {}
+    },
+  )
+
+  has_many :clients, dependent: :nullify
 end

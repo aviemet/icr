@@ -1,33 +1,32 @@
 import React from 'react'
-import { Group, Heading, Menu, Page, Section } from '@/Components'
+import { Heading, Page, Section } from '@/Components'
 import { Routes } from '@/lib'
+import ShiftForm from '../Form'
 
-interface IShowShiftProps {
-	shift: Schema.ShiftsShow
+interface NewShiftProps {
+	shift: Schema.ShiftsFormData
 }
 
-const ShowShift = ({ shift }: IShowShiftProps) => {
-	const title =  'Shift'
+const NewShift = ({ ...data }: NewShiftProps) => {
+	const title = 'New Shift'
 
 	return (
-		<Page title={ title }>
+		<Page title={ title } breadcrumbs={ [
+			{ title: 'Shifts', href: Routes.shifts() },
+			{ title: 'New Shift' },
+		] }>
+
 			<Section>
-				<Group position="apart">
-					<Heading>{ title }</Heading>
+				<Heading>{ title }</Heading>
 
-					<Menu position="bottom-end">
-						<Menu.Target />
-						<Menu.Dropdown>
-							<Menu.Link href={ Routes.editShift(shift.id) }>
-								Edit Shift
-							</Menu.Link>
-						</Menu.Dropdown>
-					</Menu>
-				</Group>
-
+				<ShiftForm
+					to={ Routes.shifts() }
+					{ ...data }
+				/>
 			</Section>
+
 		</Page>
 	)
 }
 
-export default ShowShift
+export default NewShift

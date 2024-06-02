@@ -9,8 +9,6 @@
 #  updated_at  :datetime         not null
 #
 class JobTitle < ApplicationRecord
-  include PgSearch::Model
-  include PublicActivity::Model
 
   pg_search_scope(
     :search,
@@ -23,5 +21,14 @@ class JobTitle < ApplicationRecord
 
   resourcify
 
-  scope :includes_associated, -> { includes([]) }
+  has_many :employees_job_titles, dependent: :nullify
+  has_many :employees, through: :employees_job_titles, dependent: :nullify
+
+  has_many :active_employees_job_titles, -> {
+    where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current)
+  }, class_name: 'EmployeesJobTitle', dependent: nil, inverse_of: :active_employees_job_title
+
+  has_many :active_employees, through: :active_employees_job_titles, source: :employee
+
+  scope :includes_associated, -> { includes([:employees]) }
 end

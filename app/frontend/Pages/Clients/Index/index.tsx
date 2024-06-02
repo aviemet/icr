@@ -4,13 +4,12 @@ import { IndexPageTemplate } from '@/Features'
 import { NewIcon } from '@/Components/Icons'
 import ClientsTable from '../Table'
 
-interface IClientIndexProps {
+interface ClientIndexProps {
 	clients: Schema.ClientsIndex[]
 	pagination: Schema.Pagination
 }
 
-const ClientsIndex = ({ clients, pagination }: IClientIndexProps) => {
-	// console.log({ clients})
+const ClientsIndex = ({ clients, pagination }: ClientIndexProps) => {
 	return (
 		<IndexPageTemplate
 			title="Clients"
@@ -19,7 +18,7 @@ const ClientsIndex = ({ clients, pagination }: IClientIndexProps) => {
 			pagination={ pagination }
 			deleteRoute={ Routes.clients() }
 			menuOptions={ [
-				{ label: 'New Client', href: Routes.newClient(), icon: NewIcon },
+				{ label: 'New Client', href: Routes.newClient(), icon: <NewIcon /> },
 			] }
 		>
 			<ClientsTable />

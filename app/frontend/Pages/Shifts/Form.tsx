@@ -1,12 +1,13 @@
 import React from 'react'
+import { Grid } from '@/Components'
 import { Form, TextInput, Submit } from '@/Components/Form'
-import { type UseFormProps } from 'use-inertia-form'
+import { type HTTPVerb, type UseFormProps } from 'use-inertia-form'
 
 type TShiftFormData = {
 	shift: Schema.ShiftsFormData
 }
 
-export interface IShiftFormProps {
+export interface ShiftFormProps {
 	to: string
 	method?: HTTPVerb
 	onSubmit?: (object: UseFormProps<TShiftFormData>) => boolean|void
@@ -21,7 +22,12 @@ const ShiftForm = ({ method = 'post', shift, ...props }: IShiftFormProps) => {
 			method={ method }
 			{ ...props }
 		>
-			<Submit>{ shift.id ? 'Update' : 'Create' } Shift</Submit>
+			<Grid>
+
+				<Grid.Col>
+					<Submit>{ shift.id ? 'Update' : 'Create' } Shift</Submit>
+				</Grid.Col>
+			</Grid.Col>
 		</Form>
 	)
 }

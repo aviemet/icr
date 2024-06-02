@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2022_16_24_190653) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_02_222703) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,30 @@ ActiveRecord::Schema[7.1].define(version: 2022_16_24_190653) do
     t.index ["contact_id"], name: "index_addresses_on_contact_id"
   end
 
+  create_table "cal_event_exceptions", force: :cascade do |t|
+    t.bigint "cal_event_id", null: false
+    t.datetime "rescheduled", precision: nil
+    t.datetime "cancelled", precision: nil
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cal_event_id"], name: "index_cal_event_exceptions_on_cal_event_id"
+  end
+
+  create_table "cal_events", force: :cascade do |t|
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.bigint "parent_id"
+    t.bigint "recurring_pattern_id"
+    t.bigint "created_by_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_cal_events_on_created_by_id"
+    t.index ["parent_id"], name: "index_cal_events_on_parent_id"
+    t.index ["recurring_pattern_id"], name: "index_cal_events_on_recurring_pattern_id"
+  end
+
   create_table "categories", force: :cascade do |t|
     t.string "categorizable_type", null: false
     t.string "name"
@@ -59,6 +83,16 @@ ActiveRecord::Schema[7.1].define(version: 2022_16_24_190653) do
     t.datetime "updated_at", null: false
     t.index ["name", "categorizable_type"], name: "index_categories_on_name_and_categorizable_type", unique: true
     t.index ["slug"], name: "index_categories_on_slug", unique: true
+  end
+
+  create_table "clients", force: :cascade do |t|
+    t.bigint "person_id", null: false
+    t.date "active_at"
+    t.date "inactive_at"
+    t.string "number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["person_id"], name: "index_clients_on_person_id"
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -76,6 +110,24 @@ ActiveRecord::Schema[7.1].define(version: 2022_16_24_190653) do
     t.index ["primary_phone_id"], name: "index_contacts_on_primary_phone_id"
   end
 
+  create_table "doctors", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "dosages", force: :cascade do |t|
+    t.decimal "amount"
+    t.integer "amount_unit"
+    t.decimal "freq_amount"
+    t.integer "freq_period"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "emails", force: :cascade do |t|
     t.string "title"
     t.string "email"
@@ -88,17 +140,84 @@ ActiveRecord::Schema[7.1].define(version: 2022_16_24_190653) do
     t.index ["contact_id"], name: "index_emails_on_contact_id"
   end
 
+  create_table "employee_pay_rates", force: :cascade do |t|
+    t.date "starts_at"
+    t.date "ends_at"
+    t.bigint "employee_id", null: false
+    t.bigint "pay_rate_id", null: false
+    t.bigint "shift_type_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_id"], name: "index_employee_pay_rates_on_employee_id"
+    t.index ["pay_rate_id"], name: "index_employee_pay_rates_on_pay_rate_id"
+    t.index ["shift_type_id"], name: "index_employee_pay_rates_on_shift_type_id"
+  end
+
+  create_table "employees", force: :cascade do |t|
+    t.bigint "person_id", null: false
+    t.date "active_at"
+    t.date "inactive_at"
+    t.string "number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["person_id"], name: "index_employees_on_person_id"
+  end
+
+  create_table "employees_job_titles", force: :cascade do |t|
+    t.date "starts_at", null: false
+    t.date "ends_at"
+    t.bigint "employee_id", null: false
+    t.bigint "job_title_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_id"], name: "index_employees_job_titles_on_employee_id"
+    t.index ["job_title_id"], name: "index_employees_job_titles_on_job_title_id"
+  end
+
   create_table "households", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "households_people", id: false, force: :cascade do |t|
-    t.bigint "household_id", null: false
-    t.bigint "person_id", null: false
-    t.index ["household_id"], name: "index_households_people_on_household_id"
-    t.index ["person_id"], name: "index_households_people_on_person_id"
+  create_table "identifications", force: :cascade do |t|
+    t.string "identificationable_type", null: false
+    t.bigint "identificationable_id", null: false
+    t.integer "type"
+    t.integer "number"
+    t.text "notes"
+    t.date "issued_at"
+    t.date "expires_at"
+    t.jsonb "extra_fields"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["identificationable_type", "identificationable_id"], name: "index_identifications_on_identificationable"
+  end
+
+  create_table "incident_reports", force: :cascade do |t|
+    t.datetime "occured_at"
+    t.datetime "reported_at"
+    t.datetime "agency_notified_at"
+    t.string "location"
+    t.text "description"
+    t.bigint "incident_type_id", null: false
+    t.bigint "client_id", null: false
+    t.bigint "reported_to_id", null: false
+    t.bigint "reported_by_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_incident_reports_on_client_id"
+    t.index ["incident_type_id"], name: "index_incident_reports_on_incident_type_id"
+    t.index ["reported_by_id"], name: "index_incident_reports_on_reported_by_id"
+    t.index ["reported_to_id"], name: "index_incident_reports_on_reported_to_id"
+  end
+
+  create_table "incident_types", force: :cascade do |t|
+    t.bigint "category_id", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_incident_types_on_category_id"
   end
 
   create_table "job_titles", force: :cascade do |t|
@@ -108,26 +227,37 @@ ActiveRecord::Schema[7.1].define(version: 2022_16_24_190653) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "medications", force: :cascade do |t|
+    t.string "name"
+    t.string "generic_name"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "pay_rates", force: :cascade do |t|
+    t.string "title"
+    t.integer "rate_cents", default: 0, null: false
+    t.string "rate_currency", default: "USD", null: false
+    t.integer "period", null: false
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "people", force: :cascade do |t|
     t.string "first_name"
     t.string "middle_name"
     t.string "last_name"
+    t.string "nick_name"
     t.string "slug", null: false
-    t.integer "person_type"
+    t.date "dob"
+    t.jsonb "characterstics"
     t.bigint "user_id"
-    t.bigint "job_title_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["job_title_id"], name: "index_people_on_job_title_id"
     t.index ["slug"], name: "index_people_on_slug", unique: true
     t.index ["user_id"], name: "index_people_on_user_id"
-  end
-
-  create_table "people_shifts", id: false, force: :cascade do |t|
-    t.bigint "shift_id", null: false
-    t.bigint "person_id", null: false
-    t.index ["person_id"], name: "index_people_shifts_on_person_id"
-    t.index ["shift_id"], name: "index_people_shifts_on_shift_id"
   end
 
   create_table "pg_search_documents", force: :cascade do |t|
@@ -150,6 +280,21 @@ ActiveRecord::Schema[7.1].define(version: 2022_16_24_190653) do
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_phones_on_category_id"
     t.index ["contact_id"], name: "index_phones_on_contact_id"
+  end
+
+  create_table "prescriptions", force: :cascade do |t|
+    t.bigint "medication_id", null: false
+    t.bigint "client_id", null: false
+    t.date "start_at"
+    t.date "ends_at"
+    t.bigint "doctor_id", null: false
+    t.bigint "dosage_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_prescriptions_on_client_id"
+    t.index ["doctor_id"], name: "index_prescriptions_on_doctor_id"
+    t.index ["dosage_id"], name: "index_prescriptions_on_dosage_id"
+    t.index ["medication_id"], name: "index_prescriptions_on_medication_id"
   end
 
   create_table "recurring_patterns", force: :cascade do |t|
@@ -175,30 +320,24 @@ ActiveRecord::Schema[7.1].define(version: 2022_16_24_190653) do
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
   end
 
-  create_table "shift_exceptions", force: :cascade do |t|
-    t.bigint "shift_id", null: false
-    t.datetime "rescheduled", precision: nil
-    t.datetime "cancelled", precision: nil
-    t.datetime "starts_at"
-    t.datetime "ends_at"
+  create_table "shift_types", force: :cascade do |t|
+    t.string "title"
+    t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["shift_id"], name: "index_shift_exceptions_on_shift_id"
   end
 
   create_table "shifts", force: :cascade do |t|
-    t.datetime "starts_at"
-    t.datetime "ends_at"
-    t.bigint "recurring_pattern_id"
+    t.bigint "cal_event_id"
+    t.bigint "client_id"
     t.bigint "employee_id"
-    t.bigint "created_by_id", null: false
-    t.bigint "parent_id"
+    t.bigint "household_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["created_by_id"], name: "index_shifts_on_created_by_id"
+    t.index ["cal_event_id"], name: "index_shifts_on_cal_event_id"
+    t.index ["client_id"], name: "index_shifts_on_client_id"
     t.index ["employee_id"], name: "index_shifts_on_employee_id"
-    t.index ["parent_id"], name: "index_shifts_on_parent_id"
-    t.index ["recurring_pattern_id"], name: "index_shifts_on_recurring_pattern_id"
+    t.index ["household_id"], name: "index_shifts_on_household_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -252,20 +391,48 @@ ActiveRecord::Schema[7.1].define(version: 2022_16_24_190653) do
     t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
+  create_table "vendors", force: :cascade do |t|
+    t.bigint "category_id", null: false
+    t.string "name"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_vendors_on_category_id"
+  end
+
   add_foreign_key "addresses", "categories"
   add_foreign_key "addresses", "contacts"
+  add_foreign_key "cal_event_exceptions", "cal_events"
+  add_foreign_key "cal_events", "cal_events", column: "parent_id"
+  add_foreign_key "cal_events", "recurring_patterns"
+  add_foreign_key "cal_events", "users", column: "created_by_id"
+  add_foreign_key "clients", "people"
   add_foreign_key "contacts", "addresses", column: "primary_address_id"
   add_foreign_key "contacts", "emails", column: "primary_email_id"
   add_foreign_key "contacts", "phones", column: "primary_phone_id"
   add_foreign_key "emails", "categories"
   add_foreign_key "emails", "contacts"
-  add_foreign_key "people", "job_titles"
+  add_foreign_key "employee_pay_rates", "employees"
+  add_foreign_key "employee_pay_rates", "pay_rates"
+  add_foreign_key "employee_pay_rates", "shift_types"
+  add_foreign_key "employees", "people"
+  add_foreign_key "employees_job_titles", "employees"
+  add_foreign_key "employees_job_titles", "job_titles"
+  add_foreign_key "incident_reports", "clients"
+  add_foreign_key "incident_reports", "incident_types"
+  add_foreign_key "incident_reports", "people", column: "reported_by_id"
+  add_foreign_key "incident_reports", "people", column: "reported_to_id"
+  add_foreign_key "incident_types", "categories"
   add_foreign_key "people", "users"
   add_foreign_key "phones", "categories"
   add_foreign_key "phones", "contacts"
-  add_foreign_key "shift_exceptions", "shifts"
-  add_foreign_key "shifts", "people", column: "employee_id"
-  add_foreign_key "shifts", "recurring_patterns"
-  add_foreign_key "shifts", "shifts", column: "parent_id"
-  add_foreign_key "shifts", "users", column: "created_by_id"
+  add_foreign_key "prescriptions", "clients"
+  add_foreign_key "prescriptions", "doctors"
+  add_foreign_key "prescriptions", "dosages"
+  add_foreign_key "prescriptions", "medications"
+  add_foreign_key "shifts", "cal_events"
+  add_foreign_key "shifts", "clients"
+  add_foreign_key "shifts", "employees"
+  add_foreign_key "shifts", "households"
+  add_foreign_key "vendors", "categories"
 end

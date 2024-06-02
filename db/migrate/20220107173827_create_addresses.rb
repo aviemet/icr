@@ -14,5 +14,7 @@ class CreateAddresses < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+
+    add_reference :contacts, :primary_address, null: true, foreign_key: { to_table: :addresses }
   end
 end

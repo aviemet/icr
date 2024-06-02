@@ -10,5 +10,7 @@ class CreatePhones < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+
+    add_reference :contacts, :primary_phone, null: true, foreign_key: { to_table: :phones }
   end
 end

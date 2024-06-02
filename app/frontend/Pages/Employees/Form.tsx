@@ -1,29 +1,44 @@
 import React from 'react'
+import { Grid } from '@/Components'
 import { Form, TextInput, Submit } from '@/Components/Form'
-import { type UseFormProps } from 'use-inertia-form'
+import { type HTTPVerb, type UseFormProps } from 'use-inertia-form'
 
-type TShiftFormData = {
-	shift: Schema.ShiftsFormData
+type TEmployeeFormData = {
+	employee: Schema.EmployeesFormData
 }
 
-export interface IShiftFormProps {
+export interface EmployeeFormProps {
 	to: string
 	method?: HTTPVerb
-	onSubmit?: (object: UseFormProps<TShiftFormData>) => boolean|void
-	shift: Schema.ShiftsFormData
+	onSubmit?: (object: UseFormProps<TEmployeeFormData>) => boolean|void
+	employee: Schema.EmployeesFormData
 }
 
-const ShiftForm = ({ method = 'post', shift, ...props }: IShiftFormProps) => {
+const EmployeeForm = ({ method = 'post', employee, ...props }: IEmployeeFormProps) => {
 	return (
 		<Form
-			model="shift"
-			data={ { shift } }
+			model="employee"
+			data={ { employee } }
 			method={ method }
 			{ ...props }
 		>
-			<Submit>{ shift.id ? 'Update' : 'Create' } Shift</Submit>
+			<Grid>
+				<Grid.Col>
+					<TextInput name="active_at" label="Active_at" />
+				</Grid.Col>
+				<Grid.Col>
+					<TextInput name="inactive_at" label="Inactive_at" />
+				</Grid.Col>
+				<Grid.Col>
+					<TextInput name="number" label="Number" />
+				</Grid.Col>
+
+				<Grid.Col>
+					<Submit>{ employee.id ? 'Update' : 'Create' } Employee</Submit>
+				</Grid.Col>
+			</Grid.Col>
 		</Form>
 	)
 }
 
-export default ShiftForm
+export default EmployeeForm

@@ -3,15 +3,19 @@ import { Heading, Page, Section } from '@/Components'
 import { Routes } from '@/lib'
 import ShiftsForm from '../Form'
 
-interface IEditShiftProps {
+interface EditShiftProps {
 	shift: Schema.ShiftsEdit
 }
 
-const EditShift = ({ shift }: IEditShiftProps) => {
+const EditShift = ({ shift }: EditShiftProps) => {
 	const title = 'Edit Shift'
 
 	return (
-		<Page title={ title }>
+		<Page title={ title } breadcrumbs={ [
+			{ title: 'Shifts', href: Routes.shifts() },
+			{ title: Shift, href: Routes.shift(shift.id) },
+			{ title },
+		] }>
 			<Section>
 				<Heading>{ title }</Heading>
 				

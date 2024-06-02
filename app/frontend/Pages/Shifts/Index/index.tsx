@@ -4,12 +4,12 @@ import { IndexPageTemplate } from '@/Features'
 import { NewIcon } from '@/Components/Icons'
 import ShiftsTable from '../Table'
 
-interface IShiftIndexProps {
+interface ShiftIndexProps {
 	shifts: Schema.ShiftsIndex[]
 	pagination: Schema.Pagination
 }
 
-const ShiftsIndex = ({ shifts, pagination }: IShiftIndexProps) => {
+const ShiftsIndex = ({ shifts, pagination }: ShiftIndexProps) => {
 	return (
 		<IndexPageTemplate
 			title="Shifts"
@@ -18,7 +18,7 @@ const ShiftsIndex = ({ shifts, pagination }: IShiftIndexProps) => {
 			pagination={ pagination }
 			deleteRoute={ Routes.shifts() }
 			menuOptions={ [
-				{ label: 'New Shift', href: Routes.newShift(), icon: NewIcon },
+				{ label: 'New Shift', href: Routes.newShift(), icon: <NewIcon /> },
 			] }
 		>
 			<ShiftsTable />

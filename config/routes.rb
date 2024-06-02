@@ -1,4 +1,19 @@
 Rails.application.routes.draw do
+  resources :vendors
+  resources :incident_reports
+  resources :incident_types
+  resources :prescriptions
+  resources :dosages
+  resources :doctors
+  resources :medications
+  resources :pay_rates
+  resources :employees_job_titles
+  resources :cal_event_exceptions
+  resources :cal_events
+  resources :shifts
+  resources :employees
+  resources :clients
+  resources :identifications
   resources :job_titles
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

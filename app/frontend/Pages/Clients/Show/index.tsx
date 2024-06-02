@@ -1,33 +1,32 @@
 import React from 'react'
-import { Group, Heading, Menu, Page, Section } from '@/Components'
+import { Heading, Page, Section } from '@/Components'
 import { Routes } from '@/lib'
+import ClientForm from '../Form'
 
-interface IShowClientProps {
-	client: Schema.ClientsShow
+interface NewClientProps {
+	client: Schema.ClientsFormData
 }
 
-const ShowClient = ({ client }: IShowClientProps) => {
-	const title =  'Client'
+const NewClient = ({ ...data }: NewClientProps) => {
+	const title = 'New Client'
 
 	return (
-		<Page title={ title }>
+		<Page title={ title } breadcrumbs={ [
+			{ title: 'Clients', href: Routes.clients() },
+			{ title: 'New Client' },
+		] }>
+
 			<Section>
-				<Group position="apart">
-					<Heading>{ title }</Heading>
+				<Heading>{ title }</Heading>
 
-					<Menu position="bottom-end">
-						<Menu.Target />
-						<Menu.Dropdown>
-							<Menu.Link href={ Routes.editClient(client.id) }>
-								Edit Client
-							</Menu.Link>
-						</Menu.Dropdown>
-					</Menu>
-				</Group>
-
+				<ClientForm
+					to={ Routes.clients() }
+					{ ...data }
+				/>
 			</Section>
+
 		</Page>
 	)
 }
 
-export default ShowClient
+export default NewClient

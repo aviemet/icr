@@ -1,60 +1,68 @@
-class ShiftsController < InertiaController
-  expose :shifts
-  expose :shift
+class ShiftsController < ApplicationController
+  include Searchable
 
-  # @route GET /schedule (shifts)
+  expose :shifts, -> { search(@active_company.shifts.includes_associated, sortable_fields) }
+  expose :shift, scope: ->{ @active_company.shifts }, find: ->(id, scope){ scope.includes_associated.find(id) }
+
   def index
-    @clients = Client.all
-    render inertia: "Schedules/Index", props: {
-      clients: @clients.render(view: :index),
+    authorize shifts
+    render inertia: "Shift/Index", props: {
+      shifts: -> { shifts.render(view: :index) }
     }
   end
 
-  # Routes.shifts()
-  # @route POST /schedule (shifts)
-  def create
-    ap({ shift_params:, params: })
-    @shift = Shift.create(shift_params)
+  def show
+    authorize shift
+    render inertia: "Shift/Show", props: {
+      shift: -> { shift.render(view: :show) }
+    }
+  end
 
-    if @shift.persisted?
-      redirect_to schedule_client_path(@shift.clients[0])
+  def new
+    authorize Shift.new
+    render inertia: "Shift/New", props: {
+      shift: Shift.new.render(view: :form_data)
+    }
+  end
+
+  def edit
+    authorize shift
+    render inertia: "Shift/Edit", props: {
+      shift: shift.render(view: :edit)
+    }
+  end
+
+  def create
+    authorize Shift.new
+    if shift.save
+      redirect_to shift, notice: "Shift was successfully created."
     else
-      redirect_to schedule_client_path(@shift.clients[0]), inertia: { errors: @shift.errors }
+      redirect_to new_shift_path, inertia: { errors: shift.errors }
     end
   end
 
-  # @route PATCH /schedule/:id (shift)
-  # @route PUT /schedule/:id (shift)
-  def update; end
+  def update
+    authorize shift
+    if shift.update(shift_params)
+      redirect_to shift, notice: "Shift was successfully updated."
+    else
+      redirect_to edit_shift_path, inertia: { errors: shift.errors }
+    end
+  end
+
+  def destroy
+    authorize shift
+    shift.destroy!
+    redirect_to shifts_url, notice: "Shift was successfully destroyed."
+  end
 
   private
 
-  def set_shift
-    @shift = Shift.find(params[:id])
-  end
-
-  def set_shifts
-    @shifts = Shift.all
+  def sortable_fields
+    %w(cal_event_id client_id employee_id household_id).freeze
   end
 
   def shift_params
-    params.require(:shift).permit(
-      :starts_at,
-      :ends_at,
-      :employee_id,
-      :created_by_id,
-      :is_recurring,
-      client_ids: [],
-      recurring_pattern_attributes: [
-        :recurring_type,
-        :separation_count,
-        :offset,
-        :end_date,
-        :max_occurances,
-        :day_of_week,
-        :day_of_month,
-        :month_of_year,
-      ],
-    )
+    params.require(:shift).permit(:cal_event_id, :client_id, :employee_id, :household_id)
   end
 end

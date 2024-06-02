@@ -9,5 +9,7 @@ class CreateEmails < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+
+    add_reference :contacts, :primary_email, null: true, foreign_key: { to_table: :emails }
   end
 end

@@ -1,87 +1,68 @@
-class ClientsController < InertiaController
-  expose :client, find_by: :slug
-  expose :clients, -> { Client.all }
-  expose :employees, -> { Employee.all }
+class ClientsController < ApplicationController
+  include Searchable
 
-  # @route GET /clients (clients)
+  expose :clients, -> { search(@active_company.clients.includes_associated, sortable_fields) }
+  expose :client, scope: ->{ @active_company.clients }, find: ->(id, scope){ scope.includes_associated.find(id) }
+
   def index
-    render inertia: "Clients/Index", props: {
-      clients: clients.render(view: :index),
+    authorize clients
+    render inertia: "Client/Index", props: {
+      clients: -> { clients.render(view: :index) }
     }
   end
 
-  # @route GET /clients/:id (client)
   def show
-    render inertia: "Clients/Show", props: {
-      client: client.render(view: :show),
+    authorize client
+    render inertia: "Client/Show", props: {
+      client: -> { client.render(view: :show) }
     }
   end
 
-  # @route GET /clients/new (new_client)
   def new
-    render inertia: "Clients/New", props: {
-      client: Client.new.render(view: :form_data),
+    authorize Client.new
+    render inertia: "Client/New", props: {
+      client: Client.new.render(view: :form_data)
     }
   end
 
-  # @route GET /clients/:id/edit (edit_client)
   def edit
-    render inertia: "Clients/Edit", props: {
-      client: client.render(view: :edit),
+    authorize client
+    render inertia: "Client/Edit", props: {
+      client: client.render(view: :edit)
     }
   end
 
-  # @route GET /clients/:id/schedule (schedule_client)
-  def schedule
-    shifts = client.shifts.includes(:clients, :employee, :recurring_pattern).between(range_start, range_end)
-
-    render inertia: "Clients/Schedule", props: {
-      client: client.render,
-      employees: -> { employees.render },
-      shifts: lambda {
-        shifts.render
-      },
-    }
-  end
-
-  # @route POST /clients (clients)
   def create
-    client = Client.new(client_params)
-
+    authorize Client.new
     if client.save
-      redirect_to client_url(client), notice: "Client was successfully created."
+      redirect_to client, notice: "Client was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      redirect_to new_client_path, inertia: { errors: client.errors }
     end
   end
 
-  # @route PATCH /clients/:id (client)
-  # @route PUT /clients/:id (client)
   def update
+    authorize client
     if client.update(client_params)
-      redirect_to client_url(client), notice: "Client was successfully updated."
+      redirect_to client, notice: "Client was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      redirect_to edit_client_path, inertia: { errors: client.errors }
     end
   end
 
-  # @route DELETE /clients/:id (client)
   def destroy
-    client.destroy
+    authorize client
+    client.destroy!
     redirect_to clients_url, notice: "Client was successfully destroyed."
   end
 
   private
 
-  def range_start
-    params[:start] || Time.zone.now.beginning_of_month.prev_occurring(:sunday)
-  end
-
-  def range_end
-    params[:end] || Time.zone.now.end_of_month.next_occurring(:saturday)
+  def sortable_fields
+    %w(person_id active_at inactive_at number).freeze
   end
 
   def client_params
-    params.require(:client).permit(:first_name, :last_name, :middle_name, :slug)
+    params.require(:client).permit(:person_id, :active_at, :inactive_at, :number)
   end
 end

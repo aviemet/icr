@@ -17,6 +17,9 @@
 #
 FactoryBot.define do
   factory :category do
-    
+    categorizable_type { Faker::Lorem.word }
+    name { Faker::Commerce.department }
+    slug { Faker::Internet.slug }
+    description { Faker::Lorem.paragraph }
   end
 end

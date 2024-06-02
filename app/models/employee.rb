@@ -1,33 +1,53 @@
 # == Schema Information
 #
-# Table name: people
+# Table name: employees
 #
-#  id           :bigint           not null, primary key
-#  first_name   :string
-#  last_name    :string
-#  middle_name  :string
-#  person_type  :integer
-#  slug         :string           not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  job_title_id :bigint
-#  user_id      :bigint
+#  id          :bigint           not null, primary key
+#  active_at   :date
+#  inactive_at :date
+#  number      :string
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  person_id   :bigint           not null
 #
 # Indexes
 #
-#  index_people_on_job_title_id  (job_title_id)
-#  index_people_on_slug          (slug) UNIQUE
-#  index_people_on_user_id       (user_id)
+#  index_employees_on_person_id  (person_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (job_title_id => job_titles.id)
-#  fk_rails_...  (user_id => users.id)
+#  fk_rails_...  (person_id => people.id)
 #
-class Employee < Person
-  has_many :shifts, dependent: :nullify
+class Employee < ApplicationRecord
+  include Identificationable
 
-  before_validation ->(model) { model.person_type = :employee }
+  pg_search_scope(
+    :search,
+    against: [:active_at, :inactive_at, :number],
+    associated_against: {
+      person: [],
+    },
+    using: {
+      tsearch: { prefix: true },
+      trigram: {}
+    },
+  )
 
-  default_scope { employee }
+  resourcify
+
+  belongs_to :person
+
+  has_many :employees_job_titles, dependent: :nullify
+  has_many :job_titles, through: :employees_job_titles
+
+  has_one :active_employees_job_title, -> {
+    where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current)
+  }, class_name: 'EmployeesJobTitle', dependent: nil, inverse_of: :active_employees_job_titles
+  has_one :job_title, through: :active_employees_job_title, source: :job_title
+
+  has_many :pay_rates, dependent: :destroy
+
+  accepts_nested_attributes_for :person
+
+  scope :includes_associated, -> { includes([:person, :identifications, :job_titles, :pay_rates]) }
 end

@@ -3,21 +3,25 @@ import { Heading, Page, Section } from '@/Components'
 import { Routes } from '@/lib'
 import ClientsForm from '../Form'
 
-interface IEditClientProps {
+interface EditClientProps {
 	client: Schema.ClientsEdit
 }
 
-const EditClient = ({ client }: IEditClientProps) => {
+const EditClient = ({ client }: EditClientProps) => {
 	const title = 'Edit Client'
 
 	return (
-		<Page title={ title }>
+		<Page title={ title } breadcrumbs={ [
+			{ title: 'Clients', href: Routes.clients() },
+			{ title: Client, href: Routes.client(client.id) },
+			{ title },
+		] }>
 			<Section>
 				<Heading>{ title }</Heading>
 				
 				<ClientsForm
 					method='put'
-					to={ Routes.client(client.slug) }
+					to={ Routes.client() }
 					client={ client }
 				/>
 			</Section>

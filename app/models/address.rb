@@ -27,8 +27,6 @@
 #  fk_rails_...  (contact_id => contacts.id)
 #
 class Address < ApplicationRecord
-  include PgSearch::Model
-  include PublicActivity::Model
   include Categorizable
 
   pg_search_scope(
@@ -40,7 +38,6 @@ class Address < ApplicationRecord
     },
   )
 
-  tracked owner: proc { |controller| controller&.current_user }
   resourcify
 
   enum :country, ISO3166::Country.codes

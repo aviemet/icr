@@ -10,7 +10,7 @@
 #
 FactoryBot.define do
   factory :job_title do
-    title { "MyString" }
-    description { "MyText" }
+    title { Faker::Job.title }
+    description { Faker::Lorem.paragraph }
   end
 end

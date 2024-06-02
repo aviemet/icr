@@ -22,8 +22,6 @@
 #  fk_rails_...  (contact_id => contacts.id)
 #
 class Email < ApplicationRecord
-  include PgSearch::Model
-  include PublicActivity::Model
   include Categorizable
 
   pg_search_scope(
@@ -35,7 +33,6 @@ class Email < ApplicationRecord
     },
   )
 
-  tracked owner: proc { |controller| controller&.current_user }
   resourcify
 
   belongs_to :contact
