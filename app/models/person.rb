@@ -45,9 +45,9 @@ class Person < ApplicationRecord
 
   resourcify
 
-  belongs_to :user, optional: true
-  has_one :client, optional: true, dependent: :nullify
-  has_one :employee, optional: true, dependent: :nullify
+  belongs_to :user
+  has_one :client, dependent: :nullify
+  has_one :employee, dependent: :nullify
 
   slug :full_name
 

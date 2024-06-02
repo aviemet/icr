@@ -24,5 +24,6 @@ FactoryBot.define do
     number { Faker::Alphanumeric.alpha(number: 8).upcase }
 
     person
+    job_title
   end
 end

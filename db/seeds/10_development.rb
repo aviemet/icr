@@ -30,7 +30,7 @@ if Rails.env.development?
 
   if Employee.count == 0
     6.times do |i|
-      FactoryBot.create :employee, job_title_id: (i % 3) + 1
+      FactoryBot.create :employee, job_title: JobTitle.find((i % 3) + 1)
     end
   end
 

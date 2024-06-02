@@ -40,6 +40,9 @@ class Client < ApplicationRecord
   has_many :doctors_clients, dependent: :nullify
   has_many :doctors, through: :doctors_clients
 
+  has_many :households_clients, dependent: :nullify
+  has_one :household, through: :households_clients, dependent: :nullify
+
   accepts_nested_attributes_for :person
 
   scope :includes_associated, -> { includes([:person, :identifications]) }

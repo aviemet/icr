@@ -23,5 +23,6 @@ class Household < ApplicationRecord
     },
   )
 
-  has_many :clients, dependent: :nullify
+  has_many :households_clients, dependent: :nullify
+  has_many :clients, through: :households_clients, dependent: :nullify
 end

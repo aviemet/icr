@@ -30,7 +30,7 @@ class Category < ApplicationRecord
 
   resourcify
 
-  @categorizable_types = %w(Address Email Person Phone User Website)
+  @categorizable_types = %w(Address Email Phone Vendor IncidentReport)
 
   validates :name, presence: true, uniqueness: {
     scope: :categorizable_type,

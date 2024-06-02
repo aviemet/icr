@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_02_222703) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_02_225144) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -118,6 +118,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_222703) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "doctors_clients", force: :cascade do |t|
+    t.bigint "doctor_id", null: false
+    t.bigint "client_id", null: false
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_doctors_clients_on_client_id"
+    t.index ["doctor_id"], name: "index_doctors_clients_on_doctor_id"
+  end
+
   create_table "dosages", force: :cascade do |t|
     t.decimal "amount"
     t.integer "amount_unit"
@@ -178,6 +188,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_222703) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "households_clients", force: :cascade do |t|
+    t.bigint "household_id", null: false
+    t.bigint "client_id", null: false
+    t.date "starts_at"
+    t.date "ends_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_households_clients_on_client_id"
+    t.index ["household_id"], name: "index_households_clients_on_household_id"
   end
 
   create_table "identifications", force: :cascade do |t|
@@ -410,6 +431,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_222703) do
   add_foreign_key "contacts", "addresses", column: "primary_address_id"
   add_foreign_key "contacts", "emails", column: "primary_email_id"
   add_foreign_key "contacts", "phones", column: "primary_phone_id"
+  add_foreign_key "doctors_clients", "clients"
+  add_foreign_key "doctors_clients", "doctors"
   add_foreign_key "emails", "categories"
   add_foreign_key "emails", "contacts"
   add_foreign_key "employee_pay_rates", "employees"
@@ -418,6 +441,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_222703) do
   add_foreign_key "employees", "people"
   add_foreign_key "employees_job_titles", "employees"
   add_foreign_key "employees_job_titles", "job_titles"
+  add_foreign_key "households_clients", "clients"
+  add_foreign_key "households_clients", "households"
   add_foreign_key "incident_reports", "clients"
   add_foreign_key "incident_reports", "incident_types"
   add_foreign_key "incident_reports", "people", column: "reported_by_id"
