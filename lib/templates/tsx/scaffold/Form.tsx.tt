@@ -1,12 +1,13 @@
 import React from 'react'
+import { Grid } from '@/Components'
 import { Form, TextInput, Submit } from '@/Components/Form'
-import { type UseFormProps } from 'use-inertia-form'
+import { type HTTPVerb, type UseFormProps } from 'use-inertia-form'
 
 type T<%= singular_table_name.camelize %>FormData = {
 	<%= singular_table_name %>: Schema.<%= plural_table_name.camelize %>FormData
 }
 
-export interface I<%= singular_table_name.camelize %>FormProps {
+export interface <%= singular_table_name.camelize %>FormProps {
 	to: string
 	method?: HTTPVerb
 	onSubmit?: (object: UseFormProps<T<%= singular_table_name.camelize %>FormData>) => boolean|void
@@ -20,9 +21,16 @@ const <%= singular_table_name.camelize %>Form = ({ method = 'post', <%= singular
 			data={ { <%= singular_table_name %> } }
 			method={ method }
 			{ ...props }
-		><% attributes.each do |column| %><% unless column.type == :references %>
-			<TextInput name="<%= column.name %>" label="<%= column.name.capitalize %>" /><% end %><% end %>
-			<Submit>{ <%= singular_table_name %>.id ? 'Update' : 'Create' } <%= singular_table_name.camelize %></Submit>
+		>
+			<Grid><% attributes.each do |column| %><% unless column.type == :references %>
+				<Grid.Col>
+					<TextInput name="<%= column.name %>" label="<%= column.name.capitalize %>" />
+				</Grid.Col><% end %><% end %>
+
+				<Grid.Col>
+					<Submit>{ <%= singular_table_name %>.id ? 'Update' : 'Create' } <%= singular_table_name.camelize %></Submit>
+				</Grid.Col>
+			</Grid.Col>
 		</Form>
 	)
 }

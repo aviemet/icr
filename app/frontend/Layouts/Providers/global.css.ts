@@ -3,8 +3,8 @@ import { vars, theme } from '@/lib/theme'
 
 export const globals = css`
 	:global() {
-		html body {
-			overflow: hidden;
+		html, body, #app {
+			height: 100%;
 		}
 
 		*::selection {

@@ -1,68 +1,74 @@
-import React, { forwardRef } from 'react'
-import NumberInput, { type INumberInputProps } from '@/Components/Inputs/NumberInput'
-import Field from '../Field'
-import cx from 'clsx'
-import { useInertiaInput } from 'use-inertia-form'
+import React from 'react'
+import NumberInput, { type NumberInputProps } from '@/Components/Inputs/NumberInput'
+import Field from '../Components/Field'
+import { NestedObject, useInertiaInput } from 'use-inertia-form'
 import ConditionalWrapper from '@/Components/ConditionalWrapper'
+import { type InputConflicts, type BaseFormInputProps } from '.'
 
-interface INumberFormInputProps extends Omit<INumberInputProps, 'onBlur'|'onChange'|'name'>, IInertiaInputProps {
-	field?: boolean
-}
+interface FormNumberInputProps<TForm extends NestedObject = NestedObject>
+	extends
+	Omit<NumberInputProps, InputConflicts>,
+	BaseFormInputProps<number, TForm> {}
 
-const FormInput = forwardRef<HTMLInputElement, INumberFormInputProps>((
+const FormInput = <TForm extends NestedObject = NestedObject>(
 	{
 		name,
 		model,
 		onChange,
 		onBlur,
+		onFocus,
 		id,
 		required,
-		compact = false,
 		field = true,
+		wrapperProps,
+		errorKey,
+		defaultValue,
+		clearErrorsOnChange,
 		...props
-	},
-	ref,
+	}: FormNumberInputProps<TForm>,
 ) => {
-	const { form, inputName, inputId, value, setValue, error } = useInertiaInput({ name, model })
+	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<number, TForm>({
+		name,
+		model,
+		errorKey,
+		defaultValue,
+		clearErrorsOnChange,
+	})
 
-	const handleChange = (e: number) => {
-		const v = e
+	const handleChange = (val: string|number) => {
+		const v = Number(val)
 		setValue(v)
 
-		if(onChange) onChange(v, form)
-	}
-
-	const handleBlur = (e: React.FocusEvent<HTMLInputElement, Element>) => {
-		if(onBlur) onBlur(value as number, form)
+		onChange?.(v, form)
 	}
 
 	return (
 		<ConditionalWrapper
+			condition={ field }
 			wrapper={ children => (
 				<Field
 					type="number"
 					required={ required }
-					className={ cx({ compact }) }
 					errors={ !!error }
+					{ ...wrapperProps }
 				>
 					{ children }
 				</Field>
 			) }
-			condition={ field }
 		>
 			<NumberInput
 				id={ id || inputId }
-				className={ cx({ compact }) }
 				name={ inputName }
 				value={ value as number }
 				onChange={ handleChange }
-				onBlur={ handleBlur }
+				onBlur={ () => onBlur?.(value, form) }
+				onFocus={ () => onFocus?.(value, form) }
 				error={ error }
-				ref={ ref }
+				wrapper={ false }
 				{ ...props }
 			/>
 		</ConditionalWrapper>
 	)
-})
+}
 
 export default FormInput

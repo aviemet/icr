@@ -1,19 +1,29 @@
 import React from 'react'
-import Field from '../Field'
-import SelectInput, { type ISelectProps } from '@/Components/Inputs/Select'
+import { useInertiaInput, type UseFormProps, NestedObject } from 'use-inertia-form'
+import Field from '../Components/Field'
+import { type ComboboxData, type ComboboxItem, type ComboboxItemGroup } from '@mantine/core'
+import { exclude } from '@/lib'
 import { ConditionalWrapper, Group } from '@/Components'
 import { ModalFormButton } from '@/Components/Button'
-import { useInertiaInput, type UseFormProps, NestedObject } from 'use-inertia-form'
+import SelectInput, { type SelectInputProps } from '@/Components/Inputs/Select'
+import { type BaseFormInputProps } from '.'
 
-type OmittedDropdownTypes = 'name'|'defaultValue'|'onBlur'|'onChange'|'onDropdownOpen'|'onDropdownClose'
-export interface ISelectFormProps<TForm extends NestedObject = NestedObject>
+export type SelectOption = string | ComboboxItem | ComboboxItemGroup<string | ComboboxItem>
+export { type ComboboxData, ComboboxItem, ComboboxItemGroup }
+
+type OmittedOverwrittenTypes = 'onFocus'|'onBlur'|'onChange'|'onClear'|'onDropdownOpen'|'onDropdownClose'|'onOptionSubmit'
+export interface FormSelectProps<TForm extends NestedObject = NestedObject>
 	extends
-	Omit<ISelectProps, OmittedDropdownTypes>,
-	IInertiaInputProps {
-	defaultValue?: string
-	onChange?: ((value: string|null, form: UseFormProps<TForm>) => void) | undefined
-	onDropdownOpen?: (form: UseFormProps<any>) => void
-	onDropdownClose?: (form: UseFormProps<any>) => void
+	Omit<SelectInputProps, OmittedOverwrittenTypes|'name'|'defaultValue'>,
+	Omit<BaseFormInputProps<string, TForm>, OmittedOverwrittenTypes> {
+
+	onChange?: (option: SelectOption|null, options: ComboboxData, form: UseFormProps<TForm>) => void
+	onBlur?: (option: SelectOption|null, options: ComboboxData, form: UseFormProps<TForm>) => void
+	onFocus?: (option: SelectOption|null, options: ComboboxData, form: UseFormProps<TForm>) => void
+	onClear?: (options: ComboboxData, form: UseFormProps<TForm>) => void
+	onDropdownOpen?: (options: ComboboxData, form: UseFormProps<TForm>) => void
+	onDropdownClose?: (options: ComboboxData, form: UseFormProps<TForm>) => void
+	onOptionSubmit?: (option: SelectOption|null, options: ComboboxData, form: UseFormProps<TForm>) => void
 	endpoint?: string
 	newForm?: React.ReactElement
 	field?: boolean
@@ -25,48 +35,67 @@ const Select = <TForm extends NestedObject = NestedObject>(
 		label,
 		model,
 		required,
-		defaultValue,
-		onSearchChange,
 		onChange,
 		onBlur,
+		onFocus,
+		onClear,
 		onDropdownOpen,
 		onDropdownClose,
+		onOptionSubmit,
 		fetchOnOpen,
 		endpoint,
 		newForm,
 		field = true,
 		id,
-		errorKey,
 		options,
+		wrapperProps,
+		defaultValue,
+		errorKey,
+		clearErrorsOnChange,
 		...props
-	}: ISelectFormProps<TForm>,
+	}: FormSelectProps<TForm>,
 ) => {
-	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<string, TForm>({ name, model, errorKey })
+	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<string, TForm>({
+		name,
+		model,
+		defaultValue,
+		errorKey,
+		clearErrorsOnChange,
+	})
 
 	const handleChange = (option: string|null) => {
 		setValue(option ? option : '')
 
-		onChange?.(option, form)
+		onChange?.(option, options || [], form)
 	}
 
 	const handleBlur = () => {
-		if(onBlur) onBlur(String(value), form)
+		onBlur?.(String(value), options || [],  form)
+	}
+
+	const handleFocus = () => {
+		onFocus?.(String(value), options || [], form)
 	}
 
 	const handleDropdownOpen = () => {
-		if(onDropdownOpen) onDropdownOpen(form)
+		onDropdownOpen?.(options || [], form)
 	}
 
 	const handleDropdownClose = () => {
-		if(onDropdownClose) onDropdownClose(form)
+		onDropdownClose?.(options || [], form)
 	}
 
 	const handleNewFormSuccess = (data: { id: string|number }) => {
 		setValue(String(data.id))
 	}
 
+	const handleClear = () => {
+		onClear?.(options || [], form)
+	}
+
 	return (
 		<ConditionalWrapper
+			condition={ newForm !== undefined }
 			wrapper={ children => (
 				<Group
 					grow
@@ -76,9 +105,7 @@ const Select = <TForm extends NestedObject = NestedObject>(
 				>
 					{ children }
 				</Group>
-			)
-			}
-			condition={ newForm !== undefined }
+			) }
 		>
 			<>
 				<ConditionalWrapper
@@ -87,6 +114,7 @@ const Select = <TForm extends NestedObject = NestedObject>(
 							type="select"
 							required={ required }
 							errors={ !!error }
+							{ ...wrapperProps }
 						>
 							{ children }
 						</Field>
@@ -102,12 +130,15 @@ const Select = <TForm extends NestedObject = NestedObject>(
 						value={ String(value) }
 						onChange={ handleChange }
 						onBlur={ handleBlur }
+						onFocus={ handleFocus }
 						onDropdownClose={ handleDropdownClose }
 						onDropdownOpen={ handleDropdownOpen }
+						onClear={ handleClear }
 						defaultValue={ defaultValue ?? String(value) }
 						error={ error }
 						options={ options }
-						{ ...props }
+						wrapper={ false }
+						{ ...exclude(props, 'value') }
 					/>
 				</ConditionalWrapper>
 				{ newForm && <ModalFormButton

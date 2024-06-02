@@ -89,4 +89,14 @@ module.exports = {
 		}],
 		'comma-dangle': ['error', 'always-multiline'],
 	},
+	overrides: [
+		{
+			files: ['*.d.ts'],
+			rules: {
+				'no-unused-vars': 'off',
+				'@typescript-eslint/member-delimiter-style': 'off',
+				'@typescript-eslint/indent': 'off',
+			},
+		},
+	],
 }

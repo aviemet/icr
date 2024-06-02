@@ -1,72 +1,81 @@
-import React, { forwardRef } from 'react'
-import TextInput, { type ITextInputProps } from '@/Components/Inputs/TextInput'
-import cx from 'clsx'
-import Field from '../Field'
-import { useInertiaInput } from 'use-inertia-form'
+import React from 'react'
+import TextInput, { type TextInputProps } from '@/Components/Inputs/TextInput'
+import Field from '../Components/Field'
+import { useInertiaInput, type NestedObject } from 'use-inertia-form'
 import ConditionalWrapper from '@/Components/ConditionalWrapper'
+import { type InputConflicts, type BaseFormInputProps } from '.'
 
-interface ITextFormInputProps extends Omit<ITextInputProps, 'onBlur'|'onChange'|'name'>, IInertiaInputProps {
-	field?: boolean
-}
+interface FormTextInputProps<TForm extends NestedObject>
+	extends
+	Omit<TextInputProps, InputConflicts>,
+	BaseFormInputProps<string, TForm> {}
 
-const FormInput = forwardRef<HTMLInputElement, ITextFormInputProps>((
+const TextFormInput = <TForm extends NestedObject>(
 	{
 		name,
 		model,
 		onChange,
 		onBlur,
+		onFocus,
 		id,
 		required,
-		compact = false,
-		errorKey,
 		field = true,
+		wrapperProps,
+		errorKey,
+		defaultValue,
+		clearErrorsOnChange,
 		...props
-	},
-	ref,
+	}: FormTextInputProps<TForm>,
 ) => {
-	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<string>({ name, model })
+	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<string, TForm>({
+		name,
+		model,
+		errorKey,
+		defaultValue,
+		clearErrorsOnChange,
+	})
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value
 		setValue(value)
 
-		if(onChange) onChange(value, form)
+		onChange?.(value, form)
 	}
 
 	const handleBlur = (e: React.FocusEvent<HTMLInputElement, Element>) => {
 		const value = e.target.value
 		setValue(value)
 
-		if(onBlur) onBlur(value, form)
+		onBlur?.(value, form)
 	}
 
 	return (
 		<ConditionalWrapper
+			condition={ props.hidden !== true && field }
 			wrapper={ children => (
 				<Field
 					type="text"
 					required={ required }
-					className={ cx({ compact }) }
 					errors={ !!error }
+					{ ...wrapperProps }
 				>
 					{ children }
 				</Field>
 			) }
-			condition={ props.hidden !== true && field }
 		>
 			<TextInput
 				id={ id || inputId }
-				className={ cx({ compact }) }
 				name={ inputName }
 				value={ value }
 				onChange={ handleChange }
 				onBlur={ handleBlur }
+				onFocus={ e => onFocus?.(e.target.value, form) }
 				error={ errorKey ? form.getError(errorKey) : error }
-				ref={ ref }
+				wrapper={ false }
 				{ ...props }
 			/>
 		</ConditionalWrapper>
 	)
-})
+}
 
-export default FormInput
+export default TextFormInput

@@ -1,16 +1,16 @@
 import React from 'react'
-import Cell from '../Cell'
+import Td from '../Td'
 import { Checkbox } from '@mantine/core'
 import { useTableContext } from '../TableContext'
 
-interface IRowCheckBox {
+interface RowCheckBoxProps {
 	selected: Set<string>
 	rows?: Record<string,any>[]
 	allChecked: boolean
 	indeterminate: boolean
 }
 
-const HeadCheckbox = ({ selected, rows, allChecked, indeterminate }: IRowCheckBox) => {
+const HeadCheckbox = ({ selected, rows, allChecked, indeterminate }: RowCheckBoxProps) => {
 	const { setTableState } = useTableContext()
 
 	const handleClick = () => {
@@ -28,9 +28,14 @@ const HeadCheckbox = ({ selected, rows, allChecked, indeterminate }: IRowCheckBo
 	}
 
 	return (
-		<Cell fitContent>
-			<Checkbox onChange={ handleClick } checked={ allChecked } indeterminate={ indeterminate } disabled={ rows?.length === 0 } />
-		</Cell>
+		<Td fitContent>
+			<Checkbox
+				onChange={ handleClick }
+				checked={ allChecked }
+				indeterminate={ indeterminate }
+				disabled={ rows?.length === 0 }
+			/>
+		</Td>
 	)
 }
 

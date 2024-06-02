@@ -1,41 +1,64 @@
-import React, { forwardRef } from 'react'
-import Field from '../Field'
-import SwitchInput, { type ISwitchProps } from '@/Components/Inputs/Switch'
-import { useInertiaInput } from 'use-inertia-form'
+import React from 'react'
+import Field from '../Components/Field'
+import SwitchInput, { type SwitchProps } from '@/Components/Inputs/Switch'
+import { NestedObject, useInertiaInput } from 'use-inertia-form'
 import ConditionalWrapper from '@/Components/ConditionalWrapper'
+import { type InputConflicts, type BaseFormInputProps } from '.'
 
-interface IFormSwitchProps extends Omit<ISwitchProps, 'onBlur'|'onChange'|'name'>, IInertiaInputProps {
-	field?: boolean
-}
+interface FormSwitchProps<TForm extends NestedObject = NestedObject>
+	extends
+	Omit<SwitchProps, InputConflicts>,
+	BaseFormInputProps<boolean, TForm> {}
 
-const FormSwitchComponent = forwardRef<HTMLInputElement, IFormSwitchProps>((
-	{ name, onChange, onBlur, id, required, model, field = true, ...props },
-	ref,
+const FormSwitchComponent = <TForm extends NestedObject = NestedObject>(
+	{
+		name,
+		onChange,
+		onBlur,
+		onFocus,
+		id,
+		required,
+		model,
+		field = true,
+		wrapperProps,
+		errorKey,
+		defaultValue,
+		clearErrorsOnChange,
+		...props
+	}: FormSwitchProps<TForm>,
 ) => {
-	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<boolean>({ name, model })
+	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<boolean, TForm>({
+		name,
+		model,
+		errorKey,
+		defaultValue,
+		clearErrorsOnChange,
+	})
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setValue(e.target.checked)
-		if(onChange) onChange(e, form)
+		onChange?.(e.target.checked, form)
 	}
 
 	const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setValue(e.target.checked)
-		if(onBlur) onBlur(e, form)
+		if(onBlur) onBlur(e.target.checked, form)
 	}
 
 	return (
-		<ConditionalWrapper wrapper={ children => (
-			<Field
-				type="checkbox"
-				required={ required }
-				errors={ !!error }
-				grid={ false }
-			>
-				{ children }
-			</Field>
-		) }
-		condition={ field }
+		<ConditionalWrapper
+
+			condition={ field }
+			wrapper={ children => (
+				<Field
+					type="checkbox"
+					required={ required }
+					errors={ !!error }
+					{ ...wrapperProps }
+				>
+					{ children }
+				</Field>
+			) }
 		>
 			<SwitchInput
 				id={ id || inputId }
@@ -45,12 +68,13 @@ const FormSwitchComponent = forwardRef<HTMLInputElement, IFormSwitchProps>((
 				value={ name }
 				onChange={ handleChange }
 				onBlur={ handleBlur }
+				onFocus={ e => onFocus?.(e.target.checked, form) }
 				error={ error }
-				ref={ ref }
+				wrapper={ false }
 				{ ...props }
 			/>
 		</ConditionalWrapper>
 	)
-})
+}
 
 export default FormSwitchComponent

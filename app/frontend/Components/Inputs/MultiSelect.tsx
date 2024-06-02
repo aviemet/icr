@@ -1,15 +1,17 @@
 import React, { forwardRef } from 'react'
-import { MultiSelect, type ComboboxData, type MultiSelectProps } from '@mantine/core'
-import Label from '../Label'
+import { MultiSelect, type ComboboxData, type MultiSelectProps as MantineMultiSelectInputProps } from '@mantine/core'
+import Label from './Label'
+import { type BaseInputProps } from '.'
+import InputWrapper from './InputWrapper'
 import { router } from '@inertiajs/react'
 import { coerceArray } from '@/lib'
 
-export interface IMultiSelectProps extends Omit<MultiSelectProps, 'data'> {
+export interface MultiSelectInputProps extends Omit<MantineMultiSelectInputProps, 'data'>, BaseInputProps {
 	options?: ComboboxData
 	fetchOnOpen?: string
 }
 
-const MultiSelectComponent = forwardRef<HTMLInputElement, IMultiSelectProps>((
+const MultiSelectComponent = forwardRef<HTMLInputElement, MultiSelectInputProps>((
 	{
 		options = [],
 		label,
@@ -17,6 +19,8 @@ const MultiSelectComponent = forwardRef<HTMLInputElement, IMultiSelectProps>((
 		id,
 		name,
 		size = 'md',
+		maxDropdownHeight = 400,
+		wrapper,
 		wrapperProps,
 		fetchOnOpen,
 		onDropdownOpen,
@@ -31,11 +35,11 @@ const MultiSelectComponent = forwardRef<HTMLInputElement, IMultiSelectProps>((
 			router.reload({ only: coerceArray(fetchOnOpen) })
 		}
 
-		if(onDropdownOpen) onDropdownOpen()
+		onDropdownOpen?.()
 	}
 
 	return (
-		<>
+		<InputWrapper wrapper={ wrapper } wrapperProps={ wrapperProps }>
 			{ label && <Label required={ required } htmlFor={ inputId }>
 				{ label }
 			</Label> }
@@ -48,12 +52,13 @@ const MultiSelectComponent = forwardRef<HTMLInputElement, IMultiSelectProps>((
 				size={ size }
 				data={ options }
 				required={ required }
+				maxDropdownHeight={ maxDropdownHeight }
 				onDropdownOpen={ handleDropdownOpen }
 				nothingFoundMessage="No Results"
 				{ ...props }
 			/>
-		</>
+		</InputWrapper>
 	)
 })
 
-export default React.memo(MultiSelectComponent)
+export default MultiSelectComponent

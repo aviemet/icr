@@ -2,49 +2,41 @@
 class <%= controller_class_name %>Controller < ApplicationController
   include Searchable
 
-  expose :<%= plural_table_name %>, -> { search(<%= class_name %>.includes_associated, sortable_fields) }
+  expose :<%= plural_table_name %>, -> { search(@active_company.<%= plural_table_name %>.includes_associated, sortable_fields) }
   <% if attributes.include?(:slug) -%>
-  expose :<%= singular_table_name %>, id: ->{ params[:slug] }, scope: ->{ <%= class_name %>.includes_associated }, find_by: :slug
+  expose :<%= singular_table_name %>, id: ->{ params[:slug] }, scope: ->{ @active_company.<%= plural_table_name %>.includes_associated }, find_by: :slug
   <% else -%>
-  expose :<%= singular_table_name %>, find: ->(id, scope){ scope.includes_associated.find(id) }
+  expose :<%= singular_table_name %>, scope: ->{ @active_company.<%= plural_table_name %> }, find: ->(id, scope){ scope.includes_associated.find(id) }
   <% end -%>
 
-  # GET <%= route_url %>
   def index
     authorize <%= plural_table_name %>
-
-    paginated_<%= plural_table_name %> = <%= plural_table_name %>.page(params[:page] || 1).per(current_user.limit(:items))
-
-    render inertia: "<%= class_name.pluralize %>/Index", props: {
-      <%= plural_table_name %>: -> { paginated_<%= plural_table_name %>.render(view: :index) }
+    render inertia: "<%= class_name %>/Index", props: {
+      <%= plural_table_name %>: -> { <%= plural_table_name %>.render(view: :index) }
     }
   end
 
-  # GET <%= route_url %>/:id
   def show
     authorize <%= singular_table_name %>
-    render inertia: "<%= class_name.pluralize %>/Show", props: {
+    render inertia: "<%= class_name %>/Show", props: {
       <%= singular_table_name %>: -> { <%= singular_table_name %>.render(view: :show) }
     }
   end
 
-  # GET <%= route_url %>/new
   def new
     authorize <%= orm_class.build(class_name) %>
-    render inertia: "<%= class_name.pluralize %>/New", props: {
-      <%= singular_table_name %>: <%= orm_class.build(class_name) %>.render(view: :new)
+    render inertia: "<%= class_name %>/New", props: {
+      <%= singular_table_name %>: <%= orm_class.build(class_name) %>.render(view: :form_data)
     }
   end
 
-  # GET <%= route_url %>/:id/edit
   def edit
     authorize <%= singular_table_name %>
-    render inertia: "<%= class_name.pluralize %>/Edit", props: {
+    render inertia: "<%= class_name %>/Edit", props: {
       <%= singular_table_name %>: <%= singular_table_name %>.render(view: :edit)
     }
   end
 
-  # POST <%= route_url %>
   def create
     authorize <%= orm_class.build(class_name) %>
     if <%= orm_instance.save %>
@@ -54,7 +46,6 @@ class <%= controller_class_name %>Controller < ApplicationController
     end
   end
 
-  # PATCH/PUT <%= route_url %>/:id
   def update
     authorize <%= singular_table_name %>
     if <%= orm_instance.update("#{singular_table_name}_params") %>
@@ -64,7 +55,6 @@ class <%= controller_class_name %>Controller < ApplicationController
     end
   end
 
-  # DELETE <%= route_url %>/:id
   def destroy
     authorize <%= singular_table_name %>
     <%= orm_instance.destroy %>

@@ -1,24 +1,29 @@
-import React, { forwardRef } from 'react'
+import React from 'react'
 import { HiddenInput } from '@/Components/Inputs'
-import { useInertiaInput } from 'use-inertia-form'
+import { NestedObject, useInertiaInput } from 'use-inertia-form'
 import { InputProps } from 'react-html-props'
+import { type InputConflicts, type BaseFormInputProps } from '.'
 
-interface ITextInputProps extends Omit<InputProps, 'name'|'ref'|'onBlur'|'onChange'>, IInertiaInputProps {
-	name: string
-	model?: string
-}
+type OmittedHiddenInputProps = 'onBlur'|'onFocus'|'wrapperProps'
+interface HiddenInputProps<TForm extends NestedObject = NestedObject>
+	extends
+	Omit<InputProps, InputConflicts|OmittedHiddenInputProps>,
+	Omit<BaseFormInputProps<string, TForm>, 'span'|OmittedHiddenInputProps> {}
 
-const FormInput = forwardRef<HTMLInputElement, ITextInputProps>((
-	{ name, model, onChange, onBlur, id, ...props },
-	ref,
+const FormInput = <TForm extends NestedObject = NestedObject>(
+	{ name, model, onChange, id, defaultValue, ...props }: HiddenInputProps<TForm>,
 ) => {
-	const { form, inputName, inputId, value, setValue } = useInertiaInput({ name, model })
+	const { form, inputName, inputId, value, setValue } = useInertiaInput<string, TForm>({
+		name,
+		model,
+		defaultValue,
+	})
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value
 		setValue(value)
 
-		if(onChange) onChange(value, form)
+		onChange?.(value, form)
 	}
 
 	return (
@@ -27,10 +32,9 @@ const FormInput = forwardRef<HTMLInputElement, ITextInputProps>((
 			name={ inputName }
 			value={ value }
 			onChange={ handleChange }
-			ref={ ref }
 			{ ...props }
 		/>
 	)
-})
+}
 
 export default FormInput

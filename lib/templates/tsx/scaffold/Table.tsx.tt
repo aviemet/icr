@@ -2,15 +2,15 @@ import React from 'react'
 import { Routes } from '@/lib'
 import { Table, Link } from '@/Components'
 import { EditButton } from '@/Components/Button'
-import { type ITableProps } from '@/Components/Table/Table'
+import { type TableProps } from '@/Components/Table/Table'
 
-const <%= singular_table_name.camelize %>Table = (props: ITableProps) => {
+const <%= singular_table_name.camelize %>Table = (props: TableProps) => {
 	return (
 		<Table>
 			<Table.Head>
 				<Table.Row><% attributes.each do |column| %>
-					<% unless column.type == :references %><Table.Cell sort="<%= column.name %>"><%= column.name.capitalize %></Table.Cell><% end; end %>
-					<Table.Cell className="actions">Actions</Table.Cell>
+					<% unless column.type == :references %><Table.HeadCell sort="<%= column.name %>"><%= column.name.capitalize %></Table.HeadCell><% end; end %>
+					<Table.HeadCell className="actions">Actions</Table.HeadCell>
 				</Table.Row>
 			</Table.Head>
 			<Table.Body>
