@@ -1,9 +1,9 @@
 class DoctorsController < ApplicationController
   include Searchable
 
-  expose :doctors, -> { search(@active_company.doctors.includes_associated, sortable_fields) }
-    expose :doctor, scope: ->{ @active_company.doctors }, find: ->(id, scope){ scope.includes_associated.find(id) }
-  
+  expose :doctors, -> { search(Doctor.includes_associated, sortable_fields) }
+  expose :doctor, scope: ->{ Doctor }, find: ->(id, scope){ scope.includes_associated.find(id) }
+
   def index
     authorize doctors
     render inertia: "Doctor/Index", props: {

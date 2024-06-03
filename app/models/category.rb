@@ -6,14 +6,12 @@
 #  categorizable_type :string           not null
 #  description        :text
 #  name               :string
-#  slug               :string           not null
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #
 # Indexes
 #
 #  index_categories_on_name_and_categorizable_type  (name,categorizable_type) UNIQUE
-#  index_categories_on_slug                         (slug) UNIQUE
 #
 class Category < ApplicationRecord
   pg_search_scope(
@@ -25,8 +23,6 @@ class Category < ApplicationRecord
     },
     ignoring: :accents,
   )
-
-  slug :slug_from_category_type
 
   resourcify
 
@@ -48,9 +44,9 @@ class Category < ApplicationRecord
     "#{self.categorizable_type} - #{self.name}"
   end
 
-  def slug_from_category_type
-    "#{self.categorizable_type}-#{self.name}".downcase
-  end
+  # def slug_from_category_type
+  #   "#{self.categorizable_type}-#{self.name}".downcase
+  # end
 
   def records
     self.type.find_by_category(self) # rubocop:disable Rails/DynamicFindBy

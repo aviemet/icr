@@ -1,9 +1,9 @@
 class DosagesController < ApplicationController
   include Searchable
 
-  expose :dosages, -> { search(@active_company.dosages.includes_associated, sortable_fields) }
-    expose :dosage, scope: ->{ @active_company.dosages }, find: ->(id, scope){ scope.includes_associated.find(id) }
-  
+  expose :dosages, -> { search(Dosage.includes_associated, sortable_fields) }
+  expose :dosage, scope: ->{ Dosage }, find: ->(id, scope){ scope.includes_associated.find(id) }
+
   def index
     authorize dosages
     render inertia: "Dosage/Index", props: {

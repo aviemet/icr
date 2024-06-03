@@ -48,6 +48,7 @@ class Shift < ApplicationRecord
   belongs_to :employee
   belongs_to :household
 
-  scope :includes_associated, -> { includes([:cal_event, :client, :employee, :household]) }
+  belongs_to :created_by, class_name: "User", optional: true
 
+  scope :includes_associated, -> { includes([:cal_event, :client, :employee, :household]) }
 end

@@ -22,17 +22,14 @@ const defaultData = {
 }
 
 const Login = () => {
-	const emailInputRef = useRef<HTMLInputElement>(null)
-
 	const handleSubmit = ({ data }: UseFormProps<LoginFormData>) => {
 		if(data.user.email === '' || data.user.password === '') {
-			emailInputRef.current!.focus()
 			return false
 		}
 	}
 
 	return (
-		<Form model="user" data={ defaultData } to={ Routes.newUserSession() } onSubmit={ handleSubmit } grid={ false } className={ classes.form }>
+		<Form model="user" data={ defaultData } to={ Routes.newUserSession() } onSubmit={ handleSubmit } className={ classes.form }>
 
 			<div>
 				<Heading>OSC</Heading>
@@ -45,7 +42,6 @@ const Login = () => {
 					autoFocus
 					autoComplete="Email"
 					required
-					ref={ emailInputRef }
 					pattern=".+@.+\..+"
 				/>
 			</Field>

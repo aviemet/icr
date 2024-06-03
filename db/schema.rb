@@ -77,12 +77,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_225144) do
   create_table "categories", force: :cascade do |t|
     t.string "categorizable_type", null: false
     t.string "name"
-    t.string "slug", null: false
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name", "categorizable_type"], name: "index_categories_on_name_and_categorizable_type", unique: true
-    t.index ["slug"], name: "index_categories_on_slug", unique: true
   end
 
   create_table "clients", force: :cascade do |t|
@@ -102,8 +100,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_225144) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "primary_address_id"
-    t.bigint "primary_phone_id"
     t.bigint "primary_email_id"
+    t.bigint "primary_phone_id"
     t.index ["contactable_type", "contactable_id"], name: "index_contacts_on_contactable"
     t.index ["primary_address_id"], name: "index_contacts_on_primary_address_id"
     t.index ["primary_email_id"], name: "index_contacts_on_primary_email_id"
@@ -271,13 +269,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_225144) do
     t.string "middle_name"
     t.string "last_name"
     t.string "nick_name"
-    t.string "slug", null: false
     t.date "dob"
     t.jsonb "characterstics"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["slug"], name: "index_people_on_slug", unique: true
     t.index ["user_id"], name: "index_people_on_user_id"
   end
 

@@ -7,6 +7,7 @@ if Rails.env.development?
       confirmed_at: Date.new,
       time_zone: "America/Los_Angeles"
     })
+    user.add_role :super_admin
 
     Person.create({
       first_name: "Avram",

@@ -1,9 +1,9 @@
 class IdentificationsController < ApplicationController
   include Searchable
 
-  expose :identifications, -> { search(@active_company.identifications.includes_associated, sortable_fields) }
-    expose :identification, scope: ->{ @active_company.identifications }, find: ->(id, scope){ scope.includes_associated.find(id) }
-  
+  expose :identifications, -> { search(Identification.includes_associated, sortable_fields) }
+  expose :identification, scope: ->{ Identification }, find: ->(id, scope){ scope.includes_associated.find(id) }
+
   def index
     authorize identifications
     render inertia: "Identification/Index", props: {

@@ -21,15 +21,11 @@
 class ClientSerializer < ApplicationSerializer
   object_as :client
 
-  identifier :slug
-
   attributes(
-    :first_name,
-    :middle_name,
-    :last_name,
-    :person_type,
-    :user_id,
-    :job_title_id,
-    full_name: { type: :string },
+    :person_id,
+    :active_at,
+    :inactive_at,
   )
+
+  belongs_to :person, serializer: PersonSerializer
 end

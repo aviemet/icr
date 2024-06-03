@@ -2,11 +2,8 @@
 class <%= controller_class_name %>Controller < ApplicationController
   include Searchable
 
-  expose :<%= plural_table_name %>, -> { search(@active_company.<%= plural_table_name %>.includes_associated, sortable_fields) }
-  <% if attributes.include?(:slug) -%>
-  expose :<%= singular_table_name %>, id: ->{ params[:slug] }, scope: ->{ @active_company.<%= plural_table_name %>.includes_associated }, find_by: :slug
-  <% else -%>
-  expose :<%= singular_table_name %>, scope: ->{ @active_company.<%= plural_table_name %> }, find: ->(id, scope){ scope.includes_associated.find(id) }
+  expose :<%= plural_table_name %>, -> { search(<%= orm_class.build %>.includes_associated, sortable_fields) }
+  expose :<%= singular_table_name %>, scope: ->{ <%= orm_class.build %> }, find: ->(id, scope){ scope.includes_associated.find(id) }
   <% end -%>
 
   def index

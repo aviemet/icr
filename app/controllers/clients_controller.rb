@@ -1,33 +1,39 @@
 class ClientsController < ApplicationController
   include Searchable
 
-  expose :clients, -> { search(@active_company.clients.includes_associated, sortable_fields) }
-  expose :client, scope: ->{ @active_company.clients }, find: ->(id, scope){ scope.includes_associated.find(id) }
+  expose :clients, -> { search(Client.includes_associated, sortable_fields) }
+  expose :client, scope: ->{ Client }, find: ->(id, scope){ scope.includes_associated.find(id) }
 
   def index
     authorize clients
-    render inertia: "Client/Index", props: {
-      clients: -> { clients.render(view: :index) }
+    paginated_clients = clients.page(params[:page] || 1).per(current_user.limit(:clients))
+
+    render inertia: "Clients/Index", props: {
+      clients: -> { paginated_clients.render(view: :index) },
+      pagination: -> { {
+        count: clients.count,
+        **pagination_data(paginated_clients)
+      } }
     }
   end
 
   def show
     authorize client
-    render inertia: "Client/Show", props: {
+    render inertia: "Clients/Show", props: {
       client: -> { client.render(view: :show) }
     }
   end
 
   def new
     authorize Client.new
-    render inertia: "Client/New", props: {
+    render inertia: "Clients/New", props: {
       client: Client.new.render(view: :form_data)
     }
   end
 
   def edit
     authorize client
-    render inertia: "Client/Edit", props: {
+    render inertia: "Clients/Edit", props: {
       client: client.render(view: :edit)
     }
   end

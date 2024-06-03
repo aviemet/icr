@@ -41,9 +41,10 @@ class CalEvent < ApplicationRecord
 
   resourcify
 
-  belongs_to :parent
-  belongs_to :recurring_pattern
-  belongs_to :created_by
+  belongs_to :parent, class_name: "CalEvent", optional: true
+  belongs_to :recurring_pattern, optional: true
+
+  belongs_to :created_by, class_name: "User", optional: true
 
   scope :includes_associated, -> { includes([:parent, :recurring_pattern]) }
 end

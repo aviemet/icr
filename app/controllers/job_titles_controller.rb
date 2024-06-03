@@ -2,8 +2,8 @@ class JobTitlesController < ApplicationController
   include Searchable
 
   expose :job_titles, -> { search(JobTitle.includes_associated, sortable_fields) }
-    expose :job_title, find: ->(id, scope){ scope.includes_associated.find(id) }
-  
+  expose :job_title, find: ->(id, scope){ scope.includes_associated.find(id) }
+
   # @route GET /job_titles (job_titles)
   def index
     authorize job_titles

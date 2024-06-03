@@ -1,9 +1,9 @@
 class VendorsController < ApplicationController
   include Searchable
 
-  expose :vendors, -> { search(@active_company.vendors.includes_associated, sortable_fields) }
-    expose :vendor, scope: ->{ @active_company.vendors }, find: ->(id, scope){ scope.includes_associated.find(id) }
-  
+  expose :vendors, -> { search(Vendor.includes_associated, sortable_fields) }
+  expose :vendor, scope: ->{ Vendor }, find: ->(id, scope){ scope.includes_associated.find(id) }
+
   def index
     authorize vendors
     render inertia: "Vendor/Index", props: {

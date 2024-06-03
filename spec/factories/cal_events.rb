@@ -28,7 +28,5 @@ FactoryBot.define do
     starts_at { Faker::Time.forward(days: 5) }
     ends_at { Faker::Time.forward(days: 6, period: :evening) }
     created_by factory: :user
-
-    cal_event
   end
 end

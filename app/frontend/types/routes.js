@@ -578,6 +578,40 @@ export const apiUsers = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"a
 
 /**
  * Generates rails route to
+ * /cal_events/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const calEvent = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"cal_events"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /cal_event_exceptions/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const calEventException = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"cal_event_exceptions"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /cal_event_exceptions(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const calEventExceptions = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"cal_event_exceptions"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
+ * /cal_events(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const calEvents = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"cal_events"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
  * /users/cancel(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
@@ -611,12 +645,82 @@ export const destroyUserSession = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"
 
 /**
  * Generates rails route to
+ * /doctors/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const doctor = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"doctors"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /doctors(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const doctors = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"doctors"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
+ * /dosages/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const dosage = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"dosages"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /dosages(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const dosages = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"dosages"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
+ * /cal_events/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const editCalEvent = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"cal_events"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /cal_event_exceptions/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const editCalEventException = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"cal_event_exceptions"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
  * /clients/:id/edit(.:format)
  * @param {any} id
  * @param {object | undefined} options
  * @returns {string} route path
  */
 export const editClient = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"clients"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /doctors/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const editDoctor = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"doctors"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /dosages/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const editDosage = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"dosages"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
 
 /**
  * Generates rails route to
@@ -629,6 +733,42 @@ export const editEmployee = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}},
 
 /**
  * Generates rails route to
+ * /employees_job_titles/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const editEmployeesJobTitle = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"employees_job_titles"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /identifications/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const editIdentification = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"identifications"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /incident_reports/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const editIncidentReport = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"incident_reports"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /incident_types/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const editIncidentType = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"incident_types"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
  * /job_titles/:id/edit(.:format)
  * @param {any} id
  * @param {object | undefined} options
@@ -638,12 +778,39 @@ export const editJobTitle = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}},
 
 /**
  * Generates rails route to
+ * /medications/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const editMedication = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"medications"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /pay_rates/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const editPayRate = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"pay_rates"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
  * /people/:id/edit(.:format)
  * @param {any} id
  * @param {object | undefined} options
  * @returns {string} route path
  */
 export const editPerson = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"people"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /prescriptions/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const editPrescription = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"prescriptions"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
 
 /**
  * Generates rails route to
@@ -660,6 +827,15 @@ export const editUserPassword = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],
  * @returns {string} route path
  */
 export const editUserRegistration = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"users"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /vendors/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const editVendor = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"vendors"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
 
 /**
  * Generates rails route to
@@ -680,6 +856,74 @@ export const employees = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"
 
 /**
  * Generates rails route to
+ * /employees_job_titles/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const employeesJobTitle = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"employees_job_titles"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /employees_job_titles(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const employeesJobTitles = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"employees_job_titles"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
+ * /identifications/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const identification = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"identifications"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /identifications(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const identifications = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"identifications"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
+ * /incident_reports/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const incidentReport = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"incident_reports"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /incident_reports(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const incidentReports = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"incident_reports"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
+ * /incident_types/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const incidentType = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"incident_types"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /incident_types(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const incidentTypes = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"incident_types"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
  * /job_titles/:id(.:format)
  * @param {any} id
  * @param {object | undefined} options
@@ -697,11 +941,60 @@ export const jobTitles = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"
 
 /**
  * Generates rails route to
+ * /medications/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const medication = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"medications"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /medications(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const medications = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"medications"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
+ * /cal_events/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newCalEvent = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"cal_events"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /cal_event_exceptions/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newCalEventException = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"cal_event_exceptions"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
  * /clients/new(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
 export const newClient = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"clients"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /doctors/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newDoctor = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"doctors"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /dosages/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newDosage = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"dosages"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
 
 /**
  * Generates rails route to
@@ -713,6 +1006,38 @@ export const newEmployee = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6
 
 /**
  * Generates rails route to
+ * /employees_job_titles/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newEmployeesJobTitle = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"employees_job_titles"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /identifications/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newIdentification = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"identifications"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /incident_reports/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newIncidentReport = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"incident_reports"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /incident_types/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newIncidentType = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"incident_types"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
  * /job_titles/new(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
@@ -721,11 +1046,35 @@ export const newJobTitle = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6
 
 /**
  * Generates rails route to
+ * /medications/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newMedication = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"medications"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /pay_rates/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newPayRate = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"pay_rates"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
  * /people/new(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
 export const newPerson = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"people"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /prescriptions/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newPrescription = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"prescriptions"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
 
 /**
  * Generates rails route to
@@ -753,6 +1102,31 @@ export const newUserSession = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2
 
 /**
  * Generates rails route to
+ * /vendors/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newVendor = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"vendors"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /pay_rates/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const payRate = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"pay_rates"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /pay_rates(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const payRates = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"pay_rates"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
  * /people(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
@@ -767,6 +1141,23 @@ export const people = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"peo
  * @returns {string} route path
  */
 export const person = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"people"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /prescriptions/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const prescription = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"prescriptions"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /prescriptions(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const prescriptions = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"prescriptions"],[1,[2,[8,"."],[3,"format"]]]]]);
 
 /**
  * Generates rails route to
@@ -851,4 +1242,21 @@ export const userRegistration = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],
  * @returns {string} route path
  */
 export const userSession = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"login"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
+ * /vendors/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const vendor = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"vendors"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /vendors(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const vendors = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"vendors"],[1,[2,[8,"."],[3,"format"]]]]]);
 

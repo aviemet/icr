@@ -1,9 +1,9 @@
 class IncidentReportsController < ApplicationController
   include Searchable
 
-  expose :incident_reports, -> { search(@active_company.incident_reports.includes_associated, sortable_fields) }
-    expose :incident_report, scope: ->{ @active_company.incident_reports }, find: ->(id, scope){ scope.includes_associated.find(id) }
-  
+  expose :incident_reports, -> { search(Incident_report.includes_associated, sortable_fields) }
+  expose :incident_report, scope: ->{ Incident_report }, find: ->(id, scope){ scope.includes_associated.find(id) }
+
   def index
     authorize incident_reports
     render inertia: "IncidentReport/Index", props: {

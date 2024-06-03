@@ -1,8 +1,8 @@
 class ShiftsController < ApplicationController
   include Searchable
 
-  expose :shifts, -> { search(@active_company.shifts.includes_associated, sortable_fields) }
-  expose :shift, scope: ->{ @active_company.shifts }, find: ->(id, scope){ scope.includes_associated.find(id) }
+  expose :shifts, -> { search(Shift.includes_associated, sortable_fields) }
+  expose :shift, scope: ->{ Shift }, find: ->(id, scope){ scope.includes_associated.find(id) }
 
   def index
     authorize shifts

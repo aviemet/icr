@@ -1,8 +1,8 @@
 class EmployeesController < ApplicationController
   include Searchable
 
-  expose :employees, -> { search(@active_company.employees.includes_associated, sortable_fields) }
-  expose :employee, scope: ->{ @active_company.employees }, find: ->(id, scope){ scope.includes_associated.find(id) }
+  expose :employees, -> { search(Employee.includes_associated, sortable_fields) }
+  expose :employee, scope: ->{ Employee }, find: ->(id, scope){ scope.includes_associated.find(id) }
 
   def index
     authorize employees

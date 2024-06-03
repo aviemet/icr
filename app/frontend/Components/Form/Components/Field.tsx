@@ -1,7 +1,6 @@
 import React from 'react'
 import { Box, BoxProps } from '@mantine/core'
 import cx from 'clsx'
-import { useFormFormat } from '../Form'
 import { type InputType } from '@/types'
 
 export interface FieldProps extends BoxProps {
@@ -19,7 +18,6 @@ const Field = ({
 	className,
 	...props
 }: FieldProps) => {
-	const { disableFormatting } = useFormFormat()
 
 	return (
 		<Box
@@ -28,7 +26,6 @@ const Field = ({
 				{ [String(type)]: type },
 				{ 'required': required },
 				{ 'field_with_errors': errors },
-				{ 'no-grid': disableFormatting },
 				className,
 			) }
 			{ ...props }

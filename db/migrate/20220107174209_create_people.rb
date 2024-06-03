@@ -5,7 +5,6 @@ class CreatePeople < ActiveRecord::Migration[7.0]
       t.string :middle_name
       t.string :last_name
       t.string :nick_name
-      t.string :slug, null: false, index: { unique: true }
       t.date :dob
       t.jsonb :characterstics
 

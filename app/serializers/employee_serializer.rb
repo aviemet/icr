@@ -21,14 +21,13 @@
 class EmployeeSerializer < ApplicationSerializer
   object_as :employee
 
-  identifier :slug
-
   attributes(
-    :first_name,
-    :middle_name,
-    :last_name,
-    :person_type,
-    :user_id,
-    :job_title_id,
+    :number,
+    :person_id,
+    :active_at,
+    :inactive_at,
   )
+
+  belongs_to :person, serializer: PersonSerializer
+  has_one :job_title, serializer: JobTitle
 end

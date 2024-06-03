@@ -26,9 +26,9 @@
 #
 FactoryBot.define do
   factory :shift do
-    cal_event { nil }
-    client { nil }
-    employee { nil }
-    household { nil }
+    cal_event
+    client
+    employee
+    household
   end
 end
