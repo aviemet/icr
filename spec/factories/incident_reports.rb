@@ -6,7 +6,7 @@
 #  agency_notified_at :datetime
 #  description        :text
 #  location           :string
-#  occured_at         :datetime
+#  occurred_at        :datetime
 #  reported_at        :datetime
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
@@ -31,7 +31,7 @@
 #
 FactoryBot.define do
   factory :incident_report do
-    occured_at { "2024-06-02 15:20:24" }
+    occurred_at { "2024-06-02 15:20:24" }
     reported_by { nil }
     client { nil }
     reported_at { "2024-06-02 15:20:24" }

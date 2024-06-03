@@ -14,7 +14,7 @@ export interface PrescriptionFormProps {
 	prescription: Schema.PrescriptionsFormData
 }
 
-const PrescriptionForm = ({ method = 'post', prescription, ...props }: IPrescriptionFormProps) => {
+const PrescriptionForm = ({ method = 'post', prescription, ...props }: PrescriptionFormProps) => {
 	return (
 		<Form
 			model="prescription"
@@ -33,7 +33,7 @@ const PrescriptionForm = ({ method = 'post', prescription, ...props }: IPrescrip
 				<Grid.Col>
 					<Submit>{ prescription.id ? 'Update' : 'Create' } Prescription</Submit>
 				</Grid.Col>
-			</Grid.Col>
+			</Grid>
 		</Form>
 	)
 }

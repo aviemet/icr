@@ -14,7 +14,7 @@ export interface IncidentReportFormProps {
 	incident_report: Schema.IncidentReportsFormData
 }
 
-const IncidentReportForm = ({ method = 'post', incident_report, ...props }: IIncidentReportFormProps) => {
+const IncidentReportForm = ({ method = 'post', incident_report, ...props }: IncidentReportFormProps) => {
 	return (
 		<Form
 			model="incident_report"
@@ -24,7 +24,7 @@ const IncidentReportForm = ({ method = 'post', incident_report, ...props }: IInc
 		>
 			<Grid>
 				<Grid.Col>
-					<TextInput name="occured_at" label="Occured_at" />
+					<TextInput name="occurred_at" label="Occurred_at" />
 				</Grid.Col>
 				<Grid.Col>
 					<TextInput name="reported_at" label="Reported_at" />
@@ -39,7 +39,7 @@ const IncidentReportForm = ({ method = 'post', incident_report, ...props }: IInc
 				<Grid.Col>
 					<Submit>{ incident_report.id ? 'Update' : 'Create' } IncidentReport</Submit>
 				</Grid.Col>
-			</Grid.Col>
+			</Grid>
 		</Form>
 	)
 }

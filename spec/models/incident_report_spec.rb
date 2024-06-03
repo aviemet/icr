@@ -6,7 +6,7 @@
 #  agency_notified_at :datetime
 #  description        :text
 #  location           :string
-#  occured_at         :datetime
+#  occurred_at        :datetime
 #  reported_at        :datetime
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null

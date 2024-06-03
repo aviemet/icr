@@ -3,18 +3,18 @@ import { Grid } from '@/Components'
 import { Form, TextInput, Submit } from '@/Components/Form'
 import { type HTTPVerb, type UseFormProps } from 'use-inertia-form'
 
-type TClientFormData = {
+type ClientFormData = {
 	client: Schema.ClientsFormData
 }
 
 export interface ClientFormProps {
 	to: string
 	method?: HTTPVerb
-	onSubmit?: (object: UseFormProps<TClientFormData>) => boolean|void
+	onSubmit?: (object: UseFormProps<ClientFormData>) => boolean|void
 	client: Schema.ClientsFormData
 }
 
-const ClientForm = ({ method = 'post', client, ...props }: IClientFormProps) => {
+const ClientForm = ({ method = 'post', client, ...props }: ClientFormProps) => {
 	return (
 		<Form
 			model="client"
@@ -36,7 +36,7 @@ const ClientForm = ({ method = 'post', client, ...props }: IClientFormProps) => 
 				<Grid.Col>
 					<Submit>{ client.id ? 'Update' : 'Create' } Client</Submit>
 				</Grid.Col>
-			</Grid.Col>
+			</Grid>
 		</Form>
 	)
 }

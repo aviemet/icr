@@ -29,7 +29,5 @@ FactoryBot.define do
     nick_name { Faker::Name.initials(number: 2) }
     dob { Faker::Date.birthday(min_age: 18, max_age: 65) }
     characterstics { {} }
-
-    user
   end
 end

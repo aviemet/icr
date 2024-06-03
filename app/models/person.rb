@@ -43,7 +43,7 @@ class Person < ApplicationRecord
 
   resourcify
 
-  belongs_to :user
+  belongs_to :user, optional: true
   has_one :client, dependent: :nullify
   has_one :employee, dependent: :nullify
 

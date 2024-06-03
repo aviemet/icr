@@ -1,15 +1,38 @@
 import { create } from 'zustand'
-import { type IColorSlice, type IMenuSlice, type ISidebarSlice } from './slices'
-import { createColorSlice } from './slices/colorSlice'
-import { createMenuSlice } from './slices/menuSlice'
-import { createSidebarSlice } from './slices/sidebarSlice'
+import { defaultColor } from '../theme'
 
-type LayoutStoreSlices = IColorSlice & ISidebarSlice //& IMenuSlice
 
-const useLayoutStore = create<LayoutStoreSlices>()((...a) => ({
-	...createColorSlice(...a),
-	...createSidebarSlice(...a),
-	// ...createMenuSlice(...a),
+interface LayoutState {
+	sidebarOpen: boolean
+	toggleSidebarOpen: (sidebarOpen?: boolean) => void
+
+	primaryColor: string
+	setPrimaryColor: (color: string) => void
+
+	defaults: {
+		tableRecordsLimit: number
+	}
+}
+
+const useLayoutStore = create<LayoutState>()((set) => ({
+	sidebarOpen: false,
+	primaryColor: defaultColor,
+
+	defaults: {
+		tableRecordsLimit: 25,
+	},
+
+	toggleSidebarOpen: sidebarOpen => set(state => {
+		let setValue = sidebarOpen
+		if(sidebarOpen === undefined) {
+			setValue = !state.sidebarOpen
+		}
+		return { sidebarOpen: setValue }
+	}),
+
+	setPrimaryColor: color => set(state => ({
+		primaryColor: color,
+	})),
 }))
 
 export default useLayoutStore

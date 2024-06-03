@@ -4,7 +4,7 @@ import { Select, type SelectProps } from '@mantine/core'
 import axios from 'axios'
 import { Routes } from '@/lib'
 import { useLocation, usePageProps } from '@/lib/hooks'
-import useLayoutStore from '@/lib/store/LayoutStore'
+import { useLayoutStore } from '@/lib/store/'
 
 import cx from 'clsx'
 import * as classes from '../Table.css'

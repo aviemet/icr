@@ -14,7 +14,7 @@ export interface VendorFormProps {
 	vendor: Schema.VendorsFormData
 }
 
-const VendorForm = ({ method = 'post', vendor, ...props }: IVendorFormProps) => {
+const VendorForm = ({ method = 'post', vendor, ...props }: VendorFormProps) => {
 	return (
 		<Form
 			model="vendor"
@@ -33,7 +33,7 @@ const VendorForm = ({ method = 'post', vendor, ...props }: IVendorFormProps) => 
 				<Grid.Col>
 					<Submit>{ vendor.id ? 'Update' : 'Create' } Vendor</Submit>
 				</Grid.Col>
-			</Grid.Col>
+			</Grid>
 		</Form>
 	)
 }

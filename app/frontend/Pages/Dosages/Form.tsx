@@ -14,7 +14,7 @@ export interface DosageFormProps {
 	dosage: Schema.DosagesFormData
 }
 
-const DosageForm = ({ method = 'post', dosage, ...props }: IDosageFormProps) => {
+const DosageForm = ({ method = 'post', dosage, ...props }: DosageFormProps) => {
 	return (
 		<Form
 			model="dosage"
@@ -42,7 +42,7 @@ const DosageForm = ({ method = 'post', dosage, ...props }: IDosageFormProps) => 
 				<Grid.Col>
 					<Submit>{ dosage.id ? 'Update' : 'Create' } Dosage</Submit>
 				</Grid.Col>
-			</Grid.Col>
+			</Grid>
 		</Form>
 	)
 }

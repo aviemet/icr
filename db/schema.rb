@@ -12,7 +12,9 @@
 
 ActiveRecord::Schema[7.1].define(version: 2024_06_02_225144) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_trgm"
   enable_extension "plpgsql"
+  enable_extension "unaccent"
 
   create_table "activities", id: :serial, force: :cascade do |t|
     t.string "trackable_type"
@@ -214,7 +216,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_225144) do
   end
 
   create_table "incident_reports", force: :cascade do |t|
-    t.datetime "occured_at"
+    t.datetime "occurred_at"
     t.datetime "reported_at"
     t.datetime "agency_notified_at"
     t.string "location"
@@ -279,6 +281,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_225144) do
 
   create_table "pg_search_documents", force: :cascade do |t|
     t.text "content"
+    t.text "label"
     t.string "searchable_type"
     t.bigint "searchable_id"
     t.datetime "created_at", null: false
@@ -386,7 +389,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_225144) do
     t.bigint "invited_by_id"
     t.integer "invitations_count", default: 0
     t.boolean "active", default: true, null: false
-    t.string "time_zone", default: "Pacific Time (US & Canada)"
+    t.string "time_zone", default: "America/Los_Angeles"
     t.jsonb "table_preferences", default: {}
     t.jsonb "user_preferences", default: {}
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true

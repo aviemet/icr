@@ -27,7 +27,7 @@
 #  reset_password_token   :string
 #  sign_in_count          :integer          default(0), not null
 #  table_preferences      :jsonb
-#  time_zone              :string           default("Pacific Time (US & Canada)")
+#  time_zone              :string           default("America/Los_Angeles")
 #  unconfirmed_email      :string
 #  unlock_token           :string
 #  user_preferences       :jsonb

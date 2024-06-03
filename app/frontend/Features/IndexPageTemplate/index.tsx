@@ -1,14 +1,14 @@
 import React from 'react'
 import { Page, Table } from '@/Components'
-import TableTitleSection, { IIndexTableTitleSectionProps } from './TableTitleSection'
-import { type TBreadcrumb } from '@/Components/Breadcrumbs'
+import TableTitleSection, { IndexTableTitleSectionProps } from './TableTitleSection'
+import { type Breadcrumb } from '@/Components/Breadcrumbs'
 
-interface IIndexPageTemplateProps extends IIndexTableTitleSectionProps {
+interface IIndexPageTemplateProps extends IndexTableTitleSectionProps {
 	model: string
 	rows: Record<string, any>[]
 	pagination: Schema.Pagination
 	search?: boolean
-	breadcrumbs?: TBreadcrumb[]
+	breadcrumbs?: Breadcrumb[]
 	advancedSearch?: React.ReactNode
 }
 

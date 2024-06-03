@@ -27,7 +27,7 @@
 #  reset_password_token   :string
 #  sign_in_count          :integer          default(0), not null
 #  table_preferences      :jsonb
-#  time_zone              :string           default("Pacific Time (US & Canada)")
+#  time_zone              :string           default("America/Los_Angeles")
 #  unconfirmed_email      :string
 #  unlock_token           :string
 #  user_preferences       :jsonb
@@ -50,7 +50,7 @@
 FactoryBot.define do
   factory :user do
     email { Faker::Internet.email }
-    password { Faker::Internet.password }
+    password { Faker::Internet.password(min_length: 8, mix_case: true, special_characters: true) }
     confirmed_at { Date.new }
     time_zone { "America/Los_Angeles" }
     active { true }

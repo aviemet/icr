@@ -4,7 +4,6 @@ class <%= controller_class_name %>Controller < ApplicationController
 
   expose :<%= plural_table_name %>, -> { search(<%= orm_class.build %>.includes_associated, sortable_fields) }
   expose :<%= singular_table_name %>, scope: ->{ <%= orm_class.build %> }, find: ->(id, scope){ scope.includes_associated.find(id) }
-  <% end -%>
 
   def index
     authorize <%= plural_table_name %>

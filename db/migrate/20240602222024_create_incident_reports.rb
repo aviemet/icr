@@ -1,7 +1,7 @@
 class CreateIncidentReports < ActiveRecord::Migration[7.1]
   def change
     create_table :incident_reports do |t|
-      t.datetime :occured_at
+      t.datetime :occurred_at
       t.datetime :reported_at
       t.datetime :agency_notified_at
       t.string :location

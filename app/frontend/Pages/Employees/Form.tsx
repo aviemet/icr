@@ -14,7 +14,7 @@ export interface EmployeeFormProps {
 	employee: Schema.EmployeesFormData
 }
 
-const EmployeeForm = ({ method = 'post', employee, ...props }: IEmployeeFormProps) => {
+const EmployeeForm = ({ method = 'post', employee, ...props }: EmployeeFormProps) => {
 	return (
 		<Form
 			model="employee"
@@ -36,7 +36,7 @@ const EmployeeForm = ({ method = 'post', employee, ...props }: IEmployeeFormProp
 				<Grid.Col>
 					<Submit>{ employee.id ? 'Update' : 'Create' } Employee</Submit>
 				</Grid.Col>
-			</Grid.Col>
+			</Grid>
 		</Form>
 	)
 }

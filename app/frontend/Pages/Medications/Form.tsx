@@ -14,7 +14,7 @@ export interface MedicationFormProps {
 	medication: Schema.MedicationsFormData
 }
 
-const MedicationForm = ({ method = 'post', medication, ...props }: IMedicationFormProps) => {
+const MedicationForm = ({ method = 'post', medication, ...props }: MedicationFormProps) => {
 	return (
 		<Form
 			model="medication"
@@ -36,7 +36,7 @@ const MedicationForm = ({ method = 'post', medication, ...props }: IMedicationFo
 				<Grid.Col>
 					<Submit>{ medication.id ? 'Update' : 'Create' } Medication</Submit>
 				</Grid.Col>
-			</Grid.Col>
+			</Grid>
 		</Form>
 	)
 }

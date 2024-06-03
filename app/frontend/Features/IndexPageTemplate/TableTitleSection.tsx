@@ -6,22 +6,23 @@ import { TrashIcon } from '@/Components/Icons'
 import { router } from '@inertiajs/react'
 import * as classes from './IndexPage.css'
 
-// TODO: Figure out correct type for icon
-export interface IIndexTableTitleSectionProps {
+export interface IndexTableTitleSectionProps {
 	children: React.ReactNode
 	title: string
-	deleteRoute: string
+	deleteRoute?: string
 	menuOptions?: {
 		label: string
 		href: string
-		icon?: any
+		icon?: React.ReactNode
 	}[]
 }
 
-const IndexTableTitleSection = ({ children, title, deleteRoute, menuOptions }: IIndexTableTitleSectionProps) => {
+const IndexTableTitleSection = ({ children, title, deleteRoute, menuOptions }: IndexTableTitleSectionProps) => {
 	const { tableState: { selected } } = useTableContext()
 
 	const deleteRecords = () => {
+		if(!deleteRoute) return
+
 		router.visit(deleteRoute, {
 			method: 'delete',
 			data: { ids: Array.from(selected) },
@@ -39,15 +40,14 @@ const IndexTableTitleSection = ({ children, title, deleteRoute, menuOptions }: I
 
 					<Menu.Dropdown>
 						{ menuOptions && menuOptions.map(({ label, href, icon }, index) => {
-							const Icon = icon
 							return (
-								<Menu.Link key={ index } href={ href } leftSection={ icon && <Icon size={ 14 } /> }>
+								<Menu.Link key={ index } href={ href } leftSection={ icon ? icon : undefined }>
 									{ label }
 								</Menu.Link>
 							)
 						}) }
 
-						{ selected.size > 0 && <>
+						{ deleteRoute && selected.size > 0 && <>
 							<Divider />
 
 							<Menu.Item leftSection={ <TrashIcon size={ 14 } color='red' /> } onClick={ deleteRecords }>

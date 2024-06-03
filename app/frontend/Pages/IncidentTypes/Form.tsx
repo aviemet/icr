@@ -14,7 +14,7 @@ export interface IncidentTypeFormProps {
 	incident_type: Schema.IncidentTypesFormData
 }
 
-const IncidentTypeForm = ({ method = 'post', incident_type, ...props }: IIncidentTypeFormProps) => {
+const IncidentTypeForm = ({ method = 'post', incident_type, ...props }: IncidentTypeFormProps) => {
 	return (
 		<Form
 			model="incident_type"
@@ -30,7 +30,7 @@ const IncidentTypeForm = ({ method = 'post', incident_type, ...props }: IInciden
 				<Grid.Col>
 					<Submit>{ incident_type.id ? 'Update' : 'Create' } IncidentType</Submit>
 				</Grid.Col>
-			</Grid.Col>
+			</Grid>
 		</Form>
 	)
 }

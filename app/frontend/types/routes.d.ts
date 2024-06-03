@@ -788,6 +788,16 @@ export const newPrescription: ((
 
 /**
  * Generates rails route to
+ * /users/confirmation/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newUserConfirmation: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
  * /users/password/new(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
@@ -813,6 +823,16 @@ export const newUserRegistration: ((
  * @returns {string} route path
  */
 export const newUserSession: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /users/unlock/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newUserUnlock: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -972,6 +992,16 @@ export const updateRailsDiskService: ((
 
 /**
  * Generates rails route to
+ * /users/confirmation(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const userConfirmation: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
  * /users/password(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
@@ -997,6 +1027,16 @@ export const userRegistration: ((
  * @returns {string} route path
  */
 export const userSession: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /users/unlock(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const userUnlock: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 

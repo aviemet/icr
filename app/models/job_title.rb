@@ -30,5 +30,7 @@ class JobTitle < ApplicationRecord
 
   has_many :active_employees, through: :active_employees_job_titles, source: :employee
 
+  validates :title, presence: true
+
   scope :includes_associated, -> { includes([:employees]) }
 end

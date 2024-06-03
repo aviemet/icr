@@ -59,10 +59,10 @@ class IncidentReportsController < ApplicationController
   private
 
   def sortable_fields
-    %w(occured_at reported_by_id client_id reported_at agency_notified_at reported_to_id location incident_type_id).freeze
+    %w(occurred_at reported_by_id client_id reported_at agency_notified_at reported_to_id location incident_type_id).freeze
   end
 
   def incident_report_params
-    params.require(:incident_report).permit(:occured_at, :reported_by_id, :client_id, :reported_at, :agency_notified_at, :reported_to_id, :location, :incident_type_id)
+    params.require(:incident_report).permit(:occurred_at, :reported_by_id, :client_id, :reported_at, :agency_notified_at, :reported_to_id, :location, :incident_type_id)
   end
 end

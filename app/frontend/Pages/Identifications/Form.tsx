@@ -14,7 +14,7 @@ export interface IdentificationFormProps {
 	identification: Schema.IdentificationsFormData
 }
 
-const IdentificationForm = ({ method = 'post', identification, ...props }: IIdentificationFormProps) => {
+const IdentificationForm = ({ method = 'post', identification, ...props }: IdentificationFormProps) => {
 	return (
 		<Form
 			model="identification"
@@ -45,7 +45,7 @@ const IdentificationForm = ({ method = 'post', identification, ...props }: IIden
 				<Grid.Col>
 					<Submit>{ identification.id ? 'Update' : 'Create' } Identification</Submit>
 				</Grid.Col>
-			</Grid.Col>
+			</Grid>
 		</Form>
 	)
 }

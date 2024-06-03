@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid } from '@/Components'
-import { Form, TextInput, Submit } from '@/Components/Form'
+import { Form, TextInput, Submit, RichText } from '@/Components/Form'
 import { type HTTPVerb, type UseFormProps } from 'use-inertia-form'
 
 type TShiftFormData = {
@@ -14,7 +14,7 @@ export interface ShiftFormProps {
 	shift: Schema.ShiftsFormData
 }
 
-const ShiftForm = ({ method = 'post', shift, ...props }: IShiftFormProps) => {
+const ShiftForm = ({ method = 'post', shift, ...props }: ShiftFormProps) => {
 	return (
 		<Form
 			model="shift"
@@ -23,11 +23,18 @@ const ShiftForm = ({ method = 'post', shift, ...props }: IShiftFormProps) => {
 			{ ...props }
 		>
 			<Grid>
+				<Grid.Col>
+					<TextInput name="title" />
+				</Grid.Col>
+
+				<Grid.Col>
+					<RichText name="description" />
+				</Grid.Col>
 
 				<Grid.Col>
 					<Submit>{ shift.id ? 'Update' : 'Create' } Shift</Submit>
 				</Grid.Col>
-			</Grid.Col>
+			</Grid>
 		</Form>
 	)
 }

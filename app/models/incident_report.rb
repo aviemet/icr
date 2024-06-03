@@ -6,7 +6,7 @@
 #  agency_notified_at :datetime
 #  description        :text
 #  location           :string
-#  occured_at         :datetime
+#  occurred_at        :datetime
 #  reported_at        :datetime
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
@@ -33,7 +33,7 @@ class IncidentReport < ApplicationRecord
 
   pg_search_scope(
     :search,
-    against: [:occured_at, :reported_by, :client, :reported_at, :agency_notified_at, :reported_to, :location, :incident_type],
+    against: [:occurred_at, :reported_by, :client, :reported_at, :agency_notified_at, :reported_to, :location, :incident_type],
     associated_against: {
       reported_by: [],
       client: [],

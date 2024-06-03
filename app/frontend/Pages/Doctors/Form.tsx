@@ -14,7 +14,7 @@ export interface DoctorFormProps {
 	doctor: Schema.DoctorsFormData
 }
 
-const DoctorForm = ({ method = 'post', doctor, ...props }: IDoctorFormProps) => {
+const DoctorForm = ({ method = 'post', doctor, ...props }: DoctorFormProps) => {
 	return (
 		<Form
 			model="doctor"
@@ -36,7 +36,7 @@ const DoctorForm = ({ method = 'post', doctor, ...props }: IDoctorFormProps) => 
 				<Grid.Col>
 					<Submit>{ doctor.id ? 'Update' : 'Create' } Doctor</Submit>
 				</Grid.Col>
-			</Grid.Col>
+			</Grid>
 		</Form>
 	)
 }

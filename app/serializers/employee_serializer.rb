@@ -29,5 +29,5 @@ class EmployeeSerializer < ApplicationSerializer
   )
 
   belongs_to :person, serializer: PersonSerializer
-  has_one :job_title, serializer: JobTitle
+  has_one :job_title, serializer: JobTitleSerializer
 end
