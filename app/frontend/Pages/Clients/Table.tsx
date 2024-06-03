@@ -1,34 +1,42 @@
 import React from 'react'
 import { Routes } from '@/lib'
-import { Table, Link } from '@/Components'
+import { Table, Link, Date } from '@/Components'
 import { EditButton } from '@/Components/Button'
 import { type TableProps } from '@/Components/Table/Table'
 
 const ClientTable = (props: TableProps) => {
 	return (
-		<Table>
+		<Table { ...props }>
 			<Table.Head>
 				<Table.Row>
-					
-					<Table.HeadCell sort="active_at">Active_at</Table.HeadCell>
-					<Table.HeadCell sort="inactive_at">Inactive_at</Table.HeadCell>
-					<Table.HeadCell sort="number">Number</Table.HeadCell>
+					<Table.HeadCell sort="people.first_name">First Name</Table.HeadCell>
+					<Table.HeadCell sort="people.last_name">Last Name</Table.HeadCell>
+					<Table.HeadCell sort="number">Client #</Table.HeadCell>
+					<Table.HeadCell sort="active_at">Client Since</Table.HeadCell>
 					<Table.HeadCell className="actions">Actions</Table.HeadCell>
 				</Table.Row>
 			</Table.Head>
 			<Table.Body>
 				<Table.RowIterator render={ (client: Schema.ClientsIndex) => (
 					<Table.Row key={ client.id }>
-						
 						<Table.Cell>
-							<Link href={ Routes.client(client.id) }>{ client.active_at }</Link>
+							<Link href={ Routes.client(client.id) }>{ client.person.first_name }</Link>
 						</Table.Cell>
+
 						<Table.Cell>
-							<Link href={ Routes.client(client.id) }>{ client.inactive_at }</Link>
+							<Link href={ Routes.client(client.id) }>{ client.person.last_name }</Link>
 						</Table.Cell>
+
 						<Table.Cell>
 							<Link href={ Routes.client(client.id) }>{ client.number }</Link>
 						</Table.Cell>
+
+						<Table.Cell>
+							<Link href={ Routes.client(client.id) }>
+								<Date>{ client.active_at }</Date>
+							</Link>
+						</Table.Cell>
+
 						<Table.Cell>
 							<EditButton href={ Routes.editClient(client.id) } />
 						</Table.Cell>

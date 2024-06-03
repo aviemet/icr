@@ -2,7 +2,7 @@ import React from 'react'
 import Breadcrumbs, { type Breadcrumb } from '@/Components/Breadcrumbs'
 import { Head } from '@inertiajs/react'
 
-interface PageProps {
+export interface PageProps {
 	children?: React.ReactNode
 	title?: string
 	meta?: React.ReactNode

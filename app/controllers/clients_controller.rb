@@ -65,7 +65,7 @@ class ClientsController < ApplicationController
   private
 
   def sortable_fields
-    %w(person_id active_at inactive_at number).freeze
+    %w(active_at inactive_at number people.first_name people.last_name).freeze
   end
 
   def client_params

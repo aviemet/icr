@@ -23,6 +23,7 @@ class ClientSerializer < ApplicationSerializer
 
   attributes(
     :person_id,
+    :number,
     :active_at,
     :inactive_at,
   )

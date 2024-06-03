@@ -84,6 +84,10 @@ export const table = css`
 			}
 		}
 
+		&.actions {
+			width: 1px;
+			white-space: nowrap;
+		}
 	}
 
 	/* On small screens, collapse tables into "cards" */
