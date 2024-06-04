@@ -90,6 +90,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_225144) do
     t.date "active_at"
     t.date "inactive_at"
     t.string "number"
+    t.string "color"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["person_id"], name: "index_clients_on_person_id"
@@ -168,6 +169,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_225144) do
     t.date "active_at"
     t.date "inactive_at"
     t.string "number"
+    t.string "color"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["person_id"], name: "index_employees_on_person_id"

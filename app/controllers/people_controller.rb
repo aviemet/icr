@@ -4,6 +4,7 @@ class PeopleController < ApplicationController
   expose :people, -> { search(Person.includes_associated, sortable_fields) }
   expose :person, scope: ->{ Person }, find: ->(id, scope){ scope.includes_associated.find(id) }
 
+  # @route GET /people (people)
   def index
     authorize people
     paginated_people = people.page(params[:page] || 1).per(current_user.limit(:people))
@@ -17,6 +18,7 @@ class PeopleController < ApplicationController
     }
   end
 
+  # @route GET /people/:id (person)
   def show
     authorize person
     render inertia: "People/Show", props: {
@@ -24,6 +26,7 @@ class PeopleController < ApplicationController
     }
   end
 
+  # @route GET /people/new (new_person)
   def new
     authorize Person.new
     render inertia: "People/New", props: {
@@ -31,6 +34,7 @@ class PeopleController < ApplicationController
     }
   end
 
+  # @route GET /people/:id/edit (edit_person)
   def edit
     authorize person
     render inertia: "People/Edit", props: {
@@ -38,6 +42,7 @@ class PeopleController < ApplicationController
     }
   end
 
+  # @route POST /people (people)
   def create
     authorize Person.new
     if person.save
@@ -47,6 +52,8 @@ class PeopleController < ApplicationController
     end
   end
 
+  # @route PATCH /people/:id (person)
+  # @route PUT /people/:id (person)
   def update
     authorize person
     if person.update(person_params)
@@ -56,6 +63,7 @@ class PeopleController < ApplicationController
     end
   end
 
+  # @route DELETE /people/:id (person)
   def destroy
     authorize person
     person.destroy!

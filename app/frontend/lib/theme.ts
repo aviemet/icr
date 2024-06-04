@@ -25,7 +25,7 @@ export const themeObject = {
 		},
 		navbar: {
 			width: {
-				closed: 60,
+				closed: 50,
 				open: 300,
 			},
 		},

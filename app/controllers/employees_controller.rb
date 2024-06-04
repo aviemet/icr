@@ -4,6 +4,7 @@ class EmployeesController < ApplicationController
   expose :employees, -> { search(Employee.includes_associated, sortable_fields) }
   expose :employee, scope: ->{ Employee }, find: ->(id, scope){ scope.includes_associated.find(id) }
 
+  # @route GET /employees (employees)
   def index
     authorize employees
     render inertia: "Employee/Index", props: {
@@ -11,6 +12,7 @@ class EmployeesController < ApplicationController
     }
   end
 
+  # @route GET /employees/:id (employee)
   def show
     authorize employee
     render inertia: "Employee/Show", props: {
@@ -18,6 +20,7 @@ class EmployeesController < ApplicationController
     }
   end
 
+  # @route GET /employees/new (new_employee)
   def new
     authorize Employee.new
     render inertia: "Employee/New", props: {
@@ -25,6 +28,7 @@ class EmployeesController < ApplicationController
     }
   end
 
+  # @route GET /employees/:id/edit (edit_employee)
   def edit
     authorize employee
     render inertia: "Employee/Edit", props: {
@@ -32,6 +36,7 @@ class EmployeesController < ApplicationController
     }
   end
 
+  # @route POST /employees (employees)
   def create
     authorize Employee.new
     if employee.save
@@ -41,6 +46,8 @@ class EmployeesController < ApplicationController
     end
   end
 
+  # @route PATCH /employees/:id (employee)
+  # @route PUT /employees/:id (employee)
   def update
     authorize employee
     if employee.update(employee_params)
@@ -50,6 +57,7 @@ class EmployeesController < ApplicationController
     end
   end
 
+  # @route DELETE /employees/:id (employee)
   def destroy
     authorize employee
     employee.destroy!

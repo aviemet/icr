@@ -4,6 +4,7 @@ class DosagesController < ApplicationController
   expose :dosages, -> { search(Dosage.includes_associated, sortable_fields) }
   expose :dosage, scope: ->{ Dosage }, find: ->(id, scope){ scope.includes_associated.find(id) }
 
+  # @route GET /dosages (dosages)
   def index
     authorize dosages
     render inertia: "Dosage/Index", props: {
@@ -11,6 +12,7 @@ class DosagesController < ApplicationController
     }
   end
 
+  # @route GET /dosages/:id (dosage)
   def show
     authorize dosage
     render inertia: "Dosage/Show", props: {
@@ -18,6 +20,7 @@ class DosagesController < ApplicationController
     }
   end
 
+  # @route GET /dosages/new (new_dosage)
   def new
     authorize Dosage.new
     render inertia: "Dosage/New", props: {
@@ -25,6 +28,7 @@ class DosagesController < ApplicationController
     }
   end
 
+  # @route GET /dosages/:id/edit (edit_dosage)
   def edit
     authorize dosage
     render inertia: "Dosage/Edit", props: {
@@ -32,6 +36,7 @@ class DosagesController < ApplicationController
     }
   end
 
+  # @route POST /dosages (dosages)
   def create
     authorize Dosage.new
     if dosage.save
@@ -41,6 +46,8 @@ class DosagesController < ApplicationController
     end
   end
 
+  # @route PATCH /dosages/:id (dosage)
+  # @route PUT /dosages/:id (dosage)
   def update
     authorize dosage
     if dosage.update(dosage_params)
@@ -50,6 +57,7 @@ class DosagesController < ApplicationController
     end
   end
 
+  # @route DELETE /dosages/:id (dosage)
   def destroy
     authorize dosage
     dosage.destroy!

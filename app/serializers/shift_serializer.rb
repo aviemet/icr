@@ -31,6 +31,7 @@ class ShiftSerializer < ApplicationSerializer
     :starts_at,
     :ends_at,
     :recurring_pattern_id,
+    :client_id,
     :employee_id,
     :created_by_id,
     :parent_id,

@@ -6,7 +6,7 @@ import { css } from '@linaria/core'
  */
 export const wrapper = css`
 	overflow: auto;
-	height: calc(100vh - ${theme.other.header.height}px - ${theme.other.footer.height}px);
+	height: calc(100vh - ${theme.other.footer.height}px);
 `
 
 /**
@@ -30,9 +30,8 @@ export const topbar = css`
 /**
  * Sidebar section
  */
-
 export const navbar = css`
-	transition: width 100ms ease-in-out, min-width 100ms ease-in-out;
+	transition: width 250ms ease-in-out, min-width 250ms ease-in-out;
 	overflow-y: clip;
 	
 	${vars.lightSelector} {
@@ -42,7 +41,19 @@ export const navbar = css`
 
 	${vars.darkSelector} {
 		background-color: ${vars.colors.dark[6]};
-	} 
+	}
+
+	// TODO: This animation doesn't work with display: none
+	.hidden-when-closed {
+		opacity: 1;
+		transition: opacity 2000ms, display 200ms;
+	}
+
+	&.closed .hidden-when-closed {
+		opacity: 0;
+		display: none;
+		visibility: hidden;
+	}
 `
 
 export const navLink = css`
@@ -64,7 +75,7 @@ export const navLink = css`
 
 	&.active, &:hover {
 		${vars.lightSelector} {
-			background-color: ${vars.colors.gray[3]};
+			background-color: ${vars.colors.gray[4]};
 		}
 
 		${vars.darkSelector} {

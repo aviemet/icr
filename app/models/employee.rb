@@ -4,6 +4,7 @@
 #
 #  id          :bigint           not null, primary key
 #  active_at   :date
+#  color       :string
 #  inactive_at :date
 #  number      :string
 #  created_at  :datetime         not null

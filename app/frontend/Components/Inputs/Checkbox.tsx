@@ -12,7 +12,14 @@ CheckboxProps & React.RefAttributes<HTMLInputElement>
 };
 
 const CheckboxComponent: CheckboxComponentType = forwardRef<HTMLInputElement, CheckboxProps>((
-	{ id, name, wrapper, wrapperProps, ...props },
+	{
+		id,
+		name,
+		radius = 'xs',
+		wrapper,
+		wrapperProps,
+		...props
+	},
 	ref,
 ) => {
 	const inputId = id ?? name
@@ -23,6 +30,7 @@ const CheckboxComponent: CheckboxComponentType = forwardRef<HTMLInputElement, Ch
 				ref={ ref }
 				id={ inputId }
 				name={ name }
+				radius={ radius }
 				{ ...props }
 			/>
 		</InputWrapper>

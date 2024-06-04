@@ -4,6 +4,7 @@ class IncidentTypesController < ApplicationController
   expose :incident_types, -> { search(IncidentType.includes_associated, sortable_fields) }
   expose :incident_type, scope: ->{ IncidentType }, find: ->(id, scope){ scope.includes_associated.find(id) }
 
+  # @route GET /incident_types (incident_types)
   def index
     authorize incident_types
     render inertia: "IncidentType/Index", props: {
@@ -11,6 +12,7 @@ class IncidentTypesController < ApplicationController
     }
   end
 
+  # @route GET /incident_types/:id (incident_type)
   def show
     authorize incident_type
     render inertia: "IncidentType/Show", props: {
@@ -18,6 +20,7 @@ class IncidentTypesController < ApplicationController
     }
   end
 
+  # @route GET /incident_types/new (new_incident_type)
   def new
     authorize IncidentType.new
     render inertia: "IncidentType/New", props: {
@@ -25,6 +28,7 @@ class IncidentTypesController < ApplicationController
     }
   end
 
+  # @route GET /incident_types/:id/edit (edit_incident_type)
   def edit
     authorize incident_type
     render inertia: "IncidentType/Edit", props: {
@@ -32,6 +36,7 @@ class IncidentTypesController < ApplicationController
     }
   end
 
+  # @route POST /incident_types (incident_types)
   def create
     authorize IncidentType.new
     if incident_type.save
@@ -41,6 +46,8 @@ class IncidentTypesController < ApplicationController
     end
   end
 
+  # @route PATCH /incident_types/:id (incident_type)
+  # @route PUT /incident_types/:id (incident_type)
   def update
     authorize incident_type
     if incident_type.update(incident_type_params)
@@ -50,6 +57,7 @@ class IncidentTypesController < ApplicationController
     end
   end
 
+  # @route DELETE /incident_types/:id (incident_type)
   def destroy
     authorize incident_type
     incident_type.destroy!

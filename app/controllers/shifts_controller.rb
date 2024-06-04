@@ -4,6 +4,7 @@ class ShiftsController < ApplicationController
   expose :shifts, -> { search(Shift.includes_associated, sortable_fields) }
   expose :shift, scope: ->{ Shift }, find: ->(id, scope){ scope.includes_associated.find(id) }
 
+  # @route GET /schedule (shifts)
   def index
     authorize shifts
     render inertia: "Shift/Index", props: {
@@ -32,6 +33,7 @@ class ShiftsController < ApplicationController
     }
   end
 
+  # @route POST /schedule (shifts)
   def create
     authorize Shift.new
     if shift.save
@@ -41,6 +43,8 @@ class ShiftsController < ApplicationController
     end
   end
 
+  # @route PATCH /schedule/:id (shift)
+  # @route PUT /schedule/:id (shift)
   def update
     authorize shift
     if shift.update(shift_params)

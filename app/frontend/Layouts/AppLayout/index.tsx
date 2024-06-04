@@ -27,7 +27,7 @@ const AppLayout = ({ children }: { children: any }) => {
 	return (
 		<AppShell
 			// header={ { height: theme.other.header.height } }
-
+			layout="alt"
 			navbar={ {
 				width: { sm: sidebarOpen ? theme.other.navbar.width.open : theme.other.navbar.width.closed },
 				collapsed: {

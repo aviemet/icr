@@ -4,6 +4,7 @@
 #
 #  id          :bigint           not null, primary key
 #  active_at   :date
+#  color       :string
 #  inactive_at :date
 #  number      :string
 #  created_at  :datetime         not null
@@ -23,14 +24,15 @@ class Client < ApplicationRecord
 
   pg_search_scope(
     :search,
-    against: [:person, :active_at, :inactive_at, :number],
+    against: [:active_at, :inactive_at, :number],
     associated_against: {
-      person: [],
+      person: [:first_name, :middle_name, :last_name],
     },
     using: {
       tsearch: { prefix: true },
       trigram: {}
     },
+    ignoring: :accents,
   )
 
   resourcify

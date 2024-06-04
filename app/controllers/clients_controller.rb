@@ -4,6 +4,7 @@ class ClientsController < ApplicationController
   expose :clients, -> { search(Client.includes_associated, sortable_fields) }
   expose :client, scope: ->{ Client }, find: ->(id, scope){ scope.includes_associated.find(id) }
 
+  # @route GET /clients (clients)
   def index
     authorize clients
     paginated_clients = clients.page(params[:page] || 1).per(current_user.limit(:clients))
@@ -17,6 +18,7 @@ class ClientsController < ApplicationController
     }
   end
 
+  # @route GET /clients/:id (client)
   def show
     authorize client
     render inertia: "Clients/Show", props: {
@@ -24,6 +26,7 @@ class ClientsController < ApplicationController
     }
   end
 
+  # @route GET /clients/new (new_client)
   def new
     authorize Client.new
     render inertia: "Clients/New", props: {
@@ -31,6 +34,7 @@ class ClientsController < ApplicationController
     }
   end
 
+  # @route GET /clients/:id/edit (edit_client)
   def edit
     authorize client
     render inertia: "Clients/Edit", props: {
@@ -38,6 +42,20 @@ class ClientsController < ApplicationController
     }
   end
 
+  # @route GET /clients/:id/schedule (schedule_client)
+  def schedule
+    shifts = client.shifts.includes(:clients, :employee, :recurring_pattern).between(range_start, range_end)
+
+    render inertia: "Clients/Schedule", props: {
+      client: client.render,
+      employees: -> { employees.render },
+      shifts: lambda {
+        shifts.render
+      },
+    }
+  end
+
+  # @route POST /clients (clients)
   def create
     authorize Client.new
     if client.save
@@ -47,6 +65,8 @@ class ClientsController < ApplicationController
     end
   end
 
+  # @route PATCH /clients/:id (client)
+  # @route PUT /clients/:id (client)
   def update
     authorize client
     if client.update(client_params)
@@ -56,6 +76,7 @@ class ClientsController < ApplicationController
     end
   end
 
+  # @route DELETE /clients/:id (client)
   def destroy
     authorize client
     client.destroy!
@@ -63,6 +84,14 @@ class ClientsController < ApplicationController
   end
 
   private
+
+  def range_start
+    params[:start] || Time.zone.now.beginning_of_month.prev_occurring(:sunday)
+  end
+
+  def range_end
+    params[:end] || Time.zone.now.end_of_month.next_occurring(:saturday)
+  end
 
   def sortable_fields
     %w(active_at inactive_at number people.first_name people.last_name).freeze

@@ -4,6 +4,7 @@ class VendorsController < ApplicationController
   expose :vendors, -> { search(Vendor.includes_associated, sortable_fields) }
   expose :vendor, scope: ->{ Vendor }, find: ->(id, scope){ scope.includes_associated.find(id) }
 
+  # @route GET /vendors (vendors)
   def index
     authorize vendors
     render inertia: "Vendor/Index", props: {
@@ -11,6 +12,7 @@ class VendorsController < ApplicationController
     }
   end
 
+  # @route GET /vendors/:id (vendor)
   def show
     authorize vendor
     render inertia: "Vendor/Show", props: {
@@ -18,6 +20,7 @@ class VendorsController < ApplicationController
     }
   end
 
+  # @route GET /vendors/new (new_vendor)
   def new
     authorize Vendor.new
     render inertia: "Vendor/New", props: {
@@ -25,6 +28,7 @@ class VendorsController < ApplicationController
     }
   end
 
+  # @route GET /vendors/:id/edit (edit_vendor)
   def edit
     authorize vendor
     render inertia: "Vendor/Edit", props: {
@@ -32,6 +36,7 @@ class VendorsController < ApplicationController
     }
   end
 
+  # @route POST /vendors (vendors)
   def create
     authorize Vendor.new
     if vendor.save
@@ -41,6 +46,8 @@ class VendorsController < ApplicationController
     end
   end
 
+  # @route PATCH /vendors/:id (vendor)
+  # @route PUT /vendors/:id (vendor)
   def update
     authorize vendor
     if vendor.update(vendor_params)
@@ -50,6 +57,7 @@ class VendorsController < ApplicationController
     end
   end
 
+  # @route DELETE /vendors/:id (vendor)
   def destroy
     authorize vendor
     vendor.destroy!

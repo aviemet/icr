@@ -4,6 +4,7 @@ class IdentificationsController < ApplicationController
   expose :identifications, -> { search(Identification.includes_associated, sortable_fields) }
   expose :identification, scope: ->{ Identification }, find: ->(id, scope){ scope.includes_associated.find(id) }
 
+  # @route GET /identifications (identifications)
   def index
     authorize identifications
     render inertia: "Identification/Index", props: {
@@ -11,6 +12,7 @@ class IdentificationsController < ApplicationController
     }
   end
 
+  # @route GET /identifications/:id (identification)
   def show
     authorize identification
     render inertia: "Identification/Show", props: {
@@ -18,6 +20,7 @@ class IdentificationsController < ApplicationController
     }
   end
 
+  # @route GET /identifications/new (new_identification)
   def new
     authorize Identification.new
     render inertia: "Identification/New", props: {
@@ -25,6 +28,7 @@ class IdentificationsController < ApplicationController
     }
   end
 
+  # @route GET /identifications/:id/edit (edit_identification)
   def edit
     authorize identification
     render inertia: "Identification/Edit", props: {
@@ -32,6 +36,7 @@ class IdentificationsController < ApplicationController
     }
   end
 
+  # @route POST /identifications (identifications)
   def create
     authorize Identification.new
     if identification.save
@@ -41,6 +46,8 @@ class IdentificationsController < ApplicationController
     end
   end
 
+  # @route PATCH /identifications/:id (identification)
+  # @route PUT /identifications/:id (identification)
   def update
     authorize identification
     if identification.update(identification_params)
@@ -50,6 +57,7 @@ class IdentificationsController < ApplicationController
     end
   end
 
+  # @route DELETE /identifications/:id (identification)
   def destroy
     authorize identification
     identification.destroy!

@@ -4,6 +4,7 @@ class IncidentReportsController < ApplicationController
   expose :incident_reports, -> { search(Incident_report.includes_associated, sortable_fields) }
   expose :incident_report, scope: ->{ Incident_report }, find: ->(id, scope){ scope.includes_associated.find(id) }
 
+  # @route GET /incident_reports (incident_reports)
   def index
     authorize incident_reports
     render inertia: "IncidentReport/Index", props: {
@@ -11,6 +12,7 @@ class IncidentReportsController < ApplicationController
     }
   end
 
+  # @route GET /incident_reports/:id (incident_report)
   def show
     authorize incident_report
     render inertia: "IncidentReport/Show", props: {
@@ -18,6 +20,7 @@ class IncidentReportsController < ApplicationController
     }
   end
 
+  # @route GET /incident_reports/new (new_incident_report)
   def new
     authorize IncidentReport.new
     render inertia: "IncidentReport/New", props: {
@@ -25,6 +28,7 @@ class IncidentReportsController < ApplicationController
     }
   end
 
+  # @route GET /incident_reports/:id/edit (edit_incident_report)
   def edit
     authorize incident_report
     render inertia: "IncidentReport/Edit", props: {
@@ -32,6 +36,7 @@ class IncidentReportsController < ApplicationController
     }
   end
 
+  # @route POST /incident_reports (incident_reports)
   def create
     authorize IncidentReport.new
     if incident_report.save
@@ -41,6 +46,8 @@ class IncidentReportsController < ApplicationController
     end
   end
 
+  # @route PATCH /incident_reports/:id (incident_report)
+  # @route PUT /incident_reports/:id (incident_report)
   def update
     authorize incident_report
     if incident_report.update(incident_report_params)
@@ -50,6 +57,7 @@ class IncidentReportsController < ApplicationController
     end
   end
 
+  # @route DELETE /incident_reports/:id (incident_report)
   def destroy
     authorize incident_report
     incident_report.destroy!

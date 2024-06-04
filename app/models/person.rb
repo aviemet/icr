@@ -55,7 +55,7 @@ class Person < ApplicationRecord
 
   scope :includes_associated, -> { includes([:user, :client, :employee, :contact]) }
 
-  def full_name(include_middle_name: false)
+  def name(include_middle_name: false)
     "#{first_name}#{include_middle_name ? " #{middle_name}" : ''} #{last_name}"
   end
 end

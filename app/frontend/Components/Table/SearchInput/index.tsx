@@ -28,7 +28,7 @@ const SearchInput = ({ columnPicker = true, advancedSearch }: SearchInputProps) 
 	const [searchValue, setSearchValue] = useSessionStorage({
 		key: `${model ?? 'standard'}-query`,
 		defaultValue: location.params.get('search') || '',
-		getInitialValueInEffect: false,
+		getInitialValueInEffect: true,
 	})
 
 	useInit(() => {
@@ -84,6 +84,10 @@ const SearchInput = ({ columnPicker = true, advancedSearch }: SearchInputProps) 
 		debouncedSearch(url.toString())
 	}, [debouncedSearch, searchValue])
 
+	const handleClearInput = () => {
+		setSearchValue('')
+	}
+
 	return (
 		<Box className={ classes.searchWrapper }>
 			{ advancedSearch && <AdvancedSearch>{ advancedSearch }</AdvancedSearch> }
@@ -92,9 +96,12 @@ const SearchInput = ({ columnPicker = true, advancedSearch }: SearchInputProps) 
 				id="search"
 				value={ searchValue }
 				onChange={ e => setSearchValue(e.target.value) }
-				rightSection={ searchValue !== '' && <ActionIcon variant="transparent" onClick={ () => setSearchValue('') }>
-					<CrossIcon color="grey" />
-				</ActionIcon> }
+				rightSection={
+					searchValue !== '' && (
+						<ActionIcon variant="transparent" onClick={ handleClearInput }>
+							<CrossIcon color="grey" />
+						</ActionIcon>
+					) }
 				leftSection={ <SearchIcon size={ 24 } /> }
 				leftSectionPointerEvents="none"
 				className={ classes.searchInput }

@@ -21,7 +21,7 @@ const ToggleColorSchemeButton = ({ leftSection, rightSection, ...props }: Toggle
 			onClick={ () => toggleColorScheme() }
 			title="Toggle color scheme"
 			style={ { display: 'inline-flex' } }
-			aria-label={ `Enable ${colorScheme === 'dark' ? 'light' : 'dark'} mode` }
+			aria-label={ `Toggle ${colorScheme === 'dark' ? 'light' : 'dark'} mode` }
 			size="sm"
 			{ ...props }
 		>

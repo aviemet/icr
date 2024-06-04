@@ -5,6 +5,7 @@ class CreateEmployees < ActiveRecord::Migration[7.1]
       t.date :active_at
       t.date :inactive_at
       t.string :number
+      t.string :color
 
       t.timestamps
     end

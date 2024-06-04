@@ -30,6 +30,6 @@ class PersonSerializer < ApplicationSerializer
     :last_name,
     :nick_name,
     :user_id,
-    full_name: { type: :string },
+    name: { type: :string },
   )
 end

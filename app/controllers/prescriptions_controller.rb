@@ -4,6 +4,7 @@ class PrescriptionsController < ApplicationController
   expose :prescriptions, -> { search(Prescription.includes_associated, sortable_fields) }
   expose :prescription, scope: ->{ Prescription }, find: ->(id, scope){ scope.includes_associated.find(id) }
 
+  # @route GET /prescriptions (prescriptions)
   def index
     authorize prescriptions
     render inertia: "Prescription/Index", props: {
@@ -11,6 +12,7 @@ class PrescriptionsController < ApplicationController
     }
   end
 
+  # @route GET /prescriptions/:id (prescription)
   def show
     authorize prescription
     render inertia: "Prescription/Show", props: {
@@ -18,6 +20,7 @@ class PrescriptionsController < ApplicationController
     }
   end
 
+  # @route GET /prescriptions/new (new_prescription)
   def new
     authorize Prescription.new
     render inertia: "Prescription/New", props: {
@@ -25,6 +28,7 @@ class PrescriptionsController < ApplicationController
     }
   end
 
+  # @route GET /prescriptions/:id/edit (edit_prescription)
   def edit
     authorize prescription
     render inertia: "Prescription/Edit", props: {
@@ -32,6 +36,7 @@ class PrescriptionsController < ApplicationController
     }
   end
 
+  # @route POST /prescriptions (prescriptions)
   def create
     authorize Prescription.new
     if prescription.save
@@ -41,6 +46,8 @@ class PrescriptionsController < ApplicationController
     end
   end
 
+  # @route PATCH /prescriptions/:id (prescription)
+  # @route PUT /prescriptions/:id (prescription)
   def update
     authorize prescription
     if prescription.update(prescription_params)
@@ -50,6 +57,7 @@ class PrescriptionsController < ApplicationController
     end
   end
 
+  # @route DELETE /prescriptions/:id (prescription)
   def destroy
     authorize prescription
     prescription.destroy!
