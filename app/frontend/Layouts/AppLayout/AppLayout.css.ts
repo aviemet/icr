@@ -1,10 +1,91 @@
-import { vars } from '@/lib/theme'
+import { vars, theme } from '@/lib/theme'
 import { css } from '@linaria/core'
 
-export const layout = css`
-	display: flex;
+/**
+ * AppShell
+ */
+export const wrapper = css`
+	overflow: auto;
+	height: calc(100vh - ${theme.other.header.height}px - ${theme.other.footer.height}px);
 `
 
-export const menu = css`
-	margin-left: auto;
+/**
+ * Top bar
+ */
+export const topbar = css`
+	transition: left 100ms ease-in-out;
+	background-color: ${vars.colors.primaryColors.filled};
+	
+	color: ${vars.colors.white};
+
+	@media (min-width: ${vars.breakpoints.sm}) {
+		left: ${theme.other.navbar.width.open}px;
+
+		&.closed {
+			left: ${theme.other.navbar.width.closed}px;
+		}
+	}
+`
+
+/**
+ * Sidebar section
+ */
+
+export const navbar = css`
+	transition: width 100ms ease-in-out, min-width 100ms ease-in-out;
+	overflow-y: clip;
+	
+	${vars.lightSelector} {
+		background-color: ${vars.colors.white};
+		border-right: none;
+	}
+
+	${vars.darkSelector} {
+		background-color: ${vars.colors.dark[6]};
+	} 
+
+	.links.closed .link-text {
+		display: none;
+	}
+`
+
+export const bubbleWrapper = css`
+	border-radius: ${vars.radius.md};
+	height: 100%;
+
+	${vars.lightSelector} {
+		background-color: ${vars.colors.gray[2]};
+	}
+
+	${vars.darkSelector} {
+		background-color: ${vars.colors.dark[6]};
+	} 
+`
+
+export const navLink = css`
+	display: block;
+	border-radius: ${vars.radius.md};
+	transition: background-color 200ms ease-in-out;
+
+	${vars.lightSelector} {
+		color: ${vars.colors.dark[5]};
+	}
+
+	${vars.darkSelector} {
+		color: ${vars.colors.white};
+	}
+
+	&:hover {
+		text-decoration: none;
+	}
+
+	&.active, &:hover {
+		${vars.lightSelector} {
+			background-color: ${vars.colors.gray[3]};
+		}
+
+		${vars.darkSelector} {
+			background-color: ${vars.colors.dark[8]};
+		}
+	}
 `

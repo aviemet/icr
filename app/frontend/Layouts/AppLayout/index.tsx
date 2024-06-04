@@ -1,46 +1,53 @@
-import React from 'react'
-import { AppShell, Burger, Menu, Title } from '@/Components'
-import { useAuth } from '@/lib/hooks'
-import menuItems from './menuItems'
+import React, { useEffect } from 'react'
+import { Box, useMantineTheme } from '@mantine/core'
+import { AppShell } from '@/Components'
+import Sidebar from './Sidebar'
+import Topbar from './Topbar'
+import Footer from './Footer'
+import { useLayoutStore } from '@/lib/store'
+import { useDisclosure } from '@mantine/hooks'
 
+import cx from 'clsx'
 import * as classes from './AppLayout.css'
+import '@mantine/tiptap/styles.css'
 
 const AppLayout = ({ children }: { children: any }) => {
-	const { isLoggedIn } = useAuth()
+	const theme = useMantineTheme()
+	const { sidebarOpen } = useLayoutStore()
+	const [mobileOpen, mobileHandlers] = useDisclosure(sidebarOpen)
+
+	useEffect(() => {
+		if(sidebarOpen) {
+			mobileHandlers.open()
+		} else if(!sidebarOpen) {
+			mobileHandlers.close()
+		}
+	}, [sidebarOpen])
 
 	return (
 		<AppShell
-			header={ { height: 45 } }
+			// header={ { height: theme.other.header.height } }
+
+			navbar={ {
+				width: { sm: sidebarOpen ? theme.other.navbar.width.open : theme.other.navbar.width.closed },
+				collapsed: {
+					mobile: !mobileOpen,
+				},
+				breakpoint: 'sm',
+			} }
+
+			footer={ { height: theme.other.footer.height } }
 		>
-			<AppShell.Header className={ classes.layout } p="xs">
-				<Title size="h3">Schedule Thing</Title>
-				<Menu shadow="sm">
-					<Menu.Target>
-						<Burger size="sm" className={ classes.menu }></Burger>
-					</Menu.Target>
-
-					<Menu.Dropdown>
-						{ isLoggedIn ? menuItems.map(menuGroup =>(
-							<React.Fragment key={ menuGroup.id }>
-								<Menu.Label >{ menuGroup.title }</Menu.Label>
-								{ menuGroup.children.map(menuItem => (
-									<Menu.Link key={ menuItem.id } href={ menuItem.url }>{ menuItem.title }</Menu.Link>
-								)) }
-							</React.Fragment>
-						))
-							:
-							<Menu.Label>Sign In</Menu.Label>
-						}
-					</Menu.Dropdown>
-				</Menu>
-			</AppShell.Header>
-
+			{ /* <Topbar /> */ }
+			<Sidebar />
+			<Footer />
 			<AppShell.Main>
-				{ children }
+				<Box id="CONTENT_WRAPPER" className={ cx(classes.wrapper) } p="xs">
+					{ children }
+				</Box>
 			</AppShell.Main>
-
 		</AppShell>
 	)
 }
 
-export default AppLayout
+export default React.memo(AppLayout)

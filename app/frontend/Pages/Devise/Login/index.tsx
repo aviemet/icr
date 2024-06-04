@@ -1,9 +1,10 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { Form, Field, TextInput, PasswordInput, Checkbox, Submit } from '@/Components/Form'
 import { Routes } from '@/lib'
 import { Heading, Link } from '@/Components'
 import { type UseFormProps } from 'use-inertia-form'
 import * as classes from './Login.css'
+import { useLayoutStore } from '@/lib/store'
 
 type LoginFormData = {
 	user: {
@@ -22,6 +23,8 @@ const defaultData = {
 }
 
 const Login = () => {
+	const { siteTitle } = useLayoutStore()
+
 	const handleSubmit = ({ data }: UseFormProps<LoginFormData>) => {
 		if(data.user.email === '' || data.user.password === '') {
 			return false
@@ -32,7 +35,7 @@ const Login = () => {
 		<Form model="user" data={ defaultData } to={ Routes.newUserSession() } onSubmit={ handleSubmit } className={ classes.form }>
 
 			<div>
-				<Heading>OSC</Heading>
+				<Heading mb="xs">{ siteTitle }</Heading>
 			</div>
 
 			<Field>

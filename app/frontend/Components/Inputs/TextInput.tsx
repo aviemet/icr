@@ -17,7 +17,6 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputProps>((
 		required = false,
 		id,
 		size = 'md',
-		radius = 'xs',
 		wrapper,
 		wrapperProps,
 		clearable = false,
@@ -63,7 +62,6 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputProps>((
 				onChange={ handleChange }
 				required={ required }
 				size={ size }
-				radius={ radius }
 				rightSection={ !readOnly && clearable && !isUnset(value) && <CrossIcon onClick={ handleClear } /> }
 				{ ...props }
 			/>

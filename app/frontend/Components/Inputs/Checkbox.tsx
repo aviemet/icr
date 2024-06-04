@@ -6,7 +6,7 @@ import InputWrapper from './InputWrapper'
 export interface CheckboxProps extends MantineCheckboxProps, BaseInputProps {}
 
 type CheckboxComponentType = React.ForwardRefExoticComponent<
-  CheckboxProps & React.RefAttributes<HTMLInputElement>
+CheckboxProps & React.RefAttributes<HTMLInputElement>
 > & {
 	Group: typeof Checkbox.Group
 };

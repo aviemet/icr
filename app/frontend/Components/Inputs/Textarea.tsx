@@ -12,7 +12,6 @@ const TextareaComponent = forwardRef<HTMLTextAreaElement, TextareaProps>((
 		name,
 		required = false,
 		id,
-		radius = 'xs',
 		wrapper,
 		wrapperProps,
 		...props
@@ -31,7 +30,6 @@ const TextareaComponent = forwardRef<HTMLTextAreaElement, TextareaProps>((
 				id={ inputId }
 				name={ name }
 				required={ required }
-				radius={ radius }
 				{ ...props }
 			>
 			</Textarea>

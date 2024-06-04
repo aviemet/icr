@@ -5,7 +5,7 @@ import { defaultColor } from '../theme'
 interface LayoutState {
 	sidebarOpen: boolean
 	toggleSidebarOpen: (sidebarOpen?: boolean) => void
-
+	siteTitle: string
 	primaryColor: string
 	setPrimaryColor: (color: string) => void
 
@@ -15,8 +15,9 @@ interface LayoutState {
 }
 
 const useLayoutStore = create<LayoutState>()((set) => ({
-	sidebarOpen: false,
+	sidebarOpen: true,
 	primaryColor: defaultColor,
+	siteTitle: 'Super SLS',
 
 	defaults: {
 		tableRecordsLimit: 25,

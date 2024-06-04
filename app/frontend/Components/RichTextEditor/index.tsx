@@ -1,6 +1,6 @@
-import React from 'react'
-import { RichTextEditor, Link, type RichTextEditorProps } from '@mantine/tiptap'
-import { useEditor } from '@tiptap/react'
+import React, { forwardRef } from 'react'
+import { RichTextEditor, Link, type RichTextEditorProps as MantineRichTextEditorProps } from '@mantine/tiptap'
+import { useEditor, BubbleMenu, FloatingMenu } from '@tiptap/react'
 import Highlight from '@tiptap/extension-highlight'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
@@ -9,12 +9,15 @@ import Superscript from '@tiptap/extension-superscript'
 import SubScript from '@tiptap/extension-subscript'
 import { DEFAULT_LABELS } from './tiptapLabels'
 
-export interface IRichTextEditorProps extends Omit<RichTextEditorProps, 'children'|'editor'|'onChange'> {
+export interface RichTextEditorProps extends Omit<MantineRichTextEditorProps, 'children'|'editor'|'onChange'> {
 	children?: string
 	onChange?: (value: string) => void
 }
 
-const RichTextEditorComponent = ({ children, onChange }: IRichTextEditorProps) => {
+const RichTextEditorComponent = forwardRef<HTMLDivElement, RichTextEditorProps>((
+	{ children, onChange },
+	ref,
+) => {
 	const editor = useEditor({
 		extensions: [
 			StarterKit,
@@ -27,12 +30,13 @@ const RichTextEditorComponent = ({ children, onChange }: IRichTextEditorProps) =
 		],
 		content: children,
 		onUpdate: ({ editor }) => {
-			if(onChange) onChange(editor.getHTML())
+			onChange?.(editor.getHTML())
 		},
 	})
 
 	return (
 		<RichTextEditor
+			ref={ ref }
 			editor={ editor }
 			labels={ DEFAULT_LABELS }
 		>
@@ -76,9 +80,28 @@ const RichTextEditorComponent = ({ children, onChange }: IRichTextEditorProps) =
 				</RichTextEditor.ControlsGroup>
 			</RichTextEditor.Toolbar>
 
+			{ editor && (
+				<BubbleMenu editor={ editor }>
+					<RichTextEditor.ControlsGroup>
+						<RichTextEditor.Bold />
+						<RichTextEditor.Italic />
+						<RichTextEditor.Link />
+					</RichTextEditor.ControlsGroup>
+				</BubbleMenu>
+			) }
+
+			{ editor && (
+				<FloatingMenu editor={ editor }>
+					<RichTextEditor.ControlsGroup>
+						<RichTextEditor.H1 />
+						<RichTextEditor.H2 />
+						<RichTextEditor.BulletList />
+					</RichTextEditor.ControlsGroup>
+				</FloatingMenu>
+			) }
 			<RichTextEditor.Content />
 		</RichTextEditor>
 	)
-}
+})
 
 export default RichTextEditorComponent

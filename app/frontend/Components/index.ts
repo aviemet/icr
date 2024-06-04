@@ -20,6 +20,7 @@ export { default as Tabs } from './Tabs'
 export {
 	ActionIcon,
 	AppShell,
+	Avatar,
 	Badge,
 	Box,
 	Burger,
@@ -34,6 +35,7 @@ export {
 	Paper,
 	SimpleGrid,
 	Slider,
+	Skeleton,
 	Stack,
 	Text,
 	Title,

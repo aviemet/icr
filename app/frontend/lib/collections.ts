@@ -20,3 +20,7 @@ export const exclude = <T extends any, K extends string>(obj: T, keys: K | K[]):
 	}
 	return clone
 }
+
+export const withDefaults = (obj: Record<string, any>, defaults: Record<string, any>) => {
+	return Object.assign(defaults, obj)
+}

@@ -1,24 +1,33 @@
 import React from 'react'
-import { ActionIcon, useComputedColorScheme, useMantineColorScheme } from '@mantine/core'
-import { SunIcon, MoonIcon } from '@/Components/Icons'
+import { ActionIcon, ActionIconProps, useMantineColorScheme } from '@mantine/core'
+import { SunIcon, MoonStarsIcon } from '@/Components/Icons'
 
-const ToggleColorSchemeButton = () => {
-	const { colorScheme, setColorScheme } = useMantineColorScheme()
-	const computedColorScheme = useComputedColorScheme('dark')
+interface ToggleColorSchemeButtonProps
+	extends
+	ActionIconProps
+{
+	leftSection?: React.ReactNode
+	rightSection?: React.ReactNode
+}
 
-	const toggleColorScheme = () => {
-		setColorScheme(computedColorScheme === 'dark' ? 'light' : 'dark')
-	}
+const ToggleColorSchemeButton = ({ leftSection, rightSection, ...props }: ToggleColorSchemeButtonProps) => {
+	const { colorScheme, toggleColorScheme } = useMantineColorScheme()
+
+	const iconProps = { size: 18 }
 
 	return (
 		<ActionIcon
-			color={ colorScheme === 'dark' ? 'yellow' : 'blue' }
+			color={ colorScheme === 'dark' ? 'light' : 'dark' }
 			onClick={ () => toggleColorScheme() }
 			title="Toggle color scheme"
 			style={ { display: 'inline-flex' } }
-			aria-label={ `Toggle color scheme to ${colorScheme === 'dark' ? 'light' : 'dark'} mode` }
+			aria-label={ `Enable ${colorScheme === 'dark' ? 'light' : 'dark'} mode` }
+			size="sm"
+			{ ...props }
 		>
-			{ colorScheme === 'dark' ? <SunIcon size={ 18 } /> : <MoonIcon size={ 18 } /> }
+			{ leftSection && leftSection }
+			{ colorScheme === 'dark' ? <SunIcon { ...iconProps } /> : <MoonStarsIcon { ...iconProps } /> }
+			{ rightSection && rightSection }
 		</ActionIcon>
 	)
 }

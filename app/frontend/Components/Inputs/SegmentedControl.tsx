@@ -8,17 +8,12 @@ import {
 import Label from './Label'
 import { type BaseInputProps } from '.'
 import InputWrapper from './InputWrapper'
-import { AssignToableTypes } from '@/types/AssignToableTypes'
-
-interface ControlOption extends SegmentedControlItem {
-	defaultModel?: AssignToableTypes
-}
 
 export interface SegmentedControlProps extends Omit<MantineSegmentedControlProps, 'data'>, BaseInputProps {
 	label?: string
 	labelPosition?: 'start'|'end'
 	name: string
-	options: ControlOption[]
+	options: SegmentedControlItem[]
 	id?: string
 	required?: boolean
 }

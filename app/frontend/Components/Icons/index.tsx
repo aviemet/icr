@@ -12,7 +12,6 @@ export {
 	TbArrowLeftSquare as ArrowRLeftSquareIcon,
 	TbCircleDot as CircleDotIcon,
 	TbSquarePlus as ReplenishIcon,
-	TbSun as SunIcon,
 	TbMoonStars as MoonIcon,
 } from 'react-icons/tb'
 
@@ -26,7 +25,7 @@ export {
 	MdViewColumn as ColumnsIcon,
 	MdAdd as NewIcon,
 	MdOutlineDelete as TrashIcon,
-	MdCalendarMonth as CalendarIcon,
+	MdOutlineContactMail as EmployeeIcon,
 } from 'react-icons/md'
 
 
@@ -42,15 +41,23 @@ export {
 
 export {
 	IoPerson as PersonIcon,
+	IoCalendarClearOutline as CalendarIcon,
+	IoAccessibilityOutline as ClientIcon,
 } from 'react-icons/io5'
 
 export {
 	BsCheck2Circle as CheckIcon,
+	BsFillMoonStarsFill as MoonStarsIcon,
+	BsFillSunFill as SunIcon,
 } from 'react-icons/bs'
 
 export {
 	FaHome as HomeIcon,
 } from 'react-icons/fa'
+
+export {
+	// FaPersonRays as ClientIcon,
+} from 'react-icons/fa6'
 
 export {
 } from 'react-icons/ri'
@@ -87,3 +94,7 @@ export {
 export {
 	LiaHandsHelpingSolid as HelpingIcon,
 } from 'react-icons/lia'
+
+export {
+	// PiPersonSimpleCircle as ClientIcon,
+} from 'react-icons/pi'

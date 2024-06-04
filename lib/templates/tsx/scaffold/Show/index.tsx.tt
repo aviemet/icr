@@ -1,32 +1,36 @@
 import React from 'react'
-import { Heading, Page, Section } from '@/Components'
+import { Group, Heading, Menu, Page, Section } from '@/Components'
 import { Routes } from '@/lib'
-import <%= singular_table_name.camelize %>Form from '../Form'
 
-interface New<%= singular_table_name.camelize %>Props {
-	<%= singular_table_name %>: Schema.<%= plural_table_name.camelize %>FormData
+interface Show<%= singular_table_name.camelize %>Props {
+	<%= singular_table_name %>: Schema.<%= plural_table_name.camelize %>Show
 }
 
-const New<%= singular_table_name.camelize %> = ({ ...data }: New<%= singular_table_name.camelize %>Props) => {
-	const title = 'New <%= human_name.titleize %>'
+const Show<%= singular_table_name.camelize %> = ({ <%= singular_table_name %> }: Show<%= singular_table_name.camelize %>Props) => {
+	const title = <%= attributes.include?(:name) ? "#{singular_table_name}.name || " : "" %> '<%= singular_table_name.camelize %>'
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: '<%= human_name.pluralize.titleize %>', href: Routes.<%= plural_table_name.camelize(:lower) %>() },
-			{ title: 'New <%= human_name.titleize %>' },
+			{ title: '<%= human_name.titleize %>', href: Routes.<%= plural_table_name.camelize(:lower) %>() },
+			{ title },
 		] }>
-
 			<Section>
-				<Heading>{ title }</Heading>
+				<Group justify="space-between">
+					<Heading>{ title }</Heading>
 
-				<<%= singular_table_name.camelize %>Form
-					to={ Routes.<%= plural_table_name.camelize(:lower) %>() }
-					{ ...data }
-				/>
+					<Menu position="bottom-end">
+						<Menu.Target />
+						<Menu.Dropdown>
+							<Menu.Link href={ Routes.edit<%= singular_table_name.camelize %>(<%= singular_table_name %><%= attributes.include?(:slug) ? ".slug" : ".id" %>) }>
+								Edit <%= singular_table_name.camelize %>
+							</Menu.Link>
+						</Menu.Dropdown>
+					</Menu>
+				</Group>
+
 			</Section>
-
 		</Page>
 	)
 }
 
-export default New<%= singular_table_name.camelize %>
+export default Show<%= singular_table_name.camelize %>

@@ -6,7 +6,7 @@ export const defaultColor = 'blue'
 
 export const themeObject = {
 	breakpoints,
-	defaultRadius: 'xs',
+	defaultRadius: 'md',
 	spacing: {
 		xxl: 'calc(2.5rem * var(--mantine-scale))',
 		xxs: 'calc(0.5rem * var(--mantine-scale))',
@@ -20,6 +20,18 @@ export const themeObject = {
 		xxl: '0 29px 52px rgba(0,0,0,0.40), 0 25px 16px rgba(0,0,0,0.20)',
 	},
 	other: {
+		header: {
+			height: 50,
+		},
+		navbar: {
+			width: {
+				closed: 60,
+				open: 300,
+			},
+		},
+		footer: {
+			height: 35,
+		},
 		table: {
 			sortButtonHeight: 5,
 			sortButtonWidth: 6,
