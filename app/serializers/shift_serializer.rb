@@ -19,13 +19,10 @@ class ShiftSerializer < ApplicationSerializer
   object_as :shift
 
   attributes(
-    :starts_at,
-    :ends_at,
-    :recurring_pattern_id,
-    :client_id,
     :employee_id,
-    :created_by_id,
-    :parent_id,
-    title: { type: :string },
   )
+
+  belongs_to :employee, serializer: EmployeeSerializer
+  has_many :clients, serializer: ClientSerializer
+  has_many :households, serializer: HouseholdSerializer
 end

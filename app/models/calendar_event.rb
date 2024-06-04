@@ -45,7 +45,7 @@ class CalendarEvent < ApplicationRecord
   resourcify
 
   belongs_to :parent, class_name: "CalendarEvent", optional: true
-  belongs_to :recurring_pattern, optional: true
+  belongs_to :recurring_pattern, optional: true, dependent: :destroy
 
   belongs_to :created_by, class_name: "User", optional: true
 

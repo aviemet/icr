@@ -38,4 +38,6 @@ class CalendarEventSerializer < ApplicationSerializer
     :schedulable_type,
     :schedulable_id,
   )
+
+  has_one :recurring_pattern, serializer: RecurringPatternSerializer
 end

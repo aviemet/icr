@@ -14,15 +14,17 @@
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #
-class RecurringPattern < ApplicationRecord
-  enum recurring_type: {
-    daily: 0,
-    weekly: 1,
-    monthly: 2,
-    yearly: 3,
-  }
+class RecurringPatternSerializer < ApplicationSerializer
+  object_as :recurring_pattern
 
-  resourcify
-
-  has_one :calendar_event, dependent: :nullify
+  attributes(
+    :recurring_type,
+    :offset,
+    :max_occurances,
+    :end_date,
+    :day_of_week,
+    :week_of_month,
+    :day_of_month,
+    :month_of_year,
+  )
 end

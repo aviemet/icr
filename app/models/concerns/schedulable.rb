@@ -8,6 +8,8 @@ module Schedulable
 
     validates :calendar_event, presence: true
 
-    delegate :before, :after, :between, to: :calendar_event, allow_nil: true
+    scope :before, ->(time) { where("shift.calendar_event.starts_at > ?", time) }
+    scope :after, ->(time) { calendar_event.after(time) }
+    scope :between, ->(start_time, end_time) { before(start_time).after(end_time) }
   end
 end

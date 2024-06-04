@@ -18,8 +18,14 @@
 FactoryBot.define do
   factory :shift do
     calendar_event
-    client
     employee
-    household
+
+    trait :with_client do
+      clients { [association(:client)] }
+    end
+
+    trait :with_household do
+      households { [association(:household)] }
+    end
   end
 end
