@@ -21,6 +21,7 @@
 #
 class Client < ApplicationRecord
   include Identificationable
+  include Shiftable
 
   pg_search_scope(
     :search,

@@ -142,45 +142,45 @@ export const apiUsers: ((
 
 /**
  * Generates rails route to
- * /cal_events/:id(.:format)
+ * /calendar_events/:id(.:format)
  * @param {any} id
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const calEvent: ((
+export const calendarEvent: ((
   id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
 /**
  * Generates rails route to
- * /cal_event_exceptions/:id(.:format)
+ * /calendar_event_exceptions/:id(.:format)
  * @param {any} id
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const calEventException: ((
+export const calendarEventException: ((
   id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
 /**
  * Generates rails route to
- * /cal_event_exceptions(.:format)
+ * /calendar_event_exceptions(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const calEventExceptions: ((
+export const calendarEventExceptions: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
 /**
  * Generates rails route to
- * /cal_events(.:format)
+ * /calendar_events(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const calEvents: ((
+export const calendarEvents: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -272,24 +272,24 @@ export const dosages: ((
 
 /**
  * Generates rails route to
- * /cal_events/:id/edit(.:format)
+ * /calendar_events/:id/edit(.:format)
  * @param {any} id
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const editCalEvent: ((
+export const editCalendarEvent: ((
   id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
 /**
  * Generates rails route to
- * /cal_event_exceptions/:id/edit(.:format)
+ * /calendar_event_exceptions/:id/edit(.:format)
  * @param {any} id
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const editCalEventException: ((
+export const editCalendarEventException: ((
   id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
@@ -638,21 +638,21 @@ export const medications: ((
 
 /**
  * Generates rails route to
- * /cal_events/new(.:format)
+ * /calendar_events/new(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const newCalEvent: ((
+export const newCalendarEvent: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
 /**
  * Generates rails route to
- * /cal_event_exceptions/new(.:format)
+ * /calendar_event_exceptions/new(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const newCalEventException: ((
+export const newCalendarEventException: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 

@@ -12,10 +12,10 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/cal_events", type: :request do
-  
+RSpec.describe "/calendar_events", type: :request do
+
   # This should return the minimal set of attributes required to create a valid
-  # CalEvent. As you add validations to CalEvent, be sure to
+  # CalendarEvent. As you add validations to CalendarEvent, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
     skip("Add a hash of attributes valid for your model")
@@ -27,62 +27,61 @@ RSpec.describe "/cal_events", type: :request do
 
   describe "GET /index" do
     it "renders a successful response" do
-      CalEvent.create! valid_attributes
-      get cal_events_url
+      CalendarEvent.create! valid_attributes
+      get calendar_events_url
       expect(response).to be_successful
     end
   end
 
   describe "GET /show" do
     it "renders a successful response" do
-      cal_event = CalEvent.create! valid_attributes
-      get cal_event_url(cal_event)
+      calendar_event = CalendarEvent.create! valid_attributes
+      get calendar_event_url(calendar_event)
       expect(response).to be_successful
     end
   end
 
   describe "GET /new" do
     it "renders a successful response" do
-      get new_cal_event_url
+      get new_calendar_event_url
       expect(response).to be_successful
     end
   end
 
   describe "GET /edit" do
     it "renders a successful response" do
-      cal_event = CalEvent.create! valid_attributes
-      get edit_cal_event_url(cal_event)
+      calendar_event = CalendarEvent.create! valid_attributes
+      get edit_calendar_event_url(calendar_event)
       expect(response).to be_successful
     end
   end
 
   describe "POST /create" do
     context "with valid parameters" do
-      it "creates a new CalEvent" do
+      it "creates a new CalendarEvent" do
         expect {
-          post cal_events_url, params: { cal_event: valid_attributes }
-        }.to change(CalEvent, :count).by(1)
+          post calendar_events_url, params: { calendar_event: valid_attributes }
+        }.to change(CalendarEvent, :count).by(1)
       end
 
-      it "redirects to the created cal_event" do
-        post cal_events_url, params: { cal_event: valid_attributes }
-        expect(response).to redirect_to(cal_event_url(CalEvent.last))
+      it "redirects to the created calendar_event" do
+        post calendar_events_url, params: { calendar_event: valid_attributes }
+        expect(response).to redirect_to(calendar_event_url(CalendarEvent.last))
       end
     end
 
     context "with invalid parameters" do
-      it "does not create a new CalEvent" do
+      it "does not create a new CalendarEvent" do
         expect {
-          post cal_events_url, params: { cal_event: invalid_attributes }
-        }.to change(CalEvent, :count).by(0)
+          post calendar_events_url, params: { calendar_event: invalid_attributes }
+        }.not_to change(CalendarEvent, :count)
       end
 
-    
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
-        post cal_events_url, params: { cal_event: invalid_attributes }
+        post calendar_events_url, params: { calendar_event: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 
@@ -92,44 +91,44 @@ RSpec.describe "/cal_events", type: :request do
         skip("Add a hash of attributes valid for your model")
       }
 
-      it "updates the requested cal_event" do
-        cal_event = CalEvent.create! valid_attributes
-        patch cal_event_url(cal_event), params: { cal_event: new_attributes }
-        cal_event.reload
+      it "updates the requested calendar_event" do
+        calendar_event = CalendarEvent.create! valid_attributes
+        patch calendar_event_url(calendar_event), params: { calendar_event: new_attributes }
+        calendar_event.reload
         skip("Add assertions for updated state")
       end
 
-      it "redirects to the cal_event" do
-        cal_event = CalEvent.create! valid_attributes
-        patch cal_event_url(cal_event), params: { cal_event: new_attributes }
-        cal_event.reload
-        expect(response).to redirect_to(cal_event_url(cal_event))
+      it "redirects to the calendar_event" do
+        calendar_event = CalendarEvent.create! valid_attributes
+        patch calendar_event_url(calendar_event), params: { calendar_event: new_attributes }
+        calendar_event.reload
+        expect(response).to redirect_to(calendar_event_url(calendar_event))
       end
     end
 
     context "with invalid parameters" do
-    
+
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        cal_event = CalEvent.create! valid_attributes
-        patch cal_event_url(cal_event), params: { cal_event: invalid_attributes }
+        calendar_event = CalendarEvent.create! valid_attributes
+        patch calendar_event_url(calendar_event), params: { calendar_event: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 
   describe "DELETE /destroy" do
-    it "destroys the requested cal_event" do
-      cal_event = CalEvent.create! valid_attributes
+    it "destroys the requested calendar_event" do
+      calendar_event = CalendarEvent.create! valid_attributes
       expect {
-        delete cal_event_url(cal_event)
-      }.to change(CalEvent, :count).by(-1)
+        delete calendar_event_url(calendar_event)
+      }.to change(CalendarEvent, :count).by(-1)
     end
 
-    it "redirects to the cal_events list" do
-      cal_event = CalEvent.create! valid_attributes
-      delete cal_event_url(cal_event)
-      expect(response).to redirect_to(cal_events_url)
+    it "redirects to the calendar_events list" do
+      calendar_event = CalendarEvent.create! valid_attributes
+      delete calendar_event_url(calendar_event)
+      expect(response).to redirect_to(calendar_events_url)
     end
   end
 end

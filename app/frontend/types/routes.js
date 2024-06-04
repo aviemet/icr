@@ -578,37 +578,37 @@ export const apiUsers = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"a
 
 /**
  * Generates rails route to
- * /cal_events/:id(.:format)
+ * /calendar_events/:id(.:format)
  * @param {any} id
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const calEvent = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"cal_events"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+export const calendarEvent = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"calendar_events"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
 
 /**
  * Generates rails route to
- * /cal_event_exceptions/:id(.:format)
+ * /calendar_event_exceptions/:id(.:format)
  * @param {any} id
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const calEventException = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"cal_event_exceptions"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+export const calendarEventException = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"calendar_event_exceptions"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
 
 /**
  * Generates rails route to
- * /cal_event_exceptions(.:format)
+ * /calendar_event_exceptions(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const calEventExceptions = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"cal_event_exceptions"],[1,[2,[8,"."],[3,"format"]]]]]);
+export const calendarEventExceptions = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"calendar_event_exceptions"],[1,[2,[8,"."],[3,"format"]]]]]);
 
 /**
  * Generates rails route to
- * /cal_events(.:format)
+ * /calendar_events(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const calEvents = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"cal_events"],[1,[2,[8,"."],[3,"format"]]]]]);
+export const calendarEvents = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"calendar_events"],[1,[2,[8,"."],[3,"format"]]]]]);
 
 /**
  * Generates rails route to
@@ -679,21 +679,21 @@ export const dosages = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"do
 
 /**
  * Generates rails route to
- * /cal_events/:id/edit(.:format)
+ * /calendar_events/:id/edit(.:format)
  * @param {any} id
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const editCalEvent = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"cal_events"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+export const editCalendarEvent = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"calendar_events"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
 
 /**
  * Generates rails route to
- * /cal_event_exceptions/:id/edit(.:format)
+ * /calendar_event_exceptions/:id/edit(.:format)
  * @param {any} id
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const editCalEventException = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"cal_event_exceptions"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+export const editCalendarEventException = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"calendar_event_exceptions"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
 
 /**
  * Generates rails route to
@@ -958,19 +958,19 @@ export const medications = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6
 
 /**
  * Generates rails route to
- * /cal_events/new(.:format)
+ * /calendar_events/new(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const newCalEvent = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"cal_events"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+export const newCalendarEvent = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"calendar_events"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
 
 /**
  * Generates rails route to
- * /cal_event_exceptions/new(.:format)
+ * /calendar_event_exceptions/new(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const newCalEventException = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"cal_event_exceptions"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+export const newCalendarEventException = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"calendar_event_exceptions"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
 
 /**
  * Generates rails route to

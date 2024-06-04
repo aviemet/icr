@@ -9,6 +9,7 @@
 #
 class Household < ApplicationRecord
   include Contactable
+  include Shiftable
 
   pg_search_scope(
     :search,

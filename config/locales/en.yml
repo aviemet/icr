@@ -30,4 +30,42 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  activerecord:
+    errors:
+      messages:
+        taken: "There is already an account for this address, please log in instead"
+        
+  errors:
+    # The values :model, :attribute and :value are always available for interpolation
+    # The value :count is available when applicable. Can be used for pluralization.
+    messages:
+      model_invalid: "Validation failed: %{errors}"
+      inclusion: "Doesn't exist"
+      exclusion: "Is reserved"
+      invalid: "Not valid"
+      confirmation: "Doesn't match %{attribute}"
+      accepted: "Must be accepted"
+      empty: "Can't be empty"
+      blank: "Can't be blank"
+      present: "Must be blank"
+      too_long:
+        one: "Too long (maximum is 1 character)"
+        other: "Too long (maximum is %{count} characters)"
+      password_too_long: "Too long"
+      too_short:
+        one: "Too short (minimum is 1 character)"
+        other: "Too short (minimum is %{count} characters)"
+      wrong_length:
+        one: "Wrong length (should be 1 character)"
+        other: "Wrong length (should be %{count} characters)"
+      not_a_number: "Must be a number"
+      not_an_integer: "Must be an integer"
+      greater_than: "Must be greater than %{count}"
+      greater_than_or_equal_to: "Must be greater than or equal to %{count}"
+      equal_to: "Must be equal to %{count}"
+      less_than: "Must be less than %{count}"
+      less_than_or_equal_to: "Must be less than or equal to %{count}"
+      other_than: "Must be other than %{count}"
+      in: "Must be in %{count}"
+      odd: "Must be odd"
+      even: "Must be even"

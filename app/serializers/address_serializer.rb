@@ -29,8 +29,6 @@
 class AddressSerializer < ApplicationSerializer
   object_as :address
 
-  
-
   attributes(
     :title,
     :address,

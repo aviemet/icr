@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_02_225144) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_04_063031) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -52,28 +52,31 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_225144) do
     t.index ["contact_id"], name: "index_addresses_on_contact_id"
   end
 
-  create_table "cal_event_exceptions", force: :cascade do |t|
-    t.bigint "cal_event_id", null: false
+  create_table "calendar_event_exceptions", force: :cascade do |t|
+    t.bigint "calendar_event_id", null: false
     t.datetime "rescheduled", precision: nil
     t.datetime "cancelled", precision: nil
     t.datetime "starts_at"
     t.datetime "ends_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["cal_event_id"], name: "index_cal_event_exceptions_on_cal_event_id"
+    t.index ["calendar_event_id"], name: "index_calendar_event_exceptions_on_calendar_event_id"
   end
 
-  create_table "cal_events", force: :cascade do |t|
+  create_table "calendar_events", force: :cascade do |t|
     t.datetime "starts_at"
     t.datetime "ends_at"
     t.bigint "parent_id"
     t.bigint "recurring_pattern_id"
     t.bigint "created_by_id", null: false
+    t.string "schedulable_type"
+    t.bigint "schedulable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["created_by_id"], name: "index_cal_events_on_created_by_id"
-    t.index ["parent_id"], name: "index_cal_events_on_parent_id"
-    t.index ["recurring_pattern_id"], name: "index_cal_events_on_recurring_pattern_id"
+    t.index ["created_by_id"], name: "index_calendar_events_on_created_by_id"
+    t.index ["parent_id"], name: "index_calendar_events_on_parent_id"
+    t.index ["recurring_pattern_id"], name: "index_calendar_events_on_recurring_pattern_id"
+    t.index ["schedulable_type", "schedulable_id"], name: "index_calendar_events_on_schedulable"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -350,16 +353,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_225144) do
   end
 
   create_table "shifts", force: :cascade do |t|
-    t.bigint "cal_event_id"
-    t.bigint "client_id"
-    t.bigint "employee_id"
-    t.bigint "household_id", null: false
+    t.bigint "employee_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["cal_event_id"], name: "index_shifts_on_cal_event_id"
-    t.index ["client_id"], name: "index_shifts_on_client_id"
     t.index ["employee_id"], name: "index_shifts_on_employee_id"
-    t.index ["household_id"], name: "index_shifts_on_household_id"
+  end
+
+  create_table "shifts_shiftables", force: :cascade do |t|
+    t.bigint "shift_id", null: false
+    t.string "shiftable_type", null: false
+    t.bigint "shiftable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shift_id"], name: "index_shifts_shiftables_on_shift_id"
+    t.index ["shiftable_type", "shiftable_id"], name: "index_shifts_shiftables_on_shiftable"
   end
 
   create_table "users", force: :cascade do |t|
@@ -424,10 +431,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_225144) do
 
   add_foreign_key "addresses", "categories"
   add_foreign_key "addresses", "contacts"
-  add_foreign_key "cal_event_exceptions", "cal_events"
-  add_foreign_key "cal_events", "cal_events", column: "parent_id"
-  add_foreign_key "cal_events", "recurring_patterns"
-  add_foreign_key "cal_events", "users", column: "created_by_id"
+  add_foreign_key "calendar_event_exceptions", "calendar_events"
+  add_foreign_key "calendar_events", "calendar_events", column: "parent_id"
+  add_foreign_key "calendar_events", "recurring_patterns"
+  add_foreign_key "calendar_events", "users", column: "created_by_id"
   add_foreign_key "clients", "people"
   add_foreign_key "contacts", "addresses", column: "primary_address_id"
   add_foreign_key "contacts", "emails", column: "primary_email_id"
@@ -456,9 +463,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_225144) do
   add_foreign_key "prescriptions", "doctors"
   add_foreign_key "prescriptions", "dosages"
   add_foreign_key "prescriptions", "medications"
-  add_foreign_key "shifts", "cal_events"
-  add_foreign_key "shifts", "clients"
   add_foreign_key "shifts", "employees"
-  add_foreign_key "shifts", "households"
+  add_foreign_key "shifts_shiftables", "shifts"
   add_foreign_key "vendors", "categories"
 end

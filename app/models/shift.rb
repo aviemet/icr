@@ -2,38 +2,30 @@
 #
 # Table name: shifts
 #
-#  id           :bigint           not null, primary key
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  cal_event_id :bigint
-#  client_id    :bigint
-#  employee_id  :bigint
-#  household_id :bigint           not null
+#  id          :bigint           not null, primary key
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  employee_id :bigint           not null
 #
 # Indexes
 #
-#  index_shifts_on_cal_event_id  (cal_event_id)
-#  index_shifts_on_client_id     (client_id)
-#  index_shifts_on_employee_id   (employee_id)
-#  index_shifts_on_household_id  (household_id)
+#  index_shifts_on_employee_id  (employee_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (cal_event_id => cal_events.id)
-#  fk_rails_...  (client_id => clients.id)
 #  fk_rails_...  (employee_id => employees.id)
-#  fk_rails_...  (household_id => households.id)
 #
 class Shift < ApplicationRecord
+  include Schedulable
 
   pg_search_scope(
     :search,
-    against: [:cal_event, :client, :employee, :household],
+    against: [:calendar_event, :client, :employee, :household],
     associated_against: {
-      cal_event: [],
-      client: [],
-      employee: [],
-      household: [],
+      calendar_event: [],
+      employee: [:number],
+      clients: [:numbers],
+      households: [:name],
     },
     using: {
       tsearch: { prefix: true },
@@ -43,12 +35,28 @@ class Shift < ApplicationRecord
 
   resourcify
 
-  belongs_to :cal_event
-  belongs_to :client
-  belongs_to :employee
-  belongs_to :household
-
   belongs_to :created_by, class_name: "User", optional: true
 
-  scope :includes_associated, -> { includes([:cal_event, :client, :employee, :household]) }
+  belongs_to :employee
+
+  has_many :shifts_shiftables, dependent: :nullify
+  has_many :clients, through: :shifts_shiftables, source: :shiftable, source_type: 'Client'
+  has_many :households, through: :shifts_shiftables, source: :shiftable, source_type: 'Household'
+
+  validate :at_least_one_shiftable
+
+  scope :includes_associated, -> { includes([:calendar_event, :employee,  :clients, :households]) }
+
+  # TODO: This needs to be customizable
+  def title
+    "#{calendar_event&.starts_at&.hour} - #{employee.first_name}"
+  end
+
+  private
+
+  def at_least_one_shiftable
+    unless clients.present? || households.present?
+      errors.add(:shiftable, "Shift must have at least one associated Client or Household")
+    end
+  end
 end

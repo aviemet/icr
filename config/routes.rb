@@ -73,9 +73,9 @@ Rails.application.routes.draw do
 
   resources :employees_job_titles
 
-  resources :cal_event_exceptions
+  resources :calendar_event_exceptions
 
-  resources :cal_events
+  resources :calendar_events
 
   resources :identifications
 

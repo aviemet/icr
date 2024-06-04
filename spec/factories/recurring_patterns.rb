@@ -24,6 +24,6 @@ FactoryBot.define do
     # day_of_month { 1 }
     # month_of_year { 1 }
 
-    cal_event
+    calendar_event
   end
 end
