@@ -21,12 +21,11 @@ const Sidebar = () => {
 	return (
 		<IconProvider size="1.2rem">
 			<AppShell.Navbar
-				p="xs"
+				p={ 0 }
 				hidden={ !sidebarOpen }
 				className={ cx(classes.navbar) }
 			>
-				<Box className={ cx(classes.bubbleWrapper) }>
-
+				<Box>
 					<Box m="xs">
 						<Group justify="flex-end">
 							<ToggleSidebarButton />
@@ -65,7 +64,6 @@ const Sidebar = () => {
 							<li><MenuLink href="/" icon={ <EmployeeIcon /> }>Employees</MenuLink></li>
 						</ul>
 					</Box>
-
 				</Box>
 
 			</AppShell.Navbar>

@@ -36,24 +36,7 @@ export const navbar = css`
 	overflow-y: clip;
 	
 	${vars.lightSelector} {
-		background-color: ${vars.colors.white};
-		border-right: none;
-	}
-
-	${vars.darkSelector} {
-		background-color: ${vars.colors.dark[6]};
-	} 
-
-	.links.closed .link-text {
-		display: none;
-	}
-`
-
-export const bubbleWrapper = css`
-	border-radius: ${vars.radius.md};
-	height: 100%;
-
-	${vars.lightSelector} {
+		border-right-color: ${vars.colors.gray[2]};
 		background-color: ${vars.colors.gray[2]};
 	}
 
