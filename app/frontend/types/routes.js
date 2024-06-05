@@ -578,6 +578,23 @@ export const apiUsers = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"a
 
 /**
  * Generates rails route to
+ * /appointments/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const appointment = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"appointments"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /appointments(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const appointments = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"appointments"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
  * /calendar_events/:id(.:format)
  * @param {any} id
  * @param {object | undefined} options
@@ -676,6 +693,15 @@ export const dosage = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7
  * @returns {string} route path
  */
 export const dosages = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"dosages"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
+ * /appointments/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const editAppointment = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"appointments"],[2,[7,"/"],[2,[3,"id"],[2,[7,"/"],[2,[6,"edit"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
 
 /**
  * Generates rails route to
@@ -955,6 +981,14 @@ export const medication = /*#__PURE__*/ __jsr.r({"id":{"r":true},"format":{}}, [
  * @returns {string} route path
  */
 export const medications = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"medications"],[1,[2,[8,"."],[3,"format"]]]]]);
+
+/**
+ * Generates rails route to
+ * /appointments/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newAppointment = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"appointments"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]);
 
 /**
  * Generates rails route to

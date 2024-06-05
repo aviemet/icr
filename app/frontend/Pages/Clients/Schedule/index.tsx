@@ -19,10 +19,11 @@ import { modals } from '@mantine/modals'
 interface ScheduleProps {
 	client: Schema.Client
 	employees: Schema.Employee[]
-	shifts: Schema.Shift[]
+	schedules: Schema.CalendarEvent[]
 }
 
-const Schedule = ({ client, employees, shifts }: ScheduleProps) => {
+const Schedule = ({ client, employees, schedules }: ScheduleProps) => {
+	console.log({ schedules })
 	const handleSelectEvent = (event: Event, e: React.SyntheticEvent<HTMLElement, globalThis.Event>) => {
 		modals.open({
 			title: 'Event Details',
@@ -66,11 +67,11 @@ const Schedule = ({ client, employees, shifts }: ScheduleProps) => {
 			<h1>{ client.person.name }</h1>
 			<Box>
 				<Calendar
-					events={ shifts.map(shift => (
+					events={ schedules.map(schedule => (
 						{
-							title: shift.title,
-							start: new Date(shift.calendar_event.starts_at),
-							end: new Date(shift.calendar_event.ends_at),
+							title: schedule.employee.name,
+							start: schedule.starts_at,
+							end: schedule.ends_at,
 						}
 					)) }
 					onSelectEvent={ handleSelectEvent }

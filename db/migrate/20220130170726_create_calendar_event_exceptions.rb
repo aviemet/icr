@@ -1,4 +1,4 @@
-class CreateCalEventExceptions < ActiveRecord::Migration[7.0]
+class CreateCalendarEventExceptions < ActiveRecord::Migration[7.0]
   def change
     create_table :calendar_event_exceptions do |t|
       t.references :calendar_event, null: false, foreign_key: true

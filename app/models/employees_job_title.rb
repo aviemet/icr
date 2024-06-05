@@ -35,7 +35,6 @@ class EmployeesJobTitle < ApplicationRecord
     },
   )
 
-  tracked
   resourcify
 
   belongs_to :employee

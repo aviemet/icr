@@ -4,21 +4,18 @@
 #
 #  id                   :bigint           not null, primary key
 #  ends_at              :datetime
-#  schedulable_type     :string
 #  starts_at            :datetime
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  created_by_id        :bigint           not null
 #  parent_id            :bigint
 #  recurring_pattern_id :bigint
-#  schedulable_id       :bigint
 #
 # Indexes
 #
 #  index_calendar_events_on_created_by_id         (created_by_id)
 #  index_calendar_events_on_parent_id             (parent_id)
 #  index_calendar_events_on_recurring_pattern_id  (recurring_pattern_id)
-#  index_calendar_events_on_schedulable           (schedulable_type,schedulable_id)
 #
 # Foreign Keys
 #

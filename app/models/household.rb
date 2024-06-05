@@ -9,7 +9,7 @@
 #
 class Household < ApplicationRecord
   include Contactable
-  include Shiftable
+  include Participantable
 
   pg_search_scope(
     :search,
@@ -26,4 +26,6 @@ class Household < ApplicationRecord
 
   has_many :households_clients, dependent: :nullify
   has_many :clients, through: :households_clients, dependent: :nullify
+
+  has_many :shifts, through: :event_participants, source: :event, source_type: 'Shift'
 end

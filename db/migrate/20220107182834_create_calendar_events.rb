@@ -1,4 +1,4 @@
-class CreateCalEvents < ActiveRecord::Migration[7.0]
+class CreateCalendarEvents < ActiveRecord::Migration[7.0]
   def change
     create_table :calendar_events do |t|
       t.datetime :starts_at
@@ -10,7 +10,7 @@ class CreateCalEvents < ActiveRecord::Migration[7.0]
 
       t.references :created_by, null: false, foreign_key: { to_table: :users }
 
-      t.references :schedulable, polymorphic: true, index: true
+      # t.references :schedulable, polymorphic: true, index: true
 
       t.timestamps
     end

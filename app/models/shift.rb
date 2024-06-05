@@ -2,21 +2,24 @@
 #
 # Table name: shifts
 #
-#  id          :bigint           not null, primary key
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  employee_id :bigint           not null
+#  id                :bigint           not null, primary key
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  calendar_event_id :bigint           not null
+#  employee_id       :bigint           not null
 #
 # Indexes
 #
-#  index_shifts_on_employee_id  (employee_id)
+#  index_shifts_on_calendar_event_id  (calendar_event_id)
+#  index_shifts_on_employee_id        (employee_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (calendar_event_id => calendar_events.id)
 #  fk_rails_...  (employee_id => employees.id)
 #
 class Shift < ApplicationRecord
-  include Schedulable
+  include Eventable
 
   pg_search_scope(
     :search,
@@ -39,15 +42,14 @@ class Shift < ApplicationRecord
 
   belongs_to :employee
 
-  has_many :shifts_shiftables, dependent: :nullify
-  has_many :clients, through: :shifts_shiftables, source: :shiftable, source_type: 'Client'
-  has_many :households, through: :shifts_shiftables, source: :shiftable, source_type: 'Household'
+  has_many :event_participants, as: :event, dependent: :nullify
+  has_many :clients, through: :event_participants, source: :participant, source_type: 'Client'
+  has_many :households, through: :event_participants, source: :participant, source_type: 'Household'
 
   validate :at_least_one_shiftable
 
   scope :includes_associated, -> { includes([:calendar_event, :employee,  :clients, :households]) }
 
-  # TODO: This needs to be customizable
   def title
     "#{calendar_event&.starts_at&.hour} - #{employee.first_name}"
   end
@@ -59,4 +61,5 @@ class Shift < ApplicationRecord
       errors.add(:shiftable, "Shift must have at least one associated Client or Household")
     end
   end
+
 end

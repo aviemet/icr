@@ -44,12 +44,12 @@ class ClientsController < ApplicationController
 
   # @route GET /clients/:id/schedule (schedule_client)
   def schedule
-    shifts = client.shifts.includes(:employee, :clients, :households).between(range_start, range_end)
+    schedules = client.schedules.between(range_start, range_end)
 
     render inertia: "Clients/Schedule", props: {
       client: client.render,
-      shifts: lambda {
-        shifts.render(view: :show)
+      schedules: lambda {
+        schedules.render(view: :show)
       },
     }
   end

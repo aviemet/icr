@@ -142,6 +142,28 @@ export const apiUsers: ((
 
 /**
  * Generates rails route to
+ * /appointments/:id(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const appointment: ((
+  id: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /appointments(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const appointments: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
  * /calendar_events/:id(.:format)
  * @param {any} id
  * @param {object | undefined} options
@@ -267,6 +289,18 @@ export const dosage: ((
  * @returns {string} route path
  */
 export const dosages: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /appointments/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const editAppointment: ((
+  id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -633,6 +667,16 @@ export const medication: ((
  * @returns {string} route path
  */
 export const medications: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /appointments/new(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const newAppointment: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 

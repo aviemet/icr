@@ -20,7 +20,28 @@
 #  fk_rails_...  (person_id => people.id)
 #
 require 'rails_helper'
+require "models/concerns/shiftable"
 
 RSpec.describe Client, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  subject(:client) { build_stubbed(:client) }
+
+  describe "Validations" do
+    it "is valid with valid attributes" do
+      expect(build(:client)).to be_valid
+    end
+
+    it "is invalid with invalid atributes" do
+      expect(build(:client, {
+        person: nil
+      },)).not_to be_valid
+    end
+  end
+
+  describe "Associations" do
+    it_behaves_like "shiftable"
+
+    it "has a schedule" do
+
+    end
+  end
 end
