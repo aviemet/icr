@@ -2,7 +2,7 @@
 #
 # Table name: recurring_patterns
 #
-#  id             :bigint           not null, primary key
+#  id             :uuid             not null, primary key
 #  day_of_month   :integer
 #  day_of_week    :integer
 #  end_date       :integer

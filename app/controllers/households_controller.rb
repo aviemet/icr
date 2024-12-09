@@ -7,28 +7,28 @@ class HouseholdsController < ApplicationController
   def index
     authorize households
     render inertia: "Household/Index", props: {
-      households: -> { households.render(view: :index) }
+      households: -> { households.render(:index) }
     }
   end
 
   def show
     authorize household
     render inertia: "Household/Show", props: {
-      household: -> { household.render(view: :show) }
+      household: -> { household.render(:show) }
     }
   end
 
   def new
     authorize Household.new
     render inertia: "Household/New", props: {
-      household: Household.new.render(view: :form_data)
+      household: Household.new.render(:form_data)
     }
   end
 
   def edit
     authorize household
     render inertia: "Household/Edit", props: {
-      household: household.render(view: :edit)
+      household: household.render(:edit)
     }
   end
 

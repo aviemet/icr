@@ -8,7 +8,7 @@ class VendorsController < ApplicationController
   def index
     authorize vendors
     render inertia: "Vendor/Index", props: {
-      vendors: -> { vendors.render(view: :index) }
+      vendors: -> { vendors.render(:index) }
     }
   end
 
@@ -16,7 +16,7 @@ class VendorsController < ApplicationController
   def show
     authorize vendor
     render inertia: "Vendor/Show", props: {
-      vendor: -> { vendor.render(view: :show) }
+      vendor: -> { vendor.render(:show) }
     }
   end
 
@@ -24,7 +24,7 @@ class VendorsController < ApplicationController
   def new
     authorize Vendor.new
     render inertia: "Vendor/New", props: {
-      vendor: Vendor.new.render(view: :form_data)
+      vendor: Vendor.new.render(:form_data)
     }
   end
 
@@ -32,7 +32,7 @@ class VendorsController < ApplicationController
   def edit
     authorize vendor
     render inertia: "Vendor/Edit", props: {
-      vendor: vendor.render(view: :edit)
+      vendor: vendor.render(:edit)
     }
   end
 

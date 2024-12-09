@@ -2,7 +2,7 @@
 #
 # Table name: shift_types
 #
-#  id         :bigint           not null, primary key
+#  id         :uuid             not null, primary key
 #  notes      :text
 #  title      :string
 #  created_at :datetime         not null

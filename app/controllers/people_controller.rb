@@ -10,7 +10,7 @@ class PeopleController < ApplicationController
     paginated_people = people.page(params[:page] || 1).per(current_user.limit(:people))
 
     render inertia: "People/Index", props: {
-      people: -> { paginated_people.render(view: :index) },
+      people: -> { paginated_people.render(:index) },
       pagination: -> { {
         count: people.count,
         **pagination_data(paginated_people)
@@ -22,7 +22,7 @@ class PeopleController < ApplicationController
   def show
     authorize person
     render inertia: "People/Show", props: {
-      person: -> { person.render(view: :show) }
+      person: -> { person.render(:show) }
     }
   end
 
@@ -30,7 +30,7 @@ class PeopleController < ApplicationController
   def new
     authorize Person.new
     render inertia: "People/New", props: {
-      person: Person.new.render(view: :form_data)
+      person: Person.new.render(:form_data)
     }
   end
 
@@ -38,7 +38,7 @@ class PeopleController < ApplicationController
   def edit
     authorize person
     render inertia: "People/Edit", props: {
-      person: person.render(view: :edit)
+      person: person.render(:edit)
     }
   end
 

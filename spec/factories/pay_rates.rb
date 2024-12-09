@@ -2,7 +2,7 @@
 #
 # Table name: pay_rates
 #
-#  id            :bigint           not null, primary key
+#  id            :uuid             not null, primary key
 #  notes         :text
 #  period        :integer          not null
 #  rate_cents    :integer          default(0), not null

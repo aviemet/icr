@@ -2,24 +2,29 @@
 #
 # Table name: employees
 #
-#  id          :bigint           not null, primary key
+#  id          :uuid             not null, primary key
 #  active_at   :date
 #  color       :string
 #  inactive_at :date
 #  number      :string
+#  slug        :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  person_id   :bigint           not null
+#  person_id   :uuid             not null
 #
 # Indexes
 #
 #  index_employees_on_person_id  (person_id)
+#  index_employees_on_slug       (slug) UNIQUE
 #
 # Foreign Keys
 #
 #  fk_rails_...  (person_id => people.id)
 #
 class Employee < ApplicationRecord
+  extend FriendlyId
+  friendly_id :slug_candidates, use: [:slugged, :history]
+
   include Identificationable
   include Participantable
 
@@ -55,4 +60,13 @@ class Employee < ApplicationRecord
   accepts_nested_attributes_for :person
 
   scope :includes_associated, -> { includes([:person, :identifications, :job_titles, :pay_rates]) }
+
+  private
+
+  def slug_candidates
+    [
+      person.name,
+      [person.name, :number]
+    ]
+  end
 end

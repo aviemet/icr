@@ -8,7 +8,7 @@ class EmployeesController < ApplicationController
   def index
     authorize employees
     render inertia: "Employee/Index", props: {
-      employees: -> { employees.render(view: :index) }
+      employees: -> { employees.render(:index) }
     }
   end
 
@@ -16,7 +16,7 @@ class EmployeesController < ApplicationController
   def show
     authorize employee
     render inertia: "Employee/Show", props: {
-      employee: -> { employee.render(view: :show) }
+      employee: -> { employee.render(:show) }
     }
   end
 
@@ -24,7 +24,7 @@ class EmployeesController < ApplicationController
   def new
     authorize Employee.new
     render inertia: "Employee/New", props: {
-      employee: Employee.new.render(view: :form_data)
+      employee: Employee.new.render(:form_data)
     }
   end
 
@@ -32,7 +32,7 @@ class EmployeesController < ApplicationController
   def edit
     authorize employee
     render inertia: "Employee/Edit", props: {
-      employee: employee.render(view: :edit)
+      employee: employee.render(:edit)
     }
   end
 

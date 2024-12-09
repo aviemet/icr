@@ -2,13 +2,13 @@
 #
 # Table name: employees_job_titles
 #
-#  id           :bigint           not null, primary key
+#  id           :uuid             not null, primary key
 #  ends_at      :date
 #  starts_at    :date             not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
-#  employee_id  :bigint           not null
-#  job_title_id :bigint           not null
+#  employee_id  :uuid             not null
+#  job_title_id :uuid             not null
 #
 # Indexes
 #

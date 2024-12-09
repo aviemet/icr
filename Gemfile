@@ -1,11 +1,11 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.3.2"
+ruby "3.3.4"
 
 # Server
-gem "rails", ">= 7.1"
-gem "pg", ">= 1.1"
+gem "rails", ">= 7.2"
+gem "pg", ">= 1.5"
 gem "puma", ">= 6.0"
 
 # Assets
@@ -34,11 +34,12 @@ gem "factory_bot_rails", ">= 6.4"
 gem "js-routes", ">= 2.2"
 gem "net-ldap", ">= 0.18.0"
 gem "ice_cube", ">= 0.16.4"
-gem "foreman", ">= 0.87.2"
 gem "amazing_print", ">= 1.4"
+gem "overmind", "~> 2.5"
 gem "eventmachine", ">= 1.2"
 gem "countries", ">= 6.0"
 gem "delayed_job_active_record", ">= 4.1"
+gem "friendly_id", "~> 5.5"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data"
@@ -64,7 +65,6 @@ group :development, :test do
   gem "faker", git: "https://github.com/faker-ruby/faker.git", branch: "main"
 
   # Linting
-  gem "solargraph-rails", ">= 1.1"
   gem "rubocop-rails", ">= 2.14", require: false
   gem "rubocop-rspec", ">= 2.9", require: false
   gem "rubocop-performance", ">= 1.13", require: false
@@ -89,6 +89,16 @@ group :development do
   # Live Reload
   gem "rack-livereload", ">= 0.3.17"
   gem "guard-livereload", ">= 2.5", require: false
+
+  gem "brakeman", "~> 6.1", require: false
+
+  gem "letter_opener", "~> 1.10"
+
+  # I18n
+  # Report unused and missing locale keys [https://github.com/glebm/i18n-tasks]
+  gem "i18n-tasks", "~> 1.0", require: false
+  # Generate json and ts locale files from locale.yml files [https://github.com/fnando/i18n-js]
+  gem "i18n-js", "~> 4.2", require: false
 end
 
 group :test do

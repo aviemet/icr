@@ -2,15 +2,15 @@
 #
 # Table name: contacts
 #
-#  id                 :bigint           not null, primary key
+#  id                 :uuid             not null, primary key
 #  contactable_type   :string           not null
 #  notes              :text
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
-#  contactable_id     :bigint           not null
-#  primary_address_id :bigint
-#  primary_email_id   :bigint
-#  primary_phone_id   :bigint
+#  contactable_id     :uuid             not null
+#  primary_address_id :uuid
+#  primary_email_id   :uuid
+#  primary_phone_id   :uuid
 #
 # Indexes
 #

@@ -8,7 +8,7 @@ class MedicationsController < ApplicationController
   def index
     authorize medications
     render inertia: "Medication/Index", props: {
-      medications: -> { medications.render(view: :index) }
+      medications: -> { medications.render(:index) }
     }
   end
 
@@ -16,7 +16,7 @@ class MedicationsController < ApplicationController
   def show
     authorize medication
     render inertia: "Medication/Show", props: {
-      medication: -> { medication.render(view: :show) }
+      medication: -> { medication.render(:show) }
     }
   end
 
@@ -24,7 +24,7 @@ class MedicationsController < ApplicationController
   def new
     authorize Medication.new
     render inertia: "Medication/New", props: {
-      medication: Medication.new.render(view: :form_data)
+      medication: Medication.new.render(:form_data)
     }
   end
 
@@ -32,7 +32,7 @@ class MedicationsController < ApplicationController
   def edit
     authorize medication
     render inertia: "Medication/Edit", props: {
-      medication: medication.render(view: :edit)
+      medication: medication.render(:edit)
     }
   end
 

@@ -1,9 +1,37 @@
 Description:
   Generates custom serializer
 
+  --base-only Only generates the base level serializer
+
+  --only [actions] Generates only the actions specified
+
+  --except [actions] Doesn't generate the actions specified
+
 Example:
-  bin/rails generate serializer model index show
+  bin/rails generate serializer model
 
   This will create:
+    app/serializers/model_serializer.rb
+    app/serializers/model/edit_serializer.rb
+    app/serializers/model/form_data_serializer.rb
     app/serializers/model/index_serializer.rb
+    app/serializers/model/show_serializer.rb
+
+  bin/rails generate serializer model --base-only
+
+  This will create:
+    app/serializers/model_serializer.rb
+
+  bin/rails generate serializer model --only index
+
+  This will create:
+    app/serializers/model_serializer.rb
+    app/serializers/model/index_serializer.rb
+
+  bin/rails generate serializer model --except index
+
+  This will create:
+    app/serializers/model_serializer.rb
+    app/serializers/model/edit_serializer.rb
+    app/serializers/model/form_data_serializer.rb
     app/serializers/model/show_serializer.rb

@@ -1,0 +1,6 @@
+class Orders::IndexSerializer < ApplicationSerializer
+  object_as :order
+
+  attributes(
+  )
+end

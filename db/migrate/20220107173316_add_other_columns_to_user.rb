@@ -9,6 +9,8 @@ class AddOtherColumnsToUser < ActiveRecord::Migration[7.0]
 
       t.jsonb :user_preferences, default: {}
       t.index :user_preferences, using: :gin
+
+      t.string :slug, null: false, index: { unique: true }
     end
   end
 end

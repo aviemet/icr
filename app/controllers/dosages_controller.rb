@@ -8,7 +8,7 @@ class DosagesController < ApplicationController
   def index
     authorize dosages
     render inertia: "Dosage/Index", props: {
-      dosages: -> { dosages.render(view: :index) }
+      dosages: -> { dosages.render(:index) }
     }
   end
 
@@ -16,7 +16,7 @@ class DosagesController < ApplicationController
   def show
     authorize dosage
     render inertia: "Dosage/Show", props: {
-      dosage: -> { dosage.render(view: :show) }
+      dosage: -> { dosage.render(:show) }
     }
   end
 
@@ -24,7 +24,7 @@ class DosagesController < ApplicationController
   def new
     authorize Dosage.new
     render inertia: "Dosage/New", props: {
-      dosage: Dosage.new.render(view: :form_data)
+      dosage: Dosage.new.render(:form_data)
     }
   end
 
@@ -32,7 +32,7 @@ class DosagesController < ApplicationController
   def edit
     authorize dosage
     render inertia: "Dosage/Edit", props: {
-      dosage: dosage.render(view: :edit)
+      dosage: dosage.render(:edit)
     }
   end
 

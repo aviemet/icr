@@ -2,12 +2,12 @@
 #
 # Table name: doctors_clients
 #
-#  id         :bigint           not null, primary key
+#  id         :uuid             not null, primary key
 #  notes      :text
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  client_id  :bigint           not null
-#  doctor_id  :bigint           not null
+#  client_id  :uuid             not null
+#  doctor_id  :uuid             not null
 #
 # Indexes
 #

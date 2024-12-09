@@ -8,28 +8,28 @@ class ShiftsController < ApplicationController
   def index
     authorize shifts
     render inertia: "Shift/Index", props: {
-      shifts: -> { shifts.render(view: :index) }
+      shifts: -> { shifts.render(:index) }
     }
   end
 
   def show
     authorize shift
     render inertia: "Shift/Show", props: {
-      shift: -> { shift.render(view: :show) }
+      shift: -> { shift.render(:show) }
     }
   end
 
   def new
     authorize Shift.new
     render inertia: "Shift/New", props: {
-      shift: Shift.new.render(view: :form_data)
+      shift: Shift.new.render(:form_data)
     }
   end
 
   def edit
     authorize shift
     render inertia: "Shift/Edit", props: {
-      shift: shift.render(view: :edit)
+      shift: shift.render(:edit)
     }
   end
 

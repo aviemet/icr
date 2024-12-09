@@ -15,13 +15,14 @@ module Icr
     #
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
-    #
-    # config.time_zone = "Pacific Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
+
+    config.time_zone = "Pacific Time (US & Canada)"
 
     config.autoload_paths += %W[#{config.root}/lib]
 
     config.generators do |g|
+      g.orm :active_record, primary_key_type: :uuid
+
       g.test_framework      :rspec
       g.view_specs          false
       g.routing_specs       false

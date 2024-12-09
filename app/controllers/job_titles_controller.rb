@@ -11,7 +11,7 @@ class JobTitlesController < ApplicationController
     paginated_job_titles = job_titles.page(params[:page] || 1).per(current_user.limit(:items))
 
     render inertia: "JobTitles/Index", props: {
-      job_titles: -> { paginated_job_titles.render(view: :index) }
+      job_titles: -> { paginated_job_titles.render(:index) }
     }
   end
 
@@ -19,7 +19,7 @@ class JobTitlesController < ApplicationController
   def show
     authorize job_title
     render inertia: "JobTitles/Show", props: {
-      job_title: -> { job_title.render(view: :show) }
+      job_title: -> { job_title.render(:show) }
     }
   end
 
@@ -27,7 +27,7 @@ class JobTitlesController < ApplicationController
   def new
     authorize JobTitle.new
     render inertia: "JobTitles/New", props: {
-      job_title: JobTitle.new.render(view: :new)
+      job_title: JobTitle.new.render(:new)
     }
   end
 
@@ -35,7 +35,7 @@ class JobTitlesController < ApplicationController
   def edit
     authorize job_title
     render inertia: "JobTitles/Edit", props: {
-      job_title: job_title.render(view: :edit)
+      job_title: job_title.render(:edit)
     }
   end
 

@@ -8,6 +8,7 @@ import path from 'path'
 
 const config = defineConfig({
 	build: {
+		sourcemap: true,
 		rollupOptions: {
 			external: [
 				'./app/frontend/Images/*',

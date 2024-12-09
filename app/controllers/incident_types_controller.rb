@@ -8,7 +8,7 @@ class IncidentTypesController < ApplicationController
   def index
     authorize incident_types
     render inertia: "IncidentType/Index", props: {
-      incident_types: -> { incident_types.render(view: :index) }
+      incident_types: -> { incident_types.render(:index) }
     }
   end
 
@@ -16,7 +16,7 @@ class IncidentTypesController < ApplicationController
   def show
     authorize incident_type
     render inertia: "IncidentType/Show", props: {
-      incident_type: -> { incident_type.render(view: :show) }
+      incident_type: -> { incident_type.render(:show) }
     }
   end
 
@@ -24,7 +24,7 @@ class IncidentTypesController < ApplicationController
   def new
     authorize IncidentType.new
     render inertia: "IncidentType/New", props: {
-      incident_type: IncidentType.new.render(view: :form_data)
+      incident_type: IncidentType.new.render(:form_data)
     }
   end
 
@@ -32,7 +32,7 @@ class IncidentTypesController < ApplicationController
   def edit
     authorize incident_type
     render inertia: "IncidentType/Edit", props: {
-      incident_type: incident_type.render(view: :edit)
+      incident_type: incident_type.render(:edit)
     }
   end
 

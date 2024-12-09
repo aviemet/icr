@@ -10,7 +10,7 @@ class ClientsController < ApplicationController
     paginated_clients = clients.page(params[:page] || 1).per(current_user.limit(:clients))
 
     render inertia: "Clients/Index", props: {
-      clients: -> { paginated_clients.render(view: :index) },
+      clients: -> { paginated_clients.render(:index) },
       pagination: -> { {
         count: clients.count,
         **pagination_data(paginated_clients)
@@ -22,7 +22,7 @@ class ClientsController < ApplicationController
   def show
     authorize client
     render inertia: "Clients/Show", props: {
-      client: -> { client.render(view: :show) }
+      client: -> { client.render(:show) }
     }
   end
 
@@ -30,7 +30,7 @@ class ClientsController < ApplicationController
   def new
     authorize Client.new
     render inertia: "Clients/New", props: {
-      client: Client.new.render(view: :form_data)
+      client: Client.new.render(:form_data)
     }
   end
 
@@ -38,7 +38,7 @@ class ClientsController < ApplicationController
   def edit
     authorize client
     render inertia: "Clients/Edit", props: {
-      client: client.render(view: :edit)
+      client: client.render(:edit)
     }
   end
 
@@ -49,7 +49,7 @@ class ClientsController < ApplicationController
     render inertia: "Clients/Schedule", props: {
       client: client.render,
       schedules: lambda {
-        schedules.render(view: :show)
+        schedules.render(:show)
       },
     }
   end

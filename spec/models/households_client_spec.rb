@@ -2,13 +2,13 @@
 #
 # Table name: households_clients
 #
-#  id           :bigint           not null, primary key
+#  id           :uuid             not null, primary key
 #  ends_at      :date
 #  starts_at    :date
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
-#  client_id    :bigint           not null
-#  household_id :bigint           not null
+#  client_id    :uuid             not null
+#  household_id :uuid             not null
 #
 # Indexes
 #

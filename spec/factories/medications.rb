@@ -2,7 +2,7 @@
 #
 # Table name: medications
 #
-#  id           :bigint           not null, primary key
+#  id           :uuid             not null, primary key
 #  generic_name :string
 #  name         :string
 #  notes        :text

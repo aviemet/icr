@@ -1,8 +1,8 @@
-class <%= modelast_name.pluralize.camelize %>::EditSerializer < <%= modelast_name.camelize %>Serializer
+class <%= model_name.pluralize.camelize %>::EditSerializer < ApplicationSerializer
+  object_as :<%= model_name %>
 
   attributes(
-    :id,
-    :updated_at,
-    :created_at,
+    :id,<% model_attributes&.reject{ |attr| ["updated_at", "created_at"].include?(attr) }&.each do |attribute| %>
+    :<%= attribute %>,<% end %>
   )
 end

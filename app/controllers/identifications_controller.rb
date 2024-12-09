@@ -8,7 +8,7 @@ class IdentificationsController < ApplicationController
   def index
     authorize identifications
     render inertia: "Identification/Index", props: {
-      identifications: -> { identifications.render(view: :index) }
+      identifications: -> { identifications.render(:index) }
     }
   end
 
@@ -16,7 +16,7 @@ class IdentificationsController < ApplicationController
   def show
     authorize identification
     render inertia: "Identification/Show", props: {
-      identification: -> { identification.render(view: :show) }
+      identification: -> { identification.render(:show) }
     }
   end
 
@@ -24,7 +24,7 @@ class IdentificationsController < ApplicationController
   def new
     authorize Identification.new
     render inertia: "Identification/New", props: {
-      identification: Identification.new.render(view: :form_data)
+      identification: Identification.new.render(:form_data)
     }
   end
 
@@ -32,7 +32,7 @@ class IdentificationsController < ApplicationController
   def edit
     authorize identification
     render inertia: "Identification/Edit", props: {
-      identification: identification.render(view: :edit)
+      identification: identification.render(:edit)
     }
   end
 

@@ -2,13 +2,13 @@
 #
 # Table name: event_participants
 #
-#  id               :bigint           not null, primary key
+#  id               :uuid             not null, primary key
 #  event_type       :string           not null
 #  participant_type :string           not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  event_id         :bigint           not null
-#  participant_id   :bigint           not null
+#  event_id         :uuid             not null
+#  participant_id   :uuid             not null
 #
 # Indexes
 #

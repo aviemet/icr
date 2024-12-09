@@ -2,14 +2,21 @@
 #
 # Table name: doctors
 #
-#  id         :bigint           not null, primary key
+#  id         :uuid             not null, primary key
 #  first_name :string
 #  last_name  :string
 #  notes      :text
+#  slug       :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_doctors_on_slug  (slug) UNIQUE
+#
 class Doctor < ApplicationRecord
+  extend FriendlyId
+  friendly_id :name, use: [:slugged, :history]
 
   pg_search_scope(
     :search,
@@ -27,4 +34,8 @@ class Doctor < ApplicationRecord
   has_many :prescriptions, dependent: :nullify
 
   scope :includes_associated, -> { includes([]) }
+
+  def name
+    "#{first_name} #{last_name}"
+  end
 end

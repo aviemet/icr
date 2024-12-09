@@ -17,10 +17,10 @@ const <%= singular_table_name.camelize %>Table = (props: TableProps) => {
 				<Table.RowIterator render={ (<%= singular_table_name %>: Schema.<%= plural_table_name.camelize %>Index) => (
 					<Table.Row key={ <%= singular_table_name %>.id }><% attributes.each do |column| %>
 						<% unless column.type == :references %><Table.Cell>
-							<Link href={ Routes.<%= singular_table_name.camelize(:lower) %>(<%= singular_table_name %>.id) }>{ <%= singular_table_name %>.<%= column.name %> }</Link>
+							<Link href={ Routes.<%= singular_table_name.camelize(:lower) %>(<%= singular_table_name %><%= attributes.include?(:slug) ? ".slug" : ".id" %>) }>{ <%= singular_table_name %>.<%= column.name %> }</Link>
 						</Table.Cell><% end; end %>
 						<Table.Cell>
-							<EditButton href={ Routes.edit<%= singular_table_name.camelize %>(<%= singular_table_name %>.id) } />
+							<EditButton href={ Routes.edit<%= singular_table_name.camelize %>(<%= singular_table_name %><%= attributes.include?(:slug) ? ".slug" : ".id" %>) } />
 						</Table.Cell>
 					</Table.Row>
 				) } />

@@ -2,7 +2,7 @@
 #
 # Table name: incident_reports
 #
-#  id                 :bigint           not null, primary key
+#  id                 :uuid             not null, primary key
 #  agency_notified_at :datetime
 #  description        :text
 #  location           :string
@@ -10,10 +10,10 @@
 #  reported_at        :datetime
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
-#  client_id          :bigint           not null
-#  incident_type_id   :bigint           not null
-#  reported_by_id     :bigint           not null
-#  reported_to_id     :bigint           not null
+#  client_id          :uuid             not null
+#  incident_type_id   :uuid             not null
+#  reported_by_id     :uuid             not null
+#  reported_to_id     :uuid             not null
 #
 # Indexes
 #

@@ -10,11 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_04_215320) do
+ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "unaccent"
+  enable_extension "uuid-ossp"
 
   create_table "activities", id: :serial, force: :cascade do |t|
     t.string "trackable_type"
@@ -35,7 +37,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_04_215320) do
     t.index ["trackable_type", "trackable_id"], name: "index_activities_on_trackable_type_and_trackable_id"
   end
 
-  create_table "addresses", force: :cascade do |t|
+  create_table "addresses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "title"
     t.string "address"
     t.string "address_2"
@@ -44,24 +46,24 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_04_215320) do
     t.integer "country"
     t.string "postal"
     t.text "notes"
-    t.bigint "contact_id", null: false
-    t.bigint "category_id"
+    t.uuid "contact_id", null: false
+    t.uuid "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_addresses_on_category_id"
     t.index ["contact_id"], name: "index_addresses_on_contact_id"
   end
 
-  create_table "appointments", force: :cascade do |t|
+  create_table "appointments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
-    t.bigint "calendar_event_id", null: false
+    t.uuid "calendar_event_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["calendar_event_id"], name: "index_appointments_on_calendar_event_id"
   end
 
-  create_table "calendar_event_exceptions", force: :cascade do |t|
-    t.bigint "calendar_event_id", null: false
+  create_table "calendar_event_exceptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "calendar_event_id", null: false
     t.datetime "rescheduled", precision: nil
     t.datetime "cancelled", precision: nil
     t.datetime "starts_at"
@@ -71,12 +73,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_04_215320) do
     t.index ["calendar_event_id"], name: "index_calendar_event_exceptions_on_calendar_event_id"
   end
 
-  create_table "calendar_events", force: :cascade do |t|
+  create_table "calendar_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "starts_at"
     t.datetime "ends_at"
-    t.bigint "parent_id"
-    t.bigint "recurring_pattern_id"
-    t.bigint "created_by_id", null: false
+    t.uuid "parent_id"
+    t.uuid "recurring_pattern_id"
+    t.uuid "created_by_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["created_by_id"], name: "index_calendar_events_on_created_by_id"
@@ -84,52 +86,58 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_04_215320) do
     t.index ["recurring_pattern_id"], name: "index_calendar_events_on_recurring_pattern_id"
   end
 
-  create_table "categories", force: :cascade do |t|
+  create_table "categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "categorizable_type", null: false
     t.string "name"
     t.text "description"
+    t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name", "categorizable_type"], name: "index_categories_on_name_and_categorizable_type", unique: true
+    t.index ["slug"], name: "index_categories_on_slug", unique: true
   end
 
-  create_table "clients", force: :cascade do |t|
-    t.bigint "person_id", null: false
+  create_table "clients", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "person_id", null: false
     t.date "active_at"
     t.date "inactive_at"
     t.string "number"
     t.string "color"
+    t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["person_id"], name: "index_clients_on_person_id"
+    t.index ["slug"], name: "index_clients_on_slug", unique: true
   end
 
-  create_table "contacts", force: :cascade do |t|
+  create_table "contacts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "notes"
     t.string "contactable_type", null: false
-    t.bigint "contactable_id", null: false
+    t.uuid "contactable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "primary_address_id"
-    t.bigint "primary_email_id"
-    t.bigint "primary_phone_id"
+    t.uuid "primary_address_id"
+    t.uuid "primary_email_id"
+    t.uuid "primary_phone_id"
     t.index ["contactable_type", "contactable_id"], name: "index_contacts_on_contactable"
     t.index ["primary_address_id"], name: "index_contacts_on_primary_address_id"
     t.index ["primary_email_id"], name: "index_contacts_on_primary_email_id"
     t.index ["primary_phone_id"], name: "index_contacts_on_primary_phone_id"
   end
 
-  create_table "doctors", force: :cascade do |t|
+  create_table "doctors", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
     t.text "notes"
+    t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_doctors_on_slug", unique: true
   end
 
-  create_table "doctors_clients", force: :cascade do |t|
-    t.bigint "doctor_id", null: false
-    t.bigint "client_id", null: false
+  create_table "doctors_clients", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "doctor_id", null: false
+    t.uuid "client_id", null: false
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -137,7 +145,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_04_215320) do
     t.index ["doctor_id"], name: "index_doctors_clients_on_doctor_id"
   end
 
-  create_table "dosages", force: :cascade do |t|
+  create_table "dosages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.decimal "amount"
     t.integer "amount_unit"
     t.decimal "freq_amount"
@@ -147,24 +155,24 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_04_215320) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "emails", force: :cascade do |t|
+  create_table "emails", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "title"
     t.string "email"
     t.text "notes"
-    t.bigint "contact_id", null: false
-    t.bigint "category_id"
+    t.uuid "contact_id", null: false
+    t.uuid "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_emails_on_category_id"
     t.index ["contact_id"], name: "index_emails_on_contact_id"
   end
 
-  create_table "employee_pay_rates", force: :cascade do |t|
+  create_table "employee_pay_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.date "starts_at"
     t.date "ends_at"
-    t.bigint "employee_id", null: false
-    t.bigint "pay_rate_id", null: false
-    t.bigint "shift_type_id", null: false
+    t.uuid "employee_id", null: false
+    t.uuid "pay_rate_id", null: false
+    t.uuid "shift_type_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["employee_id"], name: "index_employee_pay_rates_on_employee_id"
@@ -172,48 +180,63 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_04_215320) do
     t.index ["shift_type_id"], name: "index_employee_pay_rates_on_shift_type_id"
   end
 
-  create_table "employees", force: :cascade do |t|
-    t.bigint "person_id", null: false
+  create_table "employees", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "person_id", null: false
     t.date "active_at"
     t.date "inactive_at"
     t.string "number"
     t.string "color"
+    t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["person_id"], name: "index_employees_on_person_id"
+    t.index ["slug"], name: "index_employees_on_slug", unique: true
   end
 
-  create_table "employees_job_titles", force: :cascade do |t|
+  create_table "employees_job_titles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.date "starts_at", null: false
     t.date "ends_at"
-    t.bigint "employee_id", null: false
-    t.bigint "job_title_id", null: false
+    t.uuid "employee_id", null: false
+    t.uuid "job_title_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["employee_id"], name: "index_employees_job_titles_on_employee_id"
     t.index ["job_title_id"], name: "index_employees_job_titles_on_job_title_id"
   end
 
-  create_table "event_participants", force: :cascade do |t|
+  create_table "event_participants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "event_type", null: false
-    t.bigint "event_id", null: false
+    t.uuid "event_id", null: false
     t.string "participant_type", null: false
-    t.bigint "participant_id", null: false
+    t.uuid "participant_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["event_type", "event_id"], name: "index_event_participants_on_event"
     t.index ["participant_type", "participant_id"], name: "index_event_participants_on_participant"
   end
 
-  create_table "households", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table "friendly_id_slugs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "slug", null: false
+    t.uuid "sluggable_id", null: false
+    t.string "sluggable_type", limit: 50
+    t.string "scope"
+    t.datetime "created_at"
+    t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
+    t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
+    t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
   end
 
-  create_table "households_clients", force: :cascade do |t|
-    t.bigint "household_id", null: false
-    t.bigint "client_id", null: false
+  create_table "households", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "slug", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_households_on_slug", unique: true
+  end
+
+  create_table "households_clients", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "household_id", null: false
+    t.uuid "client_id", null: false
     t.date "starts_at"
     t.date "ends_at"
     t.datetime "created_at", null: false
@@ -222,9 +245,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_04_215320) do
     t.index ["household_id"], name: "index_households_clients_on_household_id"
   end
 
-  create_table "identifications", force: :cascade do |t|
+  create_table "identifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "identificationable_type", null: false
-    t.bigint "identificationable_id", null: false
+    t.uuid "identificationable_id", null: false
     t.integer "type"
     t.integer "number"
     t.text "notes"
@@ -236,16 +259,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_04_215320) do
     t.index ["identificationable_type", "identificationable_id"], name: "index_identifications_on_identificationable"
   end
 
-  create_table "incident_reports", force: :cascade do |t|
+  create_table "incident_reports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "occurred_at"
     t.datetime "reported_at"
     t.datetime "agency_notified_at"
     t.string "location"
     t.text "description"
-    t.bigint "incident_type_id", null: false
-    t.bigint "client_id", null: false
-    t.bigint "reported_to_id", null: false
-    t.bigint "reported_by_id", null: false
+    t.uuid "incident_type_id", null: false
+    t.uuid "client_id", null: false
+    t.uuid "reported_to_id", null: false
+    t.uuid "reported_by_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_incident_reports_on_client_id"
@@ -254,22 +277,24 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_04_215320) do
     t.index ["reported_to_id"], name: "index_incident_reports_on_reported_to_id"
   end
 
-  create_table "incident_types", force: :cascade do |t|
-    t.bigint "category_id", null: false
+  create_table "incident_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "category_id", null: false
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_incident_types_on_category_id"
   end
 
-  create_table "job_titles", force: :cascade do |t|
+  create_table "job_titles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "title", null: false
     t.text "description"
+    t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_job_titles_on_slug", unique: true
   end
 
-  create_table "medications", force: :cascade do |t|
+  create_table "medications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "generic_name"
     t.text "notes"
@@ -277,7 +302,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_04_215320) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "pay_rates", force: :cascade do |t|
+  create_table "pay_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "title"
     t.integer "rate_cents", default: 0, null: false
     t.string "rate_currency", default: "USD", null: false
@@ -287,49 +312,51 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_04_215320) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "people", force: :cascade do |t|
+  create_table "people", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "first_name"
     t.string "middle_name"
     t.string "last_name"
     t.string "nick_name"
     t.date "dob"
     t.jsonb "characterstics"
-    t.bigint "user_id"
+    t.uuid "user_id"
+    t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_people_on_slug", unique: true
     t.index ["user_id"], name: "index_people_on_user_id"
   end
 
-  create_table "pg_search_documents", force: :cascade do |t|
+  create_table "pg_search_documents", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "content"
     t.text "label"
     t.string "searchable_type"
-    t.bigint "searchable_id"
+    t.uuid "searchable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable"
   end
 
-  create_table "phones", force: :cascade do |t|
+  create_table "phones", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "title"
     t.string "number", null: false
     t.string "extension"
     t.text "notes"
-    t.bigint "contact_id", null: false
-    t.bigint "category_id", null: false
+    t.uuid "contact_id", null: false
+    t.uuid "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_phones_on_category_id"
     t.index ["contact_id"], name: "index_phones_on_contact_id"
   end
 
-  create_table "prescriptions", force: :cascade do |t|
-    t.bigint "medication_id", null: false
-    t.bigint "client_id", null: false
+  create_table "prescriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "medication_id", null: false
+    t.uuid "client_id", null: false
     t.date "start_at"
     t.date "ends_at"
-    t.bigint "doctor_id", null: false
-    t.bigint "dosage_id", null: false
+    t.uuid "doctor_id", null: false
+    t.uuid "dosage_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_prescriptions_on_client_id"
@@ -338,7 +365,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_04_215320) do
     t.index ["medication_id"], name: "index_prescriptions_on_medication_id"
   end
 
-  create_table "recurring_patterns", force: :cascade do |t|
+  create_table "recurring_patterns", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "recurring_type", null: false
     t.integer "offset", default: 1, null: false
     t.integer "max_occurances"
@@ -351,33 +378,33 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_04_215320) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "roles", force: :cascade do |t|
+  create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "resource_type"
-    t.bigint "resource_id"
+    t.uuid "resource_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
   end
 
-  create_table "shift_types", force: :cascade do |t|
+  create_table "shift_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "title"
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "shifts", force: :cascade do |t|
-    t.bigint "employee_id", null: false
-    t.bigint "calendar_event_id", null: false
+  create_table "shifts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "employee_id", null: false
+    t.uuid "calendar_event_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["calendar_event_id"], name: "index_shifts_on_calendar_event_id"
     t.index ["employee_id"], name: "index_shifts_on_employee_id"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", null: false
     t.string "encrypted_password", null: false
     t.string "reset_password_token"
@@ -403,38 +430,42 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_04_215320) do
     t.datetime "invitation_accepted_at"
     t.integer "invitation_limit"
     t.string "invited_by_type"
-    t.bigint "invited_by_id"
+    t.uuid "invited_by_id"
     t.integer "invitations_count", default: 0
     t.boolean "active", default: true, null: false
     t.string "time_zone", default: "America/Los_Angeles"
     t.jsonb "table_preferences", default: {}
     t.jsonb "user_preferences", default: {}
+    t.string "slug", null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
     t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["slug"], name: "index_users_on_slug", unique: true
     t.index ["table_preferences"], name: "index_users_on_table_preferences", using: :gin
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
     t.index ["user_preferences"], name: "index_users_on_user_preferences", using: :gin
   end
 
   create_table "users_roles", id: false, force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "role_id"
+    t.uuid "user_id"
+    t.uuid "role_id"
     t.index ["role_id"], name: "index_users_roles_on_role_id"
     t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id"
     t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
-  create_table "vendors", force: :cascade do |t|
-    t.bigint "category_id", null: false
+  create_table "vendors", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "category_id", null: false
     t.string "name"
     t.text "notes"
+    t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_vendors_on_category_id"
+    t.index ["slug"], name: "index_vendors_on_slug", unique: true
   end
 
   add_foreign_key "addresses", "categories"

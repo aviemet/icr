@@ -2,15 +2,15 @@
 #
 # Table name: phones
 #
-#  id          :bigint           not null, primary key
+#  id          :uuid             not null, primary key
 #  extension   :string
 #  notes       :text
 #  number      :string           not null
 #  title       :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  category_id :bigint           not null
-#  contact_id  :bigint           not null
+#  category_id :uuid             not null
+#  contact_id  :uuid             not null
 #
 # Indexes
 #

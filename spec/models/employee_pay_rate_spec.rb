@@ -2,14 +2,14 @@
 #
 # Table name: employee_pay_rates
 #
-#  id            :bigint           not null, primary key
+#  id            :uuid             not null, primary key
 #  ends_at       :date
 #  starts_at     :date
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  employee_id   :bigint           not null
-#  pay_rate_id   :bigint           not null
-#  shift_type_id :bigint           not null
+#  employee_id   :uuid             not null
+#  pay_rate_id   :uuid             not null
+#  shift_type_id :uuid             not null
 #
 # Indexes
 #

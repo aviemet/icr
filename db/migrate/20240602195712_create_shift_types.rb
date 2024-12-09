@@ -1,6 +1,6 @@
 class CreateShiftTypes < ActiveRecord::Migration[7.1]
   def change
-    create_table :shift_types do |t|
+    create_table :shift_types, id: :uuid do |t|
       t.string :title
       t.text :notes
 

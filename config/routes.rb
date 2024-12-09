@@ -70,13 +70,13 @@ Rails.application.routes.draw do
 
   resources :medications
 
-  resources :pay_rates
+  # resources :pay_rates
 
-  resources :employees_job_titles
+  # resources :employees_job_titles
 
-  resources :calendar_event_exceptions
+  # resources :calendar_event_exceptions
 
-  resources :calendar_events
+  # resources :calendar_events
 
   resources :identifications
 

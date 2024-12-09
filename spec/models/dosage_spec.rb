@@ -2,7 +2,7 @@
 #
 # Table name: dosages
 #
-#  id          :bigint           not null, primary key
+#  id          :uuid             not null, primary key
 #  amount      :decimal(, )
 #  amount_unit :integer
 #  freq_amount :decimal(, )

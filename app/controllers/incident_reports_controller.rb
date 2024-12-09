@@ -8,7 +8,7 @@ class IncidentReportsController < ApplicationController
   def index
     authorize incident_reports
     render inertia: "IncidentReport/Index", props: {
-      incident_reports: -> { incident_reports.render(view: :index) }
+      incident_reports: -> { incident_reports.render(:index) }
     }
   end
 
@@ -16,7 +16,7 @@ class IncidentReportsController < ApplicationController
   def show
     authorize incident_report
     render inertia: "IncidentReport/Show", props: {
-      incident_report: -> { incident_report.render(view: :show) }
+      incident_report: -> { incident_report.render(:show) }
     }
   end
 
@@ -24,7 +24,7 @@ class IncidentReportsController < ApplicationController
   def new
     authorize IncidentReport.new
     render inertia: "IncidentReport/New", props: {
-      incident_report: IncidentReport.new.render(view: :form_data)
+      incident_report: IncidentReport.new.render(:form_data)
     }
   end
 
@@ -32,7 +32,7 @@ class IncidentReportsController < ApplicationController
   def edit
     authorize incident_report
     render inertia: "IncidentReport/Edit", props: {
-      incident_report: incident_report.render(view: :edit)
+      incident_report: incident_report.render(:edit)
     }
   end
 

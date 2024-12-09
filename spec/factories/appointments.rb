@@ -2,11 +2,11 @@
 #
 # Table name: appointments
 #
-#  id                :bigint           not null, primary key
+#  id                :uuid             not null, primary key
 #  name              :string           not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  calendar_event_id :bigint           not null
+#  calendar_event_id :uuid             not null
 #
 # Indexes
 #

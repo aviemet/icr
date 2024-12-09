@@ -13,11 +13,11 @@ const Edit<%= singular_table_name.camelize %> = ({ <%= singular_table_name %> }:
 	return (
 		<Page title={ title } breadcrumbs={ [
 			{ title: '<%= human_name.pluralize.titleize %>', href: Routes.<%= plural_table_name.camelize(:lower) %>() },
-			{ title: <%= attributes.include?(:name) ? "#{singular_table_name}.name!" : singular_table_name.camelize %>, href: Routes.<%= singular_table_name.camelize(:lower) %>(<%= singular_table_name %>.id) },
-			{ title },
+			{ title: <%= attributes.include?(:name) ? "#{singular_table_name}.name!" : singular_table_name.camelize %>, href: Routes.<%= singular_table_name.camelize(:lower) %>(<%= singular_table_name %><%= attributes.include?(:slug) ? ".slug" : ".id" %>) },
+			{ title, href: window.location.href },
 		] }>
 			<Section>
-				<Heading>{ title }</Heading>
+				<Title>{ title }</Title>
 				
 				<<%= plural_table_name.camelize %>Form
 					method='put'

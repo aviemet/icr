@@ -1,6 +1,6 @@
 class CreateRecurringPatterns < ActiveRecord::Migration[7.0]
   def change
-    create_table :recurring_patterns do |t|
+    create_table :recurring_patterns, id: :uuid do |t|
       t.integer :recurring_type, null: false
       t.integer :offset, null: false, default: 1
       t.integer :max_occurances

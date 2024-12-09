@@ -1,6 +1,6 @@
 class CreatePayRates < ActiveRecord::Migration[7.1]
   def change
-    create_table :pay_rates do |t|
+    create_table :pay_rates, id: :uuid do |t|
       t.string :title
       t.monetize :rate
       t.integer :period, null: false

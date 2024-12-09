@@ -2,7 +2,7 @@
 #
 # Table name: identifications
 #
-#  id                      :bigint           not null, primary key
+#  id                      :uuid             not null, primary key
 #  expires_at              :date
 #  extra_fields            :jsonb
 #  identificationable_type :string           not null
@@ -12,7 +12,7 @@
 #  type                    :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
-#  identificationable_id   :bigint           not null
+#  identificationable_id   :uuid             not null
 #
 # Indexes
 #

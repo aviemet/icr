@@ -8,7 +8,7 @@ class AppointmentsController < ApplicationController
   def index
     authorize appointments
     render inertia: "Appointment/Index", props: {
-      appointments: -> { appointments.render(view: :index) }
+      appointments: -> { appointments.render(:index) }
     }
   end
 
@@ -16,7 +16,7 @@ class AppointmentsController < ApplicationController
   def show
     authorize appointment
     render inertia: "Appointment/Show", props: {
-      appointment: -> { appointment.render(view: :show) }
+      appointment: -> { appointment.render(:show) }
     }
   end
 
@@ -24,7 +24,7 @@ class AppointmentsController < ApplicationController
   def new
     authorize Appointment.new
     render inertia: "Appointment/New", props: {
-      appointment: Appointment.new.render(view: :form_data)
+      appointment: Appointment.new.render(:form_data)
     }
   end
 
@@ -32,7 +32,7 @@ class AppointmentsController < ApplicationController
   def edit
     authorize appointment
     render inertia: "Appointment/Edit", props: {
-      appointment: appointment.render(view: :edit)
+      appointment: appointment.render(:edit)
     }
   end
 

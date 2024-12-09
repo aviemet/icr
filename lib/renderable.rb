@@ -1,13 +1,17 @@
 module Renderable
+  def render(view = nil, options: {})
+    serializer(view).render(self, options)
+  end
+
   def serializer(view = nil)
     self.class.serializer_name(view).constantize
   end
 
-  def render(view: nil, options: {})
-    serializer(view).render(self, options)
-  end
-
   module ClassMethods
+    def render(view = nil, options: {})
+      serializer(view).render(self, options)
+    end
+
     def serializer(view = nil)
       serializer_name(view).constantize
     end
@@ -18,10 +22,6 @@ module Renderable
       else
         "#{name}Serializer"
       end
-    end
-
-    def render(view: nil, options: {})
-      serializer(view).render(self, options)
     end
   end
 

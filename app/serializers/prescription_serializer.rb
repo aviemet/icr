@@ -2,15 +2,15 @@
 #
 # Table name: prescriptions
 #
-#  id            :bigint           not null, primary key
+#  id            :uuid             not null, primary key
 #  ends_at       :date
 #  start_at      :date
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  client_id     :bigint           not null
-#  doctor_id     :bigint           not null
-#  dosage_id     :bigint           not null
-#  medication_id :bigint           not null
+#  client_id     :uuid             not null
+#  doctor_id     :uuid             not null
+#  dosage_id     :uuid             not null
+#  medication_id :uuid             not null
 #
 # Indexes
 #

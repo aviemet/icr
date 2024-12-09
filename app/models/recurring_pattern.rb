@@ -2,7 +2,7 @@
 #
 # Table name: recurring_patterns
 #
-#  id             :bigint           not null, primary key
+#  id             :uuid             not null, primary key
 #  day_of_month   :integer
 #  day_of_week    :integer
 #  end_date       :integer
@@ -15,7 +15,7 @@
 #  updated_at     :datetime         not null
 #
 class RecurringPattern < ApplicationRecord
-  enum recurring_type: {
+  enum :recurring_type, {
     daily: 0,
     weekly: 1,
     monthly: 2,

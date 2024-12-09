@@ -1,7 +1,9 @@
 class CreateHouseholds < ActiveRecord::Migration[7.0]
   def change
-    create_table :households do |t|
+    create_table :households, id: :uuid do |t|
       t.string :name
+
+      t.string :slug, null: false, index: { unique: true }
 
       t.timestamps
     end

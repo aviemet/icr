@@ -2,11 +2,11 @@
 #
 # Table name: shifts
 #
-#  id                :bigint           not null, primary key
+#  id                :uuid             not null, primary key
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  calendar_event_id :bigint           not null
-#  employee_id       :bigint           not null
+#  calendar_event_id :uuid             not null
+#  employee_id       :uuid             not null
 #
 # Indexes
 #

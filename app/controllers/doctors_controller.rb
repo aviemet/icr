@@ -8,7 +8,7 @@ class DoctorsController < ApplicationController
   def index
     authorize doctors
     render inertia: "Doctor/Index", props: {
-      doctors: -> { doctors.render(view: :index) }
+      doctors: -> { doctors.render(:index) }
     }
   end
 
@@ -16,7 +16,7 @@ class DoctorsController < ApplicationController
   def show
     authorize doctor
     render inertia: "Doctor/Show", props: {
-      doctor: -> { doctor.render(view: :show) }
+      doctor: -> { doctor.render(:show) }
     }
   end
 
@@ -24,7 +24,7 @@ class DoctorsController < ApplicationController
   def new
     authorize Doctor.new
     render inertia: "Doctor/New", props: {
-      doctor: Doctor.new.render(view: :form_data)
+      doctor: Doctor.new.render(:form_data)
     }
   end
 
@@ -32,7 +32,7 @@ class DoctorsController < ApplicationController
   def edit
     authorize doctor
     render inertia: "Doctor/Edit", props: {
-      doctor: doctor.render(view: :edit)
+      doctor: doctor.render(:edit)
     }
   end
 

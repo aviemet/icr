@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require "rails/generators"
-require "rails/generators/named_base"
+require 'rails/generators'
+require 'rails/generators/named_base'
 
 class SerializerGenerator < Rails::Generators::NamedBase
   source_root File.expand_path("templates", __dir__)
-  argument :args, type: :array, default: [], banner: "modelast_name attribute attribute attribute ..."
+  argument :args, type: :array, default: [], banner: 'model_name attribute attribute attribute ...'
 
   class_option :base_only, type: :boolean, default: false, desc: "Only generate the base serializer"
   class_option :only, type: :array, default: [], desc: "Generate only the actions specified"
@@ -14,11 +14,9 @@ class SerializerGenerator < Rails::Generators::NamedBase
   def create_serializer
     validate_options
 
-    template "serializer.rb", "app/serializers/#{modelast_name}_serializer.rb"
+    template 'serializer.rb', "app/serializers/#{model_name}_serializer.rb"
 
     generate_named_serializers
-
-    system("rails types:generate")
   end
 
   def validate_options
@@ -27,12 +25,12 @@ class SerializerGenerator < Rails::Generators::NamedBase
     raise ArgumentError, "Only one of --only or --except can be used as flags"
   end
 
-  def modelast_name
+  def model_name
     file_path.singularize
   end
 
   def ar_model
-    modelast_name.camelize.constantize
+    model_name.camelize.constantize
   rescue NameError
     nil
   end
@@ -43,7 +41,7 @@ class SerializerGenerator < Rails::Generators::NamedBase
     return args_attributes unless args_attributes&.empty?
 
     if ar_model&.ancestors&.include?(ActiveRecord::Base)
-      return ar_model.attribute_names.reject { |attr| attr.to_s == "id" }
+      return ar_model.attribute_names.reject { |attr| attr.to_s == 'id' }
     end
 
     []
@@ -63,7 +61,8 @@ class SerializerGenerator < Rails::Generators::NamedBase
     end
 
     views.each do |view|
-      template "#{view}_serializer.rb.tt", "app/serializers/#{modelast_name.pluralize}/#{view}_serializer.rb"
+      template "#{view}_serializer.rb.tt", "app/serializers/#{model_name.pluralize}/#{view}_serializer.rb"
     end
   end
+
 end

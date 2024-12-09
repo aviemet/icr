@@ -2,12 +2,17 @@
 #
 # Table name: doctors
 #
-#  id         :bigint           not null, primary key
+#  id         :uuid             not null, primary key
 #  first_name :string
 #  last_name  :string
 #  notes      :text
+#  slug       :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_doctors_on_slug  (slug) UNIQUE
 #
 require 'rails_helper'
 
