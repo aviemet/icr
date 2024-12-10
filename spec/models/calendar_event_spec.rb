@@ -2,14 +2,14 @@
 #
 # Table name: calendar_events
 #
-#  id                   :bigint           not null, primary key
+#  id                   :uuid             not null, primary key
 #  ends_at              :datetime
 #  starts_at            :datetime
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
-#  created_by_id        :bigint           not null
-#  parent_id            :bigint
-#  recurring_pattern_id :bigint
+#  created_by_id        :uuid             not null
+#  parent_id            :uuid
+#  recurring_pattern_id :uuid
 #
 # Indexes
 #

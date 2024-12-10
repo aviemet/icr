@@ -33,6 +33,8 @@ class Appointment < ApplicationRecord
 
   resourcify
 
+  validates :name, presence: true
+
   belongs_to :calendar_event
 
   has_many :event_participants, as: :event, dependent: :nullify

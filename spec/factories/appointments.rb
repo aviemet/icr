@@ -18,6 +18,8 @@
 #
 FactoryBot.define do
   factory :appointment do
-    calendar_event { nil }
+    name { Faker::Lorem.sentence(word_count: 3) }
+
+    calendar_event
   end
 end

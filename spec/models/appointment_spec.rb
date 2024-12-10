@@ -19,5 +19,23 @@
 require 'rails_helper'
 
 RSpec.describe Appointment, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'Validations' do
+    it 'is valid with valid attributes' do
+      expect(build(:appointment)).to be_valid
+    end
+
+    it "is invlalid with missing attributes" do
+      %i(name).each do |attr|
+        expect(build(:appointment, attr => nil)).not_to be_valid
+      end
+    end
+  end
+
+  describe "Associations" do
+    it { is_expected.to belong_to(:calendar_event) }
+    it { is_expected.to have_many(:event_participants) }
+    it { is_expected.to have_many(:clients) }
+    it { is_expected.to have_many(:employees) }
+  end
+
 end

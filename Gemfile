@@ -99,6 +99,10 @@ group :development do
   gem "i18n-tasks", "~> 1.0", require: false
   # Generate json and ts locale files from locale.yml files [https://github.com/fnando/i18n-js]
   gem "i18n-js", "~> 4.2", require: false
+
+  # Tools for VSCode
+  gem "solargraph", "~> 0.48.0", require: false
+  gem "ruby-lsp", "~> 0.22.1", require: false
 end
 
 group :test do

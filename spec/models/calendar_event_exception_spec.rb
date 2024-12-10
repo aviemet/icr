@@ -2,14 +2,14 @@
 #
 # Table name: calendar_event_exceptions
 #
-#  id           :bigint           not null, primary key
-#  cancelled    :datetime
-#  ends_at      :datetime
-#  rescheduled  :datetime
-#  starts_at    :datetime
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  calendar_event_id :bigint           not null
+#  id                :uuid             not null, primary key
+#  cancelled         :datetime
+#  ends_at           :datetime
+#  rescheduled       :datetime
+#  starts_at         :datetime
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  calendar_event_id :uuid             not null
 #
 # Indexes
 #
