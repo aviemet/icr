@@ -1,0 +1,4 @@
+en:
+  categories:
+    validations:
+      uniqueness: "Category already exists for that category type"

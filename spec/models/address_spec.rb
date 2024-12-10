@@ -27,7 +27,10 @@
 #  fk_rails_...  (contact_id => contacts.id)
 #
 require 'rails_helper'
+require 'models/shared/contact_method'
 
-RSpec.describe Address, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+RSpec.describe Address do
+  describe "Associations" do
+    it_behaves_like "contact_method"
+  end
 end

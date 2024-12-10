@@ -17,7 +17,7 @@
 #
 FactoryBot.define do
   factory :category do
-    categorizable_type { Faker::Lorem.word }
+    categorizable_type { Category::CATEGORIZABLE_TYPES.sample }
     name { Faker::Commerce.department }
     description { Faker::Lorem.paragraph }
   end

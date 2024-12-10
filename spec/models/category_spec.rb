@@ -17,6 +17,16 @@
 #
 require 'rails_helper'
 
-RSpec.describe Category, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+RSpec.describe Category do
+  describe "Validations" do
+    it "is valid with valid attributes" do
+      expect(build(:category)).to be_valid
+    end
+
+    it "is invlalid with missing attributes" do
+      %i(categorizable_type).each do |attr|
+        expect(build(:category, attr => nil)).not_to be_valid
+      end
+    end
+  end
 end

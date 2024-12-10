@@ -54,9 +54,9 @@ class CalendarEvent < ApplicationRecord
 
   scope :includes_associated, -> { includes([:parent, :recurring_pattern]) }
 
-  scope :before, ->(time) { where("starts_at > ?", time) }
-  scope :after, ->(time) { where(ends_at: ...time) }
-  scope :between, ->(start_time, end_time) { before(start_time).after(end_time) }
+  scope :before, ->(time) { where(starts_at: ...time) }
+  scope :after, ->(time) { where("ends_at > ?", time) }
+  scope :between, ->(start_time, end_time) { where("starts_at < ? AND ends_at > ?", end_time, start_time)  }
 
   private
 

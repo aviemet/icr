@@ -31,13 +31,13 @@ class Category < ApplicationRecord
 
   resourcify
 
-  @categorizable_types = %w(Address Email Phone Vendor IncidentReport)
+  CATEGORIZABLE_TYPES = %w(Address Email Phone Vendor IncidentReport).freeze
 
   validates :name, presence: true, uniqueness: {
     scope: :categorizable_type,
-    message: "Category already exists for that category type"
+    message: I18n.t('categories.validations.uniqueness')
   }
-  validates :categorizable_type, presence: true, inclusion: { in: @categorizable_types, allow_nil: false }
+  validates :categorizable_type, presence: true, inclusion: { in: CATEGORIZABLE_TYPES, allow_nil: false }
 
   scope :find_by_type, ->(type){ where(categorizable_type: type.to_s.singularize.camelize) }
 
