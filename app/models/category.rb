@@ -17,7 +17,7 @@
 #
 class Category < ApplicationRecord
   extend FriendlyId
-  friendly_id :name, use: [:slugged, :history]
+  friendly_id :slug_from_category_type
 
   pg_search_scope(
     :search,
@@ -39,22 +39,20 @@ class Category < ApplicationRecord
   }
   validates :categorizable_type, presence: true, inclusion: { in: CATEGORIZABLE_TYPES, allow_nil: false }
 
-  scope :find_by_type, ->(type){ where(categorizable_type: type.to_s.singularize.camelize) }
+  scope :type, ->(type){ where(categorizable_type: type.to_s.singularize.camelize) }
 
   scope :includes_associated, -> { includes([]) }
 
-  delegate :to_s, to: :category_with_type
-
-  def category_with_type
-    "#{self.categorizable_type} - #{self.name}"
+  def to_s
+    if attribute_present?("categorizable_type") && attribute_present?("name")
+      "#{categorizable_type} - #{name}"
+    else
+      super
+    end
   end
 
-  # def slug_from_category_type
-  #   "#{self.categorizable_type}-#{self.name}".downcase
-  # end
-
   def records
-    self.type.find_by_category(self) # rubocop:disable Rails/DynamicFindBy
+    self.type.where(category: self)
   end
 
   def qty
@@ -63,5 +61,11 @@ class Category < ApplicationRecord
 
   def type
     self.categorizable_type.constantize
+  end
+
+  private
+
+  def slug_from_category_type
+    "#{self.categorizable_type}-#{self.name}".downcase
   end
 end

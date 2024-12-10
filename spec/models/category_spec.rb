@@ -18,15 +18,61 @@
 require 'rails_helper'
 
 RSpec.describe Category do
-  describe "Validations" do
-    it "is valid with valid attributes" do
+  describe 'Validations' do
+    it 'is valid with valid attributes' do
       expect(build(:category)).to be_valid
     end
 
-    it "is invlalid with missing attributes" do
-      %i(categorizable_type).each do |attr|
+    it 'is invlalid with missing attributes' do
+      %i(name categorizable_type).each do |attr|
         expect(build(:category, attr => nil)).not_to be_valid
       end
     end
+
+    it 'is invalid with invalid categorizable type' do
+      expect(build(:category, { categorizable_type: 'Invalid'})).not_to be_valid
+    end
+
+    it 'enforces uniquess of :name across :categorizable_type' do
+      name = 'Exmample'
+      create(:category, { name:, categorizable_type: 'Address' })
+
+      expect(build(:category, { name:, categorizable_type: 'Address' })).not_to be_valid
+      expect(build(:category, { name:, categorizable_type: 'Email' })).to be_valid
+    end
   end
+
+  describe 'Search methods' do
+    describe '#records' do
+      it 'fetches only the records in its category' do
+        category_type = 'Vendor'
+        category = create(:category, { categorizable_type: category_type })
+        vendors = create_list(:vendor, 5, { category: })
+        other_vendor = create(:vendor)
+
+        expect(category.records).to include(*vendors)
+        expect(category.records).not_to include(other_vendor)
+      end
+    end
+
+    describe '#qty' do
+      it 'returns the number of records with the category' do
+        category_type = 'Phone'
+        category = create(:category, { categorizable_type: category_type })
+        phones = create_list(:phone, 5, { category: })
+
+        expect(category.qty).to eq(phones.count)
+      end
+    end
+
+    describe '#type' do
+      it 'returns the class of the category type' do
+        category = build_stubbed(:category, { categorizable_type: 'Vendor' })
+
+        expect(category.type).to be(Vendor)
+      end
+    end
+
+  end
+
 end

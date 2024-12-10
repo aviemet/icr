@@ -21,8 +21,7 @@
 #
 FactoryBot.define do
   factory :vendor do
-    category { nil }
-    name { "MyString" }
-    notes { "MyText" }
+    name { Faker::Commerce.department(max: 1, fixed_amount: true) }
+    category
   end
 end

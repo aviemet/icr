@@ -42,8 +42,10 @@ RSpec.describe Client, type: :model do
   describe "Associations" do
     it_behaves_like "shiftable"
 
-    it "has a schedule" do
-
-    end
+    it{ is_expected.to belong_to(:person) }
+    it{ is_expected.to have_many(:doctors).through(:doctors_clients) }
+    it{ is_expected.to have_many(:shifts).through(:event_participants) }
+    it{ is_expected.to have_many(:appointments).through(:event_participants) }
+    it{ is_expected.to have_one(:household).through(:households_client) }
   end
 end

@@ -23,7 +23,7 @@
 #
 class Client < ApplicationRecord
   extend FriendlyId
-  friendly_id :slug_candidates, use: [:slugged, :history]
+  friendly_id :slug_candidates
 
   include Identificationable
   include Participantable
@@ -48,8 +48,8 @@ class Client < ApplicationRecord
   has_many :doctors_clients, dependent: :nullify
   has_many :doctors, through: :doctors_clients
 
-  has_many :households_clients, dependent: :nullify
-  has_one :household, through: :households_clients, dependent: :nullify
+  has_one :households_client, dependent: :nullify
+  has_one :household, through: :households_client, dependent: :nullify
 
   has_many :shifts, through: :event_participants, source: :event, source_type: 'Shift'
   has_many :appointments, through: :event_participants, source: :event, source_type: 'Appointment'
@@ -62,8 +62,8 @@ class Client < ApplicationRecord
 
   def slug_candidates
     [
-      person.name,
-      [person.name, :number]
+      person&.name,
+      [person&.name, :number]
     ]
   end
 end
