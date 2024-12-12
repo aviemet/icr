@@ -5,4 +5,6 @@ namespace :api do
   end
 
   resources :spotlights, only: [:index]
+
+  resources :calendar_entries, only: [:create, :update, :destroy]
 end

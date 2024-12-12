@@ -21,6 +21,5 @@ class ShiftType < ApplicationRecord
 
   resourcify
 
-
   scope :includes_associated, -> { includes([]) }
 end

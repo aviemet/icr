@@ -12,8 +12,8 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/doctors", type: :request do
-  
+RSpec.describe "/doctors" do
+
   # This should return the minimal set of attributes required to create a valid
   # Doctor. As you add validations to Doctor, be sure to
   # adjust the attributes here as well.
@@ -74,15 +74,14 @@ RSpec.describe "/doctors", type: :request do
       it "does not create a new Doctor" do
         expect {
           post doctors_url, params: { doctor: invalid_attributes }
-        }.to change(Doctor, :count).by(0)
+        }.not_to change(Doctor, :count)
       end
 
-    
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post doctors_url, params: { doctor: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 
@@ -108,13 +107,13 @@ RSpec.describe "/doctors", type: :request do
     end
 
     context "with invalid parameters" do
-    
+
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         doctor = Doctor.create! valid_attributes
         patch doctor_url(doctor), params: { doctor: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 

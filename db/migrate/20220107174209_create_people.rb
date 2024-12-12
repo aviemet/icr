@@ -8,7 +8,7 @@ class CreatePeople < ActiveRecord::Migration[7.0]
       t.date :dob
       t.jsonb :characterstics
 
-      t.references :user, type: :uuid, null: true, foreign_key: true
+      t.belongs_to :user, type: :uuid, null: true, foreign_key: true
 
       t.string :slug, null: false, index: { unique: true }
 

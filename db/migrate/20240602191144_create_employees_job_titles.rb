@@ -4,8 +4,8 @@ class CreateEmployeesJobTitles < ActiveRecord::Migration[7.1]
       t.date :starts_at, null: false
       t.date :ends_at
 
-      t.references :employee, type: :uuid, null: false, foreign_key: true
-      t.references :job_title, type: :uuid, null: false, foreign_key: true
+      t.belongs_to :employee, type: :uuid, null: false, foreign_key: true
+      t.belongs_to :job_title, type: :uuid, null: false, foreign_key: true
 
       t.timestamps
     end

@@ -12,8 +12,8 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/employees", type: :request do
-  
+RSpec.describe "/employees" do
+
   # This should return the minimal set of attributes required to create a valid
   # Employee. As you add validations to Employee, be sure to
   # adjust the attributes here as well.
@@ -74,15 +74,14 @@ RSpec.describe "/employees", type: :request do
       it "does not create a new Employee" do
         expect {
           post employees_url, params: { employee: invalid_attributes }
-        }.to change(Employee, :count).by(0)
+        }.not_to change(Employee, :count)
       end
 
-    
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post employees_url, params: { employee: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 
@@ -108,13 +107,13 @@ RSpec.describe "/employees", type: :request do
     end
 
     context "with invalid parameters" do
-    
+
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         employee = Employee.create! valid_attributes
         patch employee_url(employee), params: { employee: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 

@@ -52,7 +52,7 @@ class Client < ApplicationRecord
   has_one :household, through: :households_client, dependent: :nullify
 
   has_many :shifts, through: :event_participants, source: :event, source_type: 'Shift'
-  has_many :appointments, through: :event_participants, source: :event, source_type: 'Appointment'
+  has_many :events, through: :event_participants, source: :event, source_type: 'CalendarEvent'
 
   accepts_nested_attributes_for :person
 

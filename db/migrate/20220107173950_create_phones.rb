@@ -5,8 +5,8 @@ class CreatePhones < ActiveRecord::Migration[7.0]
       t.string :number, null: false
       t.string :extension
       t.text :notes
-      t.references :contact, type: :uuid, null: false, foreign_key: true
-      t.references :category, type: :uuid, null: false, foreign_key: true
+      t.belongs_to :contact, type: :uuid, null: false, foreign_key: true
+      t.belongs_to :category, type: :uuid, null: false, foreign_key: true
 
       t.timestamps
     end

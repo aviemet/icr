@@ -17,8 +17,6 @@
 class RoleSerializer < ApplicationSerializer
   object_as :role
 
-  
-
   attributes(
     :name,
     :resource_type,

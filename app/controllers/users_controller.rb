@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   include Searchable
-  include ContactableConcern
 
   expose :users, -> { search(User.all.includes_associated, sortable_fields) }
   expose :user, scope: -> { Circle.includes_associated }

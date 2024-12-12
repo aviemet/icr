@@ -28,8 +28,6 @@
 class ContactSerializer < ApplicationSerializer
   object_as :contact
 
-  
-
   attributes(
     :notes,
     :contactable_type,

@@ -25,6 +25,6 @@
 #
 require 'rails_helper'
 
-RSpec.describe EmployeePayRate, type: :model do
+RSpec.describe EmployeePayRate do
   pending "add some examples to (or delete) #{__FILE__}"
 end

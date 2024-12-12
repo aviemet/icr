@@ -18,6 +18,6 @@
 #
 require 'rails_helper'
 
-RSpec.describe IncidentType, type: :model do
+RSpec.describe IncidentType do
   pending "add some examples to (or delete) #{__FILE__}"
 end

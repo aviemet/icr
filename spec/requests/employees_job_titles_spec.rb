@@ -12,8 +12,8 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/employees_job_titles", type: :request do
-  
+RSpec.describe "/employees_job_titles" do
+
   # This should return the minimal set of attributes required to create a valid
   # EmployeesJobTitle. As you add validations to EmployeesJobTitle, be sure to
   # adjust the attributes here as well.
@@ -74,15 +74,14 @@ RSpec.describe "/employees_job_titles", type: :request do
       it "does not create a new EmployeesJobTitle" do
         expect {
           post employees_job_titles_url, params: { employees_job_title: invalid_attributes }
-        }.to change(EmployeesJobTitle, :count).by(0)
+        }.not_to change(EmployeesJobTitle, :count)
       end
 
-    
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post employees_job_titles_url, params: { employees_job_title: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 
@@ -108,13 +107,13 @@ RSpec.describe "/employees_job_titles", type: :request do
     end
 
     context "with invalid parameters" do
-    
+
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         employees_job_title = EmployeesJobTitle.create! valid_attributes
         patch employees_job_title_url(employees_job_title), params: { employees_job_title: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 

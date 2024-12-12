@@ -24,7 +24,7 @@
 require 'rails_helper'
 require "models/concerns/shiftable"
 
-RSpec.describe Client, type: :model do
+RSpec.describe Client do
   subject(:client) { build_stubbed(:client) }
 
   describe "Validations" do
@@ -45,7 +45,7 @@ RSpec.describe Client, type: :model do
     it{ is_expected.to belong_to(:person) }
     it{ is_expected.to have_many(:doctors).through(:doctors_clients) }
     it{ is_expected.to have_many(:shifts).through(:event_participants) }
-    it{ is_expected.to have_many(:appointments).through(:event_participants) }
+    it{ is_expected.to have_many(:non_shift_events).through(:event_participants) }
     it{ is_expected.to have_one(:household).through(:households_client) }
   end
 end

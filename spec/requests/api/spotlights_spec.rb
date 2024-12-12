@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Api::Spotlights", type: :request do
+RSpec.describe "Api::Spotlights" do
   describe "GET /index" do
     pending "add some examples (or delete) #{__FILE__}"
   end

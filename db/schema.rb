@@ -54,36 +54,41 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
     t.index ["contact_id"], name: "index_addresses_on_contact_id"
   end
 
-  create_table "appointments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name", null: false
-    t.uuid "calendar_event_id", null: false
+  create_table "calendar_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.uuid "parent_id"
+    t.uuid "calendar_recurring_pattern_id"
+    t.uuid "created_by_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["calendar_event_id"], name: "index_appointments_on_calendar_event_id"
+    t.index ["calendar_recurring_pattern_id"], name: "index_calendar_entries_on_calendar_recurring_pattern_id"
+    t.index ["created_by_id"], name: "index_calendar_entries_on_created_by_id"
+    t.index ["parent_id"], name: "index_calendar_entries_on_parent_id"
   end
 
-  create_table "calendar_event_exceptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "calendar_event_id", null: false
+  create_table "calendar_entry_exceptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "calendar_entry_id", null: false
     t.datetime "rescheduled", precision: nil
     t.datetime "cancelled", precision: nil
     t.datetime "starts_at"
     t.datetime "ends_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["calendar_event_id"], name: "index_calendar_event_exceptions_on_calendar_event_id"
+    t.index ["calendar_entry_id"], name: "index_calendar_entry_exceptions_on_calendar_entry_id"
   end
 
-  create_table "calendar_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "starts_at"
-    t.datetime "ends_at"
-    t.uuid "parent_id"
-    t.uuid "recurring_pattern_id"
-    t.uuid "created_by_id", null: false
+  create_table "calendar_recurring_patterns", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "recurring_type", null: false
+    t.integer "offset", default: 1, null: false
+    t.integer "max_occurrences"
+    t.integer "end_date"
+    t.integer "day_of_week"
+    t.integer "week_of_month"
+    t.integer "day_of_month"
+    t.integer "month_of_year"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["created_by_id"], name: "index_calendar_events_on_created_by_id"
-    t.index ["parent_id"], name: "index_calendar_events_on_parent_id"
-    t.index ["recurring_pattern_id"], name: "index_calendar_events_on_recurring_pattern_id"
   end
 
   create_table "categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -126,12 +131,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
   end
 
   create_table "doctors", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "first_name"
-    t.string "last_name"
-    t.text "notes"
+    t.uuid "person_id", null: false
     t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["person_id"], name: "index_doctors_on_person_id"
     t.index ["slug"], name: "index_doctors_on_slug", unique: true
   end
 
@@ -302,6 +306,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "non_shift_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.uuid "calendar_entry_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["calendar_entry_id"], name: "index_non_shift_events_on_calendar_entry_id"
+  end
+
   create_table "pay_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "title"
     t.integer "rate_cents", default: 0, null: false
@@ -365,19 +377,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
     t.index ["medication_id"], name: "index_prescriptions_on_medication_id"
   end
 
-  create_table "recurring_patterns", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.integer "recurring_type", null: false
-    t.integer "offset", default: 1, null: false
-    t.integer "max_occurances"
-    t.integer "end_date"
-    t.integer "day_of_week"
-    t.integer "week_of_month"
-    t.integer "day_of_month"
-    t.integer "month_of_year"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "resource_type"
@@ -397,10 +396,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
 
   create_table "shifts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "employee_id", null: false
-    t.uuid "calendar_event_id", null: false
+    t.uuid "calendar_entry_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["calendar_event_id"], name: "index_shifts_on_calendar_event_id"
+    t.index ["calendar_entry_id"], name: "index_shifts_on_calendar_entry_id"
     t.index ["employee_id"], name: "index_shifts_on_employee_id"
   end
 
@@ -470,15 +469,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
 
   add_foreign_key "addresses", "categories"
   add_foreign_key "addresses", "contacts"
-  add_foreign_key "appointments", "calendar_events"
-  add_foreign_key "calendar_event_exceptions", "calendar_events"
-  add_foreign_key "calendar_events", "calendar_events", column: "parent_id"
-  add_foreign_key "calendar_events", "recurring_patterns"
-  add_foreign_key "calendar_events", "users", column: "created_by_id"
+  add_foreign_key "calendar_entries", "calendar_entries", column: "parent_id"
+  add_foreign_key "calendar_entries", "calendar_recurring_patterns"
+  add_foreign_key "calendar_entries", "users", column: "created_by_id"
+  add_foreign_key "calendar_entry_exceptions", "calendar_entries"
   add_foreign_key "clients", "people"
   add_foreign_key "contacts", "addresses", column: "primary_address_id"
   add_foreign_key "contacts", "emails", column: "primary_email_id"
   add_foreign_key "contacts", "phones", column: "primary_phone_id"
+  add_foreign_key "doctors", "people"
   add_foreign_key "doctors_clients", "clients"
   add_foreign_key "doctors_clients", "doctors"
   add_foreign_key "emails", "categories"
@@ -496,6 +495,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
   add_foreign_key "incident_reports", "people", column: "reported_by_id"
   add_foreign_key "incident_reports", "people", column: "reported_to_id"
   add_foreign_key "incident_types", "categories"
+  add_foreign_key "non_shift_events", "calendar_entries"
   add_foreign_key "people", "users"
   add_foreign_key "phones", "categories"
   add_foreign_key "phones", "contacts"
@@ -503,7 +503,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
   add_foreign_key "prescriptions", "doctors"
   add_foreign_key "prescriptions", "dosages"
   add_foreign_key "prescriptions", "medications"
-  add_foreign_key "shifts", "calendar_events"
+  add_foreign_key "shifts", "calendar_entries"
   add_foreign_key "shifts", "employees"
   add_foreign_key "vendors", "categories"
 end

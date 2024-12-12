@@ -10,6 +10,6 @@
 #
 require 'rails_helper'
 
-RSpec.describe ShiftType, type: :model do
+RSpec.describe ShiftType do
   pending "add some examples to (or delete) #{__FILE__}"
 end

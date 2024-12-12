@@ -20,6 +20,6 @@
 #
 require 'rails_helper'
 
-RSpec.describe Identification, type: :model do
+RSpec.describe Identification do
   pending "add some examples to (or delete) #{__FILE__}"
 end

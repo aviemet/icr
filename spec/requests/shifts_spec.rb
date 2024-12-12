@@ -12,8 +12,8 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/shifts", type: :request do
-  
+RSpec.describe "/shifts" do
+
   # This should return the minimal set of attributes required to create a valid
   # Shift. As you add validations to Shift, be sure to
   # adjust the attributes here as well.
@@ -74,15 +74,14 @@ RSpec.describe "/shifts", type: :request do
       it "does not create a new Shift" do
         expect {
           post shifts_url, params: { shift: invalid_attributes }
-        }.to change(Shift, :count).by(0)
+        }.not_to change(Shift, :count)
       end
 
-    
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post shifts_url, params: { shift: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 
@@ -108,13 +107,13 @@ RSpec.describe "/shifts", type: :request do
     end
 
     context "with invalid parameters" do
-    
+
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         shift = Shift.create! valid_attributes
         patch shift_url(shift), params: { shift: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 

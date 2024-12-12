@@ -1,8 +1,9 @@
 class CreateEventParticipants < ActiveRecord::Migration[7.1]
   def change
     create_table :event_participants, id: :uuid do |t|
-      t.references :event, type: :uuid, polymorphic: true, null: false
-      t.references :participant, type: :uuid, polymorphic: true, null: false
+      # :event can be of type Shift of EventDetail
+      t.belongs_to :event, type: :uuid, polymorphic: true, null: false
+      t.belongs_to :participant, type: :uuid, polymorphic: true, null: false
 
       t.timestamps
     end

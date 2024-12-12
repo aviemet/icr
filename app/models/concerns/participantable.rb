@@ -6,8 +6,8 @@ module Participantable
 
     def between(start_date, end_date)
       shifts_within_range = shifts.between(start_date, end_date)
-      appointments_within_range = appointments.between(start_date, end_date)
-      (shifts_within_range + appointments_within_range).uniq
+      events_within_range = non_shift_events.between(start_date, end_date)
+      (shifts_within_range + events_within_range).uniq
     end
   end
 end

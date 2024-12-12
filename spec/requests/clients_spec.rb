@@ -12,8 +12,8 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/clients", type: :request do
-  
+RSpec.describe "/clients" do
+
   # This should return the minimal set of attributes required to create a valid
   # Client. As you add validations to Client, be sure to
   # adjust the attributes here as well.
@@ -74,15 +74,14 @@ RSpec.describe "/clients", type: :request do
       it "does not create a new Client" do
         expect {
           post clients_url, params: { client: invalid_attributes }
-        }.to change(Client, :count).by(0)
+        }.not_to change(Client, :count)
       end
 
-    
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post clients_url, params: { client: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 
@@ -108,13 +107,13 @@ RSpec.describe "/clients", type: :request do
     end
 
     context "with invalid parameters" do
-    
+
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         client = Client.create! valid_attributes
         patch client_url(client), params: { client: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 

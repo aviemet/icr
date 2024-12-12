@@ -12,8 +12,8 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/incident_reports", type: :request do
-  
+RSpec.describe "/incident_reports" do
+
   # This should return the minimal set of attributes required to create a valid
   # IncidentReport. As you add validations to IncidentReport, be sure to
   # adjust the attributes here as well.
@@ -74,15 +74,14 @@ RSpec.describe "/incident_reports", type: :request do
       it "does not create a new IncidentReport" do
         expect {
           post incident_reports_url, params: { incident_report: invalid_attributes }
-        }.to change(IncidentReport, :count).by(0)
+        }.not_to change(IncidentReport, :count)
       end
 
-    
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post incident_reports_url, params: { incident_report: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 
@@ -108,13 +107,13 @@ RSpec.describe "/incident_reports", type: :request do
     end
 
     context "with invalid parameters" do
-    
+
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         incident_report = IncidentReport.create! valid_attributes
         patch incident_report_url(incident_report), params: { incident_report: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 

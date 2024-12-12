@@ -24,7 +24,7 @@ class Dosage < ApplicationRecord
 
   resourcify
 
-  has_one :prescription
+  has_one :prescription, dependent: :nullify
 
   scope :includes_associated, -> { includes([]) }
 end

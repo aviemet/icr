@@ -12,8 +12,8 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/pay_rates", type: :request do
-  
+RSpec.describe "/pay_rates" do
+
   # This should return the minimal set of attributes required to create a valid
   # PayRate. As you add validations to PayRate, be sure to
   # adjust the attributes here as well.
@@ -74,15 +74,14 @@ RSpec.describe "/pay_rates", type: :request do
       it "does not create a new PayRate" do
         expect {
           post pay_rates_url, params: { pay_rate: invalid_attributes }
-        }.to change(PayRate, :count).by(0)
+        }.not_to change(PayRate, :count)
       end
 
-    
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post pay_rates_url, params: { pay_rate: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 
@@ -108,13 +107,13 @@ RSpec.describe "/pay_rates", type: :request do
     end
 
     context "with invalid parameters" do
-    
+
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         pay_rate = PayRate.create! valid_attributes
         patch pay_rate_url(pay_rate), params: { pay_rate: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 

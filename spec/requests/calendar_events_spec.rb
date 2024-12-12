@@ -12,7 +12,7 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/calendar_events", type: :request do
+RSpec.describe "/calendar_events" do
 
   # This should return the minimal set of attributes required to create a valid
   # CalendarEvent. As you add validations to CalendarEvent, be sure to

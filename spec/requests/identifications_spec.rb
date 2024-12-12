@@ -12,8 +12,8 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/identifications", type: :request do
-  
+RSpec.describe "/identifications" do
+
   # This should return the minimal set of attributes required to create a valid
   # Identification. As you add validations to Identification, be sure to
   # adjust the attributes here as well.
@@ -74,15 +74,14 @@ RSpec.describe "/identifications", type: :request do
       it "does not create a new Identification" do
         expect {
           post identifications_url, params: { identification: invalid_attributes }
-        }.to change(Identification, :count).by(0)
+        }.not_to change(Identification, :count)
       end
 
-    
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post identifications_url, params: { identification: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 
@@ -108,13 +107,13 @@ RSpec.describe "/identifications", type: :request do
     end
 
     context "with invalid parameters" do
-    
+
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         identification = Identification.create! valid_attributes
         patch identification_url(identification), params: { identification: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 

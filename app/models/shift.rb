@@ -5,17 +5,17 @@
 #  id                :uuid             not null, primary key
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  calendar_event_id :uuid             not null
+#  calendar_entry_id :uuid             not null
 #  employee_id       :uuid             not null
 #
 # Indexes
 #
-#  index_shifts_on_calendar_event_id  (calendar_event_id)
+#  index_shifts_on_calendar_entry_id  (calendar_entry_id)
 #  index_shifts_on_employee_id        (employee_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (calendar_event_id => calendar_events.id)
+#  fk_rails_...  (calendar_entry_id => calendar_entries.id)
 #  fk_rails_...  (employee_id => employees.id)
 #
 class Shift < ApplicationRecord
@@ -23,9 +23,9 @@ class Shift < ApplicationRecord
 
   pg_search_scope(
     :search,
-    against: [:calendar_event, :client, :employee, :household],
+    against: [],
     associated_against: {
-      calendar_event: [],
+      calendar_entry: [],
       employee: [:number],
       clients: [:numbers],
       households: [:name],
@@ -48,10 +48,10 @@ class Shift < ApplicationRecord
 
   validate :at_least_one_shiftable
 
-  scope :includes_associated, -> { includes([:calendar_event, :employee,  :clients, :households]) }
+  scope :includes_associated, -> { includes([:calendar_entry, :employee, :clients, :households]) }
 
   def title
-    "#{calendar_event&.starts_at&.hour} - #{employee.first_name}"
+    "#{calendar_entry&.starts_at&.hour} - #{employee.first_name}"
   end
 
   private

@@ -14,6 +14,6 @@
 #
 require "rails_helper"
 
-RSpec.describe Household, type: :model do
+RSpec.describe Household do
   pending "add some examples to (or delete) #{__FILE__}"
 end

@@ -4,11 +4,11 @@
 class CreateActivities < ActiveRecord::Migration[5.0]
   def self.up
     create_table :activities do |t|
-      t.references :trackable, polymorphic: true
-      t.references :owner, polymorphic: true
+      t.belongs_to :trackable, polymorphic: true
+      t.belongs_to :owner, polymorphic: true
       t.string :key
       t.jsonb :parameters, default: {}
-      t.references :recipient, polymorphic: true
+      t.belongs_to :recipient, polymorphic: true
 
       t.timestamps
     end

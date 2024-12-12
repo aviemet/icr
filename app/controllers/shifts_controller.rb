@@ -63,10 +63,10 @@ class ShiftsController < ApplicationController
   private
 
   def sortable_fields
-    %w(calendar_event_id client_id employee_id household_id).freeze
+    %w(calendar_entry_id client_id employee_id household_id).freeze
   end
 
   def shift_params
-    params.require(:shift).permit(:calendar_event_id, :client_id, :employee_id, :household_id)
+    params.require(:shift).permit(:calendar_entry_id, :client_id, :employee_id, :household_id)
   end
 end

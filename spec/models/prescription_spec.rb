@@ -28,6 +28,6 @@
 #
 require 'rails_helper'
 
-RSpec.describe Prescription, type: :model do
+RSpec.describe Prescription do
   pending "add some examples to (or delete) #{__FILE__}"
 end

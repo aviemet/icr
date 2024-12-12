@@ -15,8 +15,6 @@
 class HouseholdSerializer < ApplicationSerializer
   object_as :household
 
-  
-
   attributes(
     :name,
   )

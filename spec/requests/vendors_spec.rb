@@ -12,8 +12,8 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/vendors", type: :request do
-  
+RSpec.describe "/vendors" do
+
   # This should return the minimal set of attributes required to create a valid
   # Vendor. As you add validations to Vendor, be sure to
   # adjust the attributes here as well.
@@ -74,15 +74,14 @@ RSpec.describe "/vendors", type: :request do
       it "does not create a new Vendor" do
         expect {
           post vendors_url, params: { vendor: invalid_attributes }
-        }.to change(Vendor, :count).by(0)
+        }.not_to change(Vendor, :count)
       end
 
-    
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post vendors_url, params: { vendor: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 
@@ -108,13 +107,13 @@ RSpec.describe "/vendors", type: :request do
     end
 
     context "with invalid parameters" do
-    
+
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         vendor = Vendor.create! valid_attributes
         patch vendor_url(vendor), params: { vendor: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 

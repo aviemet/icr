@@ -51,6 +51,7 @@ class Person < ApplicationRecord
   belongs_to :user, optional: true
   has_one :client, dependent: :nullify
   has_one :employee, dependent: :nullify
+  has_one :doctor, dependent: :nullify
 
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -58,7 +59,7 @@ class Person < ApplicationRecord
   accepts_nested_attributes_for :user
   accepts_nested_attributes_for :contact
 
-  scope :includes_associated, -> { includes([:user, :client, :employee, :contact]) }
+  scope :includes_associated, -> { includes([:user, :client, :employee, :doctor, :contact]) }
 
   def name(include_middle_name: false)
     "#{first_name}#{include_middle_name ? " #{middle_name}" : ''} #{last_name}"

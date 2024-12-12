@@ -24,8 +24,6 @@
 class EmailSerializer < ApplicationSerializer
   object_as :email
 
-  
-
   attributes(
     :title,
     :email,
