@@ -44,9 +44,6 @@ class Employee < ApplicationRecord
 
   belongs_to :person
 
-  has_many :shifts, dependent: :nullify
-  has_many :events, through: :event_participants, source: :event, source_type: 'CalendarEvent'
-
   has_many :employees_job_titles, dependent: :nullify
   has_many :job_titles, through: :employees_job_titles
 

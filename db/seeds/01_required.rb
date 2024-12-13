@@ -1,5 +1,6 @@
 def create_default_categories
   {
+    Event: ["Shift", "Appointment"],
     Email: ["Work", "Personal"],
     Address: ["Work", "Personal"],
     Phone: ["Home", "Mobile", "Office"],

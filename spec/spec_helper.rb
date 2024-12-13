@@ -116,4 +116,7 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 
+  config.before(:suite) do
+    load Rails.root.join("db/seeds/01_required.rb")
+  end
 end

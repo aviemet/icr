@@ -25,7 +25,7 @@ class ShiftSerializer < ApplicationSerializer
     :employee_id,
   )
 
-  belongs_to :calendar_entry, serializer: CalendarEntrySerializer
+  belongs_to :calendar_event, serializer: CalendarEventSerializer
   belongs_to :employee, serializer: EmployeeSerializer
   has_many :clients, serializer: ClientSerializer
   has_many :households, serializer: HouseholdSerializer

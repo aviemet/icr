@@ -10,6 +10,8 @@ class CreateRecurringPatterns < ActiveRecord::Migration[7.0]
       t.integer :day_of_month
       t.integer :month_of_year
 
+      t.belongs_to :calendar_event, type: :uuid, null: false, foreign_key: true
+
       t.timestamps
     end
   end

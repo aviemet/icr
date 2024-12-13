@@ -23,8 +23,8 @@
 #  fk_rails_...  (parent_id => calendar_events.id)
 #  fk_rails_...  (recurring_pattern_id => recurring_patterns.id)
 #
-class CalendarEntrySerializer < ApplicationSerializer
-  object_as :calendar_entry
+class CalendarEventSerializer < ApplicationSerializer
+  object_as :calendar_event
 
   attributes(
     :starts_at,

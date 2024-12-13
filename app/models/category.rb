@@ -31,7 +31,7 @@ class Category < ApplicationRecord
 
   resourcify
 
-  CATEGORIZABLE_TYPES = %w(Address Email Phone Vendor IncidentReport).freeze
+  CATEGORIZABLE_TYPES = %w(Event Address Email Phone Vendor IncidentReport).freeze
 
   validates :name, presence: true, uniqueness: {
     scope: :categorizable_type,

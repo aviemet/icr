@@ -3,8 +3,8 @@
 # Table name: shift_types
 #
 #  id         :uuid             not null, primary key
+#  name       :string
 #  notes      :text
-#  title      :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

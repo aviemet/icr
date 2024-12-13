@@ -1,4 +1,4 @@
-class Api::CalendarEntriesController < ApplicationController
+class Api::CalendarEventsController < ApplicationController
   # @route POST /api/calendar_events (api_calendar_events)
   def create
   end

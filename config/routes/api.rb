@@ -6,5 +6,5 @@ namespace :api do
 
   resources :spotlights, only: [:index]
 
-  resources :calendar_entries, only: [:create, :update, :destroy]
+  resources :calendar_events, only: [:create, :update, :destroy]
 end
