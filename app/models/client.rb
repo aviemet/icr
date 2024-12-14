@@ -26,7 +26,7 @@ class Client < ApplicationRecord
   friendly_id :slug_candidates
 
   include Identificationable
-  include Participantable
+  include Shiftable
 
   pg_search_scope(
     :search,

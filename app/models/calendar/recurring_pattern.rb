@@ -34,4 +34,7 @@ class Calendar::RecurringPattern < ApplicationRecord
   resourcify
 
   belongs_to :calendar_event, class_name: 'Calendar::Event'
+
+  validates :recurring_type, presence: true
+  validates :offset, presence: true
 end

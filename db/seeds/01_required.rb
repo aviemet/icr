@@ -22,6 +22,13 @@ def create_default_categories
       "Suspected Abuse/Exploitation",
       "Suspected Neglect",
       "COVID-19",
+    ],
+    Identification: [
+      "Drivers License",
+      "Passport",
+      "State ID",
+      "Birth Certificate",
+      "Social Security Card",
     ]
   }.each do |type, categories|
 

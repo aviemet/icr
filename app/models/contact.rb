@@ -30,5 +30,36 @@ class Contact < ApplicationRecord
   has_many :emails, dependent: :delete_all
   has_many :phones, dependent: :delete_all
 
+  belongs_to :primary_address, class_name: "Address", optional: true
+  belongs_to :primary_email, class_name: "Email", optional: true
+  belongs_to :primary_phone, class_name: "Phone", optional: true
+
   belongs_to :contactable, polymorphic: true
+
+  # Override the getter for primary_address
+  def primary_address
+    super || calculate_primary(:addresses)
+  end
+
+  # Override the getter for primary_email
+  def primary_email
+    super || calculate_primary(:emails)
+  end
+
+  # Override the getter for primary_phone
+  def primary_phone
+    super || calculate_primary(:phones)
+  end
+
+  private
+
+  # Generic method to calculate and persist the primary record
+  def calculate_primary(association_name)
+    collection = send(association_name)
+    if collection.count > 0
+      primary_method_name = "primary_#{association_name.to_s.singularize}"
+      update(primary_method_name => collection.first)
+    end
+    send(primary_method_name)
+  end
 end

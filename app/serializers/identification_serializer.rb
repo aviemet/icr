@@ -12,11 +12,17 @@
 #  type                    :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
+#  category_id             :uuid
 #  identificationable_id   :uuid             not null
 #
 # Indexes
 #
+#  index_identifications_on_category_id         (category_id)
 #  index_identifications_on_identificationable  (identificationable_type,identificationable_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (category_id => categories.id)
 #
 class IdentificationSerializer < ApplicationSerializer
   object_as :identification

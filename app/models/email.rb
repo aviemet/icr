@@ -9,7 +9,7 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  category_id :uuid
-#  contact_id  :uuid             not null
+#  contact_id  :uuid
 #
 # Indexes
 #
@@ -26,7 +26,7 @@ class Email < ApplicationRecord
 
   pg_search_scope(
     :search,
-    against: [:email, :notes],
+    against: [:email, :title, :notes],
     using: {
       tsearch: { prefix: true },
       trigram: {},
@@ -35,5 +35,19 @@ class Email < ApplicationRecord
 
   resourcify
 
+  before_destroy :clear_primary_from_contact
+
   belongs_to :contact
+
+  validates :email, presence: true
+
+  private
+
+  # Ensure the contact's primary_email is cleared if this email is being destroyed
+  def clear_primary_from_contact
+    if contact.primary_email == self
+      next_primary = contact.emails.where.not(id: id).first
+      contact.update_column(:primary_email_id, next_primary&.id) # rubocop:disable Rails/SkipsModelValidations
+    end
+  end
 end

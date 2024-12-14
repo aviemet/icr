@@ -9,7 +9,7 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  category_id :uuid
-#  contact_id  :uuid             not null
+#  contact_id  :uuid
 #
 # Indexes
 #

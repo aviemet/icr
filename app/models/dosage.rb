@@ -26,5 +26,8 @@ class Dosage < ApplicationRecord
 
   has_one :prescription, dependent: :nullify
 
-  scope :includes_associated, -> { includes([]) }
+  validates :amount, presence: true
+  validates :freq_period, presence: true
+
+  scope :includes_associated, -> { includes([:prescription]) }
 end

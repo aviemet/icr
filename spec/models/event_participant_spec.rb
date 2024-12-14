@@ -21,5 +21,20 @@
 require 'rails_helper'
 
 RSpec.describe EventParticipant do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "Validations" do
+    it "is valid with valid attributes" do
+      expect(build(:event_participant)).to be_valid
+    end
+
+    it 'is invlalid with missing attributes' do
+      %i().each do |attr|
+        expect(build(:event_participant, attr => nil)).not_to be_valid
+      end
+    end
+  end
+
+  describe "Associations" do
+    it{ is_expected.to belong_to(:calendar_event) }
+    it{ is_expected.to belong_to(:participant) }
+  end
 end

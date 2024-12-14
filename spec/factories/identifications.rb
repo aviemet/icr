@@ -12,17 +12,25 @@
 #  type                    :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
+#  category_id             :uuid
 #  identificationable_id   :uuid             not null
 #
 # Indexes
 #
+#  index_identifications_on_category_id         (category_id)
 #  index_identifications_on_identificationable  (identificationable_type,identificationable_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (category_id => categories.id)
 #
 FactoryBot.define do
   factory :identification do
     number { Faker::Alphanumeric.alpha(number: 16).upcase }
-    issued_at { Faker::Date.backward(days: 200) }
-    expires_at { Faker::Date.forward(days: 365) }
+    issued_at { 2.years.ago }
+    expires_at { 2.years.from_now }
+    association :category, { categorizable_type: 'Identification' } # rubocop:disable FactoryBot/AssociationStyle
     extra_fields { {} }
+    identificationable factory: :employee
   end
 end

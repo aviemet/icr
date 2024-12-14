@@ -12,18 +12,24 @@
 #  type                    :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
+#  category_id             :uuid
 #  identificationable_id   :uuid             not null
 #
 # Indexes
 #
+#  index_identifications_on_category_id         (category_id)
 #  index_identifications_on_identificationable  (identificationable_type,identificationable_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (category_id => categories.id)
 #
 class Identification < ApplicationRecord
   include Categorizable
 
   pg_search_scope(
     :search,
-    against: [:identificationable, :type, :number, :notes, :issued_at, :expires_at, :extra_fields],
+    against: [:type, :number, :notes, :issued_at, :expires_at],
     associated_against: {
       identificationable: [],
     },
@@ -36,6 +42,4 @@ class Identification < ApplicationRecord
   resourcify
 
   belongs_to :identificationable, polymorphic: true
-
-  scope :includes_associated, -> { includes([:identificationable]) }
 end

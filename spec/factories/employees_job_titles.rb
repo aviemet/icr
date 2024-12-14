@@ -22,9 +22,9 @@
 #
 FactoryBot.define do
   factory :employees_job_title do
-    employee { nil }
-    job_title { nil }
-    starts_at { "2024-06-02" }
-    ends_at { "2024-06-02" }
+    starts_at { 6.months.ago }
+
+    employee
+    job_title
   end
 end

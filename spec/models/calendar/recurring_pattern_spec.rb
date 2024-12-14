@@ -39,6 +39,6 @@ RSpec.describe Calendar::RecurringPattern do
   end
 
   describe 'Associations' do
-    it { is_expected.to have_one(:calendar_event) }
+    it { is_expected.to belong_to(:calendar_event) }
   end
 end

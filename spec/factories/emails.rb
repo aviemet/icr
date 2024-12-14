@@ -9,7 +9,7 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  category_id :uuid
-#  contact_id  :uuid             not null
+#  contact_id  :uuid
 #
 # Indexes
 #
@@ -23,11 +23,9 @@
 #
 FactoryBot.define do
   factory :email do
-    title { Faker::Job.title }
     email { Faker::Internet.email }
-    notes { Faker::Lorem.paragraph }
 
     contact
-    category
+    association :category, { categorizable_type: 'Email' } # rubocop:disable FactoryBot/AssociationStyle
   end
 end

@@ -3,7 +3,7 @@
 # Table name: addresses
 #
 #  id          :uuid             not null, primary key
-#  address     :string
+#  address     :string           not null
 #  address_2   :string
 #  city        :string
 #  country     :integer
@@ -14,7 +14,7 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  category_id :uuid
-#  contact_id  :uuid             not null
+#  contact_id  :uuid
 #
 # Indexes
 #
@@ -30,6 +30,18 @@ require 'rails_helper'
 require 'models/shared/contact_method'
 
 RSpec.describe Address do
+  describe 'Validations' do
+    it 'is valid with valid attributes' do
+      expect(build(:address)).to be_valid
+    end
+
+    it 'is invlalid with missing attributes' do
+      %i().each do |attr|
+        expect(build(:address, attr => nil)).not_to be_valid
+      end
+    end
+  end
+
   describe "Associations" do
     it_behaves_like "contact_method"
   end

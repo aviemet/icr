@@ -26,5 +26,21 @@
 require 'rails_helper'
 
 RSpec.describe EmployeePayRate do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "Validations" do
+    it "is valid with valid attributes" do
+      expect(build(:employee_pay_rate)).to be_valid
+    end
+
+    it 'is invlalid with missing attributes' do
+      %i(starts_at).each do |attr|
+        expect(build(:employee_pay_rate, attr => nil)).not_to be_valid
+      end
+    end
+  end
+
+  describe "Associations" do
+    it{ is_expected.to belong_to(:employee) }
+    it{ is_expected.to belong_to(:pay_rate) }
+    it{ is_expected.to belong_to(:shift_type) }
+  end
 end

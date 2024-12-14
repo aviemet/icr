@@ -27,6 +27,8 @@ class PayRate < ApplicationRecord
 
   resourcify
 
+  monetize :rate_cents
+
   enum :period, { hourly: 0, salary: 1 }
 
   belongs_to :employee

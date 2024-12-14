@@ -26,13 +26,13 @@ class Employee < ApplicationRecord
   friendly_id :slug_candidates, use: [:slugged, :history]
 
   include Identificationable
-  include Participantable
+  include Shiftable
 
   pg_search_scope(
     :search,
     against: [:active_at, :inactive_at, :number],
     associated_against: {
-      person: [],
+      person: [:first_name, :last_name],
     },
     using: {
       tsearch: { prefix: true },
@@ -46,13 +46,13 @@ class Employee < ApplicationRecord
 
   has_many :employees_job_titles, dependent: :nullify
   has_many :job_titles, through: :employees_job_titles
+  has_many :employee_pay_rates, dependent: :destroy
+  has_many :pay_rates, through: :employee_pay_rates, dependent: :destroy
 
   has_one :active_employees_job_title, -> {
     where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current)
   }, class_name: 'EmployeesJobTitle', dependent: nil, inverse_of: :employee
   has_one :job_title, through: :active_employees_job_title, source: :job_title
-
-  has_many :pay_rates, dependent: :destroy
 
   accepts_nested_attributes_for :person
 
@@ -61,9 +61,13 @@ class Employee < ApplicationRecord
   private
 
   def slug_candidates
-    [
-      person.name,
-      [person.name, :number]
-    ]
+    if person&.name
+      [
+          person.name,
+          [person.name, :number]
+        ]
+    else
+      [number]
+    end
   end
 end

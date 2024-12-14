@@ -6,7 +6,7 @@
 #  name        :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  category_id :uuid             not null
+#  category_id :uuid
 #
 # Indexes
 #

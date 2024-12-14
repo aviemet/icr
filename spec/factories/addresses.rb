@@ -3,7 +3,7 @@
 # Table name: addresses
 #
 #  id          :uuid             not null, primary key
-#  address     :string
+#  address     :string           not null
 #  address_2   :string
 #  city        :string
 #  country     :integer
@@ -14,7 +14,7 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  category_id :uuid
-#  contact_id  :uuid             not null
+#  contact_id  :uuid
 #
 # Indexes
 #
@@ -33,7 +33,7 @@ FactoryBot.define do
     address_2 { Faker::Address.secondary_address }
     city { Faker::Address.city }
     region { Faker::Address.state }
-    country { Faker::Address.country }
+    country { 'US' }
     postal { Faker::Address.zip_code }
     notes { Faker::Lorem.sentence }
 

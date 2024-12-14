@@ -9,8 +9,8 @@
 #  title       :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  category_id :uuid             not null
-#  contact_id  :uuid             not null
+#  category_id :uuid
+#  contact_id  :uuid
 #
 # Indexes
 #
@@ -24,12 +24,9 @@
 #
 FactoryBot.define do
   factory :phone do
-    title { Faker::Lorem.word }
     number { Faker::PhoneNumber.phone_number }
-    extension { Faker::PhoneNumber.extension }
-    notes { Faker::Lorem.sentence }
 
     contact
-    category
+    association :category, { categorizable_type: 'Phone' } # rubocop:disable FactoryBot/AssociationStyle
   end
 end

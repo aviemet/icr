@@ -3,7 +3,7 @@
 # Table name: addresses
 #
 #  id          :uuid             not null, primary key
-#  address     :string
+#  address     :string           not null
 #  address_2   :string
 #  city        :string
 #  country     :integer
@@ -14,7 +14,7 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  category_id :uuid
-#  contact_id  :uuid             not null
+#  contact_id  :uuid
 #
 # Indexes
 #
@@ -42,5 +42,19 @@ class Address < ApplicationRecord
 
   enum :country, ISO3166::Country.codes
 
+  before_destroy :clear_primary_from_contact
+
   belongs_to :contact
+
+  validates :address, presence: true
+
+  private
+
+  # Ensure the contact's primary_address is cleared if this address is being destroyed
+  def clear_primary_from_contact
+    if contact.primary_address == self
+      next_primary = contact.addresses.where.not(id: id).first
+      contact.update_column(:primary_address_id, next_primary&.id) # rubocop:disable Rails/SkipsModelValidations
+    end
+  end
 end

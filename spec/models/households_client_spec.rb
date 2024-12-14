@@ -23,5 +23,20 @@
 require 'rails_helper'
 
 RSpec.describe HouseholdsClient do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "Validations" do
+    it "is valid with valid attributes" do
+      expect(build(:households_client)).to be_valid
+    end
+
+    it 'is invlalid with missing attributes' do
+      %i().each do |attr|
+        expect(build(:households_client, attr => nil)).not_to be_valid
+      end
+    end
+  end
+
+  describe "Associations" do
+    it{ is_expected.to belong_to(:client) }
+    it{ is_expected.to belong_to(:household) }
+  end
 end

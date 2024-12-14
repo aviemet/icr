@@ -61,7 +61,6 @@ gem "bootsnap", require: false
 
 group :development, :test do
   gem "rspec-rails", ">= 6.0.1"
-  gem "pry-rails", ">= 0.3.9"
   gem "faker", git: "https://github.com/faker-ruby/faker.git", branch: "main"
 
   # Linting

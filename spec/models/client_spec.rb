@@ -22,30 +22,29 @@
 #  fk_rails_...  (person_id => people.id)
 #
 require 'rails_helper'
-require "models/concerns/shiftable"
+require "models/shared/shiftable"
 
 RSpec.describe Client do
-  subject(:client) { build_stubbed(:client) }
-
   describe "Validations" do
     it "is valid with valid attributes" do
       expect(build(:client)).to be_valid
     end
 
-    it "is invalid with invalid atributes" do
-      expect(build(:client, {
-        person: nil
-      },)).not_to be_valid
+    it 'is invlalid with missing attributes' do
+      %i(person).each do |attr|
+        expect(build(:client, attr => nil)).not_to be_valid
+      end
     end
+
   end
 
   describe "Associations" do
     it_behaves_like "shiftable"
 
     it{ is_expected.to belong_to(:person) }
+
     it{ is_expected.to have_many(:doctors).through(:doctors_clients) }
-    it{ is_expected.to have_many(:shifts).through(:event_participants) }
-    it{ is_expected.to have_many(:non_shift_events).through(:event_participants) }
+
     it{ is_expected.to have_one(:household).through(:households_client) }
   end
 end

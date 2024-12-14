@@ -20,7 +20,16 @@
 #
 FactoryBot.define do
   factory :event_participant do
-    event { nil }
-    participant { nil }
+    calendar_event
+
+    participant factory: :client
+
+    trait :client do
+      participant factory: :client
+    end
+
+    trait :doctor do
+      participant factory: :doctor
+    end
   end
 end

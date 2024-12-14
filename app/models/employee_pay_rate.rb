@@ -24,26 +24,11 @@
 #  fk_rails_...  (shift_type_id => shift_types.id)
 #
 class EmployeePayRate < ApplicationRecord
-
-  pg_search_scope(
-    :search,
-    against: [:employee, :pay_rate, :shift_type],
-    associated_against: {
-      employee: [],
-      pay_rate: [],
-      shift_type: [],
-    },
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    },
-  )
-
   resourcify
 
   belongs_to :employee
   belongs_to :pay_rate
   belongs_to :shift_type
 
-  scope :includes_associated, -> { includes([:employee, :pay_rate, :shift_type]) }
+  validates :starts_at, presence: true
 end

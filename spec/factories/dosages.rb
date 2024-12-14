@@ -17,6 +17,5 @@ FactoryBot.define do
     amount_unit { 1 }
     freq_amount { "9.99" }
     freq_period { 1 }
-    notes { "MyText" }
   end
 end

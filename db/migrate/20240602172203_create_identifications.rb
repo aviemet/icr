@@ -9,6 +9,8 @@ class CreateIdentifications < ActiveRecord::Migration[7.1]
       t.date :expires_at
       t.jsonb :extra_fields
 
+      t.belongs_to :category, type: :uuid, null: true, foreign_key: true
+
       t.timestamps
     end
   end

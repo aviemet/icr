@@ -8,7 +8,7 @@
 #  starts_at     :datetime
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  category_id   :uuid             not null
+#  category_id   :uuid
 #  created_by_id :uuid             not null
 #  employee_id   :uuid
 #  parent_id     :uuid

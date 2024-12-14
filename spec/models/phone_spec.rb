@@ -9,8 +9,8 @@
 #  title       :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  category_id :uuid             not null
-#  contact_id  :uuid             not null
+#  category_id :uuid
+#  contact_id  :uuid
 #
 # Indexes
 #
@@ -23,7 +23,22 @@
 #  fk_rails_...  (contact_id => contacts.id)
 #
 require "rails_helper"
+require 'models/shared/contact_method'
 
 RSpec.describe Phone do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'Validations' do
+    it 'is valid with valid attributes' do
+      expect(build(:phone)).to be_valid
+    end
+
+    it 'is invlalid with missing attributes' do
+      %i(number).each do |attr|
+        expect(build(:phone, attr => nil)).not_to be_valid
+      end
+    end
+  end
+
+  describe "Associations" do
+    it_behaves_like "contact_method"
+  end
 end

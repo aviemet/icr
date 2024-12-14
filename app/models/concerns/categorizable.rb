@@ -11,7 +11,7 @@ module Categorizable
     def assign_default_category
       return unless category.nil?
 
-      self.category = Category.find_by_type(self.class.to_s).where(name: "Other").first # rubocop:disable Rails/DynamicFindBy
+      self.category = Category.type(self.class.to_s).where(name: "Other").first
     end
   end
 end

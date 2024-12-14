@@ -39,17 +39,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
 
   create_table "addresses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "title"
-    t.string "address"
+    t.string "address", null: false
     t.string "address_2"
     t.string "city"
     t.string "region"
     t.integer "country"
     t.string "postal"
     t.text "notes"
-    t.uuid "contact_id", null: false
     t.uuid "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "contact_id"
     t.index ["category_id"], name: "index_addresses_on_category_id"
     t.index ["contact_id"], name: "index_addresses_on_contact_id"
   end
@@ -71,7 +71,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
     t.datetime "ends_at"
     t.uuid "parent_id"
     t.uuid "employee_id"
-    t.uuid "category_id", null: false
+    t.uuid "category_id"
     t.uuid "created_by_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -124,11 +124,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
     t.text "notes"
     t.string "contactable_type", null: false
     t.uuid "contactable_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.uuid "primary_address_id"
     t.uuid "primary_email_id"
     t.uuid "primary_phone_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["contactable_type", "contactable_id"], name: "index_contacts_on_contactable"
     t.index ["primary_address_id"], name: "index_contacts_on_primary_address_id"
     t.index ["primary_email_id"], name: "index_contacts_on_primary_email_id"
@@ -168,10 +168,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
     t.string "title"
     t.string "email"
     t.text "notes"
-    t.uuid "contact_id", null: false
     t.uuid "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "contact_id"
     t.index ["category_id"], name: "index_emails_on_category_id"
     t.index ["contact_id"], name: "index_emails_on_contact_id"
   end
@@ -235,7 +235,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
   end
 
   create_table "households", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -262,8 +262,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
     t.date "issued_at"
     t.date "expires_at"
     t.jsonb "extra_fields"
+    t.uuid "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_identifications_on_category_id"
     t.index ["identificationable_type", "identificationable_id"], name: "index_identifications_on_identificationable"
   end
 
@@ -277,8 +279,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
     t.uuid "client_id", null: false
     t.uuid "reported_to_id", null: false
     t.uuid "reported_by_id", null: false
+    t.uuid "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_incident_reports_on_category_id"
     t.index ["client_id"], name: "index_incident_reports_on_client_id"
     t.index ["incident_type_id"], name: "index_incident_reports_on_incident_type_id"
     t.index ["reported_by_id"], name: "index_incident_reports_on_reported_by_id"
@@ -286,7 +290,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
   end
 
   create_table "incident_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "category_id", null: false
+    t.uuid "category_id"
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -350,10 +354,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
     t.string "number", null: false
     t.string "extension"
     t.text "notes"
-    t.uuid "contact_id", null: false
-    t.uuid "category_id", null: false
+    t.uuid "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "contact_id"
     t.index ["category_id"], name: "index_phones_on_category_id"
     t.index ["contact_id"], name: "index_phones_on_contact_id"
   end
@@ -444,7 +448,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
   end
 
   create_table "vendors", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "category_id", null: false
+    t.uuid "category_id"
     t.string "name"
     t.text "notes"
     t.string "slug", null: false
@@ -480,6 +484,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
   add_foreign_key "event_participants", "calendar_events"
   add_foreign_key "households_clients", "clients"
   add_foreign_key "households_clients", "households"
+  add_foreign_key "identifications", "categories"
+  add_foreign_key "incident_reports", "categories"
   add_foreign_key "incident_reports", "clients"
   add_foreign_key "incident_reports", "incident_types"
   add_foreign_key "incident_reports", "people", column: "reported_by_id"

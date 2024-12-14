@@ -19,8 +19,6 @@
 #
 FactoryBot.define do
   factory :doctor do
-    first_name { "MyString" }
-    last_name { "MyString" }
-    notes { "MyText" }
+    person
   end
 end

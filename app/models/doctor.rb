@@ -21,6 +21,8 @@ class Doctor < ApplicationRecord
   extend FriendlyId
   friendly_id :name, use: [:slugged, :history]
 
+  include Participantable
+
   pg_search_scope(
     :search,
     against: [:first_name, :last_name, :notes],
@@ -32,6 +34,8 @@ class Doctor < ApplicationRecord
 
   resourcify
 
+  belongs_to :person
+
   has_many :doctors_clients, dependent: :nullify
   has_many :clients, through: :doctors_clients
   has_many :prescriptions, dependent: :nullify
@@ -39,6 +43,6 @@ class Doctor < ApplicationRecord
   scope :includes_associated, -> { includes([]) }
 
   def name
-    "#{first_name} #{last_name}"
+    "#{person&.first_name} #{person&.last_name}"
   end
 end

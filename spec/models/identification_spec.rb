@@ -12,14 +12,34 @@
 #  type                    :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
+#  category_id             :uuid
 #  identificationable_id   :uuid             not null
 #
 # Indexes
 #
+#  index_identifications_on_category_id         (category_id)
 #  index_identifications_on_identificationable  (identificationable_type,identificationable_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (category_id => categories.id)
 #
 require 'rails_helper'
 
 RSpec.describe Identification do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "Validations" do
+    it "is valid with valid attributes" do
+      expect(build(:identification)).to be_valid
+    end
+
+    it 'is invlalid with missing attributes' do
+      %i().each do |attr|
+        expect(build(:identification, attr => nil)).not_to be_valid
+      end
+    end
+  end
+
+  describe "Associations" do
+    it{ is_expected.to belong_to(:identificationable) }
+  end
 end

@@ -21,26 +21,10 @@
 #  fk_rails_...  (job_title_id => job_titles.id)
 #
 class EmployeesJobTitle < ApplicationRecord
-
-  pg_search_scope(
-    :search,
-    against: [:title, :description, :starts_at, :ends_at],
-    associated_against: {
-      employee: [:number],
-      job_title: [:title],
-    },
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    },
-  )
-
   resourcify
 
   belongs_to :employee
   belongs_to :job_title
 
   validates :starts_at, presence: true
-
-  scope :includes_associated, -> { includes([:employee, :job_title]) }
 end

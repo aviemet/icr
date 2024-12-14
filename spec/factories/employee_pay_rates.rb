@@ -25,8 +25,10 @@
 #
 FactoryBot.define do
   factory :employee_pay_rate do
-    employee { nil }
-    pay_rate { nil }
-    shift_type { nil }
+    starts_at { 1.year.ago }
+
+    employee
+    pay_rate
+    shift_type
   end
 end

@@ -10,6 +10,7 @@
 #  reported_at        :datetime
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
+#  category_id        :uuid
 #  client_id          :uuid             not null
 #  incident_type_id   :uuid             not null
 #  reported_by_id     :uuid             not null
@@ -17,6 +18,7 @@
 #
 # Indexes
 #
+#  index_incident_reports_on_category_id       (category_id)
 #  index_incident_reports_on_client_id         (client_id)
 #  index_incident_reports_on_incident_type_id  (incident_type_id)
 #  index_incident_reports_on_reported_by_id    (reported_by_id)
@@ -24,6 +26,7 @@
 #
 # Foreign Keys
 #
+#  fk_rails_...  (category_id => categories.id)
 #  fk_rails_...  (client_id => clients.id)
 #  fk_rails_...  (incident_type_id => incident_types.id)
 #  fk_rails_...  (reported_by_id => people.id)
@@ -31,13 +34,16 @@
 #
 FactoryBot.define do
   factory :incident_report do
-    occurred_at { "2024-06-02 15:20:24" }
-    reported_by { nil }
-    client { nil }
-    reported_at { "2024-06-02 15:20:24" }
-    agency_notified_at { "2024-06-02 15:20:24" }
-    reported_to { nil }
-    location { "MyString" }
-    incident_type { nil }
+    occurred_at { 1.day.ago }
+    reported_at { 1.day.ago }
+    agency_notified_at { 1.day.ago }
+    location { Faker::Address.city }
+
+    reported_by factory: :employee
+    reported_to factory: :employee
+
+    client
+    incident_type
+    association :category, { categorizable_type: 'IncidentReport' } # rubocop:disable FactoryBot/AssociationStyle
   end
 end

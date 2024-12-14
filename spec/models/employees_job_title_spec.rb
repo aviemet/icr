@@ -23,5 +23,20 @@
 require 'rails_helper'
 
 RSpec.describe EmployeesJobTitle do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "Validations" do
+    it "is valid with valid attributes" do
+      expect(build(:employees_job_title)).to be_valid
+    end
+
+    it 'is invlalid with missing attributes' do
+      %i(starts_at).each do |attr|
+        expect(build(:employees_job_title, attr => nil)).not_to be_valid
+      end
+    end
+  end
+
+  describe "Associations" do
+    it{ is_expected.to belong_to(:employee) }
+    it{ is_expected.to belong_to(:job_title) }
+  end
 end

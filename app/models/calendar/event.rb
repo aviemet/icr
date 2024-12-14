@@ -8,7 +8,7 @@
 #  starts_at     :datetime
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  category_id   :uuid             not null
+#  category_id   :uuid
 #  created_by_id :uuid             not null
 #  employee_id   :uuid
 #  parent_id     :uuid
@@ -52,7 +52,7 @@ class Calendar::Event < ApplicationRecord
   has_many :event_participants, as: :event, dependent: :nullify
   has_many :clients, through: :event_participants, source: :participant, source_type: 'Client'
   has_many :households, through: :event_participants, source: :participant, source_type: 'Household'
-  has_many :calendar_recurring_patterns, class_name: 'Calendar::RecurringPattern', dependent: :destroy
+  has_many :calendar_recurring_patterns, class_name: 'Calendar::RecurringPattern', foreign_key: 'calendar_event_id', inverse_of: :calendar_event, dependent: :destroy
 
   validates :name, presence: true
   validates :starts_at, presence: true
