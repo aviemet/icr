@@ -26,7 +26,7 @@ export const themeObject = {
 		navbar: {
 			width: {
 				closed: 50,
-				open: 300,
+				open: 250,
 			},
 		},
 		footer: {

@@ -31,10 +31,8 @@ const ClientTable = (props: TableProps) => {
 							<Link href={ Routes.client(client.slug) }>{ client.number }</Link>
 						</Table.Cell>
 
-						<Table.Cell>
-							<Link href={ Routes.client(client.slug) }>
-								<Date>{ client.active_at }</Date>
-							</Link>
+						<Table.Cell fitContent>
+							<Date tooltipFormats={ ['from'] }>{ client.active_at }</Date>
 						</Table.Cell>
 
 						<Table.Cell>

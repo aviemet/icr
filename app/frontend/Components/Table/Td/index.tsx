@@ -8,7 +8,7 @@ export interface TableCellProps extends TableTdProps {
 	fitContent?: boolean
 	sort?: string
 	nowrap?: boolean
-	hideable?: false|string
+	hideable?: false | string
 	ref?: React.RefObject<HTMLTableCellElement>
 }
 

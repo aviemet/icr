@@ -33,6 +33,7 @@ export {
 	Group,
 	List,
 	Paper,
+	Popover,
 	SimpleGrid,
 	Slider,
 	Skeleton,

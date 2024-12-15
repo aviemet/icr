@@ -65,7 +65,7 @@ const TableComponent: TableObject = ({
 					striped={ striped }
 					highlightOnHover={ highlightOnHover }
 					className={ cx(className, classes.table) }
-					style={ [wrapper ? { thead: { top: -10 } } : undefined, style] }
+					style={ [wrapper ? { thead: { top: - 10 } } : undefined, style] }
 					{ ...props }
 				>
 					{ children }

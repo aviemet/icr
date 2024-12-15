@@ -9,10 +9,23 @@ export const currency = (amount: number, currency = 'USD') => {
 }
 
 export const date = {
-	short: (date: string|Date) => dayjs(new Date(date)).format('MM/DD/YYYY'),
-	long: (date: string|Date) => dayjs(new Date(date)).format('MM/DD/YYYY HH:mm:ss'),
-	relative: (date: string|Date) => {
-		return dayjs(new Date(date)).format('MM/DD/YYYY')
+	short: (date: string | Date) => dayjs(new Date(date)).format('MM/DD/YYYY'),
+	long: (date: string | Date) => dayjs(new Date(date)).format('MM/DD/YYYY HH:mm:ss'),
+	english: (date: string | Date) => dayjs(new Date(date)).format('MM/DD/YYYY'),
+	from: (date: string | Date, relativeTime?: string | Date) => {
+		if(relativeTime === undefined) {
+			return dayjs(new Date(date)).fromNow()
+		}
+		return dayjs(new Date(relativeTime)).from(new Date(date))
 	},
-	english: (date: string|Date) => dayjs(new Date(date)).format('MM/DD/YYYY'),
+	to: (date: string | Date, relativeTime?: string | Date) => {
+		if(relativeTime === undefined) {
+			return dayjs(new Date(date)).toNow()
+		}
+		return dayjs(new Date(relativeTime)).to(new Date(date))
+	},
+	duration: (date: string | Date, relativeTime?: string | Date) => {
+		const start = relativeTime === undefined ? dayjs() : dayjs(new Date(relativeTime))
+		return start.from(new Date(date), true)
+	},
 }
