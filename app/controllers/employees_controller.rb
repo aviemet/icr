@@ -12,7 +12,7 @@ class EmployeesController < ApplicationController
     }
   end
 
-  # @route GET /employees/:id (employee)
+  # @route GET /employees/:slug (employee)
   def show
     authorize employee
     render inertia: "Employee/Show", props: {
@@ -28,7 +28,7 @@ class EmployeesController < ApplicationController
     }
   end
 
-  # @route GET /employees/:id/edit (edit_employee)
+  # @route GET /employees/:slug/edit (edit_employee)
   def edit
     authorize employee
     render inertia: "Employee/Edit", props: {
@@ -46,8 +46,8 @@ class EmployeesController < ApplicationController
     end
   end
 
-  # @route PATCH /employees/:id (employee)
-  # @route PUT /employees/:id (employee)
+  # @route PATCH /employees/:slug (employee)
+  # @route PUT /employees/:slug (employee)
   def update
     authorize employee
     if employee.update(employee_params)
@@ -57,7 +57,7 @@ class EmployeesController < ApplicationController
     end
   end
 
-  # @route DELETE /employees/:id (employee)
+  # @route DELETE /employees/:slug (employee)
   def destroy
     authorize employee
     employee.destroy!

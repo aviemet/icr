@@ -52,6 +52,6 @@ class ApplicationPolicy
   private
 
   def standard_auth(_action)
-    user.has_role?(:super_admin)
+    user.has_role?(:super_admin) || user.has_role?(:admin)
   end
 end

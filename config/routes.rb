@@ -47,13 +47,13 @@ Rails.application.routes.draw do
 
   get "settings", to: "pages#index", as: :settings
 
-  resources :clients, concerns: :schedulable
+  resources :clients, param: :slug, concerns: :schedulable
 
-  resources :employees, concerns: :schedulable
+  resources :employees, param: :slug, concerns: :schedulable
 
-  resources :people
+  resources :people, param: :slug
 
-  resources :vendors
+  resources :vendors, param: :slug
 
   resources :incident_reports
 
@@ -63,7 +63,7 @@ Rails.application.routes.draw do
 
   resources :dosages
 
-  resources :doctors
+  resources :doctors, param: :slug
 
   resources :medications
 

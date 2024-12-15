@@ -12,7 +12,7 @@ class DoctorsController < ApplicationController
     }
   end
 
-  # @route GET /doctors/:id (doctor)
+  # @route GET /doctors/:slug (doctor)
   def show
     authorize doctor
     render inertia: "Doctor/Show", props: {
@@ -28,7 +28,7 @@ class DoctorsController < ApplicationController
     }
   end
 
-  # @route GET /doctors/:id/edit (edit_doctor)
+  # @route GET /doctors/:slug/edit (edit_doctor)
   def edit
     authorize doctor
     render inertia: "Doctor/Edit", props: {
@@ -46,8 +46,8 @@ class DoctorsController < ApplicationController
     end
   end
 
-  # @route PATCH /doctors/:id (doctor)
-  # @route PUT /doctors/:id (doctor)
+  # @route PATCH /doctors/:slug (doctor)
+  # @route PUT /doctors/:slug (doctor)
   def update
     authorize doctor
     if doctor.update(doctor_params)
@@ -57,7 +57,7 @@ class DoctorsController < ApplicationController
     end
   end
 
-  # @route DELETE /doctors/:id (doctor)
+  # @route DELETE /doctors/:slug (doctor)
   def destroy
     authorize doctor
     doctor.destroy!

@@ -13,7 +13,7 @@ const EditClient = ({ client }: EditClientProps) => {
 	return (
 		<Page title={ title } breadcrumbs={ [
 			{ title: 'Clients', href: Routes.clients() },
-			{ title: Client, href: Routes.client(client.id) },
+			{ title, href: Routes.client(client.id) },
 			{ title },
 		] }>
 			<Section>
@@ -21,7 +21,7 @@ const EditClient = ({ client }: EditClientProps) => {
 				
 				<ClientsForm
 					method='put'
-					to={ Routes.client() }
+					to={ Routes.client(client.slug) }
 					client={ client }
 				/>
 			</Section>

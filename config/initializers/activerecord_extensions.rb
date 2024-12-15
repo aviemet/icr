@@ -9,3 +9,6 @@ module ActiveRecordExtensions
 end
 
 ActiveRecord::Relation.include ActiveRecordExtensions
+
+# Tell AR to use the sublcass of STI models in polymorphic _type fields
+ActiveRecord::Base.store_full_sti_class = false

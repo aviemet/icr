@@ -1,12 +1,17 @@
 class ClientsController < ApplicationController
   include Searchable
 
-  expose :clients, -> { search(Client.includes_associated, sortable_fields) }
-  expose :client, scope: ->{ Client }, find: ->(id, scope){ scope.includes_associated.find(id) }
+  expose :clients, -> { search(Client.includes_associated) }
+  expose :client, id: -> { params[:slug] }, find_by: :slug
+
+  sortable_fields %w(active_at inactive_at number people.first_name people.last_name)
+
+  strong_params :client, permit: [:person_id, :active_at, :inactive_at, :number, person_attributes: [:first_name, :last_name, :middle_name, :nick_name, :dob, :characteristics]]
 
   # @route GET /clients (clients)
   def index
     authorize clients
+
     paginated_clients = clients.page(params[:page] || 1).per(current_user.limit(:clients))
 
     render inertia: "Clients/Index", props: {
@@ -18,9 +23,10 @@ class ClientsController < ApplicationController
     }
   end
 
-  # @route GET /clients/:id (client)
+  # @route GET /clients/:slug (client)
   def show
     authorize client
+
     render inertia: "Clients/Show", props: {
       client: -> { client.render(:show) }
     }
@@ -34,7 +40,7 @@ class ClientsController < ApplicationController
     }
   end
 
-  # @route GET /clients/:id/edit (edit_client)
+  # @route GET /clients/:slug/edit (edit_client)
   def edit
     authorize client
     render inertia: "Clients/Edit", props: {
@@ -42,7 +48,7 @@ class ClientsController < ApplicationController
     }
   end
 
-  # @route GET /clients/:id/schedule (schedule_client)
+  # @route GET /clients/:slug/schedule (schedule_client)
   def schedule
     schedules = client.schedules.between(range_start, range_end)
 
@@ -57,29 +63,32 @@ class ClientsController < ApplicationController
   # @route POST /clients (clients)
   def create
     authorize Client.new
+
     if client.save
-      redirect_to client, notice: "Client was successfully created."
+      redirect_to client_path(client), notice: t("client.notices.created")
     else
       redirect_to new_client_path, inertia: { errors: client.errors }
     end
   end
 
-  # @route PATCH /clients/:id (client)
-  # @route PUT /clients/:id (client)
+  # @route PATCH /clients/:slug (client)
+  # @route PUT /clients/:slug (client)
   def update
     authorize client
+
     if client.update(client_params)
-      redirect_to client, notice: "Client was successfully updated."
+      redirect_to client, notice: t("client.notices.updated")
     else
-      redirect_to edit_client_path, inertia: { errors: client.errors }
+      redirect_to edit_client_path(client), inertia: { errors: client.errors }
     end
   end
 
-  # @route DELETE /clients/:id (client)
+  # @route DELETE /clients/:slug (client)
   def destroy
     authorize client
+
     client.destroy!
-    redirect_to clients_url, notice: "Client was successfully destroyed."
+    redirect_to clients_url, notice: t("client.notices.destroyed")
   end
 
   private
@@ -90,13 +99,5 @@ class ClientsController < ApplicationController
 
   def range_end
     params[:end] || Time.zone.now.end_of_month.next_occurring(:saturday)
-  end
-
-  def sortable_fields
-    %w(active_at inactive_at number people.first_name people.last_name).freeze
-  end
-
-  def client_params
-    params.require(:client).permit(:person_id, :active_at, :inactive_at, :number)
   end
 end

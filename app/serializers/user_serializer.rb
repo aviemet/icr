@@ -56,6 +56,4 @@ class UserSerializer < ApplicationSerializer
     :email,
     :active,
   )
-
-  belongs_to :person, serializer: PersonSerializer
 end

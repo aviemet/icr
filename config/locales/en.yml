@@ -34,6 +34,9 @@ en:
     errors:
       messages:
         taken: "There is already an account for this address, please log in instead"
+
+  application:
+    invalid_authenticity_token_notice: "The page expired, please try again."
         
   errors:
     # The values :model, :attribute and :value are always available for interpolation

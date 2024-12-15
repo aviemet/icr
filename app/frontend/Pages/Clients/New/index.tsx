@@ -3,11 +3,11 @@ import { Heading, Page, Section } from '@/Components'
 import { Routes } from '@/lib'
 import ClientForm from '../Form'
 
-interface INewClientProps {
+interface NewClientProps {
 	client: Schema.ClientsFormData
 }
 
-const NewClient = ({ ...data }: INewClientProps) => {
+const NewClient = ({ ...data }: NewClientProps) => {
 	const title = 'New Client'
 
 	return (

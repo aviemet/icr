@@ -1,7 +1,2 @@
-class Users::ShowSerializer < UserSerializer
-  attributes(
-    :id,
-    :updated_at,
-    :created_at,
-  )
+class Users::ShowSerializer < Users::PersistedSerializer
 end

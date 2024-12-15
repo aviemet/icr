@@ -20,25 +20,25 @@ const ClientTable = (props: TableProps) => {
 				<Table.RowIterator render={ (client: Schema.ClientsIndex) => (
 					<Table.Row key={ client.id }>
 						<Table.Cell>
-							<Link href={ Routes.client(client.id) }>{ client.person.first_name }</Link>
+							<Link href={ Routes.client(client.slug) }>{ client.person.first_name }</Link>
 						</Table.Cell>
 
 						<Table.Cell>
-							<Link href={ Routes.client(client.id) }>{ client.person.last_name }</Link>
+							<Link href={ Routes.client(client.slug) }>{ client.person.last_name }</Link>
 						</Table.Cell>
 
 						<Table.Cell>
-							<Link href={ Routes.client(client.id) }>{ client.number }</Link>
+							<Link href={ Routes.client(client.slug) }>{ client.number }</Link>
 						</Table.Cell>
 
 						<Table.Cell>
-							<Link href={ Routes.client(client.id) }>
+							<Link href={ Routes.client(client.slug) }>
 								<Date>{ client.active_at }</Date>
 							</Link>
 						</Table.Cell>
 
 						<Table.Cell>
-							<EditButton href={ Routes.editClient(client.id) } />
+							<EditButton href={ Routes.editClient(client.slug) } />
 						</Table.Cell>
 					</Table.Row>
 				) } />

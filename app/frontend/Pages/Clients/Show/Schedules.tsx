@@ -11,7 +11,7 @@ import {
 	Modal,
 } from '@/Components'
 import { useModalContext } from '@/Components/Modal'
-import ShiftForm from '@/Pages/Shifts/Form'
+// import ShiftForm from '@/Pages/Shifts/Form'
 import { type NavigateAction, type View, type Event } from 'react-big-calendar'
 import { useLocation } from '@/lib/hooks'
 import { modals } from '@mantine/modals'
@@ -65,7 +65,7 @@ const Schedule = ({ client, employees, shifts }: ScheduleProps) => {
 		<>
 			<h1>{ client.person.name }</h1>
 			<Box>
-				<Calendar
+				{/* <Calendar
 					events={ shifts.map(shift => (
 						{
 							title: shift.title,
@@ -78,7 +78,7 @@ const Schedule = ({ client, employees, shifts }: ScheduleProps) => {
 					onNavigate={ handleDateChange }
 					onView={ handleViewChange }
 					onRangeChange={ handleRangeChange }
-				/>
+				/> */}
 			</Box>
 			{ /* <Modal title="New Shift" open={ modalContext.open } handleClose={ modalContext.close }>
 				<ShiftForm

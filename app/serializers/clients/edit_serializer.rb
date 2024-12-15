@@ -1,8 +1,2 @@
-class Clients::EditSerializer < ClientSerializer
-
-  attributes(
-    :id,
-    :updated_at,
-    :created_at,
-  )
+class Clients::EditSerializer < Clients::PersistedSerializer
 end

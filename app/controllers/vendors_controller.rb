@@ -12,7 +12,7 @@ class VendorsController < ApplicationController
     }
   end
 
-  # @route GET /vendors/:id (vendor)
+  # @route GET /vendors/:slug (vendor)
   def show
     authorize vendor
     render inertia: "Vendor/Show", props: {
@@ -28,7 +28,7 @@ class VendorsController < ApplicationController
     }
   end
 
-  # @route GET /vendors/:id/edit (edit_vendor)
+  # @route GET /vendors/:slug/edit (edit_vendor)
   def edit
     authorize vendor
     render inertia: "Vendor/Edit", props: {
@@ -46,8 +46,8 @@ class VendorsController < ApplicationController
     end
   end
 
-  # @route PATCH /vendors/:id (vendor)
-  # @route PUT /vendors/:id (vendor)
+  # @route PATCH /vendors/:slug (vendor)
+  # @route PUT /vendors/:slug (vendor)
   def update
     authorize vendor
     if vendor.update(vendor_params)
@@ -57,7 +57,7 @@ class VendorsController < ApplicationController
     end
   end
 
-  # @route DELETE /vendors/:id (vendor)
+  # @route DELETE /vendors/:slug (vendor)
   def destroy
     authorize vendor
     vendor.destroy!

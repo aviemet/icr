@@ -17,13 +17,13 @@ const tabsList = [
 	{ id: 'documents', label: 'Documents', component: Documents },
 ]
 
-const NewClient = ({ client }: ShowClientProps) => {
+const ShowClient = ({ client }: ShowClientProps) => {
 	const title = client?.person?.name || 'Client'
 
 	return (
 		<Page title={ title } breadcrumbs={ [
 			{ title: 'Clients', href: Routes.clients() },
-			{ title, href: Routes.client(client.id) },
+			{ title, href: Routes.client(client.slug) },
 		] }>
 			<Section fullHeight>
 
@@ -33,7 +33,7 @@ const NewClient = ({ client }: ShowClientProps) => {
 					<Menu position="bottom-end">
 						<Menu.Target />
 						<Menu.Dropdown>
-							<Menu.Link href={ Routes.editClient(client.id) }>
+							<Menu.Link href={ Routes.editClient(client.slug) }>
 								Edit Client
 							</Menu.Link>
 						</Menu.Dropdown>
@@ -65,4 +65,4 @@ const NewClient = ({ client }: ShowClientProps) => {
 	)
 }
 
-export default NewClient
+export default ShowClient
