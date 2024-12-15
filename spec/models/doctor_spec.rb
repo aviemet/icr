@@ -17,7 +17,7 @@
 #
 #  fk_rails_...  (person_id => people.id)
 #
-require 'rails_helper'
+require "rails_helper"
 require "models/shared/participantable"
 
 RSpec.describe Doctor do
@@ -26,7 +26,7 @@ RSpec.describe Doctor do
       expect(build(:doctor)).to be_valid
     end
 
-    it 'is invlalid with missing attributes' do
+    it "is invlalid with missing attributes" do
       %i(person).each do |attr|
         expect(build(:doctor, attr => nil)).not_to be_valid
       end

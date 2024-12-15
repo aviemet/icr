@@ -11,7 +11,7 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Dosage do
   describe "Validations" do
@@ -19,7 +19,7 @@ RSpec.describe Dosage do
       expect(build(:dosage)).to be_valid
     end
 
-    it 'is invlalid with missing attributes' do
+    it "is invlalid with missing attributes" do
       %i(amount freq_period).each do |attr|
         expect(build(:dosage, attr => nil)).not_to be_valid
       end

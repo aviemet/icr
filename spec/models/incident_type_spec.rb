@@ -16,7 +16,7 @@
 #
 #  fk_rails_...  (category_id => categories.id)
 #
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe IncidentType do
   describe "Validations" do
@@ -24,7 +24,7 @@ RSpec.describe IncidentType do
       expect(build(:incident_type)).to be_valid
     end
 
-    it 'is invlalid with missing attributes' do
+    it "is invlalid with missing attributes" do
       %i(name).each do |attr|
         expect(build(:incident_type, attr => nil)).not_to be_valid
       end

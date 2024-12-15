@@ -23,7 +23,7 @@
 #
 FactoryBot.define do
   factory :client do
-    active_at { "2024-02-01" }
+    active_at { 2.years.ago }
     number { Faker::Alphanumeric.alpha(number: 8).upcase }
 
     person

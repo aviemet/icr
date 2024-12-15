@@ -48,14 +48,14 @@ FactoryBot.define do
     )
   end
 
-  factory :calendar_event, class: 'Calendar::Event' do
+  factory :calendar_event, class: "Calendar::Event" do
     name { Faker::Company.bs }
     starts_at { generate(:start_time) }
     ends_at { generate(:end_time) }
 
     created_by factory: :user
 
-    category { Category.find_by(slug: 'event-shift') }
+    category { Category.find_by(slug: "event-shift") }
   end
 
 end

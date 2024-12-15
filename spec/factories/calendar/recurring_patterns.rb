@@ -24,7 +24,7 @@
 #  fk_rails_...  (calendar_event_id => calendar_events.id)
 #
 FactoryBot.define do
-  factory :calendar_recurring_pattern, class: 'Calendar::RecurringPattern' do
+  factory :calendar_recurring_pattern, class: "Calendar::RecurringPattern" do
     recurring_type { 1 }
     offset { 1 }
     # separation_count { 1 }

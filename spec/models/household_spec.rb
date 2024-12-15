@@ -20,7 +20,7 @@ RSpec.describe Household do
       expect(build(:household)).to be_valid
     end
 
-    it 'is invlalid with missing attributes' do
+    it "is invlalid with missing attributes" do
       %i(name).each do |attr|
         expect(build(:household, attr => nil)).not_to be_valid
       end

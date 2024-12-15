@@ -13,7 +13,7 @@
 #
 #  index_job_titles_on_slug  (slug) UNIQUE
 #
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe JobTitle do
   describe "Validations" do
@@ -21,7 +21,7 @@ RSpec.describe JobTitle do
       expect(build(:job_title)).to be_valid
     end
 
-    it 'is invlalid with missing attributes' do
+    it "is invlalid with missing attributes" do
       %i(title).each do |attr|
         expect(build(:job_title, attr => nil)).not_to be_valid
       end

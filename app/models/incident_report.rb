@@ -53,8 +53,8 @@ class IncidentReport < ApplicationRecord
   resourcify
 
   belongs_to :client
-  belongs_to :reported_by, class_name: 'Employee'
-  belongs_to :reported_to, class_name: 'Employee'
+  belongs_to :reported_by, class_name: "Employee"
+  belongs_to :reported_to, class_name: "Employee"
   belongs_to :incident_type
 
   scope :includes_associated, -> { includes([:reported_by, :client, :reported_to, :incident_type]) }

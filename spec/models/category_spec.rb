@@ -15,37 +15,37 @@
 #  index_categories_on_name_and_categorizable_type  (name,categorizable_type) UNIQUE
 #  index_categories_on_slug                         (slug) UNIQUE
 #
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Category do
-  describe 'Validations' do
-    it 'is valid with valid attributes' do
+  describe "Validations" do
+    it "is valid with valid attributes" do
       expect(build(:category)).to be_valid
     end
 
-    it 'is invlalid with missing attributes' do
+    it "is invlalid with missing attributes" do
       %i(name categorizable_type).each do |attr|
         expect(build(:category, attr => nil)).not_to be_valid
       end
     end
 
-    it 'is invalid with invalid categorizable type' do
-      expect(build(:category, { categorizable_type: 'Invalid'})).not_to be_valid
+    it "is invalid with invalid categorizable type" do
+      expect(build(:category, { categorizable_type: "Invalid"})).not_to be_valid
     end
 
-    it 'enforces uniquess of :name across :categorizable_type' do
-      name = 'Exmample'
-      create(:category, { name:, categorizable_type: 'Address' })
+    it "enforces uniquess of :name across :categorizable_type" do
+      name = "Exmample"
+      create(:category, { name:, categorizable_type: "Address" })
 
-      expect(build(:category, { name:, categorizable_type: 'Address' })).not_to be_valid
-      expect(build(:category, { name:, categorizable_type: 'Email' })).to be_valid
+      expect(build(:category, { name:, categorizable_type: "Address" })).not_to be_valid
+      expect(build(:category, { name:, categorizable_type: "Email" })).to be_valid
     end
   end
 
-  describe 'Search methods' do
-    describe '#records' do
-      it 'fetches only the records in its category' do
-        category_type = 'Vendor'
+  describe "Search methods" do
+    describe "#records" do
+      it "fetches only the records in its category" do
+        category_type = "Vendor"
         category = create(:category, { categorizable_type: category_type })
         vendors = create_list(:vendor, 5, { category: })
         other_vendor = create(:vendor)
@@ -55,9 +55,9 @@ RSpec.describe Category do
       end
     end
 
-    describe '#qty' do
-      it 'returns the number of records with the category' do
-        category_type = 'Phone'
+    describe "#qty" do
+      it "returns the number of records with the category" do
+        category_type = "Phone"
         category = create(:category, { categorizable_type: category_type })
         phones = create_list(:phone, 5, { category: })
 
@@ -65,9 +65,9 @@ RSpec.describe Category do
       end
     end
 
-    describe '#type' do
-      it 'returns the class of the category type' do
-        category = build_stubbed(:category, { categorizable_type: 'Vendor' })
+    describe "#type" do
+      it "returns the class of the category type" do
+        category = build_stubbed(:category, { categorizable_type: "Vendor" })
 
         expect(category.type).to be(Vendor)
       end

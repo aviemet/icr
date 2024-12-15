@@ -18,7 +18,7 @@
 #
 #  fk_rails_...  (calendar_event_id => calendar_events.id)
 #
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe EventParticipant do
   describe "Validations" do
@@ -26,7 +26,7 @@ RSpec.describe EventParticipant do
       expect(build(:event_participant)).to be_valid
     end
 
-    it 'is invlalid with missing attributes' do
+    it "is invlalid with missing attributes" do
       %i().each do |attr|
         expect(build(:event_participant, attr => nil)).not_to be_valid
       end

@@ -34,7 +34,7 @@ class Calendar::EventException < ApplicationRecord
 
   resourcify
 
-  belongs_to :calendar_event, class_name: 'Calendar::Event'
+  belongs_to :calendar_event, class_name: "Calendar::Event"
 
   validate :cancelled_or_rescheduled
 

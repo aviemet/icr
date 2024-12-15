@@ -21,7 +21,7 @@
 #
 #  fk_rails_...  (person_id => people.id)
 #
-require 'rails_helper'
+require "rails_helper"
 require "models/shared/shiftable"
 
 RSpec.describe Client do
@@ -30,7 +30,7 @@ RSpec.describe Client do
       expect(build(:client)).to be_valid
     end
 
-    it 'is invlalid with missing attributes' do
+    it "is invlalid with missing attributes" do
       %i(person).each do |attr|
         expect(build(:client, attr => nil)).not_to be_valid
       end

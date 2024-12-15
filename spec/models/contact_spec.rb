@@ -28,13 +28,13 @@
 require "rails_helper"
 
 RSpec.describe Contact do
-  describe 'Validations' do
-    it 'is valid with valid attributes' do
+  describe "Validations" do
+    it "is valid with valid attributes" do
       expect(build(:contact)).to be_valid
     end
   end
 
-  describe 'Associations' do
+  describe "Associations" do
     it { is_expected.to belong_to(:contactable) }
 
     it { is_expected.to have_many(:addresses) }
@@ -45,8 +45,8 @@ RSpec.describe Contact do
     it { is_expected.to belong_to(:primary_email).optional }
     it { is_expected.to belong_to(:primary_phone).optional }
 
-    describe 'primary contact method' do
-      it 'sets a lone contact method to the primary contact method' do
+    describe "primary contact method" do
+      it "sets a lone contact method to the primary contact method" do
         contact = create(:contact)
 
         address_1 = create(:address, { contact: })

@@ -1,9 +1,9 @@
-require 'simplecov'
+require "simplecov"
 
 # Only run simplecov when running the entire test suite
 rspec_files = RSpec.configuration.instance_variable_get(:@files_or_directories_to_run)
 if rspec_files.length == 1 && rspec_files[0] == "spec"
-  SimpleCov.start 'rails' do
+  SimpleCov.start "rails" do
     enable_coverage :branch
 
     add_filter "/spec/"
@@ -36,7 +36,7 @@ end
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 require "money-rails/test_helpers"
-require 'amazing_print'
+require "amazing_print"
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

@@ -1,18 +1,18 @@
-require 'spec_helper'
-ENV['RAILS_ENV'] ||= 'test'
-require_relative '../config/environment'
+require "spec_helper"
+ENV["RAILS_ENV"] ||= "test"
+require_relative "../config/environment"
 
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
-require 'rspec/rails'
+require "rspec/rails"
 
 # Add additional requires below this line. Rails is not loaded until this point!
-require 'inertia_rails/rspec'
-require 'bullet'
-require 'database_cleaner/active_record'
+require "inertia_rails/rspec"
+require "bullet"
+require "database_cleaner/active_record"
 require "pundit/rspec"
-require 'capybara/rails'
-require 'capybara/rspec'
+require "capybara/rails"
+require "capybara/rspec"
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -39,7 +39,7 @@ end
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_paths = [Rails.root.join('spec/fixtures')]
+  config.fixture_paths = [Rails.root.join("spec/fixtures")]
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -74,7 +74,7 @@ RSpec.configure do |config|
 
   Capybara.configure do |c|
     c.default_driver = :selenium_chrome
-    c.app_host = 'https://localhost:3000'
+    c.app_host = "https://localhost:3000"
   end
 
   # Database Cleaner

@@ -35,7 +35,7 @@ class Category < ApplicationRecord
 
   validates :name, presence: true, uniqueness: {
     scope: :categorizable_type,
-    message: I18n.t('categories.validations.uniqueness')
+    message: I18n.t("categories.validations.uniqueness")
   }
   validates :categorizable_type, presence: true, inclusion: { in: CATEGORIZABLE_TYPES, allow_nil: false }
 

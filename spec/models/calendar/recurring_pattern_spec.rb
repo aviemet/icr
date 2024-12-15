@@ -26,19 +26,19 @@
 require "rails_helper"
 
 RSpec.describe Calendar::RecurringPattern do
-  describe 'Validations' do
-    it 'is valid with valid attributes' do
+  describe "Validations" do
+    it "is valid with valid attributes" do
       expect(build(:calendar_recurring_pattern)).to be_valid
     end
 
-    it 'is invalid with missing attributes' do
+    it "is invalid with missing attributes" do
       %i(recurring_type offset).each do |attr|
         expect(build(:calendar_recurring_pattern, { attr => nil })).not_to be_valid
       end
     end
   end
 
-  describe 'Associations' do
+  describe "Associations" do
     it { is_expected.to belong_to(:calendar_event) }
   end
 end

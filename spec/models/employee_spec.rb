@@ -21,7 +21,7 @@
 #
 #  fk_rails_...  (person_id => people.id)
 #
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Employee do
   describe "Validations" do
@@ -29,7 +29,7 @@ RSpec.describe Employee do
       expect(build(:employee)).to be_valid
     end
 
-    it 'is invlalid with missing attributes' do
+    it "is invlalid with missing attributes" do
       %i().each do |attr|
         expect(build(:employee, attr => nil)).not_to be_valid
       end

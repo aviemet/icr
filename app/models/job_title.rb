@@ -33,7 +33,7 @@ class JobTitle < ApplicationRecord
 
   has_many :active_employees_job_titles, -> {
     where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current)
-  }, class_name: 'EmployeesJobTitle', dependent: nil, inverse_of: :job_title
+  }, class_name: "EmployeesJobTitle", dependent: nil, inverse_of: :job_title
 
   has_many :active_employees, through: :active_employees_job_titles, source: :employee
 

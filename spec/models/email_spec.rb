@@ -21,16 +21,16 @@
 #  fk_rails_...  (category_id => categories.id)
 #  fk_rails_...  (contact_id => contacts.id)
 #
-require 'rails_helper'
-require 'models/shared/contact_method'
+require "rails_helper"
+require "models/shared/contact_method"
 
 RSpec.describe Email do
-  describe 'Validations' do
-    it 'is valid with valid attributes' do
+  describe "Validations" do
+    it "is valid with valid attributes" do
       expect(build(:email)).to be_valid
     end
 
-    it 'is invlalid with missing attributes' do
+    it "is invlalid with missing attributes" do
       %i(email).each do |attr|
         expect(build(:email, attr => nil)).not_to be_valid
       end

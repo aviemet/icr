@@ -27,6 +27,6 @@ FactoryBot.define do
     number { Faker::PhoneNumber.phone_number }
 
     contact
-    association :category, { categorizable_type: 'Phone' } # rubocop:disable FactoryBot/AssociationStyle
+    association :category, { categorizable_type: "Phone" } # rubocop:disable FactoryBot/AssociationStyle
   end
 end

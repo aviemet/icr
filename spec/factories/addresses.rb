@@ -33,7 +33,7 @@ FactoryBot.define do
     address_2 { Faker::Address.secondary_address }
     city { Faker::Address.city }
     region { Faker::Address.state }
-    country { 'US' }
+    country { "US" }
     postal { Faker::Address.zip_code }
     notes { Faker::Lorem.sentence }
 

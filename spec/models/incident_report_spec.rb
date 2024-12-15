@@ -32,7 +32,7 @@
 #  fk_rails_...  (reported_by_id => people.id)
 #  fk_rails_...  (reported_to_id => people.id)
 #
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe IncidentReport do
   describe "Validations" do
@@ -40,7 +40,7 @@ RSpec.describe IncidentReport do
       expect(build(:incident_report)).to be_valid
     end
 
-    it 'is invlalid with missing attributes' do
+    it "is invlalid with missing attributes" do
       %i().each do |attr|
         expect(build(:incident_report, attr => nil)).not_to be_valid
       end

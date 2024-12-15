@@ -19,7 +19,7 @@
 #
 #  fk_rails_...  (category_id => categories.id)
 #
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Vendor do
   describe "Validations" do
@@ -27,7 +27,7 @@ RSpec.describe Vendor do
       expect(build(:vendor)).to be_valid
     end
 
-    it 'is invlalid with missing attributes' do
+    it "is invlalid with missing attributes" do
       %i(name).each do |attr|
         expect(build(:vendor, attr => nil)).not_to be_valid
       end

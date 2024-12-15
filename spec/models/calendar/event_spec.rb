@@ -27,7 +27,7 @@
 #  fk_rails_...  (employee_id => employees.id)
 #  fk_rails_...  (parent_id => calendar_events.id)
 #
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Calendar::Event do
   describe "Validations" do
@@ -89,8 +89,8 @@ RSpec.describe Calendar::Event do
       },)
     end
 
-    describe '.before' do
-      it 'fetches events which start before the given time' do
+    describe ".before" do
+      it "fetches events which start before the given time" do
         time = 2.days.ago
         events = described_class.before(time)
 
@@ -99,8 +99,8 @@ RSpec.describe Calendar::Event do
       end
     end
 
-    describe '.after' do
-      it 'returns events end after the given time' do
+    describe ".after" do
+      it "returns events end after the given time" do
         time = 1.day.from_now
         events = described_class.after(time)
 
@@ -109,8 +109,8 @@ RSpec.describe Calendar::Event do
       end
     end
 
-    describe '.between' do
-      it 'returns events which occur within the given time range' do
+    describe ".between" do
+      it "returns events which occur within the given time range" do
         start_time = 1.day.ago + 1.hour
         end_time = 1.week.from_now - 1.hour
         events = described_class.between(start_time, end_time)

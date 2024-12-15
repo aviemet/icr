@@ -19,22 +19,22 @@
 #
 #  fk_rails_...  (calendar_event_id => calendar_events.id)
 #
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Calendar::EventException do
-  describe 'Validations' do
-    it 'is valid with valid attributes' do
+  describe "Validations" do
+    it "is valid with valid attributes" do
       expect(build(:calendar_event_exception, :cancelled)).to be_valid
       expect(build(:calendar_event_exception, :rescheduled)).to be_valid
     end
 
-    it 'is invalid with missing attributes' do
+    it "is invalid with missing attributes" do
       %i(calendar_event).each do |attr|
         expect(build(:calendar_event_exception, { attr => nil })).not_to be_valid
       end
     end
 
-    it 'is invalid unless exactly one of cancelled or scheduled is true' do
+    it "is invalid unless exactly one of cancelled or scheduled is true" do
       expect(build(:calendar_event_exception, {
         cancelled: Faker::Time.forward(days: 12, period: :morning),
         rescheduled: Faker::Time.forward(days: 12, period: :afternoon)
@@ -43,7 +43,7 @@ RSpec.describe Calendar::EventException do
     end
   end
 
-  describe 'Associations' do
+  describe "Associations" do
     it { is_expected.to belong_to(:calendar_event) }
   end
 end

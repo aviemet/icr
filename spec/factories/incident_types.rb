@@ -20,6 +20,6 @@ FactoryBot.define do
   factory :incident_type do
     name { Faker::Commerce.department(max: 1) }
 
-    association :category, { categorizable_type: 'IncidentReport' } # rubocop:disable FactoryBot/AssociationStyle
+    association :category, { categorizable_type: "IncidentReport" } # rubocop:disable FactoryBot/AssociationStyle
   end
 end

@@ -21,36 +21,36 @@
 #
 #  fk_rails_...  (employee_id => employees.id)
 #
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe PayRate do
-  describe 'Validations' do
-    it 'is valid with valid attributes' do
+  describe "Validations" do
+    it "is valid with valid attributes" do
       expect(build(:pay_rate)).to be_valid
     end
 
-    it 'uses money-rails for the pay rate' do
+    it "uses money-rails for the pay rate" do
       expect(build(:pay_rate)).to monetize(:rate_cents)
     end
 
-    it 'requires a positive value for pay rate' do
+    it "requires a positive value for pay rate" do
       expect(build(:pay_rate, { rate_cents: -10 })).not_to be_valid
     end
 
-    it 'is invlalid with missing attributes' do
+    it "is invlalid with missing attributes" do
       %i(period rate).each do |attr|
         expect(build(:pay_rate, attr => nil)).not_to be_valid
       end
     end
   end
 
-  describe 'Associations' do
+  describe "Associations" do
     it{ is_expected.to belong_to(:employee) }
   end
 
-  describe 'Scopes' do
-    describe 'active' do
-      it 'only returns active pay rates' do
+  describe "Scopes" do
+    describe "active" do
+      it "only returns active pay rates" do
         employee = create(:employee)
         create(:pay_rate, :historical, { employee: })
         active = create(:pay_rate, :active, { employee: })
@@ -59,8 +59,8 @@ RSpec.describe PayRate do
       end
     end
 
-    describe 'historical' do
-      it 'only returns historical pay rates' do
+    describe "historical" do
+      it "only returns historical pay rates" do
         employee = create(:employee)
         historical = create(:pay_rate, :historical, { employee: })
         create(:pay_rate, :active, { employee: })

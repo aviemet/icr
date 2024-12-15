@@ -20,7 +20,7 @@
 #  fk_rails_...  (calendar_event_id => calendar_events.id)
 #
 FactoryBot.define do
-  factory :calendar_event_exception, class: 'Calendar::EventException' do
+  factory :calendar_event_exception, class: "Calendar::EventException" do
     trait :cancelled do
       rescheduled { nil }
       cancelled { Faker::Time.backward(days: 5) }

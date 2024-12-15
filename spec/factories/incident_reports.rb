@@ -44,6 +44,6 @@ FactoryBot.define do
 
     client
     incident_type
-    association :category, { categorizable_type: 'IncidentReport' } # rubocop:disable FactoryBot/AssociationStyle
+    association :category, { categorizable_type: "IncidentReport" } # rubocop:disable FactoryBot/AssociationStyle
   end
 end

@@ -47,8 +47,6 @@ Rails.application.routes.draw do
 
   get "settings", to: "pages#index", as: :settings
 
-  resources :calendar_events, path: :schedule, only: [:index, :create, :update]
-
   resources :clients, concerns: :schedulable
 
   resources :employees, concerns: :schedulable

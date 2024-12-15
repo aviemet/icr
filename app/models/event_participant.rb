@@ -21,6 +21,6 @@
 class EventParticipant < ApplicationRecord
   resourcify
 
-  belongs_to :calendar_event, class_name: 'Calendar::Event'
+  belongs_to :calendar_event, class_name: "Calendar::Event"
   belongs_to :participant, polymorphic: true
 end

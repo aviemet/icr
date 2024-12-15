@@ -20,7 +20,7 @@
 #  fk_rails_...  (client_id => clients.id)
 #  fk_rails_...  (household_id => households.id)
 #
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe HouseholdsClient do
   describe "Validations" do
@@ -28,7 +28,7 @@ RSpec.describe HouseholdsClient do
       expect(build(:households_client)).to be_valid
     end
 
-    it 'is invlalid with missing attributes' do
+    it "is invlalid with missing attributes" do
       %i().each do |attr|
         expect(build(:households_client, attr => nil)).not_to be_valid
       end
