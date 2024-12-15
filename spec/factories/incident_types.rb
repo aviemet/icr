@@ -3,7 +3,7 @@
 # Table name: incident_types
 #
 #  id          :uuid             not null, primary key
-#  name        :string
+#  name        :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  category_id :uuid
@@ -18,7 +18,8 @@
 #
 FactoryBot.define do
   factory :incident_type do
-    category { nil }
-    name { "MyString" }
+    name { Faker::Commerce.department(max: 1) }
+
+    association :category, { categorizable_type: 'IncidentReport' } # rubocop:disable FactoryBot/AssociationStyle
   end
 end

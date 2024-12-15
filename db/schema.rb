@@ -98,7 +98,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
 
   create_table "categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "categorizable_type", null: false
-    t.string "name"
+    t.string "name", null: false
     t.text "description"
     t.string "slug", null: false
     t.datetime "created_at", null: false
@@ -174,19 +174,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
     t.uuid "contact_id"
     t.index ["category_id"], name: "index_emails_on_category_id"
     t.index ["contact_id"], name: "index_emails_on_contact_id"
-  end
-
-  create_table "employee_pay_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.date "starts_at"
-    t.date "ends_at"
-    t.uuid "employee_id", null: false
-    t.uuid "pay_rate_id", null: false
-    t.uuid "shift_type_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["employee_id"], name: "index_employee_pay_rates_on_employee_id"
-    t.index ["pay_rate_id"], name: "index_employee_pay_rates_on_pay_rate_id"
-    t.index ["shift_type_id"], name: "index_employee_pay_rates_on_shift_type_id"
   end
 
   create_table "employees", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -290,8 +277,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
   end
 
   create_table "incident_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
     t.uuid "category_id"
-    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_incident_types_on_category_id"
@@ -307,7 +294,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
   end
 
   create_table "medications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.string "generic_name"
     t.text "notes"
     t.datetime "created_at", null: false
@@ -315,13 +302,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
   end
 
   create_table "pay_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "title"
     t.integer "rate_cents", default: 0, null: false
     t.string "rate_currency", default: "USD", null: false
     t.integer "period", null: false
     t.text "notes"
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.uuid "employee_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["employee_id"], name: "index_pay_rates_on_employee_id"
   end
 
   create_table "people", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -365,7 +355,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
   create_table "prescriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "medication_id", null: false
     t.uuid "client_id", null: false
-    t.date "start_at"
+    t.date "starts_at"
     t.date "ends_at"
     t.uuid "doctor_id", null: false
     t.uuid "dosage_id", null: false
@@ -385,13 +375,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
     t.datetime "updated_at", null: false
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
-  end
-
-  create_table "shift_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name"
-    t.text "notes"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -449,7 +432,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
 
   create_table "vendors", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "category_id"
-    t.string "name"
+    t.string "name", null: false
     t.text "notes"
     t.string "slug", null: false
     t.datetime "created_at", null: false
@@ -475,9 +458,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
   add_foreign_key "doctors_clients", "doctors"
   add_foreign_key "emails", "categories"
   add_foreign_key "emails", "contacts"
-  add_foreign_key "employee_pay_rates", "employees"
-  add_foreign_key "employee_pay_rates", "pay_rates"
-  add_foreign_key "employee_pay_rates", "shift_types"
   add_foreign_key "employees", "people"
   add_foreign_key "employees_job_titles", "employees"
   add_foreign_key "employees_job_titles", "job_titles"
@@ -491,6 +471,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
   add_foreign_key "incident_reports", "people", column: "reported_by_id"
   add_foreign_key "incident_reports", "people", column: "reported_to_id"
   add_foreign_key "incident_types", "categories"
+  add_foreign_key "pay_rates", "employees"
   add_foreign_key "people", "users"
   add_foreign_key "phones", "categories"
   add_foreign_key "phones", "contacts"

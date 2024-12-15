@@ -39,8 +39,8 @@ RSpec.describe Employee do
   describe "Associations" do
     it{ is_expected.to belong_to(:person) }
 
-    it{ is_expected.to have_many(:job_titles).through(:employees_job_titles) }
     it{ is_expected.to have_many(:pay_rates) }
+    it{ is_expected.to have_many(:job_titles).through(:employees_job_titles) }
 
     it{ is_expected.to have_one(:active_employees_job_title) }
     it{ is_expected.to have_one(:job_title).through(:active_employees_job_title) }

@@ -3,7 +3,7 @@
 # Table name: incident_types
 #
 #  id          :uuid             not null, primary key
-#  name        :string
+#  name        :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  category_id :uuid

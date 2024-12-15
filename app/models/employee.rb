@@ -46,8 +46,7 @@ class Employee < ApplicationRecord
 
   has_many :employees_job_titles, dependent: :nullify
   has_many :job_titles, through: :employees_job_titles
-  has_many :employee_pay_rates, dependent: :destroy
-  has_many :pay_rates, through: :employee_pay_rates, dependent: :destroy
+  has_many :pay_rates, dependent: :destroy
 
   has_one :active_employees_job_title, -> {
     where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current)

@@ -4,7 +4,7 @@
 #
 #  id            :uuid             not null, primary key
 #  ends_at       :date
-#  start_at      :date
+#  starts_at     :date
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  client_id     :uuid             not null
@@ -29,5 +29,44 @@
 require 'rails_helper'
 
 RSpec.describe Prescription do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "Validations" do
+    it "is valid with valid attributes" do
+      expect(build(:prescription)).to be_valid
+    end
+
+    it 'is invlalid with missing attributes' do
+      %i().each do |attr|
+        expect(build(:prescription, attr => nil)).not_to be_valid
+      end
+    end
+  end
+
+  describe "Associations" do
+    it{ is_expected.to belong_to(:medication) }
+    it{ is_expected.to belong_to(:client) }
+    it{ is_expected.to belong_to(:doctor) }
+    it{ is_expected.to belong_to(:dosage) }
+  end
+
+  describe 'Scopes' do
+    describe 'active' do
+      it 'only returns active prescriptions' do
+        client = create(:client)
+        active = create(:prescription, :active, { client: })
+        create(:prescription, :historical, { client: })
+
+        expect(client.prescriptions.active).to eq([active])
+      end
+    end
+
+    describe 'historical' do
+      it 'only returns historical prescriptions' do
+        client = create(:client)
+        create(:prescription, :active, { client: })
+        historical = create(:prescription, :historical, { client: })
+
+        expect(client.prescriptions.historical).to eq([historical])
+      end
+    end
+  end
 end

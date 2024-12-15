@@ -1,4 +1,4 @@
-def create_default_categories
+if Category.count == 0
   {
     Event: ["Shift", "Appointment"],
     Email: ["Work", "Personal"],
@@ -46,7 +46,7 @@ def create_default_categories
   end
 end
 
-def create_default_incident_types
+if IncidentType.count == 0
   {
     "Injuries Beyond First Aid" => [
       "Medication Reactions",
@@ -116,12 +116,4 @@ def create_default_incident_types
       name:
     })
   end
-end
-
-if Category.count == 0
-  create_default_categories
-end
-
-if IncidentType.count == 0
-  create_default_incident_types
 end

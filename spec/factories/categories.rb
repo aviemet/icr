@@ -5,7 +5,7 @@
 #  id                 :uuid             not null, primary key
 #  categorizable_type :string           not null
 #  description        :text
-#  name               :string
+#  name               :string           not null
 #  slug               :string           not null
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null

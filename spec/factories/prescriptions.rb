@@ -4,7 +4,7 @@
 #
 #  id            :uuid             not null, primary key
 #  ends_at       :date
-#  start_at      :date
+#  starts_at     :date
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  client_id     :uuid             not null
@@ -28,11 +28,18 @@
 #
 FactoryBot.define do
   factory :prescription do
-    medication { nil }
-    client { nil }
-    start_at { "2024-06-02" }
-    ends_at { "2024-06-02" }
-    doctor { nil }
-    dosage { nil }
+    medication
+    client
+    doctor
+    dosage
+
+    trait :active do
+      starts_at { 1.month.ago }
+    end
+
+    trait :historical do
+      starts_at { 2.years.ago }
+      ends_at { 5.months.ago }
+    end
   end
 end

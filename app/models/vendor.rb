@@ -3,7 +3,7 @@
 # Table name: vendors
 #
 #  id          :uuid             not null, primary key
-#  name        :string
+#  name        :string           not null
 #  notes       :text
 #  slug        :string           not null
 #  created_at  :datetime         not null
@@ -25,7 +25,7 @@ class Vendor < ApplicationRecord
 
   pg_search_scope(
     :search,
-    against: [:category, :name, :notes],
+    against: [:name, :notes],
     associated_against: {
       category: [],
     },
@@ -38,6 +38,8 @@ class Vendor < ApplicationRecord
   resourcify
 
   belongs_to :category
+
+  validates :name, presence: true
 
   scope :includes_associated, -> { includes([:category]) }
 end

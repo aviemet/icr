@@ -4,7 +4,7 @@
 #
 #  id            :uuid             not null, primary key
 #  ends_at       :date
-#  start_at      :date
+#  starts_at     :date
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  client_id     :uuid             not null
@@ -50,8 +50,8 @@ class Prescription < ApplicationRecord
   belongs_to :doctor
   belongs_to :dosage
 
-  scope :active, -> { where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.zone.now, Time.zone.now) }
-  scope :historical, -> { where.not(ends_at: nil).where(ends_at: ...Timezone.now) }
+  scope :active, -> { where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current) }
+  scope :historical, -> { where.not(ends_at: nil).where(ends_at: ...Time.current) }
 
   scope :includes_associated, -> { includes([:medication, :client, :doctor, :dosage]) }
 end

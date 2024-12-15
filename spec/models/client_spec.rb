@@ -44,6 +44,7 @@ RSpec.describe Client do
     it{ is_expected.to belong_to(:person) }
 
     it{ is_expected.to have_many(:doctors).through(:doctors_clients) }
+    it{ is_expected.to have_many(:prescriptions) }
 
     it{ is_expected.to have_one(:household).through(:households_client) }
   end

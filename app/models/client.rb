@@ -47,6 +47,7 @@ class Client < ApplicationRecord
 
   has_many :doctors_clients, dependent: :nullify
   has_many :doctors, through: :doctors_clients
+  has_many :prescriptions, dependent: :destroy
 
   has_one :households_client, dependent: :nullify
   has_one :household, through: :households_client, dependent: :nullify

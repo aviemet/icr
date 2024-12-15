@@ -3,7 +3,7 @@
 # Table name: incident_types
 #
 #  id          :uuid             not null, primary key
-#  name        :string
+#  name        :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  category_id :uuid
@@ -17,22 +17,9 @@
 #  fk_rails_...  (category_id => categories.id)
 #
 class IncidentType < ApplicationRecord
-
-  pg_search_scope(
-    :search,
-    against: [:category, :name],
-    associated_against: {
-      category: [],
-    },
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    },
-  )
+  include Categorizable
 
   resourcify
 
-  belongs_to :category
-
-  scope :includes_associated, -> { includes([:category]) }
+  validates :name, presence: true
 end
