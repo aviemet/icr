@@ -25,13 +25,17 @@ if Rails.env.development?
 
   if Client.count == 0
     6.times do
-      FactoryBot.create :client
+      client = FactoryBot.create :client
+      FactoryBot.create(:address, contact: client.contact)
+      FactoryBot.create(:phone, contact: client.contact)
     end
   end
 
   if Employee.count == 0
     6.times do
-      FactoryBot.create :employee, job_title: JobTitle.find(JobTitle.pluck(:id).sample)
+      employee = FactoryBot.create :employee, job_title: JobTitle.find(JobTitle.pluck(:id).sample)
+      FactoryBot.create(:address, contact: employee.contact)
+      FactoryBot.create(:phone, contact: employee.contact)
     end
   end
 
