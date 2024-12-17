@@ -96,7 +96,7 @@ class User < ApplicationRecord
   end
 
   def synchronize_email_with_contact
-    return unless person&.contact&.exists? && saved_change_to_email?
+    return unless !person&.contact&.nil? && saved_change_to_email?
 
     person.contact.create(email: email) unless person.contact.emails.exists?(email: email)
   end

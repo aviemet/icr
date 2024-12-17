@@ -10,8 +10,6 @@
 #  updated_at   :datetime         not null
 #
 class MedicationSerializer < ApplicationSerializer
-  object_as :medication
-
   attributes(
     :name,
     :generic_name,

@@ -17,7 +17,5 @@
 #  fk_rails_...  (calendar_entry_id => calendar_entries.id)
 #
 class NonShiftEventSerializer < ApplicationSerializer
-  object_as :non_shift_event
-
   attributes
 end

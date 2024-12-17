@@ -26,8 +26,6 @@
 #  fk_rails_...  (primary_phone_id => phones.id)
 #
 class ContactSerializer < ApplicationSerializer
-  object_as :contact
-
   attributes(
     :notes,
     :contactable_type,

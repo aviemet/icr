@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client'
 import axios from 'axios'
 import { PublicLayout, AppLayout, AuthLayout } from '../Layouts'
 import { propsMiddleware } from './middleware'
+import { runAxe } from './middleware/axe'
 
 type PagesObject = { default: React.ComponentType<any> & {
 	layout?: React.ComponentType<any>
@@ -50,8 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			root.render(<App { ...props } />)
 
-			router.on('navigate', event => {
+			router.on('success', event => {
 				event.detail.page.props = propsMiddleware(event.detail.page.props)
+				runAxe(root)
 			})
 		},
 	})

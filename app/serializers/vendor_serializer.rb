@@ -20,8 +20,6 @@
 #  fk_rails_...  (category_id => categories.id)
 #
 class VendorSerializer < ApplicationSerializer
-  object_as :vendor
-
   attributes(
     :category_id,
     :name,

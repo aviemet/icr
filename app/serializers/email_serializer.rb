@@ -22,8 +22,6 @@
 #  fk_rails_...  (contact_id => contacts.id)
 #
 class EmailSerializer < ApplicationSerializer
-  object_as :email
-
   attributes(
     :title,
     :email,

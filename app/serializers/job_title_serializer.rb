@@ -14,8 +14,6 @@
 #  index_job_titles_on_slug  (slug) UNIQUE
 #
 class JobTitleSerializer < ApplicationSerializer
-  object_as :job_title
-
   identifier :slug
 
   attributes(

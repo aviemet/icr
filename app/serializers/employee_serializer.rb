@@ -22,8 +22,6 @@
 #  fk_rails_...  (person_id => people.id)
 #
 class EmployeeSerializer < ApplicationSerializer
-  object_as :employee
-
   identifier :slug
 
   attributes(

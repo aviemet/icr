@@ -27,8 +27,6 @@
 #  fk_rails_...  (contact_id => contacts.id)
 #
 class AddressSerializer < ApplicationSerializer
-  object_as :address
-
   attributes(
     :title,
     :address,

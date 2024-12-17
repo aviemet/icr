@@ -38,7 +38,7 @@ const ClientTable = (props: TableProps) => {
 						<Table.Cell>
 							<Group wrap="nowrap" gap="xs">
 								<EditButton href={ Routes.editClient(client.slug) } />
-								<ScheduleButton href={ Routes.client(client.slug, { tab: 'schedule' }) } />
+								<ScheduleButton href={ Routes.scheduleClient(client.slug) } />
 							</Group>
 						</Table.Cell>
 					</Table.Row>

@@ -19,10 +19,9 @@ import { modals } from '@mantine/modals'
 interface ScheduleProps {
 	client: Schema.Client
 	employees: Schema.Employee[]
-	shifts: Schema.Shift[]
 }
 
-const Schedule = ({ client, employees, shifts }: ScheduleProps) => {
+const Schedule = ({ client, employees }: ScheduleProps) => {
 	const handleSelectEvent = (event: Event, e: React.SyntheticEvent<HTMLElement, globalThis.Event>) => {
 		modals.open({
 			title: 'Event Details',

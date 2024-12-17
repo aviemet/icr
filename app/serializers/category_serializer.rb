@@ -16,8 +16,6 @@
 #  index_categories_on_slug                         (slug) UNIQUE
 #
 class CategorySerializer < ApplicationSerializer
-  object_as :category
-
   identifier :slug
 
   attributes(

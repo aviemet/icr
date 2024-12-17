@@ -17,13 +17,15 @@ import { useLocation } from '@/lib/hooks'
 import { modals } from '@mantine/modals'
 
 interface ScheduleProps {
-	client: Schema.Client
-	employees: Schema.Employee[]
-	schedules: Schema.CalendarEvent[]
+	client: Schema.ClientsShow
+	employees: Schema.EmployeesPersisted[]
+	schedules: Schema.CalendarEventsShow[]
 }
 
 const Schedule = ({ client, employees, schedules }: ScheduleProps) => {
+
 	console.log({ schedules })
+
 	const handleSelectEvent = (event: Event, e: React.SyntheticEvent<HTMLElement, globalThis.Event>) => {
 		modals.open({
 			title: 'Event Details',
@@ -52,7 +54,7 @@ const Schedule = ({ client, employees, schedules }: ScheduleProps) => {
 		const startDate = dayjs(start).format('DD-MM-YYYY')
 		const endDate = dayjs(end).format('DD-MM-YYYY')
 
-		router.get(`/clients/${client.id}/schedule`,
+		router.get(`/clients/${client.slug}/schedule`,
 			{ startDate, endDate, view },
 			{
 				only: ['shifts'],
@@ -64,12 +66,12 @@ const Schedule = ({ client, employees, schedules }: ScheduleProps) => {
 
 	return (
 		<>
-			<h1>{ client.person.name }</h1>
+			<h1>{ client?.person?.name }</h1>
 			<Box>
-				{/* <Calendar
+				<Calendar
 					events={ schedules.map(schedule => (
 						{
-							title: schedule.employee.name,
+							title: schedule?.name || schedule?.employee?.person?.name,
 							start: schedule.starts_at,
 							end: schedule.ends_at,
 						}
@@ -79,7 +81,7 @@ const Schedule = ({ client, employees, schedules }: ScheduleProps) => {
 					onNavigate={ handleDateChange }
 					onView={ handleViewChange }
 					onRangeChange={ handleRangeChange }
-				/> */}
+				/>
 			</Box>
 			{ /* <Modal title="New Shift" open={ modalContext.open } handleClose={ modalContext.close }>
 				<ShiftForm

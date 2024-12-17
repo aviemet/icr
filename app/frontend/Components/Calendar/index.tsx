@@ -1,5 +1,13 @@
 import React, { useRef } from 'react'
-import { Calendar, Views, dayjsLocalizer, type CalendarProps, type DateLocalizer, type Event, type View } from 'react-big-calendar'
+import {
+	Calendar,
+	Views,
+	dayjsLocalizer,
+	type CalendarProps,
+	type DateLocalizer,
+	type Event,
+	type View,
+} from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import dayjs from 'dayjs'
 
@@ -10,7 +18,7 @@ const DragAndDropCalendar = withDragAndDrop(Calendar<Event, {}>)
 
 const dayjsLocalizerInstance = dayjsLocalizer(dayjs)
 
-interface CalendarComponentProps extends Omit<CalendarProps<Event, {}>, 'localizer'|'onRangeChange'> {
+interface CalendarComponentProps extends Omit<CalendarProps<Event, {}>, 'localizer' | 'onRangeChange'> {
 	localizer?: DateLocalizer
 	onRangeChange?: (start: Date, end: Date, view: View) => void
 }
@@ -27,6 +35,9 @@ const CalendarComponent = ({
 }: CalendarComponentProps) => {
 	const viewRef = useRef(defaultView)
 
+	/**
+	 * Rewrite date range change method to stabilize interface
+	 */
 	const handleRangeChange = (range: Date[] | { start: Date, end: Date }, view?: View | undefined) => {
 		if(view) viewRef.current = view
 

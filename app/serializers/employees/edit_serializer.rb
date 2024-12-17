@@ -1,8 +1,2 @@
-class Employees::EditSerializer < EmployeeSerializer
-
-  attributes(
-    :id,
-    :updated_at,
-    :created_at,
-  )
+class Employees::EditSerializer < Employees::PersistedSerializer
 end

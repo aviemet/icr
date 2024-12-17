@@ -12,8 +12,6 @@
 #  updated_at  :datetime         not null
 #
 class DosageSerializer < ApplicationSerializer
-  object_as :dosage
-
   attributes(
     :amount,
     :amount_unit,

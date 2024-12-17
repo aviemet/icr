@@ -53,14 +53,14 @@ class Calendar::Event < ApplicationRecord
   has_many :event_participants, as: :event, dependent: :nullify
   has_many :clients, through: :event_participants, source: :participant, source_type: "Client"
   has_many :households, through: :event_participants, source: :participant, source_type: "Household"
-  has_many :calendar_recurring_patterns, class_name: "Calendar::RecurringPattern", foreign_key: "calendar_event_id", inverse_of: :calendar_event, dependent: :destroy
+  has_many :recurring_patterns, class_name: "Calendar::RecurringPattern", foreign_key: "calendar_event_id", inverse_of: :calendar_event, dependent: :destroy
 
   validates :name, presence: true
   validates :starts_at, presence: true
   validates :ends_at, presence: true
   validate :starts_at_before_ends_at
 
-  scope :includes_associated, -> { includes([:parent, :recurring_pattern, :event_participants, :clients, :households]) }
+  scope :includes_associated, -> { includes([:parent, :recurring_patterns, :event_participants, :clients, :households]) }
 
   scope :before, ->(time) { where(starts_at: ...time) }
   scope :after, ->(time) { where("ends_at > ?", time) }

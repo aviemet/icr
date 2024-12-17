@@ -22,8 +22,6 @@
 #  fk_rails_...  (person_id => people.id)
 #
 class ClientSerializer < ApplicationSerializer
-  object_as :client
-
   identifier :slug
 
   attributes(

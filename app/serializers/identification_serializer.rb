@@ -25,8 +25,6 @@
 #  fk_rails_...  (category_id => categories.id)
 #
 class IdentificationSerializer < ApplicationSerializer
-  object_as :identification
-
   attributes(
     :identificationable_type,
     :identificationable_id,

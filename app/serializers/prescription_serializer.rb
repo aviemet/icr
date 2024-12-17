@@ -27,8 +27,6 @@
 #  fk_rails_...  (medication_id => medications.id)
 #
 class PrescriptionSerializer < ApplicationSerializer
-  object_as :prescription
-
   attributes(
     :medication_id,
     :client_id,

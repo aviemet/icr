@@ -26,9 +26,9 @@
 #  fk_rails_...  (primary_phone_id => phones.id)
 #
 class Contact < ApplicationRecord
-  has_many :addresses, dependent: :delete_all, after_add: :calculate_primary_address
-  has_many :emails, dependent: :delete_all, after_add: :calculate_primary_email
-  has_many :phones, dependent: :delete_all, after_add: :calculate_primary_phone
+  has_many :addresses, dependent: :destroy, after_add: :calculate_primary_address
+  has_many :emails, dependent: :destroy, after_add: :calculate_primary_email
+  has_many :phones, dependent: :destroy, after_add: :calculate_primary_phone
 
   belongs_to :primary_address, class_name: "Address", optional: true
   belongs_to :primary_email, class_name: "Email", optional: true
@@ -36,31 +36,28 @@ class Contact < ApplicationRecord
 
   belongs_to :contactable, polymorphic: true
 
-  # Override the getter for primary_address
   def primary_address
     super || calculate_primary(:addresses)
   end
 
-  # Override the getter for primary_email
   def primary_email
-    super || calculate_primary(:email)
+    super || calculate_primary(:emails)
   end
 
-  # Override the getter for primary_phone
   def primary_phone
     super || calculate_primary(:phones)
   end
 
-  private
+  def calculate_primary_address(*_args) calculate_primary(:addresses) end
+  def calculate_primary_email(*_args) calculate_primary(:emails) end
+  def calculate_primary_phone(*_args) calculate_primary(:phones) end
 
-  def calculate_primary_address() calculate_primary(:address) end
-  def calculate_primary_email() calculate_primary(:email) end
-  def calculate_primary_phone() calculate_primary(:phone) end
+  private
 
   # Generic method to calculate and persist the primary record
   def calculate_primary(association_name)
     collection = send(association_name)
-    if collection.count > 0
+    if collection.any?
       primary_method_name = "primary_#{association_name.to_s.singularize}"
       update(primary_method_name => collection.first)
       send(primary_method_name)

@@ -33,8 +33,6 @@
 #  fk_rails_...  (reported_to_id => people.id)
 #
 class IncidentReportSerializer < ApplicationSerializer
-  object_as :incident_report
-
   attributes(
     :occurred_at,
     :reported_at,

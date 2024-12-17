@@ -17,8 +17,6 @@
 #  fk_rails_...  (category_id => categories.id)
 #
 class IncidentTypeSerializer < ApplicationSerializer
-  object_as :incident_type
-
   attributes(
     :category_id,
     :name,

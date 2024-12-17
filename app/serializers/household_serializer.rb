@@ -13,8 +13,6 @@
 #  index_households_on_slug  (slug) UNIQUE
 #
 class HouseholdSerializer < ApplicationSerializer
-  object_as :household
-
   identifier :slug
 
   attributes(

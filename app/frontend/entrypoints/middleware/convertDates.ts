@@ -1,7 +1,7 @@
 /**
  * Recursively check each prop value and convert ISO strings to dates
  */
-export function convertDates<T extends string|Record<string, unknown>|Record<string, unknown>[]>(obj: T): T {
+export function convertDates<T extends string | Record<string, unknown> | Record<string, unknown>[]>(obj: T): T {
 	if(Array.isArray(obj)) {
 		return obj.map(convertDates) as unknown as T
 	} else if(obj !== null && typeof obj === 'object') {

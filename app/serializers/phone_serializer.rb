@@ -23,8 +23,6 @@
 #  fk_rails_...  (contact_id => contacts.id)
 #
 class PhoneSerializer < ApplicationSerializer
-  object_as :phone
-
   attributes(
     :title,
     :number,

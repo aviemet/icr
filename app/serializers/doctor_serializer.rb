@@ -18,8 +18,6 @@
 #  fk_rails_...  (person_id => people.id)
 #
 class DoctorSerializer < ApplicationSerializer
-  object_as :doctor
-
   identifier :slug
 
   attributes(

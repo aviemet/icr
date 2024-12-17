@@ -50,10 +50,10 @@ class ClientsController < ApplicationController
 
   # @route GET /clients/:slug/schedule (schedule_client)
   def schedule
-    schedules = client.schedules.between(range_start, range_end)
-
+    schedules = client.shifts.between(range_start, range_end)
+    ap({schedules:})
     render inertia: "Clients/Schedule", props: {
-      client: client.render,
+      client: client.render(:show),
       schedules: lambda {
         schedules.render(:show)
       },
@@ -94,10 +94,10 @@ class ClientsController < ApplicationController
   private
 
   def range_start
-    params[:start] || Time.zone.now.beginning_of_month.prev_occurring(:sunday)
+    params[:start] || Time.current.beginning_of_month.prev_occurring(:sunday)
   end
 
   def range_end
-    params[:end] || Time.zone.now.end_of_month.next_occurring(:saturday)
+    params[:end] || Time.current.end_of_month.next_occurring(:saturday)
   end
 end
