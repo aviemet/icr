@@ -12,4 +12,6 @@ class ApplicationController < ActionController::Base
   include Inertia::Flash
   include Inertia::Auth
   include Inertia::Menu
+
+  # include ErrorHandling
 end

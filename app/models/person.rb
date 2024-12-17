@@ -35,7 +35,8 @@ class Person < ApplicationRecord
 
   pg_search_scope(
     :search,
-    against: [:first_name, :middle_name, :last_name, :nick_name], associated_against: {
+    against: [:first_name, :middle_name, :last_name, :nick_name],
+    associated_against: {
       user: [:email],
       client: [:number],
       employee: [:number]
@@ -49,6 +50,7 @@ class Person < ApplicationRecord
   resourcify
 
   belongs_to :user, optional: true
+
   has_one :client, dependent: :nullify
   has_one :employee, dependent: :nullify
   has_one :doctor, dependent: :nullify
@@ -63,5 +65,15 @@ class Person < ApplicationRecord
 
   def name(include_middle_name: false)
     "#{first_name}#{include_middle_name ? " #{middle_name}" : ''} #{last_name}"
+  end
+
+  after_create :sync_user_email_with_contact
+
+  private
+
+  def sync_user_email_with_contact
+    return unless user&.email
+
+    contact.emails.create(email: user.email) unless contact.emails.exists?(email: user.email)
   end
 end

@@ -69,8 +69,6 @@ class User < ApplicationRecord
 
   store_accessor :user_preferences, :dark_mode
 
-  before_save :coerce_json
-
   has_one :person, dependent: :nullify
 
   validates :time_zone, inclusion: { in: TZInfo::Timezone.all_data_zone_identifiers }
@@ -88,9 +86,18 @@ class User < ApplicationRecord
     self.table_preferences&.[](model.to_s)&.[]("limit")
   end
 
+  before_save :coerce_json
+  after_update :synchronize_email_with_contact
+
   private
 
   def coerce_json
     self.dark_mode = ActiveModel::Type::Boolean.new.cast(self.dark_mode) if self.dark_mode
+  end
+
+  def synchronize_email_with_contact
+    return unless person&.contact&.exists? && saved_change_to_email?
+
+    person.contact.create(email: email) unless person.contact.emails.exists?(email: email)
   end
 end

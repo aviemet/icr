@@ -57,6 +57,8 @@ class Employee < ApplicationRecord
 
   scope :includes_associated, -> { includes([:person, :identifications, :job_titles, :pay_rates]) }
 
+  delegate :contact, to: :person
+
   private
 
   def slug_candidates

@@ -31,4 +31,6 @@ class EmailSerializer < ApplicationSerializer
     :contact_id,
     :category_id,
   )
+
+  belongs_to :category, serializer: CategorySerializer
 end

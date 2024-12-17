@@ -38,6 +38,11 @@ FactoryBot.define do
     notes { Faker::Lorem.sentence }
 
     contact
-    category
+
+    after(:build) do |address|
+      existing_category = Category.find_by(categorizable_type: "Address")
+
+      address.category = existing_category.presence || FactoryBot.build(:category, :address)
+    end
   end
 end

@@ -49,12 +49,14 @@ class Client < ApplicationRecord
   has_many :doctors, through: :doctors_clients
   has_many :prescriptions, dependent: :destroy
 
-  has_one :households_client, dependent: :nullify
+  has_one :households_client, dependent: :destroy
   has_one :household, through: :households_client, dependent: :nullify
 
   accepts_nested_attributes_for :person
 
   scope :includes_associated, -> { includes([:person, :identifications]) }
+
+  delegate :contact, :name, :first_name, :last_name, to: :person
 
   private
 

@@ -27,8 +27,13 @@ if Rails.env.development?
     6.times do
       client = FactoryBot.create :client
       FactoryBot.create(:address, contact: client.contact)
+      FactoryBot.create(:email, contact: client.contact)
       FactoryBot.create(:phone, contact: client.contact)
     end
+
+    h = Household.create({ name: "Test Household" })
+    h.clients << Client.first
+    h.clients << Client.second
   end
 
   if Employee.count == 0
@@ -37,12 +42,6 @@ if Rails.env.development?
       FactoryBot.create(:address, contact: employee.contact)
       FactoryBot.create(:phone, contact: employee.contact)
     end
-  end
-
-  if Household.count == 0
-    h = Household.create({ name: "Test Household" })
-    h.clients << Client.first
-    h.clients << Client.second
   end
 
 end

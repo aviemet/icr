@@ -38,7 +38,7 @@ const Sidebar = () => {
 							className={ cx('hidden-when-closed') }
 						>
 							<Box><Text size="xl" fw={ 700 }>{ siteTitle }</Text></Box>
-							<Box><Text size="sm">{ user.person.name }</Text></Box>
+							<Box><Text size="sm">{ user?.person?.name }</Text></Box>
 						</Flex>
 					</Group>
 				</AppShell.Section>

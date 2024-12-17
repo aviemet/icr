@@ -17,8 +17,15 @@
 #
 FactoryBot.define do
   factory :category do
-    categorizable_type { Category::CATEGORIZABLE_TYPES.sample }
     name { Faker::Commerce.department }
     description { Faker::Lorem.paragraph }
+
+    categorizable_type { Category::CATEGORIZABLE_TYPES.sample }
+
+    Category::CATEGORIZABLE_TYPES.each do |type|
+      trait type.downcase.underscore.to_sym do
+        categorizable_type { type }
+      end
+    end
   end
 end

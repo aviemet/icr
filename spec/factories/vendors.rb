@@ -23,6 +23,6 @@ FactoryBot.define do
   factory :vendor do
     name { Faker::Commerce.department(max: 1, fixed_amount: true) }
 
-    association :category, { categorizable_type: "Vendor" } # rubocop:disable FactoryBot/AssociationStyle
+    category factory: %i[category vendor]
   end
 end

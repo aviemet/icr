@@ -43,7 +43,7 @@ class Contact < ApplicationRecord
 
   # Override the getter for primary_email
   def primary_email
-    super || calculate_primary(:emails)
+    super || calculate_primary(:email)
   end
 
   # Override the getter for primary_phone

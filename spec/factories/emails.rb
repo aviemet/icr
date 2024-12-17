@@ -26,6 +26,11 @@ FactoryBot.define do
     email { Faker::Internet.email }
 
     contact
-    association :category, { categorizable_type: "Email" } # rubocop:disable FactoryBot/AssociationStyle
+
+    after(:build) do |email|
+      existing_category = Category.find_by(categorizable_type: "Email")
+
+      email.category = existing_category.presence || FactoryBot.build(:category, :email)
+    end
   end
 end

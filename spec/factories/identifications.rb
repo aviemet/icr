@@ -29,8 +29,9 @@ FactoryBot.define do
     number { Faker::Alphanumeric.alpha(number: 16).upcase }
     issued_at { 2.years.ago }
     expires_at { 2.years.from_now }
-    association :category, { categorizable_type: "Identification" } # rubocop:disable FactoryBot/AssociationStyle
     extra_fields { {} }
+
     identificationable factory: :employee
+    category factory: %i[category identification]
   end
 end
