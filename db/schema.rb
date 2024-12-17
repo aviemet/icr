@@ -166,7 +166,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
 
   create_table "emails", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "title"
-    t.string "email"
+    t.string "email", null: false
     t.text "notes"
     t.uuid "category_id"
     t.datetime "created_at", null: false
@@ -320,7 +320,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
     t.string "last_name"
     t.string "nick_name"
     t.date "dob"
-    t.jsonb "characterstics"
+    t.jsonb "characteristics"
     t.uuid "user_id"
     t.string "slug", null: false
     t.datetime "created_at", null: false

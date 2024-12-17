@@ -57,11 +57,11 @@ RSpec.describe Category do
 
     describe "#qty" do
       it "returns the number of records with the category" do
-        category_type = "Phone"
+        category_type = "Vendor"
         category = create(:category, { categorizable_type: category_type })
-        phones = create_list(:phone, 5, { category: })
+        vendors = create_list(:vendor, 5, { category: })
 
-        expect(category.qty).to eq(phones.count)
+        expect(category.qty).to eq(vendors.count)
       end
     end
 

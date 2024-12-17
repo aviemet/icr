@@ -24,6 +24,8 @@
 class EmployeeSerializer < ApplicationSerializer
   object_as :employee
 
+  identifier :slug
+
   attributes(
     :number,
     :person_id,

@@ -1,10 +1,11 @@
 # == Schema Information
 #
-# Table name: emails
+# Table name: phones
 #
 #  id          :uuid             not null, primary key
-#  email       :string           not null
+#  extension   :string
 #  notes       :text
+#  number      :string           not null
 #  title       :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
@@ -13,19 +14,22 @@
 #
 # Indexes
 #
-#  index_emails_on_category_id  (category_id)
-#  index_emails_on_contact_id   (contact_id)
+#  index_phones_on_category_id  (category_id)
+#  index_phones_on_contact_id   (contact_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (category_id => categories.id)
 #  fk_rails_...  (contact_id => contacts.id)
 #
-FactoryBot.define do
-  factory :email do
-    email { Faker::Internet.email }
+class PhoneSerializer < ApplicationSerializer
+  object_as :phone
 
-    contact
-    association :category, { categorizable_type: "Email" } # rubocop:disable FactoryBot/AssociationStyle
-  end
+  attributes(
+    :title,
+    :number,
+    :extension,
+  )
+
+  belongs_to :category, serializer: CategorySerializer
 end

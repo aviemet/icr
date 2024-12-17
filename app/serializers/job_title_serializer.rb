@@ -16,6 +16,8 @@
 class JobTitleSerializer < ApplicationSerializer
   object_as :job_title
 
+  identifier :slug
+
   attributes(
     :title,
     :description,

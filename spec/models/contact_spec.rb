@@ -30,7 +30,8 @@ require "rails_helper"
 RSpec.describe Contact do
   describe "Validations" do
     it "is valid with valid attributes" do
-      expect(build(:contact)).to be_valid
+      contact = build(:contact, :for_person)
+      expect(contact).to be_valid
     end
   end
 
@@ -47,7 +48,7 @@ RSpec.describe Contact do
 
     describe "primary contact method" do
       it "sets a lone contact method to the primary contact method" do
-        contact = create(:contact)
+        contact = create(:contact, :for_person)
 
         address_1 = create(:address, { contact: })
         email_1 = create(:email, { contact: })
@@ -66,6 +67,8 @@ RSpec.describe Contact do
         address_1.destroy
         email_1.destroy
         phone_1.destroy
+
+        contact.reload!
 
         expect(contact.primary_address).to eq(address_2)
         expect(contact.primary_email).to eq(email_2)

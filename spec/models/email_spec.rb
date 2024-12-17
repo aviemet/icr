@@ -3,7 +3,7 @@
 # Table name: emails
 #
 #  id          :uuid             not null, primary key
-#  email       :string
+#  email       :string           not null
 #  notes       :text
 #  title       :string
 #  created_at  :datetime         not null

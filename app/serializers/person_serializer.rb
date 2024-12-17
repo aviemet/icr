@@ -2,17 +2,17 @@
 #
 # Table name: people
 #
-#  id             :uuid             not null, primary key
-#  characterstics :jsonb
-#  dob            :date
-#  first_name     :string
-#  last_name      :string
-#  middle_name    :string
-#  nick_name      :string
-#  slug           :string           not null
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#  user_id        :uuid
+#  id              :uuid             not null, primary key
+#  characteristics :jsonb
+#  dob             :date
+#  first_name      :string
+#  last_name       :string
+#  middle_name     :string
+#  nick_name       :string
+#  slug            :string           not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  user_id         :uuid
 #
 # Indexes
 #
@@ -25,6 +25,8 @@
 #
 class PersonSerializer < ApplicationSerializer
   object_as :person
+
+  identifier :slug
 
   attributes(
     :first_name,

@@ -52,6 +52,8 @@
 class UserSerializer < ApplicationSerializer
   object_as :user
 
+  identifier :slug
+
   attributes(
     :email,
     :active,

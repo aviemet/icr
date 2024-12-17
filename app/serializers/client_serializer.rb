@@ -24,6 +24,8 @@
 class ClientSerializer < ApplicationSerializer
   object_as :client
 
+  identifier :slug
+
   attributes(
     :person_id,
     :number,

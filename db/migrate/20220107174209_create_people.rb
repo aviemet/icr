@@ -6,7 +6,7 @@ class CreatePeople < ActiveRecord::Migration[7.0]
       t.string :last_name
       t.string :nick_name
       t.date :dob
-      t.jsonb :characterstics
+      t.jsonb :characteristics
 
       t.belongs_to :user, type: :uuid, null: true, foreign_key: true
 

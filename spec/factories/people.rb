@@ -2,17 +2,17 @@
 #
 # Table name: people
 #
-#  id             :uuid             not null, primary key
-#  characterstics :jsonb
-#  dob            :date
-#  first_name     :string
-#  last_name      :string
-#  middle_name    :string
-#  nick_name      :string
-#  slug           :string           not null
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#  user_id        :uuid
+#  id              :uuid             not null, primary key
+#  characteristics :jsonb
+#  dob             :date
+#  first_name      :string
+#  last_name       :string
+#  middle_name     :string
+#  nick_name       :string
+#  slug            :string           not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  user_id         :uuid
 #
 # Indexes
 #
@@ -30,6 +30,10 @@ FactoryBot.define do
     last_name { Faker::Name.last_name }
     nick_name { Faker::Name.initials(number: 2) }
     dob { Faker::Date.birthday(min_age: 18, max_age: 65) }
-    characterstics { {} }
+    characteristics { {} }
+
+    factory :person_with_contacts do
+      contact { association :contact, person: instance }
+    end
   end
 end

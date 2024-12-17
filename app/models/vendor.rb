@@ -23,6 +23,9 @@ class Vendor < ApplicationRecord
   extend FriendlyId
   friendly_id :name, use: [:slugged, :history]
 
+  include Contactable
+  include Categorizable
+
   pg_search_scope(
     :search,
     against: [:name, :notes],
@@ -36,8 +39,6 @@ class Vendor < ApplicationRecord
   )
 
   resourcify
-
-  belongs_to :category
 
   validates :name, presence: true
 

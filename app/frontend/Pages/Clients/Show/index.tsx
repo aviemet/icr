@@ -12,7 +12,7 @@ export interface ShowClientProps {
 
 const tabsList = [
 	{ id: 'details', label: 'Details', component: Details },
-	{ id: 'contacts', label: 'Contacts', component: Contacts },
+	{ id: 'contacts', label: 'Contact Details', component: Contacts },
 	{ id: 'schedule', label: 'Schedules', component: Schedules },
 	{ id: 'documents', label: 'Documents', component: Documents },
 ]

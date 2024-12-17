@@ -1,7 +1,7 @@
 import React from 'react'
 import { Routes } from '@/lib'
-import { Table, Link, Date } from '@/Components'
-import { EditButton } from '@/Components/Button'
+import { Table, Link, Date, Group } from '@/Components'
+import { EditButton, ScheduleButton } from '@/Components/Button'
 import { type TableProps } from '@/Components/Table/Table'
 
 const ClientTable = (props: TableProps) => {
@@ -36,7 +36,10 @@ const ClientTable = (props: TableProps) => {
 						</Table.Cell>
 
 						<Table.Cell>
-							<EditButton href={ Routes.editClient(client.slug) } />
+							<Group wrap="nowrap" gap="xs">
+								<EditButton href={ Routes.editClient(client.slug) } />
+								<ScheduleButton href={ Routes.client(client.slug, { tab: 'schedule' }) } />
+							</Group>
 						</Table.Cell>
 					</Table.Row>
 				) } />

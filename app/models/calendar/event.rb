@@ -28,6 +28,8 @@
 #  fk_rails_...  (parent_id => calendar_events.id)
 #
 class Calendar::Event < ApplicationRecord
+  include Categorizable
+
   pg_search_scope(
     :search,
     against: [:starts_at, :ends_at],
@@ -45,7 +47,6 @@ class Calendar::Event < ApplicationRecord
   resourcify
 
   belongs_to :parent, class_name: "Calendar::Event", optional: true
-  belongs_to :category
   belongs_to :employee, optional: true
   belongs_to :created_by, class_name: "User", optional: true
 

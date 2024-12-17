@@ -27,6 +27,30 @@
 #
 FactoryBot.define do
   factory :contact do
-    contactable factory: :person
+    contactable { nil }
+
+    trait :for_person do
+      contactable factory: :person
+    end
+
+    trait :for_household do
+      contactable factory: :household
+    end
+
+    trait :for_vendor do
+      contactable factory: :vendor
+    end
+
+    transient do
+      address_count { 1 }
+      email_count { 1 }
+      phone_count { 1 }
+    end
+
+    after(:create) do |contact, context|
+      create_list(:address, context.address_count, contact: contact)
+      create_list(:email, context.email_count, contact: contact)
+      create_list(:phone, context.phone_count, contact: contact)
+    end
   end
 end

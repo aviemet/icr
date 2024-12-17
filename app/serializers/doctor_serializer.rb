@@ -20,6 +20,8 @@
 class DoctorSerializer < ApplicationSerializer
   object_as :doctor
 
+  identifier :slug
+
   attributes(
     :first_name,
     :last_name,
