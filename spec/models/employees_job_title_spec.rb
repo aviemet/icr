@@ -28,7 +28,7 @@ RSpec.describe EmployeesJobTitle do
       expect(build(:employees_job_title)).to be_valid
     end
 
-    it "is invlalid with missing attributes" do
+    it "is invalid with missing attributes" do
       %i(starts_at).each do |attr|
         expect(build(:employees_job_title, attr => nil)).not_to be_valid
       end

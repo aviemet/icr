@@ -31,7 +31,7 @@ RSpec.describe Phone do
       expect(build(:phone)).to be_valid
     end
 
-    it "is invlalid with missing attributes" do
+    it "is invalid with missing attributes" do
       %i(number).each do |attr|
         expect(build(:phone, attr => nil)).not_to be_valid
       end

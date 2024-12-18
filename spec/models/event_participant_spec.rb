@@ -26,7 +26,7 @@ RSpec.describe EventParticipant do
       expect(build(:event_participant)).to be_valid
     end
 
-    it "is invlalid with missing attributes" do
+    it "is invalid with missing attributes" do
       %i().each do |attr|
         expect(build(:event_participant, attr => nil)).not_to be_valid
       end

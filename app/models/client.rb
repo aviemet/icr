@@ -54,7 +54,7 @@ class Client < ApplicationRecord
 
   accepts_nested_attributes_for :person
 
-  scope :includes_associated, -> { includes([:person, :identifications]) }
+  scope :includes_associated, -> { includes([:identifications, person: [:user, :contact]]) }
 
   delegate :contact, :name, :first_name, :last_name, to: :person
 

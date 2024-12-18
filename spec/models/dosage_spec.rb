@@ -19,7 +19,7 @@ RSpec.describe Dosage do
       expect(build(:dosage)).to be_valid
     end
 
-    it "is invlalid with missing attributes" do
+    it "is invalid with missing attributes" do
       %i(amount freq_period).each do |attr|
         expect(build(:dosage, attr => nil)).not_to be_valid
       end

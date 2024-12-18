@@ -27,6 +27,7 @@ class Employee < ApplicationRecord
 
   include Identificationable
   include Shiftable
+  include CalendarCustomizable
 
   pg_search_scope(
     :search,

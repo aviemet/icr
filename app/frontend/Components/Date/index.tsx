@@ -1,6 +1,6 @@
 import React from 'react'
 import { formatter } from '@/lib'
-import { Box, Text, Tooltip } from '@/Components'
+import { Stack, Text, Tooltip } from '@/Components'
 import ConditionalWrapper from '../ConditionalWrapper'
 import { isEmpty } from 'lodash'
 import { TooltipBaseProps } from '@mantine/core/lib/components/Tooltip/Tooltip.types'
@@ -26,9 +26,9 @@ const Date = ({ children, format = 'short', tooltipFormats, tooltipOptions }: Da
 					return (
 						<Tooltip
 							{ ...tooltipProps }
-							label={ <Box>{ tooltipFormats!.map(f => (
-								<Date format={ f }>{ children }</Date>
-							)) }</Box> }
+							label={ <Stack>{ tooltipFormats!.map(f => (
+								<Date key={ f } format={ f }>{ children }</Date>
+							)) }</Stack> }
 						>
 							{ innerChildren }
 						</Tooltip>

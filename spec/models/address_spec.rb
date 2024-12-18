@@ -35,7 +35,7 @@ RSpec.describe Address do
       expect(build(:address)).to be_valid
     end
 
-    it "is invlalid with missing attributes" do
+    it "is invalid with missing attributes" do
       %i().each do |attr|
         expect(build(:address, attr => nil)).not_to be_valid
       end

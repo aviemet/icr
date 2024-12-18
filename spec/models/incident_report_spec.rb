@@ -40,7 +40,7 @@ RSpec.describe IncidentReport do
       expect(build(:incident_report)).to be_valid
     end
 
-    it "is invlalid with missing attributes" do
+    it "is invalid with missing attributes" do
       %i().each do |attr|
         expect(build(:incident_report, attr => nil)).not_to be_valid
       end

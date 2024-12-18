@@ -31,7 +31,7 @@ RSpec.describe Person do
       expect(build(:person)).to be_valid
     end
 
-    it "is invlalid with missing attributes" do
+    it "is invalid with missing attributes" do
       %i(first_name last_name).each do |attr|
         expect(build(:person, attr => nil)).not_to be_valid
       end

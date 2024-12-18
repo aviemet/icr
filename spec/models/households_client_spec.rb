@@ -28,7 +28,7 @@ RSpec.describe HouseholdsClient do
       expect(build(:households_client)).to be_valid
     end
 
-    it "is invlalid with missing attributes" do
+    it "is invalid with missing attributes" do
       %i().each do |attr|
         expect(build(:households_client, attr => nil)).not_to be_valid
       end

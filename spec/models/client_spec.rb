@@ -30,7 +30,7 @@ RSpec.describe Client do
       expect(build(:client)).to be_valid
     end
 
-    it "is invlalid with missing attributes" do
+    it "is invalid with missing attributes" do
       %i(person).each do |attr|
         expect(build(:client, attr => nil)).not_to be_valid
       end
@@ -39,7 +39,7 @@ RSpec.describe Client do
   end
 
   describe "Associations" do
-    it_behaves_like "shiftable"
+    it_behaves_like "a shiftable entity"
 
     it{ is_expected.to belong_to(:person) }
 

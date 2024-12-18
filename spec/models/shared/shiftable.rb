@@ -1,4 +1,4 @@
-shared_examples "shiftable" do
+shared_examples "a shiftable entity" do
   it{ is_expected.to have_many(:events).through(:event_participants) }
 
   describe "shift" do

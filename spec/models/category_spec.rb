@@ -23,7 +23,7 @@ RSpec.describe Category do
       expect(build(:category)).to be_valid
     end
 
-    it "is invlalid with missing attributes" do
+    it "is invalid with missing attributes" do
       %i(name categorizable_type).each do |attr|
         expect(build(:category, attr => nil)).not_to be_valid
       end

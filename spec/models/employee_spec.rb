@@ -22,6 +22,7 @@
 #  fk_rails_...  (person_id => people.id)
 #
 require "rails_helper"
+require "models/shared/shiftable"
 
 RSpec.describe Employee do
   describe "Validations" do
@@ -29,7 +30,7 @@ RSpec.describe Employee do
       expect(build(:employee)).to be_valid
     end
 
-    it "is invlalid with missing attributes" do
+    it "is invalid with missing attributes" do
       %i().each do |attr|
         expect(build(:employee, attr => nil)).not_to be_valid
       end
@@ -37,6 +38,8 @@ RSpec.describe Employee do
   end
 
   describe "Associations" do
+    it_behaves_like "a shiftable entity"
+
     it{ is_expected.to belong_to(:person) }
 
     it{ is_expected.to have_many(:pay_rates) }

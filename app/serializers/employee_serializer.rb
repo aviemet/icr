@@ -29,6 +29,8 @@ class EmployeeSerializer < ApplicationSerializer
     :person_id,
     :active_at,
     :inactive_at,
+    :color,
+    :color_mappings,
   )
 
   belongs_to :person, serializer: PersonSerializer

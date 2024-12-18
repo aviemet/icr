@@ -17,7 +17,7 @@ RSpec.describe Medication do
       expect(build(:medication)).to be_valid
     end
 
-    it "is invlalid with missing attributes" do
+    it "is invalid with missing attributes" do
       %i(name).each do |attr|
         expect(build(:medication, attr => nil)).not_to be_valid
       end

@@ -29,6 +29,8 @@ class ClientSerializer < ApplicationSerializer
     :number,
     :active_at,
     :inactive_at,
+    :color,
+    :color_mappings,
   )
 
   belongs_to :person, serializer: PersonSerializer

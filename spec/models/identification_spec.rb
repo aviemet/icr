@@ -32,7 +32,7 @@ RSpec.describe Identification do
       expect(build(:identification)).to be_valid
     end
 
-    it "is invlalid with missing attributes" do
+    it "is invalid with missing attributes" do
       %i().each do |attr|
         expect(build(:identification, attr => nil)).not_to be_valid
       end

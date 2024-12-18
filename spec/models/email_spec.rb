@@ -30,7 +30,7 @@ RSpec.describe Email do
       expect(build(:email)).to be_valid
     end
 
-    it "is invlalid with missing attributes" do
+    it "is invalid with missing attributes" do
       %i(email).each do |attr|
         expect(build(:email, attr => nil)).not_to be_valid
       end

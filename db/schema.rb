@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_18_185308) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -52,6 +52,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_04_215320) do
     t.uuid "contact_id"
     t.index ["category_id"], name: "index_addresses_on_category_id"
     t.index ["contact_id"], name: "index_addresses_on_contact_id"
+  end
+
+  create_table "calendar_customizations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "customizer_type", null: false
+    t.uuid "customizer_id", null: false
+    t.jsonb "color_mappings", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["color_mappings"], name: "index_calendar_customizations_on_color_mappings", using: :gin
+    t.index ["customizer_type", "customizer_id"], name: "index_calendar_customizations_on_customizer"
   end
 
   create_table "calendar_event_exceptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

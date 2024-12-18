@@ -37,7 +37,7 @@ RSpec.describe PayRate do
       expect(build(:pay_rate, { rate_cents: -10 })).not_to be_valid
     end
 
-    it "is invlalid with missing attributes" do
+    it "is invalid with missing attributes" do
       %i(period rate).each do |attr|
         expect(build(:pay_rate, attr => nil)).not_to be_valid
       end

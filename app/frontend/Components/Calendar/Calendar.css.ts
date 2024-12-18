@@ -20,8 +20,17 @@ export const calendar = css`
 		button{
 			color: ${vars.colors.white};
 
+			&:hover, &:active, &:focus {
+				color: ${vars.colors.white};
+				background-color: ${vars.colors.dark[5]};
+			}
+
 			&.rbc-active {
 				background-color: ${vars.colors.cyan[8]};
+
+				&:hover {
+					color: ${vars.colors.white};
+				}
 			}
 		}
 	}

@@ -1,6 +1,6 @@
 import React  from 'react'
 import { router } from '@inertiajs/react'
-import { formatter } from '@/lib'
+import { formatter, theme } from '@/lib'
 // import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import dayjs from 'dayjs'
 import {
@@ -11,14 +11,16 @@ import {
 // import ShiftForm from '@/Pages/Shifts/Form'
 import { type NavigateAction, type View, type Event } from 'react-big-calendar'
 import { modals } from '@mantine/modals'
+import { useContrastingTextColorCalculator } from '@/lib/hooks/useContrastingTextColor'
 
 interface ScheduleProps {
 	client: Schema.ClientsShow
-	employees: Schema.EmployeesPersisted[]
 	schedules: Schema.CalendarEventsShow[]
 }
 
-const Schedule = ({ client, employees, schedules }: ScheduleProps) => {
+const Schedule = ({ client, schedules }: ScheduleProps) => {
+	const calculateContrastingColor = useContrastingTextColorCalculator()
+
 	const handleSelectEvent = (event: Event, e: React.SyntheticEvent<HTMLElement, globalThis.Event>) => {
 		modals.open({
 			title: 'Event Details',
@@ -62,7 +64,6 @@ const Schedule = ({ client, employees, schedules }: ScheduleProps) => {
 		const end = schedule.ends_at ? formatter.time.short(schedule.ends_at) : undefined
 		const name = schedule?.employee ? schedule.employee.person.name : schedule.name
 
-
 		return `${start ? start : ''}${end
 			? (
 				start ?
@@ -72,6 +73,19 @@ const Schedule = ({ client, employees, schedules }: ScheduleProps) => {
 			: ''}: ${name}`
 	}
 
+	const eventStyleGetter = (event: Event) => {
+		let defaultColor = theme.colors.blue[5]
+
+		const eventColor = event?.resource?.backgroundColor || defaultColor
+
+		return {
+			style: {
+				backgroundColor: eventColor,
+				color: calculateContrastingColor(eventColor),
+			},
+		}
+	}
+
 	return (
 		<>
 			<h1>{ client?.person?.name }</h1>
@@ -79,9 +93,13 @@ const Schedule = ({ client, employees, schedules }: ScheduleProps) => {
 				<Calendar
 					events={ schedules.map(schedule => (
 						{
+							id: schedule.id,
 							title: buildShiftTitle(schedule),
 							start: schedule.starts_at,
 							end: schedule.ends_at,
+							resource: {
+								backgroundColor: schedule.employee.color,
+							},
 						}
 					)) }
 					onSelectEvent={ handleSelectEvent }
@@ -89,6 +107,7 @@ const Schedule = ({ client, employees, schedules }: ScheduleProps) => {
 					onNavigate={ handleDateChange }
 					onView={ handleViewChange }
 					onRangeChange={ handleRangeChange }
+					eventPropGetter={ eventStyleGetter }
 				/>
 			</Box>
 			{ /* <Modal title="New Shift" open={ modalContext.open } handleClose={ modalContext.close }>

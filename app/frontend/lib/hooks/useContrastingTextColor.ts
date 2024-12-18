@@ -8,7 +8,7 @@ const useContrastingTextColor = (color: string) => {
 
 	let validatedColor = color
 	if(Object.keys(colors).includes(color)) {
-		const shade = (primaryShade as MantinePrimaryShade)[(colorScheme as 'light'|'dark')]
+		const shade = (primaryShade as MantinePrimaryShade)[(colorScheme as 'light' | 'dark')]
 		validatedColor = colors[color][shade]
 	}
 
@@ -16,3 +16,25 @@ const useContrastingTextColor = (color: string) => {
 }
 
 export default useContrastingTextColor
+
+const useContrastingTextColorCalculator = () => {
+	const { colors, primaryShade } = useMantineTheme()
+	const { colorScheme } = useMantineColorScheme()
+
+	const calculateContrastingColor = (color: string) => {
+		if(color === 'black') return 'white'
+		if(color === 'white' || color === undefined) return 'black'
+
+		let validatedColor = color
+		if(Object.keys(colors).includes(color)) {
+			const shade = (primaryShade as MantinePrimaryShade)[(colorScheme as 'light' | 'dark')]
+			validatedColor = colors[color][shade]
+		}
+		const luminanceThreshold = 0.1
+		return isLightColor(validatedColor, luminanceThreshold) ? 'black' : 'white'
+	}
+
+	return calculateContrastingColor
+}
+
+export { useContrastingTextColorCalculator }
