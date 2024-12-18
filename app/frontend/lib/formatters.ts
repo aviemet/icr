@@ -29,3 +29,15 @@ export const date = {
 		return start.from(new Date(date), true)
 	},
 }
+
+export const time = {
+	short: (date: string | Date) => {
+		const d = dayjs(new Date(date))
+		let formatString = 'h'
+		if(d.get('minutes') > 0) {
+			formatString += ':mm'
+		}
+		return d.format(`${formatString}a`)
+	},
+	full: (date: string | Date) => dayjs(new Date(date)).format('HH:mm::ss:SSS Z'),
+}

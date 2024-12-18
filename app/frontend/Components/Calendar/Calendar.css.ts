@@ -4,6 +4,10 @@ import { css } from '@linaria/core'
 export const calendar = css`
 	height: 90vh;
 
+	.rbc-event-content {
+		font-size: ${vars.fontSizes.xs}
+	}
+
 	${vars.darkSelector} { 
 		.rbc-day-bg.rbc-today {
 			background-color: ${vars.colors.cyan[9]};

@@ -1,19 +1,15 @@
-import React, { useState, useEffect, useMemo }  from 'react'
+import React  from 'react'
 import { router } from '@inertiajs/react'
-import { Routes } from '@/lib'
-import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
+import { formatter } from '@/lib'
+// import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import dayjs from 'dayjs'
 import {
 	Box,
-	Button,
 	Calendar,
 	Date,
-	Modal,
 } from '@/Components'
-import { useModalContext } from '@/Components/Modal'
 // import ShiftForm from '@/Pages/Shifts/Form'
 import { type NavigateAction, type View, type Event } from 'react-big-calendar'
-import { useLocation } from '@/lib/hooks'
 import { modals } from '@mantine/modals'
 
 interface ScheduleProps {
@@ -23,9 +19,6 @@ interface ScheduleProps {
 }
 
 const Schedule = ({ client, employees, schedules }: ScheduleProps) => {
-
-	console.log({ schedules })
-
 	const handleSelectEvent = (event: Event, e: React.SyntheticEvent<HTMLElement, globalThis.Event>) => {
 		modals.open({
 			title: 'Event Details',
@@ -64,6 +57,21 @@ const Schedule = ({ client, employees, schedules }: ScheduleProps) => {
 		)
 	}
 
+	const buildShiftTitle = (schedule: Schema.CalendarEventsShow) => {
+		const start = schedule.starts_at ? formatter.time.short(schedule.starts_at) : undefined
+		const end = schedule.ends_at ? formatter.time.short(schedule.ends_at) : undefined
+		const name = schedule?.employee ? schedule.employee.person.name : schedule.name
+
+
+		return `${start ? start : ''}${end
+			? (
+				start ?
+					` - ${end}`
+					: end
+			)
+			: ''}: ${name}`
+	}
+
 	return (
 		<>
 			<h1>{ client?.person?.name }</h1>
@@ -71,7 +79,7 @@ const Schedule = ({ client, employees, schedules }: ScheduleProps) => {
 				<Calendar
 					events={ schedules.map(schedule => (
 						{
-							title: schedule?.name || schedule?.employee?.person?.name,
+							title: buildShiftTitle(schedule),
 							start: schedule.starts_at,
 							end: schedule.ends_at,
 						}
