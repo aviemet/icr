@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_18_185308) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_19_000303) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -80,14 +80,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_18_185308) do
     t.datetime "starts_at"
     t.datetime "ends_at"
     t.uuid "parent_id"
-    t.uuid "employee_id"
     t.uuid "category_id"
     t.uuid "created_by_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_calendar_events_on_category_id"
     t.index ["created_by_id"], name: "index_calendar_events_on_created_by_id"
-    t.index ["employee_id"], name: "index_calendar_events_on_employee_id"
     t.index ["parent_id"], name: "index_calendar_events_on_parent_id"
   end
 
@@ -387,6 +385,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_18_185308) do
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
   end
 
+  create_table "shifts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "employee_id", null: false
+    t.uuid "calendar_event_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["calendar_event_id"], name: "index_shifts_on_calendar_event_id"
+    t.index ["employee_id"], name: "index_shifts_on_employee_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", null: false
     t.string "encrypted_password", null: false
@@ -456,7 +463,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_18_185308) do
   add_foreign_key "calendar_event_exceptions", "calendar_events"
   add_foreign_key "calendar_events", "calendar_events", column: "parent_id"
   add_foreign_key "calendar_events", "categories"
-  add_foreign_key "calendar_events", "employees"
   add_foreign_key "calendar_events", "users", column: "created_by_id"
   add_foreign_key "calendar_recurring_patterns", "calendar_events"
   add_foreign_key "clients", "people"
@@ -489,5 +495,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_18_185308) do
   add_foreign_key "prescriptions", "doctors"
   add_foreign_key "prescriptions", "dosages"
   add_foreign_key "prescriptions", "medications"
+  add_foreign_key "shifts", "calendar_events"
+  add_foreign_key "shifts", "employees"
   add_foreign_key "vendors", "categories"
 end

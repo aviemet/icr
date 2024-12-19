@@ -8,9 +8,7 @@ class CreateCalendarEvents < ActiveRecord::Migration[7.0]
       # Reference to original event for repeating event exception
       t.belongs_to :parent, type: :uuid, null: true, foreign_key: { to_table: :calendar_events }
 
-      t.belongs_to :employee, type: :uuid, null: true, foreign_key: true
       t.belongs_to :category, type: :uuid, null: true, foreign_key: true
-
       t.belongs_to :created_by, type: :uuid, null: false, foreign_key: { to_table: :users }
 
       t.timestamps

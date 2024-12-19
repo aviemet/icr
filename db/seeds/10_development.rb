@@ -49,12 +49,15 @@ if Rails.env.development?
       60.times do |w|
         next unless w % 7 < 6
 
-        shift = FactoryBot.create(:calendar_event, {
+        shift = FactoryBot.create(:shift, {
           employee:,
-          starts_at: start,
-          ends_at: start + 4.hours,
+          calendar_event: FactoryBot.create(:calendar_event, {
+            starts_at: start,
+            ends_at: start + 4.hours,
+          },)
         },)
-        client.events << shift
+
+        client.events << shift.calendar_event
 
         start += 1.day
       end
