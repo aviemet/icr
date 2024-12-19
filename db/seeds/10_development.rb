@@ -24,7 +24,7 @@ if Rails.env.development?
   end
 
   if Client.count == 0
-    6.times do
+    5.times do
       client = FactoryBot.create :client
       FactoryBot.create(:address, contact: client.contact)
       FactoryBot.create(:email, contact: client.contact)
@@ -37,7 +37,7 @@ if Rails.env.development?
   end
 
   if Employee.count == 0
-    6.times do |i|
+    5.times do |i|
       employee = FactoryBot.create :employee, job_title: JobTitle.find(JobTitle.pluck(:id).sample)
       FactoryBot.create(:address, contact: employee.contact)
       FactoryBot.create(:email, contact: employee.contact)
@@ -46,8 +46,8 @@ if Rails.env.development?
       client = Client.first
       start = Time.current.beginning_of_week + (i * 4).hours
 
-      14.times do |w|
-        next unless w % 7 != 6 || w % 7 != 7
+      60.times do |w|
+        next unless w % 7 < 6
 
         shift = FactoryBot.create(:calendar_event, {
           employee:,

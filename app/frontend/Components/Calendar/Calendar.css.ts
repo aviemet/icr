@@ -9,7 +9,7 @@ export const calendar = css`
 	}
 
 	${vars.darkSelector} { 
-		.rbc-day-bg.rbc-today {
+		.rbc-today {
 			background-color: ${vars.colors.cyan[9]};
 		}
 

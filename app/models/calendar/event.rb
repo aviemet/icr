@@ -50,10 +50,10 @@ class Calendar::Event < ApplicationRecord
   belongs_to :employee, optional: true
   belongs_to :created_by, class_name: "User", optional: true
 
-  has_many :event_participants, as: :event, dependent: :nullify
+  has_many :recurring_patterns, class_name: "Calendar::RecurringPattern", foreign_key: "calendar_event_id", inverse_of: :calendar_event, dependent: :destroy
+  has_many :event_participants, as: :event, dependent: :destroy
   has_many :clients, through: :event_participants, source: :participant, source_type: "Client"
   has_many :households, through: :event_participants, source: :participant, source_type: "Household"
-  has_many :recurring_patterns, class_name: "Calendar::RecurringPattern", foreign_key: "calendar_event_id", inverse_of: :calendar_event, dependent: :destroy
 
   validates :name, presence: true
   validates :starts_at, presence: true
@@ -75,4 +75,5 @@ class Calendar::Event < ApplicationRecord
       errors.add(:ends_at, "End time must be after start time")
     end
   end
+
 end

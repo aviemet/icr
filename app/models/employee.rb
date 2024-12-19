@@ -45,7 +45,7 @@ class Employee < ApplicationRecord
 
   belongs_to :person
 
-  has_many :employees_job_titles, dependent: :nullify
+  has_many :employees_job_titles, dependent: :destroy
   has_many :job_titles, through: :employees_job_titles
   has_many :pay_rates, dependent: :destroy
 
@@ -72,4 +72,5 @@ class Employee < ApplicationRecord
       [number]
     end
   end
+
 end
