@@ -7,13 +7,13 @@
 #  address_2   :string
 #  city        :string
 #  country     :integer
+#  name        :string
 #  notes       :text
 #  postal      :string
 #  region      :string
-#  title       :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  category_id :uuid
+#  category_id :uuid             not null
 #  contact_id  :uuid
 #
 # Indexes
@@ -31,7 +31,7 @@ class Address < ApplicationRecord
 
   pg_search_scope(
     :search,
-    against: [:title, :address, :address_2, :city, :region, :postal, :notes, :country],
+    against: [:name, :address, :address_2, :city, :region, :postal, :notes, :country],
     using: {
       tsearch: { prefix: true },
       trigram: {},
@@ -42,7 +42,7 @@ class Address < ApplicationRecord
 
   enum :country, ISO3166::Country.codes
 
-  before_destroy :clear_primary_from_contact
+  before_destroy :nullify_primary_address
 
   belongs_to :contact
 
@@ -50,11 +50,9 @@ class Address < ApplicationRecord
 
   private
 
-  # Ensure the contact's primary_address is cleared if this address is being destroyed
-  def clear_primary_from_contact
-    if contact.primary_address == self
-      next_primary = contact.addresses.where.not(id: id).first
-      contact.update_column(:primary_address_id, next_primary&.id) # rubocop:disable Rails/SkipsModelValidations
-    end
+  def nullify_primary_address
+    return unless contact.primary_address == self
+
+    contact.update!(primary_address: nil)
   end
 end

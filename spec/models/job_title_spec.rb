@@ -4,8 +4,8 @@
 #
 #  id          :uuid             not null, primary key
 #  description :text
+#  name        :string           not null
 #  slug        :string           not null
-#  title       :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
@@ -22,7 +22,7 @@ RSpec.describe JobTitle do
     end
 
     it "is invalid with missing attributes" do
-      %i(title).each do |attr|
+      %i(name).each do |attr|
         expect(build(:job_title, attr => nil)).not_to be_valid
       end
     end

@@ -22,6 +22,7 @@ class Doctor < ApplicationRecord
   friendly_id :name, use: [:slugged, :history]
 
   include Participantable
+  include Personable
 
   pg_search_scope(
     :search,
@@ -34,13 +35,11 @@ class Doctor < ApplicationRecord
 
   resourcify
 
-  belongs_to :person
-
   has_many :doctors_clients, dependent: :nullify
   has_many :clients, through: :doctors_clients
   has_many :prescriptions, dependent: :nullify
 
-  scope :includes_associated, -> { includes([]) }
+  scope :includes_associated, -> { includes([:clients, :prescriptions]) }
 
   def name
     "#{person&.first_name} #{person&.last_name}"

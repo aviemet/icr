@@ -7,11 +7,10 @@ class CreateIncidentReports < ActiveRecord::Migration[7.1]
       t.string :location
       t.text :description
 
-      t.belongs_to :incident_type, type: :uuid, null: false, foreign_key: true
       t.belongs_to :client, type: :uuid, null: false, foreign_key: true
       t.belongs_to :reported_to, type: :uuid, null: false, foreign_key: { to_table: :people }
       t.belongs_to :reported_by, type: :uuid, null: false, foreign_key: { to_table: :people }
-      t.belongs_to :category, type: :uuid, null: true, foreign_key: true
+      t.belongs_to :category, null: false, foreign_key: true, type: :uuid
 
       t.timestamps
     end

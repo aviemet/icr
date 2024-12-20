@@ -66,7 +66,6 @@ RSpec.describe CalendarCustomizable do
     end
   end
 
-  # Run the shared examples for both Client and Employee
   describe Client do
     it_behaves_like "a calendar customizable entity"
   end

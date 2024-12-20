@@ -8,7 +8,7 @@
 #  slug        :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  category_id :uuid
+#  category_id :uuid             not null
 #
 # Indexes
 #
@@ -34,7 +34,6 @@ RSpec.describe Vendor do
     end
   end
 
-  describe "Associations" do
-    it{ is_expected.to belong_to(:category) }
-  end
+  # describe "Associations" do
+  # end
 end

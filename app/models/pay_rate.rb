@@ -22,10 +22,9 @@
 #  fk_rails_...  (employee_id => employees.id)
 #
 class PayRate < ApplicationRecord
-
   pg_search_scope(
     :search,
-    against: [:employee, :rate, :period, :starts_at, :ends_at, :title, :notes],
+    against: [:employee, :rate, :period, :starts_at, :ends_at, :name, :notes],
     associated_against: {
       employee: [],
     },

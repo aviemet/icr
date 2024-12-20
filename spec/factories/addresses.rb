@@ -7,13 +7,13 @@
 #  address_2   :string
 #  city        :string
 #  country     :integer
+#  name        :string
 #  notes       :text
 #  postal      :string
 #  region      :string
-#  title       :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  category_id :uuid
+#  category_id :uuid             not null
 #  contact_id  :uuid
 #
 # Indexes
@@ -28,7 +28,7 @@
 #
 FactoryBot.define do
   factory :address do
-    title { Faker::Address.community }
+    name { Faker::Address.community }
     address { Faker::Address.street_address }
     address_2 { Faker::Address.secondary_address }
     city { Faker::Address.city }
@@ -39,10 +39,6 @@ FactoryBot.define do
 
     contact
 
-    after(:build) do |address|
-      existing_category = Category.find_by(categorizable_type: "Address")
-
-      address.category = existing_category.presence || FactoryBot.build(:category, :address)
-    end
+    category factory: %i[category address]
   end
 end

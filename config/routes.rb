@@ -61,7 +61,6 @@ Rails.application.routes.draw do
 
   resources :incident_reports
 
-  resources :incident_types
 
   resources :prescriptions
 

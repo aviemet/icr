@@ -26,7 +26,9 @@ class Client < ApplicationRecord
   friendly_id :slug_candidates
 
   include Identificationable
-  include Shiftable
+  include Participantable
+  include CalendarCustomizable
+  include Personable
 
   pg_search_scope(
     :search,
@@ -43,8 +45,6 @@ class Client < ApplicationRecord
 
   resourcify
 
-  belongs_to :person
-
   has_many :doctors_clients, dependent: :nullify
   has_many :doctors, through: :doctors_clients
   has_many :prescriptions, dependent: :destroy
@@ -52,11 +52,7 @@ class Client < ApplicationRecord
   has_one :households_client, dependent: :destroy
   has_one :household, through: :households_client, dependent: :nullify
 
-  accepts_nested_attributes_for :person
-
   scope :includes_associated, -> { includes([:identifications, person: [:user, :contact]]) }
-
-  delegate :contact, :name, :first_name, :last_name, to: :person
 
   private
 

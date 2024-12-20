@@ -14,5 +14,6 @@ class CreateContacts < ActiveRecord::Migration[7.0]
     add_belongs_to :addresses, :contact, type: :uuid, null: true, foreign_key: true
     add_belongs_to :emails, :contact, type: :uuid, null: true, foreign_key: true
     add_belongs_to :phones, :contact, type: :uuid, null: true, foreign_key: true
+    add_belongs_to :websites, :contact, type: :uuid, null: true, foreign_key: true
   end
 end

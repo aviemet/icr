@@ -4,8 +4,8 @@
 #
 #  id          :uuid             not null, primary key
 #  description :text
+#  name        :string           not null
 #  slug        :string           not null
-#  title       :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
@@ -15,7 +15,7 @@
 #
 FactoryBot.define do
   factory :job_title do
-    title { Faker::Job.title }
+    name { Faker::Job.title }
     description { Faker::Lorem.paragraph }
   end
 end

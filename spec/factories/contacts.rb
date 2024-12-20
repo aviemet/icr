@@ -42,15 +42,15 @@ FactoryBot.define do
     end
 
     transient do
-      address_count { 1 }
-      email_count { 1 }
-      phone_count { 1 }
+      address_count { 0 }
+      email_count { 0 }
+      phone_count { 0 }
     end
 
     after(:create) do |contact, context|
-      create_list(:address, context.address_count, contact: contact)
-      create_list(:email, context.email_count, contact: contact)
-      create_list(:phone, context.phone_count, contact: contact)
+      create_list(:address, context.address_count, contact: contact) if context.address_count > 0
+      create_list(:email, context.email_count, contact: contact) if context.email_count > 0
+      create_list(:phone, context.phone_count, contact: contact) if context.phone_count > 0
     end
   end
 end

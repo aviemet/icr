@@ -4,11 +4,11 @@
 #
 #  id          :uuid             not null, primary key
 #  email       :string           not null
+#  name        :string
 #  notes       :text
-#  title       :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  category_id :uuid
+#  category_id :uuid             not null
 #  contact_id  :uuid
 #
 # Indexes
@@ -26,7 +26,7 @@ class Email < ApplicationRecord
 
   pg_search_scope(
     :search,
-    against: [:email, :title, :notes],
+    against: [:email, :name, :notes],
     using: {
       tsearch: { prefix: true },
       trigram: {},
@@ -35,7 +35,7 @@ class Email < ApplicationRecord
 
   resourcify
 
-  before_destroy :clear_primary_from_contact
+  before_destroy :nullify_primary_email
 
   belongs_to :contact
 
@@ -43,11 +43,9 @@ class Email < ApplicationRecord
 
   private
 
-  # Ensure the contact's primary_email is cleared if this email is being destroyed
-  def clear_primary_from_contact
-    if contact.primary_email == self
-      next_primary = contact.emails.where.not(id: id).first
-      contact.update_column(:primary_email_id, next_primary&.id) # rubocop:disable Rails/SkipsModelValidations
-    end
+  def nullify_primary_email
+    return unless contact.primary_email == self
+
+    contact.update!(primary_email: nil)
   end
 end

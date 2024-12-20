@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_19_000303) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_19_191114) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -38,7 +38,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_000303) do
   end
 
   create_table "addresses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "title"
+    t.string "name"
     t.string "address", null: false
     t.string "address_2"
     t.string "city"
@@ -46,12 +46,21 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_000303) do
     t.integer "country"
     t.string "postal"
     t.text "notes"
-    t.uuid "category_id"
+    t.uuid "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "contact_id"
     t.index ["category_id"], name: "index_addresses_on_category_id"
     t.index ["contact_id"], name: "index_addresses_on_contact_id"
+  end
+
+  create_table "agencies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.jsonb "settings", default: {}
+    t.string "slug", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_agencies_on_slug", unique: true
   end
 
   create_table "calendar_customizations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -80,11 +89,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_000303) do
     t.datetime "starts_at"
     t.datetime "ends_at"
     t.uuid "parent_id"
-    t.uuid "category_id"
     t.uuid "created_by_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["category_id"], name: "index_calendar_events_on_category_id"
     t.index ["created_by_id"], name: "index_calendar_events_on_created_by_id"
     t.index ["parent_id"], name: "index_calendar_events_on_parent_id"
   end
@@ -105,13 +112,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_000303) do
   end
 
   create_table "categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "categorizable_type", null: false
     t.string "name", null: false
     t.text "description"
+    t.string "categorizable_type", null: false
     t.string "slug", null: false
+    t.uuid "parent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name", "categorizable_type"], name: "index_categories_on_name_and_categorizable_type", unique: true
+    t.index ["parent_id"], name: "index_categories_on_parent_id"
     t.index ["slug"], name: "index_categories_on_slug", unique: true
   end
 
@@ -173,10 +182,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_000303) do
   end
 
   create_table "emails", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "title"
+    t.string "name"
     t.string "email", null: false
     t.text "notes"
-    t.uuid "category_id"
+    t.uuid "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "contact_id"
@@ -257,7 +266,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_000303) do
     t.date "issued_at"
     t.date "expires_at"
     t.jsonb "extra_fields"
-    t.uuid "category_id"
+    t.uuid "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_identifications_on_category_id"
@@ -270,30 +279,20 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_000303) do
     t.datetime "agency_notified_at"
     t.string "location"
     t.text "description"
-    t.uuid "incident_type_id", null: false
     t.uuid "client_id", null: false
     t.uuid "reported_to_id", null: false
     t.uuid "reported_by_id", null: false
-    t.uuid "category_id"
+    t.uuid "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_incident_reports_on_category_id"
     t.index ["client_id"], name: "index_incident_reports_on_client_id"
-    t.index ["incident_type_id"], name: "index_incident_reports_on_incident_type_id"
     t.index ["reported_by_id"], name: "index_incident_reports_on_reported_by_id"
     t.index ["reported_to_id"], name: "index_incident_reports_on_reported_to_id"
   end
 
-  create_table "incident_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name", null: false
-    t.uuid "category_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["category_id"], name: "index_incident_types_on_category_id"
-  end
-
   create_table "job_titles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "title", null: false
+    t.string "name", null: false
     t.text "description"
     t.string "slug", null: false
     t.datetime "created_at", null: false
@@ -348,11 +347,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_000303) do
   end
 
   create_table "phones", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "title"
+    t.string "name"
     t.string "number", null: false
     t.string "extension"
     t.text "notes"
-    t.uuid "category_id"
+    t.uuid "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "contact_id"
@@ -448,23 +447,34 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_000303) do
   end
 
   create_table "vendors", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "category_id"
     t.string "name", null: false
     t.text "notes"
     t.string "slug", null: false
+    t.uuid "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_vendors_on_category_id"
     t.index ["slug"], name: "index_vendors_on_slug", unique: true
   end
 
+  create_table "websites", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "url", null: false
+    t.uuid "category_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "contact_id"
+    t.index ["category_id"], name: "index_websites_on_category_id"
+    t.index ["contact_id"], name: "index_websites_on_contact_id"
+  end
+
   add_foreign_key "addresses", "categories"
   add_foreign_key "addresses", "contacts"
   add_foreign_key "calendar_event_exceptions", "calendar_events"
   add_foreign_key "calendar_events", "calendar_events", column: "parent_id"
-  add_foreign_key "calendar_events", "categories"
   add_foreign_key "calendar_events", "users", column: "created_by_id"
   add_foreign_key "calendar_recurring_patterns", "calendar_events"
+  add_foreign_key "categories", "categories", column: "parent_id"
   add_foreign_key "clients", "people"
   add_foreign_key "contacts", "addresses", column: "primary_address_id"
   add_foreign_key "contacts", "emails", column: "primary_email_id"
@@ -483,10 +493,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_000303) do
   add_foreign_key "identifications", "categories"
   add_foreign_key "incident_reports", "categories"
   add_foreign_key "incident_reports", "clients"
-  add_foreign_key "incident_reports", "incident_types"
   add_foreign_key "incident_reports", "people", column: "reported_by_id"
   add_foreign_key "incident_reports", "people", column: "reported_to_id"
-  add_foreign_key "incident_types", "categories"
   add_foreign_key "pay_rates", "employees"
   add_foreign_key "people", "users"
   add_foreign_key "phones", "categories"
@@ -498,4 +506,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_000303) do
   add_foreign_key "shifts", "calendar_events"
   add_foreign_key "shifts", "employees"
   add_foreign_key "vendors", "categories"
+  add_foreign_key "websites", "categories"
+  add_foreign_key "websites", "contacts"
 end

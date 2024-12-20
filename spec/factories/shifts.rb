@@ -20,7 +20,7 @@
 #
 FactoryBot.define do
   factory :shift do
-    employee { nil }
-    calendar_event { nil }
+    employee
+    calendar_event
   end
 end

@@ -4,8 +4,8 @@
 #
 #  id          :uuid             not null, primary key
 #  description :text
+#  name        :string           not null
 #  slug        :string           not null
-#  title       :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
@@ -15,11 +15,11 @@
 #
 class JobTitle < ApplicationRecord
   extend FriendlyId
-  friendly_id :title, use: [:slugged, :history]
+  friendly_id :name, use: [:slugged, :history]
 
   pg_search_scope(
     :search,
-    against: [:title, :description],
+    against: [:name, :description],
     using: {
       tsearch: { prefix: true },
       trigram: {},
@@ -37,7 +37,7 @@ class JobTitle < ApplicationRecord
 
   has_many :active_employees, through: :active_employees_job_titles, source: :employee
 
-  validates :title, presence: true
+  validates :name, presence: true
 
   scope :includes_associated, -> { includes([:employees]) }
 end

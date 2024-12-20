@@ -1,7 +1,7 @@
 class CreateAddresses < ActiveRecord::Migration[7.0]
   def change
     create_table :addresses, id: :uuid do |t|
-      t.string :title
+      t.string :name
       t.string :address, null: false
       t.string :address_2
       t.string :city
@@ -10,7 +10,7 @@ class CreateAddresses < ActiveRecord::Migration[7.0]
       t.string :postal
       t.text :notes
 
-      t.belongs_to :category, type: :uuid, null: true, foreign_key: true
+      t.belongs_to :category, null: false, foreign_key: true, type: :uuid
 
       t.timestamps
     end

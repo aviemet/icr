@@ -47,31 +47,45 @@ RSpec.describe Contact do
     it { is_expected.to belong_to(:primary_phone).optional }
 
     describe "primary contact method" do
-      it "sets a lone contact method to the primary contact method" do
+      it "manages primary_address relationship" do
         contact = create(:contact, :for_person)
 
         address_1 = create(:address, { contact: })
-        email_1 = create(:email, { contact: })
-        phone_1 = create(:phone, { contact: })
-
         address_2 = create(:address, { contact: })
-        email_2 = create(:email, { contact: })
-        phone_2 = create(:phone, { contact: })
-
-        # ap({ address_1: address_1.title, contact_addresses: contact.addresses.select(:title) })
 
         expect(contact.primary_address).to eq(address_1)
-        expect(contact.primary_email).to eq(email_1)
-        expect(contact.primary_phone).to eq(phone_1)
 
         address_1.destroy
-        email_1.destroy
-        phone_1.destroy
-
-        contact.reload!
+        contact.reload
 
         expect(contact.primary_address).to eq(address_2)
+      end
+
+      it "manages primary_email relationship" do
+        contact = create(:contact, :for_person)
+
+        email_1 = create(:email, { contact: })
+        email_2 = create(:email, { contact: })
+
+        expect(contact.primary_email).to eq(email_1)
+
+        email_1.destroy
+        contact.reload
+
         expect(contact.primary_email).to eq(email_2)
+      end
+
+      it "manages primary_phone relationship" do
+        contact = create(:contact, :for_person)
+
+        phone_1 = create(:phone, { contact: })
+        phone_2 = create(:phone, { contact: })
+
+        expect(contact.primary_phone).to eq(phone_1)
+
+        phone_1.destroy
+        contact.reload
+
         expect(contact.primary_phone).to eq(phone_2)
       end
     end

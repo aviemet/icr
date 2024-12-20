@@ -4,11 +4,11 @@
 #
 #  id          :uuid             not null, primary key
 #  email       :string           not null
+#  name        :string
 #  notes       :text
-#  title       :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  category_id :uuid
+#  category_id :uuid             not null
 #  contact_id  :uuid
 #
 # Indexes
@@ -27,10 +27,6 @@ FactoryBot.define do
 
     contact
 
-    after(:build) do |email|
-      existing_category = Category.find_by(categorizable_type: "Email")
-
-      email.category = existing_category.presence || FactoryBot.build(:category, :email)
-    end
+    category factory: %i[category email]
   end
 end

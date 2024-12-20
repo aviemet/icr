@@ -4,12 +4,12 @@
 #
 #  id          :uuid             not null, primary key
 #  extension   :string
+#  name        :string
 #  notes       :text
 #  number      :string           not null
-#  title       :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  category_id :uuid
+#  category_id :uuid             not null
 #  contact_id  :uuid
 #
 # Indexes
@@ -28,10 +28,6 @@ FactoryBot.define do
 
     contact
 
-    after(:build) do |phone|
-      existing_category = Category.find_by(categorizable_type: "Phone")
-
-      phone.category = existing_category.presence || FactoryBot.build(:category, :phone)
-    end
+    category factory: %i[category phone]
   end
 end

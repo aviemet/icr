@@ -8,19 +8,16 @@
 #  starts_at     :datetime
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  category_id   :uuid
 #  created_by_id :uuid             not null
 #  parent_id     :uuid
 #
 # Indexes
 #
-#  index_calendar_events_on_category_id    (category_id)
 #  index_calendar_events_on_created_by_id  (created_by_id)
 #  index_calendar_events_on_parent_id      (parent_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (category_id => categories.id)
 #  fk_rails_...  (created_by_id => users.id)
 #  fk_rails_...  (parent_id => calendar_events.id)
 #
@@ -33,7 +30,7 @@ RSpec.describe Calendar::Event do
     end
 
     it "is invalid with missing attributes" do
-      %i(starts_at ends_at name category_id).each do |attr|
+      %i(starts_at ends_at name).each do |attr|
         expect(build(:calendar_event, { attr => nil })).not_to be_valid
       end
     end
@@ -48,11 +45,11 @@ RSpec.describe Calendar::Event do
 
   describe "Associations" do
     it { is_expected.to belong_to(:parent).optional }
-    it { is_expected.to belong_to(:category) }
-    it { is_expected.to belong_to(:employee).optional }
     it { is_expected.to belong_to(:created_by).optional }
 
-    it { is_expected.to have_many(:calendar_recurring_patterns) }
+    it { is_expected.to have_one(:shift) }
+
+    it { is_expected.to have_many(:recurring_patterns) }
     it { is_expected.to have_many(:clients).through(:event_participants) }
     it { is_expected.to have_many(:households).through(:event_participants) }
   end

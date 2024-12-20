@@ -29,6 +29,7 @@ class Contact < ApplicationRecord
   has_many :addresses, dependent: :destroy, after_add: :calculate_primary_address
   has_many :emails, dependent: :destroy, after_add: :calculate_primary_email
   has_many :phones, dependent: :destroy, after_add: :calculate_primary_phone
+  has_many :websites, dependent: :destroy
 
   belongs_to :primary_address, class_name: "Address", optional: true
   belongs_to :primary_email, class_name: "Email", optional: true
@@ -54,7 +55,6 @@ class Contact < ApplicationRecord
 
   private
 
-  # Generic method to calculate and persist the primary record
   def calculate_primary(association_name)
     collection = send(association_name)
     if collection.any?

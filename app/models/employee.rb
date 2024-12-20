@@ -26,8 +26,9 @@ class Employee < ApplicationRecord
   friendly_id :slug_candidates, use: [:slugged, :history]
 
   include Identificationable
-  include Shiftable
+  include Participantable
   include CalendarCustomizable
+  include Personable
 
   pg_search_scope(
     :search,
@@ -43,8 +44,6 @@ class Employee < ApplicationRecord
 
   resourcify
 
-  belongs_to :person
-
   has_many :employees_job_titles, dependent: :destroy
   has_many :job_titles, through: :employees_job_titles
   has_many :pay_rates, dependent: :destroy
@@ -54,11 +53,7 @@ class Employee < ApplicationRecord
   }, class_name: "EmployeesJobTitle", dependent: nil, inverse_of: :employee
   has_one :job_title, through: :active_employees_job_title, source: :job_title
 
-  accepts_nested_attributes_for :person
-
   scope :includes_associated, -> { includes([:person, :identifications, :job_titles, :pay_rates]) }
-
-  delegate :contact, to: :person
 
   private
 

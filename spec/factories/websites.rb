@@ -1,11 +1,10 @@
 # == Schema Information
 #
-# Table name: emails
+# Table name: websites
 #
 #  id          :uuid             not null, primary key
-#  email       :string           not null
 #  name        :string
-#  notes       :text
+#  url         :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  category_id :uuid             not null
@@ -13,22 +12,21 @@
 #
 # Indexes
 #
-#  index_emails_on_category_id  (category_id)
-#  index_emails_on_contact_id   (contact_id)
+#  index_websites_on_category_id  (category_id)
+#  index_websites_on_contact_id   (contact_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (category_id => categories.id)
 #  fk_rails_...  (contact_id => contacts.id)
 #
-class EmailSerializer < ApplicationSerializer
-  attributes(
-    :name,
-    :email,
-    :notes,
-    :contact_id,
-    :category_id,
-  )
+FactoryBot.define do
+  factory :website do
+    name { Faker::Company.bs.titleize }
+    url { Faker::Internet.domain_name }
 
-  belongs_to :category, serializer: CategorySerializer
+    contact
+
+    category factory: %i[category website]
+  end
 end

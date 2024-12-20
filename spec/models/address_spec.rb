@@ -7,13 +7,13 @@
 #  address_2   :string
 #  city        :string
 #  country     :integer
+#  name        :string
 #  notes       :text
 #  postal      :string
 #  region      :string
-#  title       :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  category_id :uuid
+#  category_id :uuid             not null
 #  contact_id  :uuid
 #
 # Indexes
@@ -36,7 +36,7 @@ RSpec.describe Address do
     end
 
     it "is invalid with missing attributes" do
-      %i().each do |attr|
+      %i(address).each do |attr|
         expect(build(:address, attr => nil)).not_to be_valid
       end
     end

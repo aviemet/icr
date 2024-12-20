@@ -9,11 +9,17 @@
 #  slug               :string           not null
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
+#  parent_id          :uuid
 #
 # Indexes
 #
 #  index_categories_on_name_and_categorizable_type  (name,categorizable_type) UNIQUE
+#  index_categories_on_parent_id                    (parent_id)
 #  index_categories_on_slug                         (slug) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (parent_id => categories.id)
 #
 class Category < ApplicationRecord
   extend FriendlyId
@@ -31,7 +37,11 @@ class Category < ApplicationRecord
 
   resourcify
 
-  CATEGORIZABLE_TYPES = %w(Event Address Email Phone Vendor IncidentReport Identification).freeze
+  CATEGORIZABLE_TYPES = %w(Calendar::Event Address Email Phone Website Vendor IncidentReport Identification).freeze
+
+  # Self-referential association to create parent-child relationships
+  belongs_to :parent, class_name: "Category", optional: true
+  has_many :subcategories, class_name: "Category", foreign_key: "parent_id", dependent: :destroy, inverse_of: :parent
 
   validates :name, presence: true, uniqueness: {
     scope: :categorizable_type,
@@ -41,7 +51,7 @@ class Category < ApplicationRecord
 
   scope :type, ->(type){ where(categorizable_type: type.to_s.singularize.camelize) }
 
-  scope :includes_associated, -> { includes([]) }
+  scope :includes_associated, -> { includes([:parent]) }
 
   def to_s
     if attribute_present?("categorizable_type") && attribute_present?("name")
