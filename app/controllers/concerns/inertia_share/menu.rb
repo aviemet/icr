@@ -1,6 +1,6 @@
 require "active_support/concern"
 
-module Inertia::Menu
+module InertiaShare::Menu
   extend ActiveSupport::Concern
 
   included do

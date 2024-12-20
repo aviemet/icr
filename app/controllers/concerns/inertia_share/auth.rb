@@ -1,6 +1,6 @@
 require "active_support/concern"
 
-module Inertia::Auth
+module InertiaShare::Auth
   extend ActiveSupport::Concern
 
   included do

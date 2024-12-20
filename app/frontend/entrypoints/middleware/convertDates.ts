@@ -23,5 +23,5 @@ export function convertDates<T extends string | Record<string, unknown> | Record
 
 function isISODateString(value: string) {
 	const isoDateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?([+-]\d{2}:\d{2}|Z)?$/
-	return typeof value === 'string' && isoDateFormat.test(value)
+	return isoDateFormat.test(value)
 }

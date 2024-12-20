@@ -3,7 +3,7 @@ import { unset, get, set, isEmpty } from 'lodash'
 export default class NestedURLSearchParams {
 	_data: Record<string, unknown> = {}
 
-	constructor(initialData?: string|Record<string, any>|URLSearchParams) {
+	constructor(initialData?: string | Record<string, any> | URLSearchParams) {
 		if(!initialData) return
 
 		if(initialData instanceof URLSearchParams || typeof initialData === 'string') {

@@ -1,6 +1,6 @@
 require "active_support/concern"
 
-module Inertia::Flash
+module InertiaShare::Flash
   extend ActiveSupport::Concern
 
   included do

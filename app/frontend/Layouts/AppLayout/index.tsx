@@ -7,9 +7,9 @@ import Footer from './Footer'
 import useStore from '@/lib/store'
 import { useDisclosure } from '@mantine/hooks'
 
+import '@mantine/tiptap/styles.css'
 import cx from 'clsx'
 import * as classes from './AppLayout.css'
-import '@mantine/tiptap/styles.css'
 
 const AppLayout = ({ children }: { children: any }) => {
 	const theme = useMantineTheme()

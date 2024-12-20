@@ -57,9 +57,9 @@ const Sidebar = () => {
 							>
 								Clients
 							</MenuLink>
-							{ /* <ul>
-								<li><MenuLink href="/">Schedules</MenuLink></li>
-							</ul> */ }
+							<ul>
+								<li><MenuLink href="/">Households</MenuLink></li>
+							</ul>
 						</li>
 						<li>
 							<MenuLink

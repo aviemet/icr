@@ -17,7 +17,7 @@ const Type = ({
 }: AdvancedInputProps) => {
 	const { inputProps, setInputValue } = advancedSearch
 
-	const handleChange = (value: DateRangeType|null) => {
+	const handleChange = (value: DateRangeType | null) => {
 		if(!value) return
 
 		setInputValue(`${name}[type]`, value)

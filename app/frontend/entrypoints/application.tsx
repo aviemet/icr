@@ -2,43 +2,62 @@ import React from 'react'
 import { createInertiaApp, router } from '@inertiajs/react'
 import { createRoot } from 'react-dom/client'
 import axios from 'axios'
-import { PublicLayout, AppLayout, AuthLayout } from '../Layouts'
+import { PublicLayout, AppLayout, AuthLayout, LayoutWrapper } from '../Layouts'
 import { propsMiddleware } from './middleware'
 import { runAxe } from './middleware/axe'
+
+import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import duration from 'dayjs/plugin/duration'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(localizedFormat)
+dayjs.extend(localizedFormat)
+dayjs.extend(duration)
+dayjs.extend(relativeTime)
+
+const SITE_TITLE = 'Super SLS'
 
 type PagesObject = { default: React.ComponentType<any> & {
 	layout?: React.ComponentType<any>
 } }
 
-const pages = import.meta.glob<PagesObject>('../Pages/**/index.tsx')
+// Map of layout names to components
+// This needs to manually be kept in sync with the definitions on the server
+// app/controllers/concerns/inertia_share/layout.rb
+const LAYOUT_COMPONENTS = {
+	'AppLayout': AppLayout,
+	'AuthLayout': AuthLayout,
+	'PublicLayout': PublicLayout,
+} as const
 
 document.addEventListener('DOMContentLoaded', () => {
 	const csrfToken = (document.querySelector('meta[name=csrf-token]') as HTMLMetaElement).content
 	axios.defaults.headers.common['X-CSRF-Token'] = csrfToken
 
+	router.on('navigate', (event) => {
+		event.detail.page.props = propsMiddleware(event.detail.page.props)
+	})
+
 	createInertiaApp({
-		title: title => `SLS - ${title}`,
+		title: title => `${SITE_TITLE} - ${title}`,
 
 		resolve: async name => {
-			let checkedName = name
-			let layout
+			const pages = import.meta.glob<PagesObject>('../Pages/**/index.tsx')
+			const page = (await pages[`../Pages/${name}/index.tsx`]()).default
 
-			switch(name.substring(0, name.indexOf('/'))) {
-				case 'Public':
-					layout = PublicLayout
-					checkedName = name.replace('Public/', '')
-					break
-				case 'Auth':
-					layout = AuthLayout
-					checkedName = name.replace('Auth/', '')
-					break
-				default:
-					layout = AppLayout
+			page.layout = (page) => {
+				const props = page.props
+				let Layout = LAYOUT_COMPONENTS[props.layout as keyof typeof LAYOUT_COMPONENTS] || LAYOUT_COMPONENTS['AppLayout']
+
+				return (
+					<LayoutWrapper>
+						<Layout>
+							{ page }
+						</Layout>
+					</LayoutWrapper>
+				)
 			}
-
-			const page = (await pages[`../Pages/${checkedName}/index.tsx`]()).default
-
-			if(page.layout === undefined) page.layout = layout
 
 			return page
 		},
@@ -46,15 +65,14 @@ document.addEventListener('DOMContentLoaded', () => {
 		setup({ el, App, props }) {
 			const root = createRoot(el)
 
-			// Convert ISO strings from server to javascript Date objects
 			props.initialPage.props = propsMiddleware(props.initialPage.props)
 
-			root.render(<App { ...props } />)
-
 			router.on('success', event => {
-				event.detail.page.props = propsMiddleware(event.detail.page.props)
 				runAxe(root)
 			})
+
+			runAxe(root)
+			root.render(<App { ...props } />)
 		},
 	})
 })

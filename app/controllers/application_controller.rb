@@ -9,9 +9,10 @@ class ApplicationController < ActionController::Base
   include Searchable
   include StrongParams
 
-  include Inertia::Flash
-  include Inertia::Auth
-  include Inertia::Menu
+  include InertiaShare::Auth
+  include InertiaShare::Flash
+  include InertiaShare::Layout
+  include InertiaShare::Menu
 
   # include ErrorHandling
 end

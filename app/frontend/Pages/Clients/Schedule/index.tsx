@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import {
 	Box,
 	Calendar,
-	Date,
+	DateDisplay,
 } from '@/Components'
 // import ShiftForm from '@/Pages/Shifts/Form'
 import { type NavigateAction, type View, type Event } from 'react-big-calendar'
@@ -91,8 +91,8 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 			<h1>{ client?.person?.name }</h1>
 			<Box>
 				<Calendar
-					events={ schedules.map(schedule => (
-						{
+					events={ schedules.map(schedule => {
+						return {
 							id: schedule.id,
 							title: buildShiftTitle(schedule),
 							start: schedule.starts_at,
@@ -101,7 +101,7 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 								backgroundColor: schedule.shift.employee.color,
 							},
 						}
-					)) }
+					}) }
 					onSelectEvent={ handleSelectEvent }
 					onSelectSlot={ handleSelectSlot }
 					onNavigate={ handleDateChange }

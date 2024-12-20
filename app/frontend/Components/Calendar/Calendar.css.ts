@@ -8,6 +8,39 @@ export const calendar = css`
 		font-size: ${vars.fontSizes.xs}
 	}
 
+	.rbc-month-view {
+
+		.rbc-month-row {
+			overflow: unset;
+
+			.rbc-row-content {
+
+				&.rbc-row-content-scrollable {
+					
+					.rbc-row-content-scroll-container {
+						overflow-y: unset;
+
+						.rbc-addons-dnd-row-body {
+
+							.rbc-row {
+
+								.rbc-row-segment {
+
+									.rbc-event {
+										
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+	}
+
+
+	// Fix dark theme colors
 	${vars.darkSelector} { 
 		.rbc-today {
 			background-color: ${vars.colors.cyan[9]};
@@ -34,4 +67,5 @@ export const calendar = css`
 			}
 		}
 	}
+	// End fix dark theme colors
 `

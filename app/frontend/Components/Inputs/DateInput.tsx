@@ -8,9 +8,8 @@ import { isUnset } from '@/lib'
 
 export interface DateInputProps
 	extends
-	Omit<DatePickerInputProps, 'onChange'|'value'>,
-	BaseInputProps
-{
+	Omit<DatePickerInputProps, 'onChange' | 'value'>,
+	BaseInputProps {
 	name?: string
 	id?: string
 	value: DateInputValue

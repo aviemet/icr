@@ -3,7 +3,6 @@ import { Group, Heading, Menu, Page, Section, Tabs } from '@/Components'
 import { Routes } from '@/lib'
 import Details from './Details'
 import Contacts from './Contacts'
-import Schedules from './Schedules'
 import Documents from './Documents'
 
 export interface ShowClientProps {
@@ -13,7 +12,6 @@ export interface ShowClientProps {
 const tabsList = [
 	{ id: 'details', label: 'Details', component: Details },
 	{ id: 'contacts', label: 'Contact Details', component: Contacts },
-	{ id: 'schedule', label: 'Schedules', component: Schedules },
 	{ id: 'documents', label: 'Documents', component: Documents },
 ]
 

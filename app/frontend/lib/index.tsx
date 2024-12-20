@@ -9,8 +9,9 @@ export * from './collections'
 export * from './forms'
 export * from './theme'
 export * from './units'
+export * from './colors'
 
-export const polymorphicRoute = (model: string, param: string|number) => {
+export const polymorphicRoute = (model: string, param: string | number) => {
 	// @ts-ignore
 	return Routes[camelize(model)](param)
 }

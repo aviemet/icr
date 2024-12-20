@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { DateInput, type DateInputValue } from '@/Components/Inputs'
 import { type AdvancedInputProps } from '.'
 
-const Date = ({
+const SearchDateInput = ({
 	advancedSearch,
 	name,
 }: AdvancedInputProps) => {
@@ -40,4 +40,4 @@ const Date = ({
 	)
 }
 
-export default Date
+export default SearchDateInput

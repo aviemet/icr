@@ -2,9 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLocation } from '@/lib/hooks'
 import { isUnset } from '@/lib/forms'
 import { router } from '@inertiajs/react'
-import cx from 'clsx'
 import { NestedURLSearchParams } from '@/lib'
 import buildSearchLink from './buildSearchLink'
+
+import cx from 'clsx'
 
 type SpecialSearchTypes = 'date'
 
@@ -12,15 +13,15 @@ interface Options {
 	path: string
 }
 
-export type InputParam<T = string|Date> = {
+export type InputParam<T = string | Date> = {
 	name: string
 	default?: T
-	dependent?: string|string[]
+	dependent?: string | string[]
 	keyUpListener?: boolean
 	type?: SpecialSearchTypes
 }
 
-export type ParamValue = string|number|Date|Date[]|undefined|null
+export type ParamValue = string | number | Date | Date[] | undefined | null
 
 /**
  * Hook for building advanced search interfaces
@@ -106,7 +107,7 @@ const useAdvancedSearch = (
 	}, [localInputParams])
 
 	// Method returned from hook to be passed to an input
-	const buildInputProps = <T = string|Date>(name: InputParamName) => {
+	const buildInputProps = <T = string | Date>(name: InputParamName) => {
 		const param = localInputParams.find(param => param.name === name)
 
 		let value: T

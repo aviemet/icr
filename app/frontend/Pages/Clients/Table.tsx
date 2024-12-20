@@ -1,6 +1,6 @@
 import React from 'react'
 import { Routes } from '@/lib'
-import { Table, Link, Date, Group } from '@/Components'
+import { Table, Link, DateDisplay, Group } from '@/Components'
 import { EditButton, ScheduleButton } from '@/Components/Button'
 import { type TableProps } from '@/Components/Table/Table'
 
@@ -32,7 +32,7 @@ const ClientTable = (props: TableProps) => {
 						</Table.Cell>
 
 						<Table.Cell fitContent>
-							<Date tooltipFormats={ ['from'] }>{ client.active_at }</Date>
+							<DateDisplay tooltipFormats={ ['from'] }>{ client.active_at }</DateDisplay>
 						</Table.Cell>
 
 						<Table.Cell>
