@@ -27,8 +27,8 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 			children: (
 				<>
 					<Box>{ event.title }</Box>
-					{ event.start && <Box><Date>{ event.start }</Date></Box> }
-					{ event.end && <Box><Date>{ event?.end }</Date></Box> }
+					{ event.start && <Box><DateDisplay>{ event.start }</DateDisplay></Box> }
+					{ event.end && <Box><DateDisplay>{ event?.end }</DateDisplay></Box> }
 				</>
 			),
 		})

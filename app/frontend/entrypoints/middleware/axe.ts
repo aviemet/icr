@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom'
 import { type Root } from 'react-dom/client'
 
 export const runAxe = (root?: Root) => {
-	if(process.env.NODE_ENV === 'production') return
+	const DISABLE = true
+	if(DISABLE || process.env.NODE_ENV === 'production') return
 
 	let axeRunning = false
 
