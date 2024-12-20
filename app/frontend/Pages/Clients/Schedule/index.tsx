@@ -11,7 +11,7 @@ import {
 // import ShiftForm from '@/Pages/Shifts/Form'
 import { type NavigateAction, type View, type Event } from 'react-big-calendar'
 import { modals } from '@mantine/modals'
-import { useContrastingTextColorCalculator } from '@/lib/hooks/useContrastingTextColor'
+import useStore from '@/lib/store'
 
 interface ScheduleProps {
 	client: Schema.ClientsShow
@@ -19,7 +19,7 @@ interface ScheduleProps {
 }
 
 const Schedule = ({ client, schedules }: ScheduleProps) => {
-	const calculateContrastingColor = useContrastingTextColorCalculator()
+	const { getContrastingColor } = useStore()
 
 	const handleSelectEvent = (event: Event, e: React.SyntheticEvent<HTMLElement, globalThis.Event>) => {
 		modals.open({
@@ -62,7 +62,7 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 	const buildShiftTitle = (schedule: Schema.CalendarEventsShow) => {
 		const start = schedule.starts_at ? formatter.time.short(schedule.starts_at) : undefined
 		const end = schedule.ends_at ? formatter.time.short(schedule.ends_at) : undefined
-		const name = schedule?.employee ? schedule.employee.person.name : schedule.name
+		const name = schedule?.shift?.employee ? schedule.shift.employee.person.name : schedule.name
 
 		return `${start ? start : ''}${end
 			? (
@@ -81,7 +81,7 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 		return {
 			style: {
 				backgroundColor: eventColor,
-				color: calculateContrastingColor(eventColor),
+				color: getContrastingColor(eventColor),
 			},
 		}
 	}
@@ -98,7 +98,7 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 							start: schedule.starts_at,
 							end: schedule.ends_at,
 							resource: {
-								backgroundColor: schedule.employee.color,
+								backgroundColor: schedule.shift.employee.color,
 							},
 						}
 					)) }

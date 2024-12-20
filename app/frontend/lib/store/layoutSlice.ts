@@ -1,8 +1,7 @@
-import { create } from 'zustand'
+import { StateCreator } from 'zustand'
 import { defaultColor } from '../theme'
 
-
-interface LayoutState {
+export interface LayoutSlice {
 	sidebarOpen: boolean
 	toggleSidebarOpen: (sidebarOpen?: boolean) => void
 	siteTitle: string
@@ -14,7 +13,7 @@ interface LayoutState {
 	}
 }
 
-const useLayoutStore = create<LayoutState>()((set) => ({
+export const createLayoutSlice: StateCreator<LayoutSlice> = (set) => ({
 	sidebarOpen: true,
 	primaryColor: defaultColor,
 	siteTitle: 'Super SLS',
@@ -34,6 +33,4 @@ const useLayoutStore = create<LayoutState>()((set) => ({
 	setPrimaryColor: color => set(state => ({
 		primaryColor: color,
 	})),
-}))
-
-export default useLayoutStore
+})

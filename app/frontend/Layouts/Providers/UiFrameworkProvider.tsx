@@ -1,17 +1,18 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { MantineProvider, createTheme, px, type CSSVariablesResolver } from '@mantine/core'
 import { type CSSVariables } from '@mantine/core/lib/core/MantineProvider/convert-css-variables/css-variables-object-to-string'
 import { ModalsProvider } from '@mantine/modals'
 import { Notifications } from '@mantine/notifications'
 import { theme as themeObject, vars } from '@/lib/theme'
-import useLayoutStore from '@/lib/store/LayoutStore'
 import { toKebabCase } from '@/lib'
+import { useInit } from '@/lib/hooks'
+import useStore from '@/lib/store'
 
 const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 	/**
 	 * Primary color customization
 	 */
-	const { primaryColor } = useLayoutStore()
+	const { primaryColor } = useStore()
 
 	const theme = useMemo(() => createTheme({ ...themeObject, primaryColor }), [primaryColor])
 
@@ -38,19 +39,17 @@ const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 	}, [primaryColor])
 
+	useInit(() => {
+		// /* eslint-disable no-console */
+		// if(process?.env?.NODE_ENV === 'development') {
+		// 	console.log({ theme })
+		// 	console.log({ vars })
 
-	useEffect(() => {
-		/* eslint-disable no-console */
-		if(process.env.NODE_ENV && process.env.NODE_ENV === 'development') {
-			console.log({ theme })
-			console.log({ vars })
-
-			console.log({ breakpointsPx: Object.fromEntries(
-				Object.entries(theme.breakpoints ?? []).map(([key, val]) => [key, px(val)]),
-			) })
-		}
-		/* eslint-enable */
-	}, [])
+		// 	console.log({ breakpointsPx: Object.fromEntries(
+		// 		Object.entries(theme.breakpoints ?? []).map(([key, val]) => [key, px(val)]),
+		// 	) })
+		// }
+	})
 
 	return (
 		<MantineProvider

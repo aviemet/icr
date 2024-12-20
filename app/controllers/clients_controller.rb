@@ -50,7 +50,7 @@ class ClientsController < ApplicationController
 
   # @route GET /clients/:slug/schedule (schedule_client)
   def schedule
-    schedules = client.shifts.between(range_start, range_end)
+    schedules = client.events.between(range_start, range_end)
 
     render inertia: "Clients/Schedule", props: {
       client: client.render(:show),

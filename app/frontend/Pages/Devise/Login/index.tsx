@@ -4,7 +4,7 @@ import { Routes } from '@/lib'
 import { Heading, Link } from '@/Components'
 import { type UseFormProps } from 'use-inertia-form'
 import * as classes from './Login.css'
-import { useLayoutStore } from '@/lib/store'
+import useStore from '@/lib/store'
 
 type LoginFormData = {
 	user: {
@@ -23,7 +23,7 @@ const defaultData = {
 }
 
 const Login = () => {
-	const { siteTitle } = useLayoutStore()
+	const { siteTitle } = useStore()
 
 	const handleSubmit = ({ data }: UseFormProps<LoginFormData>) => {
 		if(data.user.email === '' || data.user.password === '') {

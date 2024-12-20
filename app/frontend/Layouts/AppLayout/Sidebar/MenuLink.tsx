@@ -5,7 +5,7 @@ import { AnchorProps } from '@mantine/core'
 
 import cx from 'clsx'
 import * as classes from '../AppLayout.css'
-import { useLayoutStore } from '@/lib/store'
+import useStore from '@/lib/store'
 
 interface MenuLinkProps extends AnchorProps {
 	children: string
@@ -15,7 +15,7 @@ interface MenuLinkProps extends AnchorProps {
 }
 
 const MenuLink = ({ children, href, icon, className, active, ...props }: MenuLinkProps) => {
-	const { sidebarOpen } = useLayoutStore()
+	const { sidebarOpen } = useStore()
 
 	return (
 		<Link href={ href } className={ cx(classes.navLink, { active }) } mb="sm" { ...props }>

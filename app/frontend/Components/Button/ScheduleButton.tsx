@@ -3,7 +3,7 @@ import { Link, Tooltip } from '@/Components'
 import { CalendarIcon } from '@/Components/Icons'
 import { LinkProps } from '../Link'
 import { useMantineTheme } from '@mantine/core'
-import { useContrastingTextColor } from '@/lib/hooks'
+import useStore from '@/lib/store'
 
 interface ScheduleButtonProps extends Omit<LinkProps, 'children'> {
 	label?: string
@@ -11,6 +11,7 @@ interface ScheduleButtonProps extends Omit<LinkProps, 'children'> {
 
 const ScheduleButton = ({ href, label }: ScheduleButtonProps) => {
 	const { primaryColor } = useMantineTheme()
+	const { getContrastingColor } = useStore()
 
 	const usedLabel = `Schedule${label ? ` ${label}` : ''}`
 
@@ -24,7 +25,7 @@ const ScheduleButton = ({ href, label }: ScheduleButtonProps) => {
 			color={ primaryColor }
 		>
 			<Link as="button" href={ href } aria-label={ `Schedule ${label}` }>
-				<CalendarIcon color={ useContrastingTextColor(primaryColor) } />
+				<CalendarIcon color={ getContrastingColor(primaryColor) } />
 			</Link>
 		</Tooltip>
 	)

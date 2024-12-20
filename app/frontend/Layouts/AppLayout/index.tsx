@@ -2,9 +2,9 @@ import React, { useEffect } from 'react'
 import { Box, useMantineTheme } from '@mantine/core'
 import { AppShell } from '@/Components'
 import Sidebar from './Sidebar'
-import Topbar from './Topbar'
+// import Topbar from './Topbar'
 import Footer from './Footer'
-import { useLayoutStore } from '@/lib/store'
+import useStore from '@/lib/store'
 import { useDisclosure } from '@mantine/hooks'
 
 import cx from 'clsx'
@@ -13,7 +13,7 @@ import '@mantine/tiptap/styles.css'
 
 const AppLayout = ({ children }: { children: any }) => {
 	const theme = useMantineTheme()
-	const { sidebarOpen } = useLayoutStore()
+	const sidebarOpen = useStore(state => state.sidebarOpen)
 	const [mobileOpen, mobileHandlers] = useDisclosure(sidebarOpen)
 
 	useEffect(() => {
@@ -22,7 +22,7 @@ const AppLayout = ({ children }: { children: any }) => {
 		} else if(!sidebarOpen) {
 			mobileHandlers.close()
 		}
-	}, [sidebarOpen])
+	}, [sidebarOpen, mobileHandlers])
 
 	return (
 		<AppShell

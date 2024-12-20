@@ -1,10 +1,10 @@
 import React from 'react'
 import { Burger } from '@/Components'
-import { useLayoutStore } from '@/lib/store'
+import useStore from '@/lib/store'
 import { useComputedColorScheme } from '@mantine/core'
 
 const ToggleSidebarButton = () => {
-	const { sidebarOpen, toggleSidebarOpen } = useLayoutStore()
+	const { sidebarOpen, toggleSidebarOpen } = useStore()
 	const colorScheme = useComputedColorScheme()
 
 	return (

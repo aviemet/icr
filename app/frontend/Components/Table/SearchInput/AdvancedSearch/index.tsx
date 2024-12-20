@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { DoubleDownArrowIcon } from '@/Components/Icons'
-import { useLayoutStore } from '@/lib/store'
+import useStore from '@/lib/store'
 import { useBooleanToggle } from '@/lib/hooks'
 import { useClickOutside } from '@mantine/hooks'
 import {
@@ -29,7 +29,7 @@ interface AdvancedSearchProps {
 }
 
 const AdvancedSearch = ({ children }: AdvancedSearchProps) => {
-	const { sidebarOpen } = useLayoutStore()
+	const { sidebarOpen } = useStore()
 	const { primaryColor, other: { navbar: { width } } } = useMantineTheme()
 	const navBarWidth = width[sidebarOpen ? 'open' : 'closed']
 

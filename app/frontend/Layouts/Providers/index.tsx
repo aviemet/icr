@@ -9,6 +9,7 @@ import './global.css'
 import QueryProvider from './QueryProvider'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
+import ContrastingColorsSetup from './ContrastingColorsSetup'
 
 interface IProviderProps {
 	children?: React.ReactNode
@@ -18,6 +19,7 @@ const Providers = React.memo(({ children }: IProviderProps) => {
 	return (
 		<QueryProvider>
 			<UiFrameworkProvider>
+				<ContrastingColorsSetup />
 				<IconProvider>
 					{ children }
 				</IconProvider>

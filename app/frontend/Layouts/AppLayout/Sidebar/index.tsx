@@ -1,5 +1,5 @@
 import React from 'react'
-import { useLayoutStore } from '@/lib/store'
+import useStore from '@/lib/store'
 import MenuLink from './MenuLink'
 import { Routes } from '@/lib'
 import { Group, AppShell, Box, Flex, Text } from '@/Components'
@@ -15,7 +15,7 @@ import { ClientIcon, EmployeeIcon, SettingsIcon } from '@/Components/Icons'
 
 const Sidebar = () => {
 	const { auth: { user } } = usePageProps()
-	const { sidebarOpen, siteTitle } = useLayoutStore()
+	const { sidebarOpen, siteTitle } = useStore()
 	const { paths } = useLocation()
 
 	return (

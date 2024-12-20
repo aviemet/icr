@@ -4,7 +4,7 @@ import { Select, type SelectProps } from '@mantine/core'
 import axios from 'axios'
 import { Routes } from '@/lib'
 import { useLocation, usePageProps } from '@/lib/hooks'
-import { useLayoutStore } from '@/lib/store/'
+import useStore from '@/lib/store/'
 
 import cx from 'clsx'
 import * as classes from '../Table.css'
@@ -17,9 +17,9 @@ interface LimitSelectProps extends SelectProps {
 const LimitSelect = ({ pagination, model }: LimitSelectProps) => {
 	const { auth: { user } } = usePageProps()
 	const location = useLocation()
-	const defaultLimit = useLayoutStore(state => state.defaults.tableRecordsLimit)
+	const defaultLimit = useStore(state => state.defaults.tableRecordsLimit)
 
-	const handleLimitChange = (limit: string|null) => {
+	const handleLimitChange = (limit: string | null) => {
 		if(!model) return
 
 		limit ||= String(defaultLimit)

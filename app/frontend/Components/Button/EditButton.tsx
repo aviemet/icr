@@ -3,7 +3,7 @@ import { Link, Tooltip } from '@/Components'
 import { EditIcon } from '@/Components/Icons'
 import { LinkProps } from '../Link'
 import { useMantineTheme } from '@mantine/core'
-import { useContrastingTextColor } from '@/lib/hooks'
+import useStore from '@/lib/store'
 
 interface EditButtonProps extends Omit<LinkProps, 'children'> {
 	label?: string
@@ -11,6 +11,7 @@ interface EditButtonProps extends Omit<LinkProps, 'children'> {
 
 const EditButton = ({ href, label }: EditButtonProps) => {
 	const { primaryColor } = useMantineTheme()
+	const { getContrastingColor } = useStore()
 
 	const usedLabel = `Edit${label ? ` ${label}` : ''}`
 
@@ -24,7 +25,7 @@ const EditButton = ({ href, label }: EditButtonProps) => {
 			color={ primaryColor }
 		>
 			<Link as="button" href={ href } aria-label={ `Edit ${label}` }>
-				<EditIcon color={ useContrastingTextColor(primaryColor) } />
+				<EditIcon color={ getContrastingColor(primaryColor) } />
 			</Link>
 		</Tooltip>
 	)

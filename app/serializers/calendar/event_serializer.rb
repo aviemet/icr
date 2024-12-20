@@ -29,7 +29,6 @@ class Calendar::EventSerializer < ApplicationSerializer
     :starts_at,
     :ends_at,
     :parent_id,
-    :category_id,
     :created_by_id,
     :created_at,
     :updated_at,
