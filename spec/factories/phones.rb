@@ -28,6 +28,6 @@ FactoryBot.define do
 
     contact
 
-    category factory: %i[category phone]
+    category factory: [:category, :phone]
   end
 end

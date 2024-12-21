@@ -26,11 +26,13 @@ type PagesObject = { default: React.ComponentType<any> & {
 // This needs to manually be kept in sync with the definitions on the server
 // app/controllers/concerns/inertia_share/layout.rb
 const LAYOUT_COMPONENTS = {
-	'AppLayout': AppLayout,
-	'AuthLayout': AuthLayout,
-	'PublicLayout': PublicLayout,
+	'app': AppLayout,
+	'auth': AuthLayout,
+	'public': PublicLayout,
 } as const
 
+const pages = import.meta.glob<PagesObject>('../Pages/**/index.tsx')
+console.log({ pages })
 document.addEventListener('DOMContentLoaded', () => {
 	const csrfToken = (document.querySelector('meta[name=csrf-token]') as HTMLMetaElement).content
 	axios.defaults.headers.common['X-CSRF-Token'] = csrfToken
@@ -43,12 +45,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		title: title => `${SITE_TITLE} - ${title}`,
 
 		resolve: async name => {
-			const pages = import.meta.glob<PagesObject>('../Pages/**/index.tsx')
+			console.log({ name, page: pages[`../Pages/${name}/index.tsx`] })
 			const page = (await pages[`../Pages/${name}/index.tsx`]()).default
 
 			page.layout = (page) => {
 				const props = page.props
-				let Layout = LAYOUT_COMPONENTS[props.layout as keyof typeof LAYOUT_COMPONENTS] || LAYOUT_COMPONENTS['AppLayout']
+				let Layout = LAYOUT_COMPONENTS[props.layout as keyof typeof LAYOUT_COMPONENTS] || LAYOUT_COMPONENTS['app']
 
 				return (
 					<LayoutWrapper>

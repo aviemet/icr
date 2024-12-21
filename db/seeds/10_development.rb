@@ -39,9 +39,9 @@ if Rails.env.development?
   if Employee.count == 0
     5.times do |i|
       employee = FactoryBot.create :employee, job_title: JobTitle.find(JobTitle.pluck(:id).sample)
-      FactoryBot.create(:address, contact: employee.contact)
-      FactoryBot.create(:email, contact: employee.contact)
-      FactoryBot.create(:phone, contact: employee.contact)
+      FactoryBot.create(:address, contact: employee.contact, category: Category.type(:address).sample)
+      FactoryBot.create(:email, contact: employee.contact, category: Category.type(:email).sample)
+      FactoryBot.create(:phone, contact: employee.contact, category: Category.type(:phone).sample)
 
       client = Client.first
       start = Time.current.beginning_of_week + (i * 4).hours
