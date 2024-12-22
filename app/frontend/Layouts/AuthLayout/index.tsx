@@ -1,14 +1,13 @@
 import React from 'react'
 import { Box, Center, Flex, Paper } from '@/Components'
+import { LayoutProps } from '..'
+
+import cx from 'clsx'
 import * as classes from './AuthLayout.css'
 
-interface LayoutProps {
-	children: any
-}
-
-const Layout = ({ children }: LayoutProps) => {
+const AuthLayout = ({ children }: LayoutProps) => {
 	return (
-		<Flex className={ classes.authLayout }>
+		<Flex className={ cx(classes.authLayout) }>
 			<Center p="lg" id="auth-layout-left">
 				<Paper shadow="lg" radius="lg" p="xl" withBorder>
 					{ children }
@@ -21,4 +20,4 @@ const Layout = ({ children }: LayoutProps) => {
 	)
 }
 
-export default Layout
+export default AuthLayout

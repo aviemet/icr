@@ -1,7 +1,8 @@
 import React from 'react'
+import { Heading, Link } from '@/Components'
 import { Form, TextInput, Submit } from '@/Components/Form'
 import { Routes } from '@/lib'
-import { Heading, Link } from '@/Components'
+import { LAYOUTS } from '@/Layouts'
 
 interface IConfirmationsNew {
 	user: Schema.User
@@ -34,5 +35,7 @@ const ConfirmationsNew = ({ user }: IConfirmationsNew) => {
 		</Form>
 	)
 }
+
+ConfirmationsNew.defaultLayout = LAYOUTS.auth
 
 export default ConfirmationsNew

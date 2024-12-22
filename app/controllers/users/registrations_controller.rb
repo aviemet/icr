@@ -8,8 +8,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def new
     render inertia: "Devise/Register", props: {
 
-    },
-    layout: "auth"
+    }
   end
 
   # @route POST /users (user_registration)

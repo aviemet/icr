@@ -1,8 +1,9 @@
 import React from 'react'
+import { Box, Heading, Link } from '@/Components'
 import { Form, TextInput, PasswordInput, Submit, Field } from '@/Components/Form'
 import { Routes } from '@/lib'
-import { Box, Heading, Link } from '@/Components'
 import { type UseFormProps } from 'use-inertia-form'
+import { LAYOUTS } from '@/Layouts'
 
 type TRegisterFormData = {
 	user: {
@@ -17,7 +18,7 @@ const Register = () => {
 		// console.log({ data })
 	}
 
-	const handlePasswordChange = (value: string|number, { data, getError, clearErrors }: UseFormProps<TRegisterFormData>) => {
+	const handlePasswordChange = (value: string | number, { data, getError, clearErrors }: UseFormProps<TRegisterFormData>) => {
 		if(getError('user.password') || getError('user.password_confirmation')) {
 			if(data.user.password === data.user.password_confirmation) {
 				clearErrors('user.password')
@@ -33,7 +34,7 @@ const Register = () => {
 		}
 	}
 
-	const handleEmailBlur = (value: string|number, form: UseFormProps<TRegisterFormData>) => {
+	const handleEmailBlur = (value: string | number, form: UseFormProps<TRegisterFormData>) => {
 		// console.log({ value, form })
 	}
 
@@ -96,5 +97,7 @@ const Register = () => {
 		</Form>
 	)
 }
+
+Register.defaultLayout = LAYOUTS.auth
 
 export default Register

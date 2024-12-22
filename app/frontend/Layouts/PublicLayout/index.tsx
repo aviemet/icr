@@ -4,12 +4,9 @@ import { AppShell, Burger, Skeleton } from '@mantine/core'
 import { Group, Link, Box } from '@/Components'
 import { CircleDotIcon } from '@/Components/Icons'
 import { Routes } from '@/lib'
+import { type LayoutProps } from '..'
 
-interface PublicLayoutProps {
-	children: any
-}
-
-const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
+const PublicLayout = ({ children }: LayoutProps) => {
 	const [opened, { toggle }] = useDisclosure()
 
 	return (
@@ -34,7 +31,7 @@ const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
 				</Group>
 			</AppShell.Header>
 			<AppShell.Navbar p="md">
-        Navigation
+				Navigation
 				{ Array(15)
 					.fill(0)
 					.map((_, index) => (

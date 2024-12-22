@@ -1,10 +1,13 @@
 import React from 'react'
+import { Heading, Link } from '@/Components'
 import { Form, Field, TextInput, PasswordInput, Checkbox, Submit } from '@/Components/Form'
 import { Routes } from '@/lib'
-import { Heading, Link } from '@/Components'
 import { type UseFormProps } from 'use-inertia-form'
-import * as classes from './Login.css'
 import useStore from '@/lib/store'
+import { LAYOUTS } from '@/Layouts'
+
+import cx from 'clsx'
+import * as classes from './Login.css'
 
 type LoginFormData = {
 	user: {
@@ -32,7 +35,7 @@ const Login = () => {
 	}
 
 	return (
-		<Form model="user" data={ defaultData } to={ Routes.newUserSession() } onSubmit={ handleSubmit } className={ classes.form }>
+		<Form model="user" data={ defaultData } to={ Routes.newUserSession() } onSubmit={ handleSubmit } className={ cx(classes.form) }>
 
 			<div>
 				<Heading mb="xs">{ siteTitle }</Heading>
@@ -72,5 +75,7 @@ const Login = () => {
 		</Form>
 	)
 }
+
+Login.defaultLayout = LAYOUTS.auth
 
 export default Login

@@ -6,12 +6,13 @@ import Sidebar from './Sidebar'
 import Footer from './Footer'
 import useStore from '@/lib/store'
 import { useDisclosure } from '@mantine/hooks'
+import { LayoutProps } from '../index'
 
 import '@mantine/tiptap/styles.css'
 import cx from 'clsx'
 import * as classes from './AppLayout.css'
 
-const AppLayout = ({ children }: { children: any }) => {
+const AppLayout = ({ children }: LayoutProps) => {
 	const theme = useMantineTheme()
 	const sidebarOpen = useStore(state => state.sidebarOpen)
 	const [mobileOpen, mobileHandlers] = useDisclosure(sidebarOpen)
@@ -50,4 +51,4 @@ const AppLayout = ({ children }: { children: any }) => {
 	)
 }
 
-export default React.memo(AppLayout)
+export default AppLayout

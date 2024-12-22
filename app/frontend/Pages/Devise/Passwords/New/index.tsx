@@ -1,7 +1,8 @@
 import React from 'react'
+import { Heading, Link } from '@/Components'
 import { Field, Form, TextInput, Submit } from '@/Components/Form'
 import { Routes } from '@/lib'
-import { Heading, Link } from '@/Components'
+import { LAYOUTS } from '@/Layouts'
 
 type TPasswordsNewFormData = {
 	email: string
@@ -30,5 +31,7 @@ const PasswordsNew = () => {
 		</Form>
 	)
 }
+
+PasswordsNew.defaultLayout = LAYOUTS.auth
 
 export default PasswordsNew

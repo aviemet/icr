@@ -2,15 +2,21 @@ import React from 'react'
 import Providers from '@/Layouts/Providers'
 import { Flash } from '@/Components'
 
-export { default as AppLayout } from './AppLayout'
-export { default as AuthLayout } from './AuthLayout'
-export { default as PublicLayout } from './PublicLayout'
+import BareAppLayout from './AppLayout'
+import BareAuthLayout from './AuthLayout'
+import BarePublicLayout from './PublicLayout'
 
-interface LayoutWrapperProps {
+export const LAYOUTS = {
+	'app': 'app',
+	'auth': 'auth',
+	'public': 'public',
+} as const
+
+export interface LayoutProps {
 	children: any
 }
 
-export const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
+export const LayoutWrapper = ({ children }: LayoutProps) => {
 	return (
 		<Providers>
 			<Flash />
@@ -18,3 +24,35 @@ export const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
 		</Providers>
 	)
 }
+
+export const AppLayout = ({ children }: LayoutProps) => {
+	return (
+		<LayoutWrapper>
+			<BareAppLayout>
+				{ children }
+			</BareAppLayout>
+		</LayoutWrapper>
+	)
+}
+
+export const AuthLayout = ({ children }: LayoutProps) => {
+	return (
+		<LayoutWrapper>
+			<BareAuthLayout>
+				{ children }
+			</BareAuthLayout>
+		</LayoutWrapper>
+	)
+}
+
+
+export const PublicLayout = ({ children }: LayoutProps) => {
+	return (
+		<LayoutWrapper>
+			<BarePublicLayout>
+				{ children }
+			</BarePublicLayout>
+		</LayoutWrapper>
+	)
+}
+

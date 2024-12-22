@@ -5,8 +5,7 @@ class Users::PasswordsController < Devise::PasswordsController
   def new
     render inertia: "Devise/Passwords/New", props: {
 
-    },
-    layout: "auth"
+    }
   end
 
   # def create
