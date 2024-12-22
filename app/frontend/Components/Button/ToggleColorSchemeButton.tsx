@@ -4,8 +4,7 @@ import { SunIcon, MoonStarsIcon } from '@/Components/Icons'
 
 interface ToggleColorSchemeButtonProps
 	extends
-	ActionIconProps
-{
+	ActionIconProps {
 	leftSection?: React.ReactNode
 	rightSection?: React.ReactNode
 }

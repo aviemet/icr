@@ -1,6 +1,6 @@
 import React from 'react'
 import { type ShowClientProps } from '.'
-import { Heading, PhoneNumber, Box, Text, Group, Section, Email } from '@/Components'
+import { Heading, PhoneNumber, Box, Text, Group, Section, EmailDisplay } from '@/Components'
 
 interface ClientContactsProps extends ShowClientProps {}
 
@@ -11,7 +11,7 @@ const Contacts = ({ client }: ClientContactsProps) => {
 				<Heading order={ 3 }>Phone Numbers</Heading>
 				{ client.person.contact.phones.map(phone => (
 					<Box key={ phone.id }>
-						{ phone?.title && <Text>{ phone.title }</Text> }
+						{ phone?.name && <Text>{ phone.name }</Text> }
 						<Group gap="lg">
 							<PhoneNumber>
 								{ phone.number }
@@ -26,11 +26,11 @@ const Contacts = ({ client }: ClientContactsProps) => {
 				<Heading order={ 3 }>Emails</Heading>
 				{ client.person.contact.emails.map(email => (
 					<Box key={ email.id }>
-						{ email?.title && <Text>{ email.title }</Text> }
+						{ email?.name && <Text>{ email.name }</Text> }
 						<Group gap="lg">
-							<Email>
+							<EmailDisplay>
 								{ email.email }
-							</Email>
+							</EmailDisplay>
 							<Text>{ email.category.name }</Text>
 						</Group>
 					</Box>
@@ -41,7 +41,7 @@ const Contacts = ({ client }: ClientContactsProps) => {
 				<Heading order={ 3 }>Addresses</Heading>
 				{ client.person.contact.phones.map(phone => (
 					<Box key={ phone.id }>
-						{ phone?.title && <Text>{ phone.title }</Text> }
+						{ phone?.name && <Text>{ phone.name }</Text> }
 						<Group gap="lg">
 							<PhoneNumber>
 								{ phone.number }

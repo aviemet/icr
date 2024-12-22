@@ -8,10 +8,10 @@ import { type InputConflicts, type BaseFormInputProps } from '.'
 import { exclude, isUnset } from '@/lib'
 import { coerceArray } from '../../../lib/collections'
 
-type OmittedDropdownTypes = InputConflicts|'onDropdownOpen'|'onDropdownClose'|'onOptionSubmit'|'onClear'
+type OmittedDropdownTypes = InputConflicts | 'onDropdownOpen' | 'onDropdownClose' | 'onOptionSubmit' | 'onClear'
 export interface FormMultiSelectProps<TForm extends NestedObject = NestedObject>
 	extends Omit<MultiSelectInputProps, OmittedDropdownTypes>,
-	Omit<BaseFormInputProps<string[], TForm>, 'onChange'|'onBlur'|'onFocus'> {
+	Omit<BaseFormInputProps<string[], TForm>, 'onChange' | 'onBlur' | 'onFocus'> {
 
 	value?: string[]
 	onChange?: (values: string[], options: ComboboxData, form: UseFormProps<TForm>) => void

@@ -35,7 +35,7 @@ const FormInput = <TForm extends NestedObject = NestedObject>(
 		clearErrorsOnChange,
 	})
 
-	const handleChange = (val: string|number) => {
+	const handleChange = (val: string | number) => {
 		const v = Number(val)
 		setValue(v)
 
