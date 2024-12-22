@@ -1,45 +1,22 @@
 import React from 'react'
-import { Divider, Grid } from '@mui/material'
+import { Box, Center, Flex, Paper } from '@/Components'
+import { LayoutProps } from '..'
 
-import AuthCardWrapper from './AuthCardWrapper'
-import Logo from '@/Layouts/AppLayout/LogoSection/Logo'
-import AuthFooter from '@/Components/cards/AuthFooter'
+import cx from 'clsx'
+import * as classes from './AuthLayout.css'
 
-const AuthLayout = ({ children }) => {
+const AuthLayout = ({ children }: LayoutProps) => {
 	return (
-		<Grid container direction="column" justifyContent="flex-end" sx={ { minHeight: '100vh' } }>
+		<Flex className={ cx(classes.authLayout) }>
+			<Center p="lg" id="auth-layout-left">
+				<Paper shadow="lg" radius="lg" p="xl" withBorder>
+					{ children }
+				</Paper>
+			</Center>
 
-			<Grid item xs={ 12 }>
-				<Grid container justifyContent="center" alignItems="center" sx={ {
-					minHeight: 'calc(100vh - 68px)'
-				} }>
-					<Grid item sx={ { m: { xs: 1, sm: 3 }, mb: 0 } }>
-						<AuthCardWrapper>
-							<Grid container spacing={ 2 } alignItems="center" justifyContent="center">
-
-								<Grid item sx={ { mb: 3 } }>
-									<Logo />
-								</Grid>
-
-								<Grid item xs={ 12 }>
-									{ children }
-								</Grid>
-
-								<Grid item xs={ 12 }>
-									<Divider />
-								</Grid>
-
-							</Grid>
-						</AuthCardWrapper>
-					</Grid>
-				</Grid>
-			</Grid>
-
-			<Grid item xs={ 12 } sx={ { m: 3, mt: 1 } }>
-				<AuthFooter />
-			</Grid>
-
-		</Grid>
+			<Box id="auth-layout-right">
+			</Box>
+		</Flex>
 	)
 }
 

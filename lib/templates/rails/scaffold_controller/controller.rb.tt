@@ -1,0 +1,85 @@
+<% module_namespacing do -%>
+class <%= controller_class_name %>Controller < ApplicationController
+  
+
+  expose :<%= plural_table_name %>, -> { search(@active_company.<%= plural_table_name %>.includes_associated, sortable_fields) }
+  <% if attributes.include?(:slug) -%>
+  expose :<%= singular_table_name %>, id: ->{ params[:slug] }, scope: ->{ @active_company.<%= plural_table_name %>.includes_associated }, find_by: :slug
+  <% else -%>
+  expose :<%= singular_table_name %>, scope: ->{ @active_company.<%= plural_table_name %> }, find: ->(id, scope){ scope.includes_associated.find(id) }
+  <% end -%>
+
+  def index
+    authorize <%= plural_table_name %>
+
+    paginated_<%= plural_table_name %> = %= plural_table_name %>.page(params[:page] || 1).per(current_user.limit(:items))
+    
+    render inertia: "<%= class_name.pluralize %>/Index", props: {
+      <%= plural_table_name %>: -> { paginated_<%= plural_table_name %>.render(:index) },
+      pagination: -> { {
+        count: <%= plural_table_name %>.size,
+        **pagination_data(paginated_<%= plural_table_name %>)
+      } },
+    }
+  end
+
+  def show
+    authorize <%= singular_table_name %>
+    render inertia: "<%= class_name %>/Show", props: {
+      <%= singular_table_name %>: -> { <%= singular_table_name %>.render(:show) }
+    }
+  end
+
+  def new
+    authorize <%= orm_class.build(class_name) %>
+    render inertia: "<%= class_name %>/New", props: {
+      <%= singular_table_name %>: <%= orm_class.build(class_name) %>.render(:form_data)
+    }
+  end
+
+  def edit
+    authorize <%= singular_table_name %>
+    render inertia: "<%= class_name %>/Edit", props: {
+      <%= singular_table_name %>: <%= singular_table_name %>.render(:edit)
+    }
+  end
+
+  def create
+    authorize <%= orm_class.build(class_name) %>
+    if <%= orm_instance.save %>
+      redirect_to <%= singular_table_name %>, notice: <%= %("#{human_name} was successfully created.") %>
+    else
+      redirect_to new_<%= singular_table_name %>_path, inertia: { errors: <%= singular_table_name %>.errors }
+    end
+  end
+
+  def update
+    authorize <%= singular_table_name %>
+    if <%= orm_instance.update("#{singular_table_name}_params") %>
+      redirect_to <%= singular_table_name %>, notice: <%= %("#{human_name} was successfully updated.") %>
+    else
+      redirect_to edit_<%= singular_table_name %>_path, inertia: { errors: <%= singular_table_name %>.errors }
+    end
+  end
+
+  def destroy
+    authorize <%= singular_table_name %>
+    <%= orm_instance.destroy %>
+    redirect_to <%= index_helper %>_url, notice: <%= %("#{human_name} was successfully destroyed.") %>
+  end
+
+  private
+
+  def sortable_fields
+    %w(<%= permitted_params.gsub(/[:,]/, '') %>).freeze
+  end
+
+  def <%= "#{singular_table_name}_params" %>
+    <%- if attributes_names.empty? -%>
+    params.fetch(:<%= singular_table_name %>, {})
+    <%- else -%>
+    params.require(:<%= singular_table_name %>).permit(<%= permitted_params %>)
+    <%- end -%>
+  end
+end
+<% end -%>

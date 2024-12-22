@@ -1,72 +1,76 @@
-class EmployeesController < InertiaController
-  before_action :set_employee, only: %i[show edit update destroy]
-  before_action :set_employees, only: %i[index]
+class EmployeesController < ApplicationController
+  include Searchable
 
-  # GET /employees
+  expose :employees, -> { search(Employee.includes_associated, sortable_fields) }
+  expose :employee, scope: ->{ Employee }, find: ->(id, scope){ scope.includes_associated.find(id) }
+
+  # @route GET /employees (employees)
   def index
-    render inertia: "Employees/Index", props: {
-      employees: @employees.decorate.as_json,
+    authorize employees
+    render inertia: "Employee/Index", props: {
+      employees: -> { employees.render(:index) }
     }
   end
 
-  # GET /employees/:id
+  # @route GET /employees/:slug (employee)
   def show
-    render inertia: "Employees/Show", props: {
-      employee: @employee.decorate.as_json,
+    authorize employee
+    render inertia: "Employee/Show", props: {
+      employee: -> { employee.render(:show) }
     }
   end
 
-  # GET /employees/new
+  # @route GET /employees/new (new_employee)
   def new
-    render inertia: "Employees/New", props: {
-      employee: Employee.new.as_json,
+    authorize Employee.new
+    render inertia: "Employee/New", props: {
+      employee: Employee.new.render(:form_data)
     }
   end
 
-  # GET /employees/:id/edit
+  # @route GET /employees/:slug/edit (edit_employee)
   def edit
-    render inertia: "Employees/Edit", props: {
-      employee: @employee.as_json,
+    authorize employee
+    render inertia: "Employee/Edit", props: {
+      employee: employee.render(:edit)
     }
   end
 
-  # POST /employees
+  # @route POST /employees (employees)
   def create
-    @employee = Employee.new(example_params)
-
-    if @employee.save
-      redirect_to employee_url(@employee), notice: "Employee was successfully created."
+    authorize Employee.new
+    if employee.save
+      redirect_to employee, notice: "Employee was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      redirect_to new_employee_path, inertia: { errors: employee.errors }
     end
   end
 
-  # PATCH/PUT /employees/:id
+  # @route PATCH /employees/:slug (employee)
+  # @route PUT /employees/:slug (employee)
   def update
-    if @employee.update(employee_params)
-      redirect_to employee_url(@employee), notice: "Employee was successfully updated."
+    authorize employee
+    if employee.update(employee_params)
+      redirect_to employee, notice: "Employee was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      redirect_to edit_employee_path, inertia: { errors: employee.errors }
     end
   end
 
-  # DELETE /employees/:id
+  # @route DELETE /employees/:slug (employee)
   def destroy
-    @employee.destroy
+    authorize employee
+    employee.destroy!
     redirect_to employees_url, notice: "Employee was successfully destroyed."
   end
 
   private
 
-  def set_employee
-    @employee = Employee.find(class_name, params[:id])
-  end
-
-  def set_employees
-    @employees = Employee.all
+  def sortable_fields
+    %w(person_id active_at inactive_at number).freeze
   end
 
   def employee_params
-    params.require(:employee).permit(:f_name, :l_name, :m_name, :slug)
+    params.require(:employee).permit(:person_id, :active_at, :inactive_at, :number)
   end
 end

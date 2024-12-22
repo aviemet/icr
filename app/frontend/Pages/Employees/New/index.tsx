@@ -1,13 +1,29 @@
 import React from 'react'
-import Form from '../Form'
+import { Heading, Page, Section } from '@/Components'
+import { Routes } from '@/lib'
+import EmployeeForm from '../Form'
 
-const New = ({ employee }) => {
+interface INewEmployeeProps {
+	employee: Schema.EmployeesFormData
+}
+
+const NewEmployee = ({ ...data }: INewEmployeeProps) => {
+	const title = 'New Employee'
+
 	return (
-		<div>
-			<h1>New Employee</h1>
-			<Form employee={ employee } />
-		</div>
+		<Page title={ title }>
+
+			<Section>
+				<Heading>{ title }</Heading>
+
+				<EmployeeForm
+					to={ Routes.employees() }
+					{ ...data }
+				/>
+			</Section>
+
+		</Page>
 	)
 }
 
-export default New
+export default NewEmployee

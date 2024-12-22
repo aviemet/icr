@@ -1,39 +1,37 @@
-import React, { useContext } from 'react'
-import { useForm as useInertiaForm, InertiaFormProps } from '@inertiajs/inertia-react'
+import React from 'react'
+import { Box } from '@mantine/core'
+import {
+	Form as InertiaForm,
+	type FormProps as UifFormProps,
+	type NestedObject,
+} from 'use-inertia-form'
 
-import { FormProps } from 'react-html-props'
+import cx from 'clsx'
+import * as classes from './Form.css'
 
-const FormContext = React.createContext()
-
-export const useForm = () => useContext(FormContext)
-
-interface IFormProps extends FormProps {
-	data: Record<string, string>
-	to: string
-	onSubmit?: (object) => boolean|void
+export interface FormProps<TForm> extends UifFormProps<TForm> {
+	disableFormatting?: boolean
 }
 
-const Form = ({ children, data, method = 'post', to, onSubmit, ...props }: IFormProps) => {
-	const form = useInertiaForm(data)
-	console.log({ form })
-
-	const handleSubmit = e => {
-		e.preventDefault()
-		let submit = true
-		if(onSubmit) {
-			const val = onSubmit(form)
-			if(val === true || val === false) submit = val
-		}
-		if(submit) form[method.toLocaleLowerCase()](to)
-	}
-
+const Form = <TForm extends NestedObject>({
+	children,
+	data,
+	className,
+	railsAttributes = true,
+	...props
+}: FormProps<TForm>) => {
 	return (
-		<FormContext.Provider value={ form }>
-			<form onSubmit={ handleSubmit } { ...props }>
+		<Box className={ cx(classes.form) }>
+			<InertiaForm
+				data={ data }
+				className={ cx(className) }
+				railsAttributes={ railsAttributes }
+				{ ...props }
+			>
 				{ children }
-			</form>
-		</FormContext.Provider>
+			</InertiaForm>
+		</Box>
 	)
 }
 
-export default React.memo(Form)
+export default Form

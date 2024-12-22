@@ -1,30 +1,28 @@
 import React from 'react'
 import { Routes } from '@/lib'
-import { Head } from '@inertiajs/inertia-react'
-import { Link } from '@/Components'
-import { Grid } from '@mui/material'
-import Table from './Table'
+import { Head } from '@inertiajs/react'
+import { Link, Grid } from '@/Components'
+import Table from '../Table'
+import { Schema } from '@tiptap/pm/model'
+import { IndexPageTemplate } from '@/Features'
+import SchedulesTable from '../Table'
 
-const Index = ({ clients }) => {
+interface ScheduleIndexProps {
+	clients: Schema.Client[]
+	pagination: Schema.Pagination
+}
+
+const Index = ({ clients, pagination }: ScheduleIndexProps) => {
 	return (
-		<>
-			<Head title="Clients"></Head>
-
-			<Grid container spacing={ 2 }>
-
-				<Grid item xs={ 10 }>
-					<h1>Clients</h1>
-				</Grid>
-				<Grid item xs={ 2 }>
-					<Link href={ Routes.newClient() } as="button">New Client</Link>
-				</Grid>
-
-				<Grid item xs={ 12 }>
-					<Table clients={ clients } />
-				</Grid>
-
-			</Grid>
-		</>
+		<IndexPageTemplate
+			title="Clients"
+			model="clients"
+			rows={ clients }
+			pagination={ pagination }
+			deleteRoute={ Routes.clients() }
+		>
+			<SchedulesTable />
+		</IndexPageTemplate>
 	)
 }
 

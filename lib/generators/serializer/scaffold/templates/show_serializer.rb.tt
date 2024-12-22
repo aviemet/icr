@@ -1,0 +1,6 @@
+class Orders::ShowSerializer < ApplicationSerializer
+  object_as :order
+
+  attributes(
+  )
+end

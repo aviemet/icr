@@ -1,194 +1,272 @@
 require:
-  - rubocop-performance
+  - rubocop-factory_bot
   - rubocop-rails
   - rubocop-rspec
 
 AllCops:
+
+  Exclude:
+    - "bin/**/*"
+    - "node_modules/**/*"
+    - "tmp/**/*"
+    - "vendor/**/*"
+    - ".git/**/*"
   NewCops: enable
-  Exclude:
-    - 'vendor/**/*'
-    - 'test/fixtures/**/*'
-    - 'db/**/*'
-    - 'bin/**/*'
-    - 'log/**/*'
-    - 'tmp/**/*'
-    - 'app/views/**/*'
-    - 'config/environments/*'
-    - 'node_modules/**/*'
-
-# Metrics Cops
-
-Metrics/ClassLength:
-  Enabled: false
-
-Metrics/ModuleLength:
-  Enabled: false
-
-Metrics/ParameterLists:
-  Enabled: false
-
-Metrics/MethodLength:
-  Enabled: false
-
-Metrics/BlockLength:
-  Enabled: false
-
-# Style Cops
-
-Style/BlockDelimiters:
-  Exclude:
-    - 'spec/**/*'
-
-Style/SymbolArray:
-  Enabled: false
-
-Style/ClassAndModuleChildren:
-  Description: 'Checks style of children classes and modules.'
-  Enabled: false
-  EnforcedStyle: nested
-
-Style/CollectionMethods:
-  Enabled: true
-  PreferredMethods:
-    find: detect
-    inject: reduce
-    collect: map
-    find_all: select
 
 Style/Documentation:
-  Description: 'Document classes and non-namespace modules.'
   Enabled: false
-
+Style/ExponentialNotation:
+  Enabled: true
+Style/HashAsLastArrayItem: 
+  Enabled: false
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
 Style/FrozenStringLiteralComment:
-  Description: >-
-    Add the frozen_string_literal comment to the top of files
-    to help transition from Ruby 2.3.0 to Ruby 3.0.
   Enabled: false
-
-Style/IfUnlessModifier:
-  Description: >-
-                 Favor modifier if/unless usage when you have a
-                 single-line body.
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#if-as-a-modifier'
-  Enabled: false
-
-Style/InlineComment:
-  Description: 'Avoid inline comments.'
-  Enabled: false
-
-Style/LineEndConcatenation:
-  Description: >-
-                 Use \ instead of + or << to concatenate two string literals at
-                 line end.
-  Enabled: true
-
 Style/StringLiterals:
-  Description: 'Checks if uses of quotes match the configured preference.'
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#consistent-string-literals'
+  Enabled: true
   EnforcedStyle: double_quotes
-  Enabled: true
-
-Style/TrailingCommaInArguments:
-  Description: 'Checks for trailing comma in argument lists.'
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-trailing-array-commas'
-  EnforcedStyleForMultiline: comma
-  SupportedStylesForMultiline:
-    - comma
-    - consistent_comma
-    - no_comma
-  Enabled: true
-
-Style/TrailingCommaInArrayLiteral:
-  Description: 'Checks for trailing comma in array literals.'
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-trailing-array-commas'
-  EnforcedStyleForMultiline: comma
-  SupportedStylesForMultiline:
-    - comma
-    - consistent_comma
-    - no_comma
-  Enabled: true
-
-Style/TrailingCommaInHashLiteral:
-  Description: 'Checks for trailing comma in hash literals.'
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-trailing-array-commas'
-  EnforcedStyleForMultiline: comma
-  SupportedStylesForMultiline:
-    - comma
-    - consistent_comma
-    - no_comma
-  Enabled: true
-
-Style/BlockComments:
+Style/NumericLiterals:
   Enabled: false
-
-# Layout Cops
-
-Layout/ArgumentAlignment:
-  EnforcedStyle: with_fixed_indentation
+Style/ClassAndModuleChildren:
+  Enabled: false
+Style/EmptyMethod:
+  Enabled: false
+Style/GuardClause:
+  Enabled: false
+Style/SlicingWithRange:
+  Enabled: true
+Style/RedundantRegexpCharacterClass:
+  Enabled: true
+Style/RedundantRegexpEscape:
+  Enabled: true
+Style/RedundantParentheses:
+  Enabled: false
+Style/RedundantSelf:
+  Enabled: false
+Style/SafeNavigation:
+  Enabled: true
   Exclude:
-    - 'config/initializers/*'
-  Enabled: true
-
-Layout/ArrayAlignment:
-  EnforcedStyle: with_fixed_indentation
-  Enabled: true
-
-Layout/BlockAlignment:
-  EnforcedStyleAlignWith: start_of_block
-  Enabled: true
-
+    - "/app/views/**/*.slim"
+Metrics/AbcSize:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: false
+Lint/RaiseException:
+  Enabled: false
+Lint/StructNewOverride:
+  Enabled: false
+Lint/MissingSuper:
+  Enabled: false
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
 Layout/FirstHashElementIndentation:
   Enabled: false
-
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+Layout/MultilineBlockLayout:
+  Enabled: false
+Layout/BlockEndNewline:
+  Enabled: false
+Layout/MultilineMethodCallIndentation:
+  Enabled: true
+  EnforcedStyle: indented
 Layout/FirstArgumentIndentation:
   Enabled: false
-
-Layout/DotPosition:
-  Description: 'Checks the position of the dot in multi-line method calls.'
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#consistent-multi-line-chains'
+Layout/EmptyLinesAroundBlockBody:
   Enabled: false
-
 Layout/LineLength:
   Enabled: false
-
-Layout/MultilineOperationIndentation:
-  Description: >-
-                 Checks indentation of binary operations that span more than
-                 one line.
+Layout/ExtraSpacing:
+  Enabled: false
+Layout/TrailingWhitespace:
   Enabled: true
-  EnforcedStyle: indented
-
-Layout/MultilineMethodCallIndentation:
-  Description: >-
-                 Checks indentation of method calls with the dot operator
-                 that span more than one line.
+Layout/SpaceAroundMethodCallOperator:
   Enabled: true
-  EnforcedStyle: indented
-
-# Rails Cops
-
-Rails/Delegate:
-  Description: 'Prefer delegate method for delegations.'
+Layout/SpaceInsideHashLiteralBraces:
   Enabled: false
-
-Rails/Output:
+Layout/CommentIndentation:
   Enabled: false
-
-Rails/HasAndBelongsToMany:
+Layout/HashAlignment:
   Enabled: false
-
-Rails/DynamicFindBy:
-  Enabled: false
-
-# Bundler Cops
-
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+Lint/MixedRegexpCaptureTypes:
+  Enabled: true
 Bundler/OrderedGems:
   Enabled: false
 
-# RSpec Cops
-
 RSpec/MultipleExpectations:
   Enabled: false
-
 RSpec/ExampleLength:
+  Enabled: false
+RSpec/InstanceVariable:
+  Enabled: false
+
+# Relaxed.Ruby.Style
+## Version 2.5
+
+Style/Alias:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#stylealias
+
+Style/AsciiComments:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#styleasciicomments
+
+Style/BeginBlock:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#stylebeginblock
+
+Style/BlockDelimiters:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#styleblockdelimiters
+
+Style/CommentAnnotation:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#stylecommentannotation
+
+Style/DoubleNegation:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#styledoublenegation
+
+Style/EndBlock:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#styleendblock
+
+Style/FormatString:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#styleformatstring
+
+Style/IfUnlessModifier:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#styleifunlessmodifier
+
+Style/Lambda:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#stylelambda
+
+Style/ModuleFunction:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#stylemodulefunction
+
+Style/MultilineBlockChain:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#stylemultilineblockchain
+
+Style/NegatedIf:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#stylenegatedif
+
+Style/NegatedWhile:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#stylenegatedwhile
+
+Style/NumericPredicate:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#stylenumericpredicate
+
+Style/ParallelAssignment:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#styleparallelassignment
+
+Style/PercentLiteralDelimiters:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#stylepercentliteraldelimiters
+
+Style/PerlBackrefs:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#styleperlbackrefs
+
+Style/Semicolon:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#stylesemicolon
+
+Style/SignalException:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#stylesignalexception
+
+Style/SingleLineBlockParams:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#stylesinglelineblockparams
+
+Style/SingleLineMethods:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#stylesinglelinemethods
+
+Style/SpecialGlobalVars:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#stylespecialglobalvars
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: consistent_comma
+  StyleGuide: https://relaxed.ruby.style/#styletrailingcommainarguments
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#styletrailingcommainarrayliteral
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#styletrailingcommainhashliteral
+
+Style/SymbolArray:
+  Enabled: false
+  StyleGuide: http://relaxed.ruby.style/#stylesymbolarray
+
+Style/WhileUntilModifier:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#stylewhileuntilmodifier
+
+Style/WordArray:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#stylewordarray
+
+Layout/DotPosition:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#layoutdotposition
+
+Layout/SpaceBeforeBlockBraces:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#layoutspacebeforeblockbraces
+
+Layout/SpaceInsideParens:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#layoutspaceinsideparens
+
+Layout/FirstArrayElementIndentation:
+  Enabled: false
+
+Layout/MultilineOperationIndentation:
+  Enabled: false
+
+Layout/ArgumentAlignment:
+  Enabled: false
+
+Lint/AmbiguousRegexpLiteral:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#lintambiguousregexpliteral
+
+Lint/AssignmentInCondition:
+  Enabled: false
+  StyleGuide: https://relaxed.ruby.style/#lintassignmentincondition
+
+Naming/AccessorMethodName:
+  Enabled: false
+
+Naming/VariableNumber:
+  Enabled: false
+
+Style/HashSyntax:
+  Enabled: false
+
+Metrics:
   Enabled: false

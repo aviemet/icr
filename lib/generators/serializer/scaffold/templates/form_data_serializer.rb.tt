@@ -1,0 +1,6 @@
+class Orders::FormDataSerializer < ApplicationSerializer
+  object_as :order
+
+  attributes(
+  )
+end

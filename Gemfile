@@ -1,35 +1,45 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.0.3"
+ruby "3.3.4"
 
 # Server
-gem "rails", "~> 7.0.1"
-gem "sprockets-rails"
-gem "pg", "~> 1.1"
-gem "puma", "~> 5.0"
+gem "rails", ">= 7.2"
+gem "pg", ">= 1.5"
+gem "puma", ">= 6.0"
 
 # Assets
-gem "jbuilder"
-gem "inertia_rails", "~> 1.11"
-gem "vite_rails", "~> 3.0"
+gem "inertia_rails", ">= 3.1"
+gem "vite_rails", ">= 3.0"
+
+# Models
+gem "active_type", ">= 2.1"
+gem "pg_search", ">= 2.3"
+gem "devise", ">= 4.8"
+gem "devise_invitable", ">= 2.0"
+gem "rolify", ">= 6.0"
+gem "pundit", ">= 2.3"
+gem "kaminari", ">= 1.2"
+gem "money-rails", ">= 1.15"
+gem "decent_exposure", ">= 3.0"
+gem "boolean_timestamp", ">= 1.1"
+gem "jsonb_accessor", ">= 1.3"
+gem "oj_serializers", ">= 2.0"
+gem "types_from_serializers", ">= 2.1"
+gem "public_activity", ">= 3.0"
 
 # Helpers
-gem "factory_bot", "~> 6.2"
-gem "devise", "~> 4.8"
-gem "ice_cube", "~> 0.16.4"
-gem "slug", "~> 4.1"
-gem "time_for_a_boolean", "~> 0.2.1"
-gem "draper", "~> 4.0"
-
-# Use Redis adapter to run Action Cable in production
-# gem "redis", "~> 4.0"
-
-# Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
-# gem "kredis"
-
-# Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
-# gem "bcrypt", "~> 3.1.7"
+gem "factory_bot", ">= 6.4"
+gem "factory_bot_rails", ">= 6.4"
+gem "js-routes", ">= 2.2"
+gem "net-ldap", ">= 0.18.0"
+gem "ice_cube", ">= 0.16.4"
+gem "amazing_print", ">= 1.4"
+gem "overmind", "~> 2.5"
+gem "eventmachine", ">= 1.2"
+gem "countries", ">= 6.0"
+gem "delayed_job_active_record", ">= 4.1"
+gem "friendly_id", "~> 5.5"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data"
@@ -38,40 +48,60 @@ gem "tzinfo-data"
 gem "bootsnap", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
+# gem "image_processing", ">= 1.2"
+
+# Use Redis adapter to run Action Cable in production
+# gem "redis", ">= 4.0"
+
+# Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
+# gem "kredis"
+
+# Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
+# gem "bcrypt", ">= 3.1.7"
 
 group :development, :test do
-  gem "rspec-rails", "~> 5.0"
-  gem "factory_bot_rails", "~> 6.2"
-  gem "faker", "~> 2.19"
-  gem "amazing_print", "~> 1.4"
+  gem "rspec-rails", ">= 6.0.1"
+  gem "faker", git: "https://github.com/faker-ruby/faker.git", branch: "main"
+
+  # Linting
+  gem "rubocop-rails", ">= 2.14", require: false
+  gem "rubocop-rspec", ">= 2.9", require: false
+  gem "rubocop-performance", ">= 1.13", require: false
+  gem "rubocop-daemon", ">= 0.3.2", require: false
+  gem "rubocop-capybara", ">= 2.20", require: false
+  gem "rubocop-factory_bot", ">= 2.25", require: false
 
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri mingw x64_mingw]
-  gem "better_errors", "~> 2.9"
-  gem "solargraph", "~> 0.44.2"
-  gem "rubocop-rails", require: false
-  gem "rubocop-rspec", require: false
-  gem "rubocop-performance", require: false
-  gem "rubocop-daemon", require: false
 
-  # Routes
-  gem "js-routes", "~> 2.2"
+  gem "dotenv-rails", ">= 3.1"
+
+  # File annotation
+  gem "chusaku", ">= 1.2", require: false
+  gem "annotate", ">= 3.2", require: false
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 
-  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  gem "spring"
-
   # Live Reload
-  gem "rack-livereload", "~> 0.3.17"
-  gem "guard-livereload", "~> 2.5", require: false
+  gem "rack-livereload", ">= 0.3.17"
+  gem "guard-livereload", ">= 2.5", require: false
 
-  # Typescript schema generation
-  gem "schema2type", "~> 0.4.0"
+  gem "brakeman", "~> 6.1", require: false
+
+  gem "letter_opener", "~> 1.10"
+
+  # I18n
+  # Report unused and missing locale keys [https://github.com/glebm/i18n-tasks]
+  gem "i18n-tasks", "~> 1.0", require: false
+  # Generate json and ts locale files from locale.yml files [https://github.com/fnando/i18n-js]
+  gem "i18n-js", "~> 4.2", require: false
+
+  # Tools for VSCode
+  gem "solargraph", "~> 0.48.0", require: false
+  gem "ruby-lsp", "~> 0.22.1", require: false
 end
 
 group :test do
@@ -79,4 +109,10 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+  gem "generator_spec", ">= 0.9.4"
+  gem "database_cleaner-active_record", ">= 2.0"
+  gem "shoulda-matchers", ">= 5.1"
+  gem "bullet", ">= 7.0"
+  gem "simplecov", ">= 0.22.0"
+  gem "pundit-matchers", ">= 3.1"
 end

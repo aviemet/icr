@@ -1,48 +1,58 @@
 import React from 'react'
-import type { PageProps } from '@inertiajs/inertia'
-import Providers from '@/Providers'
+import Providers from '@/Layouts/Providers'
+import { Flash } from '@/Components'
 
-import AppLayout from './AppLayout'
-import AuthLayout from './AuthLayout'
+import BareAppLayout from './AppLayout'
+import BareAuthLayout from './AuthLayout'
+import BarePublicLayout from './PublicLayout'
 
-interface LayoutWrapperProps {
-	children: React.ReactNode
-	auth: {
-		user: Record<string, string>
-		form_authenticity_token: string
-	}
+export const LAYOUTS = {
+	'app': 'app',
+	'auth': 'auth',
+	'public': 'public',
+} as const
+
+export interface LayoutProps {
+	children: any
 }
 
-interface InertiaPageProps extends PageProps {
-	props: LayoutWrapperProps
-}
-
-const LayoutWrapper = React.memo(({ children, auth }: LayoutWrapperProps) => {
-	return(
-		<Providers auth={ auth }>
+export const LayoutWrapper = ({ children }: LayoutProps) => {
+	return (
+		<Providers>
+			<Flash />
 			{ children }
 		</Providers>
 	)
-})
+}
 
-const AppLayoutLayout = (page: InertiaPageProps) => {
-	return(
-		<LayoutWrapper auth={ page.props.auth }>
-			<AppLayout>{ page }</AppLayout>
+export const AppLayout = ({ children }: LayoutProps) => {
+	return (
+		<LayoutWrapper>
+			<BareAppLayout>
+				{ children }
+			</BareAppLayout>
 		</LayoutWrapper>
 	)
 }
 
-const AuthLayoutLayout = (page: InertiaPageProps) => {
-	return(
-		<LayoutWrapper auth={ page.props.auth }>
-			<AuthLayout>{ page }</AuthLayout>
+export const AuthLayout = ({ children }: LayoutProps) => {
+	return (
+		<LayoutWrapper>
+			<BareAuthLayout>
+				{ children }
+			</BareAuthLayout>
 		</LayoutWrapper>
 	)
 }
 
 
-export {
-	AppLayoutLayout as AppLayout,
-	AuthLayoutLayout as AuthLayout
+export const PublicLayout = ({ children }: LayoutProps) => {
+	return (
+		<LayoutWrapper>
+			<BarePublicLayout>
+				{ children }
+			</BarePublicLayout>
+		</LayoutWrapper>
+	)
 }
+

@@ -4,8 +4,8 @@ export default function greeting() {
 
 	let greeting: string
 
-	if (hour < 12) greeting = welcomeTypes[0]
-	else if (hour < 18) greeting = welcomeTypes[1]
+	if(hour < 12) greeting = welcomeTypes[0]
+	else if(hour < 18) greeting = welcomeTypes[1]
 	else greeting = welcomeTypes[2]
 
 	return greeting

@@ -1,26 +1,79 @@
+# == Schema Information
+#
+# Table name: people
+#
+#  id              :uuid             not null, primary key
+#  characteristics :jsonb
+#  dob             :date
+#  first_name      :string
+#  last_name       :string
+#  middle_name     :string
+#  nick_name       :string
+#  slug            :string           not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  user_id         :uuid
+#
+# Indexes
+#
+#  index_people_on_slug     (slug) UNIQUE
+#  index_people_on_user_id  (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (user_id => users.id)
+#
 class Person < ApplicationRecord
+  extend FriendlyId
+  friendly_id :name, use: [:slugged, :history]
+
   include Contactable
 
-  enum person_type: { employee: 10, client: 20 }
+  multisearchable(
+    against: [:first_name, :middle_name, :last_name],
+  )
+
+  pg_search_scope(
+    :search,
+    against: [:first_name, :middle_name, :last_name, :nick_name],
+    associated_against: {
+      user: [:email],
+      client: [:number],
+      employee: [:number]
+    }, using: {
+      tsearch: { prefix: true },
+      trigram: {},
+    },
+    ignoring: :accents,
+  )
+
+  resourcify
 
   belongs_to :user, optional: true
 
-  slug :name_for_slug
+  has_one :client, dependent: :nullify
+  has_one :employee, dependent: :nullify
+  has_one :doctor, dependent: :nullify
 
-  validates :f_name, presence: true
-  validates :l_name, presence: true
+  validates :first_name, presence: true
+  validates :last_name, presence: true
 
-  # def name
-  #   "#{f_name} #{l_name}"
-  # end
+  accepts_nested_attributes_for :user
+  accepts_nested_attributes_for :contact
 
-  def name_for_slug
-    "#{f_name}-#{l_name}"
+  scope :includes_associated, -> { includes([:user, :client, :employee, :doctor, :contact]) }
+
+  def name(include_middle_name: false)
+    "#{first_name}#{include_middle_name ? " #{middle_name}" : ''} #{last_name}"
   end
 
-  # def as_json(options = {})
-  #   super((options || {}).merge({
-  #     methods: [:name],
-  #   }))
-  # end
+  after_create :sync_user_email_with_contact
+
+  private
+
+  def sync_user_email_with_contact
+    return unless user&.email
+
+    contact.emails.create(email: user.email) unless contact.emails.exists?(email: user.email)
+  end
 end

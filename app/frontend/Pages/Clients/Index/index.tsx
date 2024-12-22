@@ -1,31 +1,29 @@
 import React from 'react'
 import { Routes } from '@/lib'
-import { Head } from '@inertiajs/inertia-react'
-import { Link } from '@/Components'
-import { Grid } from '@mui/material'
-import Table from './Table'
+import { IndexPageTemplate } from '@/Features'
+import { NewIcon } from '@/Components/Icons'
+import ClientsTable from '../Table'
 
-const Index = ({ clients }) => {
+interface ClientIndexProps {
+	clients: Schema.ClientsIndex[]
+	pagination: Schema.Pagination
+}
+
+const ClientsIndex = ({ clients, pagination }: ClientIndexProps) => {
 	return (
-		<>
-			<Head title="Clients"></Head>
-
-			<Grid container spacing={ 2 }>
-
-				<Grid item xs={ 10 }>
-					<h1>Clients</h1>
-				</Grid>
-				<Grid item xs={ 2 }>
-					<Link href={ Routes.newClient() } as="button">New Client</Link>
-				</Grid>
-
-				<Grid item xs={ 12 }>
-					<Table clients={ clients } />
-				</Grid>
-
-			</Grid>
-		</>
+		<IndexPageTemplate
+			title="Clients"
+			model="clients"
+			rows={ clients }
+			pagination={ pagination }
+			deleteRoute={ Routes.clients() }
+			menuOptions={ [
+				{ label: 'New Client', href: Routes.newClient(), icon: <NewIcon /> },
+			] }
+		>
+			<ClientsTable />
+		</IndexPageTemplate>
 	)
 }
 
-export default Index
+export default ClientsIndex

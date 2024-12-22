@@ -57,9 +57,9 @@ declare namespace schema {
 
   type Person = {
     id: number;
-    f_name: string | null;
-    m_name: string | null;
-    l_name: string | null;
+    first_name: string | null;
+    middle_name: string | null;
+    last_name: string | null;
     slug: string;
     person_type: number | null;
     user_id: number | null;

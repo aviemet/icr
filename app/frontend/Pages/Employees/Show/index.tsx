@@ -1,11 +1,32 @@
 import React from 'react'
+import { Heading, Page, Section } from '@/Components'
+import { Routes } from '@/lib'
+import EmployeeForm from '../Form'
 
-const Show = ({ employee }) => {
+interface NewEmployeeProps {
+	employee: Schema.EmployeesFormData
+}
+
+const NewEmployee = ({ ...data }: NewEmployeeProps) => {
+	const title = 'New Employee'
+
 	return (
-		<div>
-			<pre>{ employee }</pre>
-		</div>
+		<Page title={ title } breadcrumbs={ [
+			{ title: 'Employees', href: Routes.employees() },
+			{ title: 'New Employee' },
+		] }>
+
+			<Section>
+				<Heading>{ title }</Heading>
+
+				<EmployeeForm
+					to={ Routes.employees() }
+					{ ...data }
+				/>
+			</Section>
+
+		</Page>
 	)
 }
 
-export default Show
+export default NewEmployee

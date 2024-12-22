@@ -1,114 +1,123 @@
-import React, { useState, useEffect }  from 'react'
-import { Inertia } from '@inertiajs/inertia'
-import { Routes } from '@/lib'
-import { Calendar, Views, dateFnsLocalizer } from 'react-big-calendar'
-import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
-import { format, parse, startOfWeek, getDay, set, add, differenceInDays } from 'date-fns'
-import enUS from 'date-fns/locale/en-US'
+import React  from 'react'
+import { router } from '@inertiajs/react'
+import { formatter, theme } from '@/lib'
+// import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
+import dayjs from 'dayjs'
 import {
 	Box,
-	Button,
-	Grid,
-	Modal,
-	Typography
-} from '@mui/material'
-import { NewShiftForm, AnimateButton } from '@/Components'
-import { ModalPrompt } from '@/Components/Modal'
+	Calendar,
+	DateDisplay,
+} from '@/Components'
+// import ShiftForm from '@/Pages/Shifts/Form'
+import { type NavigateAction, type View, type Event } from 'react-big-calendar'
+import { modals } from '@mantine/modals'
+import useStore from '@/lib/store'
 
-import 'react-big-calendar/lib/css/react-big-calendar.css'
+interface ScheduleProps {
+	client: Schema.ClientsShow
+	schedules: Schema.CalendarEventsShow[]
+}
 
-const DragAndDropCalendar = withDragAndDrop(Calendar)
+const Schedule = ({ client, schedules }: ScheduleProps) => {
+	const { getContrastingColor } = useStore()
 
-const localizer = dateFnsLocalizer({
-	format,
-	parse,
-	startOfWeek,
-	getDay,
-	locales: {
-		'en-US': enUS,
-	}
-})
-
-const Schedule = ({ client, employees, shifts }) => {
-	const [modalOpen, setModalOpen] = useState(false)
-	const [newShiftStart, setNewShiftStart] = useState<Date>(new Date())
-	const [initialDay, setInitialDay] = useState<Date>()
-
-	const handleSelect = ({ start }: { start: Date }) => {
-		setNewShiftStart(set(start, { hours: 8 }))
-		setModalOpen(true)
+	const handleSelectEvent = (event: Event, e: React.SyntheticEvent<HTMLElement, globalThis.Event>) => {
+		modals.open({
+			title: 'Event Details',
+			children: (
+				<>
+					<Box>{ event.title }</Box>
+					{ event.start && <Box><DateDisplay>{ event.start }</DateDisplay></Box> }
+					{ event.end && <Box><DateDisplay>{ event?.end }</DateDisplay></Box> }
+				</>
+			),
+		})
 	}
 
-	const handleDateChange = params => {
-		console.log({ date: params })
+	const handleSelectSlot = ({ start }: { start: Date }) => {
 	}
 
-	const handleViewChange = params => {
-		console.log({ view: params })
+	const handleDateChange = (newDate: Date, view: View, action: NavigateAction) => {
+		// console.log({ date: params })
 	}
 
-	const handleRangeChange = params => {
-		const start = format(params.start, 'y-MM-dd')
-		const end = format(params.end, 'y-MM-dd')
-		console.log({ start, end })
-		Inertia.get(`/clients/${client.slug}/schedule`,
-			{ start, end },
+	const handleViewChange = (view: View) => {
+		// console.log({ view: params })
+	}
+
+	const handleRangeChange = (start: Date, end: Date, view: View) => {
+		const startDate = dayjs(start).format('DD-MM-YYYY')
+		const endDate = dayjs(end).format('DD-MM-YYYY')
+
+		router.get(`/clients/${client.slug}/schedule`,
+			{ startDate, endDate, view },
 			{
 				only: ['shifts'],
 				preserveState: true,
 				preserveScroll: true,
-			}
+			},
 		)
 	}
 
-	const defaultDate = () => {
-		const params = new URLSearchParams(window.location.search)
-		const start = params.get('start')
-		const end = params.get('end')
-		if(start && end) {
-			const startDate = new Date(start)
-			const days = Math.abs(differenceInDays(startDate, new Date(end)))
-			const defaultDate = add(startDate, { days: days })
-			return defaultDate
+	const buildShiftTitle = (schedule: Schema.CalendarEventsShow) => {
+		const start = schedule.starts_at ? formatter.time.short(schedule.starts_at) : undefined
+		const end = schedule.ends_at ? formatter.time.short(schedule.ends_at) : undefined
+		const name = schedule?.shift?.employee ? schedule.shift.employee.person.name : schedule.name
+
+		return `${start ? start : ''}${end
+			? (
+				start ?
+					` - ${end}`
+					: end
+			)
+			: ''}: ${name}`
+	}
+
+	const eventStyleGetter = (event: Event) => {
+		let defaultColor = theme.colors.blue[5]
+
+		const eventColor = event?.resource?.backgroundColor || defaultColor
+
+		return {
+			style: {
+				backgroundColor: eventColor,
+				color: getContrastingColor(eventColor),
+			},
 		}
 	}
 
-	console.log({ shifts })
-
 	return (
 		<>
-			<h1>{ client.full_name }</h1>
-			<Box sx={ { backgroundColor: 'white', padding: '10px' } }>
-				<DragAndDropCalendar
-					selectable
-					showAllEvents={ true }
-					localizer={ localizer }
-					events={ shifts.map(shift => (
-						{
-							title: shift.title,
-							start: new Date(shift.starts_at),
-							end: new Date(shift.ends_at)
+			<h1>{ client?.person?.name }</h1>
+			<Box>
+				<Calendar
+					events={ schedules.map(schedule => {
+						return {
+							id: schedule.id,
+							title: buildShiftTitle(schedule),
+							start: schedule.starts_at,
+							end: schedule.ends_at,
+							resource: {
+								backgroundColor: schedule.shift.employee.color,
+							},
 						}
-					)) }
-					defaultDate={ defaultDate() }
-					startAccessor="start"
-					endAccessor="end"
-					style={ { height: '100vh' } }
-					onSelectEvent={ event => alert(event.title) }
-					onSelectSlot={ handleSelect }
+					}) }
+					onSelectEvent={ handleSelectEvent }
+					onSelectSlot={ handleSelectSlot }
 					onNavigate={ handleDateChange }
 					onView={ handleViewChange }
 					onRangeChange={ handleRangeChange }
+					eventPropGetter={ eventStyleGetter }
 				/>
 			</Box>
-			<ModalPrompt title="New Shift" open={ modalOpen } handleClose={ () => setModalOpen(false) }>
-				<NewShiftForm
+			{ /* <Modal title="New Shift" open={ modalContext.open } handleClose={ modalContext.close }>
+				<ShiftForm
 					start={ newShiftStart }
 					client={ client }
 					employees={ employees }
-					onSubmit={ () => setModalOpen(false) }
+					onSubmit={ modalContext.close }
 				/>
-			</ModalPrompt>
+			</Modal> */ }
 		</>
 	)
 }

@@ -1,11 +1,18 @@
-# This file is copied to spec/ when you run 'rails generate rspec:install'
 require "spec_helper"
 ENV["RAILS_ENV"] ||= "test"
-require File.expand_path("../config/environment", __dir__)
+require_relative "../config/environment"
+
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require "rspec/rails"
+
 # Add additional requires below this line. Rails is not loaded until this point!
+require "inertia_rails/rspec"
+require "bullet"
+require "database_cleaner/active_record"
+require "pundit/rspec"
+require "capybara/rails"
+require "capybara/rspec"
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -27,12 +34,12 @@ require "rspec/rails"
 begin
   ActiveRecord::Migration.maintain_test_schema!
 rescue ActiveRecord::PendingMigrationError => e
-  puts e.to_s.strip
-  exit 1
+  abort e.to_s.strip
 end
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.fixture_paths = [Rails.root.join("spec/fixtures")]
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -61,4 +68,84 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  # Capybara
+  config.include Capybara::DSL, type: :feature
+
+  Capybara.configure do |c|
+    c.default_driver = :selenium_chrome
+    c.app_host = "https://localhost:3000"
+  end
+
+  # Database Cleaner
+  config.before :suite do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+    Rails.application.load_seed
+  end
+
+  # Request specs cannot use a transaction because Capybara runs in a
+  # separate thread with a different database connection.
+  config.before type: :request do
+    DatabaseCleaner.strategy = :truncation
+  end
+
+  # Reset so other non-request specs don't have to deal with slow truncation.
+  config.after type: :request  do
+    DatabaseCleaner.strategy = :transaction
+  end
+
+  config.before do
+    DatabaseCleaner.start
+    # WebMock.disable_net_connect!(allow_localhost: true)
+    ActionMailer::Base.deliveries.clear
+  end
+
+  config.after do
+    DatabaseCleaner.clean
+  end
+
+  # Shoulda
+  Shoulda::Matchers.configure do |c|
+    c.integrate do |with|
+      with.test_framework :rspec
+      with.library :rails
+    end
+  end
+
+  # FactoryBot
+  config.include FactoryBot::Syntax::Methods
+
+  # Faker
+  config.before(:all) do
+    Faker::UniqueGenerator.clear
+  end
+
+  # Bullet
+  if Bullet.enable?
+    config.before do
+      Bullet.start_request
+    end
+
+    config.after do
+      Bullet.perform_out_of_channel_notifications if Bullet.notification?
+      Bullet.end_request
+    end
+  end
+
+  # Pundit
+  RSpec::Matchers.define :authorize do |action|
+    match do |policy|
+      policy.public_send(:"#{action}?")
+    end
+
+    failure_message do |policy|
+      "#{policy.class} does not authorize #{action} on #{policy.record} for #{policy.user.inspect}."
+    end
+
+    failure_message_when_negated do |policy|
+      "#{policy.class} does not forbid #{action} on #{policy.record} for #{policy.user.inspect}."
+    end
+  end
+
 end

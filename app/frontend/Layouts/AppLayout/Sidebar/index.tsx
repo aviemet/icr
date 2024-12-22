@@ -1,69 +1,83 @@
 import React from 'react'
-import { useTheme } from '@mui/material/styles'
-import { Box, Drawer, useMediaQuery } from '@mui/material'
-import { BrowserView, MobileView } from 'react-device-detect'
-import PerfectScrollbar from 'react-perfect-scrollbar'
-import MenuList from './MenuList'
-import LogoSection from '../LogoSection'
+import useStore from '@/lib/store'
+import MenuLink from './MenuLink'
+import { Routes } from '@/lib'
+import { Group, AppShell, Box, Flex, Text } from '@/Components'
+import ToggleSidebarButton from '../ToggleSidebarButton'
+import IconProvider from '@/Layouts/Providers/IconProvider'
+import { useLocation, usePageProps } from '@/lib/hooks'
 
-const Sidebar = ({ drawerOpen, drawerToggle, window }: { drawerOpen: boolean, drawerToggle: () => void, window?: any}) => {
-	const theme = useTheme()
-	const matchUpMd = useMediaQuery(theme.breakpoints.up('md'))
+import cx from 'clsx'
+import * as classes from '../AppLayout.css'
+import { SiteLogo } from '@/Features'
+import { TextInput } from '@/Components/Inputs'
+import { ClientIcon, EmployeeIcon, SettingsIcon } from '@/Components/Icons'
 
-	const drawer = (
-		<>
-			<Box sx={ { display: { xs: 'block', md: 'none' } } }>
-				<Box sx={ { display: 'flex', p: 2, mx: 'auto' } }>
-					<LogoSection />
-				</Box>
-			</Box>
-			<BrowserView>
-				<PerfectScrollbar
-					component="div"
-					style={ {
-						height: !matchUpMd ? 'calc(100vh - 56px)' : 'calc(100vh - 88px)',
-						paddingLeft: '16px',
-						paddingRight: '16px'
-					} }
-				>
-					<MenuList />
-				</PerfectScrollbar>
-			</BrowserView>
-			<MobileView>
-				<Box sx={ { px: 2 } }>
-					<MenuList />
-				</Box>
-			</MobileView>
-		</>
-	)
-
-	const container = window !== undefined ? () => window.document.body : undefined
+const Sidebar = () => {
+	const { auth: { user } } = usePageProps()
+	const { sidebarOpen, siteTitle } = useStore()
+	const { paths } = useLocation()
 
 	return (
-		<Box component="nav" sx={ { flexShrink: { md: 0 }, width: matchUpMd ? theme.constants.drawerWidth : 'auto' } } aria-label="mailbox folders">
-			<Drawer
-				container={ container }
-				variant={ matchUpMd ? 'persistent' : 'temporary' }
-				anchor="left"
-				open={ drawerOpen }
-				onClose={ drawerToggle }
-				sx={ {
-					'& .MuiDrawer-paper': {
-						width: theme.constants.drawerWidth,
-						background: theme.palette.background.default,
-						color: theme.palette.text.primary,
-						borderRight: 'none',
-						[theme.breakpoints.up('md')]: {
-							top: '88px'
-						}
-					}
-				} }
-				ModalProps={ { keepMounted: true } }
-				color="inherit"
+		<IconProvider size="1.2rem">
+			<AppShell.Navbar
+				p={ 0 }
+				hidden={ !sidebarOpen }
+				className={ cx(classes.navbar, { closed: !sidebarOpen }) }
 			>
-				{ drawer }
-			</Drawer>
-		</Box>
+				<AppShell.Section p="xs">
+					<Group justify="flex-end">
+						<ToggleSidebarButton />
+					</Group>
+
+					<Group>
+						<SiteLogo />
+						<Flex
+							direction="column"
+							wrap="nowrap"
+							className={ cx('hidden-when-closed') }
+						>
+							<Box><Text size="xl" fw={ 700 }>{ siteTitle }</Text></Box>
+							<Box><Text size="sm">{ user?.person?.name }</Text></Box>
+						</Flex>
+					</Group>
+				</AppShell.Section>
+
+				<AppShell.Section p="xs" className={ cx('hidden-when-closed') }>
+					<TextInput placeholder="Search" />
+				</AppShell.Section>
+
+				<AppShell.Section p="xs" grow className={ cx('links') }>
+					<ul>
+						<li>
+							<MenuLink
+								href={ Routes.clients() }
+								icon={ <ClientIcon /> }
+								active={ paths.length === 1 && paths[0] === 'clients' }
+							>
+								Clients
+							</MenuLink>
+							<ul>
+								<li><MenuLink href="/">Households</MenuLink></li>
+							</ul>
+						</li>
+						<li>
+							<MenuLink
+								href={ Routes.employees() }
+								icon={ <EmployeeIcon /> }
+							>
+								Employees
+							</MenuLink>
+						</li>
+					</ul>
+				</AppShell.Section>
+
+				<AppShell.Section p="xs">
+					<MenuLink href={ Routes.settings() } icon={ <SettingsIcon /> }>Settings</MenuLink>
+				</AppShell.Section>
+
+			</AppShell.Navbar>
+		</IconProvider>
 	)
 }
 

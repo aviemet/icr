@@ -1,13 +1,29 @@
 import React from 'react'
-import Form from '../Form'
+import { Heading, Page, Section } from '@/Components'
+import { Routes } from '@/lib'
+import ClientForm from '../Form'
 
-const New = ({ client }) => {
+interface NewClientProps {
+	client: Schema.ClientsFormData
+}
+
+const NewClient = ({ ...data }: NewClientProps) => {
+	const title = 'New Client'
+
 	return (
-		<div>
-			<h1>New Client</h1>
-			<Form client={ client } />
-		</div>
+		<Page title={ title }>
+
+			<Section>
+				<Heading>{ title }</Heading>
+
+				<ClientForm
+					to={ Routes.clients() }
+					{ ...data }
+				/>
+			</Section>
+
+		</Page>
 	)
 }
 
-export default New
+export default NewClient

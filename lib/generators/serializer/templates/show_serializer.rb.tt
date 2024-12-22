@@ -1,0 +1,8 @@
+class <%= model_name.pluralize.camelize %>::ShowSerializer < ApplicationSerializer
+  object_as :<%= model_name %>
+
+  attributes(
+    :id,<% model_attributes.each do |attribute| %>
+    :<%= attribute %>,<% end %>
+  )
+end

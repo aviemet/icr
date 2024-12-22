@@ -1,13 +1,43 @@
+# == Schema Information
+#
+# Table name: shifts
+#
+#  id                :uuid             not null, primary key
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  calendar_event_id :uuid             not null
+#  employee_id       :uuid             not null
+#
+# Indexes
+#
+#  index_shifts_on_calendar_event_id  (calendar_event_id)
+#  index_shifts_on_employee_id        (employee_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (calendar_event_id => calendar_events.id)
+#  fk_rails_...  (employee_id => employees.id)
+#
 class Shift < ApplicationRecord
-  has_and_belongs_to_many :clients, class_name: "Person"
+
+  pg_search_scope(
+    :search,
+    against: [],
+    associated_against: {
+      employee: [],
+      calendar_event: [],
+    },
+    using: {
+      tsearch: { prefix: true },
+      trigram: {}
+    },
+  )
+
+  tracked
+  resourcify
+
   belongs_to :employee
-  belongs_to :created_by, class_name: "User"
-  belongs_to :recurring_pattern, optional: true, dependent: :destroy
+  belongs_to :calendar_event, class_name: "Calendar::Event"
 
-  accepts_nested_attributes_for :clients
-  accepts_nested_attributes_for :recurring_pattern
-
-  scope :before, ->(time) { where("starts_at > ?", time) }
-  scope :after, ->(time) { where("ends_at < ?", time) }
-  scope :between, ->(start_time, end_time) { before(start_time).after(end_time) }
+  scope :includes_associated, -> { includes([]) }
 end

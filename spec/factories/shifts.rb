@@ -1,19 +1,26 @@
-now = Time.zone.now
-
+# == Schema Information
+#
+# Table name: shifts
+#
+#  id                :uuid             not null, primary key
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  calendar_event_id :uuid             not null
+#  employee_id       :uuid             not null
+#
+# Indexes
+#
+#  index_shifts_on_calendar_event_id  (calendar_event_id)
+#  index_shifts_on_employee_id        (employee_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (calendar_event_id => calendar_events.id)
+#  fk_rails_...  (employee_id => employees.id)
+#
 FactoryBot.define do
-  sequence :start_time do |n|
-    Time.zone.new(now.year, now.month, now.day, n + 10)
-  end
-
-  sequence :end_time do |n|
-    Time.zone.new(now.year, now.month, now.day, n + 11)
-  end
-
-  factory :shift do |_time|
-    starts_at { generate(:start_time) }
-    ends_at { generate(:end_time) }
-    created_by { User.first }
-    employee { Employee.first }
-    clients { [Client.first] }
+  factory :shift do
+    employee
+    calendar_event
   end
 end

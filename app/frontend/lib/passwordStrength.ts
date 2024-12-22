@@ -4,16 +4,16 @@
 import colors from '@/Layouts/theme/colors'
 
 // has number
-const hasNumber = str => new RegExp(/[0-9]/).test(str)
+const hasNumber = (str: string) => new RegExp(/[0-9]/).test(str)
 
 // has mix of small and capitals
-const hasMixed = str => new RegExp(/[a-z]/).test(str) && new RegExp(/[A-Z]/).test(str)
+const hasMixed = (str: string) => new RegExp(/[a-z]/).test(str) && new RegExp(/[A-Z]/).test(str)
 
 // has special chars
-const hasSpecial = str => new RegExp(/[!#@$%^&*)(+=._-]/).test(str)
+const hasSpecial = (str: string) => new RegExp(/[!#@$%^&*)(+=._-]/).test(str)
 
 // set color based on password strength
-export const strengthColor = (count) => {
+export const strengthColor = (count: number) => {
 	if (count < 2) return { label: 'Poor', color: colors.errorMain }
 	if (count < 3) return { label: 'Weak', color: colors.warningDark }
 	if (count < 4) return { label: 'Normal', color: colors.orangeMain }
@@ -23,7 +23,7 @@ export const strengthColor = (count) => {
 }
 
 // password strength indicator
-export const strengthIndicator = str => {
+export const strengthIndicator = (str: string) => {
 	let strengths = 0
 	if (str.length > 5) strengths += 1
 	if (str.length > 7) strengths += 1
