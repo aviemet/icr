@@ -1,9 +1,21 @@
 import React from 'react'
-import { Button } from '@/Components'
+import { IconButton } from '@/Components'
 import { modals } from '@mantine/modals'
+import { ActionIconProps } from '@mantine/core'
 
-const NewShiftButton = () => {
-	const handleModalOpen = () => {
+import cx from 'clsx'
+import * as classes from './Calendar.css'
+
+interface NewShiftButtonProps extends ActionIconProps,
+	Omit<React.ComponentPropsWithoutRef<'button'>, keyof ActionIconProps> {}
+
+const NewShiftButton = ({
+	className,
+	onClick,
+	variant = 'subtle',
+	...props
+}: NewShiftButtonProps) => {
+	const handleModalOpen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		modals.open({
 			title: 'New Shift',
 			children: (
@@ -12,21 +24,18 @@ const NewShiftButton = () => {
 				</div>
 			),
 		})
+
+		onClick?.(e)
 	}
 
 	return (
-		<Button
+		<IconButton
+			{ ...props }
+			variant={ variant }
 			onClick={ handleModalOpen }
-			mt={ 2 }
-			ml={ 2 }
-			pt={ 2 }
-			pb={ 3 }
-			px={ 5 }
-			style={ {
-				height: 'auto',
-				float: 'left',
-			} }
-		>+</Button>
+			className={ cx(className, classes.newShiftButton) }
+			size="xs"
+		>+</IconButton>
 	)
 }
 

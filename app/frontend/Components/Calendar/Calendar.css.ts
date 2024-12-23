@@ -1,14 +1,61 @@
 import { vars } from '@/lib/theme'
 import { css } from '@linaria/core'
 
+export const newShiftButton = css`
+	z-index: 100;
+	height: auto;
+	float: left;
+`
+
 export const calendar = css`
 	height: 90vh;
 
-	.rbc-event-content {
-		font-size: ${vars.fontSizes.xs}
+	.rbc-date-cell {
+		.${newShiftButton} {
+			display: none;
+		}
+
+		&:hover {					
+			.${newShiftButton} {
+				display: block;
+			}
+		}
+	}
+
+	.rbc-toolbar {
+		.rbc-btn-group {
+
+		}
+
+		.rbc-toolbar-label {
+
+		}
+
+		.rbc-btn-group {
+			button.rbc-active {
+
+			}
+		}
 	}
 
 	.rbc-month-view {
+
+		.rbc-row-bg {
+			.rbc-date-cell {
+				&:hover {
+					background: orange;
+					
+					.${newShiftButton} {
+						border: 10px solid green;
+						display: block;
+					}
+				}
+
+				.rbc-day-bg {
+
+				}
+			}
+		}
 
 		.rbc-month-row {
 			overflow: unset;
@@ -39,6 +86,9 @@ export const calendar = css`
 
 	}
 
+	.rbc-event-content {
+		font-size: ${vars.fontSizes.xs};
+	}
 
 	// Fix dark theme colors
 	${vars.darkSelector} { 

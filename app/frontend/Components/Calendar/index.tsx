@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useMemo, useRef } from 'react'
 import {
 	Calendar,
 	Views,
@@ -16,6 +16,10 @@ import * as classes from './Calendar.css'
 import DateCellWrapper from './DateCellWrapper'
 import { Box } from '@mantine/core'
 import NewShiftButton from './NewShiftButton'
+import { useLocation } from '@/lib/hooks'
+import MonthDateHeader from './MonthDateHeader'
+import MonthEvent from './MonthEvent'
+import MonthHeader from './MonthHeader'
 
 const DragAndDropCalendar = withDragAndDrop(Calendar<Event, {}>)
 
@@ -36,7 +40,20 @@ const CalendarComponent = ({
 	className,
 	...props
 }: CalendarComponentProps) => {
-	const viewRef = useRef(defaultView)
+	const { params } = useLocation()
+
+	const startingView = useMemo(() => {
+		if(params.has('view')) {
+			const view = params.get('view')!.toUpperCase()
+
+			if(view in Views) {
+				return Views[view as keyof typeof Views]
+			}
+		}
+		return defaultView
+	}, [defaultView, params])
+
+	const viewRef = useRef(startingView)
 
 	/**
 	 * Rewrite date range change method to stabilize interface
@@ -57,7 +74,7 @@ const CalendarComponent = ({
 
 		onRangeChange(start, end, viewRef.current)
 	}
-	console.log({ props })
+
 	return (
 		<DragAndDropCalendar
 			selectable
@@ -65,77 +82,65 @@ const CalendarComponent = ({
 			showAllEvents={ showAllEvents }
 			localizer={ localizer }
 			onRangeChange={ handleRangeChange }
+			defaultView={ viewRef.current }
 			components={ {
-				// dateCellWrapper: DateCellWrapper,
-				// agenda: ({ children }) => {
-				// 	console.log({ children })
-				// 	return <>{ children }</>
-				// },
-				// day: ({ children }) => {
-				// 	console.log({ children })
-				// 	return <>hi{ children }</>
-				// },
-				// dayColumnWrapper: ({ children }) => {
-				// 	console.log({ children })
-				// 	return <>{ children }</>
-				// },
+				dateCellWrapper: DateCellWrapper,
 				// event: (props) => {
 				// 	console.log({ props })
 				// 	return <></>
 				// },
+
 				// eventContainerWrapper: ({ children }) => {
 				//console.log({ children})
 				// return <>{ children }</>
 				// },
-				// eventWrapper: ({ children }) => {
-				//console.log({ children})
-				// return <>{ children }</>
-				// },
+
 				// header: ({ children }) => {
 				//console.log({ children})
 				// return <>{ children }</>
 				// },
+
 				month: {
-					dateHeader: ({ date, drilldownView, isOffRange, label, onDrillDown }) => {
-						const dayOfWeek = date.getDay()
-
-						return <>
-							<NewShiftButton />
-							<Box component="span">
-								{ label }
-							</Box>
-						</>
-					},
-
+					dateHeader: MonthDateHeader,
+					event: MonthEvent,
+					header: MonthHeader,
 				},
+
 				// resourceHeader: ({ children }) => {
 				// 	console.log({ children })
 				// 	return <>HI{ children }</>
 				// },
+
 				// showMore: ({ children }) => {
 				//console.log({ children})
 				// return <>{ children }</>
 				// },
+
 				// timeGutterHeader: ({ children }) => {
 				// 	console.log({ children })
 				// 	return <>{ children }</>
 				// },
+
 				// timeGutterWrapper: ({ children }) => {
 				//console.log({ children})
 				// return <>{ children }</>
 				// },
+
 				// timeSlotWrapper: ({ children }) => {
 				// 	console.log({ children })
-				// 	return <>{ children }</>
+				// 	return <>time{ children }</>
 				// },
+
 				// toolbar: ({ children }) => {
 				//console.log({ children})
 				// return <>{ children }</>
 				// },
+
 				// week: ({ children }) => {
 				//console.log({ children})
 				// return <>{ children }</>
 				// },
+
 				// work_week: ({ children }) => {
 				//console.log({ children})
 				// return <>{ children }</>

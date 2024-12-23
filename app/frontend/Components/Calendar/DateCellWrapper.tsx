@@ -7,7 +7,6 @@ const DateCellWrapper = ({ children, range, value }: DateCellWrapperProps) => {
 
 	return (
 		<Box className="rbc-date-cell">
-			<NewShiftButton />
 			{ children }
 		</Box>
 	)
