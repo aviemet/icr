@@ -2,7 +2,7 @@ import React from 'react'
 import useStore from '@/lib/store'
 import MenuLink from './MenuLink'
 import { Routes } from '@/lib'
-import { Group, AppShell, Box, Flex, Text } from '@/Components'
+import { Group, AppShell, Box, Flex, Text, Transition, Link, ConditionalWrapper, Tooltip } from '@/Components'
 import ToggleSidebarButton from '../ToggleSidebarButton'
 import IconProvider from '@/Layouts/Providers/IconProvider'
 import { useLocation, usePageProps } from '@/lib/hooks'
@@ -31,7 +31,19 @@ const Sidebar = () => {
 					</Group>
 
 					<Group>
-						<SiteLogo />
+						<Link href={ Routes.root() }>
+							<Tooltip
+								label="Home"
+								disabled={ sidebarOpen }
+								position="right"
+								withArrow
+							>
+								<SiteLogo
+									size={ sidebarOpen ? 'md' : 'sm' }
+									mt={ sidebarOpen ? 'xxs' : 'md' }
+								/>
+							</Tooltip>
+						</Link>
 						<Flex
 							direction="column"
 							wrap="nowrap"
@@ -47,7 +59,7 @@ const Sidebar = () => {
 					<TextInput placeholder="Search" />
 				</AppShell.Section>
 
-				<AppShell.Section p="xs" grow className={ cx('links') }>
+				<AppShell.Section p="xs" grow className={ cx(classes.navigation) }>
 					<ul>
 						<li>
 							<MenuLink

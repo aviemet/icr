@@ -10,8 +10,8 @@ const ShiftInfo = ({ event }: ClientShiftInfo) => {
 	return (
 		<>
 			<Box>
-				<Text>Start: <DateTimeDisplay type="datetime" format="full">{ event.start }</DateTimeDisplay></Text>
-				<Text>Start: <DateTimeDisplay type="datetime" format="full">{ event.end }</DateTimeDisplay></Text>
+				<Text>Start: <DateTimeDisplay format="dateTimeLong">{ event.start }</DateTimeDisplay></Text>
+				<Text>Start: <DateTimeDisplay format="dateTimeLong">{ event.end }</DateTimeDisplay></Text>
 			</Box>
 		</>
 	)

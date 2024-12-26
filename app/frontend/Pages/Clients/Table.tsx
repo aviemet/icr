@@ -32,7 +32,7 @@ const ClientTable = (props: TableProps) => {
 						</Table.Cell>
 
 						<Table.Cell fitContent>
-							<DateTimeDisplay tooltipFormats={ ['from'] }>{ client.active_at }</DateTimeDisplay>
+							<DateTimeDisplay tooltipFormats={ ['fromNow'] }>{ client.active_at }</DateTimeDisplay>
 						</Table.Cell>
 
 						<Table.Cell>

@@ -54,6 +54,18 @@ export const navbar = css`
 		display: none;
 		visibility: hidden;
 	}
+
+	#site-logo, #site-logo svg {
+		transition: width 250ms ease-in-out, 
+			min-width 250ms ease-in-out, 
+			height 250ms ease-in-out, 
+			min-height 250ms ease-in-out,
+			border-radius 250ms ease-in-out;
+	}
+`
+
+export const navigation = css`
+
 `
 
 export const navLink = css`
