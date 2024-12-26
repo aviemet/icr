@@ -22,7 +22,6 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 	const { getContrastingColor } = useStore()
 
 	const handleSelectEvent = (event: Event, e: React.SyntheticEvent<HTMLElement, globalThis.Event>) => {
-		console.log({ event })
 		modals.open({
 			title: event.resource.employee.person.name,
 			children: (
@@ -69,10 +68,10 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 	}) => {
 		let title = ''
 		if(start) {
-			title += formatter.time.short(start)
+			title += formatter.datetime.timeShort(start)
 
 			if(end) {
-				title += ` - ${formatter.time.short(end)}`
+				title += ` - ${formatter.datetime.timeShort(end)}`
 			}
 		}
 		if(name) {
