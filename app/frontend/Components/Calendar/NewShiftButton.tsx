@@ -5,6 +5,7 @@ import { ActionIconProps } from '@mantine/core'
 
 import cx from 'clsx'
 import * as classes from './Calendar.css'
+import { PlusIcon } from '../Icons'
 
 interface NewShiftButtonProps extends ActionIconProps,
 	Omit<React.ComponentPropsWithoutRef<'button'>, keyof ActionIconProps> {}
@@ -35,7 +36,9 @@ const NewShiftButton = ({
 			onClick={ handleModalOpen }
 			className={ cx(className, classes.newShiftButton) }
 			size="xs"
-		>+</IconButton>
+		>
+			<PlusIcon />
+		</IconButton>
 	)
 }
 

@@ -98,3 +98,7 @@ export {
 export {
 	// PiPersonSimpleCircle as ClientIcon,
 } from 'react-icons/pi'
+
+export {
+	GoPlus as PlusIcon,
+} from 'react-icons/go'

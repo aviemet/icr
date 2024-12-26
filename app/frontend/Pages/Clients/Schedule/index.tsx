@@ -6,12 +6,12 @@ import dayjs from 'dayjs'
 import {
 	Box,
 	Calendar,
-	DateDisplay,
 } from '@/Components'
-// import ShiftForm from '@/Pages/Shifts/Form'
-import { type NavigateAction, type View, type Event } from 'react-big-calendar'
+import { type NavigateAction, type View, type Event, SlotInfo } from 'react-big-calendar'
 import { modals } from '@mantine/modals'
 import useStore from '@/lib/store'
+import ShiftInfo from './ShiftInfo'
+import NewShiftForm from './NewShiftForm'
 
 interface ScheduleProps {
 	client: Schema.ClientsShow
@@ -22,19 +22,22 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 	const { getContrastingColor } = useStore()
 
 	const handleSelectEvent = (event: Event, e: React.SyntheticEvent<HTMLElement, globalThis.Event>) => {
+		console.log({ event })
 		modals.open({
-			title: 'Event Details',
+			title: event.resource.employee.person.name,
 			children: (
-				<>
-					<Box>{ event.title }</Box>
-					{ event.start && <Box><DateDisplay>{ event.start }</DateDisplay></Box> }
-					{ event.end && <Box><DateDisplay>{ event?.end }</DateDisplay></Box> }
-				</>
+				<ShiftInfo event={ event } />
 			),
 		})
 	}
 
-	const handleSelectSlot = ({ start }: { start: Date }) => {
+	const handleSelectSlot = (info: SlotInfo) => {
+		modals.open({
+			title: 'Event Details',
+			children: (
+				<NewShiftForm { ...info } />
+			),
+		})
 	}
 
 	const handleDateChange = (newDate: Date, view: View, action: NavigateAction) => {
@@ -59,18 +62,23 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 		)
 	}
 
-	const buildShiftTitle = (schedule: Schema.CalendarEventsShow) => {
-		const start = schedule.starts_at ? formatter.time.short(schedule.starts_at) : undefined
-		const end = schedule.ends_at ? formatter.time.short(schedule.ends_at) : undefined
-		const name = schedule?.shift?.employee ? schedule.shift.employee.person.name : schedule.name
+	const buildShiftTitle = ({ start, end, name }: {
+		start?: Date
+		end?: Date
+		name?: string
+	}) => {
+		let title = ''
+		if(start) {
+			title += formatter.time.short(start)
 
-		return `${start ? start : ''}${end
-			? (
-				start ?
-					` - ${end}`
-					: end
-			)
-			: ''}: ${name}`
+			if(end) {
+				title += ` - ${formatter.time.short(end)}`
+			}
+		}
+		if(name) {
+			title += ` ${name}`
+		}
+		return title
 	}
 
 	const eventStyleGetter = (event: Event) => {
@@ -94,11 +102,16 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 					events={ schedules.map(schedule => {
 						return {
 							id: schedule.id,
-							title: buildShiftTitle(schedule),
+							title:  buildShiftTitle({
+								start: schedule?.starts_at,
+								end: schedule?.ends_at,
+								name: schedule.shift.employee.person.name,
+							}),
 							start: schedule.starts_at,
 							end: schedule.ends_at,
 							resource: {
 								backgroundColor: schedule.shift.employee.color,
+								employee: schedule.shift.employee,
 							},
 						}
 					}) }

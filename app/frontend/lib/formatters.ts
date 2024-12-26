@@ -39,5 +39,19 @@ export const time = {
 		}
 		return d.format(`${formatString}a`)
 	},
-	full: (date: string | Date) => dayjs(new Date(date)).format('HH:mm::ss:SSS Z'),
+	long: (date: string | Date) => dayjs(new Date(date)).format('hh:mm A'),
+	full: (date: string | Date) => dayjs(new Date(date)).format('HH:mm::ss'),
+}
+
+export const datetime = {
+	short: (date: string | Date) => {
+		const d = dayjs(new Date(date))
+		let formatString = 'h'
+		if(d.get('minutes') > 0) {
+			formatString += ':mm'
+		}
+		return d.format(`${formatString}a MM/DD/YY`)
+	},
+	long: (date: string | Date) => dayjs(new Date(date)).format('hh:mm A MM/DD/YYYY'),
+	full: (date: string | Date) => dayjs(new Date(date)).format('hh:mm A dddd MM/DD/YYYY'),
 }

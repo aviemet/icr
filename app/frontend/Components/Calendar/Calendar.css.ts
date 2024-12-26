@@ -13,6 +13,8 @@ export const calendar = css`
 	.rbc-date-cell {
 		.${newShiftButton} {
 			display: none;
+			margin-top: 3px;
+			margin-left: 3px;
 		}
 
 		&:hover {					
@@ -41,10 +43,10 @@ export const calendar = css`
 	.rbc-month-view {
 
 		.rbc-row-bg {
+			z-index: 1;
+
 			.rbc-date-cell {
-				&:hover {
-					background: orange;
-					
+				&:hover {					
 					.${newShiftButton} {
 						border: 10px solid green;
 						display: block;
