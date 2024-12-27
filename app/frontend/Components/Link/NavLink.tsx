@@ -5,7 +5,7 @@ import { useLocation } from '@/lib/hooks'
 
 interface NavLinkComponentProps
 	extends NavLinkProps,
-	Omit<InertiaLinkProps, 'color'|'size'|'span'|'label'|'onChange'|'onKeyDown'|'style'|'active'> {}
+	Omit<InertiaLinkProps, 'color' | 'size' | 'span' | 'label' | 'onChange' | 'onClick' | 'onKeyDown' | 'style' | 'active'> {}
 
 const NavLinkComponent = (props: NavLinkComponentProps) => {
 	const { pathname } = useLocation()

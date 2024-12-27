@@ -60,28 +60,20 @@ const Sidebar = () => {
 				</AppShell.Section>
 
 				<AppShell.Section p="xs" grow className={ cx(classes.navigation) }>
-					<ul>
-						<li>
-							<MenuLink
-								href={ Routes.clients() }
-								icon={ <ClientIcon /> }
-								active={ paths.length === 1 && paths[0] === 'clients' }
-							>
-								Clients
-							</MenuLink>
-							<ul>
-								<li><MenuLink href="/">Households</MenuLink></li>
-							</ul>
-						</li>
-						<li>
-							<MenuLink
-								href={ Routes.employees() }
-								icon={ <EmployeeIcon /> }
-							>
-								Employees
-							</MenuLink>
-						</li>
-					</ul>
+					<MenuLink
+						href={ Routes.clients() }
+						icon={ <ClientIcon /> }
+						active={ paths.length === 1 && paths[0] === 'clients' }
+					>
+						Clients
+						<MenuLink href="/">Households</MenuLink>
+					</MenuLink>
+					<MenuLink
+						href={ Routes.employees() }
+						icon={ <EmployeeIcon /> }
+					>
+						Employees
+					</MenuLink>
 				</AppShell.Section>
 
 				<AppShell.Section p="xs">

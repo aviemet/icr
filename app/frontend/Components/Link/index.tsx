@@ -8,14 +8,13 @@ export { default as NavLink } from './NavLink'
 
 export interface LinkProps
 	extends
-	Omit<AnchorProps, 'onProgress'>
-{
+	Omit<AnchorProps, 'onProgress'> {
 	children?: React.ReactNode
 	href: string
 	method?: Method
 	visit?: Omit<Visit, 'method'>
 	external?: boolean
-	as?: 'a'|'button'
+	as?: 'a' | 'button'
 	onProgress?: React.ReactEventHandler<HTMLAnchorElement>
 	onClick?: React.ReactEventHandler<HTMLAnchorElement>
 	target?: string

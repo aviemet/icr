@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from '@/Components'
+import { NavLink } from '@/Components'
 import { ActionIcon, Box, Group, Tooltip } from '@/Components'
 import { AnchorProps } from '@mantine/core'
 
@@ -18,8 +18,14 @@ const MenuLink = ({ children, href, icon, className, active, ...props }: MenuLin
 	const { sidebarOpen } = useStore()
 
 	return (
-		<Link href={ href } className={ cx(classes.navLink, { active }) } mb="sm" { ...props }>
-			<Group gap={ 0 }>
+		<NavLink
+			href={ href }
+			className={ cx(classes.navLink, { active }) } mb="sm"
+			leftSection={ icon }
+			{ ...props }
+		>
+			{ children }
+			{ /* <Group gap={ 0 }>
 				<Tooltip
 					label={ children }
 					disabled={ sidebarOpen }
@@ -36,8 +42,8 @@ const MenuLink = ({ children, href, icon, className, active, ...props }: MenuLin
 					</ActionIcon>
 				</Tooltip>
 				<Box className={ cx('hidden-when-closed') }>{ children }</Box>
-			</Group>
-		</Link>
+			</Group> */ }
+		</NavLink>
 	)
 }
 

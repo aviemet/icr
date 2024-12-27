@@ -65,7 +65,33 @@ export const navbar = css`
 `
 
 export const navigation = css`
+	/* ul {
+		li {
+			position: relative;
 
+			& > ul {
+				display: none;
+				position: absolute;
+				left: ${theme.other.navbar.width.open}px;
+				top: 0;
+				background-color: ${vars.colors.dark[5]};
+				padding: ${vars.spacing.md};
+				border-radius: ${vars.radius.md};
+			}
+
+			&:hover {
+				& > ul {
+					display: block;
+				}
+			}
+		}		
+	}
+
+	.${navbar}.closed {
+		ul li > ul {
+			left: ${theme.other.navbar.width.closed}px;
+		}
+	} */
 `
 
 export const navLink = css`
