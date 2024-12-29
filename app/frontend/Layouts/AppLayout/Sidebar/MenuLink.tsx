@@ -1,27 +1,21 @@
 import React from 'react'
-import { NavLink } from '@/Components'
+import { NavLink, NavLinkProps } from '@/Components'
 import { ActionIcon, Box, Group, Tooltip } from '@/Components'
-import { AnchorProps } from '@mantine/core'
 
 import cx from 'clsx'
 import * as classes from '../AppLayout.css'
 import useStore from '@/lib/store'
 
-interface MenuLinkProps extends AnchorProps {
-	children: string
-	href: string
-	icon?: JSX.Element
-	active?: boolean
-}
+interface MenuLinkProps extends NavLinkProps {}
 
-const MenuLink = ({ children, href, icon, className, active, ...props }: MenuLinkProps) => {
+const MenuLink = ({ children, className, active, mb = 'sm', ...props }: MenuLinkProps) => {
 	const { sidebarOpen } = useStore()
 
 	return (
 		<NavLink
-			href={ href }
-			className={ cx(classes.navLink, { active }) } mb="sm"
-			leftSection={ icon }
+			className={ cx(classes.navLink, { active }) }
+			mb={ mb }
+			active={ active }
 			{ ...props }
 		>
 			{ children }

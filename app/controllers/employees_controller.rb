@@ -1,13 +1,17 @@
 class EmployeesController < ApplicationController
   include Searchable
 
-  expose :employees, -> { search(Employee.includes_associated, sortable_fields) }
+  expose :employees, -> { search(Employee.includes_associated) }
   expose :employee, scope: ->{ Employee }, find: ->(id, scope){ scope.includes_associated.find(id) }
+
+  sortable_fields %w(person_id active_at inactive_at number)
+
+  strong_params :employee, permit: [:person_id, :active_at, :inactive_at, :number]
 
   # @route GET /employees (employees)
   def index
     authorize employees
-    render inertia: "Employee/Index", props: {
+    render inertia: "Employees/Index", props: {
       employees: -> { employees.render(:index) }
     }
   end
@@ -15,7 +19,7 @@ class EmployeesController < ApplicationController
   # @route GET /employees/:slug (employee)
   def show
     authorize employee
-    render inertia: "Employee/Show", props: {
+    render inertia: "Employees/Show", props: {
       employee: -> { employee.render(:show) }
     }
   end
@@ -23,7 +27,7 @@ class EmployeesController < ApplicationController
   # @route GET /employees/new (new_employee)
   def new
     authorize Employee.new
-    render inertia: "Employee/New", props: {
+    render inertia: "Employees/New", props: {
       employee: Employee.new.render(:form_data)
     }
   end
@@ -31,7 +35,7 @@ class EmployeesController < ApplicationController
   # @route GET /employees/:slug/edit (edit_employee)
   def edit
     authorize employee
-    render inertia: "Employee/Edit", props: {
+    render inertia: "Employees/Edit", props: {
       employee: employee.render(:edit)
     }
   end
@@ -40,7 +44,7 @@ class EmployeesController < ApplicationController
   def create
     authorize Employee.new
     if employee.save
-      redirect_to employee, notice: "Employee was successfully created."
+      redirect_to employee, notice: t("employees.notices.created")
     else
       redirect_to new_employee_path, inertia: { errors: employee.errors }
     end
@@ -51,7 +55,7 @@ class EmployeesController < ApplicationController
   def update
     authorize employee
     if employee.update(employee_params)
-      redirect_to employee, notice: "Employee was successfully updated."
+      redirect_to employee, notice: t("employees.notices.created")
     else
       redirect_to edit_employee_path, inertia: { errors: employee.errors }
     end
@@ -61,16 +65,6 @@ class EmployeesController < ApplicationController
   def destroy
     authorize employee
     employee.destroy!
-    redirect_to employees_url, notice: "Employee was successfully destroyed."
-  end
-
-  private
-
-  def sortable_fields
-    %w(person_id active_at inactive_at number).freeze
-  end
-
-  def employee_params
-    params.require(:employee).permit(:person_id, :active_at, :inactive_at, :number)
+    redirect_to employees_url, notice: t("employees.notices.created")
   end
 end

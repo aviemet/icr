@@ -4,7 +4,7 @@ import InertiaLink from './InertiaLink'
 import ExternalLink from './ExternalLink'
 import { type AnchorProps, type ButtonProps } from '@mantine/core'
 
-export { default as NavLink } from './NavLink'
+export { default as NavLink, type NavLinkProps } from './NavLink'
 
 export interface LinkProps
 	extends
@@ -15,8 +15,8 @@ export interface LinkProps
 	visit?: Omit<Visit, 'method'>
 	external?: boolean
 	as?: 'a' | 'button'
-	onProgress?: React.ReactEventHandler<HTMLAnchorElement>
-	onClick?: React.ReactEventHandler<HTMLAnchorElement>
+	onProgress?: React.ReactEventHandler<Element>
+	onClick?: React.ReactEventHandler<Element>
 	target?: string
 	rel?: string
 	tabIndex?: number
@@ -44,7 +44,7 @@ const Link = forwardRef<HTMLAnchorElement, LinkProps>((
 	ref,
 ) => {
 	// Disable navigation if link is disabled
-	const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+	const handleClick = (e: React.MouseEvent<Element, MouseEvent>) => {
 		if(disabled) {
 			e.preventDefault()
 			onClick?.(e)

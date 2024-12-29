@@ -61,23 +61,31 @@ const Sidebar = () => {
 
 				<AppShell.Section p="xs" grow className={ cx(classes.navigation) }>
 					<MenuLink
+						label="Clients"
 						href={ Routes.clients() }
-						icon={ <ClientIcon /> }
-						active={ paths.length === 1 && paths[0] === 'clients' }
-					>
-						Clients
-						<MenuLink href="/">Households</MenuLink>
-					</MenuLink>
+						leftSection={ <ClientIcon /> }
+						active={ paths.length >= 1 && paths[0] === 'clients' }
+					/>
 					<MenuLink
+						label="Households"
+						href="/"
+						active={ paths.length >= 1 && paths[0] === 'households' }
+					/>
+					<MenuLink
+						label="Employees"
 						href={ Routes.employees() }
-						icon={ <EmployeeIcon /> }
-					>
-						Employees
-					</MenuLink>
+						leftSection={ <EmployeeIcon /> }
+						active={ paths.length >= 1 && paths[0] === 'employees' }
+					/>
 				</AppShell.Section>
 
 				<AppShell.Section p="xs">
-					<MenuLink href={ Routes.settings() } icon={ <SettingsIcon /> }>Settings</MenuLink>
+					<MenuLink
+						label="Settings"
+						href={ Routes.settings() }
+						leftSection={ <SettingsIcon /> }
+						active={ paths.length >= 1 && paths[0] === 'settings' }
+					/>
 				</AppShell.Section>
 
 			</AppShell.Navbar>

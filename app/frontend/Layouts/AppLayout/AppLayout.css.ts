@@ -95,7 +95,7 @@ export const navigation = css`
 `
 
 export const navLink = css`
-	display: block;
+	/*display: block;
 	border-radius: ${vars.radius.md};
 	transition: background-color 200ms ease-in-out;
 
@@ -119,5 +119,5 @@ export const navLink = css`
 		${vars.darkSelector} {
 			background-color: ${vars.colors.dark[8]};
 		}
-	}
+	}*/
 `

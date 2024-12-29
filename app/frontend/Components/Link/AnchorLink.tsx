@@ -3,7 +3,7 @@ import { Link, type InertiaLinkProps } from '@inertiajs/react'
 import { Anchor, type AnchorProps } from '@mantine/core'
 
 export interface IAnchorLinkProps
-	extends Omit<InertiaLinkProps, 'color'|'size'|'span'|'style'>,
+	extends Omit<InertiaLinkProps, 'color' | 'size' | 'span' | 'style'>,
 	Omit<AnchorProps, 'href'> {
 
 }

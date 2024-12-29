@@ -9,7 +9,7 @@ interface IExternalLinkProps
 	extends AnchorProps,
 	Omit<React.ComponentPropsWithoutRef<'a'>, keyof AnchorProps> {
 	href: string
-	as?: 'a'|'button'
+	as?: 'a' | 'button'
 	disabled?: boolean
 }
 
