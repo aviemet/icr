@@ -1,4 +1,3 @@
-import React from 'react'
 import { formatter } from '@/lib'
 import { Stack, Tooltip } from '@/Components'
 import ConditionalWrapper from '../ConditionalWrapper'

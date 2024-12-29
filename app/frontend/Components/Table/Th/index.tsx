@@ -1,4 +1,3 @@
-import React from 'react'
 import { useTableContext } from '../TableContext'
 import HeadCell from './HeadCell'
 import { type TableThProps } from '@mantine/core'
@@ -8,7 +7,7 @@ export interface TableHeadCellProps extends TableThProps {
 	fitContent?: boolean
 	sort?: string
 	nowrap?: boolean
-	hideable?: false|string
+	hideable?: false | string
 	ref?: React.RefObject<HTMLTableCellElement>
 }
 

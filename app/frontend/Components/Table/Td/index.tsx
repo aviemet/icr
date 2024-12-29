@@ -1,4 +1,3 @@
-import React from 'react'
 import { useTableContext } from '../TableContext'
 import BodyCell from './BodyCell'
 import { type TableTdProps } from '@mantine/core'

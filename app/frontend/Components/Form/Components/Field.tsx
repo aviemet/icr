@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box, BoxProps } from '@mantine/core'
 import cx from 'clsx'
 import { type InputType } from '@/types'

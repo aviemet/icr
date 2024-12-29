@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box, Button, Flex, Grid, Paper } from '@/Components'
 import { PlusCircleIcon, MinusCircleIcon } from '@/Components/Icons'
 import { NestedFields, useDynamicInputs } from 'use-inertia-form'

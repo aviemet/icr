@@ -1,4 +1,3 @@
-import React from 'react'
 import { Heading, Page, Section } from '@/Components'
 import { Routes } from '@/lib'
 import EmployeesForm from '../Form'
@@ -18,7 +17,7 @@ const EditEmployee = ({ employee }: EditEmployeeProps) => {
 		] }>
 			<Section>
 				<Heading>{ title }</Heading>
-				
+
 				<EmployeesForm
 					method='put'
 					to={ Routes.employee() }

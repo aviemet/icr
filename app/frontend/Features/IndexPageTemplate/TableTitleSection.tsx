@@ -1,4 +1,3 @@
-import React from 'react'
 import { useTableContext } from '@/Components/Table/TableContext'
 import { Box, Title, Group, Divider } from '@mantine/core'
 import { Menu } from '@/Components'

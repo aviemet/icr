@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react'
-import { MantineProvider, createTheme, px, type CSSVariablesResolver } from '@mantine/core'
+import { useMemo } from 'react'
+import { MantineProvider, createTheme, type CSSVariablesResolver } from '@mantine/core'
 import { type CSSVariables } from '@mantine/core/lib/core/MantineProvider/convert-css-variables/css-variables-object-to-string'
 import { ModalsProvider } from '@mantine/modals'
 import { Notifications } from '@mantine/notifications'

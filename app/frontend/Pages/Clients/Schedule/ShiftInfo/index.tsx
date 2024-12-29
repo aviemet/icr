@@ -1,4 +1,3 @@
-import React from 'react'
 import { type Event } from 'react-big-calendar'
 import { Box, DateTimeDisplay, Text } from '@/Components'
 

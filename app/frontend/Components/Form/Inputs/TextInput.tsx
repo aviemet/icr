@@ -1,4 +1,3 @@
-import React from 'react'
 import TextInput, { type TextInputProps } from '@/Components/Inputs/TextInput'
 import Field from '../Components/Field'
 import { useInertiaInput, type NestedObject } from 'use-inertia-form'

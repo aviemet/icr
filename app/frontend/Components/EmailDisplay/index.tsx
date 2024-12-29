@@ -1,4 +1,3 @@
-import React from 'react'
 import { ConditionalWrapper, Link } from '@/Components'
 
 interface EmailDisplayProps {

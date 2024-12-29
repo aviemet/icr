@@ -1,4 +1,3 @@
-import React from 'react'
 import { type ShowClientProps } from '.'
 import { Heading, PhoneNumber, Box, Text, Group, Section, EmailDisplay } from '@/Components'
 

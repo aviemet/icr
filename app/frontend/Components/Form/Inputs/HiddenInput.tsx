@@ -1,4 +1,3 @@
-import React from 'react'
 import { HiddenInput } from '@/Components/Inputs'
 import { NestedObject, useInertiaInput } from 'use-inertia-form'
 import { InputProps } from 'react-html-props'

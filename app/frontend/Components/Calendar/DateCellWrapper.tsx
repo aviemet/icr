@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box } from '@/Components'
 import NewShiftButton from './NewShiftButton'
 import { type DateCellWrapperProps } from 'react-big-calendar'

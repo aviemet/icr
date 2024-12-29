@@ -564,6 +564,23 @@ export const apiCalendarEvents = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"]
 
 /**
  * Generates rails route to
+ * /api/options/categories/:category_type(.:format)
+ * @param {any} categoryType
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiCategoryOptions = /*#__PURE__*/ __jsr.r({"category_type":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"api"],[2,[7,"/"],[2,[6,"options"],[2,[7,"/"],[2,[6,"categories"],[2,[7,"/"],[2,[3,"category_type"],[1,[2,[8,"."],[3,"format"]]]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /api/options/employees(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiEmployeesOptions = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"api"],[2,[7,"/"],[2,[6,"options"],[2,[7,"/"],[2,[6,"employees"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
  * /api/spotlights(.:format)
  * @param {object | undefined} options
  * @returns {string} route path

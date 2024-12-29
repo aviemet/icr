@@ -1,4 +1,3 @@
-import React from 'react'
 import { Burger } from '@/Components'
 import useStore from '@/lib/store'
 import { useComputedColorScheme } from '@mantine/core'

@@ -1,4 +1,3 @@
-import React from 'react'
 import { useInertiaInput, type UseFormProps, NestedObject } from 'use-inertia-form'
 import Field from '../Components/Field'
 import { type ComboboxData, type ComboboxItem, type ComboboxItemGroup } from '@mantine/core'

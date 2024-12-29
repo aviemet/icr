@@ -1,4 +1,3 @@
-import React from 'react'
 import { Avatar, type AvatarProps } from '@/Components'
 
 interface SiteLogoProps extends AvatarProps,

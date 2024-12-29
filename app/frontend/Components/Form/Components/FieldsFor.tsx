@@ -1,4 +1,3 @@
-import React from 'react'
 import { NestedFields, NestedFieldsProps } from 'use-inertia-form'
 import FormGroup from './FormGroup'
 

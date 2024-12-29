@@ -1,12 +1,44 @@
-import React from 'react'
-import { type SlotInfo } from 'react-big-calendar'
+import { DateTimeInput, Form } from '@/Components/Form'
+import { FormEmployeesDropdown } from '@/Features/Dropdowns'
+import { Routes } from '@/lib'
+import dayjs from 'dayjs'
+import { type PartialDeep } from 'type-fest'
 
-interface NewClientShiftFormProps extends SlotInfo {
+interface NewClientShiftFormProps {
+	selectedDate: Date
 }
 
-const NewShiftForm = ({ start, end, action, bounds, box }: NewClientShiftFormProps) => {
+type NewShiftData = {
+	calendar_event: PartialDeep<Schema.CalendarEventsFormData>
+}
+
+const NewShiftForm = ({ selectedDate }: NewClientShiftFormProps) => {
+	const initialData: NewShiftData = {
+		calendar_event: {
+			starts_at: selectedDate,
+			ends_at: dayjs(selectedDate).add(8, 'hours').toDate(),
+			shift: {
+				employee_id: '',
+			},
+		},
+	}
+
 	return (
-		<div>NewShiftForm</div>
+		<Form
+			model="calendar_event" to={ Routes.apiCalendarEvents() }
+			data={ initialData }
+		>
+			<FormEmployeesDropdown />
+			<DateTimeInput
+				label="Start"
+				name="starts_at"
+			/>
+			<DateTimeInput
+				label="End"
+				name="ends_at"
+			/>
+
+		</Form>
 	)
 }
 

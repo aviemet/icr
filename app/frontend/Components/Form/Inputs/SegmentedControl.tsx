@@ -1,4 +1,3 @@
-import React from 'react'
 import SegmentedControl, { type SegmentedControlProps } from '@/Components/Inputs/SegmentedControl'
 import Field from '../Components/Field'
 import { NestedObject, useInertiaInput } from 'use-inertia-form'

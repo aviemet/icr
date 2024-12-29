@@ -1,4 +1,3 @@
-import React from 'react'
 import { Table, type TableProps as MantineTableProps } from '@mantine/core'
 
 import Head from './Head'

@@ -110,6 +110,28 @@ export const apiCalendarEvents: ((
 
 /**
  * Generates rails route to
+ * /api/options/categories/:category_type(.:format)
+ * @param {any} categoryType
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiCategoryOptions: ((
+  categoryType: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /api/options/employees(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiEmployeesOptions: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
  * /api/spotlights(.:format)
  * @param {object | undefined} options
  * @returns {string} route path

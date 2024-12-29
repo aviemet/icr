@@ -1,4 +1,3 @@
-import React from 'react'
 import { type HeaderProps } from 'react-big-calendar'
 
 const MonthHeader = ({ date, label, localizer }: HeaderProps) => {

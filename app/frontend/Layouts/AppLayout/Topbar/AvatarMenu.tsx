@@ -1,4 +1,3 @@
-import React from 'react'
 import { Menu } from '@/Components'
 import { Avatar, UnstyledButton } from '@mantine/core'
 import { usePageProps } from '@/lib/hooks'

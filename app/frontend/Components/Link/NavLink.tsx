@@ -1,4 +1,3 @@
-import React from 'react'
 import { NavLink, type NavLinkProps } from '@mantine/core'
 import { Link, type InertiaLinkProps } from '@inertiajs/react'
 import { useLocation } from '@/lib/hooks'

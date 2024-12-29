@@ -1,4 +1,3 @@
-import React from 'react'
 import Button from './index'
 import { Modal } from '@/Components'
 import { useMantineTheme, type ModalProps, type ButtonProps } from '@mantine/core'

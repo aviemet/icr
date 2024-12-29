@@ -1,4 +1,3 @@
-import React from 'react'
 import useStore from '@/lib/store'
 import { Box, AppShell, Group, Flex } from '@/Components'
 import AvatarMenu from './AvatarMenu'

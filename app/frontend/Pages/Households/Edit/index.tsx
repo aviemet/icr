@@ -1,4 +1,3 @@
-import React from 'react'
 import { Heading, Page, Section } from '@/Components'
 import { Routes } from '@/lib'
 import HouseholdsForm from '../Form'
@@ -14,7 +13,7 @@ const EditHousehold = ({ household }: IEditHouseholdProps) => {
 		<Page title={ title }>
 			<Section>
 				<Heading>{ title }</Heading>
-				
+
 				<HouseholdsForm
 					method='put'
 					to={ Routes.household() }

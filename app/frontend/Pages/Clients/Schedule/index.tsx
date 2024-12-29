@@ -7,7 +7,7 @@ import {
 	Box,
 	Calendar,
 } from '@/Components'
-import { type NavigateAction, type View, type Event, SlotInfo } from 'react-big-calendar'
+import { type NavigateAction, type View, type Event } from 'react-big-calendar'
 import { modals } from '@mantine/modals'
 import useStore from '@/lib/store'
 import ShiftInfo from './ShiftInfo'
@@ -30,11 +30,11 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 		})
 	}
 
-	const handleSelectSlot = (info: SlotInfo) => {
+	const handleNewShift = (date: Date) => {
 		modals.open({
 			title: 'Event Details',
 			children: (
-				<NewShiftForm { ...info } />
+				<NewShiftForm selectedDate={ date } />
 			),
 		})
 	}
@@ -115,21 +115,14 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 						}
 					}) }
 					onSelectEvent={ handleSelectEvent }
-					onSelectSlot={ handleSelectSlot }
+					// onSelectSlot={ handleSelectSlot }
 					onNavigate={ handleDateChange }
 					onView={ handleViewChange }
 					onRangeChange={ handleRangeChange }
 					eventPropGetter={ eventStyleGetter }
+					onNewShift={ handleNewShift }
 				/>
 			</Box>
-			{ /* <Modal title="New Shift" open={ modalContext.open } handleClose={ modalContext.close }>
-				<ShiftForm
-					start={ newShiftStart }
-					client={ client }
-					employees={ employees }
-					onSubmit={ modalContext.close }
-				/>
-			</Modal> */ }
 		</>
 	)
 }

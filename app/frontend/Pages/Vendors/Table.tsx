@@ -1,4 +1,3 @@
-import React from 'react'
 import { Routes } from '@/lib'
 import { Table, Link } from '@/Components'
 import { EditButton } from '@/Components/Button'
@@ -9,7 +8,7 @@ const VendorTable = (props: TableProps) => {
 		<Table>
 			<Table.Head>
 				<Table.Row>
-					
+
 					<Table.HeadCell sort="name">Name</Table.HeadCell>
 					<Table.HeadCell sort="notes">Notes</Table.HeadCell>
 					<Table.HeadCell className="actions">Actions</Table.HeadCell>
@@ -18,7 +17,7 @@ const VendorTable = (props: TableProps) => {
 			<Table.Body>
 				<Table.RowIterator render={ (vendor: Schema.VendorsIndex) => (
 					<Table.Row key={ vendor.id }>
-						
+
 						<Table.Cell>
 							<Link href={ Routes.vendor(vendor.id) }>{ vendor.name }</Link>
 						</Table.Cell>

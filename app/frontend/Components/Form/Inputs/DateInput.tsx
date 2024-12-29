@@ -1,4 +1,3 @@
-import React from 'react'
 import Field from '../Components/Field'
 import { DateInput, type DateInputValue } from '@/Components/Inputs'
 import { type DateInputProps } from '@/Components/Inputs/DateInput'

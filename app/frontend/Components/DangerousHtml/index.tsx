@@ -1,5 +1,4 @@
 import { Box, type BoxProps } from '@mantine/core'
-import React from 'react'
 
 interface IDangerousHtmlProps extends BoxProps {
 	children?: string | null

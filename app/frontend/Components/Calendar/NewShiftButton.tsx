@@ -1,39 +1,34 @@
-import React from 'react'
 import { IconButton } from '@/Components'
-import { modals } from '@mantine/modals'
 import { ActionIconProps } from '@mantine/core'
 
 import cx from 'clsx'
 import * as classes from './Calendar.css'
 import { PlusIcon } from '../Icons'
 
+export type NewShiftClick = (date: Date) => void
+
 interface NewShiftButtonProps extends ActionIconProps,
-	Omit<React.ComponentPropsWithoutRef<'button'>, keyof ActionIconProps> {}
+	Omit<React.ComponentPropsWithoutRef<'button'>, keyof ActionIconProps | 'onClick'> {
+	date: Date
+	onClick?: NewShiftClick
+}
 
 const NewShiftButton = ({
 	className,
+	date,
 	onClick,
 	variant = 'subtle',
 	...props
 }: NewShiftButtonProps) => {
-	const handleModalOpen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-		modals.open({
-			title: 'New Shift',
-			children: (
-				<div>
-					New Shift
-				</div>
-			),
-		})
-
-		onClick?.(e)
+	const handleClick = () => {
+		onClick?.(date)
 	}
 
 	return (
 		<IconButton
 			{ ...props }
 			variant={ variant }
-			onClick={ handleModalOpen }
+			onClick={ handleClick }
 			className={ cx(className, classes.newShiftButton) }
 			size="xs"
 		>

@@ -1,4 +1,3 @@
-import React from 'react'
 import { Grid } from '@/Components'
 import { Form, TextInput, Submit } from '@/Components/Form'
 import { type HTTPVerb, type UseFormProps } from 'use-inertia-form'
@@ -10,7 +9,7 @@ type ClientFormData = {
 export interface ClientFormProps {
 	to: string
 	method?: HTTPVerb
-	onSubmit?: (object: UseFormProps<ClientFormData>) => boolean|void
+	onSubmit?: (object: UseFormProps<ClientFormData>) => boolean | void
 	client: Schema.ClientsFormData
 }
 

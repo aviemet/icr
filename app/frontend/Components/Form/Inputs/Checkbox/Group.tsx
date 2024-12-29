@@ -1,4 +1,3 @@
-import React from 'react'
 import { useInertiaInput } from 'use-inertia-form'
 import { Checkbox } from '@/Components/Inputs'
 import { type CheckboxGroupProps } from '@mantine/core'

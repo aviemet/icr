@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link, Tooltip } from '@/Components'
 import { CalendarIcon } from '@/Components/Icons'
 import { LinkProps } from '../Link'

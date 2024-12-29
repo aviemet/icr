@@ -1,4 +1,3 @@
-import React from 'react'
 import { type ShowClientProps } from '.'
 import { Text, Title } from '@/Components'
 
