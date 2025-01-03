@@ -1,5 +1,7 @@
+import React from 'react'
 import { useTableContext } from './TableContext'
 import Table from '.'
+
 import cx from 'clsx'
 
 const RowIterator = ({ render }: { render: (obj: any) => JSX.Element }) => {

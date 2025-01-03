@@ -57,7 +57,7 @@ if Rails.env.development?
           },)
         },)
 
-        client.events << shift.calendar_event
+        client.calendar_events << shift.calendar_event
 
         start += 1.day
       end

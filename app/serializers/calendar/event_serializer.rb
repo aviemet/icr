@@ -22,7 +22,7 @@
 #  fk_rails_...  (parent_id => calendar_events.id)
 #
 class Calendar::EventSerializer < ApplicationSerializer
-  object_as :event, model: "Calendar::Event"
+  object_as :calendar_event, model: "Calendar::Event"
 
   attributes(
     :name,
