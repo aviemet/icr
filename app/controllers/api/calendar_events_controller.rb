@@ -1,12 +1,16 @@
 class Api::CalendarEventsController < Api::ApiController
-  expose :calendar_events, -> { CalendarEvent.all }
-  expose :calendar_event
+  expose :calendar_events, -> { Calendar::Event.all }
+  expose :calendar_event, model: Calendar::Event
 
   strong_params :calendar_event, permit: [:name, :starts_at, :ends_at, :parent_id]
 
   # @route POST /api/calendar_events (api_calendar_events)
   def create
-    authorize CalendarEvent.new
+    authorize Calendar::Event.new
+
+    calendar_event.created_by = current_user
+
+    pry calendar_event
 
     if calendar_event.save
       render json: calendar_event.render, status: :created

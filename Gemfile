@@ -117,3 +117,5 @@ group :test do
   gem "simplecov", ">= 0.22.0"
   gem "pundit-matchers", ">= 3.1"
 end
+
+gem "pry", "~> 0.15.0"

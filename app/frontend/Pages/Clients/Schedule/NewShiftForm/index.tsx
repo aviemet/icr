@@ -1,8 +1,10 @@
-import { DateTimeInput, Form } from '@/Components/Form'
+import { Grid } from '@/Components'
+import { DateTimeInput, Form, Submit } from '@/Components/Form'
 import { FormEmployeesDropdown } from '@/Features/Dropdowns'
 import { Routes } from '@/lib'
 import dayjs from 'dayjs'
 import { type PartialDeep } from 'type-fest'
+import { type UseFormProps } from 'use-inertia-form'
 
 interface NewClientShiftFormProps {
 	selectedDate: Date
@@ -23,21 +25,46 @@ const NewShiftForm = ({ selectedDate }: NewClientShiftFormProps) => {
 		},
 	}
 
+	const handleSuccess = (form: UseFormProps<NewShiftData>) => {
+		console.log({ success: form })
+	}
+
+	const handleError = (form: UseFormProps<NewShiftData>) => {
+		console.log({ error: form })
+	}
+
 	return (
 		<Form
-			model="calendar_event" to={ Routes.apiCalendarEvents() }
+			model="calendar_event"
+			async
+			onSuccess={ handleSuccess }
+			onError={ handleError }
+			to={ Routes.apiCalendarEvents() }
 			data={ initialData }
 		>
-			<FormEmployeesDropdown />
-			<DateTimeInput
-				label="Start"
-				name="starts_at"
-			/>
-			<DateTimeInput
-				label="End"
-				name="ends_at"
-			/>
+			<Grid>
+				<Grid.Col>
+					<FormEmployeesDropdown />
+				</Grid.Col>
 
+				<Grid.Col>
+					<DateTimeInput
+						label="Start"
+						name="starts_at"
+					/>
+				</Grid.Col>
+
+				<Grid.Col>
+					<DateTimeInput
+						label="End"
+						name="ends_at"
+					/>
+				</Grid.Col>
+
+				<Grid.Col>
+					<Submit>Save Shift</Submit>
+				</Grid.Col>
+			</Grid>
 		</Form>
 	)
 }

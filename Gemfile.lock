@@ -605,6 +605,7 @@ DEPENDENCIES
   overmind (~> 2.5)
   pg (>= 1.5)
   pg_search (>= 2.3)
+  pry (~> 0.15.0)
   public_activity (>= 3.0)
   puma (>= 6.0)
   pundit (>= 2.3)

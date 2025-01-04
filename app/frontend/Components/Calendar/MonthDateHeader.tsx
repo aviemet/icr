@@ -3,7 +3,7 @@ import { Box } from '@/Components'
 import { type DateHeaderProps } from 'react-big-calendar'
 
 export interface MonthDateHeaderProps extends DateHeaderProps {
-	onNewShift?: NewShiftClick
+	onNewShift?: NewShiftClick | undefined
 }
 
 const MonthDateHeader = ({
@@ -18,7 +18,7 @@ const MonthDateHeader = ({
 
 	return <>
 		<Box component="span">
-			<NewShiftButton date={ date } onClick={ onNewShift }/>
+			{ onNewShift && <NewShiftButton date={ date } onClick={ onNewShift }/> }
 			{ label }
 		</Box>
 	</>
