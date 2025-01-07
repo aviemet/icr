@@ -32,9 +32,9 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 
 	const handleNewShift = (date: Date) => {
 		modals.open({
-			title: 'Event Details',
+			title: 'New Shift',
 			children: (
-				<NewShiftForm selectedDate={ date } />
+				<NewShiftForm client={ client } selectedDate={ date } />
 			),
 		})
 	}

@@ -1,7 +1,7 @@
 class CreateCalendarEvents < ActiveRecord::Migration[7.0]
   def change
     create_table :calendar_events, id: :uuid do |t|
-      t.string :name, null: false
+      t.string :name
       t.datetime :starts_at
       t.datetime :ends_at
 

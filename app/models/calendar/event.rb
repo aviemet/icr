@@ -4,7 +4,7 @@
 #
 #  id            :uuid             not null, primary key
 #  ends_at       :datetime
-#  name          :string           not null
+#  name          :string
 #  starts_at     :datetime
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
@@ -41,17 +41,37 @@ class Calendar::Event < ApplicationRecord
   belongs_to :parent, class_name: "Calendar::Event", optional: true
   belongs_to :created_by, class_name: "User", optional: true
 
-  has_many :recurring_patterns, class_name: "Calendar::RecurringPattern", foreign_key: "calendar_event_id", inverse_of: :calendar_event, dependent: :destroy
-  has_many :event_participants, foreign_key: :calendar_event_id, dependent: :destroy, inverse_of: :calendar_event
-  has_many :clients, through: :event_participants, source: :participant, source_type: "Client"
-  has_many :households, through: :event_participants, source: :participant, source_type: "Household"
+  has_many :recurring_patterns,
+    class_name: "Calendar::RecurringPattern",
+    foreign_key: "calendar_event_id",
+    inverse_of: :calendar_event,
+    dependent: :destroy
+  has_many :event_participants,
+    foreign_key: :calendar_event_id,
+    dependent: :destroy,
+    inverse_of: :calendar_event
+  has_many :clients,
+    through: :event_participants,
+    source: :participant,
+    source_type: "Client"
+  has_many :households,
+    through: :event_participants,
+    source: :participant,
+    source_type: "Household"
 
-  has_one :shift, foreign_key: "calendar_event_id", inverse_of: :calendar_event, dependent: :destroy
+  has_one :shift,
+    foreign_key: "calendar_event_id",
+    inverse_of: :calendar_event,
+    dependent: :destroy
 
-  validates :name, presence: true
   validates :starts_at, presence: true
   validates :ends_at, presence: true
+
   validate :starts_at_before_ends_at
+  validate :has_name_or_shift
+
+  accepts_nested_attributes_for :shift
+  accepts_nested_attributes_for :event_participants
 
   scope :includes_associated, -> { includes([shift: [employee: [:person]]]) }
 
@@ -67,6 +87,12 @@ class Calendar::Event < ApplicationRecord
     if starts_at >= ends_at
       errors.add(:ends_at, "End time must be after start time")
     end
+  end
+
+  def has_name_or_shift # rubocop:disable Naming/PredicateName
+    return unless name.blank? && shift.blank?
+
+    errors.add(:name, "Event must have a title when it's not an employee shift")
   end
 
 end
