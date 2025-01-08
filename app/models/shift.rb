@@ -37,7 +37,7 @@ class Shift < ApplicationRecord
   resourcify
 
   belongs_to :employee
-  belongs_to :calendar_event, class_name: "Calendar::Event"
+  belongs_to :calendar_event, class_name: "Calendar::Event", dependent: :destroy
 
   accepts_nested_attributes_for :calendar_event
 

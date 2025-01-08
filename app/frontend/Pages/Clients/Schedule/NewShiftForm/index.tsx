@@ -1,15 +1,10 @@
 import { Grid } from '@/Components'
-import { DateTimeInput, Form, FormConsumer, HiddenInput, Submit } from '@/Components/Form'
+import { DateTimeInput, Form, Submit } from '@/Components/Form'
 import { FormEmployeesDropdown } from '@/Features/Dropdowns'
 import { Routes } from '@/lib'
 import dayjs from 'dayjs'
 import { type PartialDeep } from 'type-fest'
 import { type UseFormProps } from 'use-inertia-form'
-
-interface NewClientShiftFormProps {
-	client: Schema.ClientsPersisted
-	selectedDate: Date
-}
 
 type NewShiftData = {
 	calendar_event: PartialDeep<Schema.CalendarEventsFormData> & {
@@ -19,7 +14,15 @@ type NewShiftData = {
 	}
 }
 
-const NewShiftForm = ({ client, selectedDate }: NewClientShiftFormProps) => {
+interface NewClientShiftFormProps {
+	client: Schema.ClientsPersisted
+	selectedDate: Date
+	onSuccess?: (form: UseFormProps<NewShiftData>) => void
+	onError?: (form: UseFormProps<NewShiftData>) => void
+}
+
+
+const NewShiftForm = ({ client, selectedDate, onSuccess, onError }: NewClientShiftFormProps) => {
 	const initialData: NewShiftData = {
 		calendar_event: {
 			starts_at: selectedDate,
@@ -37,11 +40,11 @@ const NewShiftForm = ({ client, selectedDate }: NewClientShiftFormProps) => {
 	}
 
 	const handleSuccess = (form: UseFormProps<NewShiftData>) => {
-		console.log({ success: form })
+		onSuccess?.(form)
 	}
 
 	const handleError = (form: UseFormProps<NewShiftData>) => {
-		console.log({ error: form })
+		onError?.(form)
 	}
 
 	return (
@@ -55,10 +58,6 @@ const NewShiftForm = ({ client, selectedDate }: NewClientShiftFormProps) => {
 			data={ initialData }
 			railsAttributes={ true }
 		>
-			<FormConsumer>{ form => {
-				console.log({ data: form.data })
-				return <></>
-			} }</FormConsumer>
 			<Grid>
 				<Grid.Col>
 					<FormEmployeesDropdown name="shift.employee_id" />

@@ -9,10 +9,7 @@ class Api::CalendarEventsController < Api::ApiController
     authorize Calendar::Event.new
 
     calendar_event.created_by = current_user
-    ap({
-      shift: calendar_event.shift,
-      participants: calendar_event.event_participants
-    })
+
     if calendar_event.save
       render json: calendar_event.render, status: :created
     else

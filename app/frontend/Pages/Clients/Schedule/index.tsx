@@ -1,7 +1,6 @@
-import React  from 'react'
+import React, { useRef }  from 'react'
 import { router } from '@inertiajs/react'
-import { formatter, theme } from '@/lib'
-// import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
+import { buildShiftTitle, formatter, theme } from '@/lib'
 import dayjs from 'dayjs'
 import {
 	Box,
@@ -21,6 +20,8 @@ interface ScheduleProps {
 const Schedule = ({ client, schedules }: ScheduleProps) => {
 	const { getContrastingColor } = useStore()
 
+	const newShiftModalRef = useRef<string>()
+
 	const handleSelectEvent = (event: Event, e: React.SyntheticEvent<HTMLElement, globalThis.Event>) => {
 		modals.open({
 			title: event.resource.employee.person.name,
@@ -30,11 +31,22 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 		})
 	}
 
+	const handleNewShiftSuccess = () => {
+		if(!newShiftModalRef.current) return
+
+		modals.close(newShiftModalRef.current)
+		router.reload({ only: ['schedules'] })
+	}
+
 	const handleNewShift = (date: Date) => {
-		modals.open({
+		newShiftModalRef.current = modals.open({
 			title: 'New Shift',
 			children: (
-				<NewShiftForm client={ client } selectedDate={ date } />
+				<NewShiftForm
+					client={ client }
+					selectedDate={ date }
+					onSuccess={ handleNewShiftSuccess }
+				/>
 			),
 		})
 	}
@@ -61,25 +73,6 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 		)
 	}
 
-	const buildShiftTitle = ({ start, end, name }: {
-		start?: Date
-		end?: Date
-		name?: string
-	}) => {
-		let title = ''
-		if(start) {
-			title += formatter.datetime.timeShort(start)
-
-			if(end) {
-				title += ` - ${formatter.datetime.timeShort(end)}`
-			}
-		}
-		if(name) {
-			title += ` ${name}`
-		}
-		return title
-	}
-
 	const eventStyleGetter = (event: Event) => {
 		let defaultColor = theme.colors.blue[5]
 
@@ -98,12 +91,12 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 			<h1>{ client?.person?.name }</h1>
 			<Box>
 				<Calendar
-					events={ schedules.map(schedule => {
+					events={ schedules?.map(schedule => {
 						return {
 							id: schedule.id,
 							title:  buildShiftTitle({
-								start: schedule?.starts_at,
-								end: schedule?.ends_at,
+								start: schedule.starts_at,
+								end: schedule.ends_at,
 								name: schedule.shift.employee.person.name,
 							}),
 							start: schedule.starts_at,
@@ -113,7 +106,7 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 								employee: schedule.shift.employee,
 							},
 						}
-					}) }
+					}) || [] }
 					onSelectEvent={ handleSelectEvent }
 					// onSelectSlot={ handleSelectSlot }
 					onNavigate={ handleDateChange }

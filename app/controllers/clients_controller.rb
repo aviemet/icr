@@ -35,6 +35,7 @@ class ClientsController < ApplicationController
   # @route GET /clients/new (new_client)
   def new
     authorize Client.new
+
     render inertia: "Clients/New", props: {
       client: Client.new.render(:form_data)
     }
@@ -43,6 +44,7 @@ class ClientsController < ApplicationController
   # @route GET /clients/:slug/edit (edit_client)
   def edit
     authorize client
+
     render inertia: "Clients/Edit", props: {
       client: client.render(:edit)
     }
@@ -58,7 +60,7 @@ class ClientsController < ApplicationController
       .between(range_start, range_end)
 
     render inertia: "Clients/Schedule", props: {
-      client: client.render(:show),
+      client: -> { client.render(:show) },
       schedules: lambda {
         schedules.render(:show)
       },

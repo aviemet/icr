@@ -1,8 +1,7 @@
 import { createInertiaApp, router } from '@inertiajs/react'
 import { createRoot } from 'react-dom/client'
-import axios from 'axios'
 import { PublicLayout, AppLayout, AuthLayout, LAYOUTS, LayoutProps } from '../Layouts'
-import { propsMiddleware } from './middleware'
+import { applyPropsMiddleware, setupCSRFToken, setupInertiaListeners } from './middleware'
 import { runAxe } from './middleware/axe'
 
 import dayjs from 'dayjs'
@@ -31,12 +30,8 @@ const LAYOUT_COMPONENTS: Record<keyof typeof LAYOUTS, ({ children }: LayoutProps
 } as const
 
 document.addEventListener('DOMContentLoaded', () => {
-	const csrfToken = (document.querySelector('meta[name=csrf-token]') as HTMLMetaElement).content
-	axios.defaults.headers.common['X-CSRF-Token'] = csrfToken
-
-	router.on('navigate', (event) => {
-		event.detail.page.props = propsMiddleware(event.detail.page.props)
-	})
+	setupCSRFToken()
+	setupInertiaListeners(router)
 
 	createInertiaApp({
 		title: title => `${SITE_TITLE} - ${title}`,
@@ -54,9 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		setup({ el, App, props }) {
 			const root = createRoot(el)
 
-			props.initialPage.props = propsMiddleware(props.initialPage.props)
+			props.initialPage.props = applyPropsMiddleware(props.initialPage.props)
 
-			router.on('success', event => {
+			router.on('success', () => {
 				runAxe(root)
 			})
 
