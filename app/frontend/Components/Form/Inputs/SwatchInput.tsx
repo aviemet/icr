@@ -1,4 +1,3 @@
-import React from 'react'
 import { NestedObject, useInertiaInput } from 'use-inertia-form'
 import SwatchInput, { type SwatchInputProps } from '@/Components/Inputs/SwatchInput'
 import ConditionalWrapper from '@/Components/ConditionalWrapper'

@@ -1,12 +1,18 @@
-import React from 'react'
+import { ConditionalWrapper, Link } from '@/Components'
 
 interface EmailDisplayProps {
 	children: string
+	link?: boolean
 }
 
-const EmailDisplay = ({ children }: EmailDisplayProps) => {
+const EmailDisplay = ({ children, link = true }: EmailDisplayProps) => {
 	return (
-		<>{ children }</>
+		<ConditionalWrapper
+			condition={ link }
+			wrapper={ content => <Link href={ `mailto:${children}` }>{ content }</Link> }
+		>
+			<address>{ children }</address>
+		</ConditionalWrapper>
 	)
 }
 

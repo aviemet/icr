@@ -1,4 +1,3 @@
-import React from 'react'
 import Field from '../Components/Field'
 import DateTimeInput, { type DateTimeProps } from '@/Components/Inputs/DateTimeInput'
 import { NestedObject, useInertiaInput } from 'use-inertia-form'

@@ -85,7 +85,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_191114) do
   end
 
   create_table "calendar_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name", null: false
+    t.string "name"
     t.datetime "starts_at"
     t.datetime "ends_at"
     t.uuid "parent_id"

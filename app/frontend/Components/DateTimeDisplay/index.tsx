@@ -1,18 +1,22 @@
-import React from 'react'
 import { formatter } from '@/lib'
-import { Stack, Text, Tooltip } from '@/Components'
+import { Stack, Tooltip } from '@/Components'
 import ConditionalWrapper from '../ConditionalWrapper'
 import { isEmpty } from 'lodash'
 import { TooltipBaseProps } from '@mantine/core/lib/components/Tooltip/Tooltip.types'
 
-interface DateDisplayProps {
+interface DateTimeDisplayProps {
 	children: string | Date | undefined
-	format?: keyof typeof formatter.date
-	tooltipFormats?: (keyof typeof formatter.date)[]
+	format?: keyof typeof formatter['datetime']
+	tooltipFormats?: (keyof typeof formatter['datetime'])[]
 	tooltipOptions?: TooltipBaseProps
 }
 
-const DateDisplay = ({ children, format = 'short', tooltipFormats, tooltipOptions }: DateDisplayProps) => {
+const DateTimeDisplay = ({
+	children,
+	format = 'dateShort',
+	tooltipFormats,
+	tooltipOptions,
+}: DateTimeDisplayProps) => {
 	if(!children) return <></>
 
 	return (
@@ -22,12 +26,18 @@ const DateDisplay = ({ children, format = 'short', tooltipFormats, tooltipOption
 				wrapper={ innerChildren => {
 					const tooltipProps = Object.assign({}, tooltipOptions, {
 						position: 'bottom',
+						openDelay: 750,
 					})
 					return (
 						<Tooltip
 							{ ...tooltipProps }
 							label={ <Stack>{ tooltipFormats!.map(f => (
-								<DateDisplay key={ f } format={ f }>{ children }</DateDisplay>
+								<time
+									key={ f }
+									dateTime={ children.toString() }
+								>
+									{ formatter.datetime[f](children) }
+								</time>
 							)) }</Stack> }
 						>
 							{ innerChildren }
@@ -35,10 +45,10 @@ const DateDisplay = ({ children, format = 'short', tooltipFormats, tooltipOption
 					)
 				} }
 			>
-				<Text>{ formatter.date[format](children) }</Text>
+				<time dateTime={ children.toString() }>{ formatter.datetime[format](children) }</time>
 			</ConditionalWrapper>
 		</>
 	)
 }
 
-export default DateDisplay
+export default DateTimeDisplay

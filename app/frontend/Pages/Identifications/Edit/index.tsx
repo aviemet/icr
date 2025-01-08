@@ -1,4 +1,3 @@
-import React from 'react'
 import { Heading, Page, Section } from '@/Components'
 import { Routes } from '@/lib'
 import IdentificationsForm from '../Form'
@@ -18,7 +17,7 @@ const EditIdentification = ({ identification }: EditIdentificationProps) => {
 		] }>
 			<Section>
 				<Heading>{ title }</Heading>
-				
+
 				<IdentificationsForm
 					method='put'
 					to={ Routes.identification() }

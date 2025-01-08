@@ -1,4 +1,3 @@
-import React from 'react'
 import { Routes } from '@/lib'
 import { Table, Link } from '@/Components'
 import { EditButton } from '@/Components/Button'
@@ -9,7 +8,7 @@ const EmployeeTable = (props: TableProps) => {
 		<Table>
 			<Table.Head>
 				<Table.Row>
-					
+
 					<Table.HeadCell sort="active_at">Active_at</Table.HeadCell>
 					<Table.HeadCell sort="inactive_at">Inactive_at</Table.HeadCell>
 					<Table.HeadCell sort="number">Number</Table.HeadCell>
@@ -19,7 +18,7 @@ const EmployeeTable = (props: TableProps) => {
 			<Table.Body>
 				<Table.RowIterator render={ (employee: Schema.EmployeesIndex) => (
 					<Table.Row key={ employee.id }>
-						
+
 						<Table.Cell>
 							<Link href={ Routes.employee(employee.id) }>{ employee.active_at }</Link>
 						</Table.Cell>

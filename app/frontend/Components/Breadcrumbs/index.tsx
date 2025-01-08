@@ -1,4 +1,3 @@
-import React from 'react'
 import { Breadcrumbs as MantineBreadcrumbs,
 	type BreadcrumbsProps as MantineBreadcrumbsProps,
 	Portal,

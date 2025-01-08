@@ -1,4 +1,3 @@
-import React from 'react'
 import { useDisclosure } from '@mantine/hooks'
 import { AppShell, Burger, Skeleton } from '@mantine/core'
 import { Group, Link, Box } from '@/Components'

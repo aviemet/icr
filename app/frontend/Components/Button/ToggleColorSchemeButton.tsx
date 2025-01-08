@@ -1,11 +1,9 @@
-import React from 'react'
 import { ActionIcon, ActionIconProps, useMantineColorScheme } from '@mantine/core'
 import { SunIcon, MoonStarsIcon } from '@/Components/Icons'
 
 interface ToggleColorSchemeButtonProps
 	extends
-	ActionIconProps
-{
+	ActionIconProps {
 	leftSection?: React.ReactNode
 	rightSection?: React.ReactNode
 }

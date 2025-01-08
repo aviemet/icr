@@ -1,4 +1,3 @@
-import React from 'react'
 import { type ShowClientProps } from '.'
 
 interface ClientDocumentsProps extends ShowClientProps {}

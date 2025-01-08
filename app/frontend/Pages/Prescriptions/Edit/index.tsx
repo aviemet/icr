@@ -1,4 +1,3 @@
-import React from 'react'
 import { Heading, Page, Section } from '@/Components'
 import { Routes } from '@/lib'
 import PrescriptionsForm from '../Form'
@@ -18,7 +17,7 @@ const EditPrescription = ({ prescription }: EditPrescriptionProps) => {
 		] }>
 			<Section>
 				<Heading>{ title }</Heading>
-				
+
 				<PrescriptionsForm
 					method='put'
 					to={ Routes.prescription() }

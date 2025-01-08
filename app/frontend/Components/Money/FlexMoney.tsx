@@ -1,4 +1,3 @@
-import React from 'react'
 import { Group } from '@mantine/core'
 import { type Money } from '@/types'
 

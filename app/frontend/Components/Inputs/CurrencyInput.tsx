@@ -7,9 +7,8 @@ import { type BaseInputProps } from '.'
 export interface CurrencyInputProps
 	extends
 	NumberInputProps,
-	BaseInputProps
-{
-	symbol?: string|React.ReactNode
+	BaseInputProps {
+	symbol?: string | React.ReactNode
 }
 
 const NumberInputComponent = forwardRef<HTMLInputElement, CurrencyInputProps>((

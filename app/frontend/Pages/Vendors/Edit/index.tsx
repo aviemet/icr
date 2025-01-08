@@ -1,4 +1,3 @@
-import React from 'react'
 import { Heading, Page, Section } from '@/Components'
 import { Routes } from '@/lib'
 import VendorsForm from '../Form'
@@ -18,7 +17,7 @@ const EditVendor = ({ vendor }: EditVendorProps) => {
 		] }>
 			<Section>
 				<Heading>{ title }</Heading>
-				
+
 				<VendorsForm
 					method='put'
 					to={ Routes.vendor() }

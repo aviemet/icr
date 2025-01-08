@@ -1,8 +1,7 @@
-import React from 'react'
 import useStore from '@/lib/store'
 import MenuLink from './MenuLink'
 import { Routes } from '@/lib'
-import { Group, AppShell, Box, Flex, Text } from '@/Components'
+import { Group, AppShell, Box, Flex, Text, Transition, Link, ConditionalWrapper, Tooltip } from '@/Components'
 import ToggleSidebarButton from '../ToggleSidebarButton'
 import IconProvider from '@/Layouts/Providers/IconProvider'
 import { useLocation, usePageProps } from '@/lib/hooks'
@@ -31,7 +30,19 @@ const Sidebar = () => {
 					</Group>
 
 					<Group>
-						<SiteLogo />
+						<Link href={ Routes.root() }>
+							<Tooltip
+								label="Home"
+								disabled={ sidebarOpen }
+								position="right"
+								withArrow
+							>
+								<SiteLogo
+									size={ sidebarOpen ? 'md' : 'sm' }
+									mt={ sidebarOpen ? 'xxs' : 'md' }
+								/>
+							</Tooltip>
+						</Link>
 						<Flex
 							direction="column"
 							wrap="nowrap"
@@ -47,33 +58,33 @@ const Sidebar = () => {
 					<TextInput placeholder="Search" />
 				</AppShell.Section>
 
-				<AppShell.Section p="xs" grow className={ cx('links') }>
-					<ul>
-						<li>
-							<MenuLink
-								href={ Routes.clients() }
-								icon={ <ClientIcon /> }
-								active={ paths.length === 1 && paths[0] === 'clients' }
-							>
-								Clients
-							</MenuLink>
-							<ul>
-								<li><MenuLink href="/">Households</MenuLink></li>
-							</ul>
-						</li>
-						<li>
-							<MenuLink
-								href={ Routes.employees() }
-								icon={ <EmployeeIcon /> }
-							>
-								Employees
-							</MenuLink>
-						</li>
-					</ul>
+				<AppShell.Section p="xs" grow className={ cx(classes.navigation) }>
+					<MenuLink
+						label="Clients"
+						href={ Routes.clients() }
+						leftSection={ <ClientIcon /> }
+						active={ paths.length >= 1 && paths[0] === 'clients' }
+					/>
+					<MenuLink
+						label="Households"
+						href="/"
+						active={ paths.length >= 1 && paths[0] === 'households' }
+					/>
+					<MenuLink
+						label="Employees"
+						href={ Routes.employees() }
+						leftSection={ <EmployeeIcon /> }
+						active={ paths.length >= 1 && paths[0] === 'employees' }
+					/>
 				</AppShell.Section>
 
 				<AppShell.Section p="xs">
-					<MenuLink href={ Routes.settings() } icon={ <SettingsIcon /> }>Settings</MenuLink>
+					<MenuLink
+						label="Settings"
+						href={ Routes.settings() }
+						leftSection={ <SettingsIcon /> }
+						active={ paths.length >= 1 && paths[0] === 'settings' }
+					/>
 				</AppShell.Section>
 
 			</AppShell.Navbar>

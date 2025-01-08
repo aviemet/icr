@@ -1,4 +1,3 @@
-import React from 'react'
 import { Heading, Page, Section } from '@/Components'
 import { Routes } from '@/lib'
 import DosagesForm from '../Form'
@@ -18,7 +17,7 @@ const EditDosage = ({ dosage }: EditDosageProps) => {
 		] }>
 			<Section>
 				<Heading>{ title }</Heading>
-				
+
 				<DosagesForm
 					method='put'
 					to={ Routes.dosage() }

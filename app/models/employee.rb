@@ -53,7 +53,7 @@ class Employee < ApplicationRecord
   }, class_name: "EmployeesJobTitle", dependent: nil, inverse_of: :employee
   has_one :job_title, through: :active_employees_job_title, source: :job_title
 
-  scope :includes_associated, -> { includes([:person, :identifications, :job_titles, :pay_rates]) }
+  scope :includes_associated, -> { includes([:person, :job_title, :calendar_customization]) }
 
   private
 

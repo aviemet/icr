@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box, ElementProps, type BoxProps } from '@mantine/core'
 import cx from 'clsx'
 import classes from './Section.module.css'

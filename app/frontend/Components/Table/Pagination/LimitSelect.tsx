@@ -1,4 +1,3 @@
-import React from 'react'
 import { router } from '@inertiajs/react'
 import { Select, type SelectProps } from '@mantine/core'
 import axios from 'axios'

@@ -63,6 +63,8 @@ group :development, :test do
   gem "rspec-rails", ">= 6.0.1"
   gem "faker", git: "https://github.com/faker-ruby/faker.git", branch: "main"
 
+  gem "bullet", ">= 7.0"
+
   # Linting
   gem "rubocop-rails", ">= 2.14", require: false
   gem "rubocop-rspec", ">= 2.9", require: false
@@ -112,7 +114,8 @@ group :test do
   gem "generator_spec", ">= 0.9.4"
   gem "database_cleaner-active_record", ">= 2.0"
   gem "shoulda-matchers", ">= 5.1"
-  gem "bullet", ">= 7.0"
   gem "simplecov", ">= 0.22.0"
   gem "pundit-matchers", ">= 3.1"
 end
+
+gem "pry", "~> 0.15.0"

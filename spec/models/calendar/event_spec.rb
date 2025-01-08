@@ -4,7 +4,7 @@
 #
 #  id            :uuid             not null, primary key
 #  ends_at       :datetime
-#  name          :string           not null
+#  name          :string
 #  starts_at     :datetime
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null

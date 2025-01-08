@@ -35,19 +35,15 @@ export const themeObject: Partial<CustomMantineTheme> = {
 					blur: 1,
 					opacity: 0.6181,
 				},
-				radius: 'md',
-				padding: 'xl',
+				radius: 'sm',
+				padding: 'md',
 				transitionProps: {
 					transition: 'fade',
-					duration: 150,
 				},
 			},
 		},
 	},
 	other: {
-		colorSchemeOption: {},
-		form: {},
-		colors: {},
 		header: {
 			height: 50,
 		},

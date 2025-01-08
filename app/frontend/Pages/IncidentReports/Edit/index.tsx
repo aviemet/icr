@@ -1,4 +1,3 @@
-import React from 'react'
 import { Heading, Page, Section } from '@/Components'
 import { Routes } from '@/lib'
 import IncidentReportsForm from '../Form'
@@ -18,7 +17,7 @@ const EditIncidentReport = ({ incident_report }: EditIncidentReportProps) => {
 		] }>
 			<Section>
 				<Heading>{ title }</Heading>
-				
+
 				<IncidentReportsForm
 					method='put'
 					to={ Routes.incidentReport() }

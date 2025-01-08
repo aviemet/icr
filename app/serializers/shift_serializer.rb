@@ -19,7 +19,10 @@
 #  fk_rails_...  (employee_id => employees.id)
 #
 class ShiftSerializer < ApplicationSerializer
-  attributes
+  attributes(
+    :employee_id,
+    :calendar_event_id,
+  )
 
   belongs_to :employee, serializer: Employees::PersistedSerializer
 end

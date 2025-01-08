@@ -12,7 +12,7 @@ function FormConsumer <TForm>({ children, onChange }: FormComponentProps<TForm>)
 	useEffect(() => {
 		if(!onChange) return
 		onChange(form)
-	}, [form.data])
+	}, [form.data, form, onChange])
 
 	return (
 		<>{ children && children(form) }</>

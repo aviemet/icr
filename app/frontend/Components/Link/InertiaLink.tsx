@@ -9,7 +9,7 @@ import AnchorLink, { type IAnchorLinkProps } from '@/Components/Link/AnchorLink'
 interface ILinkProps extends IAnchorLinkProps {
 	children?: React.ReactNode
 	href: string
-	as: 'a'|'button'
+	as: 'a' | 'button'
 	method?: Method
 	visit?: Omit<Visit, 'method'>
 	buttonProps?: ButtonProps
@@ -20,7 +20,7 @@ const InertiaLinkComponent = forwardRef<HTMLAnchorElement, ILinkProps>((
 	{ children, href, as = 'a', method, visit, buttonProps, style, disabled, ...props },
 	ref,
 ) => {
-	const handleHTTP = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+	const handleHTTP = (e: React.MouseEvent<Element, MouseEvent>) => {
 		e.preventDefault()
 
 		router.visit(href, {

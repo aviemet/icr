@@ -1,4 +1,3 @@
-import React from 'react'
 import { Paper } from '@mantine/core'
 import cx from 'clsx'
 import * as classes from './AddControlsInterface.css'

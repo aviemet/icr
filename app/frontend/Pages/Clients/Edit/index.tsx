@@ -1,4 +1,3 @@
-import React from 'react'
 import { Heading, Page, Section } from '@/Components'
 import { Routes } from '@/lib'
 import ClientsForm from '../Form'
@@ -18,7 +17,7 @@ const EditClient = ({ client }: EditClientProps) => {
 		] }>
 			<Section>
 				<Heading>{ title }</Heading>
-				
+
 				<ClientsForm
 					method='put'
 					to={ Routes.client(client.slug) }

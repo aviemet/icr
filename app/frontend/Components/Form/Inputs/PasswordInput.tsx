@@ -1,4 +1,3 @@
-import React from 'react'
 import PasswordInput, { type PasswordInputProps } from '@/Components/Inputs/PasswordInput'
 import Field from '../Components/Field'
 import { NestedObject, useInertiaInput } from 'use-inertia-form'

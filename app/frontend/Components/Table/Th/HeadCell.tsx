@@ -1,4 +1,3 @@
-import React from 'react'
 import { useTableContext } from '../TableContext'
 import HeadCellWithContext from './HeadCellWithContext'
 import { Table } from '@mantine/core'

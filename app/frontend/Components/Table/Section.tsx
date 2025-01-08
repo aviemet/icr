@@ -1,4 +1,3 @@
-import React from 'react'
 import { Section } from '@/Components'
 import * as classes from './Table.css'
 

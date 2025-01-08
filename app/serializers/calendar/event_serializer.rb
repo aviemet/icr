@@ -4,7 +4,7 @@
 #
 #  id            :uuid             not null, primary key
 #  ends_at       :datetime
-#  name          :string           not null
+#  name          :string
 #  starts_at     :datetime
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
@@ -22,7 +22,7 @@
 #  fk_rails_...  (parent_id => calendar_events.id)
 #
 class Calendar::EventSerializer < ApplicationSerializer
-  object_as :event, model: "Calendar::Event"
+  object_as :calendar_event, model: "Calendar::Event"
 
   attributes(
     :name,

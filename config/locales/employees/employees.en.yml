@@ -1,0 +1,6 @@
+en:
+  employees:
+    notices:
+      created: "Employee was successfully created."
+      updated: "Employee was successfully updated."
+      destroyed: "Employee was successfully destroyed."

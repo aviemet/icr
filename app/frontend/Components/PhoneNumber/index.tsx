@@ -1,4 +1,3 @@
-import React from 'react'
 import { PhoneNumberUtil, PhoneNumberFormat } from 'google-libphonenumber'
 
 const phoneUtil = PhoneNumberUtil.getInstance()

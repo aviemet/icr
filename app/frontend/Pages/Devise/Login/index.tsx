@@ -1,4 +1,3 @@
-import React from 'react'
 import { Heading, Link } from '@/Components'
 import { Form, Field, TextInput, PasswordInput, Checkbox, Submit } from '@/Components/Form'
 import { Routes } from '@/lib'

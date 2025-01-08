@@ -1,12 +1,13 @@
 export { default as Button } from './Button'
+export * from './Button'
 export { default as Calendar } from './Calendar'
 export { default as ConditionalWrapper } from './ConditionalWrapper'
 export { default as DangerousHtml } from './DangerousHtml'
-export { default as DateDisplay } from './DateDisplay'
+export { default as DateTimeDisplay } from './DateTimeDisplay'
 export { default as EmailDisplay } from './EmailDisplay'
 export { default as Flash } from './Flash'
 export { default as Heading } from './Heading'
-export { default as Link, NavLink } from './Link'
+export { default as Link, NavLink, type NavLinkProps } from './Link'
 export { default as Menu } from './Menu'
 export { default as Money } from './Money'
 export { default as Modal } from './Modal'
@@ -20,28 +21,29 @@ export { default as Tabs } from './Tabs'
 
 // Export UI library components as a proxy to allow easy refactoring
 export {
-	ActionIcon,
-	AppShell,
-	Avatar,
-	Badge,
-	Box,
-	Burger,
-	Card,
-	Center,
-	Container,
-	Divider,
-	Flex,
-	Grid,
-	Group,
-	List,
-	Paper,
-	Popover,
-	SimpleGrid,
-	Slider,
-	Skeleton,
-	Stack,
-	Text,
-	Title,
-	Tooltip,
-	ThemeIcon as Icon,
+	ActionIcon, type ActionIconProps,
+	AppShell, type AppShellProps,
+	Avatar, type AvatarProps,
+	Badge, type BadgeProps,
+	Box, type BoxProps,
+	Burger, type BurgerProps,
+	Card, type CardProps,
+	Center, type CenterProps,
+	Container, type ContainerProps,
+	Divider, type DividerProps,
+	Flex, type FlexProps,
+	Grid, type GridProps,
+	Group, type GroupProps,
+	List, type ListProps,
+	Paper, type PaperProps,
+	Popover, type PopoverProps,
+	SimpleGrid, type SimpleGridProps,
+	Slider, type SliderProps,
+	Skeleton, type SkeletonProps,
+	Stack, type StackProps,
+	Text, type TextProps,
+	Title, type TitleProps,
+	Tooltip, type TooltipProps,
+	ThemeIcon, type ThemeIconProps,
+	Transition, type TransitionProps,
 } from '@mantine/core'

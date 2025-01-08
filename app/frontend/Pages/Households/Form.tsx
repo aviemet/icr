@@ -1,4 +1,3 @@
-import React from 'react'
 import { Form, TextInput, Submit } from '@/Components/Form'
 import { type UseFormProps } from 'use-inertia-form'
 
@@ -9,7 +8,7 @@ type THouseholdFormData = {
 export interface IHouseholdFormProps {
 	to: string
 	method?: HTTPVerb
-	onSubmit?: (object: UseFormProps<THouseholdFormData>) => boolean|void
+	onSubmit?: (object: UseFormProps<THouseholdFormData>) => boolean | void
 	household: Schema.HouseholdsFormData
 }
 

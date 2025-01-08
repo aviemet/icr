@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link } from '@/Components'
 import { useTableContext } from '../TableContext'
 import { Group, Pagination, type PaginationProps } from '@mantine/core'
@@ -45,7 +44,7 @@ const PaginationComponent = ({
 						model={ model }
 					/>
 				</> }
-        Showing <b> { recordStart } - { recordEnd } / { count } </b>
+				Showing <b> { recordStart } - { recordEnd } / { count } </b>
 			</div>
 
 			<Pagination.Root

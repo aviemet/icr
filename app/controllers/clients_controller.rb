@@ -35,6 +35,7 @@ class ClientsController < ApplicationController
   # @route GET /clients/new (new_client)
   def new
     authorize Client.new
+
     render inertia: "Clients/New", props: {
       client: Client.new.render(:form_data)
     }
@@ -43,6 +44,7 @@ class ClientsController < ApplicationController
   # @route GET /clients/:slug/edit (edit_client)
   def edit
     authorize client
+
     render inertia: "Clients/Edit", props: {
       client: client.render(:edit)
     }
@@ -50,10 +52,15 @@ class ClientsController < ApplicationController
 
   # @route GET /clients/:slug/schedule (schedule_client)
   def schedule
-    schedules = client.events.between(range_start, range_end)
+    schedules = Client
+      .includes([:person])
+      .find_by(slug: params[:slug])
+      .calendar_events
+      .includes([:recurring_patterns, shift: [employee: [:person, :job_title, :calendar_customization]]])
+      .between(range_start, range_end)
 
     render inertia: "Clients/Schedule", props: {
-      client: client.render(:show),
+      client: -> { client.render(:show) },
       schedules: lambda {
         schedules.render(:show)
       },
@@ -65,7 +72,7 @@ class ClientsController < ApplicationController
     authorize Client.new
 
     if client.save
-      redirect_to client_path(client), notice: t("client.notices.created")
+      redirect_to client_path(client), notice: t("clients.notices.created")
     else
       redirect_to new_client_path, inertia: { errors: client.errors }
     end
@@ -77,7 +84,7 @@ class ClientsController < ApplicationController
     authorize client
 
     if client.update(client_params)
-      redirect_to client, notice: t("client.notices.updated")
+      redirect_to client, notice: t("clients.notices.updated")
     else
       redirect_to edit_client_path(client), inertia: { errors: client.errors }
     end
@@ -88,7 +95,7 @@ class ClientsController < ApplicationController
     authorize client
 
     client.destroy!
-    redirect_to clients_url, notice: t("client.notices.destroyed")
+    redirect_to clients_url, notice: t("clients.notices.destroyed")
   end
 
   private

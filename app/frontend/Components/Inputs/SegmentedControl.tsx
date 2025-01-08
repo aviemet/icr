@@ -11,7 +11,7 @@ import InputWrapper from './InputWrapper'
 
 export interface SegmentedControlProps extends Omit<MantineSegmentedControlProps, 'data'>, BaseInputProps {
 	label?: string
-	labelPosition?: 'start'|'end'
+	labelPosition?: 'start' | 'end'
 	name: string
 	options: SegmentedControlItem[]
 	id?: string

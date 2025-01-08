@@ -1,4 +1,3 @@
-import React from 'react'
 import { Heading, Page, Section } from '@/Components'
 import { Routes } from '@/lib'
 import JobTitlesForm from '../Form'
@@ -14,7 +13,7 @@ const EditJobTitle = ({ job_title }: IEditJobTitleProps) => {
 		<Page title={ title }>
 			<Section>
 				<Heading>{ title }</Heading>
-				
+
 				<JobTitlesForm
 					method='put'
 					to={ Routes.jobTitle() }

@@ -1,9 +1,11 @@
-import React from 'react'
-import { Avatar } from '@/Components'
+import { Avatar, type AvatarProps } from '@/Components'
 
-const SiteLogo = () => {
+interface SiteLogoProps extends AvatarProps,
+	Omit<React.ComponentPropsWithoutRef<'div'>, keyof AvatarProps | 'id'> {}
+
+const SiteLogo = ({ ...props }: SiteLogoProps) => {
 	return (
-		<Avatar />
+		<Avatar id="site-logo" { ...props } />
 	)
 }
 

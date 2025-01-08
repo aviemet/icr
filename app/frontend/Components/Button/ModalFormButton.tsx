@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import Button from './index'
 import { Modal } from '@/Components'
 import { useMantineTheme, type ModalProps, type ButtonProps } from '@mantine/core'
@@ -7,11 +6,11 @@ import axios from 'axios'
 interface ModalFormButtonProps {
 	children?: string | React.ReactElement
 	form: React.ReactElement
-	title: string
+	title: React.ReactNode
 	buttonProps?: ButtonProps
 	modalProps?: Partial<ModalProps>
-	onSubmit?: (form: Inertia.FormProps) => boolean|void
-	onSuccess?: (data: { id: string|number }) => void
+	onSubmit?: (form: Inertia.FormProps) => boolean | void
+	onSuccess?: (data: { id: string | number }) => void
 }
 
 const ModalFormButton = ({
@@ -51,7 +50,7 @@ const ModalFormButton = ({
 				title={ title }
 				{ ...Object.assign({ size: theme.breakpoints.md }, modalProps) }
 			>
-				{ close => React.cloneElement(form, {
+				{ React.cloneElement(form, {
 					onSubmit: onSubmit ? onSubmit : handleSubmit,
 				}) }
 			</Modal>

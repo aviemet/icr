@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box, AppShell, Group } from '@mantine/core'
 import { ToggleColorSchemeButton } from '@/Components/Button'
 

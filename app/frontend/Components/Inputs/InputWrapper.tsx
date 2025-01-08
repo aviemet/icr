@@ -1,4 +1,3 @@
-import React from 'react'
 import ConditionalWrapper from '../ConditionalWrapper'
 import { Box } from '@/Components'
 

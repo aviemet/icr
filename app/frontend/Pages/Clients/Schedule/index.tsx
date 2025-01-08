@@ -1,17 +1,16 @@
-import React  from 'react'
+import React, { useRef }  from 'react'
 import { router } from '@inertiajs/react'
-import { formatter, theme } from '@/lib'
-// import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
+import { buildShiftTitle, formatter, theme } from '@/lib'
 import dayjs from 'dayjs'
 import {
 	Box,
 	Calendar,
-	DateDisplay,
 } from '@/Components'
-// import ShiftForm from '@/Pages/Shifts/Form'
 import { type NavigateAction, type View, type Event } from 'react-big-calendar'
 import { modals } from '@mantine/modals'
 import useStore from '@/lib/store'
+import ShiftInfo from './ShiftInfo'
+import NewShiftForm from './NewShiftForm'
 
 interface ScheduleProps {
 	client: Schema.ClientsShow
@@ -21,20 +20,35 @@ interface ScheduleProps {
 const Schedule = ({ client, schedules }: ScheduleProps) => {
 	const { getContrastingColor } = useStore()
 
+	const newShiftModalRef = useRef<string>()
+
 	const handleSelectEvent = (event: Event, e: React.SyntheticEvent<HTMLElement, globalThis.Event>) => {
 		modals.open({
-			title: 'Event Details',
+			title: event.resource.employee.person.name,
 			children: (
-				<>
-					<Box>{ event.title }</Box>
-					{ event.start && <Box><DateDisplay>{ event.start }</DateDisplay></Box> }
-					{ event.end && <Box><DateDisplay>{ event?.end }</DateDisplay></Box> }
-				</>
+				<ShiftInfo event={ event } />
 			),
 		})
 	}
 
-	const handleSelectSlot = ({ start }: { start: Date }) => {
+	const handleNewShiftSuccess = () => {
+		if(!newShiftModalRef.current) return
+
+		modals.close(newShiftModalRef.current)
+		router.reload({ only: ['schedules'] })
+	}
+
+	const handleNewShift = (date: Date) => {
+		newShiftModalRef.current = modals.open({
+			title: 'New Shift',
+			children: (
+				<NewShiftForm
+					client={ client }
+					selectedDate={ date }
+					onSuccess={ handleNewShiftSuccess }
+				/>
+			),
+		})
 	}
 
 	const handleDateChange = (newDate: Date, view: View, action: NavigateAction) => {
@@ -59,20 +73,6 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 		)
 	}
 
-	const buildShiftTitle = (schedule: Schema.CalendarEventsShow) => {
-		const start = schedule.starts_at ? formatter.time.short(schedule.starts_at) : undefined
-		const end = schedule.ends_at ? formatter.time.short(schedule.ends_at) : undefined
-		const name = schedule?.shift?.employee ? schedule.shift.employee.person.name : schedule.name
-
-		return `${start ? start : ''}${end
-			? (
-				start ?
-					` - ${end}`
-					: end
-			)
-			: ''}: ${name}`
-	}
-
 	const eventStyleGetter = (event: Event) => {
 		let defaultColor = theme.colors.blue[5]
 
@@ -91,33 +91,31 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 			<h1>{ client?.person?.name }</h1>
 			<Box>
 				<Calendar
-					events={ schedules.map(schedule => {
+					events={ schedules?.map(schedule => {
 						return {
 							id: schedule.id,
-							title: buildShiftTitle(schedule),
+							title:  buildShiftTitle({
+								start: schedule.starts_at,
+								end: schedule.ends_at,
+								name: schedule.shift.employee.person.name,
+							}),
 							start: schedule.starts_at,
 							end: schedule.ends_at,
 							resource: {
 								backgroundColor: schedule.shift.employee.color,
+								employee: schedule.shift.employee,
 							},
 						}
-					}) }
+					}) || [] }
 					onSelectEvent={ handleSelectEvent }
-					onSelectSlot={ handleSelectSlot }
+					// onSelectSlot={ handleSelectSlot }
 					onNavigate={ handleDateChange }
 					onView={ handleViewChange }
 					onRangeChange={ handleRangeChange }
 					eventPropGetter={ eventStyleGetter }
+					onNewShift={ handleNewShift }
 				/>
 			</Box>
-			{ /* <Modal title="New Shift" open={ modalContext.open } handleClose={ modalContext.close }>
-				<ShiftForm
-					start={ newShiftStart }
-					client={ client }
-					employees={ employees }
-					onSubmit={ modalContext.close }
-				/>
-			</Modal> */ }
 		</>
 	)
 }

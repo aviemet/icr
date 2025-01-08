@@ -1,4 +1,3 @@
-import React from 'react'
 import { Select } from '@/Components/Inputs'
 import { type AdvancedInputProps } from '.'
 

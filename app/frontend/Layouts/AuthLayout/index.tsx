@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box, Center, Flex, Paper } from '@/Components'
 import { LayoutProps } from '..'
 

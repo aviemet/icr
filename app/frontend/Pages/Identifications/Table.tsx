@@ -1,4 +1,3 @@
-import React from 'react'
 import { Routes } from '@/lib'
 import { Table, Link } from '@/Components'
 import { EditButton } from '@/Components/Button'
@@ -9,7 +8,7 @@ const IdentificationTable = (props: TableProps) => {
 		<Table>
 			<Table.Head>
 				<Table.Row>
-					
+
 					<Table.HeadCell sort="type">Type</Table.HeadCell>
 					<Table.HeadCell sort="number">Number</Table.HeadCell>
 					<Table.HeadCell sort="notes">Notes</Table.HeadCell>
@@ -22,7 +21,7 @@ const IdentificationTable = (props: TableProps) => {
 			<Table.Body>
 				<Table.RowIterator render={ (identification: Schema.IdentificationsIndex) => (
 					<Table.Row key={ identification.id }>
-						
+
 						<Table.Cell>
 							<Link href={ Routes.identification(identification.id) }>{ identification.type }</Link>
 						</Table.Cell>

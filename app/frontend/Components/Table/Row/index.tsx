@@ -1,4 +1,3 @@
-import React from 'react'
 import { useTableContext } from '../TableContext'
 import RowInContext from './RowInContext'
 import { Table, type TableTrProps } from '@mantine/core'

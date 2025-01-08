@@ -1,6 +1,7 @@
-import React, { useRef } from 'react'
+import React, { useMemo, useRef } from 'react'
 import {
 	Calendar,
+	DateHeaderProps,
 	Views,
 	dayjsLocalizer,
 	type CalendarProps,
@@ -13,14 +14,23 @@ import dayjs from 'dayjs'
 
 import cx from 'clsx'
 import * as classes from './Calendar.css'
+import DateCellWrapper from './DateCellWrapper'
+import { useLocation } from '@/lib/hooks'
+import MonthDateHeader from './MonthDateHeader'
+import MonthEvent from './MonthEvent'
+import MonthHeader from './MonthHeader'
+import { NewShiftClick } from './NewShiftButton'
 
 const DragAndDropCalendar = withDragAndDrop(Calendar<Event, {}>)
 
 const dayjsLocalizerInstance = dayjsLocalizer(dayjs)
 
-interface CalendarComponentProps extends Omit<CalendarProps<Event, {}>, 'localizer' | 'onRangeChange'> {
+interface CalendarComponentProps
+	extends Omit<CalendarProps<Event, {}>, 'localizer' | 'onRangeChange'> {
+
 	localizer?: DateLocalizer
 	onRangeChange?: (start: Date, end: Date, view: View) => void
+	onNewShift?: NewShiftClick
 }
 
 const CalendarComponent = ({
@@ -31,9 +41,23 @@ const CalendarComponent = ({
 	endAccessor = 'end',
 	onRangeChange,
 	className,
+	onNewShift,
 	...props
 }: CalendarComponentProps) => {
-	const viewRef = useRef(defaultView)
+	const { params } = useLocation()
+
+	const startingView = useMemo(() => {
+		if(params.has('view')) {
+			const view = params.get('view')!.toUpperCase()
+
+			if(view in Views) {
+				return Views[view as keyof typeof Views]
+			}
+		}
+		return defaultView
+	}, [defaultView, params])
+
+	const viewRef = useRef(startingView)
 
 	/**
 	 * Rewrite date range change method to stabilize interface
@@ -62,6 +86,15 @@ const CalendarComponent = ({
 			showAllEvents={ showAllEvents }
 			localizer={ localizer }
 			onRangeChange={ handleRangeChange }
+			defaultView={ viewRef.current }
+			components={ {
+				dateCellWrapper: DateCellWrapper,
+				month: {
+					dateHeader: (props: DateHeaderProps) => <MonthDateHeader { ...props } onNewShift={ onNewShift } />,
+					event: MonthEvent,
+					header: MonthHeader,
+				},
+			} }
 			{ ...props }
 		/>
 	)

@@ -1,4 +1,3 @@
-import React from 'react'
 import Td from '../Td'
 import { Checkbox } from '@/Components/Inputs'
 import { CheckboxProps } from '@/Components/Inputs/Checkbox'

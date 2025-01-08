@@ -1,4 +1,3 @@
-import React from 'react'
 import { Form, TextInput, Submit } from '@/Components/Form'
 import { type UseFormProps } from 'use-inertia-form'
 
@@ -9,7 +8,7 @@ type TJobTitleFormData = {
 export interface IJobTitleFormProps {
 	to: string
 	method?: HTTPVerb
-	onSubmit?: (object: UseFormProps<TJobTitleFormData>) => boolean|void
+	onSubmit?: (object: UseFormProps<TJobTitleFormData>) => boolean | void
 	job_title: Schema.JobTitlesFormData
 }
 

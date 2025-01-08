@@ -1,7 +1,7 @@
-import { Button, ActionIcon as IconButton } from '@mantine/core'
+import { Button, ActionIcon as IconButton, type ButtonProps } from '@mantine/core'
 export default Button
 
-export { IconButton }
+export { IconButton, type ButtonProps }
 export { default as EditButton } from './EditButton'
 export { default as DeleteButton } from './DeleteButton'
 export { default as ScheduleButton } from './ScheduleButton'

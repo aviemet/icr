@@ -1,4 +1,3 @@
-import React from 'react'
 import CurrencyInput, { type CurrencyInputProps } from '@/Components/Inputs/CurrencyInput'
 import Field from '../Components/Field'
 import { NestedObject, useInertiaInput } from 'use-inertia-form'
@@ -10,8 +9,7 @@ import { useCurrency } from '@/lib/hooks'
 interface INumberInputProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<CurrencyInputProps, InputConflicts>,
-	BaseFormInputProps<number, TForm>
-{
+	BaseFormInputProps<number, TForm> {
 
 }
 
@@ -32,7 +30,7 @@ const FormInput = <TForm extends NestedObject = NestedObject>(
 		...props
 	} : INumberInputProps<TForm>,
 ) => {
-	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<number|Money, TForm>({
+	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<number | Money, TForm>({
 		name,
 		model,
 		errorKey,
@@ -44,7 +42,7 @@ const FormInput = <TForm extends NestedObject = NestedObject>(
 		amount: value,
 	})
 
-	const handleChange = (value: string|number) => {
+	const handleChange = (value: string | number) => {
 		const numberValue = Number(value)
 		setValue(numberValue)
 

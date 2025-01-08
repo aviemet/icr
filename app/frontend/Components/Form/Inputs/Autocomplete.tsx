@@ -1,4 +1,3 @@
-import React from 'react'
 import Field from '../Components/Field'
 import AutocompleteInput, { type AutocompleteProps } from '@/Components/Inputs/AutocompleteInput'
 import cx from 'clsx'
