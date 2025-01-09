@@ -1,16 +1,24 @@
-import useStore from '@/lib/store'
-import MenuLink from './MenuLink'
 import { Routes } from '@/lib'
-import { Group, AppShell, Box, Flex, Text, Transition, Link, ConditionalWrapper, Tooltip } from '@/Components'
-import ToggleSidebarButton from '../ToggleSidebarButton'
-import IconProvider from '@/Layouts/Providers/IconProvider'
+import useStore from '@/lib/store'
 import { useLocation, usePageProps } from '@/lib/hooks'
+import IconProvider from '@/Layouts/Providers/IconProvider'
+import {
+	Group,
+	AppShell,
+	Box,
+	Flex,
+	Text,
+	Link,
+	Tooltip,
+} from '@/Components'
+import { TextInput } from '@/Components/Inputs'
+import { ClientIcon, EmployeeIcon, SettingsIcon } from '@/Components/Icons'
+import { SiteLogo } from '@/Features'
+import ToggleSidebarButton from '../ToggleSidebarButton'
+import MenuLink from './MenuLink'
 
 import cx from 'clsx'
 import * as classes from '../AppLayout.css'
-import { SiteLogo } from '@/Features'
-import { TextInput } from '@/Components/Inputs'
-import { ClientIcon, EmployeeIcon, SettingsIcon } from '@/Components/Icons'
 
 const Sidebar = () => {
 	const { auth: { user } } = usePageProps()

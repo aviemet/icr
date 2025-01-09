@@ -47,3 +47,5 @@ export {
 	ThemeIcon, type ThemeIconProps,
 	Transition, type TransitionProps,
 } from '@mantine/core'
+
+export * as Flags from 'mantine-flagpack'

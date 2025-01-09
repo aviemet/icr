@@ -1,4 +1,5 @@
 require "active_support/concern"
+require_relative "../../../lib/locales"
 
 module Localization
   extend ActiveSupport::Concern
@@ -7,12 +8,6 @@ module Localization
     before_action :set_locale
 
     around_action :apply_user_time_zone, if: :current_user
-
-    def currencies
-      Monetize::Parser::CURRENCY_SYMBOLS
-        .uniq(&:last)
-        .map{ |sym, abbr| { symbol: sym, code: abbr } }
-    end
   end
 
   private

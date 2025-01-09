@@ -13,5 +13,12 @@ namespace :api do
       get model.to_s => "#{model}#options", as: "#{model}_options"
     end
     get "categories/:category_type" => "categories#options", as: "category_options"
+
+    scope :locales do
+      get "currencies" => "locales#currencies", as: :currencies
+      get "timezones" => "locales#timezones", as: :timezones
+      get "languages" => "locales#languages", as: :languages
+      get "pay_periods" => "locales#pay_periods", as: :pay_periods
+    end
   end
 end

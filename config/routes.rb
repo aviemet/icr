@@ -49,6 +49,8 @@ Rails.application.routes.draw do
 
   # RESOURCEFUL PATHS #
   resources :settings, only: [:index]
+  put :settings, to: "settings#update"
+  patch :settings, to: "settings#update"
 
   resources :clients, param: :slug, concerns: :schedulable
 
