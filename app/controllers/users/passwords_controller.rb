@@ -3,9 +3,7 @@
 class Users::PasswordsController < Devise::PasswordsController
   # @route GET /users/password/new (new_user_password)
   def new
-    render inertia: "Devise/Passwords/New", props: {
-
-    }
+    render inertia: "Devise/Passwords/New", props: {}
   end
 
   # def create

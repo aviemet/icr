@@ -18,11 +18,9 @@
 #  fk_rails_...  (person_id => people.id)
 #
 class DoctorSerializer < ApplicationSerializer
+  include PersonFields
+
   identifier :slug
 
-  attributes(
-    :first_name,
-    :last_name,
-    :notes,
-  )
+  attributes
 end

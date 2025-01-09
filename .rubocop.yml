@@ -4,7 +4,6 @@ require:
   - rubocop-rspec
 
 AllCops:
-
   Exclude:
     - "bin/**/*"
     - "node_modules/**/*"
@@ -13,11 +12,13 @@ AllCops:
     - ".git/**/*"
   NewCops: enable
 
+Rails/HasAndBelongsToMany:
+  Enabled: false
 Style/Documentation:
   Enabled: false
 Style/ExponentialNotation:
   Enabled: true
-Style/HashAsLastArrayItem: 
+Style/HashAsLastArrayItem:
   Enabled: false
 Style/HashEachMethods:
   Enabled: true
@@ -92,7 +93,9 @@ Layout/TrailingWhitespace:
 Layout/SpaceAroundMethodCallOperator:
   Enabled: true
 Layout/SpaceInsideHashLiteralBraces:
-  Enabled: false
+  Enabled: true
+Layout/SpaceInsideBlockBraces:
+  Enabled: true
 Layout/CommentIndentation:
   Enabled: false
 Layout/HashAlignment:
@@ -246,10 +249,12 @@ Layout/FirstArrayElementIndentation:
   Enabled: false
 
 Layout/MultilineOperationIndentation:
-  Enabled: false
+  Enabled: true
+  EnforcedStyle: indented
 
-Layout/ArgumentAlignment:
-  Enabled: false
+Layout/AssignmentIndentation:
+  Enabled: true
+  IndentationWidth: 2
 
 Lint/AmbiguousRegexpLiteral:
   Enabled: false
@@ -258,6 +263,21 @@ Lint/AmbiguousRegexpLiteral:
 Lint/AssignmentInCondition:
   Enabled: false
   StyleGuide: https://relaxed.ruby.style/#lintassignmentincondition
+
+Layout/ArgumentAlignment:
+  Enabled: false
+
+Layout/IndentationWidth:
+  Width: 2
+
+Layout/IndentationConsistency:
+  EnforcedStyle: normal
+
+Layout/CaseIndentation:
+  Enabled: true
+  EnforcedStyle: end
+  IndentOneStep: false
+  IndentationWidth: 2
 
 Naming/AccessorMethodName:
   Enabled: false

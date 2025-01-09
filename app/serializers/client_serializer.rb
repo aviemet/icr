@@ -22,6 +22,9 @@
 #  fk_rails_...  (person_id => people.id)
 #
 class ClientSerializer < ApplicationSerializer
+  include PersonFields
+  include ColorMappingFields
+
   identifier :slug
 
   attributes(
@@ -30,7 +33,6 @@ class ClientSerializer < ApplicationSerializer
     :active_at,
     :inactive_at,
     :color,
-    :color_mappings,
   )
 
   belongs_to :person, serializer: PersonSerializer

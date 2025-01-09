@@ -30,7 +30,7 @@ class PrescriptionSerializer < ApplicationSerializer
   attributes(
     :medication_id,
     :client_id,
-    :start_at,
+    :starts_at,
     :ends_at,
     :doctor_id,
     :dosage_id,

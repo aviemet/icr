@@ -1,6 +1,6 @@
 if Rails.env.development?
   TypesFromSerializers.config do |config|
-    config.base_serializers = ["ApplicationSerializer"]
+    config.base_serializers = ["ApplicationSerializer", "BaseSerializer"]
     config.sql_to_typescript_type_mapping.update(
       date: :Date,
       datetime: :Date,
