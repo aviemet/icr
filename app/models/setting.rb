@@ -28,7 +28,7 @@ class Setting < RailsSettings::Base
   field :default_currency, type: :string, default: "USD", validates: { presence: true }
   field :default_timezone, type: :string, default: "America/Los Angelas", validates: { presence: true }
 
-  field :pay_period_type, type: :string, default: PAY_PERIOD_TYPES[:semi_monthly], validates: { presence: true, inclusion: { in: PAY_PERIOD_TYPES.keys } }
+  field :pay_period_type, type: :string, default: PAY_PERIOD_TYPES[:semi_monthly], validates: { presence: true, inclusion: { in: PAY_PERIOD_TYPES.values } }
 
   def self.render
     Setting.keys.to_h { |key|
