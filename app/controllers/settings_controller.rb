@@ -1,69 +1,29 @@
 class SettingsController < ApplicationController
-  include Searchable
+  strong_params :setting, permit: Setting.editable_keys
 
-  expose :settings, -> { search(@active_company.settings.includes_associated, sortable_fields) }
-  expose :setting, scope: ->{ @active_company.settings }, find: ->(id, scope){ scope.includes_associated.find(id) }
-
-  sortable_fields %w(data)
-
-  strong_params :settings, permit: [:data]
-
+  # @route GET /settings (settings)
   def index
-    authorize settings
-
-    paginated_settings = settings.page(params[:page] || 1).per(current_user.limit(:items))
+    authorize Setting
 
     render inertia: "Settings/Index", props: {
-      settings: -> { paginated_settings.render(:index) },
-      pagination: -> { {
-        count: settings.size,
-        **pagination_data(paginated_settings)
-      } },
+      settings: -> { Setting.render },
     }
   end
 
-  def show
-    authorize setting
-    render inertia: "Setting/Show", props: {
-      setting: -> { setting.render(:show) }
-    }
-  end
-
-  def new
-    authorize Setting.new
-    render inertia: "Setting/New", props: {
-      setting: Setting.new.render(:form_data)
-    }
-  end
-
-  def edit
-    authorize setting
-    render inertia: "Setting/Edit", props: {
-      setting: setting.render(:edit)
-    }
-  end
-
-  def create
-    authorize Setting.new
-    if setting.save
-      redirect_to setting, notice: "Setting was successfully created."
-    else
-      redirect_to new_setting_path, inertia: { errors: setting.errors }
-    end
-  end
-
+  # @route PUT /settings (settings)
+  # @route PATCH /settings (settings)
   def update
-    authorize setting
-    if setting.update(setting_params)
-      redirect_to setting, notice: "Setting was successfully updated."
-    else
-      redirect_to edit_setting_path, inertia: { errors: setting.errors }
-    end
-  end
+    authorize Setting
 
-  def destroy
-    authorize setting
-    setting.destroy!
-    redirect_to settings_url, notice: "Setting was successfully destroyed."
+    ActiveRecord::Base.transaction do
+
+      setting_params.each_key do |key|
+        Setting.send("#{key}=", setting_params[key].strip) unless setting_params[key].nil?
+      end
+
+      redirect_to settings_path, notice: "Setting was successfully updated."
+    rescue StandardError
+      redirect_to settings_path, inertia: { errors: setting.errors }
+    end
   end
 end
