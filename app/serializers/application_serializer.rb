@@ -1,6 +1,4 @@
-class ApplicationSerializer < Oj::Serializer
-  include TypesFromSerializers::DSL
-
+class ApplicationSerializer < BaseSerializer
   identifier
 
   def self.currency_for(field)

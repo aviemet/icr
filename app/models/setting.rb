@@ -22,17 +22,17 @@ class Setting < RailsSettings::Base
     monthly: "monthly",
   }.freeze
 
-  scope :company do
-    field :company_name, type: :string, default: "SLS Agency", validates: { presence: true }
-  end
+  field :company_name, type: :string, default: "SLS Agency", validates: { presence: true }
 
-  scope :locale do
-    field :default_language, type: :string, default: "en/US", validates: { presence: true }
-    field :default_currency, type: :string, default: "USD", validates: { presence: true }
-    field :default_timezone, type: :string, default: "America/Los Angelas", validates: { presence: true }
-  end
+  field :default_language, type: :string, default: "en/US", validates: { presence: true }
+  field :default_currency, type: :string, default: "USD", validates: { presence: true }
+  field :default_timezone, type: :string, default: "America/Los Angelas", validates: { presence: true }
 
-  scope :finance do
-    field :pay_period_type, type: :string, default: PAY_PERIOD_TYPES[:semi_monthly], validates: { presence: true, inclusion: { in: PAY_PERIOD_TYPES.keys } }
+  field :pay_period_type, type: :string, default: PAY_PERIOD_TYPES[:semi_monthly], validates: { presence: true, inclusion: { in: PAY_PERIOD_TYPES.keys } }
+
+  def self.render
+    Setting.keys.to_h { |key|
+      [key.to_sym, Setting.send(key.to_sym)]
+    }
   end
 end

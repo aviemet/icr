@@ -12,6 +12,11 @@
 #
 #  index_settings_on_var  (var) UNIQUE
 #
-class SettingSerializer < ApplicationSerializer
-  attributes(*Setting.keys)
+class SettingSerializer < BaseSerializer
+  attributes(**Setting.defined_fields.to_h { |field|
+    options = { type: field.type }
+    options[:optional] = true if field.default.nil?
+
+    [field.key.to_sym, options]
+  })
 end
