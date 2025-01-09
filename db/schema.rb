@@ -384,6 +384,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_191114) do
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
   end
 
+  create_table "settings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "singleton_guard"
+    t.jsonb "data", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["singleton_guard"], name: "index_settings_on_singleton_guard", unique: true
+  end
+
   create_table "shifts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "employee_id", null: false
     t.uuid "calendar_event_id", null: false

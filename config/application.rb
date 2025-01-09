@@ -19,7 +19,8 @@ module Icr
 
     config.time_zone = "Pacific Time (US & Canada)"
 
-    config.autoload_paths += %W[#{config.root}/lib]
+    config.autoload_paths += %W[#{config.root}/lib #{config.root}/app/schemas]
+    config.eager_load_paths += %W[#{config.root}/app/schemas]
 
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid

@@ -27,6 +27,8 @@ gem "jsonb_accessor", ">= 1.3"
 gem "oj_serializers", ">= 2.0"
 gem "types_from_serializers", ">= 2.1"
 gem "public_activity", ">= 3.0"
+gem "dry-schema", "~> 1.14"
+gem "dry-types", "~> 1.8"
 
 # Helpers
 gem "factory_bot", ">= 6.4"
@@ -78,6 +80,8 @@ group :development, :test do
 
   gem "dotenv-rails", ">= 3.1"
 
+  gem "pry", "~> 0.15.0"
+
   # File annotation
   gem "chusaku", ">= 1.2", require: false
   gem "annotate", ">= 3.2", require: false
@@ -117,5 +121,3 @@ group :test do
   gem "simplecov", ">= 0.22.0"
   gem "pundit-matchers", ">= 3.1"
 end
-
-gem "pry", "~> 0.15.0"

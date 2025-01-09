@@ -49,7 +49,7 @@ Rails.application.routes.draw do
 
   # RESOURCEFUL PATHS #
 
-  get "settings", to: "pages#index", as: :settings
+  resources :settings
 
   resources :clients, param: :slug, concerns: :schedulable
 

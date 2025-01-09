@@ -4,7 +4,6 @@ require:
   - rubocop-rspec
 
 AllCops:
-
   Exclude:
     - "bin/**/*"
     - "node_modules/**/*"
@@ -17,7 +16,7 @@ Style/Documentation:
   Enabled: false
 Style/ExponentialNotation:
   Enabled: true
-Style/HashAsLastArrayItem: 
+Style/HashAsLastArrayItem:
   Enabled: false
 Style/HashEachMethods:
   Enabled: true
@@ -246,10 +245,12 @@ Layout/FirstArrayElementIndentation:
   Enabled: false
 
 Layout/MultilineOperationIndentation:
-  Enabled: false
+  Enabled: true
+  EnforcedStyle: indented
 
-Layout/ArgumentAlignment:
-  Enabled: false
+Layout/AssignmentIndentation:
+  Enabled: true
+  IndentationWidth: 2
 
 Lint/AmbiguousRegexpLiteral:
   Enabled: false
@@ -258,6 +259,21 @@ Lint/AmbiguousRegexpLiteral:
 Lint/AssignmentInCondition:
   Enabled: false
   StyleGuide: https://relaxed.ruby.style/#lintassignmentincondition
+
+Layout/ArgumentAlignment:
+  Enabled: false
+
+Layout/IndentationWidth:
+  Width: 2
+
+Layout/IndentationConsistency:
+  EnforcedStyle: normal
+
+Layout/CaseIndentation:
+  Enabled: true
+  EnforcedStyle: end
+  IndentOneStep: false
+  IndentationWidth: 2
 
 Naming/AccessorMethodName:
   Enabled: false
