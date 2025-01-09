@@ -27,8 +27,7 @@ gem "jsonb_accessor", ">= 1.3"
 gem "oj_serializers", ">= 2.0"
 gem "types_from_serializers", ">= 2.1"
 gem "public_activity", ">= 3.0"
-gem "dry-schema", "~> 1.14"
-gem "dry-types", "~> 1.8"
+gem "rails-settings-cached", "~> 2.9"
 
 # Helpers
 gem "factory_bot", ">= 6.4"

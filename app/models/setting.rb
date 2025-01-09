@@ -2,56 +2,37 @@
 #
 # Table name: settings
 #
-#  id              :uuid             not null, primary key
-#  data            :jsonb            not null
-#  singleton_guard :integer
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
+#  id         :bigint           not null, primary key
+#  value      :text
+#  var        :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 # Indexes
 #
-#  index_settings_on_singleton_guard  (singleton_guard) UNIQUE
+#  index_settings_on_var  (var) UNIQUE
 #
-class Setting < ApplicationRecord
-  pg_search_scope(
-    :search,
-    against: [:singelton_guard, :data],
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    },
-  )
+class Setting < RailsSettings::Base
+  cache_prefix { "v1" }
 
-  tracked
-  resourcify
+  PAY_PERIOD_TYPES = {
+    weekly: "weekly",
+    bi_weekly: "bi_weekly",
+    semi_monthly: "semi_monthly",
+    monthly: "monthly",
+  }.freeze
 
-  after_initialize :set_defaults
-  before_validation :set_singleton_guard
-
-  validates :singleton_guard, inclusion: { in: [0] }
-  validate :validate_settings_schema
-
-  scope :includes_associated, -> { includes([]) }
-
-  private
-
-  def set_singleton_guard
-    self.singleton_guard = 0
+  scope :company do
+    field :company_name, type: :string, default: "SLS Agency", validates: { presence: true }
   end
 
-  def set_defaults
-    return unless data.empty?
-
-    self.data = Settings.defaults
+  scope :locale do
+    field :default_language, type: :string, default: "en/US", validates: { presence: true }
+    field :default_currency, type: :string, default: "USD", validates: { presence: true }
+    field :default_timezone, type: :string, default: "America/Los Angelas", validates: { presence: true }
   end
 
-  def validate_settings_schema
-    result = Settings::SettingsSchema.call(data)
-    return if result.success?
-
-    # Add validation errors if schema validation fails
-    result.errors.to_h.each do |key, messages|
-      errors.add(:data, "#{key}: #{messages.join(', ')}")
-    end
+  scope :finance do
+    field :pay_period_type, type: :string, default: PAY_PERIOD_TYPES[:semi_monthly], validates: { presence: true, inclusion: { in: PAY_PERIOD_TYPES.keys } }
   end
 end

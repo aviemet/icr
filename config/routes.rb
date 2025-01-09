@@ -48,8 +48,7 @@ Rails.application.routes.draw do
   )
 
   # RESOURCEFUL PATHS #
-
-  resources :settings
+  resources :settings, only: [:index]
 
   resources :clients, param: :slug, concerns: :schedulable
 

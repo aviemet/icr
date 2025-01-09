@@ -6,9 +6,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # @route GET /users/register (new_user_registration)
   def new
-    render inertia: "Devise/Register", props: {
-
-    }
+    render inertia: "Devise/Register", props: {}
   end
 
   # @route POST /users (user_registration)

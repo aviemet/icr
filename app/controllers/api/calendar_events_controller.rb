@@ -13,7 +13,7 @@ class Api::CalendarEventsController < Api::ApiController
     if calendar_event.save
       render json: calendar_event.render, status: :created
     else
-      render json: { errors: calendar_event.errors}, status: :see_other
+      render json: { errors: calendar_event.errors }, status: :see_other
     end
   end
 

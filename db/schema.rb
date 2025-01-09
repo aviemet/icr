@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_19_191114) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_09_064859) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -384,12 +384,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_191114) do
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
   end
 
-  create_table "settings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.integer "singleton_guard"
-    t.jsonb "data", default: {}, null: false
+  create_table "settings", force: :cascade do |t|
+    t.string "var", null: false
+    t.text "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["singleton_guard"], name: "index_settings_on_singleton_guard", unique: true
+    t.index ["var"], name: "index_settings_on_var", unique: true
   end
 
   create_table "shifts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

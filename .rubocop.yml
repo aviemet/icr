@@ -12,6 +12,8 @@ AllCops:
     - ".git/**/*"
   NewCops: enable
 
+Rails/HasAndBelongsToMany:
+  Enabled: false
 Style/Documentation:
   Enabled: false
 Style/ExponentialNotation:
@@ -91,7 +93,9 @@ Layout/TrailingWhitespace:
 Layout/SpaceAroundMethodCallOperator:
   Enabled: true
 Layout/SpaceInsideHashLiteralBraces:
-  Enabled: false
+  Enabled: true
+Layout/SpaceInsideBlockBraces:
+  Enabled: true
 Layout/CommentIndentation:
   Enabled: false
 Layout/HashAlignment:
