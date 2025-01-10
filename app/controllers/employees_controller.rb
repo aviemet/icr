@@ -2,7 +2,7 @@ class EmployeesController < ApplicationController
   include Searchable
 
   expose :employees, -> { search(Employee.includes_associated) }
-  expose :employee, scope: ->{ Employee }, find: ->(id, scope){ scope.includes_associated.find(id) }
+  expose :employee, id: -> { params[:slug] }, find_by: :slug
 
   sortable_fields %w(person_id active_at inactive_at number)
 
@@ -40,6 +40,23 @@ class EmployeesController < ApplicationController
     }
   end
 
+  # @route GET /employees/:slug/schedule (schedule_employee)
+  def schedule
+    schedules = Employee
+      .includes([:person])
+      .find_by(slug: params[:slug])
+      .calendar_events
+      .includes([:recurring_patterns, shift: [employee: [:person, :job_title, :calendar_customization]]])
+      .between(range_start, range_end)
+
+    render inertia: "Employees/Schedule", props: {
+      employee: -> { employee.render(:show) },
+      schedules: lambda {
+        schedules.render(:show)
+      },
+    }
+  end
+
   # @route POST /employees (employees)
   def create
     authorize Employee.new
@@ -66,5 +83,15 @@ class EmployeesController < ApplicationController
     authorize employee
     employee.destroy!
     redirect_to employees_url, notice: t("employees.notices.created")
+  end
+
+  private
+
+  def range_start
+    params[:start] || Time.current.beginning_of_month.prev_occurring(:sunday)
+  end
+
+  def range_end
+    params[:end] || Time.current.end_of_month.next_occurring(:saturday)
   end
 end
