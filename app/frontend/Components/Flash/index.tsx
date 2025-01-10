@@ -1,16 +1,17 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { usePage } from '@inertiajs/react'
 import { showNotification } from '@mantine/notifications'
+
+const shownMessageIds = new Set<string>()
 
 const Flash = () => {
 	const { flash } = usePage<SharedInertiaProps>().props
 
 	useEffect(() => {
-		let key: keyof FlashMessage
-		for(key in flash) {
-			if(flash[key]) {
+		for(const [type, message] of Object.entries(flash)) {
+			if(message !== null && !shownMessageIds.has(message.id)) {
 				let color
-				switch(key) {
+				switch(type) {
 					case 'alert':
 						color = 'red'
 						break
@@ -25,18 +26,19 @@ const Flash = () => {
 						break
 				}
 
+				shownMessageIds.add(message.id)
+
 				showNotification({
-					message: flash[key],
+					id: message.id,
+					message: message.message,
 					color,
+					onClose: () => shownMessageIds.delete(message.id),
 				})
 			}
 		}
 	}, [flash])
 
-	return (
-		<></>
-	)
+	return <></>
 }
 
 export default Flash
-
