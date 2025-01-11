@@ -7,6 +7,7 @@ import { theme as themeObject, vars } from '@/lib/theme'
 import { toKebabCase } from '@/lib'
 import useStore from '@/lib/store'
 import { Flash } from '@/Components'
+import { useInit } from '@/lib/hooks'
 
 const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 	/**
@@ -38,6 +39,12 @@ const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 			}
 		}
 	}, [primaryColor])
+
+	useInit(() => {
+		if(import.meta.env.MODE === "development") {
+			console.log({ vars })
+		}
+	})
 
 	return (
 		<MantineProvider

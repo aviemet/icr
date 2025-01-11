@@ -1,7 +1,8 @@
-import { Heading, Link } from '@/Components'
+import { Grid, Heading, Link } from '@/Components'
 import { Field, Form, TextInput, Submit } from '@/Components/Form'
 import { Routes } from '@/lib'
 import { LAYOUTS } from '@/Layouts'
+import { AuthPaperLayout } from '@/Features'
 
 type TPasswordsNewFormData = {
 	email: string
@@ -13,21 +14,35 @@ const PasswordsNew = () => {
 	}
 
 	return (
-		<Form model="user" data={ defaultData } to={ Routes.newUserPassword() }>
-			<div>
-				<Heading>Reset Password</Heading>
-			</div>
+		<AuthPaperLayout bottomLinks={ [
+			<Link href={ Routes.newUserSession() } key="login">
+				Log In
+			</Link>,
+		] }>
+			<Form model="user" data={ defaultData } to={ Routes.newUserPassword() }>
+				<Grid>
 
-			<Field>
-				<TextInput name="email" placeholder="Email" autoFocus autoComplete="Email" />
-			</Field>
+					<Grid.Col>
+						<div>
+							<Heading>Reset Password</Heading>
+						</div>
+					</Grid.Col>
 
-			<Field>
-				<Submit>Send Reset Instructions</Submit>
-			</Field>
+					<Grid.Col>
+						<Field>
+							<TextInput name="email" placeholder="Email" autoFocus autoComplete="Email" />
+						</Field>
+					</Grid.Col>
 
-			<Link href={ Routes.newUserSession() }>Log In</Link>
-		</Form>
+					<Grid.Col>
+						<Field>
+							<Submit>Send Reset Instructions</Submit>
+						</Field>
+					</Grid.Col>
+
+				</Grid>
+			</Form>
+		</AuthPaperLayout>
 	)
 }
 

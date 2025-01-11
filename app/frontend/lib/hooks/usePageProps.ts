@@ -8,6 +8,7 @@ export interface SharedInertiaProps extends PageProps {
 	}
 	flash: FlashMessage
 	errors: Errors & ErrorBag
+	settings: Schema.Setting
 }
 
 const usePageProps = () => {

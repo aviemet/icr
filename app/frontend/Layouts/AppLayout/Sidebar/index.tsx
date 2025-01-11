@@ -12,7 +12,7 @@ import {
 	Tooltip,
 } from '@/Components'
 import { TextInput } from '@/Components/Inputs'
-import { ClientIcon, EmployeeIcon, SettingsIcon } from '@/Components/Icons'
+import { ClientIcon, EmployeeIcon, LogoutIcon, SettingsIcon } from '@/Components/Icons'
 import { SiteLogo } from '@/Features'
 import ToggleSidebarButton from '../ToggleSidebarButton'
 import MenuLink from './MenuLink'
@@ -92,6 +92,11 @@ const Sidebar = () => {
 						href={ Routes.settings() }
 						leftSection={ <SettingsIcon /> }
 						active={ paths.length >= 1 && paths[0] === 'settings' }
+					/>
+					<MenuLink
+						label="Sign Out"
+						href={ Routes.destroyUserSession() }
+						leftSection={ <LogoutIcon /> }
 					/>
 				</AppShell.Section>
 

@@ -1,12 +1,13 @@
-import { Heading, Link } from '@/Components'
+import { Grid, Heading, Link } from '@/Components'
 import { Form, Field, TextInput, PasswordInput, Checkbox, Submit } from '@/Components/Form'
 import { Routes } from '@/lib'
 import { type UseFormProps } from 'use-inertia-form'
-import useStore from '@/lib/store'
 import { LAYOUTS } from '@/Layouts'
 
 import cx from 'clsx'
 import * as classes from './Login.css'
+import { usePageProps } from '@/lib/hooks'
+import { AuthPaperLayout } from '@/Features'
 
 type LoginFormData = {
 	user: {
@@ -25,7 +26,7 @@ const defaultData = {
 }
 
 const Login = () => {
-	const { siteTitle } = useStore()
+	const { settings } = usePageProps()
 
 	const handleSubmit = ({ data }: UseFormProps<LoginFormData>) => {
 		if(data.user.email === '' || data.user.password === '') {
@@ -34,44 +35,68 @@ const Login = () => {
 	}
 
 	return (
-		<Form model="user" data={ defaultData } to={ Routes.newUserSession() } onSubmit={ handleSubmit } className={ cx(classes.form) }>
+		<AuthPaperLayout bottomLinks={ [
+			<Link href={ Routes.newUserPassword() } key="reset">
+				Reset Password
+			</Link>,
+			<Link href={ Routes.newUserRegistration() } key="register">
+				Register
+			</Link>,
+		] }>
+			<Form
+				model="user"
+				data={ defaultData }
+				to={ Routes.newUserSession() }
+				onSubmit={ handleSubmit }
+			>
+				<Grid>
 
-			<div>
-				<Heading mb="xs">{ siteTitle }</Heading>
-			</div>
+					<Grid.Col>
+						<div>
+							<Heading mb="xs">{ settings.company_name }</Heading>
+						</div>
+					</Grid.Col>
 
-			<Field>
-				<TextInput
-					name="email"
-					placeholder="Email"
-					autoFocus
-					autoComplete="Email"
-					required
-					pattern=".+@.+\..+"
-				/>
-			</Field>
+					<Grid.Col>
+						<Field>
+							<TextInput
+								name="email"
+								placeholder="Email"
+								autoFocus
+								autoComplete="Email"
+								required
+								pattern=".+@.+\..+"
+							/>
+						</Field>
+					</Grid.Col>
 
-			<Field>
-				<PasswordInput
-					name="password"
-					placeholder="Password"
-					autoComplete="current-password"
-					required
-				/>
-			</Field>
+					<Grid.Col>
+						<Field>
+							<PasswordInput
+								name="password"
+								placeholder="Password"
+								autoComplete="current-password"
+								required
+							/>
+						</Field>
+					</Grid.Col>
 
-			<Field>
-				<Submit>Log In</Submit>
-			</Field>
+					<Grid.Col>
+						<Field>
+							<Submit>Log In</Submit>
+						</Field>
+					</Grid.Col>
 
-			<Field>
-				<Checkbox name="remember_me" label="Remember Me" />
-			</Field>
+					<Grid.Col>
+						<Field>
+							<Checkbox name="remember_me" label="Remember Me" />
+						</Field>
+					</Grid.Col>
 
-			<Link href={ Routes.newUserPassword() }>Reset Password</Link>
-			<Link href={ Routes.newUserRegistration() }>Register</Link>
+				</Grid>
+			</Form>
+		</AuthPaperLayout>
 
-		</Form>
 	)
 }
 
