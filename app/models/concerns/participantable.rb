@@ -3,11 +3,6 @@ module Participantable
 
   included do
     has_many :event_participants, as: :participant, dependent: :nullify
-
-    def calendar_events
-      Calendar::Event.joins(:shift)
-        .where(shifts: { employee_id: self.id })
-        .distinct
-    end
+    has_many :calendar_events, through: :event_participants, class_name: "Calendar::Event"
   end
 end

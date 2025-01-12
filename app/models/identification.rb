@@ -27,17 +27,8 @@
 class Identification < ApplicationRecord
   include Categorizable
 
-  pg_search_scope(
-    :search,
-    against: [:type, :number, :notes, :issued_at, :expires_at],
-    associated_against: {
-      identificationable: [],
-    },
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    },
-  )
+  include PgSearchable
+  pg_search_config(against: [:type, :number, :notes, :issued_at, :expires_at])
 
   resourcify
 

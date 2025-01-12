@@ -24,15 +24,6 @@
 class Email < ApplicationRecord
   include Categorizable
 
-  pg_search_scope(
-    :search,
-    against: [:email, :name, :notes],
-    using: {
-      tsearch: { prefix: true },
-      trigram: {},
-    },
-  )
-
   resourcify
 
   before_destroy :nullify_primary_email

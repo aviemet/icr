@@ -14,19 +14,13 @@
 #  index_agencies_on_slug  (slug) UNIQUE
 #
 class Agency < ApplicationRecord
+  include Contactable
+
   extend FriendlyId
   friendly_id :name
 
-  include Contactable
-
-  pg_search_scope(
-    :search,
-    against: [:name],
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    },
-  )
+  include PgSearchable
+  pg_search_config(against: [:name])
 
   tracked
   resourcify

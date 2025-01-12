@@ -22,23 +22,19 @@
 #  fk_rails_...  (person_id => people.id)
 #
 class Employee < ApplicationRecord
-  extend FriendlyId
-  friendly_id :slug_candidates, use: [:slugged, :history]
-
   include Identificationable
   include Participantable
   include CalendarCustomizable
   include Personable
 
-  pg_search_scope(
-    :search,
+  extend FriendlyId
+  friendly_id :slug_candidates, use: [:slugged, :history]
+
+  include PgSearchable
+  pg_search_config(
     against: [:active_at, :inactive_at, :number],
     associated_against: {
       person: [:first_name, :last_name],
-    },
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
     },
   )
 

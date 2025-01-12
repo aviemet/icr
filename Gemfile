@@ -39,8 +39,8 @@ gem "amazing_print", ">= 1.4"
 gem "overmind", "~> 2.5"
 gem "eventmachine", ">= 1.2"
 gem "countries", ">= 6.0"
-gem "delayed_job_active_record", ">= 4.1"
 gem "friendly_id", "~> 5.5"
+gem "good_job", "~> 4.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data"

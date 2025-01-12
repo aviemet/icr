@@ -10,16 +10,6 @@
 #  updated_at   :datetime         not null
 #
 class Medication < ApplicationRecord
-
-  pg_search_scope(
-    :search,
-    against: [:name, :generic_name, :notes],
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    },
-  )
-
   resourcify
 
   has_many :prescriptions, dependent: :nullify

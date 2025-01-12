@@ -17,14 +17,8 @@ class JobTitle < ApplicationRecord
   extend FriendlyId
   friendly_id :name, use: [:slugged, :history]
 
-  pg_search_scope(
-    :search,
-    against: [:name, :description],
-    using: {
-      tsearch: { prefix: true },
-      trigram: {},
-    },
-  )
+  include PgSearchable
+  pg_search_config(against: [:name, :description])
 
   resourcify
 

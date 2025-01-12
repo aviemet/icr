@@ -27,16 +27,12 @@
 #  fk_rails_...  (contact_id => contacts.id)
 #
 class Address < ApplicationRecord
-  include Categorizable
-
-  pg_search_scope(
-    :search,
+  include PgSearchable
+  pg_search_config(
     against: [:name, :address, :address_2, :city, :region, :postal, :notes, :country],
-    using: {
-      tsearch: { prefix: true },
-      trigram: {},
-    },
   )
+
+  include Categorizable
 
   resourcify
 

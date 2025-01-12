@@ -20,18 +20,6 @@
 #  fk_rails_...  (calendar_event_id => calendar_events.id)
 #
 class Calendar::EventException < ApplicationRecord
-  pg_search_scope(
-    :search,
-    against: [:calendar_event, :rescheduled, :cancelled, :starts_at, :ends_at],
-    associated_against: {
-      calendar_event: [],
-    },
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    },
-  )
-
   resourcify
 
   belongs_to :calendar_event, class_name: "Calendar::Event"

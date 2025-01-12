@@ -12,16 +12,6 @@
 #  updated_at  :datetime         not null
 #
 class Dosage < ApplicationRecord
-
-  pg_search_scope(
-    :search,
-    against: [:amount, :amount_unit, :freq_amount, :freq_period, :notes],
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    },
-  )
-
   resourcify
 
   has_one :prescription, dependent: :nullify

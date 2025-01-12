@@ -24,27 +24,19 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Person < ApplicationRecord
+  include Contactable
+
   extend FriendlyId
   friendly_id :name, use: [:slugged, :history]
 
-  include Contactable
-
-  multisearchable(
-    against: [:first_name, :middle_name, :last_name],
-  )
-
-  pg_search_scope(
-    :search,
+  include PgSearchable
+  pg_search_config(
     against: [:first_name, :middle_name, :last_name, :nick_name],
     associated_against: {
       user: [:email],
       client: [:number],
       employee: [:number]
-    }, using: {
-      tsearch: { prefix: true },
-      trigram: {},
     },
-    ignoring: :accents,
   )
 
   resourcify
