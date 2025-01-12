@@ -2,7 +2,7 @@ class DoctorsController < ApplicationController
   include Searchable
 
   expose :doctors, -> { search(Doctor.includes_associated, sortable_fields) }
-  expose :doctor, scope: ->{ Doctor }, find: ->(id, scope){ scope.includes_associated.find(id) }
+  expose :doctor, scope: ->{ Doctor.includes_associated }
 
   # @route GET /doctors (doctors)
   def index

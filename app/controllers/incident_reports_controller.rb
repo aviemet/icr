@@ -1,8 +1,8 @@
 class IncidentReportsController < ApplicationController
   include Searchable
 
-  expose :incident_reports, -> { search(Incident_report.includes_associated, sortable_fields) }
-  expose :incident_report, scope: ->{ Incident_report }, find: ->(id, scope){ scope.includes_associated.find(id) }
+  expose :incident_reports, -> { search(IncidentReport.includes_associated, sortable_fields) }
+  expose :incident_report, scope: ->{ IncidentReport }, find: ->(id, scope){ scope.includes_associated.find(id) }
 
   # @route GET /incident_reports (incident_reports)
   def index

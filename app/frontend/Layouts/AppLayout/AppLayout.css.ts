@@ -40,7 +40,7 @@ export const navbar = css`
 	}
 
 	${vars.darkSelector} {
-		background-color: ${vars.colors.dark[6]};
+		background-color: ${vars.colors.dark[8]};
 	}
 
 	// TODO: This animation doesn't work with display: none

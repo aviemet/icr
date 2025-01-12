@@ -17,6 +17,7 @@ export interface IndexTableTitleSectionProps {
 }
 
 const IndexTableTitleSection = ({ children, title, deleteRoute, menuOptions }: IndexTableTitleSectionProps) => {
+	console.log({ menuOptions })
 	const { tableState: { selected } } = useTableContext()
 
 	const deleteRecords = () => {
@@ -34,11 +35,11 @@ const IndexTableTitleSection = ({ children, title, deleteRoute, menuOptions }: I
 				<Title>
 					{ title }
 				</Title>
-				<Menu position="bottom-end">
+				{ menuOptions && <Menu position="bottom-end">
 					<Menu.Target />
 
 					<Menu.Dropdown>
-						{ menuOptions && menuOptions.map(({ label, href, icon }, index) => {
+						{ menuOptions.map(({ label, href, icon }, index) => {
 							return (
 								<Menu.Link key={ index } href={ href } leftSection={ icon ? icon : undefined }>
 									{ label }
@@ -55,7 +56,7 @@ const IndexTableTitleSection = ({ children, title, deleteRoute, menuOptions }: I
 						</> }
 
 					</Menu.Dropdown>
-				</Menu>
+				</Menu> }
 			</Group>
 			{ !!children && <Box className={ classes.content }>
 				{ children }

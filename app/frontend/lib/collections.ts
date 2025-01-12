@@ -24,3 +24,13 @@ export const exclude = <T extends any, K extends string>(obj: T, keys: K | K[]):
 export const withDefaults = (obj: Record<string, any>, defaults: Record<string, any>) => {
 	return Object.assign(defaults, obj)
 }
+
+export const matchesAtPosition = (arr: string[], ...args: [number, string][]) => {
+	if(args.length === 0) return false
+
+	for(const [index, value] of args) {
+		if(arr.length < index + 1 || arr[index] !== value) return false
+	}
+
+	return true
+}

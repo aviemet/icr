@@ -34,6 +34,7 @@ export {
 	Flex, type FlexProps,
 	Grid, type GridProps,
 	Group, type GroupProps,
+	Image, type ImageProps,
 	List, type ListProps,
 	Paper, type PaperProps,
 	Popover, type PopoverProps,

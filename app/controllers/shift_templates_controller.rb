@@ -1,18 +1,17 @@
 class ShiftTemplatesController < ApplicationController
-  include Searchable
-  
-  expose :shift_templates, -> { search(@active_company.shift_templates.includes_associated, sortable_fields) }
-  expose :shift_template, scope: ->{ @active_company.shift_templates }, find: ->(id, scope){ scope.includes_associated.find(id) }
-  
-  sortable_fields %w(name client_id created_by_id)
+  expose :shift_templates, -> { ShiftTemplate.includes_associated }
+  expose :shift_template, scope: ->{ ShiftTemplate.includes_associated }
 
-  strong_params shift_template, permit: [:name, :client_id, :created_by_id]
+  sortable_fields %w(name)
 
+  strong_params :shift_template, permit: [:name, :client_id, :created_by_id]
+
+  # @route GET /shift_templates (shift_templates)
   def index
     authorize shift_templates
 
     paginated_shift_templates = shift_templates.page(params[:page] || 1).per(current_user.limit(:items))
-    
+
     render inertia: "ShiftTemplates/Index", props: {
       shift_templates: -> { paginated_shift_templates.render(:index) },
       pagination: -> { {
@@ -22,6 +21,7 @@ class ShiftTemplatesController < ApplicationController
     }
   end
 
+  # @route GET /shift_templates/:id (shift_template)
   def show
     authorize shift_template
     render inertia: "ShiftTemplate/Show", props: {
@@ -29,6 +29,7 @@ class ShiftTemplatesController < ApplicationController
     }
   end
 
+  # @route GET /shift_templates/new (new_shift_template)
   def new
     authorize ShiftTemplate.new
     render inertia: "ShiftTemplate/New", props: {
@@ -36,6 +37,7 @@ class ShiftTemplatesController < ApplicationController
     }
   end
 
+  # @route GET /shift_templates/:id/edit (edit_shift_template)
   def edit
     authorize shift_template
     render inertia: "ShiftTemplate/Edit", props: {
@@ -43,6 +45,7 @@ class ShiftTemplatesController < ApplicationController
     }
   end
 
+  # @route POST /shift_templates (shift_templates)
   def create
     authorize ShiftTemplate.new
     if shift_template.save
@@ -52,6 +55,8 @@ class ShiftTemplatesController < ApplicationController
     end
   end
 
+  # @route PATCH /shift_templates/:id (shift_template)
+  # @route PUT /shift_templates/:id (shift_template)
   def update
     authorize shift_template
     if shift_template.update(shift_template_params)
@@ -61,6 +66,7 @@ class ShiftTemplatesController < ApplicationController
     end
   end
 
+  # @route DELETE /shift_templates/:id (shift_template)
   def destroy
     authorize shift_template
     shift_template.destroy!

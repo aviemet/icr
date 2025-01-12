@@ -47,7 +47,7 @@ class Client < ApplicationRecord
   has_one :households_client, dependent: :destroy
   has_one :household, through: :households_client, dependent: :nullify
 
-  scope :includes_associated, -> { includes([:person]) }
+  scope :includes_associated, -> { includes([:person, :calendar_customization]) }
 
   private
 

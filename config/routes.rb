@@ -1,10 +1,11 @@
 Rails.application.routes.draw do
-  resources :shift_templates
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
   root "pages#index"
+
+  get "/dashboard", to: "pages#dashboard", as: :dashboard
 
   match "/404", to: "errors#not_found", as: :error_404, via: :all
   match "/422", to: "errors#unprocessable_entity", as: :error_422, via: :all
@@ -56,6 +57,8 @@ Rails.application.routes.draw do
   resources :clients, param: :slug, concerns: :schedulable
 
   resources :employees, param: :slug, concerns: :schedulable
+
+  resources :shift_templates
 
   resources :people, param: :slug
 

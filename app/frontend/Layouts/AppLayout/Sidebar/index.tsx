@@ -1,4 +1,4 @@
-import { Routes } from '@/lib'
+import { matchesAtPosition, Routes } from '@/lib'
 import useStore from '@/lib/store'
 import { useLocation, usePageProps } from '@/lib/hooks'
 import IconProvider from '@/Layouts/Providers/IconProvider'
@@ -12,7 +12,7 @@ import {
 	Tooltip,
 } from '@/Components'
 import { TextInput } from '@/Components/Inputs'
-import { ClientIcon, EmployeeIcon, LogoutIcon, SettingsIcon } from '@/Components/Icons'
+import { ClientIcon, DashboardIcon, EmployeeIcon, LogoutIcon, SettingsIcon } from '@/Components/Icons'
 import { SiteLogo } from '@/Features'
 import ToggleSidebarButton from '../ToggleSidebarButton'
 import MenuLink from './MenuLink'
@@ -67,6 +67,12 @@ const Sidebar = () => {
 				</AppShell.Section>
 
 				<AppShell.Section p="xs" grow className={ cx(classes.navigation) }>
+					<MenuLink
+						label="Dashboard"
+						href={ Routes.dashboard() }
+						leftSection={ <DashboardIcon /> }
+						active={ matchesAtPosition(paths, [0, 'dashboard']) }
+					/>
 					<MenuLink
 						label="Clients"
 						href={ Routes.clients() }
