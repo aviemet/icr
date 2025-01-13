@@ -23,10 +23,11 @@
 #
 FactoryBot.define do
   factory :shift_template_entry do
-    shift_template { nil }
-    employee { nil }
     day_of_week { 1 }
     starts_at { "2025-01-11 15:52:32" }
     ends_at { "2025-01-11 15:52:32" }
+
+    shift_template { nil }
+    employee { nil }
   end
 end

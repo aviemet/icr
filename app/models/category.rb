@@ -47,11 +47,7 @@ class Category < ApplicationRecord
   scope :includes_associated, -> { includes([:parent]) }
 
   def to_s
-    if attribute_present?("categorizable_type") && attribute_present?("name")
-      "#{categorizable_type} - #{name}"
-    else
-      super
-    end
+    "#{categorizable_type.gsub('::', ' ')} - #{name}"
   end
 
   def records

@@ -22,6 +22,7 @@
 #  fk_rails_...  (person_id => people.id)
 #
 require "rails_helper"
+require "models/shared/participantable"
 
 RSpec.describe Client do
   describe "Validations" do
@@ -38,6 +39,8 @@ RSpec.describe Client do
   end
 
   describe "Associations" do
+    it_behaves_like "participantable"
+
     it{ is_expected.to belong_to(:person) }
 
     it{ is_expected.to have_many(:doctors).through(:doctors_clients) }

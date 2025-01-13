@@ -47,46 +47,56 @@ RSpec.describe Contact do
     it { is_expected.to belong_to(:primary_phone).optional }
 
     describe "primary contact method" do
-      it "manages primary_address relationship" do
+      it "updates primary contact method when the primary contact method is destroyed" do
         contact = create(:contact, :for_person)
 
         address_1 = create(:address, { contact: })
         address_2 = create(:address, { contact: })
 
-        expect(contact.primary_address).to eq(address_1)
-
-        address_1.destroy
-        contact.reload
-
-        expect(contact.primary_address).to eq(address_2)
-      end
-
-      it "manages primary_email relationship" do
-        contact = create(:contact, :for_person)
-
         email_1 = create(:email, { contact: })
         email_2 = create(:email, { contact: })
-
-        expect(contact.primary_email).to eq(email_1)
-
-        email_1.destroy
-        contact.reload
-
-        expect(contact.primary_email).to eq(email_2)
-      end
-
-      it "manages primary_phone relationship" do
-        contact = create(:contact, :for_person)
 
         phone_1 = create(:phone, { contact: })
         phone_2 = create(:phone, { contact: })
 
+        expect(contact.primary_address).to eq(address_1)
+        expect(contact.primary_email).to eq(email_1)
         expect(contact.primary_phone).to eq(phone_1)
 
+        address_1.destroy
+        email_1.destroy
         phone_1.destroy
         contact.reload
 
+        expect(contact.primary_address).to eq(address_2)
+        expect(contact.primary_email).to eq(email_2)
         expect(contact.primary_phone).to eq(phone_2)
+      end
+
+      it "doesn't update primary contact method when a non-primary contact method is destroyed" do
+        contact = create(:contact, :for_person)
+
+        address_1 = create(:address, { contact: })
+        address_2 = create(:address, { contact: })
+
+        email_1 = create(:email, { contact: })
+        email_2 = create(:email, { contact: })
+
+        phone_1 = create(:phone, { contact: })
+        phone_2 = create(:phone, { contact: })
+
+        expect(contact.primary_address).to eq(address_1)
+        expect(contact.primary_email).to eq(email_1)
+        expect(contact.primary_phone).to eq(phone_1)
+
+        address_2.destroy
+        email_2.destroy
+        phone_2.destroy
+        contact.reload
+
+        expect(contact.primary_address).to eq(address_1)
+        expect(contact.primary_email).to eq(email_1)
+        expect(contact.primary_phone).to eq(phone_1)
       end
     end
   end

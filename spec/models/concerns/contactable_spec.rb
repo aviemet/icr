@@ -24,11 +24,15 @@ RSpec.describe Contactable do
 
         expect(record.contact.attributes).to eq(Contact.new({ contactable_type: described_class.name }).attributes)
       end
-    end
-  end
 
-  describe Agency do
-    it_behaves_like "a contactable entity"
+      it "doesn't build a new contact if one exists" do
+        contact = build(:contact)
+        record = build(contactable, contact:)
+        record.valid?
+
+        expect(record.contact.id).to eq(contact.id)
+      end
+    end
   end
 
   describe Person do

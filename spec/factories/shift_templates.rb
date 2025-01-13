@@ -25,8 +25,19 @@
 #
 FactoryBot.define do
   factory :shift_template do
-    name { "MyString" }
-    client { nil }
-    created_by { nil }
+    name { "Standard Weekly Schedule" }
+    active { true }
+    client
+
+    trait :recurring do
+      start_date { Date.current }
+      end_date { 3.months.from_now.to_date }
+      frequency { :weekly }
+      active { true }
+    end
+
+    trait :inactive do
+      active { false }
+    end
   end
 end
