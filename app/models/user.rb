@@ -85,7 +85,7 @@ class User < ApplicationRecord
   end
 
   before_save :coerce_json
-  after_update :synchronize_email_with_contact
+  after_save :synchronize_email_with_contact
 
   private
 
@@ -94,8 +94,10 @@ class User < ApplicationRecord
   end
 
   def synchronize_email_with_contact
-    return unless !person&.contact&.nil? && saved_change_to_email?
+    return unless person.present? &&
+      person.contact.present? &&
+      saved_change_to_email?
 
-    person.contact.create(email: email) unless person.contact.emails.exists?(email: email)
+    person.contact.emails.find_or_create_by!(email: email)
   end
 end

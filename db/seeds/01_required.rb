@@ -112,6 +112,6 @@ if Setting.count == 0
   Setting.company_name = "ICR"
   Setting.default_language = "en"
   Setting.default_currency = "USD"
-  Setting.default_timezone = "America/Los Angelas"
+  Setting.default_timezone = "America/Los_Angeles"
   Setting.pay_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
 end

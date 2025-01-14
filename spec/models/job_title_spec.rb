@@ -32,5 +32,42 @@ RSpec.describe JobTitle do
     it{ is_expected.to have_many(:employees).through(:employees_job_titles) }
     it{ is_expected.to have_many(:active_employees_job_titles) }
     it{ is_expected.to have_many(:active_employees).through(:active_employees_job_titles) }
+
+    it "only returns active job title assignments" do
+      job_title = create(:job_title)
+      today = Date.current
+
+      # Current/Active assignment
+      create(:employees_job_title,
+        job_title: job_title,
+        starts_at: today - 1.day,
+        ends_at: nil,)
+
+      # Future assignment (shouldn't be included)
+      create(:employees_job_title,
+        job_title: job_title,
+        starts_at: today + 1.day,
+        ends_at: nil,)
+
+      # Past assignment (shouldn't be included)
+      create(:employees_job_title,
+        job_title: job_title,
+        starts_at: today - 2.days,
+        ends_at: today - 1.day,)
+
+      # Current assignment with future end date
+      create(:employees_job_title,
+        job_title: job_title,
+        starts_at: today - 1.day,
+        ends_at: today + 1.day,)
+
+      expect(job_title.active_employees_job_titles.count).to eq(2)
+
+      job_title.active_employees_job_titles.each do |assignment|
+        expect(assignment.starts_at).to be <= today
+        expect(assignment.ends_at).to be_nil.or be >= today
+      end
+    end
   end
+
 end

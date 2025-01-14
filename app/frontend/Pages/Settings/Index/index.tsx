@@ -13,6 +13,7 @@ interface SettingIndexProps {
 }
 
 const SettingsIndex = ({ settings }: SettingIndexProps) => {
+	console.log({ settings })
 	return (
 		<Page title="Settings" >
 			<Box>

@@ -3,7 +3,7 @@
 # Table name: shift_templates
 #
 #  id            :uuid             not null, primary key
-#  active        :boolean          default(FALSE), not null
+#  active        :boolean          default(TRUE), not null
 #  end_date      :date
 #  frequency     :integer
 #  name          :string

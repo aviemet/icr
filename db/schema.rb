@@ -54,15 +54,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
     t.index ["contact_id"], name: "index_addresses_on_contact_id"
   end
 
-  create_table "agencies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name", null: false
-    t.jsonb "settings", default: {}
-    t.string "slug", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["slug"], name: "index_agencies_on_slug", unique: true
-  end
-
   create_table "calendar_customizations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "customizer_type", null: false
     t.uuid "customizer_id", null: false
@@ -495,12 +486,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
 
   create_table "shift_templates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
-    t.uuid "client_id", null: false
-    t.uuid "created_by_id", null: false
     t.date "start_date"
     t.date "end_date"
     t.integer "frequency"
-    t.boolean "active", default: false, null: false
+    t.boolean "active", default: true, null: false
+    t.uuid "client_id", null: false
+    t.uuid "created_by_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_shift_templates_on_client_id"
