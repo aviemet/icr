@@ -28,9 +28,9 @@ if Rails.env.development?
   if Client.count == 0
     3.times do
       client = FactoryBot.create :client
-      FactoryBot.create(:address, contact: client.contact)
-      FactoryBot.create(:email, contact: client.contact)
-      FactoryBot.create(:phone, contact: client.contact)
+      FactoryBot.create(:address, contact: client.contact, category: Category.type("Address").where(name: "Personal"))
+      FactoryBot.create(:email, contact: client.contact, category: Category.type("Email").where(name: "Personal"))
+      FactoryBot.create(:phone, contact: client.contact, category: Category.type("Phone").where(name: "Home"))
     end
 
     h = Household.create({ name: "Test Household" })

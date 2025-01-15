@@ -51,7 +51,41 @@ class ApplicationPolicy
 
   private
 
-  def standard_auth(_action)
-    user.has_role?(:super_admin) || user.has_role?(:admin)
+  def standard_auth(action)
+    return true if user.has_role?(:super_admin) || user.has_role?(:admin)
+
+    case user.person&.role_type
+    when "Employee"
+      check_employee_permissions(action)
+    when "Client"
+      check_client_permissions(action)
+    when "Doctor"
+      check_doctor_permissions(action)
+    when "Vendor"
+      check_vendor_permissions(action)
+    else
+      false
+    end
+  end
+
+  def check_employee_permissions(action)
+    # Check job title specific roles
+    return true if user.person.employee.job_title &&
+      user.has_role?(action, user.person.employee.job_title)
+
+    # Check general employee roles
+    user.has_role?(action, :employee)
+  end
+
+  def check_client_permissions(action)
+    user.has_role?(action, :client)
+  end
+
+  def check_doctor_permissions(action)
+    user.has_role?(action, :doctor)
+  end
+
+  def check_vendor_permissions(action)
+    user.has_role?(action, :vendor)
   end
 end

@@ -80,11 +80,6 @@ const Sidebar = () => {
 						active={ paths.length >= 1 && paths[0] === 'clients' }
 					/>
 					<MenuLink
-						label="Households"
-						href="/"
-						active={ paths.length >= 1 && paths[0] === 'households' }
-					/>
-					<MenuLink
 						label="Employees"
 						href={ Routes.employees() }
 						leftSection={ <EmployeeIcon /> }

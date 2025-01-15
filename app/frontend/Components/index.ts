@@ -1,3 +1,4 @@
+export { default as AddressDisplay } from './AddressDisplay'
 export { default as Button } from './Button'
 export * from './Button'
 export { default as Calendar } from './Calendar'
@@ -22,6 +23,7 @@ export { default as Tabs } from './Tabs'
 // Export UI library components as a proxy to allow easy refactoring
 export {
 	ActionIcon, type ActionIconProps,
+	Anchor, type AnchorProps,
 	AppShell, type AppShellProps,
 	Avatar, type AvatarProps,
 	Badge, type BadgeProps,

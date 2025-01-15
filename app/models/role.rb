@@ -40,4 +40,10 @@ class Role < ApplicationRecord
   resourcify
 
   scope :includes_associated, -> { includes([]) }
+
+  # Define role groups
+  scope :employee_roles, -> { where(resource_type: "JobTitle") }
+  scope :client_roles, -> { where(resource_type: "Client") }
+  scope :doctor_roles, -> { where(resource_type: "Doctor") }
+  scope :vendor_roles, -> { where(resource_type: "Vendor") }
 end

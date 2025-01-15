@@ -18,4 +18,6 @@ class HouseholdSerializer < ApplicationSerializer
   attributes(
     :name,
   )
+
+  has_many :clients, serializer: Clients::PersistedSerializer
 end

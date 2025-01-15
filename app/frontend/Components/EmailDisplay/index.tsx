@@ -1,4 +1,4 @@
-import { ConditionalWrapper, Link } from '@/Components'
+import { Anchor, ConditionalWrapper } from '@/Components'
 
 interface EmailDisplayProps {
 	children: string
@@ -9,7 +9,7 @@ const EmailDisplay = ({ children, link = true }: EmailDisplayProps) => {
 	return (
 		<ConditionalWrapper
 			condition={ link }
-			wrapper={ content => <Link href={ `mailto:${children}` }>{ content }</Link> }
+			wrapper={ content => <Anchor href={ `mailto:${children}` }>{ content }</Anchor> }
 		>
 			<address>{ children }</address>
 		</ConditionalWrapper>

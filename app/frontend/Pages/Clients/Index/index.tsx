@@ -1,6 +1,5 @@
 import { Routes } from '@/lib'
 import { IndexPageTemplate } from '@/Features'
-import { NewIcon } from '@/Components/Icons'
 import ClientsTable from '../Table'
 
 interface ClientIndexProps {
