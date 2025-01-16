@@ -1,7 +1,7 @@
-import { Routes } from '@/lib'
-import { IndexPageTemplate } from '@/Features'
-import { NewIcon } from '@/Components/Icons'
-import DosagesTable from '../Table'
+import { Routes } from "@/lib"
+import { IndexPageTemplate } from "@/Features"
+import { NewIcon } from "@/Components/Icons"
+import DosagesTable from "../Table"
 
 interface DosageIndexProps {
 	dosages: Schema.DosagesIndex[]
@@ -17,7 +17,7 @@ const DosagesIndex = ({ dosages, pagination }: DosageIndexProps) => {
 			pagination={ pagination }
 			deleteRoute={ Routes.dosages() }
 			menuOptions={ [
-				{ label: 'New Dosage', href: Routes.newDosage(), icon: <NewIcon /> },
+				{ label: "New Dosage", href: Routes.newDosage(), icon: <NewIcon /> },
 			] }
 		>
 			<DosagesTable />

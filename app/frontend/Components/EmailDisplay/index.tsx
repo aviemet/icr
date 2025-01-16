@@ -1,4 +1,4 @@
-import { Anchor, ConditionalWrapper } from '@/Components'
+import { Anchor, ConditionalWrapper } from "@/Components"
 
 interface EmailDisplayProps {
 	children: string

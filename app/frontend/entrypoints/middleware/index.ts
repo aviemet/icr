@@ -1,8 +1,8 @@
-import { ErrorBag, Errors, PageProps, type Router } from '@inertiajs/core'
-import { convertDates } from './convertDates'
-import { Root } from 'react-dom/client'
-import axios from 'axios'
-import { runAxe } from './axe'
+import { ErrorBag, Errors, PageProps, type Router } from "@inertiajs/core"
+import { convertDates } from "./convertDates"
+import { Root } from "react-dom/client"
+import axios from "axios"
+import { runAxe } from "./axe"
 
 export const applyPropsMiddleware = (props: PageProps & {
 	errors: Errors & ErrorBag
@@ -11,13 +11,13 @@ export const applyPropsMiddleware = (props: PageProps & {
 }
 
 export function setupCSRFToken() {
-	const csrfToken = (document.querySelector('meta[name=csrf-token]') as HTMLMetaElement).content
-	axios.defaults.headers.common['X-CSRF-Token'] = csrfToken
+	const csrfToken = (document.querySelector("meta[name=csrf-token]") as HTMLMetaElement).content
+	axios.defaults.headers.common["X-CSRF-Token"] = csrfToken
 }
 
 export function setupInertiaListeners(router: Router) {
 	// Handle both full and partial page updates
-	router.on('navigate', (event) => {
+	router.on("navigate", (event) => {
 		event.detail.page.props = applyPropsMiddleware(event.detail.page.props)
 	})
 
@@ -30,7 +30,7 @@ export function setupInertiaListeners(router: Router) {
 			router.visit = function(url, visitOptions = {}) {
 				const originalPreserveState = visitOptions.preserveState
 				visitOptions.preserveState = (page) => {
-					if(typeof originalPreserveState === 'function') {
+					if(typeof originalPreserveState === "function") {
 						page.props = applyPropsMiddleware(page.props)
 						return originalPreserveState(page)
 					}
@@ -49,7 +49,7 @@ export function setupInertiaListeners(router: Router) {
 }
 
 export function setupAxeListener(router: Router, root: Root) {
-	router.on('success', () => {
+	router.on("success", () => {
 		runAxe(root)
 	})
 	runAxe(root)

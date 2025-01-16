@@ -1,5 +1,5 @@
-import { type Event } from 'react-big-calendar'
-import { Box, DateTimeDisplay, Text } from '@/Components'
+import { type Event } from "react-big-calendar"
+import { Box, DateTimeDisplay, Text } from "@/Components"
 
 interface ClientShiftInfo {
 	event: Event

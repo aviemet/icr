@@ -1,6 +1,6 @@
-import { Grid } from '@/Components'
-import { Form, TextInput, Submit } from '@/Components/Form'
-import { type HTTPVerb, type UseFormProps } from 'use-inertia-form'
+import { Grid } from "@/Components"
+import { Form, TextInput, Submit } from "@/Components/Form"
+import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
 
 type TVendorFormData = {
 	vendor: Schema.VendorsFormData
@@ -13,7 +13,7 @@ export interface VendorFormProps {
 	vendor: Schema.VendorsFormData
 }
 
-const VendorForm = ({ method = 'post', vendor, ...props }: VendorFormProps) => {
+const VendorForm = ({ method = "post", vendor, ...props }: VendorFormProps) => {
 	return (
 		<Form
 			model="vendor"
@@ -30,7 +30,7 @@ const VendorForm = ({ method = 'post', vendor, ...props }: VendorFormProps) => {
 				</Grid.Col>
 
 				<Grid.Col>
-					<Submit>{ vendor.id ? 'Update' : 'Create' } Vendor</Submit>
+					<Submit>{ vendor.id ? "Update" : "Create" } Vendor</Submit>
 				</Grid.Col>
 			</Grid>
 		</Form>

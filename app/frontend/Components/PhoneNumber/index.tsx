@@ -1,5 +1,5 @@
-import { Anchor } from '@/Components'
-import { PhoneNumberUtil, PhoneNumberFormat } from 'google-libphonenumber'
+import { Anchor } from "@/Components"
+import { PhoneNumberUtil, PhoneNumberFormat } from "google-libphonenumber"
 
 const phoneUtil = PhoneNumberUtil.getInstance()
 
@@ -13,7 +13,7 @@ const PhoneNumber = ({
 	format = "NATIONAL",
 }: PhoneNumberProps) => {
 
-	const parsedNumber = phoneUtil.parseAndKeepRawInput(children, 'US')
+	const parsedNumber = phoneUtil.parseAndKeepRawInput(children, "US")
 
 	return (
 		<Anchor href={ `tel:${phoneUtil.format(parsedNumber, PhoneNumberFormat.E164)}` }>{ phoneUtil.format(parsedNumber, PhoneNumberFormat[format]) }</Anchor>

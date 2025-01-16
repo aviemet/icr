@@ -1,10 +1,10 @@
-import { Link, Tooltip } from '@/Components'
-import { CalendarIcon } from '@/Components/Icons'
-import { LinkProps } from '../Link'
-import { useMantineTheme } from '@mantine/core'
-import useStore from '@/lib/store'
+import { Link, Tooltip } from "@/Components"
+import { CalendarIcon } from "@/Components/Icons"
+import { LinkProps } from "../Link"
+import { useMantineTheme } from "@mantine/core"
+import useStore from "@/lib/store"
 
-interface ScheduleButtonProps extends Omit<LinkProps, 'children'> {
+interface ScheduleButtonProps extends Omit<LinkProps, "children"> {
 	label?: string
 }
 
@@ -12,14 +12,14 @@ const ScheduleButton = ({ href, label }: ScheduleButtonProps) => {
 	const { primaryColor } = useMantineTheme()
 	const { getContrastingColor } = useStore()
 
-	const usedLabel = `Schedule${label ? ` ${label}` : ''}`
+	const usedLabel = `Schedule${label ? ` ${label}` : ""}`
 
 	return (
 		<Tooltip
 			withArrow
 			label={ usedLabel }
 			position="left"
-			transitionProps={ { transition: 'fade' } }
+			transitionProps={ { transition: "fade" } }
 			aria-label={ usedLabel }
 			color={ primaryColor }
 		>

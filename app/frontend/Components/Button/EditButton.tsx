@@ -1,10 +1,10 @@
-import { Link, Tooltip } from '@/Components'
-import { EditIcon } from '@/Components/Icons'
-import { LinkProps } from '../Link'
-import { useMantineTheme } from '@mantine/core'
-import useStore from '@/lib/store'
+import { Link, Tooltip } from "@/Components"
+import { EditIcon } from "@/Components/Icons"
+import { LinkProps } from "../Link"
+import { useMantineTheme } from "@mantine/core"
+import useStore from "@/lib/store"
 
-interface EditButtonProps extends Omit<LinkProps, 'children'> {
+interface EditButtonProps extends Omit<LinkProps, "children"> {
 	label?: string
 }
 
@@ -12,14 +12,14 @@ const EditButton = ({ href, label }: EditButtonProps) => {
 	const { primaryColor } = useMantineTheme()
 	const { getContrastingColor } = useStore()
 
-	const usedLabel = `Edit${label ? ` ${label}` : ''}`
+	const usedLabel = `Edit${label ? ` ${label}` : ""}`
 
 	return (
 		<Tooltip
 			withArrow
 			label={ usedLabel }
 			position="left"
-			transitionProps={ { transition: 'fade' } }
+			transitionProps={ { transition: "fade" } }
 			aria-label={ usedLabel }
 			color={ primaryColor }
 		>

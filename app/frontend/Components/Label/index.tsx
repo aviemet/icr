@@ -1,8 +1,8 @@
-import { Box, type BoxProps } from '@mantine/core'
-import cx from 'clsx'
-import { LabelProps } from 'react-html-props'
+import { Box, type BoxProps } from "@mantine/core"
+import cx from "clsx"
+import { LabelProps } from "react-html-props"
 
-interface ILabelProps extends BoxProps, Omit<LabelProps, 'ref'> {
+interface ILabelProps extends BoxProps, Omit<LabelProps, "ref"> {
 	required?: boolean
 }
 

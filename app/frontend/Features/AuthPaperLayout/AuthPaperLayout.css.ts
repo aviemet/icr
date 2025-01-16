@@ -1,13 +1,13 @@
-import { vars } from '@/lib/theme'
-import { css } from '@linaria/core'
-import { rem } from '@mantine/core'
+import { vars } from "@/lib/theme"
+import { css } from "@linaria/core"
+import { rem } from "@mantine/core"
 
 export const loginWrapper = css`
 	height: 100%;
 `
 
 export const loginPaper = css`
-	width: clamp(${rem(vars.breakpoints['2xs'])}, 85vw, ${rem(vars.breakpoints.xs)});
+	width: clamp(${rem(vars.breakpoints["2xs"])}, 85vw, ${rem(vars.breakpoints.xs)});
 `
 
 export const form = css`

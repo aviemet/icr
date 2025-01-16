@@ -1,7 +1,7 @@
-import Td from '../Td'
-import { Checkbox } from '@/Components/Inputs'
-import { CheckboxProps } from '@/Components/Inputs/Checkbox'
-import { useTableContext } from '../TableContext'
+import Td from "../Td"
+import { Checkbox } from "@/Components/Inputs"
+import { CheckboxProps } from "@/Components/Inputs/Checkbox"
+import { useTableContext } from "../TableContext"
 
 interface RowCheckBoxProps extends CheckboxProps {
 	selected: Set<string>

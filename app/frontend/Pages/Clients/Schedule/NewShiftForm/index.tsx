@@ -1,10 +1,10 @@
-import { Grid } from '@/Components'
-import { DateTimeInput, Form, Submit } from '@/Components/Form'
-import { FormEmployeesDropdown } from '@/Features/Dropdowns'
-import { Routes } from '@/lib'
-import dayjs from 'dayjs'
-import { type PartialDeep } from 'type-fest'
-import { type UseFormProps } from 'use-inertia-form'
+import { Grid } from "@/Components"
+import { DateTimeInput, Form, Submit } from "@/Components/Form"
+import { FormEmployeesDropdown } from "@/Features/Dropdowns"
+import { Routes } from "@/lib"
+import dayjs from "dayjs"
+import { type PartialDeep } from "type-fest"
+import { type UseFormProps } from "use-inertia-form"
 
 type NewShiftData = {
 	calendar_event: PartialDeep<Schema.CalendarEventsFormData> & {
@@ -26,9 +26,9 @@ const NewShiftForm = ({ client, selectedDate, onSuccess, onError }: NewClientShi
 	const initialData: NewShiftData = {
 		calendar_event: {
 			starts_at: selectedDate,
-			ends_at: dayjs(selectedDate).add(8, 'hours').toDate(),
+			ends_at: dayjs(selectedDate).add(8, "hours").toDate(),
 			shift: {
-				employee_id: '',
+				employee_id: "",
 			},
 			event_participants: [
 				{

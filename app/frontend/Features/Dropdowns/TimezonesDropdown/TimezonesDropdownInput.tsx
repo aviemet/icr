@@ -1,15 +1,15 @@
-import React, { forwardRef } from 'react'
-import { Select as InputSelect } from '@/Components/Inputs'
-import { useGetTimezones } from '@/queries/locale'
-import { isEmpty } from 'lodash'
-import { type AsyncDropdown } from '..'
+import React, { forwardRef } from "react"
+import { Select as InputSelect } from "@/Components/Inputs"
+import { useGetTimezones } from "@/queries/locale"
+import { isEmpty } from "lodash"
+import { type AsyncDropdown } from ".."
 
 interface TimezonesDropdownProps extends AsyncDropdown<Schema.TimezoneOption> {}
 
 const TimezonesDropdown = forwardRef<HTMLInputElement, TimezonesDropdownProps>((
 	{
-		label = 'Timezone',
-		name = 'timezone',
+		label = "Timezone",
+		name = "timezone",
 		...props
 	},
 	ref,

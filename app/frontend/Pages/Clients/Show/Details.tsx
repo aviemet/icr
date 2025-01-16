@@ -1,5 +1,5 @@
-import { type ShowClientProps } from '.'
-import { Text, Title } from '@/Components'
+import { type ShowClientProps } from "."
+import { Text, Title } from "@/Components"
 
 interface ClientDetailsProps extends ShowClientProps {}
 

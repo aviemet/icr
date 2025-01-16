@@ -1,13 +1,13 @@
-import { Grid, Heading, Link } from '@/Components'
-import { Form, Field, TextInput, PasswordInput, Checkbox, Submit } from '@/Components/Form'
-import { Routes } from '@/lib'
-import { type UseFormProps } from 'use-inertia-form'
-import { LAYOUTS } from '@/Layouts'
+import { Grid, Heading, Link } from "@/Components"
+import { Form, Field, TextInput, PasswordInput, Checkbox, Submit } from "@/Components/Form"
+import { Routes } from "@/lib"
+import { type UseFormProps } from "use-inertia-form"
+import { LAYOUTS } from "@/Layouts"
 
-import cx from 'clsx'
-import * as classes from './Login.css'
-import { usePageProps } from '@/lib/hooks'
-import { AuthPaperLayout } from '@/Features'
+import cx from "clsx"
+import * as classes from "./Login.css"
+import { usePageProps } from "@/lib/hooks"
+import { AuthPaperLayout } from "@/Features"
 
 type LoginFormData = {
 	user: {
@@ -19,8 +19,8 @@ type LoginFormData = {
 
 const defaultData = {
 	user: {
-		email: '',
-		password: '',
+		email: "",
+		password: "",
 		remember_me: false,
 	},
 }
@@ -29,7 +29,7 @@ const Login = () => {
 	const { settings } = usePageProps()
 
 	const handleSubmit = ({ data }: UseFormProps<LoginFormData>) => {
-		if(data.user.email === '' || data.user.password === '') {
+		if(data.user.email === "" || data.user.password === "") {
 			return false
 		}
 	}

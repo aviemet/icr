@@ -1,6 +1,6 @@
-import { Grid } from '@/Components'
-import { Form, TextInput, Submit } from '@/Components/Form'
-import { type HTTPVerb, type UseFormProps } from 'use-inertia-form'
+import { Grid } from "@/Components"
+import { Form, TextInput, Submit } from "@/Components/Form"
+import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
 
 type TDosageFormData = {
 	dosage: Schema.DosagesFormData
@@ -13,7 +13,7 @@ export interface DosageFormProps {
 	dosage: Schema.DosagesFormData
 }
 
-const DosageForm = ({ method = 'post', dosage, ...props }: DosageFormProps) => {
+const DosageForm = ({ method = "post", dosage, ...props }: DosageFormProps) => {
 	return (
 		<Form
 			model="dosage"
@@ -39,7 +39,7 @@ const DosageForm = ({ method = 'post', dosage, ...props }: DosageFormProps) => {
 				</Grid.Col>
 
 				<Grid.Col>
-					<Submit>{ dosage.id ? 'Update' : 'Create' } Dosage</Submit>
+					<Submit>{ dosage.id ? "Update" : "Create" } Dosage</Submit>
 				</Grid.Col>
 			</Grid>
 		</Form>

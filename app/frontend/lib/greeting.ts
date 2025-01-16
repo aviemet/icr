@@ -1,6 +1,6 @@
 export default function greeting() {
 	const hour = new Date().getHours()
-	const welcomeTypes = ['Good morning', 'Good afternoon', 'Good evening']
+	const welcomeTypes = ["Good morning", "Good afternoon", "Good evening"]
 
 	let greeting: string
 

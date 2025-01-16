@@ -3,13 +3,13 @@ import { type FormAsyncDropdown } from ".."
 import { useGetEmployeesAsOptions } from "@/queries"
 import { isEmpty } from "lodash"
 
-interface ItemsDropdownProps extends Omit<FormAsyncDropdown<Schema.EmployeesOptions>, 'name'> {
+interface ItemsDropdownProps extends Omit<FormAsyncDropdown<Schema.EmployeesOptions>, "name"> {
 	name?: string
 }
 
 const EmployeesDropdownInput = ({
-	label = 'Employee',
-	name = 'employee_id',
+	label = "Employee",
+	name = "employee_id",
 	initialData,
 	value,
 	...props

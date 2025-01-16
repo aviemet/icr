@@ -8,8 +8,8 @@ import {
 	EmailDisplay,
 	AddressDisplay,
 
-} from '@/Components'
-import { type ShowClientProps } from '.'
+} from "@/Components"
+import { type ShowClientProps } from "."
 
 interface ClientContactsProps extends ShowClientProps {}
 

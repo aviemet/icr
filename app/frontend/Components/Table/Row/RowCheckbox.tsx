@@ -1,8 +1,8 @@
-import Td from '../Td'
-import { Checkbox } from '@/Components/Inputs'
-import { CheckboxProps } from '@/Components/Inputs/Checkbox'
-import { useTableContext } from '../TableContext'
-import cx from 'clsx'
+import Td from "../Td"
+import { Checkbox } from "@/Components/Inputs"
+import { CheckboxProps } from "@/Components/Inputs/Checkbox"
+import { useTableContext } from "../TableContext"
+import cx from "clsx"
 
 interface RowCheckBox extends CheckboxProps {
 	name: string
@@ -24,7 +24,7 @@ const RowCheckbox = ({ name, selected, ...props }: RowCheckBox) => {
 	}
 
 	return (
-		<Td fitContent className={ cx('table-row-select-checkbox') }>
+		<Td fitContent className={ cx("table-row-select-checkbox") }>
 			<Checkbox checked={ selected?.has(name) } onChange={ handleClick } { ...props } />
 		</Td>
 	)

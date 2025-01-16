@@ -1,9 +1,9 @@
-import { useDraggable } from '@dnd-kit/core'
-import { Box, Slider, Text } from '@mantine/core'
+import { useDraggable } from "@dnd-kit/core"
+import { Box, Slider, Text } from "@mantine/core"
 
 const SpacerControl = () => {
 	const { attributes, listeners, setNodeRef, transform } = useDraggable({
-		id: 'spacer',
+		id: "spacer",
 	})
 
 	const style = transform

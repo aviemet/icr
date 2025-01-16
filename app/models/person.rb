@@ -58,4 +58,22 @@ class Person < ApplicationRecord
   def name(include_middle_name: false)
     "#{first_name}#{include_middle_name ? " #{middle_name}" : ''} #{last_name}"
   end
+
+  def agency_role
+    if employee.present?
+      "Employee"
+    elsif client.present?
+      "Client"
+    elsif doctor.present?
+      "Doctor"
+    elsif user.present? && (user.has_role?(:admin) || user.has_role?(:super_admin))
+      "Administrator"
+    else
+      ""
+    end
+  end
+
+  def login_enabled?
+    user.present? && user.active?
+  end
 end

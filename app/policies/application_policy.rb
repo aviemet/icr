@@ -16,9 +16,31 @@ class ApplicationPolicy
     attr_reader :user, :scope
   end
 
+  protected
+
   def initialize(user, record)
     @user = user
     @record = record
+    @person = user.person
+    @employee = @person&.employee
+    @job_title = @employee&.job_title
+    @client = @person&.client
+  end
+
+  def admin?
+    user.has_role?(:admin)
+  end
+
+  def employee?
+    user.has_role?(:employee)
+  end
+
+  def manager?
+    user.has_role?(:manager)
+  end
+
+  def client?
+    user.has_role?(:client)
   end
 
   def index?

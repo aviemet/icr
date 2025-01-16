@@ -1,7 +1,7 @@
-import { Routes } from '@/lib'
-import { Table, Link, DateTimeDisplay, Group } from '@/Components'
-import { EditButton, ScheduleButton } from '@/Components/Button'
-import { type TableProps } from '@/Components/Table/Table'
+import { Routes } from "@/lib"
+import { Table, Link, DateTimeDisplay, Group } from "@/Components"
+import { EditButton, ScheduleButton } from "@/Components/Button"
+import { type TableProps } from "@/Components/Table/Table"
 
 const ClientTable = (props: TableProps) => {
 	return (
@@ -31,7 +31,7 @@ const ClientTable = (props: TableProps) => {
 						</Table.Cell>
 
 						<Table.Cell fitContent>
-							<DateTimeDisplay tooltipFormats={ ['fromNow'] }>{ client.active_at }</DateTimeDisplay>
+							<DateTimeDisplay tooltipFormats={ ["fromNow"] }>{ client.active_at }</DateTimeDisplay>
 						</Table.Cell>
 
 						<Table.Cell>

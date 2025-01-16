@@ -1,4 +1,4 @@
-import { Event, EventProps } from 'react-big-calendar'
+import { Event, EventProps } from "react-big-calendar"
 
 const MonthEvent = ({
 	event,

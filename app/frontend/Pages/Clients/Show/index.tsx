@@ -1,25 +1,26 @@
-import { Group, Heading, Menu, Page, Section, Tabs } from '@/Components'
-import { Routes } from '@/lib'
-import Details from './Details'
-import Contacts from './Contacts'
-import Documents from './Documents'
+import { Group, Heading, Menu, Page, Section, Tabs } from "@/Components"
+import { Routes } from "@/lib"
+
+import Details from "./Details"
+import Contacts from "./Contacts"
+import Documents from "./Documents"
+
+const tabsList = [
+	{ id: "details", label: "Details", component: Details },
+	{ id: "contacts", label: "Contact Details", component: Contacts },
+	{ id: "documents", label: "Documents", component: Documents },
+]
 
 export interface ShowClientProps {
 	client: Schema.ClientsShow
 }
 
-const tabsList = [
-	{ id: 'details', label: 'Details', component: Details },
-	{ id: 'contacts', label: 'Contact Details', component: Contacts },
-	{ id: 'documents', label: 'Documents', component: Documents },
-]
-
 const ShowClient = ({ client }: ShowClientProps) => {
-	const title = client?.person?.name || 'Client'
+	const title = client?.person?.name || "Client"
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: 'Clients', href: Routes.clients() },
+			{ title: "Clients", href: Routes.clients() },
 			{ title, href: Routes.client(client.slug) },
 		] }>
 			<Section fullHeight>

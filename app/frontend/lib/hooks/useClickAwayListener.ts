@@ -1,9 +1,9 @@
-import React from 'react'
+import React from "react"
 
 const useClickAwayListener = (ref: React.RefObject<HTMLElement>, callback: Function) => {
 	const startClickListener = (callback?: Function) => {
-		document.addEventListener('click', handleClickAway)
-		document.addEventListener('keydown', handleEscKey)
+		document.addEventListener("click", handleClickAway)
+		document.addEventListener("keydown", handleEscKey)
 		if(callback) callback()
 	}
 
@@ -14,14 +14,14 @@ const useClickAwayListener = (ref: React.RefObject<HTMLElement>, callback: Funct
 	}
 
 	const handleEscKey = e => {
-		if(e.key === 'Escape') {
+		if(e.key === "Escape") {
 			cancelClickListener(callback)
 		}
 	}
 
 	const cancelClickListener = (callback?: Function) => {
-		document.removeEventListener('click', handleClickAway)
-		document.removeEventListener('keydown', handleEscKey)
+		document.removeEventListener("click", handleClickAway)
+		document.removeEventListener("keydown", handleEscKey)
 		if(callback) callback()
 	}
 

@@ -1,9 +1,9 @@
-import { useDraggable } from '@dnd-kit/core'
-import { Button } from '@mantine/core'
+import { useDraggable } from "@dnd-kit/core"
+import { Button } from "@mantine/core"
 
 const ButtonControl = () => {
 	const { attributes, listeners, setNodeRef, transform } = useDraggable({
-		id: 'button',
+		id: "button",
 	})
 
 	const style = transform

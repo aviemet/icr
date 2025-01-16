@@ -1,29 +1,13 @@
 class UsersController < ApplicationController
   include Searchable
 
-  expose :users, -> { search(User.all.includes_associated, sortable_fields) }
+  expose :users, -> { search(User.all.includes_associated) }
   expose :user, scope: -> { User.includes_associated }
-  expose :people, scope: -> { Person.includes_associated }
 
   sortable_fields %w[email active first_name last_name number]
 
   strong_params :user, permit: [:email, :password, :active, :first_name, :last_name, :number]
 
-  # @route GET /users (users)
-  def index
-    authorize people
-    paginated_people = paginate(people, :people)
-
-    render inertia: "Users/Index", props: {
-      people: -> { paginated_people.render(:index) },
-      pagination: -> { {
-        count: people.count,
-        **pagination_data(paginated_people),
-      } },
-    }
-  end
-
-  # @route GET /users/:id (user)
   def show
     authorize user
     render inertia: "Users/Show", props: {
@@ -31,7 +15,6 @@ class UsersController < ApplicationController
     }
   end
 
-  # @route GET /users/new (new_user)
   def new
     authorize User
     render inertia: "Users/New", props: {
@@ -39,7 +22,6 @@ class UsersController < ApplicationController
     }
   end
 
-  # @route GET /users/:id/edit (edit_user)
   def edit
     authorize user
     render inertia: "Users/Edit", props: {
@@ -64,8 +46,6 @@ class UsersController < ApplicationController
     redirect_to complete_registration_path
   end
 
-  # @route PATCH /users/:id (user)
-  # @route PUT /users/:id (user)
   def update
     authorize user
     if user.update(user_params)
@@ -75,7 +55,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # @route DELETE /users/:id (user)
   def destroy
     authorize user
     user.destroy

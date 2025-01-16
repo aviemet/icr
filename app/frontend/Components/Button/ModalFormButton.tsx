@@ -1,7 +1,7 @@
-import Button from './index'
-import { Modal } from '@/Components'
-import { useMantineTheme, type ModalProps, type ButtonProps } from '@mantine/core'
-import axios from 'axios'
+import Button from "./index"
+import { Modal } from "@/Components"
+import { useMantineTheme, type ModalProps, type ButtonProps } from "@mantine/core"
+import axios from "axios"
 
 interface ModalFormButtonProps {
 	children?: string | React.ReactElement
@@ -14,7 +14,7 @@ interface ModalFormButtonProps {
 }
 
 const ModalFormButton = ({
-	children = 'New',
+	children = "New",
 	form,
 	title,
 	buttonProps = {},
@@ -29,7 +29,7 @@ const ModalFormButton = ({
 
 		axios[method](to, { ...data, redirect: false })
 			.then(response => {
-				if(response.statusText === 'OK' || response.statusText === 'Created') {
+				if(response.statusText === "OK" || response.statusText === "Created") {
 					if(onSuccess) onSuccess(response.data)
 				}
 			})

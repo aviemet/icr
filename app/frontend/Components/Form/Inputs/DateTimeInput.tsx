@@ -1,15 +1,15 @@
-import { forwardRef, type ForwardedRef } from 'react'
-import Field from '../Components/Field'
-import DateTimeInput, { type DateTimeProps } from '@/Components/Inputs/DateTimeInput'
-import { NestedObject, useInertiaInput } from 'use-inertia-form'
-import ConditionalWrapper from '@/Components/ConditionalWrapper'
-import { type InputConflicts, type BaseFormInputProps } from '.'
-import { isUnset } from '@/lib'
+import { forwardRef, type ForwardedRef } from "react"
+import Field from "../Components/Field"
+import DateTimeInput, { type DateTimeProps } from "@/Components/Inputs/DateTimeInput"
+import { NestedObject, useInertiaInput } from "use-inertia-form"
+import ConditionalWrapper from "@/Components/ConditionalWrapper"
+import { type InputConflicts, type BaseFormInputProps } from "."
+import { isUnset } from "@/lib"
 
 interface DateTimeFormProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<DateTimeProps, InputConflicts>,
-	BaseFormInputProps<Date | '', TForm> {}
+	BaseFormInputProps<Date | "", TForm> {}
 
 const DateTime = forwardRef(<TForm extends NestedObject = NestedObject>({
 	name,
@@ -28,7 +28,7 @@ const DateTime = forwardRef(<TForm extends NestedObject = NestedObject>({
 }: DateTimeFormProps<TForm>,
 	ref: ForwardedRef<HTMLButtonElement>
 ) => {
-	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<Date | '', TForm>({
+	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<Date | "", TForm>({
 		name,
 		model,
 		errorKey,
@@ -37,7 +37,7 @@ const DateTime = forwardRef(<TForm extends NestedObject = NestedObject>({
 	})
 
 	const handleChange = (date: Date | null) => {
-		const dateWithValidEmptyType = isUnset(date) ? '' : date
+		const dateWithValidEmptyType = isUnset(date) ? "" : date
 
 		setValue(dateWithValidEmptyType)
 
@@ -70,7 +70,7 @@ const DateTime = forwardRef(<TForm extends NestedObject = NestedObject>({
 				ref={ ref }
 				id={ id || inputId }
 				name={ inputName }
-				value={ value === '' ? undefined : value }
+				value={ value === "" ? undefined : value }
 				onChange={ handleChange }
 				onBlur={ handleBlur }
 				onFocus={ handleFocus }

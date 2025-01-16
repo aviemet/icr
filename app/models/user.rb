@@ -87,6 +87,10 @@ class User < ApplicationRecord
   before_save :coerce_json
   after_save :synchronize_email_with_contact
 
+  def active?
+    active
+  end
+
   private
 
   def coerce_json

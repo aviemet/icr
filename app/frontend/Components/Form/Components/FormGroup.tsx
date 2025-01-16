@@ -1,7 +1,7 @@
-import { DivProps } from 'react-html-props'
-import { ConditionalWrapper, Grid, Box } from '@/Components'
-import { NestedFields } from 'use-inertia-form'
-import cx from 'clsx'
+import { DivProps } from "react-html-props"
+import { ConditionalWrapper, Grid, Box } from "@/Components"
+import { NestedFields } from "use-inertia-form"
+import cx from "clsx"
 
 interface FormGroupProps extends DivProps {
 	legend?: string
@@ -17,7 +17,7 @@ const FormGroup = ({ children, legend, outline = true, model, grid = true }: For
 			wrapper={ children => (
 				<Grid.Col>
 					<Grid component='fieldset' className={ cx({ outline }) } style={ {
-						marginTop: legend ? '0.5rem' : undefined,
+						marginTop: legend ? "0.5rem" : undefined,
 					} }>
 						{ children }
 					</Grid>
@@ -25,7 +25,7 @@ const FormGroup = ({ children, legend, outline = true, model, grid = true }: For
 			) }
 			elseWrapper={ children => (
 				<Box component='fieldset' className={ cx({ outline }) } style={ {
-					marginTop: legend ? '0.5rem' : undefined,
+					marginTop: legend ? "0.5rem" : undefined,
 				} }>
 					{ children }
 				</Box>

@@ -1,19 +1,19 @@
-import { formatter } from '@/lib'
-import { Stack, Tooltip } from '@/Components'
-import ConditionalWrapper from '../ConditionalWrapper'
-import { isEmpty } from 'lodash'
-import { TooltipBaseProps } from '@mantine/core/lib/components/Tooltip/Tooltip.types'
+import { formatter } from "@/lib"
+import { Stack, Tooltip } from "@/Components"
+import ConditionalWrapper from "../ConditionalWrapper"
+import { isEmpty } from "lodash"
+import { TooltipBaseProps } from "@mantine/core/lib/components/Tooltip/Tooltip.types"
 
 interface DateTimeDisplayProps {
 	children: string | Date | undefined
-	format?: keyof typeof formatter['datetime']
-	tooltipFormats?: (keyof typeof formatter['datetime'])[]
+	format?: keyof typeof formatter["datetime"]
+	tooltipFormats?: (keyof typeof formatter["datetime"])[]
 	tooltipOptions?: TooltipBaseProps
 }
 
 const DateTimeDisplay = ({
 	children,
-	format = 'dateShort',
+	format = "dateShort",
 	tooltipFormats,
 	tooltipOptions,
 }: DateTimeDisplayProps) => {
@@ -25,7 +25,7 @@ const DateTimeDisplay = ({
 				condition={ !isEmpty(tooltipFormats) }
 				wrapper={ innerChildren => {
 					const tooltipProps = Object.assign({}, tooltipOptions, {
-						position: 'bottom',
+						position: "bottom",
 						openDelay: 750,
 					})
 					return (

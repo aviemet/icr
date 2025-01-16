@@ -1,4 +1,4 @@
-import { type ShowClientProps } from '.'
+import { type ShowClientProps } from "."
 
 interface ClientDocumentsProps extends ShowClientProps {}
 

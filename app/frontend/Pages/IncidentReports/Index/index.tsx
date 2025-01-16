@@ -1,7 +1,7 @@
-import { Routes } from '@/lib'
-import { IndexPageTemplate } from '@/Features'
-import { NewIcon } from '@/Components/Icons'
-import IncidentReportsTable from '../Table'
+import { Routes } from "@/lib"
+import { IndexPageTemplate } from "@/Features"
+import { NewIcon } from "@/Components/Icons"
+import IncidentReportsTable from "../Table"
 
 interface IncidentReportIndexProps {
 	incident_reports: Schema.IncidentReportsIndex[]
@@ -17,7 +17,7 @@ const IncidentReportsIndex = ({ incident_reports, pagination }: IncidentReportIn
 			pagination={ pagination }
 			deleteRoute={ Routes.incidentReports() }
 			menuOptions={ [
-				{ label: 'New Incident Report', href: Routes.newIncidentReport(), icon: <NewIcon /> },
+				{ label: "New Incident Report", href: Routes.newIncidentReport(), icon: <NewIcon /> },
 			] }
 		>
 			<IncidentReportsTable />

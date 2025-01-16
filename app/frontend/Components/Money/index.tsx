@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import { useTableSectionContext } from '@/Components/Table/TableContext'
-import FlexMoney from './FlexMoney'
-import { type Money } from '@/types'
-import { useCurrency, type UseCurrencyOptions } from '@/lib/hooks'
+import React, { useState } from "react"
+import { useTableSectionContext } from "@/Components/Table/TableContext"
+import FlexMoney from "./FlexMoney"
+import { type Money } from "@/types"
+import { useCurrency, type UseCurrencyOptions } from "@/lib/hooks"
 
 interface MoneyProps {
 	children?: number | Money | null
@@ -14,15 +14,15 @@ interface MoneyProps {
 
 const MoneyComponent = ({
 	children,
-	currency = 'USD',
-	locale = 'en-US',
+	currency = "USD",
+	locale = "en-US",
 	accounting = false,
 	options = {},
 }: MoneyProps) => {
 	const [inTable, setInTable] = useState(false)
 
 	const useCurrencyOptions: UseCurrencyOptions = options
-	useCurrencyOptions.signDisplay = accounting ? 'never' : 'auto'
+	useCurrencyOptions.signDisplay = accounting ? "never" : "auto"
 
 	const [amount, formatter] = useCurrency({
 		amount: children ?? 0,

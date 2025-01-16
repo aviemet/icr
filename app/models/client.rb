@@ -47,6 +47,17 @@ class Client < ApplicationRecord
   has_one :households_client, dependent: :destroy
   has_one :household, through: :households_client, dependent: :nullify
 
+  has_many :client_managers, dependent: :destroy
+  has_many :managers,
+    through: :client_managers,
+    source: :manager,
+    class_name: "Employee"
+
+  has_one :active_client_manager, -> {
+    where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Date.current, Date.current)
+  }, class_name: "ClientManager", dependent: nil, inverse_of: :client
+  has_one :current_manager, through: :active_client_manager, source: :manager
+
   scope :includes_associated, -> { includes([:person, :calendar_customization]) }
 
   after_create -> { self.update(:active_at, Time.current) }

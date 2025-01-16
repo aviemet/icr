@@ -40,17 +40,52 @@ class Employee < ApplicationRecord
 
   resourcify
 
-  has_many :shifts, dependent: :nullify
-  has_many :shift_events, through: :shifts, class_name: "Calendar::Event", source: :calendar_event
-
+  # Employee personal details
   has_many :employees_job_titles, dependent: :destroy
   has_many :job_titles, through: :employees_job_titles
-  has_many :pay_rates, dependent: :destroy
-
   has_one :active_employees_job_title, -> {
     where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current)
   }, class_name: "EmployeesJobTitle", dependent: nil, inverse_of: :employee
   has_one :job_title, through: :active_employees_job_title, source: :job_title
+  has_many :pay_rates, dependent: :destroy
+  has_many :shifts, dependent: :nullify
+  has_many :shift_events, through: :shifts, class_name: "Calendar::Event", source: :calendar_event
+
+  # Employee manager relationships
+  has_many :employee_managers,
+    foreign_key: :manager_id,
+    dependent: :destroy,
+    inverse_of: :manager
+  has_many :managed_employees,
+    through: :employee_managers,
+    source: :employee
+
+  has_one :active_manager_relationship, -> {
+    where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Date.current, Date.current)
+  },
+    class_name: "EmployeeManager",
+    foreign_key: :employee_id,
+    dependent: nil,
+    inverse_of: :employee
+  has_one :current_manager, through: :active_manager_relationship, source: :manager
+
+  # Employee client relationships
+  has_many :clients_managers,
+    foreign_key: :manager_id,
+    dependent: :destroy,
+    inverse_of: :manager
+  has_many :managed_clients,
+    through: :clients_managers,
+    source: :client
+
+  has_many :active_clients_managers, -> {
+    where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Date.current, Date.current)
+  },
+    class_name: "ClientsManager",
+    foreign_key: :manager_id,
+    dependent: nil,
+    inverse_of: :manager
+  has_many :current_managed_clients, through: :active_clients_managers, source: :client
 
   scope :includes_associated, -> { includes([:person, :job_title, :calendar_customization]) }
 

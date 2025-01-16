@@ -1,6 +1,6 @@
-import { Grid } from '@/Components'
-import { Form, TextInput, Submit } from '@/Components/Form'
-import { type HTTPVerb, type UseFormProps } from 'use-inertia-form'
+import { Grid } from "@/Components"
+import { Form, TextInput, Submit } from "@/Components/Form"
+import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
 
 type TPrescriptionFormData = {
 	prescription: Schema.PrescriptionsFormData
@@ -13,7 +13,7 @@ export interface PrescriptionFormProps {
 	prescription: Schema.PrescriptionsFormData
 }
 
-const PrescriptionForm = ({ method = 'post', prescription, ...props }: PrescriptionFormProps) => {
+const PrescriptionForm = ({ method = "post", prescription, ...props }: PrescriptionFormProps) => {
 	return (
 		<Form
 			model="prescription"
@@ -30,7 +30,7 @@ const PrescriptionForm = ({ method = 'post', prescription, ...props }: Prescript
 				</Grid.Col>
 
 				<Grid.Col>
-					<Submit>{ prescription.id ? 'Update' : 'Create' } Prescription</Submit>
+					<Submit>{ prescription.id ? "Update" : "Create" } Prescription</Submit>
 				</Grid.Col>
 			</Grid>
 		</Form>

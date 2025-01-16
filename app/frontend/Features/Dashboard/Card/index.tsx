@@ -1,4 +1,4 @@
-import { Card, Image, Text, Badge, Button, Group } from '@/Components'
+import { Card, Image, Text, Badge, Button, Group } from "@/Components"
 
 const DashboardCard = () => {
 	return (

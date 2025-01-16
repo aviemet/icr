@@ -1,12 +1,12 @@
-import { useMemo, useRef } from 'react'
-import { Badge, Box, Code, Group, Paper } from '@/Components'
-import { TextInput } from '@/Components/Form'
-import { useForm } from 'use-inertia-form'
-import dayjs from 'dayjs'
-import { type SettingsFormData } from '.'
+import { useMemo, useRef } from "react"
+import { Badge, Box, Code, Group, Paper } from "@/Components"
+import { TextInput } from "@/Components/Form"
+import { useForm } from "use-inertia-form"
+import dayjs from "dayjs"
+import { type SettingsFormData } from "."
 
-import cx from 'clsx'
-import * as classes from './Settings.css'
+import cx from "clsx"
+import * as classes from "./Settings.css"
 
 const ALLOWED_TEMPLATE_VARS = ["first_name", "last_name", "full_name"] as const
 
@@ -24,7 +24,7 @@ const ShiftTitleFormatInput = ({ settings }: SettingIndexProps) => {
 	const { getData } = useForm<SettingsFormData>()
 	const inputRef = useRef<HTMLInputElement>(null)
 
-	const inputValue = getData('setting.shift_title_format')
+	const inputValue = getData("setting.shift_title_format")
 
 	const previewText = useMemo(() => {
 		const format = inputRef.current?.value || inputValue
@@ -34,7 +34,7 @@ const ShiftTitleFormatInput = ({ settings }: SettingIndexProps) => {
 			let result = format
 			ALLOWED_TEMPLATE_VARS.forEach(variable => {
 				result = result.replace(
-					new RegExp(`{${variable}}`, 'g'),
+					new RegExp(`{${variable}}`, "g"),
 					SAMPLE_DATA[variable]
 				)
 			})
@@ -47,7 +47,7 @@ const ShiftTitleFormatInput = ({ settings }: SettingIndexProps) => {
 
 			return result
 		} catch(error) {
-			return 'Invalid format'
+			return "Invalid format"
 		}
 	}, [inputValue])
 

@@ -1,9 +1,9 @@
-import { forwardRef, type ForwardedRef } from 'react'
-import NumberInput, { type NumberInputProps } from '@/Components/Inputs/NumberInput'
-import Field from '../Components/Field'
-import { NestedObject, useInertiaInput } from 'use-inertia-form'
-import ConditionalWrapper from '@/Components/ConditionalWrapper'
-import { type InputConflicts, type BaseFormInputProps } from '.'
+import { forwardRef, type ForwardedRef } from "react"
+import NumberInput, { type NumberInputProps } from "@/Components/Inputs/NumberInput"
+import Field from "../Components/Field"
+import { NestedObject, useInertiaInput } from "use-inertia-form"
+import ConditionalWrapper from "@/Components/ConditionalWrapper"
+import { type InputConflicts, type BaseFormInputProps } from "."
 
 interface FormNumberInputProps<TForm extends NestedObject = NestedObject>
 	extends

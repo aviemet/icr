@@ -1,9 +1,9 @@
-import { forwardRef, type ForwardedRef } from 'react'
-import ConditionalWrapper from '@/Components/ConditionalWrapper'
-import PasswordInput, { type PasswordInputProps } from '@/Components/Inputs/PasswordInput'
-import Field from '../Components/Field'
-import { NestedObject, useInertiaInput } from 'use-inertia-form'
-import { type InputConflicts, type BaseFormInputProps } from '.'
+import { forwardRef, type ForwardedRef } from "react"
+import ConditionalWrapper from "@/Components/ConditionalWrapper"
+import PasswordInput, { type PasswordInputProps } from "@/Components/Inputs/PasswordInput"
+import Field from "../Components/Field"
+import { NestedObject, useInertiaInput } from "use-inertia-form"
+import { type InputConflicts, type BaseFormInputProps } from "."
 
 interface FormPasswordInputProps<TForm extends NestedObject>
 	extends

@@ -1,13 +1,13 @@
-import { Heading, Page, Section } from '@/Components'
-import { Routes } from '@/lib'
-import ClientForm from '../Form'
+import { Heading, Page, Section } from "@/Components"
+import { Routes } from "@/lib"
+import ClientForm from "../Form"
 
 interface NewClientProps {
 	client: Schema.ClientsFormData
 }
 
 const NewClient = ({ ...data }: NewClientProps) => {
-	const title = 'New Client'
+	const title = "New Client"
 
 	return (
 		<Page title={ title }>

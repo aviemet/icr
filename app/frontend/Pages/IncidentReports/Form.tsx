@@ -1,6 +1,6 @@
-import { Grid } from '@/Components'
-import { Form, TextInput, Submit } from '@/Components/Form'
-import { type HTTPVerb, type UseFormProps } from 'use-inertia-form'
+import { Grid } from "@/Components"
+import { Form, TextInput, Submit } from "@/Components/Form"
+import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
 
 type TIncidentReportFormData = {
 	incident_report: Schema.IncidentReportsFormData
@@ -13,7 +13,7 @@ export interface IncidentReportFormProps {
 	incident_report: Schema.IncidentReportsFormData
 }
 
-const IncidentReportForm = ({ method = 'post', incident_report, ...props }: IncidentReportFormProps) => {
+const IncidentReportForm = ({ method = "post", incident_report, ...props }: IncidentReportFormProps) => {
 	return (
 		<Form
 			model="incident_report"
@@ -36,7 +36,7 @@ const IncidentReportForm = ({ method = 'post', incident_report, ...props }: Inci
 				</Grid.Col>
 
 				<Grid.Col>
-					<Submit>{ incident_report.id ? 'Update' : 'Create' } IncidentReport</Submit>
+					<Submit>{ incident_report.id ? "Update" : "Create" } IncidentReport</Submit>
 				</Grid.Col>
 			</Grid>
 		</Form>

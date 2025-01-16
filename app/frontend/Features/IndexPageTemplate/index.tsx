@@ -1,6 +1,6 @@
-import { Page, Table } from '@/Components'
-import TableTitleSection, { IndexTableTitleSectionProps } from './TableTitleSection'
-import { type Breadcrumb } from '@/Components/Breadcrumbs'
+import { Page, Table } from "@/Components"
+import TableTitleSection, { IndexTableTitleSectionProps } from "./TableTitleSection"
+import { type Breadcrumb } from "@/Components/Breadcrumbs"
 
 interface IIndexPageTemplateProps extends IndexTableTitleSectionProps {
 	model: string

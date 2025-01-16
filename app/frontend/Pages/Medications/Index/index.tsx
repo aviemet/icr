@@ -1,7 +1,7 @@
-import { Routes } from '@/lib'
-import { IndexPageTemplate } from '@/Features'
-import { NewIcon } from '@/Components/Icons'
-import MedicationsTable from '../Table'
+import { Routes } from "@/lib"
+import { IndexPageTemplate } from "@/Features"
+import { NewIcon } from "@/Components/Icons"
+import MedicationsTable from "../Table"
 
 interface MedicationIndexProps {
 	medications: Schema.MedicationsIndex[]
@@ -17,7 +17,7 @@ const MedicationsIndex = ({ medications, pagination }: MedicationIndexProps) => 
 			pagination={ pagination }
 			deleteRoute={ Routes.medications() }
 			menuOptions={ [
-				{ label: 'New Medication', href: Routes.newMedication(), icon: <NewIcon /> },
+				{ label: "New Medication", href: Routes.newMedication(), icon: <NewIcon /> },
 			] }
 		>
 			<MedicationsTable />

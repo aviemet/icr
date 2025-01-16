@@ -1,5 +1,5 @@
-import { StateCreator } from 'zustand'
-import { defaultColor } from '../theme'
+import { StateCreator } from "zustand"
+import { defaultColor } from "../theme"
 
 export interface LayoutSlice {
 	sidebarOpen: boolean
@@ -12,7 +12,7 @@ export interface LayoutSlice {
 export const createLayoutSlice: StateCreator<LayoutSlice> = (set) => ({
 	sidebarOpen: true,
 	primaryColor: defaultColor,
-	siteTitle: 'Super SLS',
+	siteTitle: "Super SLS",
 
 	toggleSidebarOpen: sidebarOpen => set(state => {
 		let setValue = sidebarOpen

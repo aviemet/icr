@@ -1,7 +1,7 @@
-import { Routes } from '@/lib'
-import { IndexPageTemplate } from '@/Features'
-import { NewIcon } from '@/Components/Icons'
-import PrescriptionsTable from '../Table'
+import { Routes } from "@/lib"
+import { IndexPageTemplate } from "@/Features"
+import { NewIcon } from "@/Components/Icons"
+import PrescriptionsTable from "../Table"
 
 interface PrescriptionIndexProps {
 	prescriptions: Schema.PrescriptionsIndex[]
@@ -17,7 +17,7 @@ const PrescriptionsIndex = ({ prescriptions, pagination }: PrescriptionIndexProp
 			pagination={ pagination }
 			deleteRoute={ Routes.prescriptions() }
 			menuOptions={ [
-				{ label: 'New Prescription', href: Routes.newPrescription(), icon: <NewIcon /> },
+				{ label: "New Prescription", href: Routes.newPrescription(), icon: <NewIcon /> },
 			] }
 		>
 			<PrescriptionsTable />

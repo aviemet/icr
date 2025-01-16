@@ -1,14 +1,14 @@
-import Providers from '@/Layouts/Providers'
-import { Flash } from '@/Components'
+import Providers from "@/Layouts/Providers"
+import { Flash } from "@/Components"
 
-import BareAppLayout from './AppLayout'
-import BareAuthLayout from './AuthLayout'
-import BarePublicLayout from './PublicLayout'
+import BareAppLayout from "./AppLayout"
+import BareAuthLayout from "./AuthLayout"
+import BarePublicLayout from "./PublicLayout"
 
 export const LAYOUTS = {
-	'app': 'app',
-	'auth': 'auth',
-	'public': 'public',
+	"app": "app",
+	"auth": "auth",
+	"public": "public",
 } as const
 
 export interface LayoutProps {

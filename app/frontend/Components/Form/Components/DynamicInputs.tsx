@@ -1,8 +1,8 @@
-import { Box, Button, Flex, Grid, Paper } from '@/Components'
-import { PlusCircleIcon, MinusCircleIcon } from '@/Components/Icons'
-import { NestedFields, useDynamicInputs } from 'use-inertia-form'
-import cx from 'clsx'
-import * as classes from '../Form.css'
+import { Box, Button, Flex, Grid, Paper } from "@/Components"
+import { PlusCircleIcon, MinusCircleIcon } from "@/Components/Icons"
+import { NestedFields, useDynamicInputs } from "use-inertia-form"
+import cx from "clsx"
+import * as classes from "../Form.css"
 
 interface DynamicInputsProps {
 	children: React.ReactNode | React.ReactElement[]

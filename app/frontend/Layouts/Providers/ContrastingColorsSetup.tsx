@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
-import useStore from '@/lib/store'
-import { useComputedColorScheme, useMantineTheme } from '@mantine/core'
+import { useEffect } from "react"
+import useStore from "@/lib/store"
+import { useComputedColorScheme, useMantineTheme } from "@mantine/core"
 
 const ContrastingColorsSetup = () => {
 	const theme = useMantineTheme()

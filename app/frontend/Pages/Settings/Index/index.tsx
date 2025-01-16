@@ -1,17 +1,12 @@
-import { Routes } from '@/lib'
-import { Box, Grid, Page } from '@/Components'
-import { Form, Submit, TextInput } from '@/Components/Form'
-import {
-	FormCurrenciesDropdown,
-	FormLanguagesDropdown,
-	FormPayPeriodsDropdown,
-	FormTimezonesDropdown,
-} from '@/Features/Dropdowns'
-import ShiftTitleFormatInput from './ShiftTitleFormatInput'
+import { Page, Section, Tabs  } from "@/Components"
 
-export type SettingsFormData = {
-	setting: Schema.Setting
-}
+import General from "./General"
+import Users from "./Users"
+
+const tabsList = [
+	{ id: "general", label: "General", component: General },
+	{ id: "users", label: "Users", component: Users },
+]
 
 interface SettingIndexProps {
 	settings: Schema.Setting
@@ -20,60 +15,27 @@ interface SettingIndexProps {
 const SettingsIndex = ({ settings }: SettingIndexProps) => {
 	return (
 		<Page title="Settings" >
-			<Box>
-				<Form<SettingsFormData>
-					to={ Routes.settings() }
-					model="setting"
-					method="patch"
-					data={ { setting: settings } }
-					remember={ false }
-				>
-					<Grid>
-						<Grid.Col>
-							<TextInput
-								label="Company Name"
-								name="company_name"
-							/>
-						</Grid.Col>
+			<Section fullHeight>
+				<Tabs urlControlled={ true } defaultValue={ tabsList[0].id }>
+					<Tabs.List>
+						{ tabsList.map(tab => (
+							<Tabs.Tab key={ tab.id } value={ tab.id }>{ tab.label }</Tabs.Tab>
+						)) }
+					</Tabs.List>
 
-						<Grid.Col>
-							<FormLanguagesDropdown
-								label="Default Language"
-								name="default_language"
-							/>
-						</Grid.Col>
+					{ tabsList.map(tab => {
+						const Component = tab.component
 
-						<Grid.Col>
-							<FormCurrenciesDropdown
-								label="Default Currency"
-								name="default_currency"
-							/>
-						</Grid.Col>
+						return (
+							<Tabs.Panel key={ tab.id } value={ tab.id } p="md">
+								<Component settings={ settings } />
+							</Tabs.Panel>
+						)
+					}) }
+				</Tabs>
 
-						<Grid.Col>
-							<FormTimezonesDropdown
-								label="Default Timezone"
-								name="default_timezone"
-							/>
-						</Grid.Col>
+			</Section>
 
-						<Grid.Col>
-							<FormPayPeriodsDropdown
-								label="Pay Period Type"
-								name="pay_period_type"
-							/>
-						</Grid.Col>
-
-						<Grid.Col>
-							<ShiftTitleFormatInput settings={ settings } />
-						</Grid.Col>
-
-						<Grid.Col>
-							<Submit>Update Settings</Submit>
-						</Grid.Col>
-					</Grid>
-				</Form>
-			</Box>
 		</Page>
 	)
 }

@@ -1,9 +1,9 @@
-import { useDraggable } from '@dnd-kit/core'
-import { Slider, Text } from '@mantine/core'
+import { useDraggable } from "@dnd-kit/core"
+import { Slider, Text } from "@mantine/core"
 
 const SliderControl = () => {
 	const { attributes, listeners, setNodeRef, transform } = useDraggable({
-		id: 'slider',
+		id: "slider",
 	})
 
 	const style = transform

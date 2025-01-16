@@ -1,4 +1,4 @@
-import { Page } from '@/Components'
+import { Page } from "@/Components"
 
 const Home = () => {
 	return (

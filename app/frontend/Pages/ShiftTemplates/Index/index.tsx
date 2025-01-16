@@ -1,7 +1,7 @@
-import { Routes } from '@/lib'
-import { IndexPageTemplate } from '@/Features'
-import { NewIcon } from '@/Components/Icons'
-import ShiftTemplatesTable from '../Table'
+import { Routes } from "@/lib"
+import { IndexPageTemplate } from "@/Features"
+import { NewIcon } from "@/Components/Icons"
+import ShiftTemplatesTable from "../Table"
 
 interface ShiftTemplateIndexProps {
 	shift_templates: Schema.ShiftTemplatesIndex[]
@@ -17,7 +17,7 @@ const ShiftTemplatesIndex = ({ shift_templates, pagination }: ShiftTemplateIndex
 			pagination={ pagination }
 			deleteRoute={ Routes.shiftTemplates() }
 			menuOptions={ [
-				{ label: 'New Shift Template', href: Routes.newShiftTemplate(), icon: <NewIcon /> },
+				{ label: "New Shift Template", href: Routes.newShiftTemplate(), icon: <NewIcon /> },
 			] }
 		>
 			<ShiftTemplatesTable />

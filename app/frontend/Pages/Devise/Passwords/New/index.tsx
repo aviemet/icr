@@ -1,8 +1,8 @@
-import { Grid, Heading, Link } from '@/Components'
-import { Field, Form, TextInput, Submit } from '@/Components/Form'
-import { Routes } from '@/lib'
-import { LAYOUTS } from '@/Layouts'
-import { AuthPaperLayout } from '@/Features'
+import { Grid, Heading, Link } from "@/Components"
+import { Field, Form, TextInput, Submit } from "@/Components/Form"
+import { Routes } from "@/lib"
+import { LAYOUTS } from "@/Layouts"
+import { AuthPaperLayout } from "@/Features"
 
 type TPasswordsNewFormData = {
 	email: string
@@ -10,7 +10,7 @@ type TPasswordsNewFormData = {
 
 const PasswordsNew = () => {
 	const defaultData: TPasswordsNewFormData = {
-		email: '',
+		email: "",
 	}
 
 	return (

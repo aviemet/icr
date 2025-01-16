@@ -1,17 +1,17 @@
-import { Heading, Page, Section } from '@/Components'
-import { Routes } from '@/lib'
-import PrescriptionsForm from '../Form'
+import { Heading, Page, Section } from "@/Components"
+import { Routes } from "@/lib"
+import PrescriptionsForm from "../Form"
 
 interface EditPrescriptionProps {
 	prescription: Schema.PrescriptionsEdit
 }
 
 const EditPrescription = ({ prescription }: EditPrescriptionProps) => {
-	const title = 'Edit Prescription'
+	const title = "Edit Prescription"
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: 'Prescriptions', href: Routes.prescriptions() },
+			{ title: "Prescriptions", href: Routes.prescriptions() },
 			{ title: Prescription, href: Routes.prescription(prescription.id) },
 			{ title },
 		] }>

@@ -1,6 +1,6 @@
-import { Grid } from '@/Components'
-import { Form, TextInput, Submit } from '@/Components/Form'
-import { type HTTPVerb, type UseFormProps } from 'use-inertia-form'
+import { Grid } from "@/Components"
+import { Form, TextInput, Submit } from "@/Components/Form"
+import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
 
 type TEmployeeFormData = {
 	employee: Schema.EmployeesFormData
@@ -13,7 +13,7 @@ export interface EmployeeFormProps {
 	employee: Schema.EmployeesFormData
 }
 
-const EmployeeForm = ({ method = 'post', employee, ...props }: EmployeeFormProps) => {
+const EmployeeForm = ({ method = "post", employee, ...props }: EmployeeFormProps) => {
 	return (
 		<Form
 			model="employee"
@@ -33,7 +33,7 @@ const EmployeeForm = ({ method = 'post', employee, ...props }: EmployeeFormProps
 				</Grid.Col>
 
 				<Grid.Col>
-					<Submit>{ employee.id ? 'Update' : 'Create' } Employee</Submit>
+					<Submit>{ employee.id ? "Update" : "Create" } Employee</Submit>
 				</Grid.Col>
 			</Grid>
 		</Form>

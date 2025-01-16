@@ -1,5 +1,5 @@
-import { Form, TextInput, Submit } from '@/Components/Form'
-import { type UseFormProps } from 'use-inertia-form'
+import { Form, TextInput, Submit } from "@/Components/Form"
+import { type UseFormProps } from "use-inertia-form"
 
 type THouseholdFormData = {
 	household: Schema.HouseholdsFormData
@@ -12,7 +12,7 @@ export interface IHouseholdFormProps {
 	household: Schema.HouseholdsFormData
 }
 
-const HouseholdForm = ({ method = 'post', household, ...props }: IHouseholdFormProps) => {
+const HouseholdForm = ({ method = "post", household, ...props }: IHouseholdFormProps) => {
 	return (
 		<Form
 			model="household"
@@ -20,7 +20,7 @@ const HouseholdForm = ({ method = 'post', household, ...props }: IHouseholdFormP
 			method={ method }
 			{ ...props }
 		>
-			<Submit>{ household.id ? 'Update' : 'Create' } Household</Submit>
+			<Submit>{ household.id ? "Update" : "Create" } Household</Submit>
 		</Form>
 	)
 }

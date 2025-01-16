@@ -1,5 +1,5 @@
-import { Form, TextInput, Submit } from '@/Components/Form'
-import { type UseFormProps } from 'use-inertia-form'
+import { Form, TextInput, Submit } from "@/Components/Form"
+import { type UseFormProps } from "use-inertia-form"
 
 type TJobTitleFormData = {
 	job_title: Schema.JobTitlesFormData
@@ -12,7 +12,7 @@ export interface IJobTitleFormProps {
 	job_title: Schema.JobTitlesFormData
 }
 
-const JobTitleForm = ({ method = 'post', job_title, ...props }: IJobTitleFormProps) => {
+const JobTitleForm = ({ method = "post", job_title, ...props }: IJobTitleFormProps) => {
 	return (
 		<Form
 			model="job_title"
@@ -22,7 +22,7 @@ const JobTitleForm = ({ method = 'post', job_title, ...props }: IJobTitleFormPro
 		>
 			<TextInput name="title" label="Title" />
 			<TextInput name="description" label="Description" />
-			<Submit>{ job_title.id ? 'Update' : 'Create' } JobTitle</Submit>
+			<Submit>{ job_title.id ? "Update" : "Create" } JobTitle</Submit>
 		</Form>
 	)
 }

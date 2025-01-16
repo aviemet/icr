@@ -1,20 +1,20 @@
-import { StateCreator } from 'zustand'
-import { type MantineTheme } from '@mantine/core'
-import { calculateContrastingColor } from '../colors'
+import { StateCreator } from "zustand"
+import { type MantineTheme } from "@mantine/core"
+import { calculateContrastingColor } from "../colors"
 
 export interface ContrastingColorSlice {
 	contrastingColorsMap: Map<string, string>
-	setThemeData: (theme: MantineTheme, colorScheme: 'light' | 'dark') => void
+	setThemeData: (theme: MantineTheme, colorScheme: "light" | "dark") => void
 	getContrastingColor: (color: string) => string
 }
 
 export const createContrastingColorSlice: StateCreator<ContrastingColorSlice> = (set, get) => {
 	let theme: MantineTheme
-	let colorScheme: 'light' | 'dark'
+	let colorScheme: "light" | "dark"
 
 	return {
 		theme: undefined,
-		colorScheme: 'light',
+		colorScheme: "light",
 		contrastingColorsMap: new Map(),
 
 		setThemeData: (newTheme, newColorScheme) => {

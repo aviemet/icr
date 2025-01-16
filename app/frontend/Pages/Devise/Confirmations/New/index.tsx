@@ -1,8 +1,8 @@
-import { Grid, Heading, Link } from '@/Components'
-import { Form, TextInput, Submit } from '@/Components/Form'
-import { Routes } from '@/lib'
-import { LAYOUTS } from '@/Layouts'
-import { AuthPaperLayout } from '@/Features'
+import { Grid, Heading, Link } from "@/Components"
+import { Form, TextInput, Submit } from "@/Components/Form"
+import { Routes } from "@/lib"
+import { LAYOUTS } from "@/Layouts"
+import { AuthPaperLayout } from "@/Features"
 
 interface IConfirmationsNew {
 	user: Schema.User

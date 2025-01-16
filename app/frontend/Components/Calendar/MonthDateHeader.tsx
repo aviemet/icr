@@ -1,6 +1,6 @@
-import NewShiftButton, { NewShiftClick } from './NewShiftButton'
-import { Box } from '@/Components'
-import { type DateHeaderProps } from 'react-big-calendar'
+import NewShiftButton, { NewShiftClick } from "./NewShiftButton"
+import { Box } from "@/Components"
+import { type DateHeaderProps } from "react-big-calendar"
 
 export interface MonthDateHeaderProps extends DateHeaderProps {
 	onNewShift?: NewShiftClick | undefined

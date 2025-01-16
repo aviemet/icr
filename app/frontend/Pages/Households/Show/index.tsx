@@ -1,12 +1,12 @@
-import { Group, Heading, Menu, Page, Section } from '@/Components'
-import { Routes } from '@/lib'
+import { Group, Heading, Menu, Page, Section } from "@/Components"
+import { Routes } from "@/lib"
 
 interface IShowHouseholdProps {
 	household: Schema.HouseholdsShow
 }
 
 const ShowHousehold = ({ household }: IShowHouseholdProps) => {
-	const title =  'Household'
+	const title =  "Household"
 
 	return (
 		<Page title={ title }>

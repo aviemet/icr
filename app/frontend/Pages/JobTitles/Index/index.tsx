@@ -1,7 +1,7 @@
-import { Routes } from '@/lib'
-import { IndexPageTemplate } from '@/Features'
-import { NewIcon } from '@/Components/Icons'
-import JobTitlesTable from '../Table'
+import { Routes } from "@/lib"
+import { IndexPageTemplate } from "@/Features"
+import { NewIcon } from "@/Components/Icons"
+import JobTitlesTable from "../Table"
 
 interface IJobTitleIndexProps {
 	job_titles: Schema.JobTitlesIndex[]
@@ -17,7 +17,7 @@ const JobTitlesIndex = ({ job_titles, pagination }: IJobTitleIndexProps) => {
 			pagination={ pagination }
 			deleteRoute={ Routes.jobTitles() }
 			menuOptions={ [
-				{ label: 'New Job Title', href: Routes.newJobTitle(), icon: NewIcon },
+				{ label: "New Job Title", href: Routes.newJobTitle(), icon: NewIcon },
 			] }
 		>
 			<JobTitlesTable />

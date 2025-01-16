@@ -1,15 +1,15 @@
-import React, { forwardRef } from 'react'
-import { Select as InputSelect } from '@/Components/Inputs'
-import { useGetCurrencies } from '@/queries/locale'
-import { isEmpty } from 'lodash'
-import { type AsyncDropdown } from '..'
+import React, { forwardRef } from "react"
+import { Select as InputSelect } from "@/Components/Inputs"
+import { useGetCurrencies } from "@/queries/locale"
+import { isEmpty } from "lodash"
+import { type AsyncDropdown } from ".."
 
 interface CurrenciesDropdownProps extends AsyncDropdown<Schema.CurrencyOption> {}
 
 const CurrenciesDropdown = forwardRef<HTMLInputElement, CurrenciesDropdownProps>((
 	{
-		label = 'Currency',
-		name = 'currency',
+		label = "Currency",
+		name = "currency",
 		...props
 	},
 	ref,

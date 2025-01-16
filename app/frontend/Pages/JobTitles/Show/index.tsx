@@ -1,12 +1,12 @@
-import { Group, Heading, Menu, Page, Section } from '@/Components'
-import { Routes } from '@/lib'
+import { Group, Heading, Menu, Page, Section } from "@/Components"
+import { Routes } from "@/lib"
 
 interface IShowJobTitleProps {
 	job_title: Schema.JobTitlesShow
 }
 
 const ShowJobTitle = ({ job_title }: IShowJobTitleProps) => {
-	const title =  'JobTitle'
+	const title =  "JobTitle"
 
 	return (
 		<Page title={ title }>

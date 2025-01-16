@@ -1,13 +1,13 @@
-import { Heading, Page, Section } from '@/Components'
-import { Routes } from '@/lib'
-import JobTitlesForm from '../Form'
+import { Heading, Page, Section } from "@/Components"
+import { Routes } from "@/lib"
+import JobTitlesForm from "../Form"
 
 interface IEditJobTitleProps {
 	job_title: Schema.JobTitlesEdit
 }
 
 const EditJobTitle = ({ job_title }: IEditJobTitleProps) => {
-	const title = 'Edit Job Title'
+	const title = "Edit Job Title"
 
 	return (
 		<Page title={ title }>

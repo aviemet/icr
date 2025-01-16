@@ -1,7 +1,7 @@
-import { Routes } from '@/lib'
-import { IndexPageTemplate } from '@/Features'
-import { NewIcon } from '@/Components/Icons'
-import IdentificationsTable from '../Table'
+import { Routes } from "@/lib"
+import { IndexPageTemplate } from "@/Features"
+import { NewIcon } from "@/Components/Icons"
+import IdentificationsTable from "../Table"
 
 interface IdentificationIndexProps {
 	identifications: Schema.IdentificationsIndex[]
@@ -17,7 +17,7 @@ const IdentificationsIndex = ({ identifications, pagination }: IdentificationInd
 			pagination={ pagination }
 			deleteRoute={ Routes.identifications() }
 			menuOptions={ [
-				{ label: 'New Identification', href: Routes.newIdentification(), icon: <NewIcon /> },
+				{ label: "New Identification", href: Routes.newIdentification(), icon: <NewIcon /> },
 			] }
 		>
 			<IdentificationsTable />

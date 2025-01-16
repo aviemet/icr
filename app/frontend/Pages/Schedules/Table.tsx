@@ -1,8 +1,8 @@
-import * as React from 'react'
-import { Routes } from '@/lib'
-import { Box, Link, Paper, Table } from '@/Components'
-import { EditButton } from '@/Components/Button'
-import { type ITableProps } from '@/Components/Table/Table'
+import * as React from "react"
+import { Routes } from "@/lib"
+import { Box, Link, Paper, Table } from "@/Components"
+import { EditButton } from "@/Components/Button"
+import { type ITableProps } from "@/Components/Table/Table"
 
 
 const ScheduleTable = (props: ITableProps) => {

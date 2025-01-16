@@ -1,10 +1,10 @@
-import React, { forwardRef } from 'react'
-import { Menu, createPolymorphicComponent, type MenuItemProps } from '@mantine/core'
-import cx from 'clsx'
-import { Link } from '@/Components'
-import { ILinkProps } from '../Link'
+import React, { forwardRef } from "react"
+import { Menu, createPolymorphicComponent, type MenuItemProps } from "@mantine/core"
+import cx from "clsx"
+import { Link } from "@/Components"
+import { ILinkProps } from "../Link"
 
-interface IMenuItemProps extends MenuItemProps, Omit<ILinkProps, 'color'|'children'> {
+interface IMenuItemProps extends MenuItemProps, Omit<ILinkProps, "color" | "children"> {
 	disabled?: boolean
 	type?: string
 }

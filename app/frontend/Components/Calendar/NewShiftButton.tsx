@@ -1,14 +1,14 @@
-import { IconButton } from '@/Components'
-import { ActionIconProps } from '@mantine/core'
+import { IconButton } from "@/Components"
+import { ActionIconProps } from "@mantine/core"
 
-import cx from 'clsx'
-import * as classes from './Calendar.css'
-import { PlusIcon } from '../Icons'
+import cx from "clsx"
+import * as classes from "./Calendar.css"
+import { PlusIcon } from "../Icons"
 
 export type NewShiftClick = (date: Date) => void
 
 interface NewShiftButtonProps extends ActionIconProps,
-	Omit<React.ComponentPropsWithoutRef<'button'>, keyof ActionIconProps | 'onClick'> {
+	Omit<React.ComponentPropsWithoutRef<"button">, keyof ActionIconProps | "onClick"> {
 	date: Date
 	onClick?: NewShiftClick
 }
@@ -17,7 +17,7 @@ const NewShiftButton = ({
 	className,
 	date,
 	onClick,
-	variant = 'subtle',
+	variant = "subtle",
 	...props
 }: NewShiftButtonProps) => {
 	const handleClick = () => {

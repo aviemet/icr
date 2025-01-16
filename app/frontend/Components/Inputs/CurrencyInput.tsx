@@ -1,8 +1,8 @@
-import React, { forwardRef } from 'react'
-import { NumberInput, type NumberInputProps } from '@mantine/core'
-import Label from './Label'
-import InputWrapper from './InputWrapper'
-import { withInjectedProps, type BaseInputProps } from '.'
+import React, { forwardRef } from "react"
+import { NumberInput, type NumberInputProps } from "@mantine/core"
+import Label from "./Label"
+import InputWrapper from "./InputWrapper"
+import { withInjectedProps, type BaseInputProps } from "."
 
 export interface CurrencyInputProps
 	extends
@@ -18,8 +18,8 @@ const NumberInputComponent = forwardRef<HTMLInputElement, CurrencyInputProps>((
 		required = false,
 		id,
 		pattern,
-		size = 'md',
-		symbol = '$',
+		size = "md",
+		symbol = "$",
 		wrapper,
 		wrapperProps,
 		disableAutofill = true,

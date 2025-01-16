@@ -1,13 +1,13 @@
-import { Heading, Page, Section } from '@/Components'
-import { Routes } from '@/lib'
-import HouseholdsForm from '../Form'
+import { Heading, Page, Section } from "@/Components"
+import { Routes } from "@/lib"
+import HouseholdsForm from "../Form"
 
 interface IEditHouseholdProps {
 	household: Schema.HouseholdsEdit
 }
 
 const EditHousehold = ({ household }: IEditHouseholdProps) => {
-	const title = 'Edit Household'
+	const title = "Edit Household"
 
 	return (
 		<Page title={ title }>

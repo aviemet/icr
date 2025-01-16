@@ -1,15 +1,15 @@
-import React, { forwardRef } from 'react'
-import { Select as InputSelect } from '@/Components/Inputs'
-import { useGetLanguages } from '@/queries/locale'
-import { isEmpty } from 'lodash'
-import { type AsyncDropdown } from '..'
+import React, { forwardRef } from "react"
+import { Select as InputSelect } from "@/Components/Inputs"
+import { useGetLanguages } from "@/queries/locale"
+import { isEmpty } from "lodash"
+import { type AsyncDropdown } from ".."
 
 interface LanguagesDropdownProps extends AsyncDropdown<Schema.LanguageOption> {}
 
 const LanguagesDropdown = forwardRef<HTMLInputElement, LanguagesDropdownProps>((
 	{
-		label = 'Language',
-		name = 'language',
+		label = "Language",
+		name = "language",
 		...props
 	},
 	ref,

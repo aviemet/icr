@@ -1,9 +1,9 @@
-import useStore from '@/lib/store'
-import { Box, AppShell, Group, Flex } from '@/Components'
-import AvatarMenu from './AvatarMenu'
+import useStore from "@/lib/store"
+import { Box, AppShell, Group, Flex } from "@/Components"
+import AvatarMenu from "./AvatarMenu"
 
-import cx from 'clsx'
-import * as classes from '../AppLayout.css'
+import cx from "clsx"
+import * as classes from "../AppLayout.css"
 
 const Topbar = () => {
 	const { sidebarOpen, siteTitle } = useStore()

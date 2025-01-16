@@ -1,4 +1,4 @@
-import { css } from '@linaria/core'
+import { css } from "@linaria/core"
 
 export const code = css`
 	&.no_wrap {

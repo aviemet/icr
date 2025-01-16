@@ -1,6 +1,6 @@
-import { Grid } from '@/Components'
-import { Form, TextInput, Submit } from '@/Components/Form'
-import { type HTTPVerb, type UseFormProps } from 'use-inertia-form'
+import { Grid } from "@/Components"
+import { Form, TextInput, Submit } from "@/Components/Form"
+import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
 
 type TIdentificationFormData = {
 	identification: Schema.IdentificationsFormData
@@ -13,7 +13,7 @@ export interface IdentificationFormProps {
 	identification: Schema.IdentificationsFormData
 }
 
-const IdentificationForm = ({ method = 'post', identification, ...props }: IdentificationFormProps) => {
+const IdentificationForm = ({ method = "post", identification, ...props }: IdentificationFormProps) => {
 	return (
 		<Form
 			model="identification"
@@ -42,7 +42,7 @@ const IdentificationForm = ({ method = 'post', identification, ...props }: Ident
 				</Grid.Col>
 
 				<Grid.Col>
-					<Submit>{ identification.id ? 'Update' : 'Create' } Identification</Submit>
+					<Submit>{ identification.id ? "Update" : "Create" } Identification</Submit>
 				</Grid.Col>
 			</Grid>
 		</Form>

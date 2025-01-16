@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 import { Box } from "@/Components"
-import addressFormatter from '@fragaria/address-formatter'
+import addressFormatter from "@fragaria/address-formatter"
 
 interface AddressDisplayProps {
 	address: Schema.Address
@@ -22,7 +22,7 @@ const AddressDisplay = ({ address }: AddressDisplayProps) => {
 		}
 
 		const formattedLines = addressFormatter.format(addressData, {
-			output: 'array',
+			output: "array",
 			appendCountry: true,
 		})
 		return formattedLines.filter(Boolean)

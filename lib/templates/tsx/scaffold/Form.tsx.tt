@@ -13,7 +13,7 @@ export interface <%= singular_table_name.camelize %>FormProps {
 	<%= singular_table_name %>: Schema.<%= plural_table_name.camelize %>FormData
 }
 
-const <%= singular_table_name.camelize %>Form = ({ method = 'post', <%= singular_table_name %>, ...props }: I<%= singular_table_name.camelize %>FormProps) => {
+const <%= singular_table_name.camelize %>Form = ({ method = 'post', <%= singular_table_name %>, ...props }: <%= singular_table_name.camelize %>FormProps) => {
 	return (
 		<Form
 			model="<%= singular_table_name %>"

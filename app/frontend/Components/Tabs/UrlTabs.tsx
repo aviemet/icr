@@ -1,9 +1,9 @@
-import React, { useEffect, useCallback } from 'react'
-import { Tabs } from '@mantine/core'
-import { type VisitOptions } from '@inertiajs/core'
-import { router } from '@inertiajs/react'
-import { ITabsComponentProps } from '.'
-import { coerceArray } from '@/lib'
+import React, { useEffect, useCallback } from "react"
+import { Tabs } from "@mantine/core"
+import { type VisitOptions } from "@inertiajs/core"
+import { router } from "@inertiajs/react"
+import { ITabsComponentProps } from "."
+import { coerceArray } from "@/lib"
 
 const UrlTabs = ({ children, onChange, defaultValue, dependencies, ...props }: ITabsComponentProps) => {
 	const navigateTab = (value: string | null, options?: VisitOptions) => {
@@ -23,7 +23,7 @@ const UrlTabs = ({ children, onChange, defaultValue, dependencies, ...props }: I
 	const activeTab = useCallback(() => {
 		const url = new URL(window.location.href)
 
-		return url.searchParams.get('tab')
+		return url.searchParams.get("tab")
 	}, [window.location.href])
 
 	// Handle direct navigation to tabbed page
@@ -31,9 +31,9 @@ const UrlTabs = ({ children, onChange, defaultValue, dependencies, ...props }: I
 		if(!activeTab() && defaultValue) {
 			navigateTab(defaultValue, { replace: true })
 		} else {
-			document.addEventListener('inertia:navigate', function reloadActiveTab() {
+			document.addEventListener("inertia:navigate", function reloadActiveTab() {
 				navigateTab(activeTab())
-				document.removeEventListener('inertia:navigate', reloadActiveTab)
+				document.removeEventListener("inertia:navigate", reloadActiveTab)
 			})
 		}
 	}, [])

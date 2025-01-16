@@ -8,7 +8,7 @@ class PeopleController < ApplicationController
 
   strong_params :person, permit: [:first_name, :last_name, :middle_name, :nick_name, :dob]
 
-  # @route GET /people (people)
+  # @route GET /users (users)
   def index
     authorize people
     paginated_people = paginate(people, :people)
@@ -22,7 +22,7 @@ class PeopleController < ApplicationController
     }
   end
 
-  # @route GET /people/:slug (person)
+  # @route GET /users/:slug (user)
   def show
     authorize person
     render inertia: "People/Show", props: {
@@ -30,7 +30,7 @@ class PeopleController < ApplicationController
     }
   end
 
-  # @route GET /people/new (new_person)
+  # @route GET /users/new (new_user)
   def new
     authorize Person.new
     render inertia: "People/New", props: {
@@ -38,7 +38,7 @@ class PeopleController < ApplicationController
     }
   end
 
-  # @route GET /people/:slug/edit (edit_person)
+  # @route GET /users/:slug/edit (edit_user)
   def edit
     authorize person
     render inertia: "People/Edit", props: {
@@ -46,7 +46,7 @@ class PeopleController < ApplicationController
     }
   end
 
-  # @route POST /people (people)
+  # @route POST /users (user_registration)
   def create
     authorize Person.new
     if person.save
@@ -56,8 +56,8 @@ class PeopleController < ApplicationController
     end
   end
 
-  # @route PATCH /people/:slug (person)
-  # @route PUT /people/:slug (person)
+  # @route PATCH /users/:slug (user)
+  # @route PUT /users/:slug (user)
   def update
     authorize person
     if person.update(person_params)
@@ -67,7 +67,7 @@ class PeopleController < ApplicationController
     end
   end
 
-  # @route DELETE /people/:slug (person)
+  # @route DELETE /users/:slug (user)
   def destroy
     authorize person
     person.destroy!

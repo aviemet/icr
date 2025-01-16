@@ -1,20 +1,20 @@
-import { Table, type TableProps as MantineTableProps } from '@mantine/core'
+import { Table, type TableProps as MantineTableProps } from "@mantine/core"
 
-import Head from './Head'
-import Body from './Body'
-import RowIterator from './RowIterator'
-import Row from './Row'
-import Cell from './Td'
-import HeadCell from './Th'
-import Footer from './Footer'
-import Pagination from './Pagination'
-import TableProvider, { useTableContext } from './TableContext'
-import TableSection from './Section'
-import SearchInput from './SearchInput'
-import ConditionalWrapper from '../ConditionalWrapper'
+import Head from "./Head"
+import Body from "./Body"
+import RowIterator from "./RowIterator"
+import Row from "./Row"
+import Cell from "./Td"
+import HeadCell from "./Th"
+import Footer from "./Footer"
+import Pagination from "./Pagination"
+import TableProvider, { useTableContext } from "./TableContext"
+import TableSection from "./Section"
+import SearchInput from "./SearchInput"
+import ConditionalWrapper from "../ConditionalWrapper"
 
-import cx from 'clsx'
-import * as classes from './Table.css'
+import cx from "clsx"
+import * as classes from "./Table.css"
 
 export interface TableProps extends MantineTableProps {
 	fixed?: boolean

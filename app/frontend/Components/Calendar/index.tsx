@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react'
+import React, { useMemo, useRef } from "react"
 import {
 	Calendar,
 	DateHeaderProps,
@@ -8,25 +8,25 @@ import {
 	type DateLocalizer,
 	type Event,
 	type View,
-} from 'react-big-calendar'
-import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
-import dayjs from 'dayjs'
+} from "react-big-calendar"
+import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop"
+import dayjs from "dayjs"
 
-import cx from 'clsx'
-import * as classes from './Calendar.css'
-import DateCellWrapper from './DateCellWrapper'
-import { useLocation } from '@/lib/hooks'
-import MonthDateHeader from './MonthDateHeader'
-import MonthEvent from './MonthEvent'
-import MonthHeader from './MonthHeader'
-import { NewShiftClick } from './NewShiftButton'
+import cx from "clsx"
+import * as classes from "./Calendar.css"
+import DateCellWrapper from "./DateCellWrapper"
+import { useLocation } from "@/lib/hooks"
+import MonthDateHeader from "./MonthDateHeader"
+import MonthEvent from "./MonthEvent"
+import MonthHeader from "./MonthHeader"
+import { NewShiftClick } from "./NewShiftButton"
 
 const DragAndDropCalendar = withDragAndDrop(Calendar<Event, {}>)
 
 const dayjsLocalizerInstance = dayjsLocalizer(dayjs)
 
 interface CalendarComponentProps
-	extends Omit<CalendarProps<Event, {}>, 'localizer' | 'onRangeChange'> {
+	extends Omit<CalendarProps<Event, {}>, "localizer" | "onRangeChange"> {
 
 	localizer?: DateLocalizer
 	onRangeChange?: (start: Date, end: Date, view: View) => void
@@ -37,8 +37,8 @@ const CalendarComponent = ({
 	showAllEvents = true,
 	localizer = dayjsLocalizerInstance,
 	defaultView = Views.MONTH,
-	startAccessor = 'start',
-	endAccessor = 'end',
+	startAccessor = "start",
+	endAccessor = "end",
 	onRangeChange,
 	className,
 	onNewShift,
@@ -47,8 +47,8 @@ const CalendarComponent = ({
 	const { params } = useLocation()
 
 	const startingView = useMemo(() => {
-		if(params.has('view')) {
-			const view = params.get('view')!.toUpperCase()
+		if(params.has("view")) {
+			const view = params.get("view")!.toUpperCase()
 
 			if(view in Views) {
 				return Views[view as keyof typeof Views]

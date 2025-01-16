@@ -1,11 +1,11 @@
-import { forwardRef, type ForwardedRef } from 'react'
-import { useInertiaInput, type NestedObject } from 'use-inertia-form'
-import Field from '../Components/Field'
-import TextareaInput, { type TextareaProps } from '@/Components/Inputs/Textarea'
-import ConditionalWrapper from '@/Components/ConditionalWrapper'
-import { InputConflicts, type BaseFormInputProps } from '.'
+import { forwardRef, type ForwardedRef } from "react"
+import { useInertiaInput, type NestedObject } from "use-inertia-form"
+import Field from "../Components/Field"
+import TextareaInput, { type TextareaProps } from "@/Components/Inputs/Textarea"
+import ConditionalWrapper from "@/Components/ConditionalWrapper"
+import { InputConflicts, type BaseFormInputProps } from "."
 
-import cx from 'clsx'
+import cx from "clsx"
 
 interface FormTextareaProps<TForm extends NestedObject = NestedObject>
 	extends

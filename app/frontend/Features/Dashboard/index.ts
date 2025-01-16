@@ -1,1 +1,1 @@
-export { default as DashboardCard } from './Card'
+export { default as DashboardCard } from "./Card"
