@@ -12,7 +12,7 @@ import {
 	Tooltip,
 } from '@/Components'
 import { TextInput } from '@/Components/Inputs'
-import { ClientIcon, DashboardIcon, EmployeeIcon, LogoutIcon, SettingsIcon } from '@/Components/Icons'
+import { ClientIcon, ClockIcon, DashboardIcon, EmployeeIcon, LogoutIcon, SettingsIcon } from '@/Components/Icons'
 import { SiteLogo } from '@/Features'
 import ToggleSidebarButton from '../ToggleSidebarButton'
 import MenuLink from './MenuLink'
@@ -77,13 +77,19 @@ const Sidebar = () => {
 						label="Clients"
 						href={ Routes.clients() }
 						leftSection={ <ClientIcon /> }
-						active={ paths.length >= 1 && paths[0] === 'clients' }
+						active={ matchesAtPosition(paths, [0, 'clients']) }
 					/>
 					<MenuLink
 						label="Employees"
 						href={ Routes.employees() }
 						leftSection={ <EmployeeIcon /> }
-						active={ paths.length >= 1 && paths[0] === 'employees' }
+						active={ matchesAtPosition(paths, [0,  'employees']) }
+					/>
+					<MenuLink
+						label="Payroll"
+						href={ Routes.payrolls() }
+						leftSection={ <ClockIcon /> }
+						active={ matchesAtPosition(paths, [0, 'payroll']) }
 					/>
 				</AppShell.Section>
 

@@ -62,6 +62,8 @@ Rails.application.routes.draw do
 
   resources :people, param: :slug
 
+  resources :payrolls, only: [:index]
+
   resources :vendors, param: :slug
 
   resources :incident_reports
