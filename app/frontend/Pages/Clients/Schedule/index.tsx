@@ -1,6 +1,6 @@
 import React, { useRef }  from 'react'
 import { router } from '@inertiajs/react'
-import { buildShiftTitle, formatter, theme } from '@/lib'
+import { buildShiftTitle, formatEventTitle, theme } from '@/lib'
 import dayjs from 'dayjs'
 import {
 	Box,
@@ -11,6 +11,8 @@ import { modals } from '@mantine/modals'
 import useStore from '@/lib/store'
 import ShiftInfo from './ShiftInfo'
 import NewShiftForm from './NewShiftForm'
+import { usePageProps } from '@/lib/hooks'
+import { pick } from 'lodash'
 
 interface ScheduleProps {
 	client: Schema.ClientsShow
@@ -19,6 +21,7 @@ interface ScheduleProps {
 
 const Schedule = ({ client, schedules }: ScheduleProps) => {
 	const { getContrastingColor } = useStore()
+	const { settings } = usePageProps()
 
 	const newShiftModalRef = useRef<string>()
 
@@ -94,11 +97,12 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 					events={ schedules?.map(schedule => {
 						return {
 							id: schedule.id,
-							title:  buildShiftTitle({
-								start: schedule.starts_at,
-								end: schedule.ends_at,
-								name: schedule.shift.employee.person.name,
-							}),
+							title: formatEventTitle(settings.shift_title_format, pick(client, ['first_name', 'last_name', 'full_name'])),
+							// title:  buildShiftTitle({
+							// 	start: schedule.starts_at,
+							// 	end: schedule.ends_at,
+							// 	name: schedule.shift.employee.person.name,
+							// }),
 							start: schedule.starts_at,
 							end: schedule.ends_at,
 							resource: {

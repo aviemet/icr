@@ -1,4 +1,5 @@
 import { formatter } from "."
+import dayjs from 'dayjs'
 
 const WORDS_REGEX = /[A-Z\xC0-\xD6\xD8-\xDE]?[a-z\xDF-\xF6\xF8-\xFF]+|[A-Z\xC0-\xD6\xD8-\xDE]+(?![a-z\xDF-\xF6\xF8-\xFF])|\d+/g
 
@@ -89,4 +90,37 @@ export const buildShiftTitle = ({ start, end, name }: {
 		title += ` ${name}`
 	}
 	return title
+}
+
+type TemplateVars = {
+	first_name?: string
+	last_name?: string
+	full_name?: string
+}
+
+/**
+ * Formats an event title using a template string and event data
+ */
+export const formatEventTitle = (template: string, vars: TemplateVars) => {
+	// Replace template variables
+	let result = template
+	Object.entries(vars).forEach(([key, value]) => {
+		if(value === undefined) throw new Error(`Missing required variable: ${key}`)
+		result = result.replace(
+			new RegExp(`{${key}}`, 'g'),
+			value
+		)
+	})
+
+	// Replace date formats
+	result = result.replace(
+		/{([YMDHhmsAa\-/ :]+)}/g,
+		(match, format) => {
+			const formatted = dayjs().format(format)
+			if(formatted === format) throw new Error(`Invalid date format: ${format}`)
+			return formatted
+		}
+	)
+
+	return result
 }

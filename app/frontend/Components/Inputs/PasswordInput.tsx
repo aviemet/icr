@@ -4,7 +4,10 @@ import Label from './Label'
 import { type BaseInputProps } from '.'
 import InputWrapper from './InputWrapper'
 
-export interface PasswordInputProps extends MantinePasswordInputProps, BaseInputProps {}
+export interface PasswordInputProps
+	extends
+	MantinePasswordInputProps,
+	Omit<BaseInputProps, 'disableAutofill'> {}
 
 const PasswordInputComponent = forwardRef<HTMLInputElement, PasswordInputProps>((
 	{ label, name, required = false, id, size = 'md', wrapper, wrapperProps, ...props },

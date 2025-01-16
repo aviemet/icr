@@ -6,7 +6,10 @@ import { type BaseInputProps } from '.'
 import InputWrapper from './InputWrapper'
 import { isUnset } from '@/lib'
 
-export interface DateTimeProps extends DateTimePickerProps, BaseInputProps {
+export interface DateTimeProps
+	extends
+	DateTimePickerProps,
+	Omit<BaseInputProps, 'disableAutofill'> {
 	name?: string
 	id?: string
 	value?: Date

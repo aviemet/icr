@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react'
 import { MultiSelect, type ComboboxData, type MultiSelectProps as MantineMultiSelectInputProps } from '@mantine/core'
 import Label from './Label'
-import { type BaseInputProps } from '.'
+import { withInjectedProps, type BaseInputProps } from '.'
 import InputWrapper from './InputWrapper'
 import { router } from '@inertiajs/react'
 import { coerceArray } from '@/lib'
@@ -24,6 +24,7 @@ const MultiSelectComponent = forwardRef<HTMLInputElement, MultiSelectInputProps>
 		wrapperProps,
 		fetchOnOpen,
 		onDropdownOpen,
+		disableAutofill = true,
 		...props
 	},
 	ref,
@@ -55,7 +56,9 @@ const MultiSelectComponent = forwardRef<HTMLInputElement, MultiSelectInputProps>
 				maxDropdownHeight={ maxDropdownHeight }
 				onDropdownOpen={ handleDropdownOpen }
 				nothingFoundMessage="No Results"
-				{ ...props }
+				{ ...withInjectedProps(props, {
+					disableAutofill,
+				}) }
 			/>
 		</InputWrapper>
 	)

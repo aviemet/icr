@@ -3,7 +3,7 @@ import { Switch, type SwitchProps as MantineSwitchProps } from '@mantine/core'
 import { type BaseInputProps } from '.'
 import InputWrapper from './InputWrapper'
 
-export interface SwitchProps extends MantineSwitchProps, BaseInputProps {}
+export interface SwitchProps extends MantineSwitchProps, Omit<BaseInputProps, 'disableAutofill'> {}
 
 const SwitchComponent = forwardRef<HTMLInputElement, SwitchProps>((
 	{ id, name, style, wrapper, wrapperProps, ...props },

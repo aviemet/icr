@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react'
 import { Checkbox, type CheckboxProps as MantineCheckboxProps } from '@mantine/core'
-import { type BaseInputProps } from '.'
+import { withInjectedProps, type BaseInputProps } from '.'
 import InputWrapper from './InputWrapper'
 
 export interface CheckboxProps extends MantineCheckboxProps, BaseInputProps {}
@@ -18,6 +18,7 @@ const CheckboxComponent: CheckboxComponentType = forwardRef<HTMLInputElement, Ch
 		radius = 'xs',
 		wrapper,
 		wrapperProps,
+		disableAutofill = true,
 		...props
 	},
 	ref,
@@ -31,7 +32,9 @@ const CheckboxComponent: CheckboxComponentType = forwardRef<HTMLInputElement, Ch
 				id={ inputId }
 				name={ name }
 				radius={ radius }
-				{ ...props }
+				{ ...withInjectedProps(props, {
+					disableAutofill,
+				}) }
 			/>
 		</InputWrapper>
 	)

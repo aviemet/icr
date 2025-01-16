@@ -4,7 +4,10 @@ import Label from './Label'
 import { type BaseInputProps } from '.'
 import InputWrapper from './InputWrapper'
 
-export interface RichTextInputProps extends RichTextEditorProps, BaseInputProps {
+export interface RichTextInputProps
+	extends
+	RichTextEditorProps,
+	Omit<BaseInputProps, 'disableAutofill'> {
 	label?: React.ReactNode
 	value: string
 	required?: boolean

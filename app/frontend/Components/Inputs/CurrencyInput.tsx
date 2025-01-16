@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react'
 import { NumberInput, type NumberInputProps } from '@mantine/core'
 import Label from './Label'
 import InputWrapper from './InputWrapper'
-import { type BaseInputProps } from '.'
+import { withInjectedProps, type BaseInputProps } from '.'
 
 export interface CurrencyInputProps
 	extends
@@ -22,6 +22,7 @@ const NumberInputComponent = forwardRef<HTMLInputElement, CurrencyInputProps>((
 		symbol = '$',
 		wrapper,
 		wrapperProps,
+		disableAutofill = true,
 		...props
 	},
 	ref,
@@ -41,7 +42,9 @@ const NumberInputComponent = forwardRef<HTMLInputElement, CurrencyInputProps>((
 				name={ name }
 				leftSection={ symbol }
 				hideControls
-				{ ...props }
+				{ ...withInjectedProps(props, {
+					disableAutofill,
+				}) }
 			/>
 		</InputWrapper>
 	)

@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react'
 import { Select, type ComboboxData, type SelectProps } from '@mantine/core'
 import { router } from '@inertiajs/react'
 import { coerceArray } from '@/lib'
-import { type BaseInputProps } from '.'
+import { withInjectedProps, type BaseInputProps } from '.'
 import Label from './Label'
 import InputWrapper from './InputWrapper'
 
@@ -24,6 +24,7 @@ const SelectComponent = forwardRef<HTMLInputElement, SelectInputProps>((
 		onDropdownOpen,
 		wrapper,
 		wrapperProps,
+		disableAutofill = true,
 		...props
 	},
 	ref,
@@ -55,7 +56,9 @@ const SelectComponent = forwardRef<HTMLInputElement, SelectInputProps>((
 				maxDropdownHeight={ maxDropdownHeight }
 				onDropdownOpen={ handleDropdownOpen }
 				nothingFoundMessage="No Results"
-				{ ...props }
+				{ ...withInjectedProps(props, {
+					disableAutofill,
+				}) }
 			/>
 		</InputWrapper>
 	)

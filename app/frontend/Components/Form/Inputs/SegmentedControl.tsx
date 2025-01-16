@@ -1,6 +1,7 @@
+import { forwardRef, type ForwardedRef } from 'react'
+import { NestedObject, useInertiaInput } from 'use-inertia-form'
 import SegmentedControl, { type SegmentedControlProps } from '@/Components/Inputs/SegmentedControl'
 import Field from '../Components/Field'
-import { NestedObject, useInertiaInput } from 'use-inertia-form'
 import ConditionalWrapper from '@/Components/ConditionalWrapper'
 import { type InputConflicts, type BaseFormInputProps } from '.'
 
@@ -9,22 +10,24 @@ interface FormSegmentedControlProps<TForm extends NestedObject = NestedObject>
 	Omit<SegmentedControlProps, InputConflicts>,
 	BaseFormInputProps<string, TForm> {}
 
-const FormSegmentedControl = <TForm extends NestedObject = NestedObject>({
-	options,
-	name,
-	id,
-	model,
-	onChange,
-	onBlur,
-	onFocus,
-	required,
-	field = true,
-	wrapperProps,
-	errorKey,
-	defaultValue,
-	clearErrorsOnChange,
-	...props
-}: FormSegmentedControlProps<TForm>,
+const FormSegmentedControl = forwardRef(<TForm extends NestedObject = NestedObject>(
+	{
+		options,
+		name,
+		id,
+		model,
+		onChange,
+		onBlur,
+		onFocus,
+		required,
+		field = true,
+		wrapperProps,
+		errorKey,
+		defaultValue,
+		clearErrorsOnChange,
+		...props
+	}: FormSegmentedControlProps<TForm>,
+	ref: ForwardedRef<HTMLInputElement>
 ) => {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<string, TForm>({
 		name,
@@ -63,6 +66,7 @@ const FormSegmentedControl = <TForm extends NestedObject = NestedObject>({
 			) }
 		>
 			<SegmentedControl
+				ref={ ref }
 				options={ options }
 				id={ id || inputId }
 				name={ inputName }
@@ -75,6 +79,6 @@ const FormSegmentedControl = <TForm extends NestedObject = NestedObject>({
 			/>
 		</ConditionalWrapper>
 	)
-}
+})
 
 export default FormSegmentedControl

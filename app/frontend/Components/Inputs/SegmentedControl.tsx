@@ -9,7 +9,10 @@ import Label from './Label'
 import { type BaseInputProps } from '.'
 import InputWrapper from './InputWrapper'
 
-export interface SegmentedControlProps extends Omit<MantineSegmentedControlProps, 'data'>, BaseInputProps {
+export interface SegmentedControlProps
+	extends
+	Omit<MantineSegmentedControlProps, 'data'>,
+	Omit<BaseInputProps, 'disableAutofill'> {
 	label?: string
 	labelPosition?: 'start' | 'end'
 	name: string

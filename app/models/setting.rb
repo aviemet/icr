@@ -28,11 +28,20 @@ class Setting < RailsSettings::Base
   field :default_currency, type: :string, default: "USD", validates: {
     presence: true,
   }
-  field :default_timezone, type: :string, default: "America/Los Angelas", validates: {
+  field :default_timezone, type: :string, default: "America/Los_Angeles", validates: {
     presence: true
   }
 
   field :pay_period_type, type: :string, default: PAY_PERIOD_TYPES[:semi_monthly], validates: { presence: true, inclusion: { in: PAY_PERIOD_TYPES.values } }
+
+  ALLOWED_TEMPLATE_VARS = %i(first_name last_name full_name).freeze
+  field :shift_title_format, type: :string, default: "{h:mm} - {full_name}", validates: {
+    presence: true,
+    format: {
+      with: %r(\A[^{}]*(\{(?:#{ALLOWED_TEMPLATE_VARS.join('|')}|[YMDHhmsAa\-/ :]+)\}[^{}]*)*\z),
+      message: "must contain valid variables and date formats"
+    }
+  }
 
   def self.render
     Setting.keys.to_h { |key|
