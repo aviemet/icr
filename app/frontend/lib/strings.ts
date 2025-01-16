@@ -101,7 +101,7 @@ type TemplateVars = {
 /**
  * Formats an event title using a template string and event data
  */
-export const formatEventTitle = (template: string, vars: TemplateVars) => {
+export const formatEventTitle = (template: string, startTime: Date, vars: TemplateVars) => {
 	// Replace template variables
 	let result = template
 	Object.entries(vars).forEach(([key, value]) => {
@@ -116,7 +116,7 @@ export const formatEventTitle = (template: string, vars: TemplateVars) => {
 	result = result.replace(
 		/{([YMDHhmsAa\-/ :]+)}/g,
 		(match, format) => {
-			const formatted = dayjs().format(format)
+			const formatted = dayjs(startTime).format(format)
 			if(formatted === format) throw new Error(`Invalid date format: ${format}`)
 			return formatted
 		}

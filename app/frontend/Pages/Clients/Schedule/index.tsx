@@ -1,4 +1,4 @@
-import React, { useRef }  from 'react'
+import React, { useCallback, useRef }  from 'react'
 import { router } from '@inertiajs/react'
 import { buildShiftTitle, formatEventTitle, theme } from '@/lib'
 import dayjs from 'dayjs'
@@ -89,6 +89,22 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 		}
 	}
 
+	const handleEventTitle = useCallback((
+		schedule: Schema.CalendarEventsShow,
+		employee: Schema.EmployeesPersisted
+	) => {
+		try {
+			return formatEventTitle(settings.shift_title_format, schedule.starts_at, pick(employee, ['first_name', 'last_name', 'full_name']))
+		} catch(e) {
+			console.error("Error building title: ", e)
+			return schedule.name || buildShiftTitle({
+				start: schedule.starts_at,
+				end: schedule.ends_at,
+				name: employee.full_name,
+			})
+		}
+	}, [settings.shift_title_format])
+
 	return (
 		<>
 			<h1>{ client?.person?.name }</h1>
@@ -97,12 +113,7 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 					events={ schedules?.map(schedule => {
 						return {
 							id: schedule.id,
-							title: formatEventTitle(settings.shift_title_format, pick(client, ['first_name', 'last_name', 'full_name'])),
-							// title:  buildShiftTitle({
-							// 	start: schedule.starts_at,
-							// 	end: schedule.ends_at,
-							// 	name: schedule.shift.employee.person.name,
-							// }),
+							title: handleEventTitle(schedule, schedule.shift.employee),
 							start: schedule.starts_at,
 							end: schedule.ends_at,
 							resource: {

@@ -1,2 +1,2 @@
-class Calendar::Events::EditSerializer < Calendar::EventSerializer
+class Calendar::Events::EditSerializer < Calendar::Events::PersistedSerializer
 end
