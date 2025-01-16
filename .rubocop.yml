@@ -293,3 +293,6 @@ Metrics:
 
 RSpec/NestedGroups:
   Enabled: false
+
+Lint/DuplicateBranch:
+  Enabled: false

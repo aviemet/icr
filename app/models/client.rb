@@ -49,6 +49,8 @@ class Client < ApplicationRecord
 
   scope :includes_associated, -> { includes([:person, :calendar_customization]) }
 
+  after_create -> { self.update(:active_at, Time.current) }
+
   private
 
   def slug_candidates

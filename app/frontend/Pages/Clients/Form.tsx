@@ -22,14 +22,16 @@ const ClientForm = ({ method = 'post', client, ...props }: ClientFormProps) => {
 			{ ...props }
 		>
 			<Grid>
-				<Grid.Col>
-					<TextInput name="active_at" label="Active_at" />
+				<Grid.Col span={ { xxs: 12, sm: 4 } }>
+					<TextInput name="person.first_name" label="First Name" />
 				</Grid.Col>
-				<Grid.Col>
-					<TextInput name="inactive_at" label="Inactive_at" />
+
+				<Grid.Col span={ { xxs: 12, sm: 4 } }>
+					<TextInput name="person.middle_name" label="Middle Name" />
 				</Grid.Col>
-				<Grid.Col>
-					<TextInput name="number" label="Number" />
+
+				<Grid.Col span={ { xxs: 12, sm: 4 } }>
+					<TextInput name="person.last_name" label="Last Name" />
 				</Grid.Col>
 
 				<Grid.Col>

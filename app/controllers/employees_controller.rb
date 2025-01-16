@@ -11,6 +11,7 @@ class EmployeesController < ApplicationController
   # @route GET /employees (employees)
   def index
     authorize employees
+
     render inertia: "Employees/Index", props: {
       employees: -> { employees.render(:index) }
     }
@@ -19,6 +20,7 @@ class EmployeesController < ApplicationController
   # @route GET /employees/:slug (employee)
   def show
     authorize employee
+
     render inertia: "Employees/Show", props: {
       employee: -> { employee.render(:show) }
     }
@@ -27,6 +29,7 @@ class EmployeesController < ApplicationController
   # @route GET /employees/new (new_employee)
   def new
     authorize Employee.new
+
     render inertia: "Employees/New", props: {
       employee: Employee.new.render(:form_data)
     }
@@ -35,6 +38,7 @@ class EmployeesController < ApplicationController
   # @route GET /employees/:slug/edit (edit_employee)
   def edit
     authorize employee
+
     render inertia: "Employees/Edit", props: {
       employee: employee.render(:edit)
     }
