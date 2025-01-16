@@ -2,7 +2,7 @@ class EmployeesController < ApplicationController
   include Searchable
 
   expose :employees, -> { search(Employee.includes_associated) }
-  expose :employee, id: -> { params[:slug] }, find_by: :slug
+  expose :employee, id: -> { params[:slug] }, find_by: :slug, scope: -> { Employee.includes_associated }
 
   sortable_fields %w(person_id active_at inactive_at number)
 
@@ -52,10 +52,8 @@ class EmployeesController < ApplicationController
 
   # @route GET /employees/:slug/schedule (schedule_employee)
   def schedule
-    schedules = Employee
-      .includes([:person])
-      .find_by(slug: params[:slug])
-      .calendar_events
+    schedules = employee
+      .all_events
       .includes([:recurring_patterns, shift: [employee: [:person, :job_title, :calendar_customization]]])
       .between(range_start, range_end)
 
