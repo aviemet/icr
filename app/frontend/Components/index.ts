@@ -1,6 +1,8 @@
+export { default as AddressDisplay } from './AddressDisplay'
 export { default as Button } from './Button'
 export * from './Button'
 export { default as Calendar } from './Calendar'
+export { default as Code } from './Code'
 export { default as ConditionalWrapper } from './ConditionalWrapper'
 export { default as DangerousHtml } from './DangerousHtml'
 export { default as DateTimeDisplay } from './DateTimeDisplay'
@@ -22,6 +24,7 @@ export { default as Tabs } from './Tabs'
 // Export UI library components as a proxy to allow easy refactoring
 export {
 	ActionIcon, type ActionIconProps,
+	Anchor, type AnchorProps,
 	AppShell, type AppShellProps,
 	Avatar, type AvatarProps,
 	Badge, type BadgeProps,
@@ -34,6 +37,7 @@ export {
 	Flex, type FlexProps,
 	Grid, type GridProps,
 	Group, type GroupProps,
+	Image, type ImageProps,
 	List, type ListProps,
 	Paper, type PaperProps,
 	Popover, type PopoverProps,

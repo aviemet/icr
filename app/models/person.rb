@@ -24,27 +24,19 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Person < ApplicationRecord
+  include Contactable
+
   extend FriendlyId
   friendly_id :name, use: [:slugged, :history]
 
-  include Contactable
-
-  multisearchable(
-    against: [:first_name, :middle_name, :last_name],
-  )
-
-  pg_search_scope(
-    :search,
+  include PgSearchable
+  pg_search_config(
     against: [:first_name, :middle_name, :last_name, :nick_name],
     associated_against: {
       user: [:email],
       client: [:number],
       employee: [:number]
-    }, using: {
-      tsearch: { prefix: true },
-      trigram: {},
     },
-    ignoring: :accents,
   )
 
   resourcify
@@ -65,15 +57,5 @@ class Person < ApplicationRecord
 
   def name(include_middle_name: false)
     "#{first_name}#{include_middle_name ? " #{middle_name}" : ''} #{last_name}"
-  end
-
-  after_create :sync_user_email_with_contact
-
-  private
-
-  def sync_user_email_with_contact
-    return unless user&.email
-
-    contact.emails.create(email: user.email) unless contact.emails.exists?(email: user.email)
   end
 end

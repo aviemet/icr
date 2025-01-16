@@ -20,23 +20,14 @@
 #  fk_rails_...  (category_id => categories.id)
 #
 class Vendor < ApplicationRecord
-  extend FriendlyId
-  friendly_id :name, use: [:slugged, :history]
-
   include Contactable
   include Categorizable
 
-  pg_search_scope(
-    :search,
-    against: [:name, :notes],
-    associated_against: {
-      category: [],
-    },
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    },
-  )
+  extend FriendlyId
+  friendly_id :name, use: [:slugged, :history]
+
+  include PgSearchable
+  pg_search_config(against: [:name, :notes])
 
   resourcify
 

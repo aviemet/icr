@@ -1,14 +1,25 @@
 class VendorsController < ApplicationController
   include Searchable
 
-  expose :vendors, -> { search(Vendor.includes_associated, sortable_fields) }
+  expose :vendors, -> { search(Vendor.includes_associated) }
   expose :vendor, scope: ->{ Vendor }, find: ->(id, scope){ scope.includes_associated.find(id) }
+
+  sortable_fields %w(category_id name notes)
+
+  strong_params :vendor, permit: [:category_id, :name, :notes]
 
   # @route GET /vendors (vendors)
   def index
     authorize vendors
+
+    paginated_vendors = paginate(vendors, :vendors)
+
     render inertia: "Vendor/Index", props: {
-      vendors: -> { vendors.render(:index) }
+      vendors: -> { paginated_vendors.render(:index) },
+      pagination: -> { {
+        count: vendors.count,
+        **pagination_data(paginated_vendors)
+      } }
     }
   end
 
@@ -64,13 +75,4 @@ class VendorsController < ApplicationController
     redirect_to vendors_url, notice: "Vendor was successfully destroyed."
   end
 
-  private
-
-  def sortable_fields
-    %w(category_id name notes).freeze
-  end
-
-  def vendor_params
-    params.require(:vendor).permit(:category_id, :name, :notes)
-  end
 end

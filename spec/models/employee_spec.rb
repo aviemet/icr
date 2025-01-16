@@ -22,6 +22,7 @@
 #  fk_rails_...  (person_id => people.id)
 #
 require "rails_helper"
+require "models/shared/participantable"
 
 RSpec.describe Employee do
   describe "Validations" do
@@ -37,6 +38,8 @@ RSpec.describe Employee do
   end
 
   describe "Associations" do
+    it_behaves_like "participantable"
+
     it{ is_expected.to belong_to(:person) }
 
     it{ is_expected.to have_many(:pay_rates) }

@@ -1,6 +1,6 @@
 import React, { forwardRef, useState } from 'react'
 import { TextInput, type TextInputProps as MantineTextInputProps } from '@mantine/core'
-import { type BaseInputProps } from '.'
+import { withInjectedProps, type BaseInputProps } from '.'
 import Label from './Label'
 import InputWrapper from './InputWrapper'
 import { CrossIcon } from '../Icons'
@@ -23,6 +23,7 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputProps>((
 		value,
 		onChange,
 		readOnly,
+		disableAutofill = true,
 		...props
 	},
 	ref,
@@ -63,7 +64,9 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputProps>((
 				required={ required }
 				size={ size }
 				rightSection={ !readOnly && clearable && !isUnset(value) && <CrossIcon onClick={ handleClear } /> }
-				{ ...props }
+				{ ...withInjectedProps(props, {
+					disableAutofill,
+				}) }
 			/>
 		</InputWrapper>
 	)

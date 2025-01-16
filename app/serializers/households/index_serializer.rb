@@ -1,7 +1,2 @@
-class Households::IndexSerializer < HouseholdSerializer
-  attributes(
-    :id,
-    :updated_at,
-    :created_at,
-  )
+class Households::IndexSerializer < Households::PersistedSerializer
 end

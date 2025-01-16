@@ -5,8 +5,9 @@ import { ModalsProvider } from '@mantine/modals'
 import { Notifications } from '@mantine/notifications'
 import { theme as themeObject, vars } from '@/lib/theme'
 import { toKebabCase } from '@/lib'
-import { useInit } from '@/lib/hooks'
 import useStore from '@/lib/store'
+import { Flash } from '@/Components'
+import { useInit } from '@/lib/hooks'
 
 const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 	/**
@@ -40,15 +41,9 @@ const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 	}, [primaryColor])
 
 	useInit(() => {
-		// /* eslint-disable no-console */
-		// if(process?.env?.NODE_ENV === 'development') {
-		// 	console.log({ theme })
-		// 	console.log({ vars })
-
-		// 	console.log({ breakpointsPx: Object.fromEntries(
-		// 		Object.entries(theme.breakpoints ?? []).map(([key, val]) => [key, px(val)]),
-		// 	) })
-		// }
+		if(import.meta.env.MODE === "development") {
+			console.log({ vars })
+		}
 	})
 
 	return (
@@ -59,6 +54,7 @@ const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 		>
 			<ModalsProvider labels={ { confirm: 'Submit', cancel: 'Cancel' } }>
 				<Notifications />
+				<Flash />
 				{ children }
 			</ModalsProvider>
 		</MantineProvider>

@@ -1,11 +1,11 @@
+import { forwardRef, type ForwardedRef } from 'react'
 import { NestedObject, UseFormProps, useInertiaInput } from 'use-inertia-form'
 import { ConditionalWrapper } from '@/Components'
 import Field from '../Components/Field'
 import MultiSelect, { type MultiSelectInputProps } from '@/Components/Inputs/MultiSelect'
 import { type ComboboxData } from '@mantine/core'
 import { type InputConflicts, type BaseFormInputProps } from '.'
-import { exclude, isUnset } from '@/lib'
-import { coerceArray } from '../../../lib/collections'
+import { exclude, isUnset, coerceArray } from '@/lib'
 
 type OmittedDropdownTypes = InputConflicts | 'onDropdownOpen' | 'onDropdownClose' | 'onOptionSubmit' | 'onClear'
 export interface FormMultiSelectProps<TForm extends NestedObject = NestedObject>
@@ -22,7 +22,7 @@ export interface FormMultiSelectProps<TForm extends NestedObject = NestedObject>
 	onOptionSubmit?: (values: string[], options: ComboboxData, form: UseFormProps<TForm>) => void
 }
 
-const MultiSelectComponent = <TForm extends NestedObject = NestedObject>(
+const MultiSelectComponent = forwardRef(<TForm extends NestedObject = NestedObject>(
 	{
 		options = [],
 		label,
@@ -44,6 +44,7 @@ const MultiSelectComponent = <TForm extends NestedObject = NestedObject>(
 		clearErrorsOnChange,
 		...props
 	}: FormMultiSelectProps<TForm>,
+	ref: ForwardedRef<HTMLInputElement>
 ) => {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<string[], TForm>({
 		name,
@@ -98,6 +99,7 @@ const MultiSelectComponent = <TForm extends NestedObject = NestedObject>(
 			) }
 		>
 			<MultiSelect
+				ref={ ref }
 				// Add "search" suffix to prevent password managers trying to autofill dropdowns
 				id={ `${id || inputId}-search` }
 				autoComplete="off"
@@ -118,6 +120,6 @@ const MultiSelectComponent = <TForm extends NestedObject = NestedObject>(
 			/>
 		</ConditionalWrapper>
 	)
-}
+})
 
 export default MultiSelectComponent

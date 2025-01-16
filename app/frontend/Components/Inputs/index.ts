@@ -18,6 +18,32 @@ export { default as TextInput }         from './TextInput'
 
 export interface BaseInputProps {
 	wrapper?: boolean
+	disableAutofill?: boolean
 }
 
 export type DateInputValue = DateValue | DatesRangeValue | Date[] | undefined
+
+const disableAutofillProps = {
+	autoComplete: 'off',
+	'data-1p-ignore': true,
+	'data-bwignore': true,
+	'data-lpignore': true,
+	'data-form-type': 'other',
+}
+
+type withInjectedPropsFunc = (
+	props: Record<string, unknown>,
+	options: {
+		disableAutofill?: boolean
+	}
+) => Record<string, unknown>
+
+export const withInjectedProps: withInjectedPropsFunc = (props,  { disableAutofill }) => {
+	const usedProps = props ?? {}
+
+	if(disableAutofill) {
+		Object.assign(usedProps, disableAutofillProps)
+	}
+
+	return usedProps
+}

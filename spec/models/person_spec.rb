@@ -45,4 +45,22 @@ RSpec.describe Person do
     it{ is_expected.to have_one(:employee) }
     it{ is_expected.to have_one(:doctor) }
   end
+
+  describe "Attributes" do
+    describe "#name" do
+      it "includes the first and last names" do
+        person = build_stubbed(:person, middle_name: Faker::Name.middle_name)
+
+        expect(person.name).to include(person.first_name)
+        expect(person.name).to include(person.last_name)
+        expect(person.name).not_to include(person.middle_name)
+      end
+
+      it "only include the middle name if the argument is true" do
+        person = build_stubbed(:person, middle_name: Faker::Name.middle_name)
+
+        expect(person.name(include_middle_name: true)).to include(person.middle_name)
+      end
+    end
+  end
 end

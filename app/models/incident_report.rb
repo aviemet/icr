@@ -32,19 +32,8 @@
 class IncidentReport < ApplicationRecord
   include Categorizable
 
-  pg_search_scope(
-    :search,
-    against: [:occurred_at, :reported_at, :agency_notified_at],
-    associated_against: {
-      reported_by: [],
-      client: [],
-      reported_to: [],
-    },
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    },
-  )
+  include PgSearchable
+  pg_search_config(against: [:occurred_at, :reported_at, :agency_notified_at])
 
   resourcify
 

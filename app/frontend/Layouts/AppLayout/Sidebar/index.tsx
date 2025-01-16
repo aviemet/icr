@@ -1,4 +1,4 @@
-import { Routes } from '@/lib'
+import { matchesAtPosition, Routes } from '@/lib'
 import useStore from '@/lib/store'
 import { useLocation, usePageProps } from '@/lib/hooks'
 import IconProvider from '@/Layouts/Providers/IconProvider'
@@ -12,7 +12,7 @@ import {
 	Tooltip,
 } from '@/Components'
 import { TextInput } from '@/Components/Inputs'
-import { ClientIcon, EmployeeIcon, SettingsIcon } from '@/Components/Icons'
+import { ClientIcon, ClockIcon, DashboardIcon, EmployeeIcon, LogoutIcon, SettingsIcon } from '@/Components/Icons'
 import { SiteLogo } from '@/Features'
 import ToggleSidebarButton from '../ToggleSidebarButton'
 import MenuLink from './MenuLink'
@@ -68,21 +68,28 @@ const Sidebar = () => {
 
 				<AppShell.Section p="xs" grow className={ cx(classes.navigation) }>
 					<MenuLink
+						label="Dashboard"
+						href={ Routes.dashboard() }
+						leftSection={ <DashboardIcon /> }
+						active={ matchesAtPosition(paths, [0, 'dashboard']) }
+					/>
+					<MenuLink
 						label="Clients"
 						href={ Routes.clients() }
 						leftSection={ <ClientIcon /> }
-						active={ paths.length >= 1 && paths[0] === 'clients' }
-					/>
-					<MenuLink
-						label="Households"
-						href="/"
-						active={ paths.length >= 1 && paths[0] === 'households' }
+						active={ matchesAtPosition(paths, [0, 'clients']) }
 					/>
 					<MenuLink
 						label="Employees"
 						href={ Routes.employees() }
 						leftSection={ <EmployeeIcon /> }
-						active={ paths.length >= 1 && paths[0] === 'employees' }
+						active={ matchesAtPosition(paths, [0,  'employees']) }
+					/>
+					<MenuLink
+						label="Payroll"
+						href={ Routes.payrolls() }
+						leftSection={ <ClockIcon /> }
+						active={ matchesAtPosition(paths, [0, 'payroll']) }
 					/>
 				</AppShell.Section>
 
@@ -92,6 +99,11 @@ const Sidebar = () => {
 						href={ Routes.settings() }
 						leftSection={ <SettingsIcon /> }
 						active={ paths.length >= 1 && paths[0] === 'settings' }
+					/>
+					<MenuLink
+						label="Sign Out"
+						href={ Routes.destroyUserSession() }
+						leftSection={ <LogoutIcon /> }
 					/>
 				</AppShell.Section>
 

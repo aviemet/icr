@@ -55,13 +55,11 @@ class User < ApplicationRecord
   extend FriendlyId
   friendly_id :email, use: [:slugged, :history]
 
+  include PgSearchable
+  pg_search_config(against: [:email], enable_multisearch: true)
+
   rolify
   tracked except: [:reset_password_token, :remember_created_at, :sign_in_count, :last_sign_in_at, :last_sign_in_ip, :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email, :unlock_token, :active_company]
-
-  multisearchable(
-    against: [:email],
-    additional_attributes: ->(record) { { label: record.email } },
-  )
 
   # Include default devise modules. Others available are:
   #  and :omniauthable
@@ -87,7 +85,7 @@ class User < ApplicationRecord
   end
 
   before_save :coerce_json
-  after_update :synchronize_email_with_contact
+  after_save :synchronize_email_with_contact
 
   private
 
@@ -96,8 +94,10 @@ class User < ApplicationRecord
   end
 
   def synchronize_email_with_contact
-    return unless !person&.contact&.nil? && saved_change_to_email?
+    return unless person.present? &&
+      person.contact.present? &&
+      saved_change_to_email?
 
-    person.contact.create(email: email) unless person.contact.emails.exists?(email: email)
+    person.contact.emails.find_or_create_by!(email: email)
   end
 end

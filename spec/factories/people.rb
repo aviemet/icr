@@ -33,7 +33,7 @@ FactoryBot.define do
     characteristics { {} }
 
     factory :person_with_contacts do
-      contact { association :contact, person: instance }
+      contact { association :contact, contactable: instance }
     end
   end
 end

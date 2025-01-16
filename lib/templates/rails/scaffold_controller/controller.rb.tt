@@ -2,25 +2,25 @@
 class <%= controller_class_name %>Controller < ApplicationController
   include Searchable
   
-  expose :<%= plural_table_name %>, -> { search(@active_company.<%= plural_table_name %>.includes_associated, sortable_fields) }
+  expose :<%= plural_table_name %>, -> { search(<%= orm_class.build(class_name) %>.includes_associated) }
 <% if attributes.include?(:slug) -%>
-  expose :<%= singular_table_name %>, id: ->{ params[:slug] }, scope: ->{ @active_company.<%= plural_table_name %>.includes_associated }, find_by: :slug
+  expose :<%= singular_table_name %>, id: ->{ params[:slug] }, scope: ->{ <%= orm_class.build(class_name) %>.includes_associated }, find_by: :slug
   <% else -%>
-  expose :<%= singular_table_name %>, scope: ->{ @active_company.<%= plural_table_name %> }, find: ->(id, scope){ scope.includes_associated.find(id) }
+  expose :<%= singular_table_name %>, scope: ->{ <%= orm_class.build(class_name) %>.includes_associated }
   <% end -%>
 
   sortable_fields %w(<%= permitted_params.gsub(/[:,]/, '') %>)
 
 <%- if attributes_names.empty? -%>
-  strong_params <%= singular_table_name %>, fetch: :<%= singular_table_name %>
+  strong_params :<%= singular_table_name %>, fetch: :<%= singular_table_name %>
   <%- else -%>
-  strong_params <%= singular_table_name %>, permit: [<%= permitted_params %>]
+  strong_params :<%= singular_table_name %>, permit: [<%= permitted_params %>]
   <%- end -%>
 
   def index
     authorize <%= plural_table_name %>
 
-    paginated_<%= plural_table_name %> = <%= plural_table_name %>.page(params[:page] || 1).per(current_user.limit(:items))
+    paginated_<%= plural_table_name %> = paginate(<%= plural_table_name %>, :<%= plural_table_name %>)
     
     render inertia: "<%= class_name.pluralize %>/Index", props: {
       <%= plural_table_name %>: -> { paginated_<%= plural_table_name %>.render(:index) },

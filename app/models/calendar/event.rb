@@ -22,19 +22,8 @@
 #  fk_rails_...  (parent_id => calendar_events.id)
 #
 class Calendar::Event < ApplicationRecord
-  pg_search_scope(
-    :search,
-    against: [:starts_at, :ends_at],
-    associated_against: {
-      parent: [],
-      recurring_pattern: [],
-      created_by: [],
-    },
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    },
-  )
+  include PgSearchable
+  pg_search_config(against: [:name, :starts_at, :ends_at])
 
   resourcify
 

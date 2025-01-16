@@ -2179,6 +2179,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fragaria/address-formatter@npm:^6.4.0":
+  version: 6.4.0
+  resolution: "@fragaria/address-formatter@npm:6.4.0"
+  dependencies:
+    mustache: "npm:^4.0.0"
+  checksum: 10c0/f141c4e98ae9d61e32e0468585f9b14aa9d64d1e7fbf80add06dd8468b42d4635ebaa1b9c22c28a0de3fe873dd5f9e9603dfe5d2f4d3708f89e605a7b0d9f36a
+  languageName: node
+  linkType: hard
+
 "@humanfs/core@npm:^0.19.1":
   version: 0.19.1
   resolution: "@humanfs/core@npm:0.19.1"
@@ -8307,6 +8316,7 @@ __metadata:
     "@dnd-kit/modifiers": "npm:^9.0.0"
     "@eslint/compat": "npm:^1.2.4"
     "@eslint/json": "npm:^0.9.0"
+    "@fragaria/address-formatter": "npm:^6.4.0"
     "@inertiajs/react": "npm:^2.0.0"
     "@linaria/core": "npm:^6.2.0"
     "@mantine/core": "npm:^7.15.2"
@@ -10565,6 +10575,15 @@ __metadata:
   bin:
     msw: cli/index.js
   checksum: 10c0/14fb8299dcb6bcf2c6b3777a3127ed6be795a281598394022650b82889f1b70e0ada96559fefead351b18ed5db4e0a3a64367b758dd64f74dea63edc8eb2b551
+  languageName: node
+  linkType: hard
+
+"mustache@npm:^4.0.0":
+  version: 4.2.0
+  resolution: "mustache@npm:4.2.0"
+  bin:
+    mustache: bin/mustache
+  checksum: 10c0/1f8197e8a19e63645a786581d58c41df7853da26702dbc005193e2437c98ca49b255345c173d50c08fe4b4dbb363e53cb655ecc570791f8deb09887248dd34a2
   languageName: node
   linkType: hard
 

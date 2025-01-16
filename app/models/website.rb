@@ -23,15 +23,6 @@
 class Website < ApplicationRecord
   include Categorizable
 
-  pg_search_scope(
-    :search,
-    against: [:url, :category, :name],
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    },
-  )
-
   tracked
   resourcify
 

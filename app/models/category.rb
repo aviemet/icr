@@ -25,15 +25,8 @@ class Category < ApplicationRecord
   extend FriendlyId
   friendly_id :slug_from_category_type
 
-  pg_search_scope(
-    :search,
-    against: [:name],
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    },
-    ignoring: :accents,
-  )
+  include PgSearchable
+  pg_search_config(against: [:name])
 
   resourcify
 
@@ -54,11 +47,7 @@ class Category < ApplicationRecord
   scope :includes_associated, -> { includes([:parent]) }
 
   def to_s
-    if attribute_present?("categorizable_type") && attribute_present?("name")
-      "#{categorizable_type} - #{name}"
-    else
-      super
-    end
+    "#{categorizable_type.gsub('::', ' ')} - #{name}"
   end
 
   def records

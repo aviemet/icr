@@ -1,8 +1,12 @@
 class DosagesController < ApplicationController
   include Searchable
 
-  expose :dosages, -> { search(Dosage.includes_associated, sortable_fields) }
-  expose :dosage, scope: ->{ Dosage }, find: ->(id, scope){ scope.includes_associated.find(id) }
+  expose :dosages, -> { Dosage.includes_associated }
+  expose :dosage, scope: ->{ Dosage.includes_associated }
+
+  sortable_fields %w(amount amount_unit freq_amount freq_period notes)
+
+  strong_params :dosage, permit: [:amount, :amount_unit, :freq_amount, :freq_period, :notes]
 
   # @route GET /dosages (dosages)
   def index
@@ -62,15 +66,5 @@ class DosagesController < ApplicationController
     authorize dosage
     dosage.destroy!
     redirect_to dosages_url, notice: "Dosage was successfully destroyed."
-  end
-
-  private
-
-  def sortable_fields
-    %w(amount amount_unit freq_amount freq_period notes).freeze
-  end
-
-  def dosage_params
-    params.require(:dosage).permit(:amount, :amount_unit, :freq_amount, :freq_period, :notes)
   end
 end

@@ -36,16 +36,23 @@ RSpec.describe Category do
     end
 
     it "is invalid with invalid categorizable type" do
-      expect(build(:category, { categorizable_type: "Invalid"})).not_to be_valid
+      expect(build(:category, { categorizable_type: "Invalid" })).not_to be_valid
     end
 
     it "enforces uniquess of :name across :categorizable_type" do
-      name = "Exmample"
+      name = "Example"
       create(:category, { name:, categorizable_type: "Address" })
 
       expect(build(:category, { name:, categorizable_type: "Address" })).not_to be_valid
       expect(build(:category, { name:, categorizable_type: "Email" })).to be_valid
     end
+
+    it { is_expected.to validate_uniqueness_of(:name).scoped_to(:categorizable_type).with_message(I18n.t("categories.validations.uniqueness")) }
+  end
+
+  describe "Associations" do
+    it { is_expected.to belong_to(:parent).class_name("Category").optional }
+    it { is_expected.to have_many(:subcategories).class_name("Category").with_foreign_key("parent_id").dependent(:destroy) }
   end
 
   describe "Search methods" do
@@ -79,6 +86,23 @@ RSpec.describe Category do
       end
     end
 
+  end
+
+  describe "Hierarchy" do
+    it "allows parent-child relationships" do
+      parent_category = create(:category)
+      child_category = create(:category, parent: parent_category)
+
+      expect(child_category.parent).to eq(parent_category)
+      expect(parent_category.subcategories).to include(child_category)
+    end
+  end
+
+  describe "#to_s" do
+    it "returns formatted string with type and name" do
+      category = create(:category, categorizable_type: "Calendar::Event", name: "Meeting")
+      expect(category.to_s).to eq("Calendar Event - Meeting")
+    end
   end
 
 end

@@ -2,21 +2,24 @@ class UsersController < ApplicationController
   include Searchable
 
   expose :users, -> { search(User.all.includes_associated, sortable_fields) }
-  expose :user, scope: -> { Circle.includes_associated }
+  expose :user, scope: -> { User.includes_associated }
+  expose :people, scope: -> { Person.includes_associated }
+
+  sortable_fields %w[email active first_name last_name number]
+
+  strong_params :user, permit: [:email, :password, :active, :first_name, :last_name, :number]
 
   # @route GET /users (users)
   def index
-    authorize users
-    paginated_users = users.page(params[:page] || 1)
+    authorize people
+    paginated_people = paginate(people, :people)
 
     render inertia: "Users/Index", props: {
-      users: users.render,
-      pagination: lambda {
-        {
-              count: users.count,
-              **pagination_data(paginated_users),
-            }
-      },
+      people: -> { paginated_people.render(:index) },
+      pagination: -> { {
+        count: people.count,
+        **pagination_data(paginated_people),
+      } },
     }
   end
 
@@ -66,7 +69,7 @@ class UsersController < ApplicationController
   def update
     authorize user
     if user.update(user_params)
-      redirect_to user, notice: "User was successfully updated."
+      redirect_to user, notice: t("users.notices.updated")
     else
       redirect_to edit_user_path(user), inertia: { errors: user.errors }
     end
@@ -77,17 +80,7 @@ class UsersController < ApplicationController
     authorize user
     user.destroy
     respond_to do
-      redirect_to users_url, notice: "User was successfully destroyed."
+      redirect_to users_url, notice: t("users.notices.destroyed")
     end
-  end
-
-  private
-
-  def sortable_fields
-    %w[email active first_name last_name number].freeze
-  end
-
-  def user_params
-    params.require(:user).permit(:email, :password, :active, :first_name, :last_name, :number)
   end
 end

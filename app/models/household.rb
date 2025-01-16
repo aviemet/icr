@@ -13,24 +13,14 @@
 #  index_households_on_slug  (slug) UNIQUE
 #
 class Household < ApplicationRecord
-  extend FriendlyId
-  friendly_id :name, use: [:slugged, :history]
-
   include Contactable
   include Participantable
 
-  pg_search_scope(
-    :search,
-    against: [:name],
-    associated_against: {
-      employee: [],
-      client: [],
-    },
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    },
-  )
+  extend FriendlyId
+  friendly_id :name, use: [:slugged, :history]
+
+  include PgSearchable
+  pg_search_config(against: [:name])
 
   has_many :households_clients, dependent: :nullify
   has_many :clients, through: :households_clients, dependent: :nullify

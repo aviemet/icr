@@ -5,6 +5,8 @@ Rails.application.routes.draw do
 
   root "pages#index"
 
+  get "/dashboard", to: "pages#dashboard", as: :dashboard
+
   match "/404", to: "errors#not_found", as: :error_404, via: :all
   match "/422", to: "errors#unprocessable_entity", as: :error_422, via: :all
   match "/500", to: "errors#internal_server_error", as: :error_500, via: :all
@@ -52,11 +54,17 @@ Rails.application.routes.draw do
   put :settings, to: "settings#update"
   patch :settings, to: "settings#update"
 
+  resources :users, param: :slug
+
   resources :clients, param: :slug, concerns: :schedulable
 
   resources :employees, param: :slug, concerns: :schedulable
 
+  resources :shift_templates
+
   resources :people, param: :slug
+
+  resources :payrolls, only: [:index]
 
   resources :vendors, param: :slug
 

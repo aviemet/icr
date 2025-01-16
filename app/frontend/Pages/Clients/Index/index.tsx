@@ -1,6 +1,5 @@
 import { Routes } from '@/lib'
 import { IndexPageTemplate } from '@/Features'
-import { NewIcon } from '@/Components/Icons'
 import ClientsTable from '../Table'
 
 interface ClientIndexProps {
@@ -16,9 +15,6 @@ const ClientsIndex = ({ clients, pagination }: ClientIndexProps) => {
 			rows={ clients }
 			pagination={ pagination }
 			deleteRoute={ Routes.clients() }
-			menuOptions={ [
-				{ label: 'New Client', href: Routes.newClient(), icon: <NewIcon /> },
-			] }
 		>
 			<ClientsTable />
 		</IndexPageTemplate>

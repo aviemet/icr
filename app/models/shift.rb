@@ -19,20 +19,6 @@
 #  fk_rails_...  (employee_id => employees.id)
 #
 class Shift < ApplicationRecord
-
-  pg_search_scope(
-    :search,
-    against: [],
-    associated_against: {
-      employee: [],
-      calendar_event: [],
-    },
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    },
-  )
-
   tracked
   resourcify
 

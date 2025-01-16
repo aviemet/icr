@@ -1,12 +1,20 @@
 import React, { forwardRef } from 'react'
 import { Autocomplete, type AutocompleteProps as MantineAutocompleteProps } from '@mantine/core'
-import { type BaseInputProps } from '.'
+import { withInjectedProps, type BaseInputProps } from '.'
 import InputWrapper from './InputWrapper'
 
 export interface AutocompleteProps extends MantineAutocompleteProps, BaseInputProps {}
 
 const AutocompleteComponent = forwardRef<HTMLInputElement, AutocompleteProps>((
-	{ id, name, style, wrapper, wrapperProps, ...props },
+	{
+		id,
+		name,
+		style,
+		wrapper,
+		wrapperProps,
+		disableAutofill = true,
+		...props
+	},
 	ref,
 ) => {
 	const inputId = id ?? name
@@ -19,7 +27,9 @@ const AutocompleteComponent = forwardRef<HTMLInputElement, AutocompleteProps>((
 				name={ name }
 				style={ [{ padding: '14px 10px' }, style] }
 				wrapperProps={ wrapper ? {} : wrapperProps }
-				{ ...props }
+				{ ...withInjectedProps(props, {
+					disableAutofill,
+				}) }
 			/>
 		</InputWrapper>
 	)

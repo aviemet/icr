@@ -26,12 +26,12 @@ class Calendar::EventSerializer < ApplicationSerializer
 
   attributes(
     :name,
-    :starts_at,
-    :ends_at,
     :parent_id,
     :created_by_id,
     :created_at,
     :updated_at,
+    :starts_at,
+    :ends_at,
   )
 
   has_many :recurring_patterns, serializer: Calendar::RecurringPatternSerializer

@@ -7,13 +7,13 @@ interface EditClientProps {
 }
 
 const EditClient = ({ client }: EditClientProps) => {
-	const title = 'Edit Client'
+	const title = `Edit ${client.name}`
 
 	return (
 		<Page title={ title } breadcrumbs={ [
 			{ title: 'Clients', href: Routes.clients() },
-			{ title, href: Routes.client(client.id) },
-			{ title },
+			{ title: client.name, href: Routes.client(client.id) },
+			{ title: 'Edit' },
 		] }>
 			<Section>
 				<Heading>{ title }</Heading>

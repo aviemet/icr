@@ -120,7 +120,7 @@ RSpec.describe "/clients", :inertia do
       it "updates the requested client" do
         client = create(:client)
 
-        patch client_url(client), params: { client: { number: "changed"} }
+        patch client_url(client), params: { client: { number: "changed" } }
         client.reload
 
         expect(client.number).to eq("changed")
@@ -129,7 +129,7 @@ RSpec.describe "/clients", :inertia do
       it "redirects to the client" do
         client = create(:client)
 
-        patch client_url(client), params: { client: { number: "changed"} }
+        patch client_url(client), params: { client: { number: "changed" } }
         client.reload
 
         expect(response).to redirect_to(client_url(client))
@@ -162,6 +162,30 @@ RSpec.describe "/clients", :inertia do
       client = create(:client)
       delete client_url(client)
       expect(response).to redirect_to(clients_url)
+    end
+  end
+
+  describe "GET /schedule" do
+    login_user(:admin)
+
+    it "renders a successful response" do
+      client = create(:client)
+
+      get schedule_client_url(client)
+
+      expect(response).to have_http_status(:ok)
+      expect_inertia.to render_component "Clients/Schedule"
+    end
+
+    it "includes schedules within the date range" do
+      client = create(:client)
+      employee = create(:employee)
+      shift = create(:shift, employee: employee)
+      event = create(:calendar_event, client: client, shift: shift)
+
+      get schedule_client_url(client)
+
+      expect(response.body).to include(event.to_json)
     end
   end
 end

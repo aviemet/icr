@@ -7,6 +7,11 @@ import {
 	FormPayPeriodsDropdown,
 	FormTimezonesDropdown,
 } from '@/Features/Dropdowns'
+import ShiftTitleFormatInput from './ShiftTitleFormatInput'
+
+export type SettingsFormData = {
+	setting: Schema.Setting
+}
 
 interface SettingIndexProps {
 	settings: Schema.Setting
@@ -16,11 +21,12 @@ const SettingsIndex = ({ settings }: SettingIndexProps) => {
 	return (
 		<Page title="Settings" >
 			<Box>
-				<Form
+				<Form<SettingsFormData>
 					to={ Routes.settings() }
 					model="setting"
 					method="patch"
 					data={ { setting: settings } }
+					remember={ false }
 				>
 					<Grid>
 						<Grid.Col>
@@ -29,29 +35,37 @@ const SettingsIndex = ({ settings }: SettingIndexProps) => {
 								name="company_name"
 							/>
 						</Grid.Col>
+
 						<Grid.Col>
 							<FormLanguagesDropdown
 								label="Default Language"
 								name="default_language"
 							/>
 						</Grid.Col>
+
 						<Grid.Col>
 							<FormCurrenciesDropdown
 								label="Default Currency"
 								name="default_currency"
 							/>
 						</Grid.Col>
+
 						<Grid.Col>
 							<FormTimezonesDropdown
 								label="Default Timezone"
 								name="default_timezone"
 							/>
 						</Grid.Col>
+
 						<Grid.Col>
 							<FormPayPeriodsDropdown
 								label="Pay Period Type"
 								name="pay_period_type"
 							/>
+						</Grid.Col>
+
+						<Grid.Col>
+							<ShiftTitleFormatInput settings={ settings } />
 						</Grid.Col>
 
 						<Grid.Col>

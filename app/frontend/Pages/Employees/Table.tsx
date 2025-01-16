@@ -1,6 +1,6 @@
 import { Routes } from '@/lib'
-import { Table, Link } from '@/Components'
-import { EditButton } from '@/Components/Button'
+import { Table, Link, Group } from '@/Components'
+import { EditButton, ScheduleButton } from '@/Components/Button'
 import { type TableProps } from '@/Components/Table/Table'
 
 const EmployeeTable = (props: TableProps) => {
@@ -8,10 +8,9 @@ const EmployeeTable = (props: TableProps) => {
 		<Table>
 			<Table.Head>
 				<Table.Row>
-
-					<Table.HeadCell sort="active_at">Active_at</Table.HeadCell>
-					<Table.HeadCell sort="inactive_at">Inactive_at</Table.HeadCell>
-					<Table.HeadCell sort="number">Number</Table.HeadCell>
+					<Table.HeadCell sort="first_name">First Name</Table.HeadCell>
+					<Table.HeadCell sort="last_name">Last Name</Table.HeadCell>
+					<Table.HeadCell sort="number">Employee Number</Table.HeadCell>
 					<Table.HeadCell className="actions">Actions</Table.HeadCell>
 				</Table.Row>
 			</Table.Head>
@@ -20,17 +19,24 @@ const EmployeeTable = (props: TableProps) => {
 					<Table.Row key={ employee.id }>
 
 						<Table.Cell>
-							<Link href={ Routes.employee(employee.id) }>{ employee.active_at }</Link>
+							<Link href={ Routes.employee(employee.slug) }>{ employee.first_name }</Link>
 						</Table.Cell>
+
 						<Table.Cell>
-							<Link href={ Routes.employee(employee.id) }>{ employee.inactive_at }</Link>
+							<Link href={ Routes.employee(employee.slug) }>{ employee.last_name }</Link>
 						</Table.Cell>
+
 						<Table.Cell>
-							<Link href={ Routes.employee(employee.id) }>{ employee.number }</Link>
+							<Link href={ Routes.employee(employee.slug) }>{ employee.number }</Link>
 						</Table.Cell>
+
 						<Table.Cell>
-							<EditButton href={ Routes.editEmployee(employee.id) } />
+							<Group wrap="nowrap" gap="xs">
+								<EditButton href={ Routes.editEmployee(employee.slug) } />
+								<ScheduleButton href={ Routes.scheduleEmployee(employee.slug) } />
+							</Group>
 						</Table.Cell>
+
 					</Table.Row>
 				) } />
 			</Table.Body>

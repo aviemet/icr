@@ -6,7 +6,10 @@ import { InputProps } from 'react-html-props'
 import { type BaseInputProps } from '.'
 import InputWrapper from './InputWrapper'
 
-export interface SwatchInputProps extends Omit<InputProps, 'onChange'>, BaseInputProps {
+export interface SwatchInputProps
+	extends
+	Omit<InputProps, 'onChange'>,
+	Omit<BaseInputProps, 'disableAutofill'> {
 	label?: React.ReactNode
 	initialValue?: string
 	onChange?: (color: string) => void

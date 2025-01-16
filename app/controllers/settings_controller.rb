@@ -21,7 +21,7 @@ class SettingsController < ApplicationController
         Setting.send("#{key}=", setting_params[key].strip) unless setting_params[key].nil?
       end
 
-      redirect_to settings_path, notice: "Setting was successfully updated."
+      redirect_to settings_path, success: t("settings.notices.updated")
     rescue StandardError
       redirect_to settings_path, inertia: { errors: setting.errors }
     end

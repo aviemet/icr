@@ -43,15 +43,9 @@ export const calendar = css`
 	.rbc-month-view {
 
 		.rbc-row-bg {
-			z-index: 1;
+			/* z-index: 1; */
 
 			.rbc-date-cell {
-				&:hover {					
-					.${newShiftButton} {
-						border: 10px solid green;
-						display: block;
-					}
-				}
 
 				.rbc-day-bg {
 
@@ -63,6 +57,7 @@ export const calendar = css`
 			overflow: unset;
 
 			.rbc-row-content {
+				min-height: 145px;
 
 				&.rbc-row-content-scrollable {
 					

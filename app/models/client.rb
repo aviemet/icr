@@ -22,26 +22,21 @@
 #  fk_rails_...  (person_id => people.id)
 #
 class Client < ApplicationRecord
-  extend FriendlyId
-  friendly_id :slug_candidates
-
   include Identificationable
   include Participantable
   include CalendarCustomizable
   include Personable
 
-  pg_search_scope(
-    :search,
+  include PgSearchable
+  pg_search_config(
     against: [:active_at, :inactive_at, :number],
     associated_against: {
-      person: [:first_name, :middle_name, :last_name],
+      person: [:first_name, :middle_name, :last_name]
     },
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    },
-    ignoring: :accents,
   )
+
+  extend FriendlyId
+  friendly_id :slug_candidates
 
   resourcify
 
@@ -52,7 +47,9 @@ class Client < ApplicationRecord
   has_one :households_client, dependent: :destroy
   has_one :household, through: :households_client, dependent: :nullify
 
-  scope :includes_associated, -> { includes([:person]) }
+  scope :includes_associated, -> { includes([:person, :calendar_customization]) }
+
+  after_create -> { self.update(:active_at, Time.current) }
 
   private
 

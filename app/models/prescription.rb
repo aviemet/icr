@@ -27,22 +27,6 @@
 #  fk_rails_...  (medication_id => medications.id)
 #
 class Prescription < ApplicationRecord
-
-  pg_search_scope(
-    :search,
-    against: [:medication, :client, :start_at, :ends_at, :doctor, :dosage],
-    associated_against: {
-      medication: [],
-      client: [],
-      doctor: [],
-      dosage: [],
-    },
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    },
-  )
-
   resourcify
 
   belongs_to :medication

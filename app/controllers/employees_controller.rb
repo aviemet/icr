@@ -2,7 +2,7 @@ class EmployeesController < ApplicationController
   include Searchable
 
   expose :employees, -> { search(Employee.includes_associated) }
-  expose :employee, scope: ->{ Employee }, find: ->(id, scope){ scope.includes_associated.find(id) }
+  expose :employee, id: -> { params[:slug] }, find_by: :slug, scope: -> { Employee.includes_associated }
 
   sortable_fields %w(person_id active_at inactive_at number)
 
@@ -11,14 +11,22 @@ class EmployeesController < ApplicationController
   # @route GET /employees (employees)
   def index
     authorize employees
+
+    paginated_employees = paginate(employees, :employees)
+
     render inertia: "Employees/Index", props: {
-      employees: -> { employees.render(:index) }
+      employees: -> { paginated_employees.render(:index) },
+      pagination: -> { {
+        count: employees.count,
+        **pagination_data(paginated_employees)
+      } }
     }
   end
 
   # @route GET /employees/:slug (employee)
   def show
     authorize employee
+
     render inertia: "Employees/Show", props: {
       employee: -> { employee.render(:show) }
     }
@@ -27,6 +35,7 @@ class EmployeesController < ApplicationController
   # @route GET /employees/new (new_employee)
   def new
     authorize Employee.new
+
     render inertia: "Employees/New", props: {
       employee: Employee.new.render(:form_data)
     }
@@ -35,8 +44,24 @@ class EmployeesController < ApplicationController
   # @route GET /employees/:slug/edit (edit_employee)
   def edit
     authorize employee
+
     render inertia: "Employees/Edit", props: {
       employee: employee.render(:edit)
+    }
+  end
+
+  # @route GET /employees/:slug/schedule (schedule_employee)
+  def schedule
+    schedules = employee
+      .all_events
+      .includes([:recurring_patterns, shift: [employee: [:person, :job_title, :calendar_customization]]])
+      .between(range_start, range_end)
+
+    render inertia: "Employees/Schedule", props: {
+      employee: -> { employee.render(:show) },
+      schedules: lambda {
+        schedules.render(:show)
+      },
     }
   end
 
@@ -66,5 +91,15 @@ class EmployeesController < ApplicationController
     authorize employee
     employee.destroy!
     redirect_to employees_url, notice: t("employees.notices.created")
+  end
+
+  private
+
+  def range_start
+    params[:start] || Time.current.beginning_of_month.prev_occurring(:sunday)
+  end
+
+  def range_end
+    params[:end] || Time.current.end_of_month.next_occurring(:saturday)
   end
 end

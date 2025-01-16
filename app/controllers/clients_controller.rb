@@ -1,18 +1,22 @@
 class ClientsController < ApplicationController
   include Searchable
 
-  expose :clients, -> { search(Client.includes_associated) }
-  expose :client, id: -> { params[:slug] }, find_by: :slug
+  expose :clients, ->{ search(Client.includes_associated) }
+  expose :client, id: ->{ params[:slug] }, scope: ->{ Client.includes_associated }, find_by: :slug
 
   sortable_fields %w(active_at inactive_at number people.first_name people.last_name)
 
-  strong_params :client, permit: [:person_id, :active_at, :inactive_at, :number, person_attributes: [:first_name, :last_name, :middle_name, :nick_name, :dob, :characteristics]]
+  strong_params :client, permit: [
+    :person_id, :active_at, :inactive_at, :number, person_attributes: [
+      :first_name, :last_name, :middle_name, :nick_name, :dob, :characteristics
+    ]
+  ]
 
   # @route GET /clients (clients)
   def index
     authorize clients
 
-    paginated_clients = clients.page(params[:page] || 1).per(current_user.limit(:clients))
+    paginated_clients = paginate(clients, :clients)
 
     render inertia: "Clients/Index", props: {
       clients: -> { paginated_clients.render(:index) },

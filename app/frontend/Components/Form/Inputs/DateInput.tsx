@@ -1,3 +1,4 @@
+import { forwardRef, type ForwardedRef } from 'react'
 import Field from '../Components/Field'
 import { DateInput, type DateInputValue } from '@/Components/Inputs'
 import { type DateInputProps } from '@/Components/Inputs/DateInput'
@@ -11,21 +12,23 @@ interface FormDateInputProps<TForm extends NestedObject = NestedObject>
 	Omit<DateInputProps, InputConflicts>,
 	BaseFormInputProps<Exclude<DateInputValue, undefined | null> | '', TForm> {}
 
-const FormDateInput = <TForm extends NestedObject = NestedObject>({
-	name,
-	required,
-	onChange,
-	onBlur,
-	onFocus,
-	id,
-	model,
-	field = true,
-	wrapperProps,
-	errorKey,
-	defaultValue,
-	clearErrorsOnChange,
-	...props
-}: FormDateInputProps<TForm>,
+const FormDateInput = forwardRef(<TForm extends NestedObject = NestedObject>(
+	{
+		name,
+		required,
+		onChange,
+		onBlur,
+		onFocus,
+		id,
+		model,
+		field = true,
+		wrapperProps,
+		errorKey,
+		defaultValue,
+		clearErrorsOnChange,
+		...props
+	}: FormDateInputProps<TForm>,
+	ref: ForwardedRef<HTMLButtonElement>
 ) => {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<
 		Exclude<DateInputValue, undefined | null> | '',
@@ -65,6 +68,7 @@ const FormDateInput = <TForm extends NestedObject = NestedObject>({
 			) }
 		>
 			<DateInput
+				ref={ ref }
 				id={ id || inputId }
 				name={ inputName }
 				value={ isUnset(value) ? undefined : value }
@@ -77,6 +81,6 @@ const FormDateInput = <TForm extends NestedObject = NestedObject>({
 			/>
 		</ConditionalWrapper>
 	)
-}
+})
 
 export default FormDateInput

@@ -18,20 +18,14 @@
 #  fk_rails_...  (person_id => people.id)
 #
 class Doctor < ApplicationRecord
-  extend FriendlyId
-  friendly_id :name, use: [:slugged, :history]
-
   include Participantable
   include Personable
 
-  pg_search_scope(
-    :search,
-    against: [:first_name, :last_name, :notes],
-    using: {
-      tsearch: { prefix: true },
-      trigram: {}
-    },
-  )
+  extend FriendlyId
+  friendly_id :name, use: [:slugged, :history]
+
+  include PgSearchable
+  pg_search_config(against: [:first_name, :last_name, :notes])
 
   resourcify
 
