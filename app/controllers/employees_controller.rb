@@ -12,8 +12,14 @@ class EmployeesController < ApplicationController
   def index
     authorize employees
 
+    paginated_employees = paginate(employees, :employees)
+
     render inertia: "Employees/Index", props: {
-      employees: -> { employees.render(:index) }
+      employees: -> { paginated_employees.render(:index) },
+      pagination: -> { {
+        count: employees.count,
+        **pagination_data(paginated_employees)
+      } }
     }
   end
 

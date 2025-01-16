@@ -1,14 +1,25 @@
 class DoctorsController < ApplicationController
   include Searchable
 
-  expose :doctors, -> { search(Doctor.includes_associated, sortable_fields) }
+  expose :doctors, -> { search(Doctor.includes_associated) }
   expose :doctor, scope: ->{ Doctor.includes_associated }
+
+  sortable_fields %w(first_name last_name notes)
+
+  strong_params :doctor, permit: [:first_name, :last_name, :notes]
 
   # @route GET /doctors (doctors)
   def index
     authorize doctors
+
+    paginated_doctors = paginate(doctors, :doctors)
+
     render inertia: "Doctor/Index", props: {
-      doctors: -> { doctors.render(:index) }
+      doctors: -> { paginated_doctors.render(:index) },
+      pagination: -> { {
+        count: doctors.count,
+        **pagination_data(paginated_doctors)
+      } }
     }
   end
 
@@ -62,15 +73,5 @@ class DoctorsController < ApplicationController
     authorize doctor
     doctor.destroy!
     redirect_to doctors_url, notice: "Doctor was successfully destroyed."
-  end
-
-  private
-
-  def sortable_fields
-    %w(first_name last_name notes).freeze
-  end
-
-  def doctor_params
-    params.require(:doctor).permit(:first_name, :last_name, :notes)
   end
 end

@@ -1,14 +1,25 @@
 class IncidentReportsController < ApplicationController
   include Searchable
 
-  expose :incident_reports, -> { search(IncidentReport.includes_associated, sortable_fields) }
+  expose :incident_reports, -> { search(IncidentReport.includes_associated) }
   expose :incident_report, scope: ->{ IncidentReport }, find: ->(id, scope){ scope.includes_associated.find(id) }
+
+  sortable_fields %w(occurred_at reported_by_id client_id reported_at agency_notified_at reported_to_id location)
+
+  strong_params :incident_report, permit: [:occurred_at, :reported_by_id, :client_id, :reported_at, :agency_notified_at, :reported_to_id, :location]
 
   # @route GET /incident_reports (incident_reports)
   def index
     authorize incident_reports
+
+    paginated_incident_reports = paginate(incident_reports, :incident_reports)
+
     render inertia: "IncidentReport/Index", props: {
-      incident_reports: -> { incident_reports.render(:index) }
+      incident_reports: -> { paginated_incident_reports.render(:index) },
+      pagination: -> { {
+        count: incident_reports.count,
+        **pagination_data(paginated_incident_reports)
+      } }
     }
   end
 
@@ -62,15 +73,5 @@ class IncidentReportsController < ApplicationController
     authorize incident_report
     incident_report.destroy!
     redirect_to incident_reports_url, notice: "Incident report was successfully destroyed."
-  end
-
-  private
-
-  def sortable_fields
-    %w(occurred_at reported_by_id client_id reported_at agency_notified_at reported_to_id location).freeze
-  end
-
-  def incident_report_params
-    params.require(:incident_report).permit(:occurred_at, :reported_by_id, :client_id, :reported_at, :agency_notified_at, :reported_to_id, :location)
   end
 end

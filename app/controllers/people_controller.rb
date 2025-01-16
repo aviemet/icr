@@ -1,13 +1,17 @@
 class PeopleController < ApplicationController
   include Searchable
 
-  expose :people, -> { search(Person.includes_associated, sortable_fields) }
+  expose :people, -> { search(Person.includes_associated) }
   expose :person, scope: ->{ Person }, find: ->(id, scope){ scope.includes_associated.find(id) }
+
+  sortable_fields %w(first_name last_name middle_name nick_name dob created_at updated_at)
+
+  strong_params :person, permit: [:first_name, :last_name, :middle_name, :nick_name, :dob]
 
   # @route GET /people (people)
   def index
     authorize people
-    paginated_people = people.page(params[:page] || 1).per(current_user.limit(:people))
+    paginated_people = paginate(people, :people)
 
     render inertia: "People/Index", props: {
       people: -> { paginated_people.render(:index) },
@@ -68,15 +72,5 @@ class PeopleController < ApplicationController
     authorize person
     person.destroy!
     redirect_to people_url, notice: "Person was successfully destroyed."
-  end
-
-  private
-
-  def sortable_fields
-    %w(first_name last_name middle_name nick_name dob created_at updated_at).freeze
-  end
-
-  def person_params
-    params.require(:person).permit(:person_id, :active_at, :inactive_at, :number)
   end
 end

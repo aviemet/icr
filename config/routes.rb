@@ -54,6 +54,8 @@ Rails.application.routes.draw do
   put :settings, to: "settings#update"
   patch :settings, to: "settings#update"
 
+  resources :users, param: :slug
+
   resources :clients, param: :slug, concerns: :schedulable
 
   resources :employees, param: :slug, concerns: :schedulable

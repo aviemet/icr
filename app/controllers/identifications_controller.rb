@@ -1,8 +1,12 @@
 class IdentificationsController < ApplicationController
   include Searchable
 
-  expose :identifications, -> { search(Identification.includes_associated, sortable_fields) }
+  expose :identifications, -> { Identification.includes_associated }
   expose :identification, scope: ->{ Identification }, find: ->(id, scope){ scope.includes_associated.find(id) }
+
+  sortable_fields %w(identificationable_id identificationable_type type number notes issued_at expires_at extra_fields)
+
+  strong_params :identification, permit: [:identificationable_id, :identificationable_type, :type, :number, :notes, :issued_at, :expires_at, :extra_fields]
 
   # @route GET /identifications (identifications)
   def index
@@ -62,15 +66,5 @@ class IdentificationsController < ApplicationController
     authorize identification
     identification.destroy!
     redirect_to identifications_url, notice: "Identification was successfully destroyed."
-  end
-
-  private
-
-  def sortable_fields
-    %w(identificationable_id identificationable_type type number notes issued_at expires_at extra_fields).freeze
-  end
-
-  def identification_params
-    params.require(:identification).permit(:identificationable_id, :identificationable_type, :type, :number, :notes, :issued_at, :expires_at, :extra_fields)
   end
 end

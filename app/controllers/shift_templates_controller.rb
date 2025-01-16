@@ -1,5 +1,5 @@
 class ShiftTemplatesController < ApplicationController
-  expose :shift_templates, -> { ShiftTemplate.includes_associated }
+  expose :shift_templates, -> { search(ShiftTemplate.includes_associated) }
   expose :shift_template, scope: ->{ ShiftTemplate.includes_associated }
 
   sortable_fields %w(name)
@@ -10,7 +10,7 @@ class ShiftTemplatesController < ApplicationController
   def index
     authorize shift_templates
 
-    paginated_shift_templates = shift_templates.page(params[:page] || 1).per(current_user.limit(:items))
+    paginated_shift_templates = paginate(shift_templates, :shift_templates)
 
     render inertia: "ShiftTemplates/Index", props: {
       shift_templates: -> { paginated_shift_templates.render(:index) },

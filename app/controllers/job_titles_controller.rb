@@ -1,17 +1,25 @@
 class JobTitlesController < ApplicationController
   include Searchable
 
-  expose :job_titles, -> { search(JobTitle.includes_associated, sortable_fields) }
+  expose :job_titles, -> { search(JobTitle.includes_associated) }
   expose :job_title, find: ->(id, scope){ scope.includes_associated.find(id) }
+
+  sortable_fields %w(title description)
+
+  strong_params :job_title, permit: [:title, :description]
 
   # @route GET /job_titles (job_titles)
   def index
     authorize job_titles
 
-    paginated_job_titles = job_titles.page(params[:page] || 1).per(current_user.limit(:items))
+    paginated_job_titles = paginate(job_titles, :job_titles)
 
     render inertia: "JobTitles/Index", props: {
-      job_titles: -> { paginated_job_titles.render(:index) }
+      job_titles: -> { paginated_job_titles.render(:index) },
+      pagination: -> { {
+        count: job_titles.count,
+        **pagination_data(paginated_job_titles)
+      } }
     }
   end
 
@@ -65,15 +73,5 @@ class JobTitlesController < ApplicationController
     authorize job_title
     job_title.destroy!
     redirect_to job_titles_url, notice: "Job title was successfully destroyed."
-  end
-
-  private
-
-  def sortable_fields
-    %w(title description).freeze
-  end
-
-  def job_title_params
-    params.require(:job_title).permit(:title, :description)
   end
 end

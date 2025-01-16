@@ -1,8 +1,12 @@
 class MedicationsController < ApplicationController
   include Searchable
 
-  expose :medications, -> { search(Medication.includes_associated, sortable_fields) }
+  expose :medications, -> { Medication.includes_associated }
   expose :medication, scope: ->{ Medication }, find: ->(id, scope){ scope.includes_associated.find(id) }
+
+  sortable_fields %w(name generic_name notes)
+
+  strong_params :medication, permit: [:name, :generic_name, :notes]
 
   # @route GET /medications (medications)
   def index
@@ -62,15 +66,5 @@ class MedicationsController < ApplicationController
     authorize medication
     medication.destroy!
     redirect_to medications_url, notice: "Medication was successfully destroyed."
-  end
-
-  private
-
-  def sortable_fields
-    %w(name generic_name notes).freeze
-  end
-
-  def medication_params
-    params.require(:medication).permit(:name, :generic_name, :notes)
   end
 end

@@ -1,14 +1,24 @@
 class PrescriptionsController < ApplicationController
   include Searchable
 
-  expose :prescriptions, -> { search(Prescription.includes_associated, sortable_fields) }
+  expose :prescriptions, -> { search(Prescription.includes_associated) }
   expose :prescription, scope: ->{ Prescription }, find: ->(id, scope){ scope.includes_associated.find(id) }
+
+  sortable_fields %w(medication_id client_id start_at ends_at doctor_id dosage_id)
+
+  strong_params :prescription, permit: [:medication_id, :client_id, :start_at, :ends_at, :doctor_id, :dosage_id]
 
   # @route GET /prescriptions (prescriptions)
   def index
     authorize prescriptions
+    paginated_prescriptions = paginate(prescriptions, :prescriptions)
+
     render inertia: "Prescription/Index", props: {
-      prescriptions: -> { prescriptions.render(:index) }
+      prescriptions: -> { paginated_prescriptions.render(:index) },
+      pagination: -> { {
+        count: prescriptions.count,
+        **pagination_data(paginated_prescriptions)
+      } }
     }
   end
 
@@ -62,15 +72,5 @@ class PrescriptionsController < ApplicationController
     authorize prescription
     prescription.destroy!
     redirect_to prescriptions_url, notice: "Prescription was successfully destroyed."
-  end
-
-  private
-
-  def sortable_fields
-    %w(medication_id client_id start_at ends_at doctor_id dosage_id).freeze
-  end
-
-  def prescription_params
-    params.require(:prescription).permit(:medication_id, :client_id, :start_at, :ends_at, :doctor_id, :dosage_id)
   end
 end

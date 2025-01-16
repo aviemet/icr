@@ -2,7 +2,7 @@
 class <%= controller_class_name %>Controller < ApplicationController
   include Searchable
   
-  expose :<%= plural_table_name %>, -> { search(<%= orm_class.build(class_name) %>.includes_associated, sortable_fields) }
+  expose :<%= plural_table_name %>, -> { search(<%= orm_class.build(class_name) %>.includes_associated) }
 <% if attributes.include?(:slug) -%>
   expose :<%= singular_table_name %>, id: ->{ params[:slug] }, scope: ->{ <%= orm_class.build(class_name) %>.includes_associated }, find_by: :slug
   <% else -%>
@@ -20,7 +20,7 @@ class <%= controller_class_name %>Controller < ApplicationController
   def index
     authorize <%= plural_table_name %>
 
-    paginated_<%= plural_table_name %> = <%= plural_table_name %>.page(params[:page] || 1).per(current_user.limit(:items))
+    paginated_<%= plural_table_name %> = paginate(<%= plural_table_name %>, :<%= plural_table_name %>)
     
     render inertia: "<%= class_name.pluralize %>/Index", props: {
       <%= plural_table_name %>: -> { paginated_<%= plural_table_name %>.render(:index) },

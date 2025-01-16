@@ -1,13 +1,24 @@
 class HouseholdsController < ApplicationController
   include Searchable
 
-  expose :households, -> { search(Household.includes_associated, sortable_fields) }
+  expose :households, -> { search(Household.includes_associated) }
   expose :household, scope: ->{ Household }, find: ->(id, scope){ scope.includes_associated.find(id) }
+
+  sortable_fields %w(householdable_id householdable_type type number notes issued_at expires_at extra_fields)
+
+  strong_params :household, permit: [:householdable_id, :householdable_type, :type, :number, :notes, :issued_at, :expires_at, :extra_fields]
 
   def index
     authorize households
+
+    paginated_households = paginate(households, :households)
+
     render inertia: "Household/Index", props: {
-      households: -> { households.render(:index) }
+      households: -> { paginated_households.render(:index) },
+      pagination: -> { {
+        count: households.count,
+        **pagination_data(paginated_households)
+      } }
     }
   end
 
@@ -54,15 +65,5 @@ class HouseholdsController < ApplicationController
     authorize household
     household.destroy!
     redirect_to households_url, notice: "Household was successfully destroyed."
-  end
-
-  private
-
-  def sortable_fields
-    %w(householdable_id householdable_type type number notes issued_at expires_at extra_fields).freeze
-  end
-
-  def household_params
-    params.require(:household).permit(:householdable_id, :householdable_type, :type, :number, :notes, :issued_at, :expires_at, :extra_fields)
   end
 end
