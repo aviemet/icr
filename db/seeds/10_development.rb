@@ -1,3 +1,11 @@
+if Setting.count == 0
+  Setting.company_name = "ICR"
+  Setting.default_language = "en"
+  Setting.default_currency = "USD"
+  Setting.default_timezone = "America/Los_Angeles"
+  Setting.pay_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
+end
+
 if Rails.env.development?
   dev_password = "Complex1!"
 
@@ -20,7 +28,7 @@ if Rails.env.development?
   end
 
   if JobTitle.count == 0
-    JobTitle.create({ name: "Caregiver" })
+    JobTitle.create({ name: "Attendant" })
     JobTitle.create({ name: "Facilitator" })
     JobTitle.create({ name: "Director" })
   end
@@ -28,9 +36,9 @@ if Rails.env.development?
   if Client.count == 0
     3.times do
       client = FactoryBot.create :client
-      FactoryBot.create(:address, contact: client.contact, category: Category.type("Address").where(name: "Personal"))
-      FactoryBot.create(:email, contact: client.contact, category: Category.type("Email").where(name: "Personal"))
-      FactoryBot.create(:phone, contact: client.contact, category: Category.type("Phone").where(name: "Home"))
+      FactoryBot.create(:address, contact: client.contact, category: Category.type("Address").find_by(name: "Personal"))
+      FactoryBot.create(:email, contact: client.contact, category: Category.type("Email").find_by(name: "Personal"))
+      FactoryBot.create(:phone, contact: client.contact, category: Category.type("Phone").find_by(name: "Home"))
     end
 
     h = Household.create({ name: "Test Household" })
@@ -53,7 +61,7 @@ if Rails.env.development?
       confirmed_at: Date.new,
       time_zone: "America/Los_Angeles"
     })
-    admin.add_role :facilitator
+    facilitator_user.add_role :facilitator
 
     facilitator = FactoryBot.create(:person, user: facilitator_user)
     FactoryBot.create :employee, job_title: JobTitle.find_by(slug: "facilitator"), person: facilitator
@@ -66,38 +74,13 @@ if Rails.env.development?
       confirmed_at: Date.new,
       time_zone: "America/Los_Angeles"
     })
-    admin.add_role :director
+    director_user.add_role :director
 
     director = FactoryBot.create(:person, user: director_user)
     FactoryBot.create :employee, job_title: JobTitle.find_by(slug: "director"), person: director
     FactoryBot.create(:address, contact: director.contact, category: Category.type(:address).sample)
     FactoryBot.create(:phone, contact: director.contact, category: Category.type(:phone).sample)
 
-    5.times do |i|
-      employee = FactoryBot.create :employee, job_title: JobTitle.find_by(slug: "caregiver")
-      FactoryBot.create(:address, contact: employee.contact, category: Category.type(:address).sample)
-      FactoryBot.create(:email, contact: employee.contact, category: Category.type(:email).sample)
-      FactoryBot.create(:phone, contact: employee.contact, category: Category.type(:phone).sample)
-
-      client = Client.first
-      start = Time.current.beginning_of_week + (i * 4).hours
-
-      60.times do |w|
-        next unless w % 7 < 6
-
-        shift = FactoryBot.create(:shift, {
-          employee:,
-          calendar_event: FactoryBot.create(:calendar_event, {
-            starts_at: start,
-            ends_at: start + 4.hours,
-          },)
-        },)
-
-        client.calendar_events << shift.calendar_event
-
-        start += 1.day
-      end
-    end
   end
 
 end

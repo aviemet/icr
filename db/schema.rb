@@ -80,7 +80,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
     t.datetime "starts_at"
     t.datetime "ends_at"
     t.uuid "parent_id"
-    t.uuid "created_by_id", null: false
+    t.uuid "created_by_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["created_by_id"], name: "index_calendar_events_on_created_by_id"
@@ -126,6 +126,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
     t.datetime "updated_at", null: false
     t.index ["person_id"], name: "index_clients_on_person_id"
     t.index ["slug"], name: "index_clients_on_slug", unique: true
+  end
+
+  create_table "clients_managers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "manager_id", null: false
+    t.uuid "client_id", null: false
+    t.date "starts_at", null: false
+    t.date "ends_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_clients_managers_on_client_id"
+    t.index ["manager_id", "client_id"], name: "index_clients_managers_unique_relationship", unique: true, where: "(ends_at IS NULL)"
+    t.index ["manager_id"], name: "index_clients_managers_on_manager_id"
   end
 
   create_table "contacts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -206,6 +218,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
     t.datetime "updated_at", null: false
     t.index ["employee_id"], name: "index_employees_job_titles_on_employee_id"
     t.index ["job_title_id"], name: "index_employees_job_titles_on_job_title_id"
+  end
+
+  create_table "employees_managers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "manager_id", null: false
+    t.uuid "employee_id", null: false
+    t.date "starts_at", null: false
+    t.date "ends_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_id"], name: "index_employees_managers_on_employee_id"
+    t.index ["manager_id", "employee_id"], name: "index_employees_managers_unique_relationship", unique: true, where: "(ends_at IS NULL)"
+    t.index ["manager_id"], name: "index_employees_managers_on_manager_id"
   end
 
   create_table "event_participants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -590,6 +614,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
   add_foreign_key "calendar_recurring_patterns", "calendar_events"
   add_foreign_key "categories", "categories", column: "parent_id"
   add_foreign_key "clients", "people"
+  add_foreign_key "clients_managers", "clients"
+  add_foreign_key "clients_managers", "employees", column: "manager_id"
   add_foreign_key "contacts", "addresses", column: "primary_address_id"
   add_foreign_key "contacts", "emails", column: "primary_email_id"
   add_foreign_key "contacts", "phones", column: "primary_phone_id"
@@ -601,6 +627,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
   add_foreign_key "employees", "people"
   add_foreign_key "employees_job_titles", "employees"
   add_foreign_key "employees_job_titles", "job_titles"
+  add_foreign_key "employees_managers", "employees"
+  add_foreign_key "employees_managers", "employees", column: "manager_id"
   add_foreign_key "event_participants", "calendar_events"
   add_foreign_key "households_clients", "clients"
   add_foreign_key "households_clients", "households"

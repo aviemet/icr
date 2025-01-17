@@ -9,8 +9,8 @@ class CreateClientsManagers < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
-    add_index :client_managers, [:manager_id, :client_id],
-      name: "index_client_managers_unique_relationship",
+    add_index :clients_managers, [:manager_id, :client_id],
+      name: "index_clients_managers_unique_relationship",
       unique: true,
       where: "ends_at IS NULL"
   end
