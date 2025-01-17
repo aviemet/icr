@@ -47,7 +47,28 @@ class Employee < ApplicationRecord
     where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current)
   }, class_name: "EmployeesJobTitle", dependent: nil, inverse_of: :employee
   has_one :job_title, through: :active_employees_job_title, source: :job_title
+
+  def job_title=(new_job_title)
+    assign_job_title(new_job_title)
+  end
+
+  def assign_job_title(new_job_title, starts_at: Time.current)
+    # Don't create a new assignment if it's the same job title
+    return if job_title == new_job_title
+
+    transaction do
+      # End the current job title at the start of the new one
+      active_employees_job_title&.update!(ends_at: starts_at)
+
+      employees_job_titles.create!(
+        job_title: new_job_title,
+        starts_at: starts_at,
+      )
+    end
+  end
+
   has_many :pay_rates, dependent: :destroy
+
   has_many :shifts, dependent: :nullify
   has_many :shift_events, through: :shifts, class_name: "Calendar::Event", source: :calendar_event
 
@@ -101,9 +122,9 @@ class Employee < ApplicationRecord
   def slug_candidates
     if person&.name
       [
-          person.name,
-          [person.name, :number]
-        ]
+        person.name,
+        [person.name, :number]
+      ]
     else
       [number]
     end

@@ -9,5 +9,14 @@ class CreateEmployeesJobTitles < ActiveRecord::Migration[7.1]
 
       t.timestamps
     end
+
+    add_index :employees_job_titles, [:employee_id, :starts_at, :ends_at],
+      where: "ends_at IS NULL",
+      unique: true,
+      name: "index_ensure_single_active_job_title"
+
+    add_check_constraint :employees_job_titles,
+      "ends_at IS NULL OR ends_at > starts_at",
+      name: "ensure_valid_job_title_dates"
   end
 end

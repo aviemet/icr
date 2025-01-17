@@ -16,8 +16,6 @@ class ApplicationPolicy
     attr_reader :user, :scope
   end
 
-  protected
-
   def initialize(user, record)
     @user = user
     @record = record

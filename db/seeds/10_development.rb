@@ -59,7 +59,8 @@ if Rails.env.development?
       email: "facilitator@gmail.com",
       password: dev_password,
       confirmed_at: Date.new,
-      time_zone: "America/Los_Angeles"
+      time_zone: "America/Los_Angeles",
+      job_title: JobTitle.find_by(slug: "facilitator"),
     })
     facilitator_user.add_role :facilitator
 
@@ -72,7 +73,8 @@ if Rails.env.development?
       email: "director@gmail.com",
       password: dev_password,
       confirmed_at: Date.new,
-      time_zone: "America/Los_Angeles"
+      time_zone: "America/Los_Angeles",
+      job_title: JobTitle.find_by(slug: "director"),
     })
     director_user.add_role :director
 

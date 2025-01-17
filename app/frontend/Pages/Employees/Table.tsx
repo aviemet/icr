@@ -11,6 +11,7 @@ const EmployeeTable = (props: TableProps) => {
 					<Table.HeadCell sort="first_name">First Name</Table.HeadCell>
 					<Table.HeadCell sort="last_name">Last Name</Table.HeadCell>
 					<Table.HeadCell sort="number">Employee Number</Table.HeadCell>
+					<Table.HeadCell>Job Title</Table.HeadCell>
 					<Table.HeadCell className="actions">Actions</Table.HeadCell>
 				</Table.Row>
 			</Table.Head>
@@ -28,6 +29,10 @@ const EmployeeTable = (props: TableProps) => {
 
 						<Table.Cell>
 							<Link href={ Routes.employee(employee.slug) }>{ employee.number }</Link>
+						</Table.Cell>
+
+						<Table.Cell>
+							<Link href={ Routes.employee(employee.slug) }>{ employee?.job_title?.name ?? "" }</Link>
 						</Table.Cell>
 
 						<Table.Cell>
