@@ -530,7 +530,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
     t.integer "frequency"
     t.boolean "active", default: true, null: false
     t.uuid "client_id", null: false
-    t.uuid "created_by_id", null: false
+    t.uuid "created_by_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_shift_templates_on_client_id"

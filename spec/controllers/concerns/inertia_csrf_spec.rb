@@ -1,6 +1,9 @@
 require "rails_helper"
+require_relative "../../support/devise"
 
 RSpec.describe InertiaCsrf, type: :controller do
+  include Devise::Test::ControllerHelpers
+
   controller(ApplicationController) do
     def index
       render plain: "OK"
@@ -12,18 +15,14 @@ RSpec.describe InertiaCsrf, type: :controller do
   end
 
   describe "CSRF protection" do
-    it "sets XSRF-TOKEN cookie" do
-      user = create(:user)
-      sign_in user
+    login_super_admin
 
+    it "sets XSRF-TOKEN cookie" do
       get :index
       expect(cookies["XSRF-TOKEN"]).to be_present
     end
 
     it "accepts CSRF token from HTTP_X_XSRF_TOKEN header" do
-      user = create(:user)
-      sign_in user
-
       token = "test-token"
       request.headers["HTTP_X_XSRF_TOKEN"] = token
       expect(controller.request_authenticity_tokens).to include(token)

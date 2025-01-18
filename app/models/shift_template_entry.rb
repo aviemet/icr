@@ -29,33 +29,17 @@ class ShiftTemplateEntry < ApplicationRecord
   belongs_to :employee, optional: true
 
   validates :day_of_week, presence: true, inclusion: { in: 0..6 }
-  validates :start_time, presence: true
-  validates :end_time, presence: true
-  validate :end_time_after_start_time
-  validate :no_overlapping_shifts
+  validates :starts_at, presence: true
+  validates :ends_at, presence: true
+  validate :ends_at_after_starts_at
 
   private
 
-  def end_time_after_start_time
-    return unless start_time && end_time
+  def ends_at_after_starts_at
+    return if ends_at.blank? || starts_at.blank?
 
-    if end_time <= start_time
-      errors.add(:end_time, "must be after start time")
-    end
-  end
-
-  def no_overlapping_shifts
-    return unless shift_template && start_time && end_time
-
-    overlapping = shift_template.shift_template_entries
-      .where(day_of_week: day_of_week)
-      .where.not(id: id)
-      .select do |entry|
-        (start_time < entry.end_time) && (end_time > entry.start_time)
-      end
-
-    if overlapping.any?
-      errors.add(:base, "Shift overlaps with existing shifts")
+    if ends_at <= starts_at
+      errors.add(:ends_at, "must be after start time")
     end
   end
 end

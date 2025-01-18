@@ -1,12 +1,9 @@
-if Setting.count == 0
-  Setting.company_name = "ICR"
-  Setting.default_language = "en"
-  Setting.default_currency = "USD"
-  Setting.default_timezone = "America/Los_Angeles"
-  Setting.pay_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
-end
-
 if Rails.env.development?
+  if Setting.count == 0
+    Setting.company_name = "ICR SLS"
+    Setting.pay_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
+  end
+
   dev_password = "Complex1!"
 
   if User.count == 0

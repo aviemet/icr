@@ -11,7 +11,7 @@
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  client_id     :uuid             not null
-#  created_by_id :uuid             not null
+#  created_by_id :uuid
 #
 # Indexes
 #
@@ -60,7 +60,7 @@ class ShiftTemplate < ApplicationRecord
     entries_by_day = shift_template_entries.group_by(&:day_of_week)
 
     conflicts = []
-    entries_by_day.each do |_day, entries|
+    entries_by_day.each_value do |entries|
       entries.combination(2).each do |entry1, entry2|
         if entries_overlap?(entry1, entry2)
           conflicts << [entry1, entry2]
@@ -78,7 +78,7 @@ class ShiftTemplate < ApplicationRecord
   private
 
   def entries_overlap?(entry1, entry2)
-    (entry1.start_time < entry2.end_time) && (entry1.end_time > entry2.start_time)
+    (entry1.starts_at < entry2.ends_at) && (entry1.ends_at > entry2.starts_at)
   end
 
   def end_date_after_start_date

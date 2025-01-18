@@ -8,7 +8,7 @@ class CreateShiftTemplates < ActiveRecord::Migration[7.2]
       t.boolean :active, default: true, null: false
 
       t.belongs_to :client, null: false, foreign_key: true, type: :uuid
-      t.belongs_to :created_by, type: :uuid, null: false, foreign_key: { to_table: :users }
+      t.belongs_to :created_by, type: :uuid, null: true, foreign_key: { to_table: :users }
 
       t.timestamps
     end
