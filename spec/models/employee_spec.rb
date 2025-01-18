@@ -45,7 +45,16 @@ RSpec.describe Employee do
     it{ is_expected.to have_many(:pay_rates) }
     it{ is_expected.to have_many(:job_titles).through(:employees_job_titles) }
 
-    it{ is_expected.to have_one(:active_employees_job_title) }
     it{ is_expected.to have_one(:job_title).through(:active_employees_job_title) }
+  end
+
+  describe "#job_title" do
+    it "assigns the job title" do
+      employee = create(:employee)
+      job_title = create(:job_title)
+
+      employee.job_title = job_title
+      expect(employee.job_title).to eq(job_title)
+    end
   end
 end

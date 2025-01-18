@@ -57,6 +57,7 @@ class Employee < ApplicationRecord
     return if job_title == new_job_title
 
     transaction do
+      ap({ starts_at:, active_employees_job_title: })
       # End the current job title at the start of the new one
       active_employees_job_title&.update!(ends_at: starts_at)
 

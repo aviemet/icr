@@ -45,13 +45,12 @@ if Rails.env.development?
     h.clients << Client.second
     h.clients << Client.third
 
-    client_user = User.create({
+    User.create({
       email: "client@gmail.com",
       password: dev_password,
       confirmed_at: Date.new,
       time_zone: "America/Los_Angeles"
     })
-    client_user.add_role :client
   end
 
   if Employee.count == 0
@@ -60,28 +59,34 @@ if Rails.env.development?
       password: dev_password,
       confirmed_at: Date.new,
       time_zone: "America/Los_Angeles",
-      job_title: JobTitle.find_by(slug: "facilitator"),
+      person: FactoryBot.create(:person)
     })
-    facilitator_user.add_role :facilitator
 
-    facilitator = FactoryBot.create(:person, user: facilitator_user)
-    FactoryBot.create :employee, job_title: JobTitle.find_by(slug: "facilitator"), person: facilitator
-    FactoryBot.create(:address, contact: facilitator.contact, category: Category.type(:address).sample)
-    FactoryBot.create(:phone, contact: facilitator.contact, category: Category.type(:phone).sample)
+    facilitator = FactoryBot.create(:employee, {
+      person: facilitator_user.person
+    },)
+
+    facilitator.assign_job_title(JobTitle.find_by(slug: "facilitator"))
+
+    FactoryBot.create(:address, contact: facilitator.person.contact, category: Category.type(:address).sample)
+    FactoryBot.create(:phone, contact: facilitator.person.contact, category: Category.type(:phone).sample)
 
     director_user = User.create({
       email: "director@gmail.com",
       password: dev_password,
       confirmed_at: Date.new,
       time_zone: "America/Los_Angeles",
-      job_title: JobTitle.find_by(slug: "director"),
+      person: FactoryBot.create(:person)
     })
-    director_user.add_role :director
 
-    director = FactoryBot.create(:person, user: director_user)
-    FactoryBot.create :employee, job_title: JobTitle.find_by(slug: "director"), person: director
-    FactoryBot.create(:address, contact: director.contact, category: Category.type(:address).sample)
-    FactoryBot.create(:phone, contact: director.contact, category: Category.type(:phone).sample)
+    director = FactoryBot.create(:employee, {
+      person: director_user.person
+    },)
+
+    director.assign_job_title(JobTitle.find_by(slug: "director"))
+
+    FactoryBot.create(:address, contact: director.person.contact, category: Category.type(:address).sample)
+    FactoryBot.create(:phone, contact: director.person.contact, category: Category.type(:phone).sample)
 
   end
 

@@ -22,20 +22,32 @@ class Setting < RailsSettings::Base
     monthly: "monthly",
   }.freeze
 
-  field :company_name, type: :string, default: "SLS Agency", validates: { presence: true }
+  DEFAULT_SETTINGS = {
+    company_name: "SLS Agency",
+    default_language: "en/US",
+    default_currency: "USD",
+    default_timezone: "America/Los_Angeles",
+    pay_period_type: PAY_PERIOD_TYPES[:semi_monthly],
+    shift_title_format: "{h:mm} - {full_name}",
+  }.freeze
 
-  field :default_language, type: :string, default: "en/US", validates: { presence: true }
-  field :default_currency, type: :string, default: "USD", validates: {
+  field :company_name, type: :string, default: DEFAULT_SETTINGS[:company_name], validates: { presence: true }
+
+  field :default_language, type: :string, default: DEFAULT_SETTINGS[:default_language], validates: { presence: true }
+  field :default_currency, type: :string, default: DEFAULT_SETTINGS[:default_currency], validates: {
     presence: true,
   }
-  field :default_timezone, type: :string, default: "America/Los_Angeles", validates: {
+  field :default_timezone, type: :string, default: DEFAULT_SETTINGS[:default_timezone], validates: {
     presence: true
   }
 
-  field :pay_period_type, type: :string, default: PAY_PERIOD_TYPES[:semi_monthly], validates: { presence: true, inclusion: { in: PAY_PERIOD_TYPES.values } }
+  field :pay_period_type, type: :string, default: DEFAULT_SETTINGS[:pay_period_type], validates: {
+    presence: true,
+    inclusion: { in: PAY_PERIOD_TYPES.values }
+  }
 
   ALLOWED_TEMPLATE_VARS = %i(first_name last_name full_name).freeze
-  field :shift_title_format, type: :string, default: "{h:mm} - {full_name}", validates: {
+  field :shift_title_format, type: :string, default: DEFAULT_SETTINGS[:shift_title_format], validates: {
     presence: true,
     format: {
       with: %r(\A[^{}]*(\{(?:#{ALLOWED_TEMPLATE_VARS.join('|')}|[YMDHhmsAa\-/ :]+)\}[^{}]*)*\z),

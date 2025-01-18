@@ -2,7 +2,7 @@
 if Rails.env.development?
   if Shift.count == 0
     5.times do |i|
-      employee = FactoryBot.create :employee, job_title: JobTitle.find_by(slug: "attendant")
+      employee = FactoryBot.create(:employee, { job_title: JobTitle.find_by(slug: "attendant") })
       FactoryBot.create(:address, contact: employee.contact, category: Category.type(:address).sample)
       FactoryBot.create(:email, contact: employee.contact, category: Category.type(:email).sample)
       FactoryBot.create(:phone, contact: employee.contact, category: Category.type(:phone).sample)

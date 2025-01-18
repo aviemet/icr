@@ -210,14 +210,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
   end
 
   create_table "employees_job_titles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.date "starts_at", null: false
-    t.date "ends_at"
+    t.datetime "starts_at", null: false
+    t.datetime "ends_at"
     t.uuid "employee_id", null: false
     t.uuid "job_title_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["employee_id", "starts_at", "ends_at"], name: "index_ensure_single_active_job_title", unique: true, where: "(ends_at IS NULL)"
     t.index ["employee_id"], name: "index_employees_job_titles_on_employee_id"
     t.index ["job_title_id"], name: "index_employees_job_titles_on_job_title_id"
+    t.check_constraint "ends_at IS NULL OR ends_at > starts_at", name: "ensure_valid_job_title_dates"
   end
 
   create_table "employees_managers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
