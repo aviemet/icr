@@ -3,8 +3,8 @@
 # Table name: clients_managers
 #
 #  id         :uuid             not null, primary key
-#  ends_at    :date
-#  starts_at  :date             not null
+#  ends_at    :datetime
+#  starts_at  :datetime         not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  client_id  :uuid             not null

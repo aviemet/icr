@@ -3,8 +3,8 @@
 # Table name: clients_managers
 #
 #  id         :uuid             not null, primary key
-#  ends_at    :date
-#  starts_at  :date             not null
+#  ends_at    :datetime
+#  starts_at  :datetime         not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  client_id  :uuid             not null
@@ -25,20 +25,28 @@ class ClientsManager < ApplicationRecord
   belongs_to :manager, class_name: "Employee"
   belongs_to :client
 
+  attribute :starts_at, :datetime, default: -> { Time.current }
+
   validates :starts_at, presence: true
+  validate :ends_at_after_starts_at, if: :ends_at?
+
   validates :manager_id, uniqueness: {
     scope: :client_id,
     conditions: -> { where(ends_at: nil) },
     message: "already manages this client"
   }
 
-  validate :manager_can_manage_clients
+  scope :current, -> { where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current) }
+
+  scope :includes_associated, -> { includes([:manager, :client]) }
 
   private
 
-  def manager_can_manage_clients
-    unless manager&.can_manage_clients?
-      errors.add(:manager, "must have client management privileges")
+  def ends_at_after_starts_at
+    return if ends_at.blank?
+
+    if ends_at < starts_at
+      errors.add(:ends_at, "must be after starts_at")
     end
   end
 end

@@ -128,11 +128,23 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
     t.index ["slug"], name: "index_clients_on_slug", unique: true
   end
 
+  create_table "clients_attendants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "attendant_id", null: false
+    t.uuid "client_id", null: false
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attendant_id", "client_id"], name: "index_clients_attendants_unique_relationship", unique: true, where: "(ends_at IS NULL)"
+    t.index ["attendant_id"], name: "index_clients_attendants_on_attendant_id"
+    t.index ["client_id"], name: "index_clients_attendants_on_client_id"
+  end
+
   create_table "clients_managers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "manager_id", null: false
     t.uuid "client_id", null: false
-    t.date "starts_at", null: false
-    t.date "ends_at"
+    t.datetime "starts_at", null: false
+    t.datetime "ends_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_clients_managers_on_client_id"
@@ -225,8 +237,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
   create_table "employees_managers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "manager_id", null: false
     t.uuid "employee_id", null: false
-    t.date "starts_at", null: false
-    t.date "ends_at"
+    t.datetime "starts_at", null: false
+    t.datetime "ends_at"
+    t.boolean "primary", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["employee_id"], name: "index_employees_managers_on_employee_id"
@@ -616,6 +629,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
   add_foreign_key "calendar_recurring_patterns", "calendar_events"
   add_foreign_key "categories", "categories", column: "parent_id"
   add_foreign_key "clients", "people"
+  add_foreign_key "clients_attendants", "clients"
+  add_foreign_key "clients_attendants", "employees", column: "attendant_id"
   add_foreign_key "clients_managers", "clients"
   add_foreign_key "clients_managers", "employees", column: "manager_id"
   add_foreign_key "contacts", "addresses", column: "primary_address_id"

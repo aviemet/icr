@@ -3,8 +3,9 @@ class CreateEmployeesManagers < ActiveRecord::Migration[7.1]
     create_table :employees_managers, id: :uuid do |t|
       t.belongs_to :manager, type: :uuid, null: false, foreign_key: { to_table: :employees }
       t.belongs_to :employee, type: :uuid, null: false, foreign_key: { to_table: :employees }
-      t.date :starts_at, null: false
-      t.date :ends_at
+      t.datetime :starts_at, null: false
+      t.datetime :ends_at
+      t.boolean :primary, default: false, null: false
 
       t.timestamps
     end

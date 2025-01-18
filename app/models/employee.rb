@@ -40,12 +40,14 @@ class Employee < ApplicationRecord
 
   resourcify
 
-  # Employee personal details
+  ##############
+  # Job Titles #
+  ##############
   has_many :employees_job_titles, dependent: :destroy
   has_many :job_titles, through: :employees_job_titles
   has_one :active_employees_job_title, -> {
-    where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current)
-  }, class_name: "EmployeesJobTitle", dependent: nil, inverse_of: :employee
+    where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", 1.second.from_now, 1.second.from_now)
+  }, class_name: "EmployeesJobTitle", dependent: :destroy, inverse_of: :employee
   has_one :job_title, through: :active_employees_job_title, source: :job_title
 
   def job_title=(new_job_title)
@@ -57,7 +59,6 @@ class Employee < ApplicationRecord
     return if job_title == new_job_title
 
     transaction do
-      ap({ starts_at:, active_employees_job_title: })
       # End the current job title at the start of the new one
       active_employees_job_title&.update!(ends_at: starts_at)
 
@@ -66,48 +67,87 @@ class Employee < ApplicationRecord
         starts_at: starts_at,
       )
     end
+
+    reload
   end
 
-  has_many :pay_rates, dependent: :destroy
-
+  ##########
+  # Shifts #
+  ##########
   has_many :shifts, dependent: :nullify
   has_many :shift_events, through: :shifts, class_name: "Calendar::Event", source: :calendar_event
 
-  # Employee manager relationships
-  has_many :employee_managers,
+  #############
+  # Pay Rates #
+  #############
+  has_many :pay_rates, dependent: :destroy
+
+  ############
+  # Managers #
+  ############
+  # Join table for employees managed by employee
+  has_many :managed_employees_managers,
+    class_name: "EmployeesManager",
     foreign_key: :manager_id,
     dependent: :destroy,
     inverse_of: :manager
-  has_many :managed_employees,
-    through: :employee_managers,
-    source: :employee
+  has_many :managed_employees, through: :managed_employees_managers, source: :employee
 
-  has_one :active_manager_relationship, -> {
-    where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Date.current, Date.current)
-  },
-    class_name: "EmployeeManager",
-    foreign_key: :employee_id,
+  has_many :managers_employees_managers,
+    class_name: "EmployeesManager",
     dependent: nil,
     inverse_of: :employee
-  has_one :current_manager, through: :active_manager_relationship, source: :manager
+  has_many :managers, through: :managers_employees_managers, source: :manager
 
-  # Employee client relationships
+  ###################
+  # Managed Clients #
+  ###################
   has_many :clients_managers,
+  class_name: "ClientsManager",
     foreign_key: :manager_id,
     dependent: :destroy,
     inverse_of: :manager
-  has_many :managed_clients,
+
+  has_many :all_managed_clients,
     through: :clients_managers,
     source: :client
 
   has_many :active_clients_managers, -> {
-    where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Date.current, Date.current)
+    where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current)
   },
     class_name: "ClientsManager",
     foreign_key: :manager_id,
-    dependent: nil,
+    dependent: :destroy,
     inverse_of: :manager
-  has_many :current_managed_clients, through: :active_clients_managers, source: :client
+
+  has_many :managed_clients,
+    through: :active_clients_managers,
+    source: :client
+
+  ####################
+  # Attended Clients #
+  ####################
+  has_many :clients_attendants,
+    class_name: "ClientsAttendant",
+    foreign_key: :attendant_id,
+    dependent: :destroy,
+    inverse_of: :attendant
+
+  has_many :all_attended_clients,
+    through: :clients_attendants,
+    source: :client
+
+  has_many :active_clients_attendants, -> {
+    where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current)
+  },
+    class_name: "ClientsAttendant",
+    foreign_key: :attendant_id,
+    dependent: :destroy,
+    inverse_of: :attendant
+
+  has_many :attended_clients,
+    through: :active_clients_attendants,
+    source: :client
 
   scope :includes_associated, -> { includes([:person, :job_title, :calendar_customization]) }
 

@@ -32,6 +32,10 @@ class EmployeesJobTitle < ApplicationRecord
   validates :starts_at, presence: true
   validate :ends_at_after_starts_at, if: :ends_at?
 
+  scope :current, -> { where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current) }
+
+  scope :includes_associated, -> { includes([:employee, :job_title]) }
+
   private
 
   def ends_at_after_starts_at

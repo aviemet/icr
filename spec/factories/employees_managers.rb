@@ -3,8 +3,9 @@
 # Table name: employees_managers
 #
 #  id          :uuid             not null, primary key
-#  ends_at     :date
-#  starts_at   :date             not null
+#  ends_at     :datetime
+#  primary     :boolean          default(FALSE), not null
+#  starts_at   :datetime         not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  employee_id :uuid             not null

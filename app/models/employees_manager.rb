@@ -3,8 +3,9 @@
 # Table name: employees_managers
 #
 #  id          :uuid             not null, primary key
-#  ends_at     :date
-#  starts_at   :date             not null
+#  ends_at     :datetime
+#  primary     :boolean          default(FALSE), not null
+#  starts_at   :datetime         not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  employee_id :uuid             not null
@@ -27,23 +28,24 @@ class EmployeesManager < ApplicationRecord
   belongs_to :manager, class_name: "Employee"
   belongs_to :employee, class_name: "Employee"
 
+  attribute :starts_at, :datetime, default: -> { Time.current }
+
   validates :starts_at, presence: true
+  validate :ends_at_after_starts_at, if: :ends_at?
+
   validates :manager_id, uniqueness: {
     scope: :employee_id,
     conditions: -> { where(ends_at: nil) },
     message: :manager_uniqueness
   }
 
-  validate :manager_can_manage_employees
   validate :not_self_managed
 
-  private
+  scope :current, -> { where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current) }
 
-  def manager_can_manage_employees
-    unless manager&.can_manage_employees?
-      errors.add(:manager, :must_have_privileges)
-    end
-  end
+  scope :includes_associated, -> { includes([:manager, :employee]) }
+
+  private
 
   def not_self_managed
     if manager_id == employee_id
@@ -51,5 +53,11 @@ class EmployeesManager < ApplicationRecord
     end
   end
 
-  scope :includes_associated, -> { includes([:manager, :employee]) }
+  def ends_at_after_starts_at
+    return if ends_at.blank?
+
+    if ends_at < starts_at
+      errors.add(:ends_at, "must be after starts_at")
+    end
+  end
 end
