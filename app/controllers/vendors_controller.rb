@@ -2,7 +2,7 @@ class VendorsController < ApplicationController
   include Searchable
 
   expose :vendors, -> { search(Vendor.includes_associated) }
-  expose :vendor, scope: ->{ Vendor }, find: ->(id, scope){ scope.includes_associated.find(id) }
+  expose :vendor, id: ->{ params[:slug] }, scope: ->{ Vendor.includes_associated }, find_by: :slug
 
   sortable_fields %w(category_id name notes)
 
@@ -14,7 +14,7 @@ class VendorsController < ApplicationController
 
     paginated_vendors = paginate(vendors, :vendors)
 
-    render inertia: "Vendor/Index", props: {
+    render inertia: "Vendors/Index", props: {
       vendors: -> { paginated_vendors.render(:index) },
       pagination: -> { {
         count: vendors.count,
@@ -26,7 +26,7 @@ class VendorsController < ApplicationController
   # @route GET /vendors/:slug (vendor)
   def show
     authorize vendor
-    render inertia: "Vendor/Show", props: {
+    render inertia: "Vendors/Show", props: {
       vendor: -> { vendor.render(:show) }
     }
   end
@@ -34,7 +34,7 @@ class VendorsController < ApplicationController
   # @route GET /vendors/new (new_vendor)
   def new
     authorize Vendor.new
-    render inertia: "Vendor/New", props: {
+    render inertia: "Vendors/New", props: {
       vendor: Vendor.new.render(:form_data)
     }
   end
@@ -42,7 +42,7 @@ class VendorsController < ApplicationController
   # @route GET /vendors/:slug/edit (edit_vendor)
   def edit
     authorize vendor
-    render inertia: "Vendor/Edit", props: {
+    render inertia: "Vendors/Edit", props: {
       vendor: vendor.render(:edit)
     }
   end

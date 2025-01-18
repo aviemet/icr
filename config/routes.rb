@@ -68,17 +68,7 @@ Rails.application.routes.draw do
 
   resources :incident_reports
 
-  resources :prescriptions
-
-  resources :dosages
-
   resources :doctors, param: :slug
-
-  resources :medications
-
-  resources :identifications
-
-  resources :job_titles
 
   draw(:api)
 end

@@ -14,7 +14,7 @@ class DoctorsController < ApplicationController
 
     paginated_doctors = paginate(doctors, :doctors)
 
-    render inertia: "Doctor/Index", props: {
+    render inertia: "Doctors/Index", props: {
       doctors: -> { paginated_doctors.render(:index) },
       pagination: -> { {
         count: doctors.count,
@@ -26,7 +26,7 @@ class DoctorsController < ApplicationController
   # @route GET /doctors/:slug (doctor)
   def show
     authorize doctor
-    render inertia: "Doctor/Show", props: {
+    render inertia: "Doctors/Show", props: {
       doctor: -> { doctor.render(:show) }
     }
   end
@@ -34,7 +34,7 @@ class DoctorsController < ApplicationController
   # @route GET /doctors/new (new_doctor)
   def new
     authorize Doctor.new
-    render inertia: "Doctor/New", props: {
+    render inertia: "Doctors/New", props: {
       doctor: Doctor.new.render(:form_data)
     }
   end
@@ -42,7 +42,7 @@ class DoctorsController < ApplicationController
   # @route GET /doctors/:slug/edit (edit_doctor)
   def edit
     authorize doctor
-    render inertia: "Doctor/Edit", props: {
+    render inertia: "Doctors/Edit", props: {
       doctor: doctor.render(:edit)
     }
   end

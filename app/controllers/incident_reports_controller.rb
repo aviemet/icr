@@ -14,7 +14,7 @@ class IncidentReportsController < ApplicationController
 
     paginated_incident_reports = paginate(incident_reports, :incident_reports)
 
-    render inertia: "IncidentReport/Index", props: {
+    render inertia: "IncidentReports/Index", props: {
       incident_reports: -> { paginated_incident_reports.render(:index) },
       pagination: -> { {
         count: incident_reports.count,
@@ -26,7 +26,7 @@ class IncidentReportsController < ApplicationController
   # @route GET /incident_reports/:id (incident_report)
   def show
     authorize incident_report
-    render inertia: "IncidentReport/Show", props: {
+    render inertia: "IncidentReports/Show", props: {
       incident_report: -> { incident_report.render(:show) }
     }
   end
@@ -34,7 +34,7 @@ class IncidentReportsController < ApplicationController
   # @route GET /incident_reports/new (new_incident_report)
   def new
     authorize IncidentReport.new
-    render inertia: "IncidentReport/New", props: {
+    render inertia: "IncidentReports/New", props: {
       incident_report: IncidentReport.new.render(:form_data)
     }
   end
@@ -42,7 +42,7 @@ class IncidentReportsController < ApplicationController
   # @route GET /incident_reports/:id/edit (edit_incident_report)
   def edit
     authorize incident_report
-    render inertia: "IncidentReport/Edit", props: {
+    render inertia: "IncidentReports/Edit", props: {
       incident_report: incident_report.render(:edit)
     }
   end

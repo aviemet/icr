@@ -13,7 +13,7 @@ class HouseholdsController < ApplicationController
 
     paginated_households = paginate(households, :households)
 
-    render inertia: "Household/Index", props: {
+    render inertia: "Households/Index", props: {
       households: -> { paginated_households.render(:index) },
       pagination: -> { {
         count: households.count,
@@ -24,21 +24,21 @@ class HouseholdsController < ApplicationController
 
   def show
     authorize household
-    render inertia: "Household/Show", props: {
+    render inertia: "Households/Show", props: {
       household: -> { household.render(:show) }
     }
   end
 
   def new
     authorize Household.new
-    render inertia: "Household/New", props: {
+    render inertia: "Households/New", props: {
       household: Household.new.render(:form_data)
     }
   end
 
   def edit
     authorize household
-    render inertia: "Household/Edit", props: {
+    render inertia: "Households/Edit", props: {
       household: household.render(:edit)
     }
   end
