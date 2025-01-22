@@ -1,11 +1,11 @@
 import { Page, Section, Tabs  } from "@/Components"
 
 import General from "./General"
-import Users from "./Users"
+import People from "./People"
 
 const tabsList = [
 	{ id: "general", label: "General", component: General },
-	{ id: "users", label: "Users", component: Users },
+	{ id: "people", label: "People", component: People },
 ]
 
 interface SettingIndexProps {

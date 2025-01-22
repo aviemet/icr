@@ -7,7 +7,7 @@ import {
 	FormPayPeriodsDropdown,
 	FormTimezonesDropdown,
 } from "@/Features/Dropdowns"
-import ShiftTitleFormatInput from "./ShiftTitleFormatInput"
+import ShiftTitleFormatInput from "../../../Features/Settings/ShiftTitleFormatInput"
 
 export type GeneralSettingsFormData = {
 	setting: Schema.Setting

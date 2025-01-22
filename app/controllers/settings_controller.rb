@@ -5,7 +5,7 @@ class SettingsController < ApplicationController
   def index
     authorize Setting
 
-    render inertia: "Settings/Index", props: {
+    render inertia: "Settings", props: {
       settings: -> { Setting.render },
     }
   end

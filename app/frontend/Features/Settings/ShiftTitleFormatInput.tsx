@@ -2,8 +2,8 @@ import { useMemo, useRef } from "react"
 import { Badge, Box, Code, Group, Paper } from "@/Components"
 import { TextInput } from "@/Components/Form"
 import { useForm } from "use-inertia-form"
-import dayjs from "dayjs"
-import { type SettingsFormData } from "."
+import { formatEventTitle } from "@/lib"
+import { GeneralSettingsFormData } from "@/Pages/Settings/General"
 
 import cx from "clsx"
 import * as classes from "./Settings.css"
@@ -21,34 +21,14 @@ interface SettingIndexProps {
 }
 
 const ShiftTitleFormatInput = ({ settings }: SettingIndexProps) => {
-	const { getData } = useForm<SettingsFormData>()
+	const { getData } = useForm<GeneralSettingsFormData>()
 	const inputRef = useRef<HTMLInputElement>(null)
 
 	const inputValue = getData("setting.shift_title_format")
 
 	const previewText = useMemo(() => {
 		const format = inputRef.current?.value || inputValue
-
-		try {
-			// Replace template variables
-			let result = format
-			ALLOWED_TEMPLATE_VARS.forEach(variable => {
-				result = result.replace(
-					new RegExp(`{${variable}}`, "g"),
-					SAMPLE_DATA[variable]
-				)
-			})
-
-			// Replace date formats
-			result = result.replace(
-				/{([YMDHhmsAa\-/ :]+)}/g,
-				(match, format) => dayjs().format(format)
-			)
-
-			return result
-		} catch(error) {
-			return "Invalid format"
-		}
+		return formatEventTitle(format, new Date(), SAMPLE_DATA)
 	}, [inputValue])
 
 	const insertVariable = (variable: string) => {
