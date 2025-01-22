@@ -101,7 +101,7 @@ RSpec.describe Employee do
     it{ is_expected.to have_many(:all_attended_clients).through(:clients_attendants) }
     it{ is_expected.to have_many(:attended_clients).through(:active_clients_attendants) }
 
-    describe "attendanted clients" do
+    describe "attended clients" do
       it "assigns an attendant" do
         employee = create(:employee)
         client = create(:client)

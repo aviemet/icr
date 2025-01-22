@@ -178,7 +178,7 @@ module Searchable
     return unless request.query_parameters.keys.length > non_empty_params.keys.length
 
     # Rebuild the URL without empty query parameters
-    new_url = "#{request.path}?#{non_empty_params.to_param}"
+    new_url = "#{request.path}#{non_empty_params.empty? ? '' : '?'}#{non_empty_params.to_param}"
     redirect_to new_url
   end
 end
