@@ -1,4 +1,4 @@
-import { Group, Heading, Menu, Page, Section, Tabs } from "@/Components"
+import { Group, Title, Menu, Page, Section, Tabs } from "@/Components"
 import { Routes } from "@/lib"
 import Details from "./Details"
 import Contacts from "./Contacts"
@@ -25,7 +25,7 @@ const ShowEmployee = ({ employee }: ShowEmployeeProps) => {
 			<Section fullHeight>
 
 				<Group justify="space-between">
-					<Heading>{ title }</Heading>
+					<Title>{ title }</Title>
 
 					<Menu position="bottom-end">
 						<Menu.Target />

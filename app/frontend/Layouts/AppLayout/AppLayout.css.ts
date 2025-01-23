@@ -64,6 +64,13 @@ export const navbar = css`
 	}
 `
 
+export const main = css`
+	#above-content-portal {
+		padding: 0;
+		margin: 0;
+	}
+`
+
 export const navigation = css`
 	/* ul {
 		li {

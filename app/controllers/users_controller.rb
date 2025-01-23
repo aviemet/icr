@@ -8,27 +8,6 @@ class UsersController < ApplicationController
 
   strong_params :user, permit: [:email, :password, :active, :first_name, :last_name, :number]
 
-  def show
-    authorize user
-    render inertia: "Users/Show", props: {
-      user: user.render,
-    }
-  end
-
-  def new
-    authorize User
-    render inertia: "Users/New", props: {
-      user: user.render,
-    }
-  end
-
-  def edit
-    authorize user
-    render inertia: "Users/Edit", props: {
-      user: user.render,
-    }
-  end
-
   def complete_registration
     render inertia: "Public/Devise/Register/Complete"
   end
@@ -46,20 +25,4 @@ class UsersController < ApplicationController
     redirect_to complete_registration_path
   end
 
-  def update
-    authorize user
-    if user.update(user_params)
-      redirect_to user, notice: t("users.notices.updated")
-    else
-      redirect_to edit_user_path(user), inertia: { errors: user.errors }
-    end
-  end
-
-  def destroy
-    authorize user
-    user.destroy
-    respond_to do
-      redirect_to users_url, notice: t("users.notices.destroyed")
-    end
-  end
 end

@@ -1,7 +1,2 @@
-class Doctors::IndexSerializer < DoctorSerializer
-  attributes(
-    :id,
-    :updated_at,
-    :created_at,
-  )
+class Doctors::IndexSerializer < Doctors::PersistedSerializer
 end

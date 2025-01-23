@@ -1,4 +1,4 @@
-import { Heading, Page, Section } from "@/Components"
+import { Title, Page, Section } from "@/Components"
 import { Routes } from "@/lib"
 import VendorForm from "../Form"
 
@@ -16,7 +16,7 @@ const NewVendor = ({ ...data }: NewVendorProps) => {
 		] }>
 
 			<Section>
-				<Heading>{ title }</Heading>
+				<Title>{ title }</Title>
 
 				<VendorForm
 					to={ Routes.vendors() }

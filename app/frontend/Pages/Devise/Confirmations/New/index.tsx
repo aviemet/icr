@@ -1,7 +1,6 @@
-import { Grid, Heading, Link } from "@/Components"
+import { Grid, Title, Link } from "@/Components"
 import { Form, TextInput, Submit } from "@/Components/Form"
-import { Routes } from "@/lib"
-import { LAYOUTS } from "@/Layouts"
+import { Routes, withLayout } from "@/lib"
 import { AuthPaperLayout } from "@/Features"
 
 interface IConfirmationsNew {
@@ -27,7 +26,7 @@ const ConfirmationsNew = ({ user }: IConfirmationsNew) => {
 
 					<Grid.Col>
 						<div>
-							<Heading order={ 3 }>Please check your email</Heading>
+							<Title order={ 3 }>Please check your email</Title>
 							<p>An email has been sent to the address provided. Please follow the link to confirm your account.</p>
 							<p>If you don&apos;t receive an email, use the form below to resend it.</p>
 						</div>
@@ -51,6 +50,4 @@ const ConfirmationsNew = ({ user }: IConfirmationsNew) => {
 	)
 }
 
-ConfirmationsNew.defaultLayout = LAYOUTS.auth
-
-export default ConfirmationsNew
+export default withLayout(ConfirmationsNew, "auth")

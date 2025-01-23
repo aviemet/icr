@@ -1,4 +1,4 @@
-import { Heading, Page, Section } from "@/Components"
+import { Title, Page, Section } from "@/Components"
 import { Routes } from "@/lib"
 import DoctorForm from "../Form"
 
@@ -16,7 +16,7 @@ const NewDoctor = ({ ...data }: NewDoctorProps) => {
 		] }>
 
 			<Section>
-				<Heading>{ title }</Heading>
+				<Title>{ title }</Title>
 
 				<DoctorForm
 					to={ Routes.doctors() }

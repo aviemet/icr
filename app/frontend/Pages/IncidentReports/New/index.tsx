@@ -1,4 +1,4 @@
-import { Heading, Page, Section } from "@/Components"
+import { Title, Page, Section } from "@/Components"
 import { Routes } from "@/lib"
 import IncidentReportForm from "../Form"
 
@@ -13,7 +13,7 @@ const NewIncidentReport = ({ ...data }: INewIncidentReportProps) => {
 		<Page title={ title }>
 
 			<Section>
-				<Heading>{ title }</Heading>
+				<Title>{ title }</Title>
 
 				<IncidentReportForm
 					to={ Routes.incidentReports() }

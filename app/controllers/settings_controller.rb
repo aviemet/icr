@@ -2,16 +2,16 @@ class SettingsController < ApplicationController
   strong_params :setting, permit: Setting.editable_keys
 
   # @route GET /settings (settings)
-  def index
+  def show
     authorize Setting
 
-    render inertia: "Settings", props: {
+    render inertia: "Settings/General", props: {
       settings: -> { Setting.render },
     }
   end
 
-  # @route PUT /settings (settings)
   # @route PATCH /settings (settings)
+  # @route PUT /settings (settings)
   def update
     authorize Setting
 

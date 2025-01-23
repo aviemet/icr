@@ -11,7 +11,7 @@ const NavLinkComponent = (props: NavLinkComponentProps) => {
 	const { pathname } = useLocation()
 
 	return (
-		<NavLink component={ Link } active={ pathname === props.href } { ...props } />
+		<NavLink component={ Link } active={ pathname === props.href } autoContrast { ...props } />
 	)
 }
 

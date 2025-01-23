@@ -2,10 +2,10 @@ import * as React from "react"
 import { Routes } from "@/lib"
 import { Box, Link, Paper, Table } from "@/Components"
 import { EditButton } from "@/Components/Button"
-import { type ITableProps } from "@/Components/Table/Table"
+import { type TableProps } from "@/Components/Table/Table"
 
 
-const ScheduleTable = (props: ITableProps) => {
+const ScheduleTable = (props: TableProps) => {
 	return (
 		<Table>
 			<Table.Head>

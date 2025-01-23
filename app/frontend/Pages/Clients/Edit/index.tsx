@@ -1,4 +1,4 @@
-import { Heading, Page, Section } from "@/Components"
+import { Title, Page, Section } from "@/Components"
 import { Routes } from "@/lib"
 import ClientsForm from "../Form"
 
@@ -16,7 +16,7 @@ const EditClient = ({ client }: EditClientProps) => {
 			{ title: "Edit" },
 		] }>
 			<Section>
-				<Heading>{ title }</Heading>
+				<Title>{ title }</Title>
 
 				<ClientsForm
 					method='put'

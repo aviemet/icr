@@ -1,4 +1,4 @@
-import { Heading, Page, Section } from "@/Components"
+import { Title, Page, Section } from "@/Components"
 import { Routes } from "@/lib"
 import DoctorsForm from "../Form"
 
@@ -12,15 +12,15 @@ const EditDoctor = ({ doctor }: EditDoctorProps) => {
 	return (
 		<Page title={ title } breadcrumbs={ [
 			{ title: "Doctors", href: Routes.doctors() },
-			{ title: Doctor, href: Routes.doctor(doctor.id) },
+			{ title: title, href: Routes.doctor(doctor.id) },
 			{ title },
 		] }>
 			<Section>
-				<Heading>{ title }</Heading>
+				<Title>{ title }</Title>
 
 				<DoctorsForm
 					method='put'
-					to={ Routes.doctor() }
+					to={ Routes.doctor(doctor.slug) }
 					doctor={ doctor }
 				/>
 			</Section>

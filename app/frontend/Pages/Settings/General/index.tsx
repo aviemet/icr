@@ -1,4 +1,4 @@
-import { Routes } from "@/lib"
+import { Routes, withLayout } from "@/lib"
 import { Box, Grid } from "@/Components"
 import { Form, Submit, TextInput } from "@/Components/Form"
 import {
@@ -7,7 +7,7 @@ import {
 	FormPayPeriodsDropdown,
 	FormTimezonesDropdown,
 } from "@/Features/Dropdowns"
-import ShiftTitleFormatInput from "../../../Features/Settings/ShiftTitleFormatInput"
+import ShiftTitleFormatInput from "./ShiftTitleFormatInput"
 
 export type GeneralSettingsFormData = {
 	setting: Schema.Setting
@@ -76,4 +76,4 @@ const General = ({ settings }: GeneralSettingsProps) => {
 	)
 }
 
-export default General
+export default withLayout(General, "settings")

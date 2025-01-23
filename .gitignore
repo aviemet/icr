@@ -57,7 +57,7 @@ node_modules
 yarn-error.log
 
 # VSCode files
-.vscode
+.vscode/*
 
 # OS generated files
 .DS_Store

@@ -1,4 +1,4 @@
-import { Group, Heading, Menu, Page, Section, Tabs } from "@/Components"
+import { Group, Title, Menu, Page, Section, Tabs } from "@/Components"
 import { Routes } from "@/lib"
 
 import Details from "./Details"
@@ -26,7 +26,7 @@ const ShowClient = ({ client }: ShowClientProps) => {
 			<Section fullHeight>
 
 				<Group justify="space-between">
-					<Heading>{ title }</Heading>
+					<Title>{ title }</Title>
 
 					<Menu position="bottom-end">
 						<Menu.Target />

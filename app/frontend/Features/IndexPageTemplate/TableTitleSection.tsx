@@ -17,7 +17,6 @@ export interface IndexTableTitleSectionProps {
 }
 
 const IndexTableTitleSection = ({ children, title, deleteRoute, menuOptions }: IndexTableTitleSectionProps) => {
-	console.log({ menuOptions })
 	const { tableState: { selected } } = useTableContext()
 
 	const deleteRecords = () => {

@@ -1,8 +1,7 @@
-import { Box, Grid, Heading, Link } from "@/Components"
+import { Box, Grid, Title, Link } from "@/Components"
 import { Form, TextInput, PasswordInput, Submit, Field } from "@/Components/Form"
-import { Routes } from "@/lib"
+import { Routes, withLayout } from "@/lib"
 import { type UseFormProps } from "use-inertia-form"
-import { LAYOUTS } from "@/Layouts"
 import { AuthPaperLayout } from "@/Features"
 
 type TRegisterFormData = {
@@ -61,7 +60,7 @@ const Register = () => {
 
 					<Grid.Col>
 						<Box>
-							<Heading>Sign Up</Heading>
+							<Title>Sign Up</Title>
 						</Box>
 					</Grid.Col>
 
@@ -114,6 +113,4 @@ const Register = () => {
 	)
 }
 
-Register.defaultLayout = LAYOUTS.auth
-
-export default Register
+export default withLayout(Register, "auth")

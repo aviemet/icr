@@ -49,18 +49,20 @@ Rails.application.routes.draw do
     skip: [:sessions],
   )
 
+  # SETTINGS PATHS #
+
+  namespace :settings do
+    resources :people, param: :slug
+  end
+  resource :settings, param: :slug, except: [:new, :create, :destroy]
+
   # RESOURCEFUL PATHS #
-  resources :settings, only: [:index]
-  put :settings, to: "settings#update"
-  patch :settings, to: "settings#update"
 
   resources :clients, param: :slug, concerns: :schedulable
 
   resources :employees, param: :slug, concerns: :schedulable
 
   resources :shift_templates
-
-  resources :users, controller: "people", param: :slug
 
   resources :payrolls, only: [:index]
 

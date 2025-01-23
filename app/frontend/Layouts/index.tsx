@@ -4,10 +4,12 @@ import { Flash } from "@/Components"
 import BareAppLayout from "./AppLayout"
 import BareAuthLayout from "./AuthLayout"
 import BarePublicLayout from "./PublicLayout"
+import BareSettingsLayout from "./SettingsLayout"
 
 export const LAYOUTS = {
-	"app": "app",
 	"auth": "auth",
+	"app": "app",
+	"settings": "settings",
 	"public": "public",
 } as const
 
@@ -24,16 +26,6 @@ export const LayoutWrapper = ({ children }: LayoutProps) => {
 	)
 }
 
-export const AppLayout = ({ children }: LayoutProps) => {
-	return (
-		<LayoutWrapper>
-			<BareAppLayout>
-				{ children }
-			</BareAppLayout>
-		</LayoutWrapper>
-	)
-}
-
 export const AuthLayout = ({ children }: LayoutProps) => {
 	return (
 		<LayoutWrapper>
@@ -44,6 +36,25 @@ export const AuthLayout = ({ children }: LayoutProps) => {
 	)
 }
 
+export const AppLayout = ({ children }: LayoutProps) => {
+	return (
+		<LayoutWrapper>
+			<BareAppLayout>
+				{ children }
+			</BareAppLayout>
+		</LayoutWrapper>
+	)
+}
+
+export const SettingsLayout = ({ children }: LayoutProps) => {
+	return (
+		<LayoutWrapper>
+			<BareSettingsLayout>
+				{ children }
+			</BareSettingsLayout>
+		</LayoutWrapper>
+	)
+}
 
 export const PublicLayout = ({ children }: LayoutProps) => {
 	return (

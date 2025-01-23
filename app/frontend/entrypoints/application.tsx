@@ -1,7 +1,12 @@
 import { createInertiaApp, router } from "@inertiajs/react"
 import { createRoot } from "react-dom/client"
-import { PublicLayout, AppLayout, AuthLayout, LAYOUTS, LayoutProps } from "../Layouts"
-import { applyPropsMiddleware, setupCSRFToken, setupInertiaListeners } from "./middleware"
+import { LAYOUTS } from "../Layouts"
+import {
+	applyPropsMiddleware,
+	setupCSRFToken,
+	setupInertiaListeners,
+	handlePageLayout,
+} from "./middleware"
 import { runAxe } from "./middleware/axe"
 
 import dayjs from "dayjs"
@@ -18,16 +23,10 @@ dayjs.extend(relativeTime)
 
 const SITE_TITLE = "Super SLS"
 
-type PagesObject = { default: React.ComponentType<any> & {
-	layout?: React.ComponentType<any>
+export type PagesObject<T = any> = { default: React.ComponentType<T> & {
+	layout?: React.ComponentType<T>
 	defaultLayout?: keyof typeof LAYOUTS
 } }
-
-const LAYOUT_COMPONENTS: Record<keyof typeof LAYOUTS, ({ children }: LayoutProps) => React.JSX.Element> = {
-	"app": AppLayout,
-	"auth": AuthLayout,
-	"public": PublicLayout,
-} as const
 
 document.addEventListener("DOMContentLoaded", () => {
 	setupCSRFToken()
@@ -37,13 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
 		title: title => `${SITE_TITLE} - ${title}`,
 
 		resolve: async (name) => {
-			const page = (await pages[`../Pages/${name}/index.tsx`]()).default
+			const page: PagesObject = (await pages[`../Pages/${name}/index.tsx`]())
 
-			const DefaultLayout = LAYOUT_COMPONENTS[page.defaultLayout as keyof typeof LAYOUTS] || AppLayout
-
-			page.layout ||= (children: React.ReactNode) => <DefaultLayout>{ children }</DefaultLayout>
-
-			return page
+			return handlePageLayout(page)
 		},
 
 		setup({ el, App, props }) {

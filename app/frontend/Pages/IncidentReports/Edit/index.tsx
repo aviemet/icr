@@ -1,4 +1,4 @@
-import { Heading, Page, Section } from "@/Components"
+import { Title, Page, Section } from "@/Components"
 import { Routes } from "@/lib"
 import IncidentReportsForm from "../Form"
 
@@ -16,7 +16,7 @@ const EditIncidentReport = ({ incident_report }: EditIncidentReportProps) => {
 			{ title },
 		] }>
 			<Section>
-				<Heading>{ title }</Heading>
+				<Title>{ title }</Title>
 
 				<IncidentReportsForm
 					method='put'

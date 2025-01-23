@@ -1,7 +1,6 @@
-import { Grid, Heading, Link } from "@/Components"
+import { Grid, Title, Link } from "@/Components"
 import { Field, Form, TextInput, Submit } from "@/Components/Form"
-import { Routes } from "@/lib"
-import { LAYOUTS } from "@/Layouts"
+import { Routes, withLayout } from "@/lib"
 import { AuthPaperLayout } from "@/Features"
 
 type TPasswordsNewFormData = {
@@ -24,7 +23,7 @@ const PasswordsNew = () => {
 
 					<Grid.Col>
 						<div>
-							<Heading>Reset Password</Heading>
+							<Title>Reset Password</Title>
 						</div>
 					</Grid.Col>
 
@@ -46,6 +45,4 @@ const PasswordsNew = () => {
 	)
 }
 
-PasswordsNew.defaultLayout = LAYOUTS.auth
-
-export default PasswordsNew
+export default withLayout(PasswordsNew, "auth")

@@ -1,4 +1,4 @@
-import { Group, Heading, Menu, Page, Section } from "@/Components"
+import { Group, Title, Menu, Page, Section } from "@/Components"
 import { Routes } from "@/lib"
 
 interface IShowJobTitleProps {
@@ -12,7 +12,7 @@ const ShowJobTitle = ({ job_title }: IShowJobTitleProps) => {
 		<Page title={ title }>
 			<Section>
 				<Group position="apart">
-					<Heading>{ title }</Heading>
+					<Title>{ title }</Title>
 
 					<Menu position="bottom-end">
 						<Menu.Target />

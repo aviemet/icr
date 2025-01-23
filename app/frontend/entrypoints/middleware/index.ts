@@ -4,6 +4,8 @@ import { Root } from "react-dom/client"
 import axios from "axios"
 import { runAxe } from "./axe"
 
+export { default as  handlePageLayout } from "./handlePageLayout"
+
 export const applyPropsMiddleware = (props: PageProps & {
 	errors: Errors & ErrorBag
 }) => {

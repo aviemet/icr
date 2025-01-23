@@ -1,4 +1,4 @@
-import { Heading, Page, Section } from "@/Components"
+import { Title, Page, Section } from "@/Components"
 import { Routes } from "@/lib"
 import EmployeeForm from "../Form"
 
@@ -13,7 +13,7 @@ const NewEmployee = ({ ...data }: INewEmployeeProps) => {
 		<Page title={ title }>
 
 			<Section>
-				<Heading>{ title }</Heading>
+				<Title>{ title }</Title>
 
 				<EmployeeForm
 					to={ Routes.employees() }

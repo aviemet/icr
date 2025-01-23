@@ -1,13 +1,12 @@
-import { Grid, Heading, Link } from "@/Components"
+import { Grid, Title, Link } from "@/Components"
 import { Form, Field, TextInput, PasswordInput, Checkbox, Submit } from "@/Components/Form"
-import { Routes } from "@/lib"
+import { Routes, withLayout } from "@/lib"
+import { usePageProps } from "@/lib/hooks"
+import { AuthPaperLayout } from "@/Features"
 import { type UseFormProps } from "use-inertia-form"
-import { LAYOUTS } from "@/Layouts"
 
 import cx from "clsx"
 import * as classes from "./Login.css"
-import { usePageProps } from "@/lib/hooks"
-import { AuthPaperLayout } from "@/Features"
 
 type LoginFormData = {
 	user: {
@@ -53,7 +52,7 @@ const Login = () => {
 
 					<Grid.Col>
 						<div>
-							<Heading mb="xs">{ settings.company_name }</Heading>
+							<Title mb="xs">{ settings.company_name }</Title>
 						</div>
 					</Grid.Col>
 
@@ -100,6 +99,4 @@ const Login = () => {
 	)
 }
 
-Login.defaultLayout = LAYOUTS.auth
-
-export default Login
+export default withLayout(Login, "auth")

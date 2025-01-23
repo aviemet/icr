@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react"
+import { forwardRef } from "react"
 import { TableSectionContextProvider, useTableContext } from "./TableContext"
 import { Table, LoadingOverlay, type TableTbodyProps } from "@mantine/core"
 

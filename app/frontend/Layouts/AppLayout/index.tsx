@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import { useEffect } from "react"
 import { Box, useMantineTheme } from "@mantine/core"
 import { AppShell } from "@/Components"
 import Sidebar from "./Sidebar"
@@ -42,8 +42,9 @@ const AppLayout = ({ children }: LayoutProps) => {
 			{ /* <Topbar /> */ }
 			<Sidebar />
 			<Footer />
-			<AppShell.Main>
-				<Box id="CONTENT_WRAPPER" className={ cx(classes.wrapper) } p="xs">
+			<AppShell.Main className={ cx(classes.main) }>
+				<div id="above-content-portal"></div>
+				<Box className={ cx(classes.wrapper) } p="xs">
 					{ children }
 				</Box>
 			</AppShell.Main>
