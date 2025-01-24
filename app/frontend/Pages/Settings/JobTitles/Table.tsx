@@ -1,30 +1,34 @@
 import { Routes } from "@/lib"
-import { Table, Link } from "@/Components"
+import { Link, Table } from "@/Components"
 import { EditButton } from "@/Components/Button"
-import { type ITableProps } from "@/Components/Table/Table"
+import { type TableProps } from "@/Components/Table/Table"
 
-const JobTitleTable = (props: ITableProps) => {
+const JobTitleTable = (props: TableProps) => {
 	return (
-		<Table>
+		<Table { ...props }>
 			<Table.Head>
 				<Table.Row>
 					<Table.Cell sort="title">Title</Table.Cell>
 					<Table.Cell sort="description">Description</Table.Cell>
-					<Table.Cell className="actions">Actions</Table.Cell>
+					<Table.HeadCell className="actions">Actions</Table.HeadCell>
 				</Table.Row>
 			</Table.Head>
 			<Table.Body>
 				<Table.RowIterator render={ (job_title: Schema.JobTitlesIndex) => (
 					<Table.Row key={ job_title.id }>
+
 						<Table.Cell>
-							<Link href={ Routes.jobTitle(job_title.id) }>{ job_title.title }</Link>
+							<Link href={ Routes.settingsJobTitle(job_title.slug) }>{ job_title.name }</Link>
 						</Table.Cell>
+
 						<Table.Cell>
-							<Link href={ Routes.jobTitle(job_title.id) }>{ job_title.description }</Link>
+							<Link href={ Routes.settingsJobTitle(job_title.slug) }>{ job_title.description }</Link>
 						</Table.Cell>
+
 						<Table.Cell>
-							<EditButton href={ Routes.editJobTitle(job_title.id) } />
+							<EditButton href={ Routes.editSettingsJobTitle(job_title.slug) } />
 						</Table.Cell>
+
 					</Table.Row>
 				) } />
 			</Table.Body>

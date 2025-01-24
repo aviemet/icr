@@ -3,6 +3,8 @@ require "rails/generators/named_base"
 module Tsx
   module Generators
     class Base < Rails::Generators::NamedBase
+      source_root File.expand_path("lib/templates/tsx/scaffold", Rails.root)
+
       private
 
       def formats

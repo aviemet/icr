@@ -51,8 +51,11 @@ Rails.application.routes.draw do
 
   # SETTINGS PATHS #
 
+  get "settings/general", to: "settings#show"
   namespace :settings do
+    get "", to: redirect("/settings/general")
     resources :people, param: :slug
+    resources :job_titles, param: :slug
   end
   resource :settings, param: :slug, except: [:new, :create, :destroy]
 

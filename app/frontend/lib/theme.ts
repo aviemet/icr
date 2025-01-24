@@ -50,7 +50,7 @@ export const themeObject: Partial<CustomMantineTheme> = {
 		navbar: {
 			width: {
 				closed: 50,
-				open: 250,
+				open: 210,
 			},
 		},
 		footer: {

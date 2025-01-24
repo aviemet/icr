@@ -2,19 +2,19 @@
 class <%= class_name %>Controller < ApplicationController
 
   def index
-    render inertia: "<%= class_name %>/Index"
+    render inertia: "<%= class_name.gsub("::", "/") %>/Index"
   end
 
   def show
-    render inertia: "<%= class_name %>/Show"
+    render inertia: "<%= class_name.gsub("::", "/") %>/Show"
   end
 
   def new
-    render inertia: "<%= class_name %>/New"
+    render inertia: "<%= class_name.gsub("::", "/") %>/New"
   end
 
   def edit
-    render inertia: "<%= class_name %>/Edit"
+    render inertia: "<%= class_name.gsub("::", "/") %>/Edit"
   end
 
   def create

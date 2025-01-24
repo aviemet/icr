@@ -1,6 +1,5 @@
 import { Link } from "@/Components"
 import { type LinkProps } from "@/Components/Link"
-import { useLocation } from "@/lib/hooks"
 import { forwardRef } from "react"
 
 import cx from "clsx"
@@ -14,13 +13,9 @@ const SettingsNavLink = forwardRef<HTMLAnchorElement, SettingsNavLinkProps>((
 	},
 	ref
 ) => {
-	const { pathname } = useLocation()
-	const isActive = pathname.includes(props.href)
-
 	return <Link
 		ref={ ref }
 		underline={ underline }
-		// active={ isActive }
 		{ ...props }
 	>
 		<span className={ cx("controlLabel") }>{ children }</span>

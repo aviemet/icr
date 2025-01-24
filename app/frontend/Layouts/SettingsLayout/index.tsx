@@ -13,11 +13,12 @@ interface SettingsLayoutProps {
 }
 
 const links = [
-	{ label: "General", href: "/settings" },
+	{ label: "General", href: "/settings/general" },
 	{ label: "People", href: "/settings/people" },
+	{ label: "Job Titles", href: "/settings/job_titles" },
 ]
 
-const linkIndex = (path: string) => links.findIndex(link => link.href === path)
+const linkIndex = (path: string) => links.findIndex(link => link.href === path || path.startsWith(link.href))
 
 const SettingsLayout = ({ children }: SettingsLayoutProps) => {
 	const { pathname } = useLocation()
@@ -25,8 +26,6 @@ const SettingsLayout = ({ children }: SettingsLayoutProps) => {
 	const rootRef = useRef<HTMLElement | null>(null)
 	const [controlsRefs, setControlsRefs] = useState<Record<string, HTMLAnchorElement | null>>({})
 	const [active, setActive] = useState(linkIndex(pathname))
-
-	console.log({ controlsRefs, active })
 
 	const setControlRef = (index: number) => (node: HTMLAnchorElement) => {
 		controlsRefs[index] = node

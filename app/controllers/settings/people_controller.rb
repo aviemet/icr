@@ -23,16 +23,16 @@ class Settings::PeopleController < ApplicationController
     }
   end
 
-  # @route GET /settings/people/:id (settings_user)
+  # @route GET /settings/people/:slug (settings_person)
   def show
     authorize person
-    ap({ params: })
+
     render inertia: "Settings/People/Show", props: {
       person: -> { person.render(:show) }
     }
   end
 
-  # @route GET /settings/people/new (new_settings_user)
+  # @route GET /settings/people/new (new_settings_person)
   def new
     authorize Person.new
 
@@ -41,7 +41,7 @@ class Settings::PeopleController < ApplicationController
     }
   end
 
-  # @route GET /settings/people/:id/edit (edit_settings_user)
+  # @route GET /settings/people/:slug/edit (edit_settings_person)
   def edit
     authorize person
 
@@ -60,8 +60,8 @@ class Settings::PeopleController < ApplicationController
     end
   end
 
-  # @route PATCH /settings/people/:id (settings_user)
-  # @route PUT /settings/people/:id (settings_user)
+  # @route PATCH /settings/people/:slug (settings_person)
+  # @route PUT /settings/people/:slug (settings_person)
   def update
     authorize person
     if person.update(person_params)
@@ -71,7 +71,7 @@ class Settings::PeopleController < ApplicationController
     end
   end
 
-  # @route DELETE /settings/people/:id (settings_user)
+  # @route DELETE /settings/people/:slug (settings_person)
   def destroy
     authorize person
     person.destroy!

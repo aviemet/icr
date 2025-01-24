@@ -5,7 +5,7 @@ import { type TableProps } from '@/Components/Table/Table'
 
 const <%= singular_table_name.camelize %>Table = (props: TableProps) => {
 	return (
-		<Table>
+		<Table { ...props}>
 			<Table.Head>
 				<Table.Row><% attributes.each do |column| %>
 					<% unless column.type == :references %><Table.HeadCell sort="<%= column.name %>"><%= column.name.capitalize %></Table.HeadCell><% end; end %>
