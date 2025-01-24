@@ -1,13 +1,13 @@
 import { Title, Page, Section } from "@/Components"
 import { Routes, withLayout } from "@/lib"
-import JobTitlesForm from "../Form"
+import JobTitlesForm from "@/Features/Settings/JobTitles/Form"
 
 interface EditJobTitleProps {
 	job_title: Schema.JobTitlesEdit
 }
 
 const EditJobTitle = ({ job_title }: EditJobTitleProps) => {
-	const title = "Edit Job Title"
+	const title = `Edit ${job_title.name || "Job Title"}`
 
 	return (
 		<Page title={ title } breadcrumbs={ [

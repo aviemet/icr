@@ -1,11 +1,11 @@
 import { Routes } from "@/lib"
 import { Table, Link } from "@/Components"
 import { EditButton } from "@/Components/Button"
-import { type ITableProps } from "@/Components/Table/Table"
+import { type TableProps } from "@/Components/Table/Table"
 
-const HouseholdTable = (props: ITableProps) => {
+const HouseholdTable = (props: TableProps) => {
 	return (
-		<Table>
+		<Table { ...props }>
 			<Table.Head>
 				<Table.Row>
 					<Table.Cell className="actions">Actions</Table.Cell>
@@ -15,7 +15,7 @@ const HouseholdTable = (props: ITableProps) => {
 				<Table.RowIterator render={ (household: Schema.HouseholdsIndex) => (
 					<Table.Row key={ household.id }>
 						<Table.Cell>
-							<EditButton href={ Routes.editHousehold(household.id) } />
+							<EditButton href={ Routes.editHousehold(household.slug) } />
 						</Table.Cell>
 					</Table.Row>
 				) } />

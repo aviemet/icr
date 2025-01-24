@@ -1,22 +1,22 @@
 import { formatter } from "@/lib"
 import { Stack, Tooltip } from "@/Components"
-import ConditionalWrapper from "../ConditionalWrapper"
+import ConditionalWrapper from "../../ConditionalWrapper"
 import { isEmpty } from "lodash"
 import { TooltipBaseProps } from "@mantine/core/lib/components/Tooltip/Tooltip.types"
 
-interface DateTimeDisplayProps {
+interface DateTimeFormatterProps {
 	children: string | Date | undefined
 	format?: keyof typeof formatter["datetime"]
 	tooltipFormats?: (keyof typeof formatter["datetime"])[]
 	tooltipOptions?: TooltipBaseProps
 }
 
-const DateTimeDisplay = ({
+const DateTimeFormatter = ({
 	children,
 	format = "dateShort",
 	tooltipFormats,
 	tooltipOptions,
-}: DateTimeDisplayProps) => {
+}: DateTimeFormatterProps) => {
 	if(!children) return <></>
 
 	return (
@@ -51,4 +51,4 @@ const DateTimeDisplay = ({
 	)
 }
 
-export default DateTimeDisplay
+export default DateTimeFormatter

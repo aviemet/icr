@@ -1,19 +1,19 @@
-import { Grid } from '@/Components'
-import { Form, TextInput, Submit } from '@/Components/Form'
-import { type HTTPVerb, type UseFormProps } from 'use-inertia-form'
+import { Grid } from "@/Components"
+import { Form, TextInput, Submit } from "@/Components/Form"
+import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
 
-type TShiftTemplateFormData = {
+type ShiftTemplateFormData = {
 	shift_template: Schema.ShiftTemplatesFormData
 }
 
 export interface ShiftTemplateFormProps {
 	to: string
 	method?: HTTPVerb
-	onSubmit?: (object: UseFormProps<TShiftTemplateFormData>) => boolean|void
+	onSubmit?: (object: UseFormProps<ShiftTemplateFormData>) => boolean | void
 	shift_template: Schema.ShiftTemplatesFormData
 }
 
-const ShiftTemplateForm = ({ method = 'post', shift_template, ...props }: IShiftTemplateFormProps) => {
+const ShiftTemplateForm = ({ method = "post", shift_template, ...props }: ShiftTemplateFormProps) => {
 	return (
 		<Form
 			model="shift_template"
@@ -33,9 +33,9 @@ const ShiftTemplateForm = ({ method = 'post', shift_template, ...props }: IShift
 				</Grid.Col>
 
 				<Grid.Col>
-					<Submit>{ shift_template.id ? 'Update' : 'Create' } ShiftTemplate</Submit>
+					<Submit>{ shift_template.id ? "Update" : "Create" } ShiftTemplate</Submit>
 				</Grid.Col>
-			</Grid.Col>
+			</Grid>
 		</Form>
 	)
 }

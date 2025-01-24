@@ -1,7 +1,7 @@
 import { Routes } from "@/lib"
 import { IndexPageTemplate } from "@/Features"
 import { NewIcon } from "@/Components/Icons"
-import VendorsTable from "../Table"
+import VendorsTable from "@/Features/Vendors/Table"
 
 interface VendorIndexProps {
 	vendors: Schema.VendorsIndex[]

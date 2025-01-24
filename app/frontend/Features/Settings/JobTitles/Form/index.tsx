@@ -1,6 +1,7 @@
 import { Grid } from "@/Components"
-import { Form, TextInput, Submit } from "@/Components/Form"
+import { Form, TextInput, Submit, RichText } from "@/Components/Form"
 import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
+import PermissionsSection from "./PermissionsSection"
 
 type JobTitleFormData = {
 	job_title: Schema.JobTitlesFormData
@@ -28,8 +29,10 @@ const JobTitleForm = ({ method = "post", job_title, ...props }: JobTitleFormProp
 				</Grid.Col>
 
 				<Grid.Col>
-					<TextInput name="description" label="Description" />
+					<RichText name="description" label="Description" />
 				</Grid.Col>
+
+				<PermissionsSection />
 
 				<Grid.Col>
 					<Submit>{ job_title.id ? "Update" : "Create" } JobTitle</Submit>

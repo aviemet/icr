@@ -6,7 +6,7 @@ interface ShowJobTitleProps {
 }
 
 const ShowJobTitle = ({ job_title }: ShowJobTitleProps) => {
-	const title =  "JobTitle"
+	const title = job_title.name || "Job Title"
 
 	return (
 		<Page title={ title } breadcrumbs={ [
@@ -26,6 +26,8 @@ const ShowJobTitle = ({ job_title }: ShowJobTitleProps) => {
 						</Menu.Dropdown>
 					</Menu>
 				</Group>
+
+
 
 			</Section>
 		</Page>

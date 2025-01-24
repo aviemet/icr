@@ -65,6 +65,8 @@ Rails.application.routes.draw do
 
   resources :employees, param: :slug, concerns: :schedulable
 
+  resources :households, param: :slug
+
   resources :shift_templates
 
   resources :payrolls, only: [:index]

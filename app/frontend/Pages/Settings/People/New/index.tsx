@@ -1,6 +1,6 @@
 import { Title, Page, Section } from "@/Components"
-import { Routes } from "@/lib"
-import PersonForm from "../Form"
+import { Routes, withLayout } from "@/lib"
+import PersonForm from "@/Features/Settings/People/Form"
 
 interface NewPersonProps {
 	person: Schema.PeopleFormData
@@ -11,15 +11,15 @@ const NewPerson = ({ ...data }: NewPersonProps) => {
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: "Users", href: Routes.users() },
-			{ title: "New User", href: window.location.href },
+			{ title: "People", href: Routes.settingsPeople() },
+			{ title: "New Person", href: window.location.href },
 		] }>
 
 			<Section>
 				<Title>{ title }</Title>
 
 				<PersonForm
-					to={ Routes.users() }
+					to={ Routes.settingsPeople() }
 					{ ...data }
 				/>
 			</Section>

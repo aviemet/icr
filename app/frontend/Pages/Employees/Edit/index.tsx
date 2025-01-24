@@ -1,6 +1,6 @@
 import { Title, Page, Section } from "@/Components"
 import { Routes } from "@/lib"
-import EmployeesForm from "../Form"
+import EmployeesForm from "@/Features/Employees/Form"
 
 interface EditEmployeeProps {
 	employee: Schema.EmployeesEdit
@@ -12,7 +12,7 @@ const EditEmployee = ({ employee }: EditEmployeeProps) => {
 	return (
 		<Page title={ title } breadcrumbs={ [
 			{ title: "Employees", href: Routes.employees() },
-			{ title: Employee, href: Routes.employee(employee.id) },
+			{ title: title, href: Routes.employee(employee.slug) },
 			{ title },
 		] }>
 			<Section>
@@ -20,7 +20,7 @@ const EditEmployee = ({ employee }: EditEmployeeProps) => {
 
 				<EmployeesForm
 					method='put'
-					to={ Routes.employee() }
+					to={ Routes.employee(employee.slug) }
 					employee={ employee }
 				/>
 			</Section>

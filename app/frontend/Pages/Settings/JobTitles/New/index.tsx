@@ -1,6 +1,6 @@
 import { Title, Page, Section } from "@/Components"
 import { Routes, withLayout } from "@/lib"
-import JobTitleForm from "../Form"
+import JobTitleForm from "@/Features/Settings/JobTitles/Form"
 
 interface NewJobTitleProps {
 	job_title: Schema.JobTitlesFormData

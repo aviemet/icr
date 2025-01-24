@@ -4,10 +4,9 @@ import { Box, Link, Paper, Table } from "@/Components"
 import { EditButton } from "@/Components/Button"
 import { type TableProps } from "@/Components/Table/Table"
 
-
 const ScheduleTable = (props: TableProps) => {
 	return (
-		<Table>
+		<Table { ...props }>
 			<Table.Head>
 				<Table.Row>
 					<Table.Cell>First Name</Table.Cell>

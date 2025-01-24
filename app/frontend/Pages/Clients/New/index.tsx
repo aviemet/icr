@@ -1,6 +1,6 @@
 import { Title, Page, Section } from "@/Components"
 import { Routes } from "@/lib"
-import ClientForm from "../Form"
+import ClientForm from "@/Features/Clients/Form"
 
 interface NewClientProps {
 	client: Schema.ClientsFormData

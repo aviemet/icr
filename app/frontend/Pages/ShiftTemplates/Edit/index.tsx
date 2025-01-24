@@ -1,6 +1,6 @@
 import { Title, Page, Section } from "@/Components"
 import { Routes } from "@/lib"
-import ShiftTemplatesForm from "../Form"
+import ShiftTemplatesForm from "@/Features/ShiftTemplates/Form"
 
 interface EditShiftTemplateProps {
 	shift_template: Schema.ShiftTemplatesEdit
@@ -12,7 +12,7 @@ const EditShiftTemplate = ({ shift_template }: EditShiftTemplateProps) => {
 	return (
 		<Page title={ title } breadcrumbs={ [
 			{ title: "Shift Templates", href: Routes.shiftTemplates() },
-			{ title: ShiftTemplate, href: Routes.shiftTemplate(shift_template.id) },
+			{ title: "Shift Template", href: Routes.shiftTemplate(shift_template.id) },
 			{ title, href: window.location.href },
 		] }>
 			<Section>
@@ -20,7 +20,7 @@ const EditShiftTemplate = ({ shift_template }: EditShiftTemplateProps) => {
 
 				<ShiftTemplatesForm
 					method='put'
-					to={ Routes.shiftTemplate() }
+					to={ Routes.shiftTemplate(shift_template.id) }
 					shift_template={ shift_template }
 				/>
 			</Section>

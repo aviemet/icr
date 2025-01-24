@@ -1,6 +1,6 @@
 import { Title, Page, Section } from "@/Components"
 import { Routes } from "@/lib"
-import HouseholdsForm from "../Form"
+import HouseholdsForm from "@/Features/Households/Form"
 
 interface IEditHouseholdProps {
 	household: Schema.HouseholdsEdit
@@ -16,7 +16,7 @@ const EditHousehold = ({ household }: IEditHouseholdProps) => {
 
 				<HouseholdsForm
 					method='put'
-					to={ Routes.household() }
+					to={ Routes.household(household.slug) }
 					household={ household }
 				/>
 			</Section>

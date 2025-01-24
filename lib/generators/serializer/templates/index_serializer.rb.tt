@@ -1,8 +1,2 @@
-class <%= model_name.pluralize.camelize %>::IndexSerializer < ApplicationSerializer
-  object_as :<%= model_name %>
-
-  attributes(
-    :id,<% model_attributes.each do |attribute| %>
-    :<%= attribute %>,<% end %>
-  )
+class <%= model_name.pluralize.camelize %>::IndexSerializer < <%= model_name.pluralize.camelize %>::PersistedSerializer
 end

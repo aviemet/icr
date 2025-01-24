@@ -1,0 +1,7 @@
+class <%= model_name.pluralize.camelize %>::PersistedSerializer < <%= model_name.camelize %>Serializer
+  include Persisted
+
+  attributes(<% if model_attributes.include?("slug") %>
+    :slug,<% end %>
+  )
+end

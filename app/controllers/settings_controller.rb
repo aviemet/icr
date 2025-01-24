@@ -1,6 +1,7 @@
 class SettingsController < ApplicationController
   strong_params :setting, permit: Setting.editable_keys
 
+  # @route GET /settings/general (settings_general)
   # @route GET /settings (settings)
   def show
     authorize Setting

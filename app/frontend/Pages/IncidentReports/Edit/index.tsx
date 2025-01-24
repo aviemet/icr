@@ -1,6 +1,6 @@
 import { Title, Page, Section } from "@/Components"
 import { Routes } from "@/lib"
-import IncidentReportsForm from "../Form"
+import IncidentReportsForm from "@/Features/IncidentReports/Form"
 
 interface EditIncidentReportProps {
 	incident_report: Schema.IncidentReportsEdit
@@ -12,7 +12,7 @@ const EditIncidentReport = ({ incident_report }: EditIncidentReportProps) => {
 	return (
 		<Page title={ title } breadcrumbs={ [
 			{ title: "Incident Reports", href: Routes.incidentReports() },
-			{ title: IncidentReport, href: Routes.incidentReport(incident_report.id) },
+			{ title: "Incident Report", href: Routes.incidentReport(incident_report.id) },
 			{ title },
 		] }>
 			<Section>
@@ -20,7 +20,7 @@ const EditIncidentReport = ({ incident_report }: EditIncidentReportProps) => {
 
 				<IncidentReportsForm
 					method='put'
-					to={ Routes.incidentReport() }
+					to={ Routes.incidentReport(incident_report.id) }
 					incident_report={ incident_report }
 				/>
 			</Section>

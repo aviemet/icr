@@ -1,7 +1,2 @@
-class IncidentReports::IndexSerializer < IncidentReportSerializer
-  attributes(
-    :id,
-    :updated_at,
-    :created_at,
-  )
+class IncidentReports::IndexSerializer < IncidentReports::PersistedSerializer
 end

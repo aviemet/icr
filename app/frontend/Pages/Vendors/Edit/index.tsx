@@ -1,6 +1,6 @@
 import { Title, Page, Section } from "@/Components"
 import { Routes } from "@/lib"
-import VendorsForm from "../Form"
+import VendorsForm from "@/Features/Vendors/Form"
 
 interface EditVendorProps {
 	vendor: Schema.VendorsEdit
@@ -12,7 +12,7 @@ const EditVendor = ({ vendor }: EditVendorProps) => {
 	return (
 		<Page title={ title } breadcrumbs={ [
 			{ title: "Vendors", href: Routes.vendors() },
-			{ title: Vendor, href: Routes.vendor(vendor.id) },
+			{ title: title, href: Routes.vendor(vendor.id) },
 			{ title },
 		] }>
 			<Section>
@@ -20,7 +20,7 @@ const EditVendor = ({ vendor }: EditVendorProps) => {
 
 				<VendorsForm
 					method='put'
-					to={ Routes.vendor() }
+					to={ Routes.vendor(vendor.id) }
 					vendor={ vendor }
 				/>
 			</Section>

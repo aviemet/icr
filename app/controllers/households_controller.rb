@@ -8,6 +8,7 @@ class HouseholdsController < ApplicationController
 
   strong_params :household, permit: [:householdable_id, :householdable_type, :type, :number, :notes, :issued_at, :expires_at, :extra_fields]
 
+  # @route GET /households (households)
   def index
     authorize households
 
@@ -22,6 +23,7 @@ class HouseholdsController < ApplicationController
     }
   end
 
+  # @route GET /households/:slug (household)
   def show
     authorize household
     render inertia: "Households/Show", props: {
@@ -29,6 +31,7 @@ class HouseholdsController < ApplicationController
     }
   end
 
+  # @route GET /households/new (new_household)
   def new
     authorize Household.new
     render inertia: "Households/New", props: {
@@ -36,6 +39,7 @@ class HouseholdsController < ApplicationController
     }
   end
 
+  # @route GET /households/:slug/edit (edit_household)
   def edit
     authorize household
     render inertia: "Households/Edit", props: {
@@ -43,6 +47,7 @@ class HouseholdsController < ApplicationController
     }
   end
 
+  # @route POST /households (households)
   def create
     authorize Household.new
     if household.save
@@ -52,6 +57,8 @@ class HouseholdsController < ApplicationController
     end
   end
 
+  # @route PATCH /households/:slug (household)
+  # @route PUT /households/:slug (household)
   def update
     authorize household
     if household.update(household_params)
@@ -61,6 +68,7 @@ class HouseholdsController < ApplicationController
     end
   end
 
+  # @route DELETE /households/:slug (household)
   def destroy
     authorize household
     household.destroy!

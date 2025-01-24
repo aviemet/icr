@@ -1,7 +1,7 @@
 import { Routes } from "@/lib"
 import { IndexPageTemplate } from "@/Features"
 import { NewIcon } from "@/Components/Icons"
-import PeopleTable from "../Table"
+import PeopleTable from "@/Features/Settings/People/Table"
 import { withLayout } from "@/lib/withLayout"
 
 interface PersonIndexProps {
