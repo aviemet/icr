@@ -20,6 +20,7 @@ class JobTitle < ApplicationRecord
   include PgSearchable
   pg_search_config(against: [:name, :description])
 
+  rolify
   resourcify
 
   has_many :employees_job_titles, dependent: :nullify

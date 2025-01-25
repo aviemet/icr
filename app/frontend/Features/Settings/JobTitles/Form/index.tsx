@@ -2,10 +2,8 @@ import { Grid } from "@/Components"
 import { Form, TextInput, Submit, RichText } from "@/Components/Form"
 import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
 import PermissionsSection from "./PermissionsSection"
+import { emptyPermissions, JobTitleFormData } from "./formData"
 
-type JobTitleFormData = {
-	job_title: Schema.JobTitlesFormData
-}
 
 export interface JobTitleFormProps {
 	to: string
@@ -18,7 +16,7 @@ const JobTitleForm = ({ method = "post", job_title, ...props }: JobTitleFormProp
 	return (
 		<Form
 			model="job_title"
-			data={ { job_title } }
+			data={ { job_title, ...emptyPermissions } }
 			method={ method }
 			{ ...props }
 		>

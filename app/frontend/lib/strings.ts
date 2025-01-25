@@ -1,6 +1,8 @@
 import { formatter } from "."
 import dayjs from "dayjs"
 
+export { default as aOrAn }  from "indefinite"
+
 const WORDS_REGEX = /[A-Z\xC0-\xD6\xD8-\xDE]?[a-z\xDF-\xF6\xF8-\xFF]+|[A-Z\xC0-\xD6\xD8-\xDE]+(?![a-z\xDF-\xF6\xF8-\xFF])|\d+/g
 
 /**
@@ -13,7 +15,7 @@ const toWords = (str?: string | null) => {
 }
 
 /**
- * Capializes the first letter of a string
+ * Capitalizes the first letter of a string
  */
 export const capitalize = (str?: string | null): string => {
 	if(typeof str !== "string") return ""

@@ -3822,6 +3822,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/indefinite@npm:^2":
+  version: 2.3.4
+  resolution: "@types/indefinite@npm:2.3.4"
+  checksum: 10c0/b3b02cf28861f413a8b5948252db5c0c357981e514155c3699554753fbe35469dfdabf00fe71bdb25979707430258bc0dbf6bb0c10d7702604de73e22c6fdef3
+  languageName: node
+  linkType: hard
+
 "@types/istanbul-lib-coverage@npm:*, @types/istanbul-lib-coverage@npm:^2.0.0, @types/istanbul-lib-coverage@npm:^2.0.1":
   version: 2.0.6
   resolution: "@types/istanbul-lib-coverage@npm:2.0.6"
@@ -8348,6 +8355,7 @@ __metadata:
     "@tiptap/react": "npm:^2.11.0"
     "@tiptap/starter-kit": "npm:^2.11.0"
     "@types/google-libphonenumber": "npm:^7.4.30"
+    "@types/indefinite": "npm:^2"
     "@types/jest": "npm:^29.5.14"
     "@types/lodash": "npm:^4.17.14"
     "@types/node": "npm:^22.10.5"
@@ -8381,6 +8389,7 @@ __metadata:
     git-cz: "npm:^4.9.0"
     google-libphonenumber: "npm:^3.2.40"
     husky: "npm:^9.1.7"
+    indefinite: "npm:^2.5.1"
     jest: "npm:^29.7.0"
     jsdom: "npm:^25.0.1"
     jsonc-eslint-parser: "npm:^2.4.0"
@@ -8465,6 +8474,13 @@ __metadata:
   version: 0.1.4
   resolution: "imurmurhash@npm:0.1.4"
   checksum: 10c0/8b51313850dd33605c6c9d3fd9638b714f4c4c40250cff658209f30d40da60f78992fb2df5dabee4acf589a6a82bbc79ad5486550754bd9ec4e3fc0d4a57d6a6
+  languageName: node
+  linkType: hard
+
+"indefinite@npm:^2.5.1":
+  version: 2.5.1
+  resolution: "indefinite@npm:2.5.1"
+  checksum: 10c0/d02a97a8886ddfadbf2c7f9213258b14b2d0706cc1d0983341a663d6e7e5e63c09b9c806e51bffcc7d5afab72e893cbb9a3964dbd2d681cb3114efce86c63811
   languageName: node
   linkType: hard
 

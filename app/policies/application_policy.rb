@@ -26,19 +26,11 @@ class ApplicationPolicy
   end
 
   def admin?
-    user.has_role?(:admin)
-  end
-
-  def employee?
-    user.has_role?(:employee)
-  end
-
-  def manager?
-    user.has_role?(:manager)
+    user.has_role?(:admin) || user.has_role?(:super_admin)
   end
 
   def client?
-    user.has_role?(:client)
+    user.person&.client&.active?
   end
 
   def index?
@@ -71,21 +63,8 @@ class ApplicationPolicy
 
   private
 
-  def standard_auth(action)
-    return true if user.has_role?(:super_admin) || user.has_role?(:admin)
-
-    case user.person&.role_type
-    when "Employee"
-      check_employee_permissions(action)
-    when "Client"
-      check_client_permissions(action)
-    when "Doctor"
-      check_doctor_permissions(action)
-    when "Vendor"
-      check_vendor_permissions(action)
-    else
-      false
-    end
+  def standard_auth(_action)
+    admin?
   end
 
   def check_employee_permissions(action)

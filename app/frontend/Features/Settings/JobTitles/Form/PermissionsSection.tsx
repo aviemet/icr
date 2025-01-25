@@ -1,41 +1,61 @@
-import { Grid } from "@/Components"
-import { Checkbox } from "@/Components/Form"
-import FormGroup from "@/Components/Form/Components/FormGroup"
-
-const PERMISSIONS = [
-	"index",
-	"show",
-	"create",
-	"update",
-	"destroy",
-] as const
-
-const RESOURCE_TYPES = [
-	"employee",
-	"client",
-	"doctor",
-	"vendor",
-] as const
+import { useForm } from "use-inertia-form"
+import { Grid, Table, Text, Title, Tooltip } from "@/Components"
+import { FormGroup } from "@/Components/Form"
+import { aOrAn } from "@/lib/strings"
+import ColumnToggle from "./ColumnToggle"
+import SwitchRow from "./SwitchRow"
+import { tableRows, type JobTitleFormData } from "./formData"
 
 const PermissionsSection = () => {
+	const { getData } = useForm<JobTitleFormData>()
+
 	return (
-		<FormGroup legend="Permissions">
-			{ RESOURCE_TYPES.map(resourceType => (
-				<Grid.Col key={ resourceType }>
-					<Checkbox.Group
-						name={ `roles.${resourceType}` }
-						label={ resourceType.charAt(0).toUpperCase() + resourceType.slice(1) }
-					>
-						{ PERMISSIONS.map(permission => (
-							<Checkbox
-								key={ `${resourceType}_${permission}` }
-								value={ permission }
-								label={ permission.charAt(0).toUpperCase() + permission.slice(1) }
-							/>
-						)) }
-					</Checkbox.Group>
-				</Grid.Col>
-			)) }
+
+		<FormGroup model="permissions">
+			<Grid.Col>
+				<Title order={ 3 }>Permissions</Title>
+				<Text>Select what { aOrAn(getData("job_title.name"), { articleOnly: true }) } <strong>{ getData("job_title.name") }</strong> has access to do in the application</Text>
+			</Grid.Col>
+
+			<Grid.Col>
+				<Table>
+					<Table.Head>
+						<Table.Row>
+							<Table.HeadCell>
+								All
+							</Table.HeadCell>
+
+							<Table.HeadCell>
+								Record Type
+							</Table.HeadCell>
+
+							<Table.HeadCell>
+								<ColumnToggle permission="index" /> <Tooltip label="Show the fu">List</Tooltip>
+							</Table.HeadCell>
+
+							<Table.HeadCell>
+								<ColumnToggle permission="show" /> View
+							</Table.HeadCell>
+
+							<Table.HeadCell>
+								<ColumnToggle permission="create" /> Create
+							</Table.HeadCell>
+
+							<Table.HeadCell>
+								<ColumnToggle permission="update" /> Edit
+							</Table.HeadCell>
+
+							<Table.HeadCell>
+								<ColumnToggle permission="delete" /> Delete
+							</Table.HeadCell>
+
+						</Table.Row>
+					</Table.Head>
+					<Table.Body>{ tableRows.map(row => (
+						<SwitchRow key={ row.model } { ...row } />
+					)) }</Table.Body>
+				</Table>
+			</Grid.Col>
 		</FormGroup>
 	)
 }

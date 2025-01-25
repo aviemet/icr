@@ -64,13 +64,19 @@ class Person < ApplicationRecord
       "Employee"
     elsif client.present?
       "Client"
-    elsif doctor.present?
-      "Doctor"
     elsif user.present? && (user.has_role?(:admin) || user.has_role?(:super_admin))
       "Administrator"
     else
       ""
     end
+  end
+
+  def employee?
+    employee.present? && employee.active?
+  end
+
+  def client?
+    client.present? && client.active?
   end
 
   def login_enabled?
