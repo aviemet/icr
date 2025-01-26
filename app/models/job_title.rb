@@ -34,5 +34,5 @@ class JobTitle < ApplicationRecord
 
   validates :name, presence: true
 
-  scope :includes_associated, -> { includes([:employees]) }
+  scope :includes_associated, -> { includes([]) }
 end

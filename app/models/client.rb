@@ -72,6 +72,10 @@ class Client < ApplicationRecord
 
   after_create -> { self.update(active_at: Time.current) }
 
+  def active?
+    active_at.present? && (inactive_at.nil? || inactive_at > Time.current)
+  end
+
   private
 
   def slug_candidates

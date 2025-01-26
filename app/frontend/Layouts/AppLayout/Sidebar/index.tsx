@@ -21,9 +21,11 @@ import cx from "clsx"
 import * as classes from "../AppLayout.css"
 
 const Sidebar = () => {
-	const { auth: { user } } = usePageProps()
+	const { auth: { user }, permissions } = usePageProps()
 	const { sidebarOpen, siteTitle } = useStore()
 	const { paths } = useLocation()
+
+	console.log({ permissions })
 
 	return (
 		<IconProvider size="1.2rem">
@@ -74,13 +76,13 @@ const Sidebar = () => {
 						rightSection={ matchesAtPosition(paths, [0, "dashboard"]) && <NextIcon /> }
 						active={ matchesAtPosition(paths, [0, "dashboard"]) }
 					/>
-					<MenuLink
+					{ permissions?.clients?.index && <MenuLink
 						label="Clients"
 						href={ Routes.clients() }
 						leftSection={ <ClientIcon /> }
 						rightSection={ matchesAtPosition(paths, [0, "clients"]) && <NextIcon /> }
 						active={ matchesAtPosition(paths, [0, "clients"]) }
-					/>
+					/> }
 					<MenuLink
 						label="Employees"
 						href={ Routes.employees() }

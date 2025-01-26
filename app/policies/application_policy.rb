@@ -26,11 +26,15 @@ class ApplicationPolicy
   end
 
   def admin?
-    user.has_role?(:admin) || user.has_role?(:super_admin)
+    user.has_role?(:admin)
   end
 
   def client?
     user.person&.client&.active?
+  end
+
+  def employee?
+    user.person&.employee&.active?
   end
 
   def index?
@@ -69,8 +73,7 @@ class ApplicationPolicy
 
   def check_employee_permissions(action)
     # Check job title specific roles
-    return true if user.person.employee.job_title &&
-      user.has_role?(action, user.person.employee.job_title)
+    return true if employee? && user.has_role?(action, @job_title)
 
     # Check general employee roles
     user.has_role?(action, :employee)
@@ -78,13 +81,5 @@ class ApplicationPolicy
 
   def check_client_permissions(action)
     user.has_role?(action, :client)
-  end
-
-  def check_doctor_permissions(action)
-    user.has_role?(action, :doctor)
-  end
-
-  def check_vendor_permissions(action)
-    user.has_role?(action, :vendor)
   end
 end

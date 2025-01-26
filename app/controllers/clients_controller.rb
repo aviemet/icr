@@ -1,8 +1,8 @@
 class ClientsController < ApplicationController
   include Searchable
 
-  expose :clients, ->{ search(Client.includes_associated) }
-  expose :client, id: ->{ params[:slug] }, scope: ->{ Client.includes_associated }, find_by: :slug
+  expose :clients, ->{ policy_scope(search(Client.includes_associated)) }
+  expose :client, id: ->{ params[:slug] }, scope: ->{ policy_scope(Client.includes_associated) }, find_by: :slug
 
   sortable_fields %w(active_at inactive_at number people.first_name people.last_name)
 
@@ -14,6 +14,7 @@ class ClientsController < ApplicationController
 
   # @route GET /clients (clients)
   def index
+    ap({ clients: })
     authorize clients
 
     paginated_clients = paginate(clients, :clients)

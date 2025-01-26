@@ -3,7 +3,7 @@ import RowInContext from "./RowInContext"
 import { Table, type TableTrProps } from "@mantine/core"
 
 export interface TableRow extends TableTrProps {
-	children?:  JSX.Element | JSX.Element[]
+	children?: React.ReactElement | React.ReactElement[] | (React.ReactElement | React.ReactElement[])[]
 }
 
 interface TableRowProps extends Omit<TableRow, "ref"> {

@@ -64,7 +64,7 @@ class Person < ApplicationRecord
       "Employee"
     elsif client.present?
       "Client"
-    elsif user.present? && (user.has_role?(:admin) || user.has_role?(:super_admin))
+    elsif user.present? && user.has_role?(:admin)
       "Administrator"
     else
       ""

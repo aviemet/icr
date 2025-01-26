@@ -4,7 +4,7 @@ import { Table } from "@/Components"
 import { Checkbox } from "@/Components/Inputs"
 import { Switch } from "@/Components/Form"
 import { useCheckboxState } from "@/lib/hooks"
-import { type JobTitleFormData } from "."
+import { type JobTitleFormData } from "./formData"
 
 interface SwitchRowProps {
 	label: string
@@ -50,7 +50,7 @@ const SwitchRow = ({ label, model, permissions }: SwitchRowProps) => {
 					/>
 				</Table.Cell>
 				<Table.Cell>{ label }</Table.Cell>
-				<>{ permissions.map(permission => (
+				{ permissions.map(permission => (
 					<Table.Cell key={ `${model}_${permission}` }>
 						<Switch
 							name={ permission }
@@ -59,7 +59,7 @@ const SwitchRow = ({ label, model, permissions }: SwitchRowProps) => {
 							{ ...checked }
 						/>
 					</Table.Cell>
-				) ) }</>
+				)) }
 			</Table.Row>
 		</NestedFields>
 	)

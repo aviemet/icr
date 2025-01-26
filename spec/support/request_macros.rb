@@ -1,9 +1,9 @@
 module RequestMacros
-  def login_super_admin
+  def login_admin
     before do
       @admin = FactoryBot.create(:user)
       @admin.confirm
-      @admin.add_role(:super_admin)
+      @admin.add_role(:admin)
       sign_in @admin
     end
   end

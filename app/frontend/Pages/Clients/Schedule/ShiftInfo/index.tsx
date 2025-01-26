@@ -1,5 +1,6 @@
 import { type Event } from "react-big-calendar"
-import { Box, DateTimeDisplay, Text } from "@/Components"
+import { Box, Text } from "@/Components"
+import { DateTimeFormatter } from "@/Components/Formatters"
 
 interface ClientShiftInfo {
 	event: Event
@@ -9,8 +10,8 @@ const ShiftInfo = ({ event }: ClientShiftInfo) => {
 	return (
 		<>
 			<Box>
-				<Text>Start: <DateTimeDisplay format="dateTimeLong">{ event.start }</DateTimeDisplay></Text>
-				<Text>Start: <DateTimeDisplay format="dateTimeLong">{ event.end }</DateTimeDisplay></Text>
+				<Text>Start: <DateTimeFormatter format="dateTimeLong">{ event.start }</DateTimeFormatter></Text>
+				<Text>Start: <DateTimeFormatter format="dateTimeLong">{ event.end }</DateTimeFormatter></Text>
 			</Box>
 		</>
 	)

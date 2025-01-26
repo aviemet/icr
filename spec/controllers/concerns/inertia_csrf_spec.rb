@@ -15,7 +15,7 @@ RSpec.describe InertiaCsrf, type: :controller do
   end
 
   describe "CSRF protection" do
-    login_super_admin
+    login_admin
 
     it "sets XSRF-TOKEN cookie" do
       get :index

@@ -55,6 +55,12 @@ class Employee < ApplicationRecord
   end
 
   def assign_job_title(new_job_title, starts_at: Time.current)
+    if new_job_title.is_a?(String) || new_job_title.is_a?(Symbol)
+      search_term = new_job_title.to_s
+      new_job_title = JobTitle.find_by(name: search_term.titleize) ||
+        JobTitle.find_by(slug: search_term.parameterize)
+    end
+
     # Don't create a new assignment if it's the same job title
     return if job_title == new_job_title
 
@@ -156,6 +162,10 @@ class Employee < ApplicationRecord
     participant_sql = calendar_events.select(:id).to_sql
 
     Calendar::Event.where("calendar_events.id IN (#{shift_sql} UNION #{participant_sql})")
+  end
+
+  def active?
+    active_at.present? && (inactive_at.nil? || inactive_at > Time.current)
   end
 
   private

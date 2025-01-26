@@ -30,7 +30,7 @@ const PermissionsSection = () => {
 							</Table.HeadCell>
 
 							<Table.HeadCell>
-								<ColumnToggle permission="index" /> <Tooltip label="Show the fu">List</Tooltip>
+								<ColumnToggle permission="index" /> List
 							</Table.HeadCell>
 
 							<Table.HeadCell>
@@ -51,8 +51,11 @@ const PermissionsSection = () => {
 
 						</Table.Row>
 					</Table.Head>
+
 					<Table.Body>{ tableRows.map(row => (
+
 						<SwitchRow key={ row.model } { ...row } />
+
 					)) }</Table.Body>
 				</Table>
 			</Grid.Col>
