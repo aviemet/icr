@@ -94,9 +94,11 @@ group :development do
   gem "rack-livereload", ">= 0.3.17"
   gem "guard-livereload", ">= 2.5", require: false
 
-  gem "brakeman", "~> 6.1", require: false
+  # Security analysis tool
+  gem "brakeman", ">= 6.1", require: false
 
-  gem "letter_opener", "~> 1.10"
+  # Email previews
+  gem "letter_opener", ">= 1.10"
 
   # I18n
   # Report unused and missing locale keys [https://github.com/glebm/i18n-tasks]
@@ -105,8 +107,8 @@ group :development do
   gem "i18n-js", "~> 4.2", require: false
 
   # Tools for VSCode
-  gem "solargraph", "~> 0.48.0", require: false
-  gem "ruby-lsp", "~> 0.22.1", require: false
+  gem "solargraph", ">= 0.48.0", require: false
+  gem "ruby-lsp", ">= 0.23.6", require: false
 end
 
 group :test do
