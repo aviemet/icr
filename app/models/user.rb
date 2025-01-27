@@ -77,6 +77,7 @@ class User < ApplicationRecord
   validates :email, length: { maximum: 255 }
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
 
+  default_scope { includes(:roles) }
   scope :includes_associated, -> { includes([:person]) }
 
   # Rows page for pagination

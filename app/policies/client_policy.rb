@@ -102,7 +102,10 @@ class ClientPolicy < ApplicationPolicy
   def current_attendant?
     record.clients_attendants
       .where(attendant: user.person.employee)
-      .where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current)
-      .exists?
+      .exists?([
+        "starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)",
+        Time.current,
+        Time.current
+      ])
   end
 end

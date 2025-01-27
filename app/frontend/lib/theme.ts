@@ -31,15 +31,8 @@ export const themeObject: Partial<CustomMantineTheme> = {
 		Modal: {
 			defaultProps: {
 				centered: true,
-				overlayProps: {
-					blur: 1,
-					opacity: 0.6181,
-				},
 				radius: "sm",
 				padding: "md",
-				transitionProps: {
-					transition: "fade",
-				},
 			},
 		},
 	},

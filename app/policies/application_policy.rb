@@ -19,22 +19,10 @@ class ApplicationPolicy
   def initialize(user, record)
     @user = user
     @record = record
-    @person = user.person
+    @person = @user.person
     @employee = @person&.employee
-    @job_title = @employee&.job_title
+    @job_title = @employee&.job_title&.includes(:roles)
     @client = @person&.client
-  end
-
-  def admin?
-    user.has_role?(:admin)
-  end
-
-  def client?
-    user.person&.client&.active?
-  end
-
-  def employee?
-    user.person&.employee&.active?
   end
 
   def index?
@@ -65,21 +53,30 @@ class ApplicationPolicy
     standard_auth(:destroy)
   end
 
+  def policy_methods
+    policy_methods = self.class.public_instance_methods - Object.public_instance_methods
+    policy_methods.select { |m| m.to_s.end_with?("?") }
+  end
+
+  protected
+
+  def admin?
+    return @admin if defined?(@admin)
+
+    @admin = user&.has_role?(:admin) || false
+  end
+
+  def client?
+    user.person&.client&.active?
+  end
+
+  def employee?
+    user.person&.employee&.active?
+  end
+
   private
 
   def standard_auth(_action)
     admin?
-  end
-
-  def check_employee_permissions(action)
-    # Check job title specific roles
-    return true if employee? && user.has_role?(action, @job_title)
-
-    # Check general employee roles
-    user.has_role?(action, :employee)
-  end
-
-  def check_client_permissions(action)
-    user.has_role?(action, :client)
   end
 end

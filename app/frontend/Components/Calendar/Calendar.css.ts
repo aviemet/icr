@@ -46,9 +46,13 @@ export const calendar = css`
 			/* z-index: 1; */
 
 			.rbc-date-cell {
+				border-right: 1px solid ${vars.colors.gray[6]};
+				
+				&:last-child {
+					border-right: none;
+				}
 
 				.rbc-day-bg {
-
 				}
 			}
 		}

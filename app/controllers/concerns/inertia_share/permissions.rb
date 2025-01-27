@@ -21,15 +21,17 @@ module InertiaShare::Permissions
 
   def build_permissions_hash
     policy_classes.each_with_object({}) do |policy_class, permissions|
+      resource = policy_class.to_s.remove("Policy").underscore.pluralize
 
-      resource = resource_name_for(policy_class)
-      model_class = policy_class.to_s.remove("Policy").constantize
-      record = model_class.new # Create a new instance for class-level checks
-      permissions[resource] = build_permission_values_for(policy(record))
-    rescue NameError => e
-      Rails.logger.debug { "Skipping permissions for #{policy_class}: #{e.message}" }
-      next
-
+      begin
+        model_class = policy_class.to_s.remove("Policy").constantize
+        # Create policy instance once and reuse
+        policy_instance = policy(model_class.new)
+        permissions[resource] = build_permission_values_for(policy_instance)
+      rescue NameError => e
+        Rails.logger.debug { "Skipping permissions for #{policy_class}: #{e.message}" }
+        next
+      end
     end
   end
 
@@ -41,8 +43,10 @@ module InertiaShare::Permissions
   end
 
   def build_permission_values_for(policy)
-    # Only get methods that end with ? and are defined in the policy class itself
-    policy_methods = policy.class.instance_methods(false).select { |m| m.to_s.end_with?("?") }
+    policy_methods = policy.policy_methods
+
+    # Cache common checks like admin? at policy instance level
+    policy.instance_variable_set(:@admin, policy.admin?) if policy.respond_to?(:admin?)
 
     policy_methods.each_with_object({}) do |method, permissions|
       action = method.to_s.chomp("?").to_sym
@@ -69,9 +73,5 @@ module InertiaShare::Permissions
     end
   rescue Pundit::NotAuthorizedError, NoMethodError, TypeError
     false
-  end
-
-  def resource_name_for(policy_class)
-    policy_class.to_s.remove("Policy").underscore.pluralize
   end
 end

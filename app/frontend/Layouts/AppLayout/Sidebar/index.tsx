@@ -10,22 +10,21 @@ import {
 	Text,
 	Link,
 	Tooltip,
+	Avatar,
 } from "@/Components"
 import { TextInput } from "@/Components/Inputs"
 import { ClientIcon, ClockIcon, DashboardIcon, EmployeeIcon, LogoutIcon, NextIcon, SettingsIcon } from "@/Components/Icons"
-import { SiteLogo } from "@/Features"
 import ToggleSidebarButton from "../ToggleSidebarButton"
 import MenuLink from "./MenuLink"
 
 import cx from "clsx"
 import * as classes from "../AppLayout.css"
+import UserMenu from "./UserMenu"
 
 const Sidebar = () => {
 	const { auth: { user }, permissions } = usePageProps()
 	const { sidebarOpen, siteTitle } = useStore()
 	const { paths } = useLocation()
-
-	console.log({ permissions })
 
 	return (
 		<IconProvider size="1.2rem">
@@ -34,25 +33,15 @@ const Sidebar = () => {
 				hidden={ !sidebarOpen }
 				className={ cx(classes.navbar, { closed: !sidebarOpen }) }
 			>
+				{ /* Hamburger */ }
 				<AppShell.Section p="xs">
 					<Group justify="flex-end">
 						<ToggleSidebarButton />
 					</Group>
 
+					{ /* User menu and Logo */ }
 					<Group>
-						<Link href={ Routes.root() }>
-							<Tooltip
-								label="Home"
-								disabled={ sidebarOpen }
-								position="right"
-								withArrow
-							>
-								<SiteLogo
-									size={ sidebarOpen ? "md" : "sm" }
-									mt={ sidebarOpen ? "xxs" : "md" }
-								/>
-							</Tooltip>
-						</Link>
+						<UserMenu />
 						<Flex
 							direction="column"
 							wrap="nowrap"
@@ -71,10 +60,10 @@ const Sidebar = () => {
 				<AppShell.Section p={ 0 } grow className={ cx(classes.navigation) }>
 					<MenuLink
 						label="Dashboard"
-						href={ Routes.dashboard() }
+						href={ Routes.root() }
 						leftSection={ <DashboardIcon /> }
-						rightSection={ matchesAtPosition(paths, [0, "dashboard"]) && <NextIcon /> }
-						active={ matchesAtPosition(paths, [0, "dashboard"]) }
+						rightSection={ matchesAtPosition(paths, [0, ""]) && <NextIcon /> }
+						active={ matchesAtPosition(paths, [0, ""]) }
 					/>
 					{ permissions?.clients?.index && <MenuLink
 						label="Clients"
@@ -106,11 +95,6 @@ const Sidebar = () => {
 						leftSection={ <SettingsIcon /> }
 						rightSection={ matchesAtPosition(paths, [0, "settings"]) && <NextIcon /> }
 						active={  matchesAtPosition(paths, [0, "settings"]) }
-					/>
-					<MenuLink
-						label="Sign Out"
-						href={ Routes.destroyUserSession() }
-						leftSection={ <LogoutIcon /> }
 					/>
 				</AppShell.Section>
 

@@ -73,6 +73,7 @@ export {
 	GrFormNext as NextIcon,
 	GrFormPrevious as PreviousIcon,
 	GrMoney as CoinsIcon,
+	GrUserSettings as UserSettingsIcon,
 } from "react-icons/gr"
 
 export {

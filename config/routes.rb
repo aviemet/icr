@@ -3,9 +3,7 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  root "pages#index"
-
-  get "/dashboard", to: "pages#dashboard", as: :dashboard
+  root "pages#dashboard"
 
   match "/404", to: "errors#not_found", as: :error_404, via: :all
   match "/422", to: "errors#unprocessable_entity", as: :error_422, via: :all
