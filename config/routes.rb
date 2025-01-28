@@ -54,6 +54,7 @@ Rails.application.routes.draw do
     get "", to: redirect("/settings/general")
     resources :people, param: :slug
     resources :job_titles, param: :slug
+    get :calendar, to: "calendar#show", as: :calendar
   end
   resource :settings, param: :slug, except: [:new, :create, :destroy]
 

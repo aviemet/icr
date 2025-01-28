@@ -26,13 +26,18 @@ export type ReactQueryFunction<T, P = undefined> =
  * Mutation types
  */
 
-interface LimitedMutationOptions<T, P> extends Omit<UseMutationOptions<T, unknown, P, unknown>, "mutationKey" | "onSuccess"> {
-	onSuccess?: (data: T, variables: P) => void
-}
+type IfEmpty<T, TrueType, FalseType> = keyof T extends never ? TrueType : FalseType;
 
-export type ReactMutationFunction<T, P extends Record<string, unknown>> = (
-	params: P,
-	options?: LimitedMutationOptions<T, P>
+type MutationOptions<T, P, O> = Omit<UseMutationOptions<T, unknown, P, unknown>, "mutationKey" | "onSuccess"> & {
+	onSuccess?: (data: T, variables: P) => void
+} & IfEmpty<O, {}, { params: O }>;
+
+export type ReactMutationFunction<
+	T, // Data type returned by the mutation
+	P, // Data type passed to mutate function
+	O extends Record<string, unknown> = {} // Optional parameters for setting up hook
+> = (
+	options?: MutationOptions<T, P, O>
 ) => UseMutationResult<T, unknown, P, unknown>;
 
 /**

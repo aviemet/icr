@@ -1,6 +1,6 @@
 import { Box, Paper } from "@/Components"
 import SettingsNavLink from "./SettingsNavLink"
-import { useRef, useState } from "react"
+import { useState } from "react"
 import { FloatingIndicator, Portal } from "@mantine/core"
 import AppLayout from "../AppLayout"
 import { useLocation } from "@/lib/hooks"
@@ -16,6 +16,7 @@ const links = [
 	{ label: "General", href: "/settings/general" },
 	{ label: "People", href: "/settings/people" },
 	{ label: "Job Titles", href: "/settings/job_titles" },
+	{ label: "Calendar", href: "/settings/calendar" },
 ]
 
 const linkIndex = (path: string) => links.findIndex(link => link.href === path || path.startsWith(link.href))
@@ -23,7 +24,7 @@ const linkIndex = (path: string) => links.findIndex(link => link.href === path |
 const SettingsLayout = ({ children }: SettingsLayoutProps) => {
 	const { pathname } = useLocation()
 
-	const rootRef = useRef<HTMLElement | null>(null)
+	const [rootRef, setRootRef] = useState<HTMLElement | null>(null)
 	const [controlsRefs, setControlsRefs] = useState<Record<string, HTMLAnchorElement | null>>({})
 	const [active, setActive] = useState(linkIndex(pathname))
 
@@ -40,7 +41,7 @@ const SettingsLayout = ({ children }: SettingsLayoutProps) => {
 		<AppLayout>
 			<Portal target="#above-content-portal">
 				<Paper
-					ref={ rootRef }
+					ref={ setRootRef }
 					withBorder
 					component="nav"
 					shadow="xs"
@@ -63,7 +64,7 @@ const SettingsLayout = ({ children }: SettingsLayoutProps) => {
 
 					<FloatingIndicator
 						target={ controlsRefs[active] }
-						parent={ rootRef.current }
+						parent={ rootRef }
 						className={ cx("indicator") }
 					/>
 

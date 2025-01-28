@@ -24,7 +24,7 @@ class Setting < RailsSettings::Base
 
   DEFAULT_SETTINGS = {
     company_name: "SLS Agency",
-    default_language: "en/US",
+    default_language: "en",
     default_currency: "USD",
     default_timezone: "America/Los_Angeles",
     pay_period_type: PAY_PERIOD_TYPES[:semi_monthly],
@@ -54,6 +54,8 @@ class Setting < RailsSettings::Base
       message: "must contain valid variables and date formats"
     }
   }
+
+  field :overtime_hours, type: :integer, default: 40, validates: { presence: true }
 
   def self.render
     Setting.keys.to_h { |key|
