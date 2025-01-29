@@ -16,7 +16,7 @@ const links = [
 	{ label: "General", href: "/settings/general" },
 	{ label: "People", href: "/settings/people" },
 	{ label: "Job Titles", href: "/settings/job_titles" },
-	{ label: "Calendar", href: "/settings/calendar" },
+	{ label: "Payroll", href: "/settings/payroll" },
 ]
 
 const linkIndex = (path: string) => links.findIndex(link => link.href === path || path.startsWith(link.href))

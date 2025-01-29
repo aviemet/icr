@@ -56,6 +56,10 @@ class Setting < RailsSettings::Base
   }
 
   field :overtime_hours, type: :integer, default: 40, validates: { presence: true }
+  field :payroll_period_type, type: :string, default: DEFAULT_SETTINGS[:payroll_period_type], validates: {
+    presence: true,
+    inclusion: { in: PAY_PERIOD_TYPES.values }
+  }
 
   def self.render
     Setting.keys.to_h { |key|
