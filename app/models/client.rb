@@ -26,6 +26,8 @@ class Client < ApplicationRecord
   include Participantable
   include CalendarCustomizable
   include Personable
+  include Attachment::HasImages
+  include Attachment::HasDocuments
 
   include PgSearchable
   pg_search_config(

@@ -11,6 +11,7 @@ import {
 	Link,
 	Tooltip,
 	Avatar,
+	Divider,
 } from "@/Components"
 import { TextInput } from "@/Components/Inputs"
 import { ClientIcon, ClockIcon, DashboardIcon, EmployeeIcon, LogoutIcon, NextIcon, SettingsIcon } from "@/Components/Icons"
@@ -34,7 +35,7 @@ const Sidebar = () => {
 				className={ cx(classes.navbar, { closed: !sidebarOpen }) }
 			>
 				{ /* Hamburger */ }
-				<AppShell.Section p="xs">
+				<AppShell.Section p="xs" mb="xs">
 					<Group justify="flex-end">
 						<ToggleSidebarButton />
 					</Group>
@@ -53,11 +54,9 @@ const Sidebar = () => {
 					</Group>
 				</AppShell.Section>
 
-				<AppShell.Section p="xs" className={ cx("hidden-when-closed") }>
-					<TextInput placeholder="Search" />
-				</AppShell.Section>
+				<Divider />
 
-				<AppShell.Section p={ 0 } grow className={ cx(classes.navigation) }>
+				<AppShell.Section mt="xs" p={ 0 } grow className={ cx(classes.navigation) }>
 					<MenuLink
 						label="Dashboard"
 						href={ Routes.root() }

@@ -59,15 +59,16 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 	}
 
 	const handleViewChange = (view: View) => {
-		// console.log({ view: params })
+		// console.log({ view })
 	}
 
 	const handleRangeChange = (start: Date, end: Date, view: View) => {
-		const startDate = dayjs(start).format("DD-MM-YYYY")
-		const endDate = dayjs(end).format("DD-MM-YYYY")
-
 		router.get(`/clients/${client.slug}/schedule`,
-			{ startDate, endDate, view },
+			{
+				start: dayjs(start).format("YYYY-MM-DD"),
+				end: dayjs(end).format("YYYY-MM-DD"),
+				view,
+			},
 			{
 				only: ["shifts"],
 				preserveState: true,

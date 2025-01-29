@@ -14,7 +14,6 @@ class ClientsController < ApplicationController
 
   # @route GET /clients (clients)
   def index
-    ap({ clients: })
     authorize clients
 
     paginated_clients = paginate(clients, :clients)

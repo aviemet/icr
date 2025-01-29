@@ -5,9 +5,7 @@ module InertiaShare::Permissions
 
   included do
     inertia_share do
-      {
-        permissions: cached_permissions
-      }
+      { permissions: cached_permissions }
     end
   end
 
@@ -25,8 +23,14 @@ module InertiaShare::Permissions
 
       begin
         model_class = policy_class.to_s.remove("Policy").constantize
-        # Create policy instance once and reuse
-        policy_instance = policy(model_class.new)
+        # Try to create a policy instance with a new model instance or nil
+        policy_instance = begin
+          policy(model_class.new)
+        rescue ArgumentError, Pundit::InvalidConstructorError
+          # If model instantiation fails, instantiate the policy class directly with nil
+          policy_class.new(current_user, nil)
+        end
+
         permissions[resource] = build_permission_values_for(policy_instance)
       rescue NameError => e
         Rails.logger.debug { "Skipping permissions for #{policy_class}: #{e.message}" }

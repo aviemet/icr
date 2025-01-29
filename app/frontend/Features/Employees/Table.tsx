@@ -1,6 +1,6 @@
 import { Routes } from "@/lib"
-import { Table, Link } from "@/Components"
-import { EditButton } from "@/Components/Button"
+import { Table, Link, Group } from "@/Components"
+import { EditButton, ScheduleButton } from "@/Components/Button"
 import { type TableProps } from "@/Components/Table/Table"
 
 const EmployeeTable = (props: TableProps) => {
@@ -17,15 +17,18 @@ const EmployeeTable = (props: TableProps) => {
 				<Table.RowIterator render={ (employee: Schema.EmployeesIndex) => (
 					<Table.Row key={ employee.id }>
 						<Table.Cell>
-							<Link href={ Routes.employee(employee.id) }>{ employee.person.first_name }</Link>
+							<Link href={ Routes.employee(employee.slug) }>{ employee.person.first_name }</Link>
 						</Table.Cell>
 
 						<Table.Cell>
-							<Link href={ Routes.employee(employee.id) }>{ employee.person.last_name }</Link>
+							<Link href={ Routes.employee(employee.slug) }>{ employee.person.last_name }</Link>
 						</Table.Cell>
 
 						<Table.Cell>
-							<EditButton href={ Routes.editEmployee(employee.id) } />
+							<Group wrap="nowrap" gap="xs">
+								<EditButton href={ Routes.editEmployee(employee.slug) } />
+								<ScheduleButton href={ Routes.scheduleEmployee(employee.slug) } />
+							</Group>
 						</Table.Cell>
 					</Table.Row>
 				) } />

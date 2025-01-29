@@ -2,6 +2,7 @@
 if Rails.env.development?
   if Shift.count == 0
     attendant_job = JobTitle.find_by(slug: "attendant")
+
     ActiveRecord::Base.transaction do
       5.times do |i|
         employee = FactoryBot.create(:employee)

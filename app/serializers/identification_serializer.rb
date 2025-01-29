@@ -8,7 +8,7 @@
 #  identificationable_type :string           not null
 #  issued_at               :date
 #  notes                   :text
-#  number                  :integer
+#  number                  :string
 #  type                    :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null

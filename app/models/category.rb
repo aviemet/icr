@@ -30,7 +30,7 @@ class Category < ApplicationRecord
 
   resourcify
 
-  CATEGORIZABLE_TYPES = %w(Calendar::Event Address Email Phone Website Vendor IncidentReport Identification Shift).freeze
+  CATEGORIZABLE_TYPES = %w(Calendar::Event Shift Address Email Phone Website Vendor IncidentReport Identification).freeze
 
   # Self-referential association to create parent-child relationships
   belongs_to :parent, class_name: "Category", optional: true

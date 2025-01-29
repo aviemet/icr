@@ -41,6 +41,8 @@ gem "eventmachine", ">= 1.2"
 gem "countries", ">= 6.0"
 gem "friendly_id", "~> 5.5"
 gem "good_job", "~> 4.7"
+gem "mini_magick", "~> 5.1"
+gem "active_storage_validations", "~> 2.0"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data"

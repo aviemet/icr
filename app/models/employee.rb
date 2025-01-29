@@ -26,6 +26,8 @@ class Employee < ApplicationRecord
   include Participantable
   include CalendarCustomizable
   include Personable
+  include Attachment::HasImages
+  include Attachment::HasDocuments
 
   extend FriendlyId
   friendly_id :slug_candidates, use: [:slugged, :history]

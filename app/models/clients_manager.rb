@@ -33,7 +33,7 @@ class ClientsManager < ApplicationRecord
   validates :manager_id, uniqueness: {
     scope: :client_id,
     conditions: -> { where(ends_at: nil) },
-    message: "already manages this client"
+    message: :already_manages
   }
 
   scope :current, -> { where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current) }
