@@ -21,3 +21,9 @@ export const dynamicInputItem = css`
 		}
 	}
 `
+
+export const inline = css`
+	display: inline-block;
+	margin-left: ${vars.spacing.xs};
+	margin-right: ${vars.spacing.xs};
+`

@@ -18,7 +18,6 @@ const MultiSelectComponent = forwardRef<HTMLInputElement, MultiSelectInputProps>
 		required,
 		id,
 		name,
-		size = "md",
 		maxDropdownHeight = 400,
 		wrapper,
 		wrapperProps,
@@ -50,7 +49,6 @@ const MultiSelectComponent = forwardRef<HTMLInputElement, MultiSelectInputProps>
 				id={ `${inputId}-search` }
 				autoComplete="off"
 				name={ name }
-				size={ size }
 				data={ options }
 				required={ required }
 				maxDropdownHeight={ maxDropdownHeight }

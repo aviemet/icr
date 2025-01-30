@@ -18,7 +18,6 @@ const SelectComponent = forwardRef<HTMLInputElement, SelectInputProps>((
 		required,
 		id,
 		name,
-		size = "md",
 		maxDropdownHeight = 400,
 		fetchOnOpen,
 		onDropdownOpen,
@@ -50,7 +49,6 @@ const SelectComponent = forwardRef<HTMLInputElement, SelectInputProps>((
 				id={ `${inputId}-search` }
 				autoComplete="off"
 				name={ name }
-				size={ size }
 				data={ options }
 				required={ required }
 				maxDropdownHeight={ maxDropdownHeight }

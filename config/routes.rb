@@ -54,7 +54,7 @@ Rails.application.routes.draw do
     get "", to: redirect("/settings/general")
     resources :people, param: :slug
     resources :job_titles, param: :slug
-    get :payroll, to: "payrolls#show", as: :payroll
+    resource :payrolls, path: :payroll, only: [:show, :update], as: :payroll
   end
   resource :settings, param: :slug, except: [:new, :create, :destroy]
 

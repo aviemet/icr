@@ -18,7 +18,6 @@ const NumberInputComponent = forwardRef<HTMLInputElement, CurrencyInputProps>((
 		required = false,
 		id,
 		pattern,
-		size = "md",
 		symbol = "$",
 		wrapper,
 		wrapperProps,
@@ -38,7 +37,6 @@ const NumberInputComponent = forwardRef<HTMLInputElement, CurrencyInputProps>((
 				id={ inputId }
 				required={ required }
 				ref={ ref }
-				size={ size }
 				name={ name }
 				leftSection={ symbol }
 				hideControls

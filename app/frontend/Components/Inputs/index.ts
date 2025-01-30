@@ -15,7 +15,7 @@ export { default as Select }            from "./Select"
 export { default as SwatchInput }       from "./SwatchInput"
 export { default as Textarea }          from "./Textarea"
 export { default as TextInput }         from "./TextInput"
-
+export { default as TimeInput }         from "./TimeInput"
 export interface BaseInputProps {
 	wrapper?: boolean
 	disableAutofill?: boolean

@@ -15,3 +15,5 @@ export const polymorphicRoute = (model: string, param: string | number) => {
 	// @ts-ignore
 	return Routes[camelize(model)](param)
 }
+
+export * from "./mergeRefs"

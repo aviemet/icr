@@ -27,7 +27,7 @@ class Setting < RailsSettings::Base
     default_language: "en",
     default_currency: "USD",
     default_timezone: "America/Los_Angeles",
-    pay_period_type: PAY_PERIOD_TYPES[:semi_monthly],
+    payroll_period_type: PAY_PERIOD_TYPES[:semi_monthly],
     shift_title_format: "{h:mm} - {full_name}",
   }.freeze
 
@@ -41,11 +41,6 @@ class Setting < RailsSettings::Base
     presence: true
   }
 
-  field :pay_period_type, type: :string, default: DEFAULT_SETTINGS[:pay_period_type], validates: {
-    presence: true,
-    inclusion: { in: PAY_PERIOD_TYPES.values }
-  }
-
   ALLOWED_TEMPLATE_VARS = %i(first_name last_name full_name).freeze
   field :shift_title_format, type: :string, default: DEFAULT_SETTINGS[:shift_title_format], validates: {
     presence: true,
@@ -55,10 +50,16 @@ class Setting < RailsSettings::Base
     }
   }
 
-  field :overtime_hours, type: :integer, default: 40, validates: { presence: true }
+  field :overtime_weekly_hours, type: :integer, default: 40, validates: { presence: true }
+  field :overtime_daily_hours, type: :integer, default: 8, validates: { presence: true }
+
   field :payroll_period_type, type: :string, default: DEFAULT_SETTINGS[:payroll_period_type], validates: {
     presence: true,
     inclusion: { in: PAY_PERIOD_TYPES.values }
+  }
+  field :payroll_period_day, type: :string, default: "monday", validates: {
+    presence: true,
+    inclusion: { in: %w(monday tuesday wednesday thursday friday saturday sunday) }
   }
 
   def self.render

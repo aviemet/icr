@@ -24,7 +24,6 @@ const DateTime = forwardRef<HTMLButtonElement, DateTimeProps>((
 		name,
 		required,
 		value,
-		size = "md",
 		radius = "xs",
 		valueFormat = "L LT",
 		wrapper,
@@ -46,7 +45,6 @@ const DateTime = forwardRef<HTMLButtonElement, DateTimeProps>((
 				name={ name }
 				value={ isUnset(value) ? null : new Date(value!) }
 				radius={ radius }
-				size={ size }
 				valueFormat={ valueFormat }
 				leftSection={ <CalendarIcon /> }
 				leftSectionPointerEvents="none"

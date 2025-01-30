@@ -2,11 +2,11 @@ import { forwardRef, type ForwardedRef } from "react"
 import { useInertiaInput, type UseFormProps, NestedObject } from "use-inertia-form"
 import { type ComboboxData, type ComboboxItem, type ComboboxItemGroup } from "@mantine/core"
 import { exclude } from "@/lib"
-import Field from "../Components/Field"
 import { ConditionalWrapper, Group } from "@/Components"
 import { ModalFormButton } from "@/Components/Button"
 import SelectInput, { type SelectInputProps } from "@/Components/Inputs/Select"
 import { type BaseFormInputProps } from "."
+import InputWrapper from "../Components/InputWrapper"
 
 export type SelectOption = string | ComboboxItem | ComboboxItemGroup<string | ComboboxItem>
 export { type ComboboxData, ComboboxItem, ComboboxItemGroup }
@@ -109,18 +109,12 @@ const Select = forwardRef(<TForm extends NestedObject = NestedObject>(
 			) }
 		>
 			<>
-				<ConditionalWrapper
-					wrapper={ children => (
-						<Field
-							type="select"
-							required={ required }
-							errors={ !!error }
-							{ ...wrapperProps }
-						>
-							{ children }
-						</Field>
-					) }
-					condition={ field }
+				<InputWrapper
+					type="select"
+					wrapped={ props.hidden !== true && field }
+					required={ required }
+					errors={ !!error }
+					{ ...wrapperProps }
 				>
 					<SelectInput
 						ref={ ref }
@@ -142,7 +136,7 @@ const Select = forwardRef(<TForm extends NestedObject = NestedObject>(
 						wrapper={ false }
 						{ ...exclude(props, "value") }
 					/>
-				</ConditionalWrapper>
+				</InputWrapper>
 				{ newForm && <ModalFormButton
 					title={ `Create New ${label}` }
 					form={ newForm }

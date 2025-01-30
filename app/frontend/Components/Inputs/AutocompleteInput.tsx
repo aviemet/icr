@@ -9,7 +9,6 @@ const AutocompleteComponent = forwardRef<HTMLInputElement, AutocompleteProps>((
 	{
 		id,
 		name,
-		style,
 		wrapper,
 		wrapperProps,
 		disableAutofill = true,
@@ -25,8 +24,7 @@ const AutocompleteComponent = forwardRef<HTMLInputElement, AutocompleteProps>((
 				ref={ ref }
 				id={ inputId }
 				name={ name }
-				style={ [{ padding: "14px 10px" }, style] }
-				wrapperProps={ wrapper ? {} : wrapperProps }
+				wrapperProps={ wrapper ? undefined : wrapperProps }
 				{ ...withInjectedProps(props, {
 					disableAutofill,
 				}) }

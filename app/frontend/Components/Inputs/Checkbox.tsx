@@ -15,7 +15,6 @@ const CheckboxComponent: CheckboxComponentType = forwardRef<HTMLInputElement, Ch
 	{
 		id,
 		name,
-		radius = "xs",
 		wrapper,
 		wrapperProps,
 		disableAutofill = true,
@@ -31,7 +30,6 @@ const CheckboxComponent: CheckboxComponentType = forwardRef<HTMLInputElement, Ch
 				ref={ ref }
 				id={ inputId }
 				name={ name }
-				radius={ radius }
 				{ ...withInjectedProps(props, {
 					disableAutofill,
 				}) }

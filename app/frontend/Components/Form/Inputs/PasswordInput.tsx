@@ -1,9 +1,8 @@
 import { forwardRef, type ForwardedRef } from "react"
-import ConditionalWrapper from "@/Components/ConditionalWrapper"
 import PasswordInput, { type PasswordInputProps } from "@/Components/Inputs/PasswordInput"
-import Field from "../Components/Field"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 import { type InputConflicts, type BaseFormInputProps } from "."
+import InputWrapper from "../Components/InputWrapper"
 
 interface FormPasswordInputProps<TForm extends NestedObject>
 	extends
@@ -51,18 +50,12 @@ const FormInput = forwardRef(<TForm extends NestedObject>(
 	}
 
 	return (
-		<ConditionalWrapper
-			condition={ field }
-			wrapper={ children => (
-				<Field
-					type="password"
-					required={ required }
-					errors={ !!error }
-					{ ...wrapperProps }
-				>
-					{ children }
-				</Field>
-			) }
+		<InputWrapper
+			type="password"
+			wrapped={ props.hidden !== true && field }
+			required={ required }
+			errors={ !!error }
+			{ ...wrapperProps }
 		>
 			<PasswordInput
 				ref={ ref }
@@ -75,7 +68,8 @@ const FormInput = forwardRef(<TForm extends NestedObject>(
 				error={ error }
 				wrapper={ false }
 				{ ...props }
-			/></ConditionalWrapper>
+			/>
+		</InputWrapper>
 	)
 })
 

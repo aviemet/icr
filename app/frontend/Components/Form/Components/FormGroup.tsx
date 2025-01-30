@@ -10,7 +10,13 @@ interface FormGroupProps extends DivProps {
 	grid?: boolean
 }
 
-const FormGroup = ({ children, legend, outline = true, model, grid = true }: FormGroupProps) => {
+const FormGroup = ({
+	children,
+	legend,
+	outline = true,
+	model,
+	grid = false,
+}: FormGroupProps) => {
 	return (
 		<ConditionalWrapper
 			condition={ grid }

@@ -13,7 +13,6 @@ const NumberInputComponent = forwardRef<HTMLInputElement, NumberInputProps>((
 		required = false,
 		value,
 		id,
-		size = "md",
 		wrapper,
 		wrapperProps,
 		disableAutofill = true,
@@ -29,11 +28,10 @@ const NumberInputComponent = forwardRef<HTMLInputElement, NumberInputProps>((
 				{ label }
 			</Label> }
 			<NumberInput
+				ref={ ref }
 				id={ inputId }
 				value={ value }
 				required={ required }
-				ref={ ref }
-				size={ size }
 				{ ...withInjectedProps(props, {
 					disableAutofill,
 				}) }

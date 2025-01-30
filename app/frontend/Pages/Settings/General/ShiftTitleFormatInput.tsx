@@ -24,7 +24,7 @@ const ShiftTitleFormatInput = ({ settings }: SettingIndexProps) => {
 	const { getData } = useForm<GeneralSettingsFormData>()
 	const inputRef = useRef<HTMLInputElement>(null)
 
-	const inputValue = getData("setting.shift_title_format")
+	const inputValue = getData("settings.shift_title_format")
 
 	const previewText = useMemo(() => {
 		const format = inputRef.current?.value || inputValue

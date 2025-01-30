@@ -1,4 +1,4 @@
-import React, { useEffect, useState, forwardRef } from "react"
+import { useEffect, useState, forwardRef } from "react"
 import Label from "./Label"
 import { DatePickerInput, type DatePickerInputProps } from "@mantine/dates"
 import { CalendarIcon } from "@/Components/Icons"
@@ -23,8 +23,6 @@ const DateInputComponent = forwardRef<HTMLButtonElement, DateInputProps>((
 		id,
 		name,
 		type = "default",
-		size = "md",
-		radius = "xs",
 		valueFormat = "L",
 		required,
 		wrapper,
@@ -79,8 +77,6 @@ const DateInputComponent = forwardRef<HTMLButtonElement, DateInputProps>((
 				value={ isUnset(localValue) ? undefined : localValue }
 				type={ datePickerType }
 				onChange={ handleChange }
-				radius={ radius }
-				size={ size }
 				valueFormat={ valueFormat }
 				leftSection={ <CalendarIcon /> }
 				leftSectionPointerEvents="none"

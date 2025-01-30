@@ -10,7 +10,7 @@ import {
 import ShiftTitleFormatInput from "./ShiftTitleFormatInput"
 
 export type GeneralSettingsFormData = {
-	setting: Schema.Setting
+	settings: Schema.Setting
 }
 
 interface GeneralSettingsProps {
@@ -22,9 +22,9 @@ const General = ({ settings }: GeneralSettingsProps) => {
 		<Box>
 			<Form<GeneralSettingsFormData>
 				to={ Routes.settings() }
-				model="setting"
+				model="settings"
 				method="patch"
-				data={ { setting: settings } }
+				data={ { settings } }
 				remember={ false }
 			>
 				<Grid>

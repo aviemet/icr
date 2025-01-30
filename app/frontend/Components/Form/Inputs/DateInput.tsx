@@ -1,11 +1,10 @@
 import { forwardRef, type ForwardedRef } from "react"
-import Field from "../Components/Field"
 import { DateInput, type DateInputValue } from "@/Components/Inputs"
 import { type DateInputProps } from "@/Components/Inputs/DateInput"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
-import ConditionalWrapper from "@/Components/ConditionalWrapper"
 import { type InputConflicts, type BaseFormInputProps } from "."
 import { isUnset } from "@/lib"
+import InputWrapper from "../Components/InputWrapper"
 
 interface FormDateInputProps<TForm extends NestedObject = NestedObject>
 	extends
@@ -54,18 +53,12 @@ const FormDateInput = forwardRef(<TForm extends NestedObject = NestedObject>(
 	}
 
 	return (
-		<ConditionalWrapper
-			condition={ field }
-			wrapper={ children => (
-				<Field
-					type="date"
-					required={ required }
-					errors={ !!error }
-					{ ...wrapperProps }
-				>
-					{ children }
-				</Field>
-			) }
+		<InputWrapper
+			type="date"
+			wrapped={ props.hidden !== true && field }
+			required={ required }
+			errors={ !!error }
+			{ ...wrapperProps }
 		>
 			<DateInput
 				ref={ ref }
@@ -79,7 +72,7 @@ const FormDateInput = forwardRef(<TForm extends NestedObject = NestedObject>(
 				wrapper={ false }
 				{ ...props }
 			/>
-		</ConditionalWrapper>
+		</InputWrapper>
 	)
 })
 

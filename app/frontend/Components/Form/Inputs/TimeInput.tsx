@@ -1,33 +1,30 @@
 import { forwardRef, type ForwardedRef } from "react"
-import { NestedObject, useInertiaInput } from "use-inertia-form"
-import RichTextInput, { type RichTextInputProps } from "@/Components/Inputs/RichText"
+import TimeInput, { type TimeInputProps } from "@/Components/Inputs/TimeInput"
+import { useInertiaInput, type NestedObject } from "use-inertia-form"
 import { type InputConflicts, type BaseFormInputProps } from "."
-
-import cx from "clsx"
 import InputWrapper from "../Components/InputWrapper"
 
-interface FormRichTextInputProps<TForm extends NestedObject = NestedObject>
+interface FormTimeInputProps<TForm extends NestedObject>
 	extends
-	Omit<RichTextInputProps, InputConflicts>,
+	Omit<TimeInputProps, InputConflicts>,
 	BaseFormInputProps<string, TForm> {}
 
-const RichText = forwardRef(<TForm extends NestedObject = NestedObject>(
+const TimeFormInput = forwardRef(<TForm extends NestedObject>(
 	{
-		label,
 		name,
-		required = false,
-		id,
+		model,
 		onChange,
 		onBlur,
 		onFocus,
-		model,
+		id,
+		required,
 		field = true,
 		wrapperProps,
 		errorKey,
 		defaultValue,
 		clearErrorsOnChange,
 		...props
-	}: FormRichTextInputProps<TForm>,
+	}: FormTimeInputProps<TForm>,
 	ref: ForwardedRef<HTMLInputElement>
 ) => {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<string, TForm>({
@@ -38,34 +35,35 @@ const RichText = forwardRef(<TForm extends NestedObject = NestedObject>(
 		clearErrorsOnChange,
 	})
 
-	const handleChange = (v: string) => {
-		setValue(v)
-		onChange?.(v, form)
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value
+		setValue(value)
+
+		onChange?.(value, form)
 	}
 
 	const handleBlur = () => {
-		onBlur?.(value, form )
+		onBlur?.(value, form)
 	}
 
 	return (
 		<InputWrapper
-			type="textarea"
+			type="time"
 			wrapped={ props.hidden !== true && field }
 			required={ required }
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			{ label && <label className={ cx({ required }) } htmlFor={ id || inputId }>
-				{ label }
-			</label> }
-			<RichTextInput
+			<TimeInput
 				ref={ ref }
-				id={ id }
+				id={ id || inputId }
 				name={ inputName }
+				value={ value }
 				onChange={ handleChange }
 				onBlur={ handleBlur }
-				onFocus={ () => onFocus?.(value, form ) }
-				value={ value }
+				required={ required }
+				error={ error }
 				wrapper={ false }
 				{ ...props }
 			/>
@@ -73,4 +71,4 @@ const RichText = forwardRef(<TForm extends NestedObject = NestedObject>(
 	)
 })
 
-export default RichText
+export default TimeFormInput

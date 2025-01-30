@@ -10,7 +10,7 @@ export interface PasswordInputProps
 	Omit<BaseInputProps, "disableAutofill"> {}
 
 const PasswordInputComponent = forwardRef<HTMLInputElement, PasswordInputProps>((
-	{ label, name, required = false, id, size = "md", wrapper, wrapperProps, ...props },
+	{ label, name, required = false, id, wrapper, wrapperProps, ...props },
 	ref,
 ) => {
 	const inputId = id || name
@@ -24,7 +24,6 @@ const PasswordInputComponent = forwardRef<HTMLInputElement, PasswordInputProps>(
 				id={ inputId }
 				required={ required }
 				ref={ ref }
-				size={ size }
 				{ ...props }
 			/>
 		</InputWrapper>

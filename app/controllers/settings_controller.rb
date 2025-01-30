@@ -1,5 +1,5 @@
 class SettingsController < ApplicationController
-  strong_params :setting, permit: Setting.editable_keys
+  strong_params :settings, permit: Setting.editable_keys
 
   # @route GET /settings/general (settings_general)
   # @route GET /settings (settings)
@@ -18,13 +18,13 @@ class SettingsController < ApplicationController
 
     ActiveRecord::Base.transaction do
 
-      setting_params.each_key do |key|
-        Setting.send("#{key}=", setting_params[key].strip) unless setting_params[key].nil?
+      settings_params.each_key do |key|
+        Setting.send("#{key}=", settings_params[key].strip) unless settings_params[key].nil?
       end
 
       redirect_to settings_path, success: t("settings.notices.updated")
     rescue StandardError
-      redirect_to settings_path, inertia: { errors: setting.errors }
+      redirect_to settings_path, inertia: { errors: ["There were errors"] }
     end
   end
 end

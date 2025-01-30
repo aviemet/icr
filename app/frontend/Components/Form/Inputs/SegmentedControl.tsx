@@ -1,9 +1,8 @@
 import { forwardRef, type ForwardedRef } from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 import SegmentedControl, { type SegmentedControlProps } from "@/Components/Inputs/SegmentedControl"
-import Field from "../Components/Field"
-import ConditionalWrapper from "@/Components/ConditionalWrapper"
 import { type InputConflicts, type BaseFormInputProps } from "."
+import InputWrapper from "../Components/InputWrapper"
 
 interface FormSegmentedControlProps<TForm extends NestedObject = NestedObject>
 	extends
@@ -52,18 +51,12 @@ const FormSegmentedControl = forwardRef(<TForm extends NestedObject = NestedObje
 	}
 
 	return (
-		<ConditionalWrapper
-			condition={ field }
-			wrapper={ children => (
-				<Field
-					type="radio"
-					required={ required }
-					errors={ !!error }
-					{ ...wrapperProps }
-				>
-					{ children }
-				</Field>
-			) }
+		<InputWrapper
+			type="radio"
+			wrapped={ props.hidden !== true && field }
+			required={ required }
+			errors={ !!error }
+			{ ...wrapperProps }
 		>
 			<SegmentedControl
 				ref={ ref }
@@ -77,7 +70,7 @@ const FormSegmentedControl = forwardRef(<TForm extends NestedObject = NestedObje
 				wrapper={ false }
 				{ ...props }
 			/>
-		</ConditionalWrapper>
+		</InputWrapper>
 	)
 })
 

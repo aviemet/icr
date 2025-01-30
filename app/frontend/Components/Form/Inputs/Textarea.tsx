@@ -1,11 +1,10 @@
 import { forwardRef, type ForwardedRef } from "react"
 import { useInertiaInput, type NestedObject } from "use-inertia-form"
-import Field from "../Components/Field"
 import TextareaInput, { type TextareaProps } from "@/Components/Inputs/Textarea"
-import ConditionalWrapper from "@/Components/ConditionalWrapper"
 import { InputConflicts, type BaseFormInputProps } from "."
 
 import cx from "clsx"
+import InputWrapper from "../Components/InputWrapper"
 
 interface FormTextareaProps<TForm extends NestedObject = NestedObject>
 	extends
@@ -48,18 +47,12 @@ const Textarea = forwardRef(<TForm extends NestedObject = NestedObject>(
 	}
 
 	return (
-		<ConditionalWrapper
-			condition={ props.hidden !== true && field }
-			wrapper={ children => (
-				<Field
-					type="textarea"
-					required={ required }
-					errors={ !!error }
-					{ ...wrapperProps }
-				>
-					{ children }
-				</Field>
-			) }
+		<InputWrapper
+			type="textarea"
+			wrapped={ props.hidden !== true && field }
+			required={ required }
+			errors={ !!error }
+			{ ...wrapperProps }
 		>
 			<>
 				{ label && <label className={ cx({ required }) } htmlFor={ id || inputId }>
@@ -80,7 +73,7 @@ const Textarea = forwardRef(<TForm extends NestedObject = NestedObject>(
 				>
 				</TextareaInput>
 			</>
-		</ConditionalWrapper>
+		</InputWrapper>
 	)
 })
 

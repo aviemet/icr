@@ -15,7 +15,7 @@ export { default as SwatchInput }      from "./SwatchInput"
 export { default as Switch }           from "./Switch"
 export { default as TextInput }        from "./TextInput"
 export { default as Textarea }         from "./Textarea"
-
+export { default as TimeInput }        from "./TimeInput"
 export {
 	default as Checkbox,
 	GroupedCheckbox,

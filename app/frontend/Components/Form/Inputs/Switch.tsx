@@ -1,9 +1,8 @@
 import { forwardRef, type ForwardedRef } from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
-import Field from "../Components/Field"
 import SwitchInput, { type SwitchProps } from "@/Components/Inputs/Switch"
-import ConditionalWrapper from "@/Components/ConditionalWrapper"
 import { type InputConflicts, type BaseFormInputProps } from "."
+import InputWrapper from "../Components/InputWrapper"
 
 interface FormSwitchProps<TForm extends NestedObject = NestedObject>
 	extends
@@ -47,19 +46,12 @@ const FormSwitchComponent = forwardRef(<TForm extends NestedObject = NestedObjec
 	}
 
 	return (
-		<ConditionalWrapper
-
-			condition={ field }
-			wrapper={ children => (
-				<Field
-					type="checkbox"
-					required={ required }
-					errors={ !!error }
-					{ ...wrapperProps }
-				>
-					{ children }
-				</Field>
-			) }
+		<InputWrapper
+			type="checkbox"
+			wrapped={ props.hidden !== true && field }
+			required={ required }
+			errors={ !!error }
+			{ ...wrapperProps }
 		>
 			<SwitchInput
 				ref={ ref }
@@ -75,7 +67,7 @@ const FormSwitchComponent = forwardRef(<TForm extends NestedObject = NestedObjec
 				wrapper={ false }
 				{ ...props }
 			/>
-		</ConditionalWrapper>
+		</InputWrapper>
 	)
 })
 

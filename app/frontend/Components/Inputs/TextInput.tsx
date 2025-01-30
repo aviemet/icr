@@ -16,7 +16,6 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputProps>((
 		label,
 		required = false,
 		id,
-		size = "md",
 		wrapper,
 		wrapperProps,
 		clearable = false,
@@ -62,7 +61,6 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputProps>((
 				value={ value || localValue }
 				onChange={ handleChange }
 				required={ required }
-				size={ size }
 				rightSection={ !readOnly && clearable && !isUnset(value) && <CrossIcon onClick={ handleClear } /> }
 				{ ...withInjectedProps(props, {
 					disableAutofill,

@@ -1,11 +1,10 @@
 import { forwardRef, type ForwardedRef } from "react"
 import { NestedObject, UseFormProps, useInertiaInput } from "use-inertia-form"
-import { ConditionalWrapper } from "@/Components"
-import Field from "../Components/Field"
 import MultiSelect, { type MultiSelectInputProps } from "@/Components/Inputs/MultiSelect"
 import { type ComboboxData } from "@mantine/core"
 import { type InputConflicts, type BaseFormInputProps } from "."
 import { exclude, isUnset, coerceArray } from "@/lib"
+import InputWrapper from "../Components/InputWrapper"
 
 type OmittedDropdownTypes = InputConflicts | "onDropdownOpen" | "onDropdownClose" | "onOptionSubmit" | "onClear"
 export interface FormMultiSelectProps<TForm extends NestedObject = NestedObject>
@@ -85,18 +84,12 @@ const MultiSelectComponent = forwardRef(<TForm extends NestedObject = NestedObje
 	}
 
 	return (
-		<ConditionalWrapper
-			condition={ field }
-			wrapper={ children => (
-				<Field
-					type="select"
-					required={ required }
-					errors={ !!error }
-					{ ...wrapperProps }
-				>
-					{ children }
-				</Field>
-			) }
+		<InputWrapper
+			type="select"
+			wrapped={ props.hidden !== true && field }
+			required={ required }
+			errors={ !!error }
+			{ ...wrapperProps }
 		>
 			<MultiSelect
 				ref={ ref }
@@ -118,7 +111,7 @@ const MultiSelectComponent = forwardRef(<TForm extends NestedObject = NestedObje
 				wrapper={ false }
 				{ ...exclude(props, "value") }
 			/>
-		</ConditionalWrapper>
+		</InputWrapper>
 	)
 })
 

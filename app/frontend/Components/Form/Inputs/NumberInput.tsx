@@ -1,9 +1,8 @@
 import { forwardRef, type ForwardedRef } from "react"
 import NumberInput, { type NumberInputProps } from "@/Components/Inputs/NumberInput"
-import Field from "../Components/Field"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
-import ConditionalWrapper from "@/Components/ConditionalWrapper"
 import { type InputConflicts, type BaseFormInputProps } from "."
+import InputWrapper from "../Components/InputWrapper"
 
 interface FormNumberInputProps<TForm extends NestedObject = NestedObject>
 	extends
@@ -44,18 +43,12 @@ const FormInput = forwardRef(<TForm extends NestedObject = NestedObject>(
 	}
 
 	return (
-		<ConditionalWrapper
-			condition={ field }
-			wrapper={ children => (
-				<Field
-					type="number"
-					required={ required }
-					errors={ !!error }
-					{ ...wrapperProps }
-				>
-					{ children }
-				</Field>
-			) }
+		<InputWrapper
+			type="number"
+			wrapped={ props.hidden !== true && field }
+			required={ required }
+			errors={ !!error }
+			{ ...wrapperProps }
 		>
 			<NumberInput
 				ref={ ref }
@@ -69,7 +62,7 @@ const FormInput = forwardRef(<TForm extends NestedObject = NestedObject>(
 				wrapper={ false }
 				{ ...props }
 			/>
-		</ConditionalWrapper>
+		</InputWrapper>
 	)
 })
 
