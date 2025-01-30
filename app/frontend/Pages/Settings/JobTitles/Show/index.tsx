@@ -1,11 +1,13 @@
-import { Group, Title, Menu, Page, Section } from "@/Components"
+import { Group, Title, Menu, Page, Section, Table } from "@/Components"
 import { Routes, withLayout } from "@/lib"
+import EmployeesTable from "@/Features/Employees/Table"
 
 interface ShowJobTitleProps {
 	job_title: Schema.JobTitlesShow
+	employees: Schema.EmployeesIndex[]
 }
 
-const ShowJobTitle = ({ job_title }: ShowJobTitleProps) => {
+const ShowJobTitle = ({ job_title, employees }: ShowJobTitleProps) => {
 	const title = job_title.name || "Job Title"
 
 	return (
@@ -28,7 +30,17 @@ const ShowJobTitle = ({ job_title }: ShowJobTitleProps) => {
 				</Group>
 
 
+				<Table.Section>
+					<Table.TableProvider
+						selectable
+						model="employees"
+						rows={ employees }
+					>
+						<EmployeesTable />
 
+						<Table.Pagination />
+					</Table.TableProvider>
+				</Table.Section>
 			</Section>
 		</Page>
 	)

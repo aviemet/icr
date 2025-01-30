@@ -1,32 +1,12 @@
-import {
-	Box,
-	Button,
-	Grid,
-	Label,
-	Title,
-} from "@/Components"
-import {
-	Form,
-	Submit,
-	TextInput,
-	Select,
-	NumberInput,
-	DateInput,
-	DateTimeInput,
-	TimeInput,
-} from "@/Components/Form"
-import { Routes, withLayout } from "@/lib"
-import { useState } from "react"
-import ShiftTypes from "./ShiftTypes"
-import { useMantineTheme } from "@mantine/core"
+import { Grid, Title } from "@/Components"
+import { Select } from "@/Components/Form"
 import { useForm } from "use-inertia-form"
 import { type PayrollSettingsFormData, type CalendarSettingsProps } from ".."
-import { type PayrollPeriodType } from "@/types/PayrollPeriodType"
 import PayrollPeriodOptions from "./PayrollPeriodOptions"
 
 const Payroll = ({ settings, shift_types }: CalendarSettingsProps) => {
-	const { getData, data } = useForm<PayrollSettingsFormData>()
-	console.log({ data })
+	const { getData } = useForm<PayrollSettingsFormData>()
+
 	const payrollPeriod = getData("settings.payroll_period_type")
 	return (
 		<>

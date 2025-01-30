@@ -57,13 +57,6 @@ const General = ({ settings }: GeneralSettingsProps) => {
 					</Grid.Col>
 
 					<Grid.Col>
-						<FormPayPeriodsDropdown
-							label="Pay Period Type"
-							name="pay_period_type"
-						/>
-					</Grid.Col>
-
-					<Grid.Col>
 						<ShiftTitleFormatInput settings={ settings } />
 					</Grid.Col>
 

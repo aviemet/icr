@@ -27,8 +27,13 @@ class Setting < RailsSettings::Base
     default_language: "en",
     default_currency: "USD",
     default_timezone: "America/Los_Angeles",
-    payroll_period_type: PAY_PERIOD_TYPES[:semi_monthly],
     shift_title_format: "{h:mm} - {full_name}",
+    overtime_weekly_hours: 40,
+    overtime_daily_hours: 8,
+    payroll_period_type: PAY_PERIOD_TYPES[:semi_monthly],
+    payroll_period_day: "monday",
+    payroll_period_date: "1",
+    payroll_period_date_2: "15",
   }.freeze
 
   field :company_name, type: :string, default: DEFAULT_SETTINGS[:company_name], validates: { presence: true }
@@ -60,6 +65,15 @@ class Setting < RailsSettings::Base
   field :payroll_period_day, type: :string, default: "monday", validates: {
     presence: true,
     inclusion: { in: %w(monday tuesday wednesday thursday friday saturday sunday) }
+  }
+
+  field :payroll_period_date, type: :string, default: "1", validates: {
+    presence: true,
+    inclusion: { in: %w(1 5 15 20 -1) }
+  }
+  field :payroll_period_date_2, type: :string, default: "15", validates: {
+    presence: true,
+    inclusion: { in: %w(15 20 -1) }
   }
 
   def self.render

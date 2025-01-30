@@ -26,9 +26,10 @@ class Settings::JobTitlesController < ApplicationController
   # @route GET /settings/job_titles/:slug (settings_job_title)
   def show
     authorize job_title
-    ap({ params: })
+
     render inertia: "Settings/JobTitles/Show", props: {
-      job_title: -> { job_title.render(:show) }
+      job_title: -> { job_title.render(:show) },
+      employees: -> { job_title.active_employees.render(:index) }
     }
   end
 
