@@ -1,8 +1,8 @@
-import React from 'react'
-import { useTableContext } from './TableContext'
-import Table from '.'
+import React from "react"
+import { useTableContext } from "./TableContext"
+import Table from "."
 
-import cx from 'clsx'
+import cx from "clsx"
 
 const RowIterator = ({ render }: { render: (obj: any) => JSX.Element }) => {
 	const { tableState: { selected, rows, columns, selectable } } = useTableContext()

@@ -1,6 +1,6 @@
-import { vars, theme } from '@/lib/theme'
-import { darken, lighten } from '@mantine/core'
-import { css } from '@linaria/core'
+import { vars, theme } from "@/lib/theme"
+import { darken, lighten } from "@mantine/core"
+import { css } from "@linaria/core"
 
 const fieldsetAlphaAdjustment = 0.125
 
@@ -20,4 +20,10 @@ export const dynamicInputItem = css`
 			background-color: ${vars.colors.gray[8] }
 		}
 	}
+`
+
+export const inline = css`
+	display: inline-block;
+	margin-left: ${vars.spacing.xs};
+	margin-right: ${vars.spacing.xs};
 `

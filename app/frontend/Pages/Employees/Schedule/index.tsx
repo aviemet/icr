@@ -1,15 +1,15 @@
-import React  from 'react'
-import { router } from '@inertiajs/react'
-import { buildShiftTitle, theme } from '@/lib'
-import dayjs from 'dayjs'
+import React  from "react"
+import { router } from "@inertiajs/react"
+import { buildShiftTitle, theme } from "@/lib"
+import dayjs from "dayjs"
 import {
 	Box,
 	Calendar,
-} from '@/Components'
-import { type NavigateAction, type View, type Event } from 'react-big-calendar'
-import { modals } from '@mantine/modals'
-import useStore from '@/lib/store'
-import ShiftInfo from './ShiftInfo'
+} from "@/Components"
+import { type NavigateAction, type View, type Event } from "react-big-calendar"
+import { modals } from "@mantine/modals"
+import useStore from "@/lib/store"
+import ShiftInfo from "./ShiftInfo"
 
 interface ScheduleProps {
 	employee: Schema.EmployeesShow
@@ -33,17 +33,18 @@ const Schedule = ({ employee, schedules }: ScheduleProps) => {
 	}
 
 	const handleViewChange = (view: View) => {
-		// console.log({ view: params })
+		// console.log({ view })
 	}
 
 	const handleRangeChange = (start: Date, end: Date, view: View) => {
-		const startDate = dayjs(start).format('DD-MM-YYYY')
-		const endDate = dayjs(end).format('DD-MM-YYYY')
-
 		router.get(`/employees/${employee.slug}/schedule`,
-			{ startDate, endDate, view },
 			{
-				only: ['shifts'],
+				start: dayjs(start).format("YYYY-MM-DD"),
+				end: dayjs(end).format("YYYY-MM-DD"),
+				view,
+			},
+			{
+				only: ["shifts"],
 				preserveState: true,
 				preserveScroll: true,
 			},

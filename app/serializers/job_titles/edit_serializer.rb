@@ -1,8 +1,2 @@
-class JobTitles::EditSerializer < JobTitleSerializer
-
-  attributes(
-    :id,
-    :updated_at,
-    :created_at,
-  )
+class JobTitles::EditSerializer < JobTitles::PersistedSerializer
 end

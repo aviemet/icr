@@ -1,18 +1,18 @@
-import React, { useCallback, useRef }  from 'react'
-import { router } from '@inertiajs/react'
-import { buildShiftTitle, formatEventTitle, theme } from '@/lib'
-import dayjs from 'dayjs'
+import React, { useCallback, useRef }  from "react"
+import { router } from "@inertiajs/react"
+import { buildShiftTitle, formatEventTitle, theme } from "@/lib"
+import dayjs from "dayjs"
 import {
 	Box,
 	Calendar,
-} from '@/Components'
-import { type NavigateAction, type View, type Event } from 'react-big-calendar'
-import { modals } from '@mantine/modals'
-import useStore from '@/lib/store'
-import ShiftInfo from './ShiftInfo'
-import NewShiftForm from './NewShiftForm'
-import { usePageProps } from '@/lib/hooks'
-import { pick } from 'lodash'
+} from "@/Components"
+import { type NavigateAction, type View, type Event } from "react-big-calendar"
+import { modals } from "@mantine/modals"
+import useStore from "@/lib/store"
+import ShiftInfo from "./ShiftInfo"
+import NewShiftForm from "./NewShiftForm"
+import { usePageProps } from "@/lib/hooks"
+import { pick } from "lodash"
 
 interface ScheduleProps {
 	client: Schema.ClientsShow
@@ -38,12 +38,12 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 		if(!newShiftModalRef.current) return
 
 		modals.close(newShiftModalRef.current)
-		router.reload({ only: ['schedules'] })
+		router.reload({ only: ["schedules"] })
 	}
 
 	const handleNewShift = (date: Date) => {
 		newShiftModalRef.current = modals.open({
-			title: 'New Shift',
+			title: "New Shift",
 			children: (
 				<NewShiftForm
 					client={ client }
@@ -59,17 +59,18 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 	}
 
 	const handleViewChange = (view: View) => {
-		// console.log({ view: params })
+		// console.log({ view })
 	}
 
 	const handleRangeChange = (start: Date, end: Date, view: View) => {
-		const startDate = dayjs(start).format('DD-MM-YYYY')
-		const endDate = dayjs(end).format('DD-MM-YYYY')
-
 		router.get(`/clients/${client.slug}/schedule`,
-			{ startDate, endDate, view },
 			{
-				only: ['shifts'],
+				start: dayjs(start).format("YYYY-MM-DD"),
+				end: dayjs(end).format("YYYY-MM-DD"),
+				view,
+			},
+			{
+				only: ["shifts"],
 				preserveState: true,
 				preserveScroll: true,
 			},
@@ -94,7 +95,7 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 		employee: Schema.EmployeesPersisted
 	) => {
 		try {
-			return formatEventTitle(settings.shift_title_format, schedule.starts_at, pick(employee, ['first_name', 'last_name', 'full_name']))
+			return formatEventTitle(settings.shift_title_format, schedule.starts_at, pick(employee, ["first_name", "last_name", "full_name"]))
 		} catch(e) {
 			console.error("Error building title: ", e)
 			return schedule.name || buildShiftTitle({

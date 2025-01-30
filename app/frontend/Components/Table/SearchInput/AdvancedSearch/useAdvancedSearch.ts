@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useLocation } from '@/lib/hooks'
-import { isUnset } from '@/lib/forms'
-import { router } from '@inertiajs/react'
-import { NestedURLSearchParams } from '@/lib'
-import buildSearchLink from './buildSearchLink'
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { useLocation } from "@/lib/hooks"
+import { isUnset } from "@/lib/forms"
+import { router } from "@inertiajs/react"
+import { NestedURLSearchParams } from "@/lib"
+import buildSearchLink from "./buildSearchLink"
 
-import cx from 'clsx'
+import cx from "clsx"
 
-type SpecialSearchTypes = 'date'
+type SpecialSearchTypes = "date"
 
 interface Options {
 	path: string
@@ -36,7 +36,7 @@ const useAdvancedSearch = (
 	options?: Options,
 ) => {
 	// TODO: Trying to infer keys from prop
-	type InputParamName = typeof inputParams[number]['name']
+	type InputParamName = typeof inputParams[number]["name"]
 
 	const location = useLocation()
 
@@ -47,7 +47,7 @@ const useAdvancedSearch = (
 
 		inputParams.forEach(param => {
 			switch(param?.type) {
-				case 'date':
+				case "date":
 					finalParams.push({
 						name: `${param.name}[start]`,
 					})
@@ -74,14 +74,14 @@ const useAdvancedSearch = (
 		(data: NestedURLSearchParams, param) => {
 			// Handle special input types
 			switch(param?.type) {
-				case 'date':
-					data.set(`${param.name}[type]`, 'exact')
-					data.set(`${param.name}[start]`, data.get(`${param.name}[start]`) || '')
-					data.set(`${param.name}[end]`, data.get(`${param.name}[end]`) || '')
+				case "date":
+					data.set(`${param.name}[type]`, "exact")
+					data.set(`${param.name}[start]`, data.get(`${param.name}[start]`) || "")
+					data.set(`${param.name}[end]`, data.get(`${param.name}[end]`) || "")
 
 					return data
 				default:
-					data.set(param.name, data.get(param.name) || param.default || '')
+					data.set(param.name, data.get(param.name) || param.default || "")
 			}
 
 			return data
@@ -99,7 +99,7 @@ const useAdvancedSearch = (
 	const resetValues = useCallback(() => {
 		setValues(prevValues => localInputParams.reduce(
 			(data, param) => {
-				data.set(param.name, param.default ?? '')
+				data.set(param.name, param.default ?? "")
 				return data
 			},
 			prevValues.clone(),
@@ -112,7 +112,7 @@ const useAdvancedSearch = (
 
 		let value: T
 		switch(param?.type) {
-			case 'date':
+			case "date":
 				// @ts-ignore
 				value = new Date(values.get(name))
 				break
@@ -125,7 +125,7 @@ const useAdvancedSearch = (
 			value,
 			mb: 10,
 			...( param?.keyUpListener !== false && { onKeyUp: (e: React.KeyboardEvent<HTMLInputElement>) => {
-				if(e.key === 'Enter') {
+				if(e.key === "Enter") {
 					router.get(searchLink, undefined, { preserveScroll: true })
 				}
 			} }),

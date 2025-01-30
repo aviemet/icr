@@ -1,16 +1,16 @@
-import React from 'react'
-import { Select as FormSelect } from '@/Components/Form'
-import { useGetLanguages } from '@/queries/locale'
-import { isEmpty } from 'lodash'
-import { type FormAsyncDropdown } from '..'
+import React from "react"
+import { Select as FormSelect } from "@/Components/Form"
+import { useGetLanguages } from "@/queries/locale"
+import { isEmpty } from "lodash"
+import { type FormAsyncDropdown } from ".."
 
-interface FormLanguagesDropdownProps extends Omit<FormAsyncDropdown<Schema.LanguageOption>, 'name'> {
+interface FormLanguagesDropdownProps extends Omit<FormAsyncDropdown<Schema.LanguageOption>, "name"> {
 	name?: string
 }
 
 const FormLanguagesDropdown = ({
-	label = 'Languages',
-	name = 'languages',
+	label = "Languages",
+	name = "languages",
 	...props
 }: FormLanguagesDropdownProps) => {
 	const { data, refetch } = useGetLanguages({

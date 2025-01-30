@@ -1,15 +1,15 @@
-import React, { forwardRef } from 'react'
-import Label from './Label'
-import { DateTimePicker, DateTimePickerProps } from '@mantine/dates'
-import { CalendarIcon } from '../Icons'
-import { type BaseInputProps } from '.'
-import InputWrapper from './InputWrapper'
-import { isUnset } from '@/lib'
+import React, { forwardRef } from "react"
+import Label from "./Label"
+import { DateTimePicker, DateTimePickerProps } from "@mantine/dates"
+import { CalendarIcon } from "../Icons"
+import { type BaseInputProps } from "."
+import InputWrapper from "./InputWrapper"
+import { isUnset } from "@/lib"
 
 export interface DateTimeProps
 	extends
 	DateTimePickerProps,
-	Omit<BaseInputProps, 'disableAutofill'> {
+	Omit<BaseInputProps, "disableAutofill"> {
 	name?: string
 	id?: string
 	value?: Date
@@ -24,9 +24,8 @@ const DateTime = forwardRef<HTMLButtonElement, DateTimeProps>((
 		name,
 		required,
 		value,
-		size = 'md',
-		radius = 'xs',
-		valueFormat = 'L LT',
+		radius = "xs",
+		valueFormat = "L LT",
 		wrapper,
 		wrapperProps,
 		...props
@@ -46,7 +45,6 @@ const DateTime = forwardRef<HTMLButtonElement, DateTimeProps>((
 				name={ name }
 				value={ isUnset(value) ? null : new Date(value!) }
 				radius={ radius }
-				size={ size }
 				valueFormat={ valueFormat }
 				leftSection={ <CalendarIcon /> }
 				leftSectionPointerEvents="none"

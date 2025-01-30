@@ -1,20 +1,20 @@
-import { forwardRef, type ForwardedRef } from 'react'
-import { useInertiaInput, type UseFormProps, NestedObject } from 'use-inertia-form'
-import { type ComboboxData, type ComboboxItem, type ComboboxItemGroup } from '@mantine/core'
-import { exclude } from '@/lib'
-import Field from '../Components/Field'
-import { ConditionalWrapper, Group } from '@/Components'
-import { ModalFormButton } from '@/Components/Button'
-import SelectInput, { type SelectInputProps } from '@/Components/Inputs/Select'
-import { type BaseFormInputProps } from '.'
+import { forwardRef, type ForwardedRef } from "react"
+import { useInertiaInput, type UseFormProps, NestedObject } from "use-inertia-form"
+import { type ComboboxData, type ComboboxItem, type ComboboxItemGroup } from "@mantine/core"
+import { exclude } from "@/lib"
+import { ConditionalWrapper, Group } from "@/Components"
+import { ModalFormButton } from "@/Components/Button"
+import SelectInput, { type SelectInputProps } from "@/Components/Inputs/Select"
+import { type BaseFormInputProps } from "."
+import InputWrapper from "../Components/InputWrapper"
 
 export type SelectOption = string | ComboboxItem | ComboboxItemGroup<string | ComboboxItem>
 export { type ComboboxData, ComboboxItem, ComboboxItemGroup }
 
-type OmittedOverwrittenTypes = 'onFocus' | 'onBlur' | 'onChange' | 'onClear' | 'onDropdownOpen' | 'onDropdownClose' | 'onOptionSubmit'
+type OmittedOverwrittenTypes = "onFocus" | "onBlur" | "onChange" | "onClear" | "onDropdownOpen" | "onDropdownClose" | "onOptionSubmit"
 export interface FormSelectProps<TForm extends NestedObject = NestedObject>
 	extends
-	Omit<SelectInputProps, OmittedOverwrittenTypes | 'name' | 'defaultValue'>,
+	Omit<SelectInputProps, OmittedOverwrittenTypes | "name" | "defaultValue">,
 	Omit<BaseFormInputProps<string, TForm>, OmittedOverwrittenTypes> {
 
 	onChange?: (option: SelectOption | null, options: ComboboxData, form: UseFormProps<TForm>) => void
@@ -65,7 +65,7 @@ const Select = forwardRef(<TForm extends NestedObject = NestedObject>(
 	})
 
 	const handleChange = (option: string | null) => {
-		setValue(option ? option : '')
+		setValue(option ? option : "")
 
 		onChange?.(option, options || [], form)
 	}
@@ -109,18 +109,12 @@ const Select = forwardRef(<TForm extends NestedObject = NestedObject>(
 			) }
 		>
 			<>
-				<ConditionalWrapper
-					wrapper={ children => (
-						<Field
-							type="select"
-							required={ required }
-							errors={ !!error }
-							{ ...wrapperProps }
-						>
-							{ children }
-						</Field>
-					) }
-					condition={ field }
+				<InputWrapper
+					type="select"
+					wrapped={ props.hidden !== true && field }
+					required={ required }
+					errors={ !!error }
+					{ ...wrapperProps }
 				>
 					<SelectInput
 						ref={ ref }
@@ -140,9 +134,9 @@ const Select = forwardRef(<TForm extends NestedObject = NestedObject>(
 						error={ error }
 						options={ options }
 						wrapper={ false }
-						{ ...exclude(props, 'value') }
+						{ ...exclude(props, "value") }
 					/>
-				</ConditionalWrapper>
+				</InputWrapper>
 				{ newForm && <ModalFormButton
 					title={ `Create New ${label}` }
 					form={ newForm }

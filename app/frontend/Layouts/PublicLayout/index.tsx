@@ -1,9 +1,9 @@
-import { useDisclosure } from '@mantine/hooks'
-import { AppShell, Burger, Skeleton } from '@mantine/core'
-import { Group, Link, Box } from '@/Components'
-import { CircleDotIcon } from '@/Components/Icons'
-import { Routes } from '@/lib'
-import { type LayoutProps } from '..'
+import { useDisclosure } from "@mantine/hooks"
+import { AppShell, Burger, Skeleton } from "@mantine/core"
+import { Group, Link, Box } from "@/Components"
+import { CircleDotIcon } from "@/Components/Icons"
+import { Routes } from "@/lib"
+import { type LayoutProps } from ".."
 
 const PublicLayout = ({ children }: LayoutProps) => {
 	const [opened, { toggle }] = useDisclosure()
@@ -13,7 +13,7 @@ const PublicLayout = ({ children }: LayoutProps) => {
 			header={ { height: { base: 30, md: 50, lg: 60 } } }
 			navbar={ {
 				width: { base: 100, md: 200, lg: 300 },
-				breakpoint: 'sm',
+				breakpoint: "sm",
 				collapsed: { mobile: !opened },
 			} }
 			padding="md"

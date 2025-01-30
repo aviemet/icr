@@ -125,6 +125,10 @@ export default [
 			'eol-last': ['error', 'always'],
 			'semi': ['error', 'never'],
 			...reactHooksPlugin.configs.recommended.rules,
+			'@stylistic/quotes': ['error', 'double', { 
+				avoidEscape: true,
+				allowTemplateLiterals: true 
+			}],
 		},
 	},
 	// Typescript declaration files

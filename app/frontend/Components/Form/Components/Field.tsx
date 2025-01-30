@@ -1,12 +1,15 @@
-import { Box, BoxProps } from '@mantine/core'
-import cx from 'clsx'
-import { type InputType } from '@/types'
+import { Box, BoxProps } from "@mantine/core"
+import { type InputType } from "@/types"
+
+import cx from "clsx"
+import * as classes from "../Form.css"
 
 export interface FieldProps extends BoxProps {
 	children: React.ReactNode
 	type?: InputType
 	required?: boolean
 	errors?: boolean
+	inline?: boolean
 }
 
 const Field = ({
@@ -15,16 +18,17 @@ const Field = ({
 	required = false,
 	errors = false,
 	className,
+	inline = false,
 	...props
 }: FieldProps) => {
-
 	return (
 		<Box
 			className={ cx(
-				'field',
+				"field",
 				{ [String(type)]: type },
-				{ 'required': required },
-				{ 'field_with_errors': errors },
+				{ "required": required },
+				{ "field_with_errors": errors },
+				{ [classes.inline]: inline },
 				className,
 			) }
 			{ ...props }

@@ -11,7 +11,7 @@
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  client_id     :uuid             not null
-#  created_by_id :uuid             not null
+#  created_by_id :uuid
 #
 # Indexes
 #

@@ -18,7 +18,7 @@ RSpec.describe Setting, type: :model do
   describe "fields" do
     describe "company_name" do
       it "has default value" do
-        expect(described_class.company_name).to eq("SLS Agency")
+        expect(described_class.company_name).to eq(Setting::DEFAULT_SETTINGS[:company_name])
       end
 
       it "requires presence" do
@@ -29,7 +29,7 @@ RSpec.describe Setting, type: :model do
 
     describe "default_language" do
       it "has default value" do
-        expect(described_class.default_language).to eq("en/US")
+        expect(described_class.default_language).to eq(Setting::DEFAULT_SETTINGS[:default_language])
       end
 
       it "requires presence" do
@@ -40,7 +40,7 @@ RSpec.describe Setting, type: :model do
 
     describe "default_currency" do
       it "has default value" do
-        expect(described_class.default_currency).to eq("USD")
+        expect(described_class.default_currency).to eq(Setting::DEFAULT_SETTINGS[:default_currency])
       end
 
       it "requires presence" do
@@ -51,7 +51,7 @@ RSpec.describe Setting, type: :model do
 
     describe "default_timezone" do
       it "has default value" do
-        expect(described_class.default_timezone).to eq("America/Los_Angeles")
+        expect(described_class.default_timezone).to eq(Setting::DEFAULT_SETTINGS[:default_timezone])
       end
 
       it "requires presence" do
@@ -62,7 +62,7 @@ RSpec.describe Setting, type: :model do
 
     describe "pay_period_type" do
       it "has default value" do
-        expect(described_class.pay_period_type).to eq("semi_monthly")
+        expect(described_class.pay_period_type).to eq(Setting::DEFAULT_SETTINGS[:pay_period_type])
       end
 
       it "requires presence" do
@@ -82,7 +82,7 @@ RSpec.describe Setting, type: :model do
 
     describe "shift_title_format" do
       it "has default value" do
-        expect(described_class.shift_title_format).to eq("{full_name} - {YYYY-MM-DD}")
+        expect(described_class.shift_title_format).to eq(Setting::DEFAULT_SETTINGS[:shift_title_format])
       end
 
       context "with valid formats" do

@@ -1,5 +1,5 @@
-import { css } from '@linaria/core'
-import { vars, theme } from '@/lib/theme'
+import { css } from "@linaria/core"
+import { vars } from "@/lib/theme"
 
 export const globals = css`
 	:global() {
@@ -23,5 +23,19 @@ export const globals = css`
 		label {
 			font-size: 1rem;
 		}
+
+		em {
+			font-style: italic;
+		}
+
+		b {
+			font-weight: bold;
+		}
+
+		strong {
+			font-weight: bold;
+		}
 	}
+
+
 `

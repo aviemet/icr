@@ -1,22 +1,22 @@
-import { Heading, Page, Section } from '@/Components'
-import { Routes } from '@/lib'
-import DoctorForm from '../Form'
+import { Title, Page, Section } from "@/Components"
+import { Routes } from "@/lib"
+import DoctorForm from "@/Features/Doctors/Form"
 
 interface NewDoctorProps {
 	doctor: Schema.DoctorsFormData
 }
 
 const NewDoctor = ({ ...data }: NewDoctorProps) => {
-	const title = 'New Doctor'
+	const title = "New Doctor"
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: 'Doctors', href: Routes.doctors() },
-			{ title: 'New Doctor' },
+			{ title: "Doctors", href: Routes.doctors() },
+			{ title: "New Doctor" },
 		] }>
 
 			<Section>
-				<Heading>{ title }</Heading>
+				<Title>{ title }</Title>
 
 				<DoctorForm
 					to={ Routes.doctors() }

@@ -1,12 +1,12 @@
-import { Box } from '@mantine/core'
+import { Box } from "@mantine/core"
 import {
 	Form as InertiaForm,
 	type FormProps as UifFormProps,
 	type NestedObject,
-} from 'use-inertia-form'
+} from "use-inertia-form"
 
-import cx from 'clsx'
-import * as classes from './Form.css'
+import cx from "clsx"
+import * as classes from "./Form.css"
 
 export interface FormProps<TForm> extends UifFormProps<TForm> {
 	disableFormatting?: boolean

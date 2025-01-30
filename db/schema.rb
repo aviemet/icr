@@ -18,6 +18,34 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
   enable_extension "unaccent"
   enable_extension "uuid-ossp"
 
+  create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.uuid "record_id", null: false
+    t.uuid "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
   create_table "activities", id: :serial, force: :cascade do |t|
     t.string "trackable_type"
     t.integer "trackable_id"
@@ -80,7 +108,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
     t.datetime "starts_at"
     t.datetime "ends_at"
     t.uuid "parent_id"
-    t.uuid "created_by_id", null: false
+    t.uuid "created_by_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["created_by_id"], name: "index_calendar_events_on_created_by_id"
@@ -126,6 +154,30 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
     t.datetime "updated_at", null: false
     t.index ["person_id"], name: "index_clients_on_person_id"
     t.index ["slug"], name: "index_clients_on_slug", unique: true
+  end
+
+  create_table "clients_attendants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "attendant_id", null: false
+    t.uuid "client_id", null: false
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attendant_id", "client_id"], name: "index_clients_attendants_unique_relationship", unique: true, where: "(ends_at IS NULL)"
+    t.index ["attendant_id"], name: "index_clients_attendants_on_attendant_id"
+    t.index ["client_id"], name: "index_clients_attendants_on_client_id"
+  end
+
+  create_table "clients_managers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "manager_id", null: false
+    t.uuid "client_id", null: false
+    t.datetime "starts_at", null: false
+    t.datetime "ends_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_clients_managers_on_client_id"
+    t.index ["manager_id", "client_id"], name: "index_clients_managers_unique_relationship", unique: true, where: "(ends_at IS NULL)"
+    t.index ["manager_id"], name: "index_clients_managers_on_manager_id"
   end
 
   create_table "contacts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -198,14 +250,29 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
   end
 
   create_table "employees_job_titles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.date "starts_at", null: false
-    t.date "ends_at"
+    t.datetime "starts_at", null: false
+    t.datetime "ends_at"
     t.uuid "employee_id", null: false
     t.uuid "job_title_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["employee_id", "starts_at", "ends_at"], name: "index_ensure_single_active_job_title", unique: true, where: "(ends_at IS NULL)"
     t.index ["employee_id"], name: "index_employees_job_titles_on_employee_id"
     t.index ["job_title_id"], name: "index_employees_job_titles_on_job_title_id"
+    t.check_constraint "ends_at IS NULL OR ends_at > starts_at", name: "ensure_valid_job_title_dates"
+  end
+
+  create_table "employees_managers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "manager_id", null: false
+    t.uuid "employee_id", null: false
+    t.datetime "starts_at", null: false
+    t.datetime "ends_at"
+    t.boolean "primary", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_id"], name: "index_employees_managers_on_employee_id"
+    t.index ["manager_id", "employee_id"], name: "index_employees_managers_unique_relationship", unique: true, where: "(ends_at IS NULL)"
+    t.index ["manager_id"], name: "index_employees_managers_on_manager_id"
   end
 
   create_table "event_participants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -341,7 +408,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
     t.string "identificationable_type", null: false
     t.uuid "identificationable_id", null: false
     t.integer "type"
-    t.integer "number"
+    t.string "number"
     t.text "notes"
     t.date "issued_at"
     t.date "expires_at"
@@ -491,7 +558,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
     t.integer "frequency"
     t.boolean "active", default: true, null: false
     t.uuid "client_id", null: false
-    t.uuid "created_by_id", null: false
+    t.uuid "created_by_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_shift_templates_on_client_id"
@@ -582,6 +649,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
     t.index ["contact_id"], name: "index_websites_on_contact_id"
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "addresses", "categories"
   add_foreign_key "addresses", "contacts"
   add_foreign_key "calendar_event_exceptions", "calendar_events"
@@ -590,6 +659,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
   add_foreign_key "calendar_recurring_patterns", "calendar_events"
   add_foreign_key "categories", "categories", column: "parent_id"
   add_foreign_key "clients", "people"
+  add_foreign_key "clients_attendants", "clients"
+  add_foreign_key "clients_attendants", "employees", column: "attendant_id"
+  add_foreign_key "clients_managers", "clients"
+  add_foreign_key "clients_managers", "employees", column: "manager_id"
   add_foreign_key "contacts", "addresses", column: "primary_address_id"
   add_foreign_key "contacts", "emails", column: "primary_email_id"
   add_foreign_key "contacts", "phones", column: "primary_phone_id"
@@ -601,6 +674,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_12_003217) do
   add_foreign_key "employees", "people"
   add_foreign_key "employees_job_titles", "employees"
   add_foreign_key "employees_job_titles", "job_titles"
+  add_foreign_key "employees_managers", "employees"
+  add_foreign_key "employees_managers", "employees", column: "manager_id"
   add_foreign_key "event_participants", "calendar_events"
   add_foreign_key "households_clients", "clients"
   add_foreign_key "households_clients", "households"

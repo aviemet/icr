@@ -8,7 +8,7 @@
 #  starts_at     :datetime
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  created_by_id :uuid             not null
+#  created_by_id :uuid
 #  parent_id     :uuid
 #
 # Indexes

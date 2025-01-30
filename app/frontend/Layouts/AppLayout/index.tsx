@@ -1,16 +1,16 @@
-import React, { useEffect } from 'react'
-import { Box, useMantineTheme } from '@mantine/core'
-import { AppShell } from '@/Components'
-import Sidebar from './Sidebar'
+import { useEffect } from "react"
+import { Box, useMantineTheme } from "@mantine/core"
+import { AppShell } from "@/Components"
+import Sidebar from "./Sidebar"
 // import Topbar from './Topbar'
-import Footer from './Footer'
-import useStore from '@/lib/store'
-import { useDisclosure } from '@mantine/hooks'
-import { LayoutProps } from '../index'
+import Footer from "./Footer"
+import useStore from "@/lib/store"
+import { useDisclosure } from "@mantine/hooks"
+import { LayoutProps } from "../index"
 
-import '@mantine/tiptap/styles.css'
-import cx from 'clsx'
-import * as classes from './AppLayout.css'
+import "@mantine/tiptap/styles.css"
+import cx from "clsx"
+import * as classes from "./AppLayout.css"
 
 const AppLayout = ({ children }: LayoutProps) => {
 	const theme = useMantineTheme()
@@ -34,7 +34,7 @@ const AppLayout = ({ children }: LayoutProps) => {
 				collapsed: {
 					mobile: !mobileOpen,
 				},
-				breakpoint: 'sm',
+				breakpoint: "sm",
 			} }
 
 			footer={ { height: theme.other.footer.height } }
@@ -42,8 +42,9 @@ const AppLayout = ({ children }: LayoutProps) => {
 			{ /* <Topbar /> */ }
 			<Sidebar />
 			<Footer />
-			<AppShell.Main>
-				<Box id="CONTENT_WRAPPER" className={ cx(classes.wrapper) } p="xs">
+			<AppShell.Main className={ cx(classes.main) }>
+				<div id="above-content-portal"></div>
+				<Box className={ cx(classes.wrapper) } p="xs">
 					{ children }
 				</Box>
 			</AppShell.Main>

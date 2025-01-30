@@ -1,15 +1,13 @@
 import {
-	Heading,
-	PhoneNumber,
+	Title,
 	Box,
 	Text,
 	Group,
 	Section,
-	EmailDisplay,
 	AddressDisplay,
-
-} from '@/Components'
-import { type ShowClientProps } from '.'
+} from "@/Components"
+import { PhoneFormatter, EmailFormatter } from "@/Components/Formatters"
+import { type ShowClientProps } from "."
 
 interface ClientContactsProps extends ShowClientProps {}
 
@@ -17,14 +15,14 @@ const Contacts = ({ client }: ClientContactsProps) => {
 	return (
 		<>
 			<Section mb="md">
-				<Heading order={ 3 }>Phone Numbers</Heading>
+				<Title order={ 3 }>Phone Numbers</Title>
 				{ client.person.contact.phones.map(phone => (
 					<Box key={ phone.id }>
 						{ phone?.name && <Text>{ phone.name }</Text> }
 						<Group gap="lg">
-							<PhoneNumber>
+							<PhoneFormatter>
 								{ phone.number }
-							</PhoneNumber>
+							</PhoneFormatter>
 							<Text>{ phone.category.name }</Text>
 						</Group>
 					</Box>
@@ -32,14 +30,14 @@ const Contacts = ({ client }: ClientContactsProps) => {
 			</Section>
 
 			<Section mb="md">
-				<Heading order={ 3 }>Emails</Heading>
+				<Title order={ 3 }>Emails</Title>
 				{ client.person.contact.emails.map(email => (
 					<Box key={ email.id }>
 						{ email?.name && <Text>{ email.name }</Text> }
 						<Group gap="lg">
-							<EmailDisplay>
+							<EmailFormatter>
 								{ email.email }
-							</EmailDisplay>
+							</EmailFormatter>
 							<Text>{ email.category.name }</Text>
 						</Group>
 					</Box>
@@ -47,7 +45,7 @@ const Contacts = ({ client }: ClientContactsProps) => {
 			</Section>
 
 			<Section mb="md">
-				<Heading order={ 3 }>Addresses</Heading>
+				<Title order={ 3 }>Addresses</Title>
 				{ client.person.contact.addresses.map(address => (
 					<Box key={ address.id }>
 						<Group gap="lg">

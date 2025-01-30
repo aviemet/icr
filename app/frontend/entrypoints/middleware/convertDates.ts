@@ -13,7 +13,7 @@ export function convertDates<T extends string | Record<string, unknown> | Record
 			(acc as any)[key] = convertDates((obj as any)[key])
 			return acc
 		}, {} as T)
-	} else if(typeof obj === 'string' && isISODateString(obj)) {
+	} else if(typeof obj === "string" && isISODateString(obj)) {
 		// Case to convert the date object
 		return new Date(obj) as unknown as T
 	}

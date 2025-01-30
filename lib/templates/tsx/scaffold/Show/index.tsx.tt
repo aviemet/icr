@@ -1,4 +1,4 @@
-import { Group, Heading, Menu, Page, Section } from '@/Components'
+import { Group, Title, Menu, Page, Section } from '@/Components'
 import { Routes } from '@/lib'
 
 interface Show<%= singular_table_name.camelize %>Props {

@@ -1,8 +1,2 @@
-class IncidentReports::EditSerializer < IncidentReportSerializer
-
-  attributes(
-    :id,
-    :updated_at,
-    :created_at,
-  )
+class IncidentReports::EditSerializer < IncidentReports::PersistedSerializer
 end

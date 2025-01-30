@@ -19,6 +19,10 @@ class ApplicationPolicy
   def initialize(user, record)
     @user = user
     @record = record
+    @person = @user.person
+    @employee = @person&.employee
+    @job_title = @employee&.job_title&.includes(:roles)
+    @client = @person&.client
   end
 
   def index?
@@ -49,43 +53,30 @@ class ApplicationPolicy
     standard_auth(:destroy)
   end
 
+  def policy_methods
+    policy_methods = self.class.public_instance_methods - Object.public_instance_methods
+    policy_methods.select { |m| m.to_s.end_with?("?") }
+  end
+
+  protected
+
+  def admin?
+    return @admin if defined?(@admin)
+
+    @admin = user&.has_role?(:admin) || false
+  end
+
+  def client?
+    user.person&.client&.active?
+  end
+
+  def employee?
+    user.person&.employee&.active?
+  end
+
   private
 
-  def standard_auth(action)
-    return true if user.has_role?(:super_admin) || user.has_role?(:admin)
-
-    case user.person&.role_type
-    when "Employee"
-      check_employee_permissions(action)
-    when "Client"
-      check_client_permissions(action)
-    when "Doctor"
-      check_doctor_permissions(action)
-    when "Vendor"
-      check_vendor_permissions(action)
-    else
-      false
-    end
-  end
-
-  def check_employee_permissions(action)
-    # Check job title specific roles
-    return true if user.person.employee.job_title &&
-      user.has_role?(action, user.person.employee.job_title)
-
-    # Check general employee roles
-    user.has_role?(action, :employee)
-  end
-
-  def check_client_permissions(action)
-    user.has_role?(action, :client)
-  end
-
-  def check_doctor_permissions(action)
-    user.has_role?(action, :doctor)
-  end
-
-  def check_vendor_permissions(action)
-    user.has_role?(action, :vendor)
+  def standard_auth(_action)
+    admin?
   end
 end

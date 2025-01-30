@@ -23,6 +23,7 @@ class Api::CategoriesController < Api::ApiController
     render json: categories.render(view: :options)
   end
 
+  # @route POST /api/categories (api_categories)
   def create
     category.company = @active_company
 
@@ -33,6 +34,8 @@ class Api::CategoriesController < Api::ApiController
     end
   end
 
+  # @route PATCH /api/categories/:slug (api_category)
+  # @route PUT /api/categories/:slug (api_category)
   def update
     if category.update(category_params)
       render json: category.render, status: :created

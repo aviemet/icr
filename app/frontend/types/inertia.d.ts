@@ -1,5 +1,5 @@
-import { type InertiaFormProps as DefaultInertiaFormProps, InertiaHeadProps } from '@inertiajs/core-react'
-import { Page, PageProps, Errors, ErrorBag } from '@inertiajs/core'
+import { type InertiaFormProps as DefaultInertiaFormProps, InertiaHeadProps } from "@inertiajs/core-react"
+import { Page, PageProps, Errors, ErrorBag } from "@inertiajs/core"
 
 declare global {
 
@@ -16,7 +16,7 @@ declare global {
 		[key: string]: any
 	}
 
-	interface InertiaFormProps<TForm = Record<string, any>> extends Omit<DefaultInertiaFormProps, 'errors'> {
+	interface InertiaFormProps<TForm = Record<string, any>> extends Omit<DefaultInertiaFormProps, "errors"> {
 		errors: Record<keyof TForm, string | string[]>
 		getData: (key: string) => any
 		unsetData: (key: string) => void

@@ -1,5 +1,5 @@
-import Breadcrumbs, { type Breadcrumb } from '@/Components/Breadcrumbs'
-import { Head } from '@inertiajs/react'
+import Breadcrumbs, { type Breadcrumb } from "@/Components/Breadcrumbs"
+import { Head } from "@inertiajs/react"
 
 export interface PageProps {
 	children?: React.ReactNode

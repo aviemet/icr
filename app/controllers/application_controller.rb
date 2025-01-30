@@ -13,6 +13,7 @@ class ApplicationController < ActionController::Base
   include InertiaShare::Flash
   include InertiaShare::Menu
   include InertiaShare::Settings
+  include InertiaShare::Permissions
 
   # include ErrorHandling
 end

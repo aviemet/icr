@@ -1,7 +1,7 @@
-import { Box, Center, Paper, Group } from '@/Components'
+import { Box, Center, Paper, Group } from "@/Components"
 
-import cx from 'clsx'
-import * as classes from './AuthPaperLayout.css'
+import cx from "clsx"
+import * as classes from "./AuthPaperLayout.css"
 
 interface AuthPaperLayoutProps {
 	children: React.ReactNode

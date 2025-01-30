@@ -37,7 +37,7 @@ en:
 
   application:
     invalid_authenticity_token_notice: "The page expired, please try again."
-        
+
   errors:
     # The values :model, :attribute and :value are always available for interpolation
     # The value :count is available when applicable. Can be used for pluralization.
@@ -72,3 +72,6 @@ en:
       in: "Must be in %{count}"
       odd: "Must be odd"
       even: "Must be even"
+
+  pundit:
+    not_authorized: "You are not authorized to access this page."

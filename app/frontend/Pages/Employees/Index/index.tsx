@@ -1,7 +1,7 @@
-import { Routes } from '@/lib'
-import { IndexPageTemplate } from '@/Features'
-import { NewIcon } from '@/Components/Icons'
-import EmployeesTable from '../Table'
+import { Routes } from "@/lib"
+import { IndexPageTemplate } from "@/Features"
+import { NewIcon } from "@/Components/Icons"
+import EmployeesTable from "@/Features/Employees/Table"
 
 interface EmployeeIndexProps {
 	employees: Schema.EmployeesIndex[]
@@ -17,7 +17,7 @@ const EmployeesIndex = ({ employees, pagination }: EmployeeIndexProps) => {
 			pagination={ pagination }
 			deleteRoute={ Routes.employees() }
 			menuOptions={ [
-				{ label: 'New Employee', href: Routes.newEmployee(), icon: <NewIcon /> },
+				{ label: "New Employee", href: Routes.newEmployee(), icon: <NewIcon /> },
 			] }
 		>
 			<EmployeesTable />

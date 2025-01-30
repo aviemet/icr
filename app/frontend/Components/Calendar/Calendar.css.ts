@@ -1,5 +1,5 @@
-import { vars } from '@/lib/theme'
-import { css } from '@linaria/core'
+import { vars } from "@/lib/theme"
+import { css } from "@linaria/core"
 
 export const newShiftButton = css`
 	z-index: 100;
@@ -38,6 +38,10 @@ export const calendar = css`
 
 			}
 		}
+
+		button {
+			border-color: ${vars.colors.gray[6]};
+		}
 	}
 
 	.rbc-month-view {
@@ -46,9 +50,13 @@ export const calendar = css`
 			/* z-index: 1; */
 
 			.rbc-date-cell {
+				border-right: 1px solid ${vars.colors.gray[6]};
+				
+				&:last-child {
+					border-right: none;
+				}
 
 				.rbc-day-bg {
-
 				}
 			}
 		}
@@ -81,6 +89,35 @@ export const calendar = css`
 			}
 		}
 
+	}
+
+	.rbc-time-view {
+		.rbc-time-header {
+			.rbc-time-header-content {
+				border-color: ${vars.colors.gray[7]};
+				border-left-color: ${vars.colors.gray[7]};
+				border-bottom-color: ${vars.colors.gray[7]};
+
+				.rbc-header {
+					border-color: ${vars.colors.gray[7]};
+					border-left-color: ${vars.colors.gray[7]};
+					border-bottom-color: ${vars.colors.gray[6]};
+				}
+			}
+		}
+
+		.rbc-time-content {
+			border-color: ${vars.colors.gray[6]};
+			border-top-color: ${vars.colors.gray[6]};
+			border-bottom-color: ${vars.colors.gray[6]};
+			
+			.rbc-day-slot {
+				.rbc-timeslot-group {
+					border-color: ${vars.colors.gray[6]};
+					border-left-color: ${vars.colors.gray[6]};
+				}
+			}
+		}
 	}
 
 	.rbc-event-content {

@@ -1,9 +1,8 @@
-import { useInertiaInput, type NestedObject } from 'use-inertia-form'
-import ConditionalWrapper from '@/Components/ConditionalWrapper'
-import { Field } from '@/Components/Form'
-import CheckboxInput, { type CheckboxProps } from '@/Components/Inputs/Checkbox'
-import FormCheckboxGroup from './Group'
-import { type InputConflicts, type BaseFormInputProps } from '..'
+import { useInertiaInput, type NestedObject } from "use-inertia-form"
+import CheckboxInput, { type CheckboxProps } from "@/Components/Inputs/Checkbox"
+import FormCheckboxGroup from "./Group"
+import { type InputConflicts, type BaseFormInputProps } from ".."
+import InputWrapper from "../../Components/InputWrapper"
 
 export interface FormCheckboxProps<TForm extends NestedObject>
 	extends
@@ -47,18 +46,12 @@ const FormCheckboxComponent = <TForm extends NestedObject>(
 	}
 
 	return (
-		<ConditionalWrapper
-			condition={ field }
-			wrapper={ children => (
-				<Field
-					type="checkbox"
-					required={ required }
-					errors={ !!error }
-					{ ...wrapperProps }
-				>
-					{ children }
-				</Field>
-			) }
+		<InputWrapper
+			type="checkbox"
+			wrapped={ props.hidden !== true && field }
+			required={ required }
+			errors={ !!error }
+			{ ...wrapperProps }
 		>
 			<CheckboxInput
 				id={ id || inputId }
@@ -70,11 +63,11 @@ const FormCheckboxComponent = <TForm extends NestedObject>(
 				onBlur={ handleBlur }
 				onFocus={ e => onFocus?.(e.target.checked, form) }
 				error={ error }
-				style={ [{ padding: '14px 10px' }, style] }
+				style={ [{ padding: "14px 10px" }, style] }
 				wrapper={ false }
 				{ ...props }
 			/>
-		</ConditionalWrapper>
+		</InputWrapper>
 	)
 }
 

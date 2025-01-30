@@ -1,7 +1,7 @@
-import { Avatar, type AvatarProps } from '@/Components'
+import { Avatar, type AvatarProps } from "@/Components"
 
 interface SiteLogoProps extends AvatarProps,
-	Omit<React.ComponentPropsWithoutRef<'div'>, keyof AvatarProps | 'id'> {}
+	Omit<React.ComponentPropsWithoutRef<"div">, keyof AvatarProps | "id"> {}
 
 const SiteLogo = ({ ...props }: SiteLogoProps) => {
 	return (

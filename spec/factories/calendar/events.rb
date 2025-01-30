@@ -8,7 +8,7 @@
 #  starts_at     :datetime
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  created_by_id :uuid             not null
+#  created_by_id :uuid
 #  parent_id     :uuid
 #
 # Indexes
@@ -41,7 +41,7 @@ FactoryBot.define do
     starts_at { generate(:start_time) }
     ends_at { generate(:end_time) }
 
-    created_by factory: :user
+    created_by { nil }
 
     shift { nil }
   end

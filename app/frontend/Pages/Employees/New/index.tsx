@@ -1,19 +1,19 @@
-import { Heading, Page, Section } from '@/Components'
-import { Routes } from '@/lib'
-import EmployeeForm from '../Form'
+import { Title, Page, Section } from "@/Components"
+import { Routes } from "@/lib"
+import EmployeeForm from "@/Features/Employees/Form"
 
 interface INewEmployeeProps {
 	employee: Schema.EmployeesFormData
 }
 
 const NewEmployee = ({ ...data }: INewEmployeeProps) => {
-	const title = 'New Employee'
+	const title = "New Employee"
 
 	return (
 		<Page title={ title }>
 
 			<Section>
-				<Heading>{ title }</Heading>
+				<Title>{ title }</Title>
 
 				<EmployeeForm
 					to={ Routes.employees() }

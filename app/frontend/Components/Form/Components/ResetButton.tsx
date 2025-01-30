@@ -1,6 +1,6 @@
-import { Button } from '@/Components'
-import { type ButtonProps } from '@mantine/core'
-import { useForm } from 'use-inertia-form'
+import { Button } from "@/Components"
+import { type ButtonProps } from "@mantine/core"
+import { useForm } from "use-inertia-form"
 
 interface ResetButton extends ButtonProps {
 	fields?: string | string[]
@@ -16,7 +16,7 @@ const ResetButton = ({ fields, children, ...props }: ResetButton) => {
 	}
 
 	return (
-		<Button onClick={ handleReset } { ...props }>{ children || 'Reset' }</Button>
+		<Button onClick={ handleReset } { ...props }>{ children || "Reset" }</Button>
 	)
 }
 

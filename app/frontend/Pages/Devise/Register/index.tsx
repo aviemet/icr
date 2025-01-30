@@ -1,9 +1,8 @@
-import { Box, Grid, Heading, Link } from '@/Components'
-import { Form, TextInput, PasswordInput, Submit, Field } from '@/Components/Form'
-import { Routes } from '@/lib'
-import { type UseFormProps } from 'use-inertia-form'
-import { LAYOUTS } from '@/Layouts'
-import { AuthPaperLayout } from '@/Features'
+import { Box, Grid, Title, Link } from "@/Components"
+import { Form, TextInput, PasswordInput, Submit, Field } from "@/Components/Form"
+import { Routes, withLayout } from "@/lib"
+import { type UseFormProps } from "use-inertia-form"
+import { AuthPaperLayout } from "@/Features"
 
 type TRegisterFormData = {
 	user: {
@@ -19,17 +18,17 @@ const Register = () => {
 	}
 
 	const handlePasswordChange = (value: string | number, { data, getError, clearErrors }: UseFormProps<TRegisterFormData>) => {
-		if(getError('user.password') || getError('user.password_confirmation')) {
+		if(getError("user.password") || getError("user.password_confirmation")) {
 			if(data.user.password === data.user.password_confirmation) {
-				clearErrors('user.password')
-				clearErrors('user.password_confirmation')
+				clearErrors("user.password")
+				clearErrors("user.password_confirmation")
 			}
 		}
 	}
 
 	const handleSubmit = ({ data, setError, errors, transform }: UseFormProps<TRegisterFormData>) => {
 		if(data.user.password !== data.user.password_confirmation) {
-			setError('user.password_confirmation', 'Passwords must match')
+			setError("user.password_confirmation", "Passwords must match")
 			return false
 		}
 	}
@@ -47,9 +46,9 @@ const Register = () => {
 			<Form
 				data={ {
 					user: {
-						email: '',
-						password: '',
-						password_confirmation: '',
+						email: "",
+						password: "",
+						password_confirmation: "",
 					},
 				} }
 				model="user"
@@ -61,7 +60,7 @@ const Register = () => {
 
 					<Grid.Col>
 						<Box>
-							<Heading>Sign Up</Heading>
+							<Title>Sign Up</Title>
 						</Box>
 					</Grid.Col>
 
@@ -114,6 +113,4 @@ const Register = () => {
 	)
 }
 
-Register.defaultLayout = LAYOUTS.auth
-
-export default Register
+export default withLayout(Register, "auth")

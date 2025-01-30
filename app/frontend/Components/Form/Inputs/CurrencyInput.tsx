@@ -1,11 +1,10 @@
-import { forwardRef, type ForwardedRef } from 'react'
-import CurrencyInput, { type CurrencyInputProps } from '@/Components/Inputs/CurrencyInput'
-import Field from '../Components/Field'
-import { NestedObject, useInertiaInput } from 'use-inertia-form'
-import ConditionalWrapper from '@/Components/ConditionalWrapper'
-import { InputConflicts, type BaseFormInputProps } from '.'
-import { type  Money } from '@/types'
-import { useCurrency } from '@/lib/hooks'
+import { forwardRef, type ForwardedRef } from "react"
+import CurrencyInput, { type CurrencyInputProps } from "@/Components/Inputs/CurrencyInput"
+import { NestedObject, useInertiaInput } from "use-inertia-form"
+import { InputConflicts, type BaseFormInputProps } from "."
+import { type  Money } from "@/types"
+import { useCurrency } from "@/lib/hooks"
+import InputWrapper from "../Components/InputWrapper"
 
 interface INumberInputProps<TForm extends NestedObject = NestedObject>
 	extends
@@ -59,18 +58,12 @@ const FormInput = forwardRef(<TForm extends NestedObject = NestedObject>(
 	}
 
 	return (
-		<ConditionalWrapper
-			condition={ field }
-			wrapper={ children => (
-				<Field
-					type="text"
-					required={ required }
-					errors={ !!error }
-					{ ...wrapperProps }
-				>
-					{ children }
-				</Field>
-			) }
+		<InputWrapper
+			type="text"
+			wrapped={ props.hidden !== true && field }
+			required={ required }
+			errors={ !!error }
+			{ ...wrapperProps }
 		>
 			<CurrencyInput
 				ref={ ref }
@@ -83,7 +76,8 @@ const FormInput = forwardRef(<TForm extends NestedObject = NestedObject>(
 				error={ error }
 				wrapper={ false }
 				{ ...props }
-			/></ConditionalWrapper>
+			/>
+		</InputWrapper>
 	)
 })
 

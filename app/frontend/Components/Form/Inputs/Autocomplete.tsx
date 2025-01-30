@@ -1,10 +1,8 @@
-import { forwardRef, type ForwardedRef } from 'react'
-import Field from '../Components/Field'
-import AutocompleteInput, { type AutocompleteProps } from '@/Components/Inputs/AutocompleteInput'
-import cx from 'clsx'
-import { NestedObject, useInertiaInput } from 'use-inertia-form'
-import { InputConflicts, type BaseFormInputProps } from '.'
-import ConditionalWrapper from '@/Components/ConditionalWrapper'
+import { forwardRef, type ForwardedRef } from "react"
+import AutocompleteInput, { type AutocompleteProps } from "@/Components/Inputs/AutocompleteInput"
+import { NestedObject, useInertiaInput } from "use-inertia-form"
+import { InputConflicts, type BaseFormInputProps } from "."
+import InputWrapper from "../Components/InputWrapper"
 
 interface FormAutocompleteProps<TForm extends NestedObject = NestedObject>
 	extends
@@ -51,18 +49,12 @@ const FormAutocompleteComponent = forwardRef(<TForm extends NestedObject>(
 	}
 
 	return (
-		<ConditionalWrapper
-			condition={ props.hidden !== true && field }
-			wrapper={ children => (
-				<Field
-					type="text"
-					required={ required }
-					errors={ !!error }
-					{ ...wrapperProps }
-				>
-					{ children }
-				</Field>
-			) }
+		<InputWrapper
+			type="text"
+			wrapped={ props.hidden !== true && field }
+			required={ required }
+			errors={ !!error }
+			{ ...wrapperProps }
 		>
 			<AutocompleteInput
 				ref={ ref }
@@ -72,16 +64,10 @@ const FormAutocompleteComponent = forwardRef(<TForm extends NestedObject>(
 				onChange={ handleChange }
 				onBlur={ handleBlur }
 				error={ errorKey ? form.getError(errorKey) : error }
-				wrapperProps={ {
-					component: Field,
-					className: cx({ required }),
-					errors: Boolean(error),
-					style: { padding: 0 },
-				} }
 				wrapper={ false }
 				{ ...props }
 			/>
-		</ConditionalWrapper>
+		</InputWrapper>
 	)
 })
 

@@ -1,16 +1,15 @@
-import { forwardRef, type ForwardedRef } from 'react'
-import Field from '../Components/Field'
-import { DateInput, type DateInputValue } from '@/Components/Inputs'
-import { type DateInputProps } from '@/Components/Inputs/DateInput'
-import { NestedObject, useInertiaInput } from 'use-inertia-form'
-import ConditionalWrapper from '@/Components/ConditionalWrapper'
-import { type InputConflicts, type BaseFormInputProps } from '.'
-import { isUnset } from '@/lib'
+import { forwardRef, type ForwardedRef } from "react"
+import { DateInput, type DateInputValue } from "@/Components/Inputs"
+import { type DateInputProps } from "@/Components/Inputs/DateInput"
+import { NestedObject, useInertiaInput } from "use-inertia-form"
+import { type InputConflicts, type BaseFormInputProps } from "."
+import { isUnset } from "@/lib"
+import InputWrapper from "../Components/InputWrapper"
 
 interface FormDateInputProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<DateInputProps, InputConflicts>,
-	BaseFormInputProps<Exclude<DateInputValue, undefined | null> | '', TForm> {}
+	BaseFormInputProps<Exclude<DateInputValue, undefined | null> | "", TForm> {}
 
 const FormDateInput = forwardRef(<TForm extends NestedObject = NestedObject>(
 	{
@@ -31,7 +30,7 @@ const FormDateInput = forwardRef(<TForm extends NestedObject = NestedObject>(
 	ref: ForwardedRef<HTMLButtonElement>
 ) => {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<
-		Exclude<DateInputValue, undefined | null> | '',
+		Exclude<DateInputValue, undefined | null> | "",
 		TForm
 	>({
 		name,
@@ -42,7 +41,7 @@ const FormDateInput = forwardRef(<TForm extends NestedObject = NestedObject>(
 	})
 
 	const handleChange = (date: DateInputValue) => {
-		const dateWithValidEmptyType = (isUnset(date) ? '' : date)
+		const dateWithValidEmptyType = (isUnset(date) ? "" : date)
 
 		setValue(dateWithValidEmptyType)
 
@@ -54,18 +53,12 @@ const FormDateInput = forwardRef(<TForm extends NestedObject = NestedObject>(
 	}
 
 	return (
-		<ConditionalWrapper
-			condition={ field }
-			wrapper={ children => (
-				<Field
-					type="date"
-					required={ required }
-					errors={ !!error }
-					{ ...wrapperProps }
-				>
-					{ children }
-				</Field>
-			) }
+		<InputWrapper
+			type="date"
+			wrapped={ props.hidden !== true && field }
+			required={ required }
+			errors={ !!error }
+			{ ...wrapperProps }
 		>
 			<DateInput
 				ref={ ref }
@@ -79,7 +72,7 @@ const FormDateInput = forwardRef(<TForm extends NestedObject = NestedObject>(
 				wrapper={ false }
 				{ ...props }
 			/>
-		</ConditionalWrapper>
+		</InputWrapper>
 	)
 })
 

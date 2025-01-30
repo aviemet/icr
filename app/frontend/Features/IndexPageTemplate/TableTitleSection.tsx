@@ -1,9 +1,9 @@
-import { useTableContext } from '@/Components/Table/TableContext'
-import { Box, Title, Group, Divider } from '@mantine/core'
-import { Menu } from '@/Components'
-import { TrashIcon } from '@/Components/Icons'
-import { router } from '@inertiajs/react'
-import * as classes from './IndexPage.css'
+import { useTableContext } from "@/Components/Table/TableContext"
+import { Box, Title, Group, Divider } from "@mantine/core"
+import { Menu } from "@/Components"
+import { TrashIcon } from "@/Components/Icons"
+import { router } from "@inertiajs/react"
+import * as classes from "./IndexPage.css"
 
 export interface IndexTableTitleSectionProps {
 	children: React.ReactNode
@@ -17,14 +17,13 @@ export interface IndexTableTitleSectionProps {
 }
 
 const IndexTableTitleSection = ({ children, title, deleteRoute, menuOptions }: IndexTableTitleSectionProps) => {
-	console.log({ menuOptions })
 	const { tableState: { selected } } = useTableContext()
 
 	const deleteRecords = () => {
 		if(!deleteRoute) return
 
 		router.visit(deleteRoute, {
-			method: 'delete',
+			method: "delete",
 			data: { ids: Array.from(selected) },
 		})
 	}

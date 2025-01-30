@@ -1,16 +1,16 @@
-import { Group, Heading, Menu, Page, Section } from '@/Components'
-import { Routes } from '@/lib'
+import { Group, Title, Menu, Page, Section } from "@/Components"
+import { Routes } from "@/lib"
 
 interface ShowShiftTemplateProps {
 	shift_template: Schema.ShiftTemplatesShow
 }
 
 const ShowShiftTemplate = ({ shift_template }: ShowShiftTemplateProps) => {
-	const title =  'ShiftTemplate'
+	const title =  "ShiftTemplate"
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: 'Shift Template', href: Routes.shiftTemplates() },
+			{ title: "Shift Template", href: Routes.shiftTemplates() },
 			{ title, href: window.location.href },
 		] }>
 			<Section>

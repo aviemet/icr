@@ -1,6 +1,6 @@
-import { Box } from '@/Components'
-import NewShiftButton from './NewShiftButton'
-import { type DateCellWrapperProps } from 'react-big-calendar'
+import { Box } from "@/Components"
+import NewShiftButton from "./NewShiftButton"
+import { type DateCellWrapperProps } from "react-big-calendar"
 
 const DateCellWrapper = ({ children, range, value }: DateCellWrapperProps) => {
 

@@ -1,7 +1,7 @@
-import React, { forwardRef } from 'react'
-import { Button, Link } from '@/Components'
-import { Submit as SubmitButton } from 'use-inertia-form'
-import { Flex, type ButtonProps } from '@mantine/core'
+import React, { forwardRef } from "react"
+import { Button, Link } from "@/Components"
+import { Submit as SubmitButton } from "use-inertia-form"
+import { Flex, type ButtonProps } from "@mantine/core"
 
 interface SubmitButtonProps extends ButtonProps {
 	cancelRoute?: string

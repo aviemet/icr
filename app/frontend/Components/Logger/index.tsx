@@ -4,7 +4,7 @@ interface LoggerProps {
 
 const Logger = ({ children }: LoggerProps) => {
 	/* eslint-disable no-console */
-	if(import.meta.env.MODE === 'development') {
+	if(import.meta.env.MODE === "development") {
 		console.log(children)
 	}
 

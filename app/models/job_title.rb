@@ -20,6 +20,7 @@ class JobTitle < ApplicationRecord
   include PgSearchable
   pg_search_config(against: [:name, :description])
 
+  rolify
   resourcify
 
   has_many :employees_job_titles, dependent: :nullify
@@ -33,5 +34,5 @@ class JobTitle < ApplicationRecord
 
   validates :name, presence: true
 
-  scope :includes_associated, -> { includes([:employees]) }
+  scope :includes_associated, -> { includes([]) }
 end

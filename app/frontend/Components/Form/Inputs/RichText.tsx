@@ -1,11 +1,10 @@
-import { forwardRef, type ForwardedRef } from 'react'
-import { NestedObject, useInertiaInput } from 'use-inertia-form'
-import Field from '../Components/Field'
-import RichTextInput, { type RichTextInputProps } from '@/Components/Inputs/RichText'
-import ConditionalWrapper from '@/Components/ConditionalWrapper'
-import { type InputConflicts, type BaseFormInputProps } from '.'
+import { forwardRef, type ForwardedRef } from "react"
+import { NestedObject, useInertiaInput } from "use-inertia-form"
+import RichTextInput, { type RichTextInputProps } from "@/Components/Inputs/RichText"
+import { type InputConflicts, type BaseFormInputProps } from "."
 
-import cx from 'clsx'
+import cx from "clsx"
+import InputWrapper from "../Components/InputWrapper"
 
 interface FormRichTextInputProps<TForm extends NestedObject = NestedObject>
 	extends
@@ -49,36 +48,28 @@ const RichText = forwardRef(<TForm extends NestedObject = NestedObject>(
 	}
 
 	return (
-		<ConditionalWrapper
-			condition={ field }
-			wrapper={ children => (
-				<Field
-					type="textarea"
-					required={ required }
-					errors={ !!error }
-					{ ...wrapperProps }
-				>
-					{ children }
-				</Field>
-			) }
+		<InputWrapper
+			type="textarea"
+			wrapped={ props.hidden !== true && field }
+			required={ required }
+			errors={ !!error }
+			{ ...wrapperProps }
 		>
-			<>
-				{ label && <label className={ cx({ required }) } htmlFor={ id || inputId }>
-					{ label }
-				</label> }
-				<RichTextInput
-					ref={ ref }
-					id={ id }
-					name={ inputName }
-					onChange={ handleChange }
-					onBlur={ handleBlur }
-					onFocus={ () => onFocus?.(value, form ) }
-					value={ value }
-					wrapper={ false }
-					{ ...props }
-				/>
-			</>
-		</ConditionalWrapper>
+			{ label && <label className={ cx({ required }) } htmlFor={ id || inputId }>
+				{ label }
+			</label> }
+			<RichTextInput
+				ref={ ref }
+				id={ id }
+				name={ inputName }
+				onChange={ handleChange }
+				onBlur={ handleBlur }
+				onFocus={ () => onFocus?.(value, form ) }
+				value={ value }
+				wrapper={ false }
+				{ ...props }
+			/>
+		</InputWrapper>
 	)
 })
 

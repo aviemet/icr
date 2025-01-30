@@ -1,19 +1,19 @@
-import { Heading, Page, Section } from '@/Components'
-import { Routes } from '@/lib'
-import IncidentReportForm from '../Form'
+import { Title, Page, Section } from "@/Components"
+import { Routes } from "@/lib"
+import IncidentReportForm from "@/Features/IncidentReports/Form"
 
 interface INewIncidentReportProps {
 	incident_report: Schema.IncidentReportsFormData
 }
 
 const NewIncidentReport = ({ ...data }: INewIncidentReportProps) => {
-	const title = 'New Incident Report'
+	const title = "New Incident Report"
 
 	return (
 		<Page title={ title }>
 
 			<Section>
-				<Heading>{ title }</Heading>
+				<Title>{ title }</Title>
 
 				<IncidentReportForm
 					to={ Routes.incidentReports() }

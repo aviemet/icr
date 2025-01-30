@@ -3,9 +3,7 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  root "pages#index"
-
-  get "/dashboard", to: "pages#dashboard", as: :dashboard
+  root "pages#dashboard"
 
   match "/404", to: "errors#not_found", as: :error_404, via: :all
   match "/422", to: "errors#unprocessable_entity", as: :error_422, via: :all
@@ -49,20 +47,26 @@ Rails.application.routes.draw do
     skip: [:sessions],
   )
 
-  # RESOURCEFUL PATHS #
-  resources :settings, only: [:index]
-  put :settings, to: "settings#update"
-  patch :settings, to: "settings#update"
+  # SETTINGS PATHS #
 
-  resources :users, param: :slug
+  get "settings/general", to: "settings#show"
+  namespace :settings do
+    get "", to: redirect("/settings/general")
+    resources :people, param: :slug
+    resources :job_titles, param: :slug
+    resource :payrolls, path: :payroll, only: [:show, :update], as: :payroll
+  end
+  resource :settings, param: :slug, except: [:new, :create, :destroy]
+
+  # RESOURCEFUL PATHS #
 
   resources :clients, param: :slug, concerns: :schedulable
 
   resources :employees, param: :slug, concerns: :schedulable
 
-  resources :shift_templates
+  resources :households, param: :slug
 
-  resources :people, param: :slug
+  resources :shift_templates
 
   resources :payrolls, only: [:index]
 
@@ -70,17 +74,7 @@ Rails.application.routes.draw do
 
   resources :incident_reports
 
-  resources :prescriptions
-
-  resources :dosages
-
   resources :doctors, param: :slug
-
-  resources :medications
-
-  resources :identifications
-
-  resources :job_titles
 
   draw(:api)
 end

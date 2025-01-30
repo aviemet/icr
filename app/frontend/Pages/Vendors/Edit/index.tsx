@@ -1,26 +1,26 @@
-import { Heading, Page, Section } from '@/Components'
-import { Routes } from '@/lib'
-import VendorsForm from '../Form'
+import { Title, Page, Section } from "@/Components"
+import { Routes } from "@/lib"
+import VendorsForm from "@/Features/Vendors/Form"
 
 interface EditVendorProps {
 	vendor: Schema.VendorsEdit
 }
 
 const EditVendor = ({ vendor }: EditVendorProps) => {
-	const title = 'Edit Vendor'
+	const title = "Edit Vendor"
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: 'Vendors', href: Routes.vendors() },
-			{ title: Vendor, href: Routes.vendor(vendor.id) },
+			{ title: "Vendors", href: Routes.vendors() },
+			{ title: title, href: Routes.vendor(vendor.id) },
 			{ title },
 		] }>
 			<Section>
-				<Heading>{ title }</Heading>
+				<Title>{ title }</Title>
 
 				<VendorsForm
 					method='put'
-					to={ Routes.vendor() }
+					to={ Routes.vendor(vendor.id) }
 					vendor={ vendor }
 				/>
 			</Section>

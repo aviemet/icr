@@ -24,7 +24,7 @@ class ShiftTemplatesController < ApplicationController
   # @route GET /shift_templates/:id (shift_template)
   def show
     authorize shift_template
-    render inertia: "ShiftTemplate/Show", props: {
+    render inertia: "ShiftTemplates/Show", props: {
       shift_template: -> { shift_template.render(:show) }
     }
   end
@@ -32,7 +32,7 @@ class ShiftTemplatesController < ApplicationController
   # @route GET /shift_templates/new (new_shift_template)
   def new
     authorize ShiftTemplate.new
-    render inertia: "ShiftTemplate/New", props: {
+    render inertia: "ShiftTemplates/New", props: {
       shift_template: ShiftTemplate.new.render(:form_data)
     }
   end
@@ -40,7 +40,7 @@ class ShiftTemplatesController < ApplicationController
   # @route GET /shift_templates/:id/edit (edit_shift_template)
   def edit
     authorize shift_template
-    render inertia: "ShiftTemplate/Edit", props: {
+    render inertia: "ShiftTemplates/Edit", props: {
       shift_template: shift_template.render(:edit)
     }
   end

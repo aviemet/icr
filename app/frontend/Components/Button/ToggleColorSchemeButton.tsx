@@ -1,5 +1,5 @@
-import { ActionIcon, ActionIconProps, useMantineColorScheme } from '@mantine/core'
-import { SunIcon, MoonStarsIcon } from '@/Components/Icons'
+import { ActionIcon, ActionIconProps, useMantineColorScheme } from "@mantine/core"
+import { SunIcon, MoonStarsIcon } from "@/Components/Icons"
 
 interface ToggleColorSchemeButtonProps
 	extends
@@ -15,16 +15,16 @@ const ToggleColorSchemeButton = ({ leftSection, rightSection, ...props }: Toggle
 
 	return (
 		<ActionIcon
-			color={ colorScheme === 'dark' ? 'light' : 'dark' }
+			color={ colorScheme === "dark" ? "light" : "dark" }
 			onClick={ () => toggleColorScheme() }
 			title="Toggle color scheme"
-			style={ { display: 'inline-flex' } }
-			aria-label={ `Toggle ${colorScheme === 'dark' ? 'light' : 'dark'} mode` }
+			style={ { display: "inline-flex" } }
+			aria-label={ `Toggle ${colorScheme === "dark" ? "light" : "dark"} mode` }
 			size="sm"
 			{ ...props }
 		>
 			{ leftSection && leftSection }
-			{ colorScheme === 'dark' ? <SunIcon { ...iconProps } /> : <MoonStarsIcon { ...iconProps } /> }
+			{ colorScheme === "dark" ? <SunIcon { ...iconProps } /> : <MoonStarsIcon { ...iconProps } /> }
 			{ rightSection && rightSection }
 		</ActionIcon>
 	)

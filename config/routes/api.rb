@@ -1,8 +1,9 @@
 namespace :api do
-  resources :users, only: [:create, :update] do
-    patch "update_user_preferences" => "users#update_user_preferences", as: :update_user_preferences
-    patch "update_table_preferences" => "users#update_table_preferences", as: :update_table_preferences
-  end
+  resources :users, only: [:create, :update]
+  patch "users/:id/update_table_preferences" => "users#update_table_preferences", as: :update_table_preferences
+  patch "users/:id/update_user_preferences" => "users#update_user_preferences", as: :update_user_preferences
+
+  resources :categories, only: [:create, :update, :destroy], param: :slug
 
   resources :spotlights, only: [:index]
 

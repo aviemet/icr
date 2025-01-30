@@ -1,13 +1,13 @@
-import { useMemo } from 'react'
-import { MantineProvider, createTheme, type CSSVariablesResolver } from '@mantine/core'
-import { type CSSVariables } from '@mantine/core/lib/core/MantineProvider/convert-css-variables/css-variables-object-to-string'
-import { ModalsProvider } from '@mantine/modals'
-import { Notifications } from '@mantine/notifications'
-import { theme as themeObject, vars } from '@/lib/theme'
-import { toKebabCase } from '@/lib'
-import useStore from '@/lib/store'
-import { Flash } from '@/Components'
-import { useInit } from '@/lib/hooks'
+import { useMemo } from "react"
+import { MantineProvider, createTheme, type CSSVariablesResolver } from "@mantine/core"
+import { type CSSVariables } from "@mantine/core/lib/core/MantineProvider/convert-css-variables/css-variables-object-to-string"
+import { ModalsProvider } from "@mantine/modals"
+import { Notifications } from "@mantine/notifications"
+import { theme as themeObject, vars } from "@/lib/theme"
+import { toKebabCase } from "@/lib"
+import useStore from "@/lib/store"
+import { Flash } from "@/Components"
+import { useInit } from "@/lib/hooks"
 
 const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 	/**
@@ -52,7 +52,7 @@ const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 			defaultColorScheme="dark"
 			cssVariablesResolver={ cssVariablesResolver }
 		>
-			<ModalsProvider labels={ { confirm: 'Submit', cancel: 'Cancel' } }>
+			<ModalsProvider labels={ { confirm: "Submit", cancel: "Cancel" } }>
 				<Notifications />
 				<Flash />
 				{ children }

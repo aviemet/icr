@@ -1,7 +1,7 @@
 import { Code, type CodeProps as MantineCodeProps } from "@mantine/core"
 
-import cx from 'clsx'
-import * as classes from './Code.css'
+import cx from "clsx"
+import * as classes from "./Code.css"
 
 interface CodeProps extends MantineCodeProps {
 	wrap?: boolean

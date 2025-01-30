@@ -1,5 +1,5 @@
-import { vars, theme } from '@/lib/theme'
-import { css } from '@linaria/core'
+import { vars, theme } from "@/lib/theme"
+import { css } from "@linaria/core"
 
 /**
  * AppShell
@@ -61,6 +61,13 @@ export const navbar = css`
 			height 250ms ease-in-out, 
 			min-height 250ms ease-in-out,
 			border-radius 250ms ease-in-out;
+	}
+`
+
+export const main = css`
+	#above-content-portal {
+		padding: 0;
+		margin: 0;
 	}
 `
 

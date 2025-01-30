@@ -32,6 +32,12 @@ class PersonSerializer < ApplicationSerializer
     :last_name,
     :nick_name,
     :user_id,
+    agency_role: { type: :string, optional: false },
     name: { type: :string },
   )
+
+  type :boolean, optional: false
+  def login_enabled
+    person.login_enabled?
+  end
 end

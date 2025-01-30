@@ -1,26 +1,26 @@
-import { Heading, Page, Section } from '@/Components'
-import { Routes } from '@/lib'
-import EmployeesForm from '../Form'
+import { Title, Page, Section } from "@/Components"
+import { Routes } from "@/lib"
+import EmployeesForm from "@/Features/Employees/Form"
 
 interface EditEmployeeProps {
 	employee: Schema.EmployeesEdit
 }
 
 const EditEmployee = ({ employee }: EditEmployeeProps) => {
-	const title = 'Edit Employee'
+	const title = "Edit Employee"
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: 'Employees', href: Routes.employees() },
-			{ title: Employee, href: Routes.employee(employee.id) },
+			{ title: "Employees", href: Routes.employees() },
+			{ title: title, href: Routes.employee(employee.slug) },
 			{ title },
 		] }>
 			<Section>
-				<Heading>{ title }</Heading>
+				<Title>{ title }</Title>
 
 				<EmployeesForm
 					method='put'
-					to={ Routes.employee() }
+					to={ Routes.employee(employee.slug) }
 					employee={ employee }
 				/>
 			</Section>

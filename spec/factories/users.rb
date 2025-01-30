@@ -56,5 +56,7 @@ FactoryBot.define do
     confirmed_at { Time.current }
     time_zone { "America/Los_Angeles" }
     active { true }
+
+    person
   end
 end

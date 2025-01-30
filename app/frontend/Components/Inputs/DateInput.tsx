@@ -1,15 +1,15 @@
-import React, { useEffect, useState, forwardRef } from 'react'
-import Label from './Label'
-import { DatePickerInput, type DatePickerInputProps } from '@mantine/dates'
-import { CalendarIcon } from '@/Components/Icons'
-import { type DateInputValue, type BaseInputProps } from '.'
-import InputWrapper from './InputWrapper'
-import { isUnset } from '@/lib'
+import { useEffect, useState, forwardRef } from "react"
+import Label from "./Label"
+import { DatePickerInput, type DatePickerInputProps } from "@mantine/dates"
+import { CalendarIcon } from "@/Components/Icons"
+import { type DateInputValue, type BaseInputProps } from "."
+import InputWrapper from "./InputWrapper"
+import { isUnset } from "@/lib"
 
 export interface DateInputProps
 	extends
-	Omit<DatePickerInputProps, 'onChange' | 'value'>,
-	Omit<BaseInputProps, 'disableAutofill'> {
+	Omit<DatePickerInputProps, "onChange" | "value">,
+	Omit<BaseInputProps, "disableAutofill"> {
 	name?: string
 	id?: string
 	value: DateInputValue
@@ -22,10 +22,8 @@ const DateInputComponent = forwardRef<HTMLButtonElement, DateInputProps>((
 		label,
 		id,
 		name,
-		type = 'default',
-		size = 'md',
-		radius = 'xs',
-		valueFormat = 'L',
+		type = "default",
+		valueFormat = "L",
 		required,
 		wrapper,
 		wrapperProps,
@@ -51,7 +49,7 @@ const DateInputComponent = forwardRef<HTMLButtonElement, DateInputProps>((
 		if(datePickerType === type) return
 
 		// DatesRangeValue and Date[] are the Array type options
-		if(type === 'range') {
+		if(type === "range") {
 			if(Array.isArray(localValue)) {
 				// An array of length 2 indicates it's already a range of dates
 				if(localValue.length !== 2) {
@@ -79,8 +77,6 @@ const DateInputComponent = forwardRef<HTMLButtonElement, DateInputProps>((
 				value={ isUnset(localValue) ? undefined : localValue }
 				type={ datePickerType }
 				onChange={ handleChange }
-				radius={ radius }
-				size={ size }
 				valueFormat={ valueFormat }
 				leftSection={ <CalendarIcon /> }
 				leftSectionPointerEvents="none"

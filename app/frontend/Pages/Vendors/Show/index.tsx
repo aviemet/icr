@@ -1,22 +1,22 @@
-import { Heading, Page, Section } from '@/Components'
-import { Routes } from '@/lib'
-import VendorForm from '../Form'
+import { Title, Page, Section } from "@/Components"
+import { Routes } from "@/lib"
+import VendorForm from "@/Features/Vendors/Form"
 
 interface NewVendorProps {
 	vendor: Schema.VendorsFormData
 }
 
 const NewVendor = ({ ...data }: NewVendorProps) => {
-	const title = 'New Vendor'
+	const title = "New Vendor"
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: 'Vendors', href: Routes.vendors() },
-			{ title: 'New Vendor' },
+			{ title: "Vendors", href: Routes.vendors() },
+			{ title: "New Vendor" },
 		] }>
 
 			<Section>
-				<Heading>{ title }</Heading>
+				<Title>{ title }</Title>
 
 				<VendorForm
 					to={ Routes.vendors() }

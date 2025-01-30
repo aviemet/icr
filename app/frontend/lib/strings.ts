@@ -1,5 +1,7 @@
 import { formatter } from "."
-import dayjs from 'dayjs'
+import dayjs from "dayjs"
+
+export { default as aOrAn }  from "indefinite"
 
 const WORDS_REGEX = /[A-Z\xC0-\xD6\xD8-\xDE]?[a-z\xDF-\xF6\xF8-\xFF]+|[A-Z\xC0-\xD6\xD8-\xDE]+(?![a-z\xDF-\xF6\xF8-\xFF])|\d+/g
 
@@ -8,15 +10,15 @@ const WORDS_REGEX = /[A-Z\xC0-\xD6\xD8-\xDE]?[a-z\xDF-\xF6\xF8-\xFF]+|[A-Z\xC0-\
  * Tests for many different separators
  */
 const toWords = (str?: string | null) => {
-	const input = str ?? ''
+	const input = str ?? ""
 	return input.match(WORDS_REGEX) || []
 }
 
 /**
- * Capializes the first letter of a string
+ * Capitalizes the first letter of a string
  */
 export const capitalize = (str?: string | null): string => {
-	if(typeof str !== 'string') return ''
+	if(typeof str !== "string") return ""
 	return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
@@ -32,7 +34,7 @@ export const toCamelCase = (str?: string | null) => {
 			return lowered
 		}
 		return capitalize(lowered)
-	}).join('')
+	}).join("")
 }
 
 /**
@@ -41,7 +43,7 @@ export const toCamelCase = (str?: string | null) => {
 export const toKebabCase = (str?: string | null) => {
 	const words = toWords(str)
 
-	return words.map((word, i) => word.toLocaleLowerCase()).join('-')
+	return words.map((word, i) => word.toLocaleLowerCase()).join("-")
 }
 
 /**
@@ -50,7 +52,7 @@ export const toKebabCase = (str?: string | null) => {
 export const toSnakeCase = (str?: string | null) => {
 	const words = toWords(str)
 
-	return words.map((word, i) => word.toLocaleLowerCase()).join('_')
+	return words.map((word, i) => word.toLocaleLowerCase()).join("_")
 }
 
 /**
@@ -78,7 +80,7 @@ export const buildShiftTitle = ({ start, end, name }: {
 	end?: Date
 	name?: string
 }) => {
-	let title = ''
+	let title = ""
 	if(start) {
 		title += formatter.datetime.timeShort(start)
 
@@ -107,7 +109,7 @@ export const formatEventTitle = (template: string, startTime: Date, vars: Templa
 	Object.entries(vars).forEach(([key, value]) => {
 		if(value === undefined) throw new Error(`Missing required variable: ${key}`)
 		result = result.replace(
-			new RegExp(`{${key}}`, 'g'),
+			new RegExp(`{${key}}`, "g"),
 			value
 		)
 	})

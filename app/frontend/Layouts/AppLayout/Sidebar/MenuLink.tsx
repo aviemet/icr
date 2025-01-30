@@ -1,13 +1,13 @@
-import { NavLink, NavLinkProps } from '@/Components'
-import { ActionIcon, Box, Group, Tooltip } from '@/Components'
+import { NavLink, NavLinkProps } from "@/Components"
+import { ActionIcon, Box, Group, Tooltip } from "@/Components"
 
-import cx from 'clsx'
-import * as classes from '../AppLayout.css'
-import useStore from '@/lib/store'
+import cx from "clsx"
+import * as classes from "../AppLayout.css"
+import useStore from "@/lib/store"
 
 interface MenuLinkProps extends NavLinkProps {}
 
-const MenuLink = ({ children, className, active, mb = 'sm', ...props }: MenuLinkProps) => {
+const MenuLink = ({ children, className, active, mb = "sm", ...props }: MenuLinkProps) => {
 	const { sidebarOpen } = useStore()
 
 	return (

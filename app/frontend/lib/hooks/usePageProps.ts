@@ -1,5 +1,5 @@
-import { usePage } from '@inertiajs/react'
-import { PageProps, Errors, ErrorBag } from '@inertiajs/core'
+import { usePage } from "@inertiajs/react"
+import { PageProps, Errors, ErrorBag } from "@inertiajs/core"
 
 export interface SharedInertiaProps extends PageProps {
 	auth: {
@@ -9,6 +9,7 @@ export interface SharedInertiaProps extends PageProps {
 	flash: FlashMessage
 	errors: Errors & ErrorBag
 	settings: Schema.Setting
+	permissions: Record<string, Record<string, boolean>>
 }
 
 const usePageProps = () => {

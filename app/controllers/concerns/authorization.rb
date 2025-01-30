@@ -11,8 +11,8 @@ module Authorization
 
   private
 
-  def user_not_authorized(exception)
-    flash[:warning] = exception.message
+  def user_not_authorized(_exception)
+    flash[:warning] = t("pundit.not_authorized")
     redirect_to request.referer || root_path
   end
 end

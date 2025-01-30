@@ -1,5 +1,5 @@
-import { Box, AppShell, Group } from '@mantine/core'
-import { ToggleColorSchemeButton } from '@/Components/Button'
+import { Box, AppShell, Group } from "@mantine/core"
+import { ToggleColorSchemeButton } from "@/Components/Button"
 
 const FooterComponent = () => {
 	return (
@@ -7,7 +7,7 @@ const FooterComponent = () => {
 			<Group>
 				<ToggleColorSchemeButton />
 				<div id="footer-portal" />
-				<Box style={ { marginLeft: 'auto' } }>
+				<Box style={ { marginLeft: "auto" } }>
 					©{ (new Date).getFullYear() }
 				</Box>
 			</Group>
