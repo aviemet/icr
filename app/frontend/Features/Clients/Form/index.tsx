@@ -1,9 +1,12 @@
 import { Grid } from "@/Components"
 import { Form, TextInput, Submit } from "@/Components/Form"
 import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
+import Ihss from "./Ihss"
 
-type ClientFormData = {
-	client: Schema.ClientsFormData
+export type ClientFormData = {
+	client: Partial<Schema.ClientsFormData> & {
+		ihss: boolean
+	}
 }
 
 export interface ClientFormProps {
@@ -22,6 +25,7 @@ const ClientForm = ({ method = "post", client, ...props }: ClientFormProps) => {
 			{ ...props }
 		>
 			<Grid>
+
 				<Grid.Col span={ { xxs: 12, sm: 4 } }>
 					<TextInput name="person.first_name" label="First Name" />
 				</Grid.Col>
@@ -34,10 +38,15 @@ const ClientForm = ({ method = "post", client, ...props }: ClientFormProps) => {
 					<TextInput name="person.last_name" label="Last Name" />
 				</Grid.Col>
 
+				<Ihss />
+
 				<Grid.Col>
 					<Submit>{ client.id ? "Update" : "Create" } Client</Submit>
 				</Grid.Col>
+
+
 			</Grid>
+
 		</Form>
 	)
 }

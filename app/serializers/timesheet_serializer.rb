@@ -21,18 +21,12 @@
 #  fk_rails_...  (approved_by_id => users.id)
 #  fk_rails_...  (employee_id => employees.id)
 #
-class Timesheet < ApplicationRecord
-  include PgSearchable
-  pg_search_config(
-    against: [:pay_period_end, :pay_period_start, :approved_at],
-    associated_against: { employee: [:name] },
+class TimesheetSerializer < ApplicationSerializer
+  attributes(
+    :pay_period_start,
+    :pay_period_end,
+    :approved_at,
   )
 
-  tracked
-  resourcify
-
-  belongs_to :employee
-  belongs_to :approved_by, class_name: "User"
-
-  scope :includes_associated, -> { includes([]) }
+  belongs_to :employee, serializer: EmployeeSerializer
 end

@@ -79,11 +79,11 @@ const Sidebar = () => {
 						active={ matchesAtPosition(paths, [0,  "employees"]) }
 					/>
 					<MenuLink
-						label="Payroll"
-						href={ Routes.payrolls() }
+						label="Timesheets"
+						href={ Routes.timesheets() }
 						leftSection={ <ClockIcon /> }
-						rightSection={ matchesAtPosition(paths, [0, "payroll"]) && <NextIcon /> }
-						active={ matchesAtPosition(paths, [0, "payroll"]) }
+						rightSection={ matchesAtPosition(paths, [0, "timesheets"]) && <NextIcon /> }
+						active={ matchesAtPosition(paths, [0, "timesheets"]) }
 					/>
 				</AppShell.Section>
 

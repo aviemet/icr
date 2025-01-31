@@ -1,7 +1,7 @@
-import { Routes } from '@/lib'
-import { IndexPageTemplate } from '@/Features'
-import { NewIcon } from '@/Components/Icons'
-import TimesheetsTable from '../Table'
+import { NewIcon } from "@/Components/Icons"
+import { Routes } from "@/lib"
+import { IndexPageTemplate } from "@/Features"
+import TimesheetsTable from "../Table"
 
 interface TimesheetIndexProps {
 	timesheets: Schema.TimesheetsIndex[]
@@ -17,7 +17,7 @@ const TimesheetsIndex = ({ timesheets, pagination }: TimesheetIndexProps) => {
 			pagination={ pagination }
 			deleteRoute={ Routes.timesheets() }
 			menuOptions={ [
-				{ label: 'New Timesheet', href: Routes.newTimesheet(), icon: <NewIcon /> },
+				{ label: "New Timesheet", href: Routes.newTimesheet(), icon: <NewIcon /> },
 			] }
 		>
 			<TimesheetsTable />

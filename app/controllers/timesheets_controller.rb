@@ -1,18 +1,19 @@
 class TimesheetsController < ApplicationController
   include Searchable
-  
-  expose :timesheets, -> { search(Timesheet.new.includes_associated) }
-  expose :timesheet, scope: ->{ Timesheet.new.includes_associated }
-  
-  sortable_fields %w()
+
+  expose :timesheets, -> { search(Timesheet.includes_associated) }
+  expose :timesheet, scope: ->{ Timesheet.includes_associated }
+
+  sortable_fields %w(employee.name pay_period_start pay_period_end approved_at)
 
   strong_params :timesheet, fetch: :timesheet
 
+  # @route GET /timesheets (timesheets)
   def index
     authorize timesheets
 
     paginated_timesheets = paginate(timesheets, :timesheets)
-    
+
     render inertia: "Timesheets/Index", props: {
       timesheets: -> { paginated_timesheets.render(:index) },
       pagination: -> { {
@@ -22,6 +23,7 @@ class TimesheetsController < ApplicationController
     }
   end
 
+  # @route GET /timesheets/:id (timesheet)
   def show
     authorize timesheet
     render inertia: "Timesheets/Show", props: {
@@ -29,6 +31,7 @@ class TimesheetsController < ApplicationController
     }
   end
 
+  # @route GET /timesheets/new (new_timesheet)
   def new
     authorize Timesheet.new
     render inertia: "Timesheets/New", props: {
@@ -36,6 +39,7 @@ class TimesheetsController < ApplicationController
     }
   end
 
+  # @route GET /timesheets/:id/edit (edit_timesheet)
   def edit
     authorize timesheet
     render inertia: "Timesheets/Edit", props: {
@@ -43,6 +47,7 @@ class TimesheetsController < ApplicationController
     }
   end
 
+  # @route POST /timesheets (timesheets)
   def create
     authorize Timesheet.new
     if timesheet.save
@@ -52,6 +57,8 @@ class TimesheetsController < ApplicationController
     end
   end
 
+  # @route PATCH /timesheets/:id (timesheet)
+  # @route PUT /timesheets/:id (timesheet)
   def update
     authorize timesheet
     if timesheet.update(timesheet_params)
@@ -61,6 +68,7 @@ class TimesheetsController < ApplicationController
     end
   end
 
+  # @route DELETE /timesheets/:id (timesheet)
   def destroy
     authorize timesheet
     timesheet.destroy!
