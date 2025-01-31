@@ -4,6 +4,7 @@ import { Routes, withLayout } from "@/lib"
 import Overtime from "./FormInputs/Overtime"
 import Payroll from "./FormInputs/Payroll"
 import ShiftTypes from "./FormInputs/ShiftTypes"
+import OvertimeExemptions from "./FormInputs/OvertimeExemptions"
 
 export type PayrollSettingsFormData = {
 	settings: Schema.Setting
@@ -39,7 +40,9 @@ const CalendarSettings = ({ settings, shift_types }: CalendarSettingsProps) => {
 			</Form>
 
 			<Divider my="lg" />
+			<OvertimeExemptions />
 
+			<Divider my="lg" />
 			<ShiftTypes shift_types={ shift_types } />
 		</>
 	)

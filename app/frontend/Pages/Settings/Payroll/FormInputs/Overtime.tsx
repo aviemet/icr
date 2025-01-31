@@ -35,6 +35,15 @@ const Overtime = ({ settings, shift_types }: CalendarSettingsProps) => {
 				/>
 				in a day are considered overtime.
 			</Grid.Col>
+
+			<Grid.Col>
+				<Title order={ 3 }>Overtime Exemptions</Title>
+			</Grid.Col>
+
+			<Grid.Col>
+				
+
+			</Grid.Col>
 		</>
 	)
 }

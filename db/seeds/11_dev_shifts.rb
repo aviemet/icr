@@ -12,9 +12,9 @@ if Rails.env.development?
         FactoryBot.create(:phone, contact: employee.contact, category: Category.type(:phone).sample)
 
         client = Client.first
-        start = Time.current.beginning_of_week + (i * 4).hours
+        start = Time.current.beginning_of_month + (i * 4).hours
 
-        120.times do |w|
+        240.times do |w|
           next unless w % 7 < 6
 
           shift = FactoryBot.create(:shift, {

@@ -21,7 +21,7 @@ class CustomFailure < Devise::FailureApp
     elsif message == :unconfirmed
       redirect_to new_user_confirmation_path({ email: params[:user][:email] })
     elsif message == :unauthenticated
-      self.headers['x-inertia'] = true
+      self.headers["x-inertia"] = true
       redirect_to new_user_session_path
     end
   end
