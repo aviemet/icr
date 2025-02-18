@@ -42,6 +42,7 @@ const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 
 	useInit(() => {
 		if(import.meta.env.MODE === "development") {
+			console.log({ theme })
 			console.log({ vars })
 		}
 	})

@@ -1,9 +1,10 @@
+import React from "react"
 import { IconButton } from "@/Components"
 import { ActionIconProps } from "@mantine/core"
+import { PlusIcon } from "../Icons"
 
 import cx from "clsx"
 import * as classes from "./Calendar.css"
-import { PlusIcon } from "../Icons"
 
 export type NewShiftClick = (date: Date) => void
 
@@ -37,4 +38,4 @@ const NewShiftButton = ({
 	)
 }
 
-export default NewShiftButton
+export default React.memo(NewShiftButton)

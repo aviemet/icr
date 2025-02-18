@@ -1,9 +1,11 @@
+import React from "react"
 import { type HeaderProps } from "react-big-calendar"
+import { Box } from "@/Components"
 
 const MonthHeader = ({ date, label, localizer }: HeaderProps) => {
 	return (
-		<div>{ label }</div>
+		<Box>{ label }</Box>
 	)
 }
 
-export default MonthHeader
+export default React.memo(MonthHeader)

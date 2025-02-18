@@ -1,4 +1,6 @@
+import React from "react"
 import { Event, EventProps } from "react-big-calendar"
+import { Box } from "@/Components"
 
 const MonthEvent = ({
 	event,
@@ -11,8 +13,8 @@ const MonthEvent = ({
 	slotEnd,
 }: EventProps<Event>) => {
 	return (
-		<div>{ title }</div>
+		<Box>{ title }</Box>
 	)
 }
 
-export default MonthEvent
+export default React.memo(MonthEvent)

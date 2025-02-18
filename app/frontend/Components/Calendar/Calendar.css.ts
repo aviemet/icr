@@ -51,12 +51,14 @@ export const calendar = css`
 
 			.rbc-date-cell {
 				border-right: 1px solid ${vars.colors.gray[6]};
+				padding-right: 0;
 				
 				&:last-child {
 					border-right: none;
 				}
 
 				.rbc-day-bg {
+					height: 100%;
 				}
 			}
 		}

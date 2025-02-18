@@ -1,6 +1,7 @@
+import React from "react"
 import { Box } from "@/Components"
-import NewShiftButton from "./NewShiftButton"
 import { type DateCellWrapperProps } from "react-big-calendar"
+// import NewShiftButton from "./NewShiftButton"
 
 const DateCellWrapper = ({ children, range, value }: DateCellWrapperProps) => {
 
@@ -11,4 +12,4 @@ const DateCellWrapper = ({ children, range, value }: DateCellWrapperProps) => {
 	)
 }
 
-export default DateCellWrapper
+export default React.memo(DateCellWrapper)

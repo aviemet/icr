@@ -1,4 +1,4 @@
-import React, { useCallback, useRef }  from "react"
+import React, { useCallback, useMemo, useRef }  from "react"
 import { router } from "@inertiajs/react"
 import { buildShiftTitle, formatEventTitle, theme } from "@/lib"
 import dayjs from "dayjs"
@@ -97,7 +97,6 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 		try {
 			return formatEventTitle(settings.shift_title_format, schedule.starts_at, pick(employee, ["first_name", "last_name", "full_name"]))
 		} catch(e) {
-			console.error("Error building title: ", e)
 			return schedule.name || buildShiftTitle({
 				start: schedule.starts_at,
 				end: schedule.ends_at,
@@ -106,23 +105,27 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 		}
 	}, [settings.shift_title_format])
 
+	const processedSchedules = useMemo(() => {
+		return schedules?.map(schedule => {
+			return {
+				id: schedule.id,
+				title: handleEventTitle(schedule, schedule.shift.employee),
+				start: schedule.starts_at,
+				end: schedule.ends_at,
+				resource: {
+					backgroundColor: schedule.shift.employee.color,
+					employee: schedule.shift.employee,
+				},
+			}
+		}) || []
+	}, [schedules, handleEventTitle])
+
 	return (
 		<>
 			<h1>{ client?.person?.name }</h1>
 			<Box>
 				<Calendar
-					events={ schedules?.map(schedule => {
-						return {
-							id: schedule.id,
-							title: handleEventTitle(schedule, schedule.shift.employee),
-							start: schedule.starts_at,
-							end: schedule.ends_at,
-							resource: {
-								backgroundColor: schedule.shift.employee.color,
-								employee: schedule.shift.employee,
-							},
-						}
-					}) || [] }
+					events={ processedSchedules }
 					onSelectEvent={ handleSelectEvent }
 					// onSelectSlot={ handleSelectSlot }
 					onNavigate={ handleDateChange }

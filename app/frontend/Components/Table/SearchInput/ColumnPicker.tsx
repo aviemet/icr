@@ -36,7 +36,7 @@ const ColumnPicker = () => {
 	return (
 		<Menu closeOnItemClick={ false } position="bottom-end">
 			<Menu.Target>
-				<Button size="md" p="xs" className={ cx(classes.columnPickerButton) }>
+				<Button p="xxs" className={ cx("column-picker") }>
 					<ColumnsIcon size={ 24 } />
 				</Button>
 			</Menu.Target>

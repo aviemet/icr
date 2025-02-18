@@ -133,6 +133,11 @@ export const section = css`
 export const searchWrapper = css`
 	display: flex;
 	flex: 1;
+
+	button.column-picker {
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+	}
 `
 
 export const searchInput = css`

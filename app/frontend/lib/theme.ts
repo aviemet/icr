@@ -14,7 +14,7 @@ export const defaultColor = "blue"
 
 export const themeObject: Partial<CustomMantineTheme> = {
 	breakpoints,
-	defaultRadius: "md",
+	defaultRadius: "sm",
 	spacing: {
 		xxl: "calc(2.5rem * var(--mantine-scale))",
 		xxs: "calc(0.5rem * var(--mantine-scale))",
