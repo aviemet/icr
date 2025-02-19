@@ -12,14 +12,15 @@ import {
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop"
 import dayjs from "dayjs"
 
-import cx from "clsx"
-import * as classes from "./Calendar.css"
 import DateCellWrapper from "./DateCellWrapper"
 import { useLocation } from "@/lib/hooks"
 import MonthDateHeader from "./MonthDateHeader"
 import MonthEvent from "./MonthEvent"
 import MonthHeader from "./MonthHeader"
 import { NewShiftClick } from "./NewShiftButton"
+
+import cx from "clsx"
+import * as classes from "./Calendar.css"
 
 const DragAndDropCalendar = withDragAndDrop(Calendar<Event, {}>)
 

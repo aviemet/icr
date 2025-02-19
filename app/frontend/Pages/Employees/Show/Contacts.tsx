@@ -4,8 +4,7 @@ import {
 	Text,
 	Group,
 	Section,
-	AddressDisplay,
-
+	AddressFormatter,
 } from "@/Components"
 import { PhoneFormatter, EmailFormatter } from "@/Components/Formatters"
 import { type ShowEmployeeProps } from "."
@@ -50,7 +49,7 @@ const Contacts = ({ employee }: EmployeeContactsProps) => {
 				{ employee.person.contact.addresses.map(address => (
 					<Box key={ address.id }>
 						<Group gap="lg">
-							<AddressDisplay address={ address } />
+							<AddressFormatter address={ address } />
 						</Group>
 					</Box>
 				)) }

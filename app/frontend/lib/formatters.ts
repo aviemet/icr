@@ -10,7 +10,7 @@ export const currency = (amount: number, currency = "USD") => {
 
 export const datetime = {
 	// Date formatters
-	dateShort: (date: string | Date) => dayjs(new Date(date)).format("MM/DD/YYYY"),
+	dateShort: (date: string | Date) => dayjs(new Date(date)).format("M/DD/YY"),
 	dateLong: (date: string | Date) => dayjs(new Date(date)).format("MM/DD/YYYY HH:mm:ss"),
 	dateEnglish: (date: string | Date) => dayjs(new Date(date)).format("MM/DD/YYYY"),
 
