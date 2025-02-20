@@ -20,7 +20,7 @@ const CustomDateCellWrapper = ({ children, value, events }: CustomDateCellWrappe
 	}, 0)
 
 	return (
-		<Box className="rbc-date-cell blah blah blah" style={ { display: "flex", flexDirection: "column", height: "100%" } }>
+		<Box className="rbc-date-cell" style={ { display: "flex", flexDirection: "column", height: "100%" } }>
 			{ children }
 			<Box>
 				<Text size="xs" c="dimmed" style={ { marginTop: "auto", padding: "4px" } }>

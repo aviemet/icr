@@ -66,6 +66,9 @@ export const calendar = css`
 		.rbc-month-row {
 			overflow: unset;
 
+			.rbc-row-bg {
+			}
+
 			.rbc-row-content {
 				min-height: 145px;
 
@@ -73,6 +76,7 @@ export const calendar = css`
 					
 					.rbc-row-content-scroll-container {
 						overflow-y: unset;
+						margin-bottom: 25px; /* Adds space for billable hours */
 
 						.rbc-addons-dnd-row-body {
 

@@ -7,9 +7,6 @@ import cx from "clsx"
 import * as classes from "./TUICalendar.css"
 import "@toast-ui/calendar/dist/toastui-calendar.min.css"
 
-type ReactCalendarOptions = Omit<Options, "defaultView">;
-type CalendarView = Required<Options>["defaultView"];
-
 type CalendarExternalEventNames = Extract<keyof ExternalEventTypes, string>;
 type ReactCalendarEventNames = `on${Capitalize<CalendarExternalEventNames>}`;
 type ReactCalendarEventHandler = ExternalEventTypes[CalendarExternalEventNames];
@@ -17,24 +14,20 @@ type ReactCalendarExternalEvents = {
 	[events in ReactCalendarEventNames]: ReactCalendarEventHandler;
 };
 
-type CalendarProps = ReactCalendarOptions & {
+interface CalendarProps extends Omit<Options, "defaultView"> {
 	height?: string
 	events: Partial<EventObject>[]
-	view?: CalendarView
-} & ReactCalendarExternalEvents;
-
-// const optionsProps: (keyof ReactCalendarOptions)[] = [
-// 	"useFormPopup",
-// 	"useDetailPopup",
-// 	"isReadOnly",
-// 	"week",
-// 	"month",
-// 	"gridSelection",
-// 	"usageStatistics",
-// 	"eventFilter",
-// 	"timezone",
-// 	"template",
-// ]
+	view?: Required<Options>["defaultView"]
+	onSelectDateTime?: ExternalEventTypes["selectDateTime"]
+	onBeforeCreateEvent?: ExternalEventTypes["beforeCreateEvent"]
+	onBeforeUpdateEvent?: ExternalEventTypes["beforeUpdateEvent"]
+	onBeforeDeleteEvent?: ExternalEventTypes["beforeDeleteEvent"]
+	onAfterRenderEvent?: ExternalEventTypes["afterRenderEvent"]
+	onClickDayName?: ExternalEventTypes["clickDayName"]
+	onClickEvent?: ExternalEventTypes["clickEvent"]
+	onClickMoreEventsBtn?: ExternalEventTypes["clickMoreEventsBtn"]
+	onClickTimezonesCollapseBtn?: ExternalEventTypes["clickTimezonesCollapseBtn"]
+}
 
 const reactCalendarEventNames: ReactCalendarEventNames[] = [
 	"onSelectDateTime",
@@ -102,6 +95,7 @@ const TUICalendar = ({
 	useEffect(() => {
 		if(calendarRef.current && options) {
 			calendarRef.current.setOptions(options)
+
 			bindEventHandlers(options)
 		}
 	}, [options])
@@ -112,6 +106,7 @@ const TUICalendar = ({
 		)
 
 		eventNames.forEach((key) => {
+			console.log({ key })
 			const eventName = key[2].toLowerCase() + key.slice(3)
 
 			if(calendarRef.current) {
@@ -121,7 +116,7 @@ const TUICalendar = ({
 		})
 	}
 
-	return <div id="CALENDARHERE" ref={ containerRef } className={ cx(classes.calendar) } style={ { height } } />
+	return <div ref={ containerRef } className={ cx(classes.calendar) } style={ { height } } />
 }
 
 export default TUICalendar
