@@ -6,7 +6,7 @@ import {
 	Box,
 	Calendar,
 } from "@/Components"
-import { type NavigateAction, type View, type Event } from "react-big-calendar"
+import { type NavigateAction, type View, type Event, SlotInfo } from "react-big-calendar"
 import { modals } from "@mantine/modals"
 import useStore from "@/lib/store"
 import ShiftInfo from "./ShiftInfo"
@@ -32,6 +32,10 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 				<ShiftInfo event={ event } />
 			),
 		})
+	}
+
+	const handleSelectSlot = (info: SlotInfo) => {
+		// console.log({ info })
 	}
 
 	const handleNewShiftSuccess = () => {
@@ -96,6 +100,7 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 	) => {
 		try {
 			return formatEventTitle(settings.shift_title_format, schedule.starts_at, pick(employee, ["first_name", "last_name", "full_name"]))
+		// eslint-disable-next-line no-unused-vars
 		} catch(e) {
 			return schedule.name || buildShiftTitle({
 				start: schedule.starts_at,
@@ -127,7 +132,7 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 				<Calendar
 					events={ processedSchedules }
 					onSelectEvent={ handleSelectEvent }
-					// onSelectSlot={ handleSelectSlot }
+					onSelectSlot={ handleSelectSlot }
 					onNavigate={ handleDateChange }
 					onView={ handleViewChange }
 					onRangeChange={ handleRangeChange }

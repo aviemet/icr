@@ -7,6 +7,12 @@ export const newShiftButton = css`
 	float: left;
 `
 
+export const shiftTotals = css`
+	display: flex;
+	justify-content: space-between;
+	border-top: 1px solid ${vars.colors.gray[6]};
+`
+
 export const calendar = css`
 	height: 90vh;
 
@@ -58,7 +64,7 @@ export const calendar = css`
 				}
 
 				.rbc-day-bg {
-					height: 100%;
+					/* height: 100%; */
 				}
 			}
 		}
