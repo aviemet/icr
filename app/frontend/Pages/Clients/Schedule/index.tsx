@@ -13,6 +13,7 @@ import ShiftInfo from "./ShiftInfo"
 import NewShiftForm from "./NewShiftForm"
 import { usePageProps } from "@/lib/hooks"
 import { pick } from "lodash"
+import { calendarParams } from "@/lib/dates"
 
 interface ScheduleProps {
 	client: Schema.ClientsShow
@@ -59,22 +60,19 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 	}
 
 	const handleDateChange = (newDate: Date, view: View, action: NavigateAction) => {
-		// console.log({ date: params })
+		// console.log("handleDateChange", { newDate, view, action })
 	}
 
 	const handleViewChange = (view: View) => {
-		// console.log({ view })
+		// console.log("handleViewChange", { view })
 	}
 
 	const handleRangeChange = (start: Date, end: Date, view: View) => {
+		// console.log("handleRangeChange", { start, end, view })
 		router.get(`/clients/${client.slug}/schedule`,
+			calendarParams(start, end, view),
 			{
-				start: dayjs(start).format("YYYY-MM-DD"),
-				end: dayjs(end).format("YYYY-MM-DD"),
-				view,
-			},
-			{
-				only: ["shifts"],
+				only: ["schedules"],
 				preserveState: true,
 				preserveScroll: true,
 			},
