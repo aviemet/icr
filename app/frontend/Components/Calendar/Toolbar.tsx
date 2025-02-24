@@ -2,9 +2,9 @@ import { Navigate, ToolbarProps } from "react-big-calendar"
 import { Box, Button, Group, Menu } from "@/Components"
 import { DatePicker, DateValue, MonthPicker } from "@mantine/dates"
 import { PreviousIcon, NextIcon } from "../Icons"
+import { useDisclosure } from "@mantine/hooks"
 
 import cx from "clsx"
-import { useDisclosure } from "@mantine/hooks"
 
 const CustomToolbar = ({
 	date,
@@ -51,7 +51,6 @@ const CustomToolbar = ({
 							key={ name }
 							variant={ view === name ? "filled" : "light" }
 							onClick={ () => onView(name) }
-							// className={ cx({ "rbc-active": view === name }) }
 						>
 							{ localizer.messages[name] }
 						</Button>

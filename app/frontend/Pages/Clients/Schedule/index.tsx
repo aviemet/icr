@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useRef }  from "react"
 import { router } from "@inertiajs/react"
 import { buildShiftTitle, formatEventTitle, theme } from "@/lib"
-import dayjs from "dayjs"
 import {
 	Box,
 	Calendar,
