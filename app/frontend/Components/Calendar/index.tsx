@@ -2,6 +2,7 @@ import React, { useMemo, useRef } from "react"
 import {
 	Calendar,
 	DateHeaderProps,
+	ToolbarProps,
 	Views,
 	dayjsLocalizer,
 	type CalendarProps,
@@ -21,6 +22,7 @@ import { NewShiftClick } from "./NewShiftButton"
 
 import cx from "clsx"
 import * as classes from "./Calendar.css"
+import Toolbar from "./Toolbar"
 
 const DragAndDropCalendar = withDragAndDrop(Calendar<Event, {}>)
 
@@ -90,6 +92,7 @@ const CalendarComponent = ({
 			defaultView={ viewRef.current }
 			components={ {
 				dateCellWrapper: DateCellWrapper,
+				toolbar: Toolbar,
 				month: {
 					dateHeader: (props: DateHeaderProps) => <MonthDateHeader { ...props } onNewShift={ onNewShift } />,
 					event: MonthEvent,

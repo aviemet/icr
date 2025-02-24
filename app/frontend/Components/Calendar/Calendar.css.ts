@@ -44,17 +44,19 @@ export const calendar = css`
 
 			}
 		}
+	}
 
-		button {
-			border-color: ${vars.colors.gray[6]};
+	.rbc-header {
+		background-color: ${vars.colors.primaryColors[2]};
+
+		${vars.darkSelector} { 
+				background-color: ${vars.colors.primaryColors[9]};
 		}
 	}
 
 	.rbc-month-view {
 
 		.rbc-row-bg {
-			/* z-index: 1; */
-
 			.rbc-date-cell {
 				border-right: 1px solid ${vars.colors.gray[6]};
 				padding-right: 0;
@@ -73,6 +75,14 @@ export const calendar = css`
 			overflow: unset;
 
 			.rbc-row-bg {
+
+				.rbc-today {
+					background-color: ${vars.colors.primaryColors[2]};
+
+					${vars.darkSelector} { 
+							background-color: ${vars.colors.primaryColors[9]};
+					}
+				}
 			}
 
 			.rbc-row-content {
@@ -138,29 +148,8 @@ export const calendar = css`
 
 	// Fix dark theme colors
 	${vars.darkSelector} { 
-		.rbc-today {
-			background-color: ${vars.colors.cyan[9]};
-		}
-
 		.rbc-day-bg.rbc-off-range-bg {
 			background-color: ${vars.colors.dark[5]};
-		}
-
-		button{
-			color: ${vars.colors.white};
-
-			&:hover, &:active, &:focus {
-				color: ${vars.colors.white};
-				background-color: ${vars.colors.dark[5]};
-			}
-
-			&.rbc-active {
-				background-color: ${vars.colors.cyan[8]};
-
-				&:hover {
-					color: ${vars.colors.white};
-				}
-			}
 		}
 	}
 	// End fix dark theme colors
