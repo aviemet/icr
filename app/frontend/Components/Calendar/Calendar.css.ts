@@ -1,5 +1,6 @@
-import { vars } from "@/lib/theme"
 import { css } from "@linaria/core"
+
+import { vars } from "@/lib/theme"
 
 export const newShiftButton = css`
 	z-index: 100;
@@ -13,39 +14,7 @@ export const shiftTotals = css`
 	border-top: 1px solid ${vars.colors.gray[6]};
 `
 
-export const calendar = css`
-	height: 90vh;
-
-	.rbc-date-cell {
-		.${newShiftButton} {
-			display: none;
-			margin-top: 3px;
-			margin-left: 3px;
-		}
-
-		&:hover {					
-			.${newShiftButton} {
-				display: block;
-			}
-		}
-	}
-
-	.rbc-toolbar {
-		.rbc-btn-group {
-
-		}
-
-		.rbc-toolbar-label {
-
-		}
-
-		.rbc-btn-group {
-			button.rbc-active {
-
-			}
-		}
-	}
-
+export const darkTheme = css`
 	.rbc-header {
 		background-color: ${vars.colors.primaryColors[2]};
 
@@ -53,29 +22,10 @@ export const calendar = css`
 				background-color: ${vars.colors.primaryColors[9]};
 		}
 	}
-
+	
 	.rbc-month-view {
-
-		.rbc-row-bg {
-			.rbc-date-cell {
-				border-right: 1px solid ${vars.colors.gray[6]};
-				padding-right: 0;
-				
-				&:last-child {
-					border-right: none;
-				}
-
-				.rbc-day-bg {
-					/* height: 100%; */
-				}
-			}
-		}
-
 		.rbc-month-row {
-			overflow: unset;
-
 			.rbc-row-bg {
-
 				.rbc-today {
 					background-color: ${vars.colors.primaryColors[2]};
 
@@ -84,33 +34,7 @@ export const calendar = css`
 					}
 				}
 			}
-
-			.rbc-row-content {
-				min-height: 145px;
-
-				&.rbc-row-content-scrollable {
-					
-					.rbc-row-content-scroll-container {
-						overflow-y: unset;
-						margin-bottom: 25px; /* Adds space for billable hours */
-
-						.rbc-addons-dnd-row-body {
-
-							.rbc-row {
-
-								.rbc-row-segment {
-
-									.rbc-event {
-										
-									}
-								}
-							}
-						}
-					}
-				}
-			}
 		}
-
 	}
 
 	.rbc-time-view {
@@ -142,15 +66,66 @@ export const calendar = css`
 		}
 	}
 
-	.rbc-event-content {
-		font-size: ${vars.fontSizes.xs};
-	}
-
-	// Fix dark theme colors
-	${vars.darkSelector} { 
-		.rbc-day-bg.rbc-off-range-bg {
+	.rbc-day-bg.rbc-off-range-bg {
+		${vars.darkSelector} { 
 			background-color: ${vars.colors.dark[5]};
 		}
 	}
-	// End fix dark theme colors
+`
+
+export const calendar = css`
+	height: 90vh;
+
+	.rbc-date-cell {
+		.${newShiftButton} {
+			display: none;
+			margin-top: 3px;
+			margin-left: 3px;
+		}
+
+		&:hover {					
+			.${newShiftButton} {
+				display: block;
+			}
+		}
+	}
+
+	.rbc-month-view {
+
+		.rbc-row-bg {
+			.rbc-date-cell {
+				border-right: 1px solid ${vars.colors.gray[6]};
+				padding-right: 0;
+				
+				&:last-child {
+					border-right: none;
+				}
+
+				.rbc-day-bg {
+					/* height: 100%; */
+				}
+			}
+		}
+
+		.rbc-month-row {
+			overflow: unset;
+
+			.rbc-row-content {
+				min-height: 145px;
+
+				&.rbc-row-content-scrollable {
+					
+					.rbc-row-content-scroll-container {
+						overflow-y: unset;
+						/*margin-bottom: 25px; /* Adds space for billable hours */
+					}
+				}
+			}
+		}
+
+	}
+
+	.rbc-event-content {
+		font-size: ${vars.fontSizes.xs};
+	}
 `

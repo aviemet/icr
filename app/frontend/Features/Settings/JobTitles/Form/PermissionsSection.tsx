@@ -1,10 +1,12 @@
 import { useForm } from "use-inertia-form"
+
 import { Grid, Table, Text, Title, Tooltip } from "@/Components"
 import { FormGroup } from "@/Components/Form"
 import { aOrAn } from "@/lib/strings"
+
 import ColumnToggle from "./ColumnToggle"
-import SwitchRow from "./SwitchRow"
 import { tableRows, type JobTitleFormData } from "./formData"
+import SwitchRow from "./SwitchRow"
 
 const PermissionsSection = () => {
 	const { getData } = useForm<JobTitleFormData>()

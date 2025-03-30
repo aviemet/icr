@@ -1,8 +1,9 @@
 import { Tabs, type TabsProps } from "@mantine/core"
-import UrlTabs from "./UrlTabs"
+import clsx from "clsx"
+
 import TabLink from "./TabLink"
-import cx from "clsx"
 import * as classes from "./Tabs.css"
+import UrlTabs from "./UrlTabs"
 
 export interface ITabsComponentProps extends TabsProps {
 	urlControlled?: boolean
@@ -11,9 +12,9 @@ export interface ITabsComponentProps extends TabsProps {
 
 const TabsComponent = ({ children, urlControlled = false, className, ...props }: ITabsComponentProps) => {
 	return urlControlled ?
-		<UrlTabs className={ cx(className, classes.tabs) } { ...props }>{ children }</UrlTabs>
+		<UrlTabs className={ clsx(className, classes.tabs) } { ...props }>{ children }</UrlTabs>
 		:
-		<Tabs className={ cx(className, classes.tabs) } { ...props }>{ children }</Tabs>
+		<Tabs className={ clsx(className, classes.tabs) } { ...props }>{ children }</Tabs>
 }
 
 TabsComponent.List = Tabs.List

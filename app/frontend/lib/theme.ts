@@ -1,5 +1,6 @@
 import { createTheme, DEFAULT_THEME, MantineSpacingValues, mergeMantineTheme, type MantineTheme } from "@mantine/core"
 import { themeToVars } from "@mantine/vanilla-extract"
+
 import breakpoints from "./breakpoints.mjs"
 
 type CustomMantineTheme = Omit<MantineTheme, "spacing" | "other"> & {

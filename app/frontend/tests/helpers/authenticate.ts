@@ -1,5 +1,5 @@
-import { beforeAll } from "vitest"
 import axios from "axios"
+import { beforeAll } from "vitest"
 
 beforeAll(async () => {
 	await axios.post("http://localhost:3000/test/login", {

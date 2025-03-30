@@ -1,7 +1,7 @@
 import { Grid, Title, Link } from "@/Components"
 import { Form, TextInput, Submit } from "@/Components/Form"
-import { Routes, withLayout } from "@/lib"
 import { AuthPaperLayout } from "@/Features"
+import { Routes, withLayout } from "@/lib"
 
 interface IConfirmationsNew {
 	user: Schema.User

@@ -1,6 +1,7 @@
-import { vars, theme } from "@/lib/theme"
-import { rem } from "@mantine/core"
 import { css } from "@linaria/core"
+import { rem } from "@mantine/core"
+
+import { vars, theme } from "@/lib/theme"
 
 export const wrapper = css`
 	overflow: auto;

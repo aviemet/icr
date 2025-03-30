@@ -1,8 +1,12 @@
 import { forwardRef, type ForwardedRef } from "react"
-import PasswordInput, { type PasswordInputProps } from "@/Components/Inputs/PasswordInput"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
-import { type InputConflicts, type BaseFormInputProps } from "."
+
+import PasswordInput, { type PasswordInputProps } from "@/Components/Inputs/PasswordInput"
+
 import InputWrapper from "../Components/InputWrapper"
+
+import { type InputConflicts, type BaseFormInputProps } from "."
+
 
 interface FormPasswordInputProps<TForm extends NestedObject>
 	extends

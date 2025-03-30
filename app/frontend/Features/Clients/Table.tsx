@@ -1,8 +1,8 @@
-import { Routes } from "@/lib"
 import { Table, Link, Group } from "@/Components"
 import { EditButton, ScheduleButton } from "@/Components/Button"
-import { type TableProps } from "@/Components/Table/Table"
 import { DateTimeFormatter } from "@/Components/Formatters"
+import { type TableProps } from "@/Components/Table/Table"
+import { Routes } from "@/lib"
 
 const ClientTable = (props: TableProps) => {
 	return (

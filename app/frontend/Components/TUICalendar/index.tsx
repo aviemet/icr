@@ -1,10 +1,11 @@
-import { useEffect, useRef } from "react"
 import Calendar, { EventObject, ExternalEventTypes, Options } from "@toast-ui/calendar"
-import { useDefaultCalendarOptions } from "./useDefaultCalendarOptions"
+import clsx from "clsx"
+import { useEffect, useRef } from "react"
+
 import { useInit } from "@/lib/hooks"
 
-import cx from "clsx"
 import * as classes from "./TUICalendar.css"
+import { useDefaultCalendarOptions } from "./useDefaultCalendarOptions"
 import "@toast-ui/calendar/dist/toastui-calendar.min.css"
 
 type CalendarExternalEventNames = Extract<keyof ExternalEventTypes, string>;
@@ -116,7 +117,7 @@ const TUICalendar = ({
 		})
 	}
 
-	return <div ref={ containerRef } className={ cx(classes.calendar) } style={ { height } } />
+	return <div ref={ containerRef } className={ clsx(classes.calendar) } style={ { height } } />
 }
 
 export default TUICalendar

@@ -1,13 +1,16 @@
-import React, { forwardRef } from "react"
 import {
 	SegmentedControl,
 	useMantineTheme,
 	type SegmentedControlProps as MantineSegmentedControlProps,
 	type SegmentedControlItem,
 } from "@mantine/core"
-import Label from "./Label"
-import { type BaseInputProps } from "."
+import React, { forwardRef } from "react"
+
 import InputWrapper from "./InputWrapper"
+import Label from "./Label"
+
+import { type BaseInputProps } from "."
+
 
 export interface SegmentedControlProps
 	extends

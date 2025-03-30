@@ -1,4 +1,4 @@
-import breakpoints from './app/frontend/lib/breakpoints.mjs'
+import breakpoints from "./app/frontend/lib/breakpoints.mjs"
 
 const postCssBreakpoints = {}
 for(const key in breakpoints) {
@@ -7,8 +7,8 @@ for(const key in breakpoints) {
 
 export default {
 	plugins: {
-		'postcss-preset-mantine': {},
-		'postcss-simple-vars': {
+		"postcss-preset-mantine": {},
+		"postcss-simple-vars": {
 			variables: postCssBreakpoints,
 		},
 	},

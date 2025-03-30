@@ -1,6 +1,6 @@
 import { Title, Page, Section } from "@/Components"
-import { Routes } from "@/lib"
 import DoctorForm from "@/Features/Doctors/Form"
+import { Routes } from "@/lib"
 
 interface INewDoctorProps {
 	doctor: Schema.DoctorsFormData

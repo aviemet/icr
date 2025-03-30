@@ -1,6 +1,7 @@
-import { useInertiaInput } from "use-inertia-form"
-import { Checkbox } from "@/Components/Inputs"
 import { type CheckboxGroupProps } from "@mantine/core"
+import { useInertiaInput } from "use-inertia-form"
+
+import { Checkbox } from "@/Components/Inputs"
 
 export interface FormCheckboxGroupProps extends CheckboxGroupProps {
 	name: string

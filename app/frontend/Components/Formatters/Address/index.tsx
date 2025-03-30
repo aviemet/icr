@@ -1,6 +1,7 @@
-import { useMemo } from "react"
-import { Box } from "@/Components"
 import addressFormatter from "@fragaria/address-formatter"
+import { useMemo } from "react"
+
+import { Box } from "@/Components"
 
 interface AddressFormatterProps {
 	address: Schema.Address

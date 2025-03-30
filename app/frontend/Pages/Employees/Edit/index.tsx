@@ -1,6 +1,6 @@
 import { Title, Page, Section } from "@/Components"
-import { Routes } from "@/lib"
 import EmployeesForm from "@/Features/Employees/Form"
+import { Routes } from "@/lib"
 
 interface EditEmployeeProps {
 	employee: Schema.EmployeesEdit

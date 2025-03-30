@@ -1,11 +1,12 @@
+import clsx from "clsx"
 import { useMemo, useRef } from "react"
+import { useForm } from "use-inertia-form"
+
 import { Badge, Box, Code, Group, Paper } from "@/Components"
 import { TextInput } from "@/Components/Form"
-import { useForm } from "use-inertia-form"
 import { formatEventTitle } from "@/lib"
 import { GeneralSettingsFormData } from "@/Pages/Settings/General"
 
-import cx from "clsx"
 import * as classes from "../Settings.css"
 
 const ALLOWED_TEMPLATE_VARS = ["first_name", "last_name", "full_name"] as const
@@ -70,7 +71,7 @@ const ShiftTitleFormatInput = ({ settings }: SettingIndexProps) => {
 						key={ variable }
 						m="sm"
 						onClick={ () => insertVariable(variable) }
-						className={ cx(classes.templateBadge) }
+						className={ clsx(classes.templateBadge) }
 					>
 						{ `{${variable}}` }
 					</Badge>

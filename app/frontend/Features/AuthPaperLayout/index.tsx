@@ -1,6 +1,7 @@
+import clsx from "clsx"
+
 import { Box, Center, Paper, Group } from "@/Components"
 
-import cx from "clsx"
 import * as classes from "./AuthPaperLayout.css"
 
 interface AuthPaperLayoutProps {
@@ -11,8 +12,8 @@ interface AuthPaperLayoutProps {
 const AuthPaperLayout = ({ children, bottomLinks }: AuthPaperLayoutProps) => {
 	return (
 
-		<Center p="lg" className={ cx(classes.loginWrapper) }>
-			<Paper shadow="lg" radius="lg" withBorder className={ cx(classes.loginPaper) }>
+		<Center p="lg" className={ clsx(classes.loginWrapper) }>
+			<Paper shadow="lg" radius="lg" withBorder className={ clsx(classes.loginPaper) }>
 				<Box p="xl">
 					{ children }
 				</Box>
@@ -21,7 +22,7 @@ const AuthPaperLayout = ({ children, bottomLinks }: AuthPaperLayoutProps) => {
 					justify="center"
 					content="center"
 					grow
-					className={ cx(classes.bottomLinks ) }
+					className={ clsx(classes.bottomLinks ) }
 					gap={ 0 }
 				>
 					{ bottomLinks }

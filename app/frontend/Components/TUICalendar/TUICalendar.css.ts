@@ -1,5 +1,6 @@
-import { vars } from "@/lib/theme"
 import { css } from "@linaria/core"
+
+import { vars } from "@/lib/theme"
 
 export const calendar = css`
 	.toastui-calendar-layout {

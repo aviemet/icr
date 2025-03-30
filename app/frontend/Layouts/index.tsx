@@ -1,5 +1,5 @@
-import Providers from "@/Layouts/Providers"
 import { Flash } from "@/Components"
+import Providers from "@/Layouts/Providers"
 
 import BareAppLayout from "./AppLayout"
 import BareAuthLayout from "./AuthLayout"

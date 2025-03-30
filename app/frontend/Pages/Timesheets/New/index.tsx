@@ -1,18 +1,19 @@
-import { Title, Page, Section } from '@/Components'
-import { Routes } from '@/lib'
-import TimesheetForm from '../Form'
+import { Title, Page, Section } from "@/Components"
+import { Routes } from "@/lib"
+
+import TimesheetForm from "../Form"
 
 interface NewTimesheetProps {
 	timesheet: Schema.TimesheetsFormData
 }
 
 const NewTimesheet = ({ ...data }: NewTimesheetProps) => {
-	const title = 'New Timesheet'
+	const title = "New Timesheet"
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: 'Timesheets', href: Routes.timesheets() },
-			{ title: 'New Timesheet', href: window.location.href },
+			{ title: "Timesheets", href: Routes.timesheets() },
+			{ title: "New Timesheet", href: window.location.href },
 		] }>
 
 			<Section>

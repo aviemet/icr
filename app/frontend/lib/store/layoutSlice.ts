@@ -1,4 +1,5 @@
 import { StateCreator } from "zustand"
+
 import { defaultColor } from "../theme"
 
 export interface LayoutSlice {

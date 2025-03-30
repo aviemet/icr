@@ -1,5 +1,6 @@
 import { Title, Page, Section } from "@/Components"
 import { Routes } from "@/lib"
+
 import TimesheetsForm from "../Form"
 
 interface EditTimesheetProps {
@@ -17,7 +18,7 @@ const EditTimesheet = ({ timesheet }: EditTimesheetProps) => {
 		] }>
 			<Section>
 				<Title>{ title }</Title>
-				
+
 				<TimesheetsForm
 					method='put'
 					to={ Routes.timesheet() }

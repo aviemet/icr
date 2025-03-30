@@ -1,7 +1,7 @@
-import { Routes } from "@/lib"
-import { IndexPageTemplate } from "@/Features"
 import { NewIcon } from "@/Components/Icons"
+import { IndexPageTemplate } from "@/Features"
 import HouseholdsTable from "@/Features/Households/Table"
+import { Routes } from "@/lib"
 
 interface IHouseholdIndexProps {
 	households: Schema.HouseholdsIndex[]

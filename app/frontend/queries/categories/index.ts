@@ -1,6 +1,8 @@
-import { exclude, Routes } from "@/lib"
-import axios from "axios"
 import { useMutation, useQuery } from "@tanstack/react-query"
+import axios from "axios"
+
+import { exclude, Routes } from "@/lib"
+
 import { type ReactQueryFunction, type ReactMutationFunction } from ".."
 
 export const useGetCategories: ReactQueryFunction<Schema.Category[], { type: string }> = (params, options) => {

@@ -1,8 +1,11 @@
 import React, { useCallback } from "react"
-import { Checkbox } from "@/Components/Inputs"
 import { useForm } from "use-inertia-form"
-import { tableRows, type JobTitleFormData, type Permissions } from "./formData"
+
+import { Checkbox } from "@/Components/Inputs"
 import { useCheckboxState } from "@/lib/hooks"
+
+import { tableRows, type JobTitleFormData, type Permissions } from "./formData"
+
 
 interface ColumnToggleProps {
 	permission: keyof Permissions

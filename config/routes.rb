@@ -5,6 +5,8 @@ Rails.application.routes.draw do
 
   root "pages#dashboard"
 
+  get "/home" => "pages#home"
+
   match "/404", to: "errors#not_found", as: :error_404, via: :all
   match "/422", to: "errors#unprocessable_entity", as: :error_422, via: :all
   match "/500", to: "errors#internal_server_error", as: :error_500, via: :all

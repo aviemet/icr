@@ -1,10 +1,11 @@
-import React, { forwardRef } from "react"
-import { router } from "@inertiajs/react"
 import { Method, Visit } from "@inertiajs/core"
+import { router } from "@inertiajs/react"
 import { type ButtonProps } from "@mantine/core"
+import React, { forwardRef } from "react"
+
 import { Button } from "@/Components"
-import { exclude } from "@/lib/collections"
 import AnchorLink, { type IAnchorLinkProps } from "@/Components/Link/AnchorLink"
+import { exclude } from "@/lib/collections"
 
 interface ILinkProps extends IAnchorLinkProps {
 	children?: React.ReactNode

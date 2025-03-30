@@ -1,4 +1,3 @@
-import React, { useState } from "react"
 import {
 	TextInput,
 	Button,
@@ -14,6 +13,8 @@ import {
 	Text,
 } from "@mantine/core"
 import { TimeInput } from "@mantine/dates"
+import React, { useState } from "react"
+
 import { PlusIcon, TrashIcon } from "@/Components/Icons"
 
 interface CriterionCondition {

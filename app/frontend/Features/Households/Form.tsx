@@ -1,5 +1,6 @@
-import { Form, TextInput, Submit } from "@/Components/Form"
 import { type UseFormProps } from "use-inertia-form"
+
+import { Form, TextInput, Submit } from "@/Components/Form"
 
 type THouseholdFormData = {
 	household: Schema.HouseholdsFormData

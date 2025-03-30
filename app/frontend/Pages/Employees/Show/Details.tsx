@@ -1,5 +1,6 @@
-import { type ShowEmployeeProps } from "."
 import { Text, Title } from "@/Components"
+
+import { type ShowEmployeeProps } from "."
 
 interface EmployeeDetailsProps extends ShowEmployeeProps {}
 

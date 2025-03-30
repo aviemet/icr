@@ -1,6 +1,8 @@
-import { HiddenInput } from "@/Components/Inputs"
-import { NestedObject, useInertiaInput } from "use-inertia-form"
 import { InputProps } from "react-html-props"
+import { NestedObject, useInertiaInput } from "use-inertia-form"
+
+import { HiddenInput } from "@/Components/Inputs"
+
 import { type InputConflicts, type BaseFormInputProps } from "."
 
 type OmittedHiddenInputProps = "onBlur" | "onFocus" | "wrapperProps"

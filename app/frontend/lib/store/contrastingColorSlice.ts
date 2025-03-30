@@ -1,5 +1,6 @@
-import { StateCreator } from "zustand"
 import { type MantineTheme } from "@mantine/core"
+import { StateCreator } from "zustand"
+
 import { calculateContrastingColor } from "../colors"
 
 export interface ContrastingColorSlice {

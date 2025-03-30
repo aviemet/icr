@@ -1,5 +1,6 @@
-import { type Event, type DateCellWrapperProps } from "react-big-calendar"
 import dayjs from "dayjs"
+import { type Event, type DateCellWrapperProps } from "react-big-calendar"
+
 import { Box, Text } from "@/Components"
 
 // Extend the DateCellWrapper props to include events

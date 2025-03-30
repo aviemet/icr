@@ -1,6 +1,7 @@
-import { vars, theme } from "@/lib/theme"
-import { darken, lighten } from "@mantine/core"
 import { css } from "@linaria/core"
+import { darken, lighten } from "@mantine/core"
+
+import { vars, theme } from "@/lib/theme"
 
 const fieldsetAlphaAdjustment = 0.125
 

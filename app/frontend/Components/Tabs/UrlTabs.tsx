@@ -1,9 +1,12 @@
-import React, { useEffect, useCallback } from "react"
-import { Tabs } from "@mantine/core"
 import { type VisitOptions } from "@inertiajs/core"
 import { router } from "@inertiajs/react"
-import { ITabsComponentProps } from "."
+import { Tabs } from "@mantine/core"
+import React, { useEffect, useCallback } from "react"
+
+
 import { coerceArray } from "@/lib"
+
+import { ITabsComponentProps } from "."
 
 const UrlTabs = ({ children, onChange, defaultValue, dependencies, ...props }: ITabsComponentProps) => {
 	const navigateTab = (value: string | null, options?: VisitOptions) => {

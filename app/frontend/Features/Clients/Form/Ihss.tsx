@@ -1,7 +1,10 @@
-import { Grid, Title } from "@/Components"
 import { useForm } from "use-inertia-form"
-import { type ClientFormData } from "."
+
+import { Grid, Title } from "@/Components"
 import { Checkbox } from "@/Components/Form"
+
+import { type ClientFormData } from "."
+
 
 const Ihss = () => {
 	const { getData } = useForm<ClientFormData>()

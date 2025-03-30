@@ -1,7 +1,9 @@
-import { Select } from "@/Components/Form/Inputs"
-import { type FormAsyncDropdown } from ".."
-import { useGetEmployeesAsOptions } from "@/queries"
 import { isEmpty } from "lodash"
+
+import { Select } from "@/Components/Form/Inputs"
+import { useGetEmployeesAsOptions } from "@/queries"
+
+import { type FormAsyncDropdown } from ".."
 
 interface ItemsDropdownProps extends Omit<FormAsyncDropdown<Schema.EmployeesOptions>, "name"> {
 	name?: string

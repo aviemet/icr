@@ -1,11 +1,12 @@
-import { Grid, Title, Link } from "@/Components"
-import { Form, Field, TextInput, PasswordInput, Checkbox, Submit } from "@/Components/Form"
-import { Routes, withLayout } from "@/lib"
-import { usePageProps } from "@/lib/hooks"
-import { AuthPaperLayout } from "@/Features"
+import clsx from "clsx"
 import { type UseFormProps } from "use-inertia-form"
 
-import cx from "clsx"
+import { Grid, Title, Link } from "@/Components"
+import { Form, Field, TextInput, PasswordInput, Checkbox, Submit } from "@/Components/Form"
+import { AuthPaperLayout } from "@/Features"
+import { Routes, withLayout } from "@/lib"
+import { usePageProps } from "@/lib/hooks"
+
 import * as classes from "./Login.css"
 
 type LoginFormData = {

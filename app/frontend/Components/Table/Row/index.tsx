@@ -1,6 +1,7 @@
+import { Table, type TableTrProps } from "@mantine/core"
+
 import { useTableContext } from "../TableContext"
 import RowInContext from "./RowInContext"
-import { Table, type TableTrProps } from "@mantine/core"
 
 export interface TableRow extends TableTrProps {
 	children?: React.ReactElement | React.ReactElement[] | (React.ReactElement | React.ReactElement[])[]

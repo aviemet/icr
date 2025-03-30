@@ -7,6 +7,7 @@ import {
 	AddressFormatter,
 } from "@/Components"
 import { PhoneFormatter, EmailFormatter } from "@/Components/Formatters"
+
 import { type ShowClientProps } from "."
 
 interface ClientContactsProps extends ShowClientProps {}

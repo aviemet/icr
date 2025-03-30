@@ -1,7 +1,8 @@
 import { Grid, Title } from "@/Components"
 import { NumberInput } from "@/Components/Form"
-import { CalendarSettingsProps } from ".."
 import { rem } from "@/lib"
+
+import { CalendarSettingsProps } from ".."
 
 const Overtime = ({ settings, shift_types }: CalendarSettingsProps) => {
 	return (

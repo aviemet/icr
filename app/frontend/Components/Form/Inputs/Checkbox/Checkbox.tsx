@@ -1,7 +1,9 @@
 import { useInertiaInput, type NestedObject } from "use-inertia-form"
+
 import CheckboxInput, { type CheckboxProps } from "@/Components/Inputs/Checkbox"
-import FormCheckboxGroup from "./Group"
+
 import { type InputConflicts, type BaseFormInputProps } from ".."
+import FormCheckboxGroup from "./Group"
 import InputWrapper from "../../Components/InputWrapper"
 
 export interface FormCheckboxProps<TForm extends NestedObject>

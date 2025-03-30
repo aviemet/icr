@@ -1,7 +1,9 @@
+import { isEmpty } from "lodash"
 import React, { forwardRef } from "react"
+
 import { Select as InputSelect } from "@/Components/Inputs"
 import { useGetCurrencies } from "@/queries/locale"
-import { isEmpty } from "lodash"
+
 import { type AsyncDropdown } from ".."
 
 interface CurrenciesDropdownProps extends AsyncDropdown<Schema.CurrencyOption> {}

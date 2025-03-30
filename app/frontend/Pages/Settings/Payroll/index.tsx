@@ -1,10 +1,11 @@
 import { Divider, Grid } from "@/Components"
 import { Form, Submit } from "@/Components/Form"
 import { Routes, withLayout } from "@/lib"
+
 import Overtime from "./FormInputs/Overtime"
+import OvertimeExemptions from "./FormInputs/OvertimeExemptions"
 import Payroll from "./FormInputs/Payroll"
 import ShiftTypes from "./FormInputs/ShiftTypes"
-import OvertimeExemptions from "./FormInputs/OvertimeExemptions"
 
 export type PayrollSettingsFormData = {
 	settings: Schema.Setting

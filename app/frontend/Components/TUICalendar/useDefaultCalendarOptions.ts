@@ -1,6 +1,6 @@
-import { useCallback } from "react"
 import { useMantineTheme } from "@mantine/core"
 import { Options } from "@toast-ui/calendar"
+import { useCallback } from "react"
 
 export const useDefaultCalendarOptions = () => {
 	const theme = useMantineTheme()

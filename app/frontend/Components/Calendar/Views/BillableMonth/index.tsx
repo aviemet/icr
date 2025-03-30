@@ -1,11 +1,11 @@
+import clsx from "clsx"
+import { chunk } from "lodash"
 import { useState, useRef } from "react"
 import { DateLocalizer, ViewProps } from "react-big-calendar"
-import { inRange, sortWeekEvents } from "react-big-calendar/lib/utils/eventLevels"
-import Header from "react-big-calendar/lib/Header"
 import DateContentRow from "react-big-calendar/lib/DateContentRow"
-import { chunk } from "lodash"
+import Header from "react-big-calendar/lib/Header"
+import { inRange, sortWeekEvents } from "react-big-calendar/lib/utils/eventLevels"
 
-import cx from "clsx"
 
 const eventsForWeek = (events: CustomMonthProps["events"], start: Date, end: Date, accessors: any, localizer: DateLocalizer) => {
 	if(!Array.isArray(events)) return []
@@ -73,7 +73,7 @@ const CustomMonth = ({
 
 	return (
 		<div
-			className={ cx("rbc-month-view", className) }
+			className={ clsx("rbc-month-view", className) }
 			role="table"
 			aria-label="Month View"
 			ref={ containerRef }
@@ -105,7 +105,7 @@ const CustomMonth = ({
 						key={ weekIdx }
 						ref={ weekIdx === 0 ? slotRowRef : undefined }
 						container={ containerRef.current }
-						className={ cx("rbc-month-row") }
+						className={ clsx("rbc-month-row") }
 						getNow={ getNow }
 						date={ date }
 						range={ week }

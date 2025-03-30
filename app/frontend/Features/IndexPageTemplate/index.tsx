@@ -1,6 +1,7 @@
 import { Page, Table } from "@/Components"
-import TableTitleSection, { IndexTableTitleSectionProps } from "./TableTitleSection"
 import { type Breadcrumb } from "@/Components/Breadcrumbs"
+
+import TableTitleSection, { IndexTableTitleSectionProps } from "./TableTitleSection"
 
 interface IIndexPageTemplateProps extends IndexTableTitleSectionProps {
 	model: string

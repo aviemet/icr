@@ -1,7 +1,8 @@
 import { Box, BoxProps } from "@mantine/core"
+import clsx from "clsx"
+
 import { type InputType } from "@/types"
 
-import cx from "clsx"
 import * as classes from "../Form.css"
 
 export interface FieldProps extends BoxProps {
@@ -23,7 +24,7 @@ const Field = ({
 }: FieldProps) => {
 	return (
 		<Box
-			className={ cx(
+			className={ clsx(
 				"field",
 				{ [String(type)]: type },
 				{ "required": required },

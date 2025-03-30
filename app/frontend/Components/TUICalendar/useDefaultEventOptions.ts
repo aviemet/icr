@@ -1,6 +1,6 @@
-import { useCallback } from "react"
 import { useMantineTheme } from "@mantine/core"
 import { EventObject } from "@toast-ui/calendar"
+import { useCallback } from "react"
 
 const useDefaultEventOptions = () => {
 	const theme = useMantineTheme()

@@ -1,5 +1,5 @@
-import { type SelectInputProps } from "../Inputs/Select"
 import { type MultiSelectInputProps } from "../Inputs/MultiSelect"
+import { type SelectInputProps } from "../Inputs/Select"
 
 // export { default as AssetsDropdown }        from './AssetsDropdown'
 // export { default as CategoriesDropdown }    from './CategoriesDropdown'

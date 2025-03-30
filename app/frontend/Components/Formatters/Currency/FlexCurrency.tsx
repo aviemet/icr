@@ -1,4 +1,5 @@
 import { Group } from "@mantine/core"
+
 import { type Money } from "@/types"
 
 interface FlexCurrencyFormatterProps {

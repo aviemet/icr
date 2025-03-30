@@ -1,9 +1,10 @@
-import { Card, Group, Link, Section, Title } from "@/Components"
-import { usePageProps } from "@/lib/hooks"
 import React from "react"
+
+import { Card, Group, Link, Section, Title } from "@/Components"
+import { PlusIcon } from "@/Components/Icons"
 import { DashboardCard } from "@/Features/Dashboard"
 import { Routes } from "@/lib"
-import { PlusIcon } from "@/Components/Icons"
+import { usePageProps } from "@/lib/hooks"
 
 const Dashboard = () => {
 	const { settings } = usePageProps()

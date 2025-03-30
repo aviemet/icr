@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react"
-import { Page, Box, Section, Tabs } from "@/Components"
 import { router } from "@inertiajs/react"
 import { Paper, useMantineTheme } from "@mantine/core"
-import { useViewportSize, useLocation } from "@/lib/hooks"
+import React, { useEffect, useState } from "react"
+
+import { Page, Box, Section, Tabs } from "@/Components"
 import { px } from "@/lib"
+import { useViewportSize, useLocation } from "@/lib/hooks"
 
 
 export type TTab = {

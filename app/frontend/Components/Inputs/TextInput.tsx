@@ -1,10 +1,15 @@
-import React, { forwardRef, useState } from "react"
 import { TextInput, type TextInputProps as MantineTextInputProps } from "@mantine/core"
-import { withInjectedProps, type BaseInputProps } from "."
-import Label from "./Label"
-import InputWrapper from "./InputWrapper"
-import { CrossIcon } from "../Icons"
+import React, { forwardRef, useState } from "react"
+
 import { isUnset } from "@/lib"
+
+import InputWrapper from "./InputWrapper"
+import Label from "./Label"
+import { CrossIcon } from "../Icons"
+
+import { withInjectedProps, type BaseInputProps } from "."
+
+
 
 export interface TextInputProps extends MantineTextInputProps, BaseInputProps {
 	clearable?: boolean

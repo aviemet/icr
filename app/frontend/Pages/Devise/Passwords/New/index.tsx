@@ -1,7 +1,7 @@
 import { Grid, Title, Link } from "@/Components"
 import { Field, Form, TextInput, Submit } from "@/Components/Form"
-import { Routes, withLayout } from "@/lib"
 import { AuthPaperLayout } from "@/Features"
+import { Routes, withLayout } from "@/lib"
 
 type TPasswordsNewFormData = {
 	email: string

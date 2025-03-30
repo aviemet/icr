@@ -1,8 +1,11 @@
 import { forwardRef, type ForwardedRef } from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
+
 import SegmentedControl, { type SegmentedControlProps } from "@/Components/Inputs/SegmentedControl"
-import { type InputConflicts, type BaseFormInputProps } from "."
+
 import InputWrapper from "../Components/InputWrapper"
+
+import { type InputConflicts, type BaseFormInputProps } from "."
 
 interface FormSegmentedControlProps<TForm extends NestedObject = NestedObject>
 	extends

@@ -1,7 +1,8 @@
-import { Menu } from "@/Components"
 import { Avatar, UnstyledButton } from "@mantine/core"
-import { usePageProps } from "@/lib/hooks"
+
+import { Menu } from "@/Components"
 import { Routes } from "@/lib"
+import { usePageProps } from "@/lib/hooks"
 
 const AvatarMenu = () => {
 	const props = usePageProps()

@@ -1,8 +1,12 @@
 import { forwardRef, type ForwardedRef } from "react"
-import TimeInput, { type TimeInputProps } from "@/Components/Inputs/TimeInput"
 import { useInertiaInput, type NestedObject } from "use-inertia-form"
-import { type InputConflicts, type BaseFormInputProps } from "."
+
+import TimeInput, { type TimeInputProps } from "@/Components/Inputs/TimeInput"
+
 import InputWrapper from "../Components/InputWrapper"
+
+import { type InputConflicts, type BaseFormInputProps } from "."
+
 
 interface FormTimeInputProps<TForm extends NestedObject>
 	extends

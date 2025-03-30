@@ -1,7 +1,5 @@
-import { matchesAtPosition, Routes } from "@/lib"
-import useStore from "@/lib/store"
-import { useLocation, usePageProps } from "@/lib/hooks"
-import IconProvider from "@/Layouts/Providers/IconProvider"
+import clsx from "clsx"
+
 import {
 	Group,
 	AppShell,
@@ -13,12 +11,15 @@ import {
 	Avatar,
 	Divider,
 } from "@/Components"
-import { TextInput } from "@/Components/Inputs"
 import { ClientIcon, ClockIcon, DashboardIcon, EmployeeIcon, LogoutIcon, NextIcon, SettingsIcon } from "@/Components/Icons"
+import { TextInput } from "@/Components/Inputs"
+import IconProvider from "@/Layouts/Providers/IconProvider"
+import { matchesAtPosition, Routes } from "@/lib"
+import { useLocation, usePageProps } from "@/lib/hooks"
+import useStore from "@/lib/store"
+
 import ToggleSidebarButton from "../ToggleSidebarButton"
 import MenuLink from "./MenuLink"
-
-import cx from "clsx"
 import * as classes from "../AppLayout.css"
 import UserMenu from "./UserMenu"
 
@@ -32,7 +33,7 @@ const Sidebar = () => {
 			<AppShell.Navbar
 				p={ 0 }
 				hidden={ !sidebarOpen }
-				className={ cx(classes.navbar, { closed: !sidebarOpen }) }
+				className={ clsx(classes.navbar, { closed: !sidebarOpen }) }
 			>
 				{ /* Hamburger */ }
 				<AppShell.Section p="xs" mb="xs">
@@ -46,7 +47,7 @@ const Sidebar = () => {
 						<Flex
 							direction="column"
 							wrap="nowrap"
-							className={ cx("hidden-when-closed") }
+							className={ clsx("hidden-when-closed") }
 						>
 							<Box><Text size="xl" fw={ 700 }>{ siteTitle }</Text></Box>
 							<Box><Text size="sm">{ user?.person?.name }</Text></Box>
@@ -56,7 +57,7 @@ const Sidebar = () => {
 
 				<Divider />
 
-				<AppShell.Section mt="xs" p={ 0 } grow className={ cx(classes.navigation) }>
+				<AppShell.Section mt="xs" p={ 0 } grow className={ clsx(classes.navigation) }>
 					<MenuLink
 						label="Dashboard"
 						href={ Routes.root() }

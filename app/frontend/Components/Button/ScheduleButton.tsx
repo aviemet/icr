@@ -1,8 +1,10 @@
+import { useMantineTheme } from "@mantine/core"
+
 import { Link, Tooltip } from "@/Components"
 import { CalendarIcon } from "@/Components/Icons"
-import { LinkProps } from "../Link"
-import { useMantineTheme } from "@mantine/core"
 import useStore from "@/lib/store"
+
+import { LinkProps } from "../Link"
 
 interface ScheduleButtonProps extends Omit<LinkProps, "children"> {
 	label?: string

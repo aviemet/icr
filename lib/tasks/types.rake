@@ -3,5 +3,6 @@ namespace :types do
   task :generate => [:environment] do
     system("rails types_from_serializers:generate")
     system("rails annotate:models")
+    system("rails restart")
   end
 end

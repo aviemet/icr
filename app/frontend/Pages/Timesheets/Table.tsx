@@ -1,11 +1,11 @@
-import { Routes } from "@/lib"
 import { Table, Link } from "@/Components"
 import { EditButton } from "@/Components/Button"
 import { type TableProps } from "@/Components/Table/Table"
+import { Routes } from "@/lib"
 
 const TimesheetTable = (props: TableProps) => {
 	return (
-		<Table { ...props}>
+		<Table { ...props }>
 			<Table.Head>
 				<Table.Row>
 					<Table.HeadCell className="actions">Actions</Table.HeadCell>

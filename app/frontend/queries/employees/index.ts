@@ -1,7 +1,9 @@
 import { useQuery } from "@tanstack/react-query"
-import { ReactQueryFunction } from ".."
-import { Routes } from "@/lib"
 import axios from "axios"
+
+import { Routes } from "@/lib"
+
+import { ReactQueryFunction } from ".."
 
 export const useGetEmployeesAsOptions: ReactQueryFunction<Schema.EmployeesOptions[]> = (options) => {
 	return useQuery({
