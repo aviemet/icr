@@ -3,7 +3,7 @@ import { chunk } from "lodash-es"
 import { useMemo } from "react"
 
 import { useCalendarContext } from "@/Components/CalendarCustom"
-import { BaseViewProps } from "@/Components/CalendarCustom/Views"
+import { BaseViewProps, VIEWS } from "@/Components/CalendarCustom/Views"
 
 import * as classes from "./MonthView.css"
 
@@ -14,9 +14,11 @@ const MonthView = ({
 }: MonthViewProps) => {
 	const { date, localizer, events } = useCalendarContext()
 
+	const eventsByDay = useMemo(() => localizer.groupedEventsForPeriod(events, date, VIEWS.month), [])
+
 	const weekdays = useMemo(() => localizer.weekdays(), [])
 	const weeks = useMemo(() => {
-		return chunk(localizer.visibleDays(date), weekdays.length)
+		return chunk(localizer.visibleDays(date, VIEWS.month), weekdays.length)
 	}, [])
 
 	return (
@@ -30,7 +32,6 @@ const MonthView = ({
 
 			<div className={ clsx(classes.daysContainer) }>
 				{ weeks.map((week, index) => {
-					// Use reduce instead of map so we only loop over each week once rather than thrice
 					const { backgroundCells, headingCells, contentCells } = week.reduce((acc, day) => {
 
 						acc.backgroundCells.push(
@@ -44,8 +45,14 @@ const MonthView = ({
 							</div>
 						)
 
+						const eventsForDay = eventsByDay.get(day.toISOString())
 						acc.contentCells.push(
 							<div className={ clsx(classes.dateCellContent) } key={ day.toISOString() }>
+								{ eventsForDay && eventsForDay.map(event => {
+									return (
+										<div className={ classes.event } key={ event.id }>{ event.title }</div>
+									)
+								}) }
 							</div>
 						)
 
@@ -58,17 +65,19 @@ const MonthView = ({
 
 					return (
 						<div className={ clsx(classes.row) } key={ `week_${index}` }>
-							<div className={ clsx(classes.rowLayerContainer) }>
+
+							<div className={ clsx(classes.rowLayerContainer, classes.backgroundLayer) }>
 								{ backgroundCells }
 							</div>
 
-							<div className={ clsx(classes.rowLayerContainer) }>
+							<div className={ clsx(classes.rowLayerContainer, classes.headingLayer) }>
 								{ headingCells }
 							</div>
 
-							<div className={ clsx(classes.rowLayerContainer, "content") }>
+							<div className={ clsx(classes.rowLayerContainer, classes.contentLayer) }>
 								{ contentCells }
 							</div>
+
 						</div>
 					)
 				}) }

@@ -8,13 +8,11 @@ import * as classes from "./Calendar.css"
 import { viewComponents, VIEWS, VIEW_NAMES } from "./Views"
 
 export interface CalendarEvent {
-	id?: string | number
+	id: string | number
 	allDay?: boolean | undefined
-	title?: React.ReactNode | undefined
-	start?: Date | undefined
-	end?: Date | undefined
-	resource?: any
-	style?: React.CSSProperties
+	title: React.ReactNode | undefined
+	start: Date | undefined
+	end: Date | undefined
 }
 
 type CalendarContext<TEvent extends CalendarEvent = CalendarEvent> = {

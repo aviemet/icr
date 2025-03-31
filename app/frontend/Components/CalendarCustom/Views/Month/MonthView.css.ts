@@ -1,6 +1,6 @@
 import { css } from "@linaria/core"
 
-import { vars } from "@/lib"
+import { rem, vars } from "@/lib"
 
 export const monthView = css`
 	position: absolute;
@@ -13,11 +13,9 @@ export const daysHeading = css`
 	width: 100%;
   flex: 1 1 0%;
   margin: 0;
-	margin-bottom: 0px;
   align-items: stretch;
   display: flex;
   flex: none;
-  margin-bottom: -8px;
 `
 
 export const daysContainer = css`
@@ -32,6 +30,7 @@ export const row = css`
   border-bottom: ${ vars.colors.dark[2] } 1px solid;
   display: flex;
   flex: 1 1 0%;
+  pointer-events: none;
 `
 
 export const columnHeader = css`
@@ -48,34 +47,64 @@ export const columnHeader = css`
 
 export const rowLayerContainer = css`
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   display: flex;
+  pointer-events: none;
+`
 
-  &.content {  
-    margin-top: 30px;
-    flex: 1 1 0%;
-  }
+export const backgroundLayer = css`
+`
+
+export const headingLayer = css`
+
+`
+
+export const contentLayer = css`
+  flex: 1 1 0%;
 `
 
 export const dateCellBackground = css`
   border-right: ${ vars.colors.dark[2] } 1px solid;
   flex: 1 1 0%;
+  pointer-events: all;
+  background-color: none;
+  transition: background-color 200ms linear;
+  
+  &:hover {
+    background-color: ${ vars.colors.dark[7] };
+  }
 `
+
+const headingHeight = rem(25)
 
 export const dateCellHeading = css`
   font-size: 14px;
-  line-height: 30px;
   color: ${ vars.colors.dark[2] };
   text-align: center;
   background: transparent;
   flex: 1 1 0%;
+  height: ${ headingHeight };
 `
 
 export const dateCellContent = css`
   display: flex;
   position: relative;
   flex: 1 1 0%;
+  pointer-events: none;
+  margin-top: ${ headingHeight };
+`
+
+export const event = css`    
+  position: absolute;
+  height: 24px;
+  padding-right: 12px;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  pointer-events: none;
+  transition: transform .3s cubic-bezier(.4,0,.2,1),opacity .3s cubic-bezier(.4,0,.2,1);
+  -webkit-font-smoothing: antialiased;
+  list-style: none;
+  z-index: 5;
+
+  border: 1px solid orange;
 `
