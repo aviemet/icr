@@ -1,4 +1,4 @@
-import { isEmpty } from "lodash"
+import { isEmpty } from "lodash-es"
 import React, { forwardRef } from "react"
 
 import { Select as InputSelect } from "@/Components/Inputs"

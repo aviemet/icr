@@ -3,9 +3,9 @@
  * @version 55eb7c46d4d79fbcf648e591f40cd39ad825549ceaad68313487cb7c263c6071
  * @see https://github.com/railsware/js-routes
  */
- 
+// eslint-disable-next-line
 const __jsr = (
- 
+// eslint-disable-next-line
 () => {
     const hasProp = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
     let NodeTypes;
@@ -216,7 +216,7 @@ const __jsr = (
             return this.is_callable(result) ? result.call(object) : result;
         }
         partition_parameters(parts, required_params, default_options, call_arguments) {
-             
+            // eslint-disable-next-line prefer-const
             let { args, options } = this.extract_options(parts.length, call_arguments);
             if (args.length > parts.length) {
                 throw new Error("Too many parameters provided for path");
@@ -587,6 +587,15 @@ export const apiCategory = /*#__PURE__*/ __jsr.r({"slug":{"r":true},"format":{}}
  * @returns {string} route path
  */
 export const apiCategoryOptions = /*#__PURE__*/ __jsr.r({"category_type":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"api"],[2,[7,"/"],[2,[6,"options"],[2,[7,"/"],[2,[6,"categories"],[2,[7,"/"],[2,[3,"category_type"],[1,[2,[8,"."],[3,"format"]]]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /api/clients/:slug/schedule(.:format)
+ * @param {any} slug
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiClientSchedule = /*#__PURE__*/ __jsr.r({"slug":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"api"],[2,[7,"/"],[2,[6,"clients"],[2,[7,"/"],[2,[3,"slug"],[2,[7,"/"],[2,[6,"schedule"],[1,[2,[8,"."],[3,"format"]]]]]]]]]]]);
 
 /**
  * Generates rails route to

@@ -1,4 +1,4 @@
-import { unset, get, set, isEmpty } from "lodash"
+import { unset, get, set, isEmpty } from "lodash-es"
 
 export default class NestedObject {
 	data = {}

@@ -144,6 +144,18 @@ export const apiCategoryOptions: ((
 
 /**
  * Generates rails route to
+ * /api/clients/:slug/schedule(.:format)
+ * @param {any} slug
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiClientSchedule: ((
+  slug: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
  * /api/options/clients(.:format)
  * @param {object | undefined} options
  * @returns {string} route path

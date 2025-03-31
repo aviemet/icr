@@ -1,4 +1,4 @@
-import { isEmpty } from "lodash"
+import { isEmpty } from "lodash-es"
 
 import { Select } from "@/Components/Form/Inputs"
 import { useGetEmployeesAsOptions } from "@/queries"

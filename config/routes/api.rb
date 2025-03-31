@@ -22,4 +22,8 @@ namespace :api do
       get "pay_periods" => "locales#pay_periods", as: :pay_periods
     end
   end
+
+  scope :clients do
+    get ":slug/schedule" => "clients#schedule", param: :slug, as: "client_schedule"
+  end
 end

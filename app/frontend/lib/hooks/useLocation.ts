@@ -1,4 +1,4 @@
-import { omit } from "lodash"
+import { omit } from "lodash-es"
 import { useState, useEffect, useMemo } from "react"
 
 import { NestedURLSearchParams } from "@/lib/collections"

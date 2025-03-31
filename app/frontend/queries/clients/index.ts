@@ -8,7 +8,7 @@ import { ReactQueryFunction } from ".."
 export const useGetClientsAsOptions: ReactQueryFunction<Schema.ClientsOptions[]> = (options) => {
 	return useQuery({
 		queryKey: ["clients"],
-		queryFn: async () => {
+		queryFn: async() => {
 			const res = await axios.get(Routes.apiClientsOptions())
 			return res.data
 		},
@@ -16,12 +16,13 @@ export const useGetClientsAsOptions: ReactQueryFunction<Schema.ClientsOptions[]>
 	})
 }
 
-export const useGetClientSchedules: ReactQueryFunction<Schema.Schedule[]> = (options) => {
+export const useGetClientSchedules: ReactQueryFunction<Schema.CalendarEventsShow[], { slug: string }> = (params, options) => {
 	return useQuery({
-		queryKey: ["clients/schedule"],
-		queryFn: async () => {
-			const res = await axios.get(Routes.apiClientSchedule())
+		queryKey: [`clients/${params.slug}/schedule`],
+		queryFn: async() => {
+			const res = await axios.get(Routes.apiClientSchedule(params.slug))
 			return res.data
 		},
+		...options,
 	})
 }

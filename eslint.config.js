@@ -106,6 +106,13 @@ export default [
 				functions: "only-multiline",
 			}],
 			"@stylistic/multiline-ternary": ["error", "always-multiline"],
+			"@stylistic/space-before-function-paren": ["error", "never"],
+			"@stylistic/arrow-spacing": "error",
+			"@stylistic/space-before-blocks": ["error", "always"],
+			"@stylistic/no-multiple-empty-lines": ["error", {
+				max: 2,
+				maxBOF: 0,
+			}],
 			"@stylistic/space-infix-ops": "error",
 			"@stylistic/space-unary-ops": ["error", {
 				words: true,
@@ -115,6 +122,22 @@ export default [
 					"!!": false,
 					"+": true,
 					"-": true,
+				},
+			}],
+			"@stylistic/comma-spacing": ["error", {
+				before: false,
+				after: true,
+			}],
+			"@stylistic/no-multi-spaces": "error",
+			"@stylistic/spaced-comment": ["error", "always", {
+				"line": {
+					"markers": ["/"],
+					"exceptions": ["-", "+"],
+				},
+				"block": {
+					"markers": ["!"],
+					"exceptions": ["*"],
+					"balanced": true,
 				},
 			}],
 			"no-trailing-spaces": ["error", {
@@ -152,6 +175,7 @@ export default [
 				avoidEscape: true,
 				allowTemplateLiterals: true,
 			}],
+			"@stylistic/jsx-quotes": ["error", "prefer-double"],
 			...reactHooksPlugin.configs.recommended.rules,
 		},
 	},
@@ -181,6 +205,36 @@ export default [
 			"json/no-duplicate-keys": "error",
 			"jsonc/indent": ["error", 2, { ignoredNodes: ["Property"] }],
 			"@stylistic/no-multi-spaces": "off",
+		},
+	},
+	// CSS-in-TS files
+	{
+		files: ["**/*.css.ts"],
+		ignores,
+		languageOptions: {
+			parser: tsParser,
+		},
+		plugins: {
+			"@stylistic": stylistic,
+		},
+		rules: {
+			"@stylistic/template-curly-spacing": ["error", "always"],
+			"no-restricted-syntax": [
+				"error",
+				{
+					"selector": "TemplateLiteral > TemplateElement[value.raw=/\\${(?!vars\\.|theme\\.)/]",
+					"message": "Use Mantine vars for styling variables",
+				},
+			],
+			"import/order": ["error", {
+				"groups": ["builtin", "external", ["parent", "sibling"], "internal", "index"],
+				"pathGroups": [
+					{ "pattern": "@linaria/core", "group": "external", "position": "before" },
+					{ "pattern": "@mantine/**", "group": "external", "position": "after" },
+					{ "pattern": "@/lib*", "group": "internal" },
+				],
+				"newlines-between": "always",
+			}],
 		},
 	},
 ]

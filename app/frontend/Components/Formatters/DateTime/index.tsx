@@ -1,5 +1,5 @@
 import { TooltipBaseProps } from "@mantine/core/lib/components/Tooltip/Tooltip.types"
-import { isEmpty } from "lodash"
+import { isEmpty } from "lodash-es"
 
 import { Stack, Tooltip } from "@/Components"
 import { formatter } from "@/lib"

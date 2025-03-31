@@ -8,7 +8,7 @@ import {
 	Box,
 	// Calendar,
 } from "@/Components"
-import Calendar from "@/Components/CalendarCustom"
+import Calendar from "@/Components/DayPilot"
 import { buildShiftTitle, formatEventTitle, theme } from "@/lib"
 import { calendarParams } from "@/lib/dates"
 import { usePageProps } from "@/lib/hooks"
@@ -129,20 +129,19 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 	return (
 		<>
 			<h1>{ client?.person?.name }</h1>
-
-			<Box style={ { width: "100%", height: "100%" } }>
+			<Box style={ { minHeight: "90vh" } }>
 				<Calendar
-					events={ processedSchedules }
-					// onSelectEvent={ handleSelectEvent }
-					// onSelectSlot={ handleSelectSlot }
-					// onNavigate={ handleDateChange }
-					// onView={ handleViewChange }
-					// onRangeChange={ handleRangeChange }
-					// eventPropGetter={ eventStyleGetter }
-					// onNewShift={ handleNewShift }
+					// events={ processedSchedules }
+					events={ schedules }
+					onSelectEvent={ handleSelectEvent }
+					onSelectSlot={ handleSelectSlot }
+					onNavigate={ handleDateChange }
+					onView={ handleViewChange }
+					onRangeChange={ handleRangeChange }
+					eventPropGetter={ eventStyleGetter }
+					onNewShift={ handleNewShift }
 				/>
 			</Box>
-
 		</>
 	)
 }

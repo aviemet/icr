@@ -4,7 +4,6 @@ import axios from "axios"
 import { exclude, Routes } from "@/lib"
 import { UserPreferences, UserTablePreferences } from "@/types"
 
-
 import { type ReactMutationFunction } from ".."
 
 export const useUpdateUserPreferences: ReactMutationFunction<Schema.User, UserPreferences, { userId: string }> = (

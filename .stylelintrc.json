@@ -1,0 +1,29 @@
+{
+  "extends": [
+    "stylelint-config-standard", 
+    "@stylistic/stylelint-config"
+  ],
+  "format": "esm",
+  "overrides": [
+    {
+      "files": ["**/*.css.ts"],
+      "customSyntax": "@stylelint/postcss-css-in-js",
+      "plugins": ["@stylistic/stylelint-plugin"],
+      "rules": {
+        "@stylistic/indentation": "tab",
+        "@stylistic/string-quotes": "single",
+        "@stylistic/number-leading-zero": "always",
+        "@stylistic/unit-case": "lower",
+        "@stylistic/no-empty-first-line": null,
+        "property-no-vendor-prefix": null,
+        "value-keyword-case": ["lower", {
+          "ignoreProperties": ["composes"]
+        }],
+        "selector-class-pattern": null,
+        "function-no-unknown": [true, {
+          "ignoreFunctions": ["vars", "theme", "darken", "lighten", "rem"]
+        }]
+      }
+    }
+  ]
+} 
