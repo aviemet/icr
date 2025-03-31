@@ -1,4 +1,6 @@
-import React, { useMemo, useRef } from "react"
+import clsx from "clsx"
+import dayjs from "dayjs"
+import React, { useCallback, useMemo, useRef } from "react"
 import {
 	Calendar,
 	DateHeaderProps,
@@ -11,17 +13,15 @@ import {
 	type View,
 } from "react-big-calendar"
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop"
-import dayjs from "dayjs"
 
-import DateCellWrapper from "./DateCellWrapper"
 import { useLocation } from "@/lib/hooks"
+
+import * as classes from "./Calendar.css"
+import DateCellWrapper from "./DateCellWrapper"
 import MonthDateHeader from "./MonthDateHeader"
 import MonthEvent from "./MonthEvent"
 import MonthHeader from "./MonthHeader"
 import { NewShiftClick } from "./NewShiftButton"
-
-import cx from "clsx"
-import * as classes from "./Calendar.css"
 import Toolbar from "./Toolbar"
 
 const DragAndDropCalendar = withDragAndDrop(Calendar<Event, {}>)
@@ -34,6 +34,7 @@ interface CalendarComponentProps
 	localizer?: DateLocalizer
 	onRangeChange?: (start: Date, end: Date, view: View) => void
 	onNewShift?: NewShiftClick
+	dnd?: boolean
 }
 
 const CalendarComponent = ({
@@ -45,6 +46,7 @@ const CalendarComponent = ({
 	onRangeChange,
 	className,
 	onNewShift,
+	dnd = false,
 	...props
 }: CalendarComponentProps) => {
 	const { params } = useLocation()
@@ -65,7 +67,7 @@ const CalendarComponent = ({
 	/**
 	 * Rewrite date range change method to stabilize interface
 	 */
-	const handleRangeChange = (range: Date[] | { start: Date, end: Date }, view?: View | undefined) => {
+	const handleRangeChange = useCallback((range: Date[] | { start: Date, end: Date }, view?: View | undefined) => {
 		if(view) viewRef.current = view
 
 		if(!onRangeChange) return
@@ -80,28 +82,34 @@ const CalendarComponent = ({
 		}
 
 		onRangeChange(start, end, viewRef.current)
-	}
+	}, [])
+
+	const components = useMemo(() => ({
+		dateCellWrapper: DateCellWrapper,
+		toolbar: Toolbar,
+		month: {
+			dateHeader: (props: DateHeaderProps) => <MonthDateHeader { ...props } onNewShift={ onNewShift } />,
+			event: MonthEvent,
+			header: MonthHeader,
+		},
+	}), [])
+
+	const InternalCalendarComponent = dnd
+		? DragAndDropCalendar
+		: Calendar
 
 	return (
-		<DragAndDropCalendar
+		<InternalCalendarComponent
 			selectable
-			className={ cx(classes.calendar, className) }
+			className={ clsx(classes.darkTheme, classes.calendar, className) }
 			showAllEvents={ showAllEvents }
 			localizer={ localizer }
 			onRangeChange={ handleRangeChange }
 			defaultView={ viewRef.current }
-			components={ {
-				dateCellWrapper: DateCellWrapper,
-				toolbar: Toolbar,
-				month: {
-					dateHeader: (props: DateHeaderProps) => <MonthDateHeader { ...props } onNewShift={ onNewShift } />,
-					event: MonthEvent,
-					header: MonthHeader,
-				},
-			} }
+			// components={ components }
 			{ ...props }
 		/>
 	)
 }
 
-export default CalendarComponent
+export default React.memo(CalendarComponent)

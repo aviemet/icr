@@ -1,6 +1,7 @@
-import { vars } from "@/lib/theme"
 import { css } from "@linaria/core"
 import { rem } from "@mantine/core"
+
+import { vars } from "@/lib/theme"
 
 export const paper = css`
 	position: absolute;

@@ -1,8 +1,10 @@
-import React, { forwardRef, useMemo } from "react"
 import { type Method, type Visit } from "@inertiajs/core"
-import InertiaLink from "./InertiaLink"
-import ExternalLink from "./ExternalLink"
 import { type AnchorProps, type ButtonProps } from "@mantine/core"
+import React, { forwardRef, useMemo } from "react"
+
+import ExternalLink from "./ExternalLink"
+import InertiaLink from "./InertiaLink"
+
 
 export { default as NavLink, type NavLinkProps } from "./NavLink"
 

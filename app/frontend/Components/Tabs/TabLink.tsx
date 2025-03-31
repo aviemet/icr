@@ -1,5 +1,6 @@
+import clsx from "clsx"
+
 import Link, { LinkProps } from "../Link"
-import cx from "clsx"
 
 interface TabLinkProps extends LinkProps {
 	position?: undefined | "right"
@@ -7,7 +8,7 @@ interface TabLinkProps extends LinkProps {
 
 const TabLink = ({ position, className, ...props }: TabLinkProps) => {
 	return (
-		<Link { ...props } className={ cx(className, position) } />
+		<Link { ...props } className={ clsx(className, position) } />
 	)
 }
 

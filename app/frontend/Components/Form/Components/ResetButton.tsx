@@ -1,6 +1,7 @@
-import { Button } from "@/Components"
 import { type ButtonProps } from "@mantine/core"
 import { useForm } from "use-inertia-form"
+
+import { Button } from "@/Components"
 
 interface ResetButton extends ButtonProps {
 	fields?: string | string[]

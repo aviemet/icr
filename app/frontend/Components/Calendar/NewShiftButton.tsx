@@ -1,9 +1,10 @@
-import React from "react"
-import { IconButton } from "@/Components"
 import { ActionIconProps } from "@mantine/core"
-import { PlusIcon } from "../Icons"
+import clsx from "clsx"
+import React from "react"
 
-import cx from "clsx"
+import { IconButton } from "@/Components"
+
+import { PlusIcon } from "../Icons"
 import * as classes from "./Calendar.css"
 
 export type NewShiftClick = (date: Date) => void
@@ -30,7 +31,7 @@ const NewShiftButton = ({
 			{ ...props }
 			variant={ variant }
 			onClick={ handleClick }
-			className={ cx(className, classes.newShiftButton) }
+			className={ clsx(className, classes.newShiftButton) }
 			size="xs"
 		>
 			<PlusIcon />

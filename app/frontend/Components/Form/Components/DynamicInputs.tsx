@@ -1,7 +1,9 @@
+import clsx from "clsx"
+import { NestedFields, useDynamicInputs } from "use-inertia-form"
+
 import { Box, Button, Flex, Grid, Paper } from "@/Components"
 import { PlusCircleIcon, MinusCircleIcon } from "@/Components/Icons"
-import { NestedFields, useDynamicInputs } from "use-inertia-form"
-import cx from "clsx"
+
 import * as classes from "../Form.css"
 
 interface DynamicInputsProps {
@@ -26,7 +28,7 @@ const DynamicInputs = ({ children, model, label, emptyData, grid = true }: Dynam
 
 			{ paths.map((path, i) => (
 				<NestedFields key={ i } model={ path }>
-					<Flex key={ i } align="center" className={ cx(classes.dynamicInputItem) }>
+					<Flex key={ i } align="center" className={ clsx(classes.dynamicInputItem) }>
 						<Paper p="xs" shadow="xs" mb="xs">
 							<Box component={ grid ? Grid : undefined } style={ { flex: 1 } }>
 								{ children }

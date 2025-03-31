@@ -1,10 +1,12 @@
-import { Navigate, ToolbarProps } from "react-big-calendar"
-import { Box, Button, Group, Menu } from "@/Components"
 import { DatePicker, DateValue, MonthPicker } from "@mantine/dates"
-import { PreviousIcon, NextIcon } from "../Icons"
 import { useDisclosure } from "@mantine/hooks"
+import clsx from "clsx"
+import { Navigate, ToolbarProps } from "react-big-calendar"
 
-import cx from "clsx"
+import { Box, Button, Group, Menu } from "@/Components"
+
+import { PreviousIcon, NextIcon } from "../Icons"
+
 
 const CustomToolbar = ({
 	date,
@@ -25,7 +27,7 @@ const CustomToolbar = ({
 
 	return (
 		<Group justify="space-between" my="md">
-			<Box component="span" className={ cx("rbc-btn-group") }>
+			<Box component="span" className={ clsx("rbc-btn-group") }>
 				<Button variant="light" onClick={ () => onNavigate(Navigate.PREVIOUS) }><PreviousIcon />{ localizer.messages.previous }</Button>
 				<Button variant="light" onClick={ () => onNavigate(Navigate.TODAY) }>{ localizer.messages.today }</Button>
 				<Button variant="light" onClick={ () => onNavigate(Navigate.NEXT) }>{ localizer.messages.next }<NextIcon /></Button>
@@ -44,7 +46,7 @@ const CustomToolbar = ({
 				</Menu>
 			</Box>
 
-			<Box component="span" className={ cx("rbc-btn-group") }>
+			<Box component="span" className={ clsx("rbc-btn-group") }>
 				{ Array.isArray(views) && views.map(name => {
 					return (
 						<Button

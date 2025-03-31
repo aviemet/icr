@@ -1,16 +1,16 @@
-import { Group, Title, Menu, Page, Section } from '@/Components'
-import { Routes } from '@/lib'
+import { Group, Title, Menu, Page, Section } from "@/Components"
+import { Routes } from "@/lib"
 
 interface ShowTimesheetProps {
 	timesheet: Schema.TimesheetsShow
 }
 
 const ShowTimesheet = ({ timesheet }: ShowTimesheetProps) => {
-	const title =  'Timesheet'
+	const title =  "Timesheet"
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: 'Timesheet', href: Routes.timesheets() },
+			{ title: "Timesheet", href: Routes.timesheets() },
 			{ title, href: window.location.href },
 		] }>
 			<Section>

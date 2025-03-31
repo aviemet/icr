@@ -1,6 +1,6 @@
-import { useEffect } from "react"
 import { usePage } from "@inertiajs/react"
 import { showNotification } from "@mantine/notifications"
+import { useEffect } from "react"
 
 const shownMessageIds = new Set<string>()
 

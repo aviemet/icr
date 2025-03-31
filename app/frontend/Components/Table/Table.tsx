@@ -1,19 +1,18 @@
 import { Table, type TableProps as MantineTableProps } from "@mantine/core"
+import clsx from "clsx"
 
-import Head from "./Head"
 import Body from "./Body"
-import RowIterator from "./RowIterator"
+import Footer from "./Footer"
+import Head from "./Head"
+import Pagination from "./Pagination"
 import Row from "./Row"
+import RowIterator from "./RowIterator"
+import SearchInput from "./SearchInput"
+import TableSection from "./Section"
+import TableProvider, { useTableContext } from "./TableContext"
 import Cell from "./Td"
 import HeadCell from "./Th"
-import Footer from "./Footer"
-import Pagination from "./Pagination"
-import TableProvider, { useTableContext } from "./TableContext"
-import TableSection from "./Section"
-import SearchInput from "./SearchInput"
 import ConditionalWrapper from "../ConditionalWrapper"
-
-import cx from "clsx"
 import * as classes from "./Table.css"
 
 export interface TableProps extends MantineTableProps {
@@ -63,7 +62,7 @@ const TableComponent: TableObject = ({
 				<Table
 					striped={ striped }
 					highlightOnHover={ highlightOnHover }
-					className={ cx(className, classes.table) }
+					className={ clsx(className, classes.table) }
 					style={ [wrapper ? { thead: { top: - 10 } } : undefined, style] }
 					{ ...props }
 				>

@@ -1,5 +1,7 @@
 import { Modal } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
+import React from "react"
+
 import { createContext } from "@/lib/hooks"
 
 export type TriggerComponent =  React.ReactElement<{ onClick: () => void }>

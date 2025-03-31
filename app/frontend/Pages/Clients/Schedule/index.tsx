@@ -1,18 +1,22 @@
-import React, { useCallback, useMemo, useRef }  from "react"
 import { router } from "@inertiajs/react"
-import { buildShiftTitle, formatEventTitle, theme } from "@/lib"
+import { modals } from "@mantine/modals"
+import { pick } from "lodash-es"
+import React, { useCallback, useMemo, useRef } from "react"
+import { type NavigateAction, type View, type Event, SlotInfo } from "react-big-calendar"
+
 import {
 	Box,
-	Calendar,
+	// Calendar,
 } from "@/Components"
-import { type NavigateAction, type View, type Event, SlotInfo } from "react-big-calendar"
-import { modals } from "@mantine/modals"
-import useStore from "@/lib/store"
-import ShiftInfo from "./ShiftInfo"
-import NewShiftForm from "./NewShiftForm"
-import { usePageProps } from "@/lib/hooks"
-import { pick } from "lodash"
+import Calendar from "@/Components/CalendarCustom"
+import { buildShiftTitle, formatEventTitle, theme } from "@/lib"
 import { calendarParams } from "@/lib/dates"
+import { usePageProps } from "@/lib/hooks"
+import useStore from "@/lib/store"
+
+import NewShiftForm from "./NewShiftForm"
+import ShiftInfo from "./ShiftInfo"
+
 
 interface ScheduleProps {
 	client: Schema.ClientsShow
@@ -25,27 +29,27 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 
 	const newShiftModalRef = useRef<string>()
 
-	const handleSelectEvent = (event: Event, e: React.SyntheticEvent<HTMLElement, globalThis.Event>) => {
+	const handleSelectEvent = useCallback((event: Event, e: React.SyntheticEvent<HTMLElement, globalThis.Event>) => {
 		modals.open({
 			title: event.resource.employee.person.name,
 			children: (
 				<ShiftInfo event={ event } />
 			),
 		})
-	}
+	}, [])
 
-	const handleSelectSlot = (info: SlotInfo) => {
+	const handleSelectSlot = useCallback((info: SlotInfo) => {
 		// console.log({ info })
-	}
+	}, [])
 
-	const handleNewShiftSuccess = () => {
+	const handleNewShiftSuccess = useCallback(() => {
 		if(!newShiftModalRef.current) return
 
 		modals.close(newShiftModalRef.current)
 		router.reload({ only: ["schedules"] })
-	}
+	}, [])
 
-	const handleNewShift = (date: Date) => {
+	const handleNewShift = useCallback((date: Date) => {
 		newShiftModalRef.current = modals.open({
 			title: "New Shift",
 			children: (
@@ -56,17 +60,17 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 				/>
 			),
 		})
-	}
+	}, [])
 
-	const handleDateChange = (newDate: Date, view: View, action: NavigateAction) => {
+	const handleDateChange = useCallback((newDate: Date, view: View, action: NavigateAction) => {
 		// console.log("handleDateChange", { newDate, view, action })
-	}
+	}, [])
 
-	const handleViewChange = (view: View) => {
+	const handleViewChange = useCallback((view: View) => {
 		// console.log("handleViewChange", { view })
-	}
+	}, [])
 
-	const handleRangeChange = (start: Date, end: Date, view: View) => {
+	const handleRangeChange = useCallback((start: Date, end: Date, view: View) => {
 		// console.log("handleRangeChange", { start, end, view })
 		router.get(`/clients/${client.slug}/schedule`,
 			calendarParams(start, end, view),
@@ -76,9 +80,9 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 				preserveScroll: true,
 			},
 		)
-	}
+	}, [])
 
-	const eventStyleGetter = (event: Event) => {
+	const eventStyleGetter = useCallback((event: Event) => {
 		let defaultColor = theme.colors.blue[5]
 
 		const eventColor = event?.resource?.backgroundColor || defaultColor
@@ -89,7 +93,7 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 				color: getContrastingColor(eventColor),
 			},
 		}
-	}
+	}, [])
 
 	const handleEventTitle = useCallback((
 		schedule: Schema.CalendarEventsShow,
@@ -105,7 +109,7 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 				name: employee.full_name,
 			})
 		}
-	}, [settings.shift_title_format])
+	}, [])
 
 	const processedSchedules = useMemo(() => {
 		return schedules?.map(schedule => {
@@ -125,18 +129,20 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 	return (
 		<>
 			<h1>{ client?.person?.name }</h1>
-			<Box>
+
+			<Box style={ { width: "100%", height: "100%" } }>
 				<Calendar
 					events={ processedSchedules }
-					onSelectEvent={ handleSelectEvent }
-					onSelectSlot={ handleSelectSlot }
-					onNavigate={ handleDateChange }
-					onView={ handleViewChange }
-					onRangeChange={ handleRangeChange }
-					eventPropGetter={ eventStyleGetter }
-					onNewShift={ handleNewShift }
+					// onSelectEvent={ handleSelectEvent }
+					// onSelectSlot={ handleSelectSlot }
+					// onNavigate={ handleDateChange }
+					// onView={ handleViewChange }
+					// onRangeChange={ handleRangeChange }
+					// eventPropGetter={ eventStyleGetter }
+					// onNewShift={ handleNewShift }
 				/>
 			</Box>
+
 		</>
 	)
 }

@@ -1,6 +1,8 @@
+import { useForm } from "use-inertia-form"
+
 import { Grid, Title } from "@/Components"
 import { Select } from "@/Components/Form"
-import { useForm } from "use-inertia-form"
+
 import { type PayrollSettingsFormData, type CalendarSettingsProps } from ".."
 import PayrollPeriodOptions from "./PayrollPeriodOptions"
 

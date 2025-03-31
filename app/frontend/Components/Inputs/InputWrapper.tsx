@@ -1,5 +1,6 @@
-import ConditionalWrapper from "../ConditionalWrapper"
 import { Box } from "@/Components"
+
+import ConditionalWrapper from "../ConditionalWrapper"
 
 interface InputWrapper {
 	children: React.ReactNode

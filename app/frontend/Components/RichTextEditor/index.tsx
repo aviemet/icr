@@ -1,12 +1,13 @@
-import React, { forwardRef } from "react"
 import { RichTextEditor, Link, type RichTextEditorProps as MantineRichTextEditorProps } from "@mantine/tiptap"
-import { useEditor, BubbleMenu, FloatingMenu } from "@tiptap/react"
 import Highlight from "@tiptap/extension-highlight"
-import StarterKit from "@tiptap/starter-kit"
-import Underline from "@tiptap/extension-underline"
-import TextAlign from "@tiptap/extension-text-align"
-import Superscript from "@tiptap/extension-superscript"
 import SubScript from "@tiptap/extension-subscript"
+import Superscript from "@tiptap/extension-superscript"
+import TextAlign from "@tiptap/extension-text-align"
+import Underline from "@tiptap/extension-underline"
+import { useEditor, BubbleMenu, FloatingMenu } from "@tiptap/react"
+import StarterKit from "@tiptap/starter-kit"
+import React, { forwardRef } from "react"
+
 import { DEFAULT_LABELS } from "./tiptapLabels"
 
 export interface RichTextEditorProps extends Omit<MantineRichTextEditorProps, "children" | "editor" | "onChange"> {

@@ -1,6 +1,6 @@
 import { Title, Page, Section } from "@/Components"
-import { Routes } from "@/lib"
 import HouseholdsForm from "@/Features/Households/Form"
+import { Routes } from "@/lib"
 
 interface IEditHouseholdProps {
 	household: Schema.HouseholdsEdit

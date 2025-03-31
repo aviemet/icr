@@ -1,11 +1,14 @@
-import { forwardRef, useRef } from "react"
 import { ActionIcon } from "@mantine/core"
 import { TimeInput as MantineTimeInput, type TimeInputProps as MantineTimeInputProps } from "@mantine/dates"
+import { forwardRef, useRef } from "react"
+
 import { ClockIcon } from "@/Components/Icons"
+import { mergeRefs } from "@/lib/mergeRefs"
+
 import InputWrapper from "./InputWrapper"
 import Label from "./Label"
+
 import { type BaseInputProps } from "."
-import { mergeRefs } from "@/lib/mergeRefs"
 
 export interface TimeInputProps
 	extends

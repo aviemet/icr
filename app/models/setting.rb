@@ -13,6 +13,8 @@
 #  index_settings_on_var  (var) UNIQUE
 #
 class Setting < RailsSettings::Base
+  include Renderable
+
   cache_prefix { "v1" }
 
   PAY_PERIOD_TYPES = {
@@ -75,10 +77,4 @@ class Setting < RailsSettings::Base
     presence: true,
     inclusion: { in: %w(15 20 -1) }
   }
-
-  def self.render
-    Setting.keys.to_h { |key|
-      [key.to_sym, Setting.send(key.to_sym)]
-    }
-  end
 end

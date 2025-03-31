@@ -1,5 +1,6 @@
-import { formatter } from "."
 import dayjs from "dayjs"
+
+import { formatter } from "."
 
 export { default as aOrAn }  from "indefinite"
 

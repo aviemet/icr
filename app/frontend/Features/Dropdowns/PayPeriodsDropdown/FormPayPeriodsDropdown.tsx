@@ -1,7 +1,9 @@
+import { isEmpty } from "lodash-es"
 import React from "react"
+
 import { Select as FormSelect } from "@/Components/Form"
 import { useGetPayPeriodTypes } from "@/queries/locale"
-import { isEmpty } from "lodash"
+
 import { type FormAsyncDropdown } from ".."
 
 interface FormPayPeriodsDropdownProps extends Omit<FormAsyncDropdown<Schema.PayPeriodOption>, "name"> {

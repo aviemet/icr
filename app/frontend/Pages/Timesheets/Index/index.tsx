@@ -1,6 +1,7 @@
 import { NewIcon } from "@/Components/Icons"
-import { Routes } from "@/lib"
 import { IndexPageTemplate } from "@/Features"
+import { Routes } from "@/lib"
+
 import TimesheetsTable from "../Table"
 
 interface TimesheetIndexProps {

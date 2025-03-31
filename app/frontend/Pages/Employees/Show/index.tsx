@@ -1,7 +1,8 @@
 import { Group, Title, Menu, Page, Section, Tabs } from "@/Components"
 import { Routes } from "@/lib"
-import Details from "./Details"
+
 import Contacts from "./Contacts"
+import Details from "./Details"
 import Documents from "./Documents"
 
 export interface ShowEmployeeProps {

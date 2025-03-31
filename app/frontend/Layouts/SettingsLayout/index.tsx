@@ -1,11 +1,12 @@
-import { Box, Paper } from "@/Components"
-import SettingsNavLink from "./SettingsNavLink"
-import { useState } from "react"
 import { FloatingIndicator, Portal } from "@mantine/core"
-import AppLayout from "../AppLayout"
+import clsx from "clsx"
+import { useState } from "react"
+
+import { Box, Paper } from "@/Components"
 import { useLocation } from "@/lib/hooks"
 
-import cx from "clsx"
+import SettingsNavLink from "./SettingsNavLink"
+import AppLayout from "../AppLayout"
 import * as classes from "./SettingsLayout.css"
 
 interface SettingsLayoutProps {
@@ -47,7 +48,7 @@ const SettingsLayout = ({ children }: SettingsLayoutProps) => {
 					shadow="xs"
 					p="sm"
 					m="sm"
-					className={ cx(classes.settingsLayout) }
+					className={ clsx(classes.settingsLayout) }
 				>
 					{ links.map((link, index) => (
 						<SettingsNavLink
@@ -55,7 +56,7 @@ const SettingsLayout = ({ children }: SettingsLayoutProps) => {
 							key={ link.label }
 							href={ link.href }
 							onClick={ () => handleNavLinkClick(index) }
-							className={ cx("control") }
+							className={ clsx("control") }
 							mod={ { active: active === index } }
 						>
 							{ link.label }
@@ -65,7 +66,7 @@ const SettingsLayout = ({ children }: SettingsLayoutProps) => {
 					<FloatingIndicator
 						target={ controlsRefs[active] }
 						parent={ rootRef }
-						className={ cx("indicator") }
+						className={ clsx("indicator") }
 					/>
 
 				</Paper>

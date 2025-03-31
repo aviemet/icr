@@ -1,7 +1,7 @@
-import { Routes } from "@/lib"
-import { IndexPageTemplate } from "@/Features"
 import { NewIcon } from "@/Components/Icons"
+import { IndexPageTemplate } from "@/Features"
 import ShiftTemplatesTable from "@/Features/ShiftTemplates/Table"
+import { Routes } from "@/lib"
 
 interface ShiftTemplateIndexProps {
 	shift_templates: Schema.ShiftTemplatesIndex[]

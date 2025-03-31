@@ -1,9 +1,13 @@
-import React, { forwardRef } from "react"
-import normalizeUrl from "normalize-url"
-import { ExternalLinkIcon } from "@/Components/Icons"
 import { Anchor, type AnchorProps } from "@mantine/core"
+import clsx from "clsx"
+import normalizeUrl from "normalize-url"
+import React, { forwardRef } from "react"
+
+import { ExternalLinkIcon } from "@/Components/Icons"
+
+
 import * as classes from "./Link.css"
-import cx from "clsx"
+
 
 interface IExternalLinkProps
 	extends AnchorProps,
@@ -24,7 +28,7 @@ const ExternalLink = forwardRef<HTMLAnchorElement, IExternalLinkProps>((
 			href={ disabled ? "javascript:void(0)" : url }
 			target="_blank"
 			rel="noreferrer"
-			className={ cx(classes.external, className ) }
+			className={ clsx(classes.external, className ) }
 			ref={ ref }
 			{ ...props }
 		>

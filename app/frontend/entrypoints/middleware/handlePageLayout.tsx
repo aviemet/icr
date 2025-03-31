@@ -6,6 +6,7 @@ import {
 	SettingsLayout,
 	LayoutProps,
 } from "@/Layouts"
+
 import { PagesObject } from "../application"
 
 const LAYOUT_COMPONENTS: Record<keyof typeof LAYOUTS, ({ children }: LayoutProps) => React.JSX.Element> = {

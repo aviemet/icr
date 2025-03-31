@@ -1,7 +1,7 @@
-import { Routes } from "@/lib"
 import { Link, Table } from "@/Components"
 import { EditButton } from "@/Components/Button"
 import { type TableProps } from "@/Components/Table/Table"
+import { Routes } from "@/lib"
 
 const JobTitleTable = (props: TableProps) => {
 	return (

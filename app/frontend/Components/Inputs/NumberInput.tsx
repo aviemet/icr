@@ -1,8 +1,11 @@
-import React, { forwardRef } from "react"
 import { NumberInput, type NumberInputProps as MantineNumberInputProps } from "@mantine/core"
-import Label from "./Label"
-import { withInjectedProps, type BaseInputProps } from "."
+import React, { forwardRef } from "react"
+
 import InputWrapper from "./InputWrapper"
+import Label from "./Label"
+
+import { withInjectedProps, type BaseInputProps } from "."
+
 
 export interface NumberInputProps extends MantineNumberInputProps, BaseInputProps {}
 

@@ -1,7 +1,7 @@
-import { Routes } from "@/lib"
-import { IndexPageTemplate } from "@/Features"
 import { NewIcon } from "@/Components/Icons"
+import { IndexPageTemplate } from "@/Features"
 import EmployeesTable from "@/Features/Employees/Table"
+import { Routes } from "@/lib"
 
 interface EmployeeIndexProps {
 	employees: Schema.EmployeesIndex[]

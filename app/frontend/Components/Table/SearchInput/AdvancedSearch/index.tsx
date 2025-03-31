@@ -1,8 +1,3 @@
-import React, { useState } from "react"
-import { DoubleDownArrowIcon } from "@/Components/Icons"
-import useStore from "@/lib/store"
-import { useBooleanToggle } from "@/lib/hooks"
-import { useClickOutside } from "@mantine/hooks"
 import {
 	ActionIcon,
 	Paper,
@@ -13,8 +8,14 @@ import {
 	Tooltip,
 	Box,
 } from "@mantine/core"
+import { useClickOutside } from "@mantine/hooks"
+import clsx from "clsx"
+import React, { useState } from "react"
 
-import cx from "clsx"
+import { DoubleDownArrowIcon } from "@/Components/Icons"
+import { useBooleanToggle } from "@/lib/hooks"
+import useStore from "@/lib/store"
+
 import * as classes from "./AdvancedSearch.css"
 
 const scaleY = {
@@ -72,7 +73,7 @@ const AdvancedSearch = ({ children }: AdvancedSearchProps) => {
 						ref={ setSearchPaper }
 						shadow="md"
 						p="md"
-						className={ cx(classes.paper) }
+						className={ clsx(classes.paper) }
 						style={ {
 							...styles,
 							left: rem(navBarWidth + Number(px("1rem"))),

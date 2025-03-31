@@ -1,7 +1,7 @@
-import { Routes } from "@/lib"
-import { IndexPageTemplate } from "@/Features"
 import { NewIcon } from "@/Components/Icons"
+import { IndexPageTemplate } from "@/Features"
 import IncidentReportsTable from "@/Features/IncidentReports/Table"
+import { Routes } from "@/lib"
 
 interface IncidentReportIndexProps {
 	incident_reports: Schema.IncidentReportsIndex[]

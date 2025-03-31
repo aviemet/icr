@@ -1,6 +1,7 @@
-import React, { forwardRef } from "react"
-import { TableSectionContextProvider } from "./TableContext"
 import { Table, type TableTheadProps } from "@mantine/core"
+import React, { forwardRef } from "react"
+
+import { TableSectionContextProvider } from "./TableContext"
 
 interface TableHead extends TableTheadProps {}
 

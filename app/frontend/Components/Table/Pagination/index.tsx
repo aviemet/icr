@@ -1,8 +1,10 @@
-import { Link } from "@/Components"
-import { useTableContext } from "../TableContext"
 import { Group, Pagination, type PaginationProps } from "@mantine/core"
+import clsx from "clsx"
+
+import { Link } from "@/Components"
+
+import { useTableContext } from "../TableContext"
 import LimitSelect from "./LimitSelect"
-import cx from "clsx"
 import * as classes from "../Table.css"
 
 const pageLink = (page: number) => {
@@ -39,7 +41,7 @@ const PaginationComponent = ({
 				{ model && <>
 					Records per page:
 					<LimitSelect
-						className={ cx(classes.limitSelect) }
+						className={ clsx(classes.limitSelect) }
 						pagination={ pagination }
 						model={ model }
 					/>
@@ -48,7 +50,7 @@ const PaginationComponent = ({
 			</div>
 
 			<Pagination.Root
-				className={ cx(className, classes.pagination) }
+				className={ clsx(className, classes.pagination) }
 				total={ pages }
 				getItemProps={ (page) => ({
 					component: Link,

@@ -1,7 +1,7 @@
-import { Routes } from "@/lib"
 import { Table, Link, type TableProps } from "@/Components"
 import { EditButton } from "@/Components/Button"
 import { CheckIcon } from "@/Components/Icons"
+import { Routes } from "@/lib"
 
 const personLink = (person: Schema.PeopleIndex) => {
 	if(person.agency_role === "Client") {

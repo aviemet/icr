@@ -1,8 +1,11 @@
 import { useState } from "react"
+
 import { useTableSectionContext } from "@/Components/Table/TableContext"
-import FlexCurrency from "./FlexCurrency"
-import { type Money } from "@/types"
 import { useCurrency, type UseCurrencyOptions } from "@/lib/hooks"
+import { type Money } from "@/types"
+
+import FlexCurrency from "./FlexCurrency"
+
 
 interface CurrencyFormatterProps {
 	children?: number | Money | null

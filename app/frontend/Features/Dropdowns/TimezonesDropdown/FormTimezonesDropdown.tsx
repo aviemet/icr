@@ -1,8 +1,10 @@
+import { isEmpty } from "lodash-es"
 import React from "react"
+
 import { Flags } from "@/Components"
 import { Select as FormSelect } from "@/Components/Form"
 import { useGetTimezones } from "@/queries/locale"
-import { isEmpty } from "lodash"
+
 import { type FormAsyncDropdown } from ".."
 
 interface FormTimezonesDropdownProps extends Omit<FormAsyncDropdown<Schema.TimezoneOption>, "name"> {

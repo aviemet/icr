@@ -1,7 +1,9 @@
+import { isEmpty } from "lodash-es"
 import React, { forwardRef } from "react"
+
 import { Select as InputSelect } from "@/Components/Inputs"
 import { useGetPayPeriodTypes } from "@/queries/locale"
-import { isEmpty } from "lodash"
+
 import { type AsyncDropdown } from ".."
 
 interface PayPeriodsDropdownProps extends AsyncDropdown<Schema.PayPeriodOption> {}

@@ -1,8 +1,10 @@
+import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
+
 import { Grid } from "@/Components"
 import { Form, TextInput, Submit, RichText } from "@/Components/Form"
-import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
-import PermissionsSection from "./PermissionsSection"
+
 import { emptyPermissions, JobTitleFormData } from "./formData"
+import PermissionsSection from "./PermissionsSection"
 
 
 export interface JobTitleFormProps {

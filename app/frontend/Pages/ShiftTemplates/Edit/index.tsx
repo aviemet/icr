@@ -1,6 +1,6 @@
 import { Title, Page, Section } from "@/Components"
-import { Routes } from "@/lib"
 import ShiftTemplatesForm from "@/Features/ShiftTemplates/Form"
+import { Routes } from "@/lib"
 
 interface EditShiftTemplateProps {
 	shift_template: Schema.ShiftTemplatesEdit

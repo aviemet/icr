@@ -1,9 +1,11 @@
 import React, { useCallback } from "react"
 import { NestedFields, useForm } from "use-inertia-form"
+
 import { Table } from "@/Components"
-import { Checkbox } from "@/Components/Inputs"
 import { Switch } from "@/Components/Form"
+import { Checkbox } from "@/Components/Inputs"
 import { useCheckboxState } from "@/lib/hooks"
+
 import { type JobTitleFormData } from "./formData"
 
 interface SwitchRowProps {

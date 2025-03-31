@@ -1,10 +1,13 @@
 import React, { forwardRef, useState } from "react"
+import { InputProps } from "react-html-props"
+
 import HiddenInput from "./HiddenInput"
 import SwatchPicker from "../SwatchPicker"
-import Label from "./Label"
-import { InputProps } from "react-html-props"
-import { type BaseInputProps } from "."
 import InputWrapper from "./InputWrapper"
+import Label from "./Label"
+
+import { type BaseInputProps } from "."
+
 
 export interface SwatchInputProps
 	extends

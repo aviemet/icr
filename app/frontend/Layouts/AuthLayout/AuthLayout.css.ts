@@ -1,7 +1,7 @@
-import { vars } from "@/lib/theme"
 import { css } from "@linaria/core"
 
 import helping_tree from "@/Images/helping_tree.jpg"
+import { vars } from "@/lib/theme"
 
 export const authLayout = css`
 	height: 100%;

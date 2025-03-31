@@ -1,11 +1,11 @@
 import { Box } from "@mantine/core"
+import clsx from "clsx"
 import {
 	Form as InertiaForm,
 	type FormProps as UifFormProps,
 	type NestedObject,
 } from "use-inertia-form"
 
-import cx from "clsx"
 import * as classes from "./Form.css"
 
 export interface FormProps<TForm> extends UifFormProps<TForm> {
@@ -20,10 +20,10 @@ const Form = <TForm extends NestedObject>({
 	...props
 }: FormProps<TForm>) => {
 	return (
-		<Box className={ cx(classes.form) }>
+		<Box className={ clsx(classes.form) }>
 			<InertiaForm
 				data={ data }
-				className={ cx(className) }
+				className={ clsx(className) }
 				railsAttributes={ railsAttributes }
 				{ ...props }
 			>

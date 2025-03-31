@@ -1,22 +1,19 @@
-import React, { createRef } from "react"
-import PropTypes from "prop-types"
 import clsx from "clsx"
-
-import chunk from "lodash/chunk"
-
-import { navigate, views } from "./utils/constants"
-import { notify } from "./utils/helpers"
-import getPosition from "dom-helpers/position"
 import * as animationFrame from "dom-helpers/animationFrame"
+import getPosition from "dom-helpers/position"
+import chunk from "lodash/chunk"
+import PropTypes from "prop-types"
+import React, { createRef } from "react"
 
 /* import Popup from './Popup'
 import Overlay from 'react-overlays/Overlay' */
-import PopOverlay from "./PopOverlay"
 import DateContentRow from "./DateContentRow"
-import Header from "./Header"
 import DateHeader from "./DateHeader"
-
+import Header from "./Header"
+import PopOverlay from "./PopOverlay"
+import { navigate, views } from "./utils/constants"
 import { inRange, sortWeekEvents } from "./utils/eventLevels"
+import { notify } from "./utils/helpers"
 
 let eventsForWeek = (evts, start, end, accessors, localizer) =>
 	evts.filter((e) => inRange(e, start, end, accessors, localizer))

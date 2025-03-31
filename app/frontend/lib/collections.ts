@@ -1,4 +1,4 @@
-import { cloneDeep, unset } from "lodash"
+import { cloneDeep, unset } from "lodash-es"
 
 export { default as NestedObject } from "./Collections/NestedObject"
 export { default as NestedURLSearchParams } from "./Collections/NestedURLSearchParams"

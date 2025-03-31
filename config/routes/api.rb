@@ -10,7 +10,7 @@ namespace :api do
   resources :calendar_events, only: [:create, :update, :destroy]
 
   scope :options do
-    [:employees].each do |model|
+    [:employees, :clients].each do |model|
       get model.to_s => "#{model}#options", as: "#{model}_options"
     end
     get "categories/:category_type" => "categories#options", as: "category_options"
@@ -21,5 +21,9 @@ namespace :api do
       get "languages" => "locales#languages", as: :languages
       get "pay_periods" => "locales#pay_periods", as: :pay_periods
     end
+  end
+
+  scope :clients do
+    get ":slug/schedule" => "clients#schedule", param: :slug, as: "client_schedule"
   end
 end

@@ -1,6 +1,7 @@
-import { Routes } from "@/lib"
-import { type ShowClientProps } from "."
 import { Box, Group, ScheduleButton, Section, Text } from "@/Components"
+import { Routes } from "@/lib"
+
+import { type ShowClientProps } from "."
 
 interface ClientDetailsProps extends ShowClientProps {}
 

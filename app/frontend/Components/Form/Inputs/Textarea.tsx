@@ -1,10 +1,13 @@
+import clsx from "clsx"
 import { forwardRef, type ForwardedRef } from "react"
 import { useInertiaInput, type NestedObject } from "use-inertia-form"
+
 import TextareaInput, { type TextareaProps } from "@/Components/Inputs/Textarea"
+
+import InputWrapper from "../Components/InputWrapper"
+
 import { InputConflicts, type BaseFormInputProps } from "."
 
-import cx from "clsx"
-import InputWrapper from "../Components/InputWrapper"
 
 interface FormTextareaProps<TForm extends NestedObject = NestedObject>
 	extends
@@ -55,7 +58,7 @@ const Textarea = forwardRef(<TForm extends NestedObject = NestedObject>(
 			{ ...wrapperProps }
 		>
 			<>
-				{ label && <label className={ cx({ required }) } htmlFor={ id || inputId }>
+				{ label && <label className={ clsx({ required }) } htmlFor={ id || inputId }>
 					{ label }
 				</label> }
 				<TextareaInput

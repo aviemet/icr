@@ -1,6 +1,6 @@
 import { Title, Page, Section } from "@/Components"
-import { Routes } from "@/lib"
 import VendorsForm from "@/Features/Vendors/Form"
+import { Routes } from "@/lib"
 
 interface EditVendorProps {
 	vendor: Schema.VendorsEdit

@@ -1,12 +1,13 @@
-import { Box } from "@/Components"
-import { LayoutProps } from ".."
+import clsx from "clsx"
 
-import cx from "clsx"
+import { Box } from "@/Components"
+
+import { LayoutProps } from ".."
 import * as classes from "./AuthLayout.css"
 
 const AuthLayout = ({ children }: LayoutProps) => {
 	return (
-		<Box className={ cx(classes.authLayout) }>
+		<Box className={ clsx(classes.authLayout) }>
 			{ children }
 		</Box>
 	)

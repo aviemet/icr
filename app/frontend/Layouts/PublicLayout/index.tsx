@@ -1,8 +1,10 @@
-import { useDisclosure } from "@mantine/hooks"
 import { AppShell, Burger, Skeleton } from "@mantine/core"
+import { useDisclosure } from "@mantine/hooks"
+
 import { Group, Link, Box } from "@/Components"
 import { CircleDotIcon } from "@/Components/Icons"
 import { Routes } from "@/lib"
+
 import { type LayoutProps } from ".."
 
 const PublicLayout = ({ children }: LayoutProps) => {

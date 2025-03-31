@@ -43,4 +43,8 @@ export type ReactMutationFunction<
 /**
  * Folder exports
  */
+export * from "./categories"
+export * from "./clients"
 export * from "./employees"
+export * from "./locale"
+export * from "./users"

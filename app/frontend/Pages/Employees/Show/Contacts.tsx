@@ -7,6 +7,7 @@ import {
 	AddressFormatter,
 } from "@/Components"
 import { PhoneFormatter, EmailFormatter } from "@/Components/Formatters"
+
 import { type ShowEmployeeProps } from "."
 
 interface EmployeeContactsProps extends ShowEmployeeProps {}

@@ -1,4 +1,3 @@
-import { Routes, withLayout } from "@/lib"
 import { Box, Grid } from "@/Components"
 import { Form, Submit, TextInput } from "@/Components/Form"
 import {
@@ -7,6 +6,8 @@ import {
 	FormPayPeriodsDropdown,
 	FormTimezonesDropdown,
 } from "@/Features/Dropdowns"
+import { Routes, withLayout } from "@/lib"
+
 import ShiftTitleFormatInput from "./ShiftTitleFormatInput"
 
 export type GeneralSettingsFormData = {

@@ -1,10 +1,12 @@
-import { defineConfig } from "vite"
-import RubyPlugin from "vite-plugin-ruby"
-import wyw from "@wyw-in-js/vite"
-import tsconfigPaths from "vite-tsconfig-paths"
-import FullReload from "vite-plugin-full-reload"
-import react from "@vitejs/plugin-react"
 import path from "path"
+
+import react from "@vitejs/plugin-react"
+import wyw from "@wyw-in-js/vite"
+import { defineConfig } from "vite"
+import FullReload from "vite-plugin-full-reload"
+import RubyPlugin from "vite-plugin-ruby"
+import tsconfigPaths from "vite-tsconfig-paths"
+
 
 const config = defineConfig({
 	build: {

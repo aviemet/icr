@@ -1,14 +1,16 @@
-import React  from "react"
 import { router } from "@inertiajs/react"
-import { buildShiftTitle, theme } from "@/lib"
+import { modals } from "@mantine/modals"
 import dayjs from "dayjs"
+import React  from "react"
+import { type NavigateAction, type View, type Event } from "react-big-calendar"
+
 import {
 	Box,
 	Calendar,
 } from "@/Components"
-import { type NavigateAction, type View, type Event } from "react-big-calendar"
-import { modals } from "@mantine/modals"
+import { buildShiftTitle, theme } from "@/lib"
 import useStore from "@/lib/store"
+
 import ShiftInfo from "./ShiftInfo"
 
 interface ScheduleProps {

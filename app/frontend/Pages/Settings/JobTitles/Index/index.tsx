@@ -1,7 +1,7 @@
-import { Routes, withLayout } from "@/lib"
-import { IndexPageTemplate } from "@/Features"
 import { NewIcon } from "@/Components/Icons"
+import { IndexPageTemplate } from "@/Features"
 import JobTitlesTable from "@/Features/Settings/JobTitles/Table"
+import { Routes, withLayout } from "@/lib"
 
 interface JobTitleIndexProps {
 	job_titles: Schema.JobTitlesIndex[]
