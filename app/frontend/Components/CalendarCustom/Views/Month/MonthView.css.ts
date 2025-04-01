@@ -2,6 +2,9 @@ import { css } from "@linaria/core"
 
 import { rem, vars } from "@/lib"
 
+const headingHeight = rem(25)
+const eventHeight = rem(22)
+
 export const monthView = css`
 	position: absolute;
 	inset: 0;
@@ -25,7 +28,7 @@ export const daysContainer = css`
   flex-direction: column;
 `
 
-export const row = css`  
+export const row = css`
   position: relative;
   border-bottom: ${ vars.colors.dark[2] } 1px solid;
   display: flex;
@@ -33,7 +36,7 @@ export const row = css`
   pointer-events: none;
 `
 
-export const columnHeader = css`
+export const columnHeading = css`
   border-right: ${ vars.colors.dark[2] } 1px solid;
   flex: 1 1 0%;
   text-align: center;
@@ -61,6 +64,13 @@ export const headingLayer = css`
 
 export const contentLayer = css`
   flex: 1 1 0%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(auto-fill, ${ eventHeight });
+  pointer-events: none;
+  grid-auto-flow: dense;
+  row-gap: 2px;
+  margin-top: ${ headingHeight };
 `
 
 export const dateCellBackground = css`
@@ -75,8 +85,6 @@ export const dateCellBackground = css`
   }
 `
 
-const headingHeight = rem(25)
-
 export const dateCellHeading = css`
   font-size: 14px;
   color: ${ vars.colors.dark[2] };
@@ -86,25 +94,18 @@ export const dateCellHeading = css`
   height: ${ headingHeight };
 `
 
-export const dateCellContent = css`
-  display: flex;
-  position: relative;
-  flex: 1 1 0%;
-  pointer-events: none;
-  margin-top: ${ headingHeight };
-`
-
-export const event = css`    
-  position: absolute;
-  height: 24px;
-  padding-right: 12px;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  pointer-events: none;
-  transition: transform .3s cubic-bezier(.4,0,.2,1),opacity .3s cubic-bezier(.4,0,.2,1);
-  -webkit-font-smoothing: antialiased;
-  list-style: none;
-  z-index: 5;
-
-  border: 1px solid orange;
+export const event = css`
+  --column-start: 1;
+  --column-span: 1;
+  height: ${ eventHeight };
+  overflow: hidden;
+  pointer-events: all;
+  background-color: ${ vars.colors.primary };
+  font-size: 0.75rem;
+  border-radius: ${ vars.radius.sm };
+  padding: 2px 5px;
+  margin: 1px 3px;
+  color: ${ vars.colors.black };
+  grid-column: var(--column-start) / span var(--column-span);
+  cursor: pointer;
 `

@@ -2,6 +2,7 @@ import { MantineProvider, createTheme, type CSSVariablesResolver } from "@mantin
 import { type CSSVariables } from "@mantine/core/lib/core/MantineProvider/convert-css-variables/css-variables-object-to-string"
 import { ModalsProvider } from "@mantine/modals"
 import { Notifications } from "@mantine/notifications"
+import { ContextMenuProvider } from "mantine-contextmenu"
 import { useMemo } from "react"
 
 import { Flash } from "@/Components"
@@ -54,11 +55,13 @@ const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 			defaultColorScheme="dark"
 			cssVariablesResolver={ cssVariablesResolver }
 		>
-			<ModalsProvider labels={ { confirm: "Submit", cancel: "Cancel" } }>
-				<Notifications />
-				<Flash />
-				{ children }
-			</ModalsProvider>
+			<ContextMenuProvider>
+				<ModalsProvider labels={ { confirm: "Submit", cancel: "Cancel" } }>
+					<Notifications />
+					<Flash />
+					{ children }
+				</ModalsProvider>
+			</ContextMenuProvider>
 		</MantineProvider>
 	)
 }

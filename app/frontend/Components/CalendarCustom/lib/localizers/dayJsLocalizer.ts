@@ -7,10 +7,11 @@ import localizedFormat from "dayjs/plugin/localizedFormat"
 import minMax from "dayjs/plugin/minMax"
 import utc from "dayjs/plugin/utc"
 
-import { DateLocalizer, DateLocalizerFactory } from "@/Components/CalendarCustom/lib/localizers"
+import { CalendarLocalizer, CalendarLocalizerFactory, TIME_UNIT } from "@/Components/CalendarCustom/lib/localizers"
 import { VIEW_NAMES } from "@/Components/CalendarCustom/Views"
 
 import { CalendarEvent } from "../.."
+import { defaultMessages } from "../messages"
 
 dayjsLib.extend(localeData)
 
@@ -23,7 +24,7 @@ type DayjsLib = typeof dayjsLib & {
 	tz?: TZ
 }
 
-export const dayJsLocalizer: DateLocalizerFactory<DayjsLib> = (dayjs) => {
+export const dayJsLocalizer: CalendarLocalizerFactory<DayjsLib> = (dayjs) => {
 
 	const firstVisibleDay = <T extends boolean = true>(
 		date: Date,
@@ -100,13 +101,23 @@ export const dayJsLocalizer: DateLocalizerFactory<DayjsLib> = (dayjs) => {
 		return dayjs(date).isAfter(compareDate)
 	}
 
+	const add = (date: Date, amount: number, unit: TIME_UNIT) => {
+		return dayjs(date).add(amount, unit).toDate()
+	}
+
+	const subtract = (date: Date, amount: number, unit: TIME_UNIT) => {
+		return dayjs(date).subtract(amount, unit).toDate()
+	}
+
 	const groupedEventsForPeriod = <TEvent extends CalendarEvent = CalendarEvent>(events: TEvent[], date: Date, view: VIEW_NAMES) => {
 		const firstDay = firstVisibleDay(date, view)
 		const lastDay = lastVisibleDay(date, view)
 
 		const groupedEvents = new Map<string, TEvent[]>()
 		events.forEach(event => {
-			if(dayjs(event.start).isBetween(firstDay, lastDay)) {
+			if(dayjs(event.end).isAfter(firstDay) &&
+				dayjs(event.start).isBefore(lastDay)
+			) {
 				const eventGroupingString = dayjs(event.start).startOf("day").toISOString()
 				const daysEvents = groupedEvents.get(eventGroupingString) ?? []
 				daysEvents.push(event)
@@ -117,13 +128,32 @@ export const dayJsLocalizer: DateLocalizerFactory<DayjsLib> = (dayjs) => {
 		return groupedEvents
 	}
 
-	return new DateLocalizer({
+	const calculateGridPlacement = <TEvent extends CalendarEvent = CalendarEvent>(event: TEvent) => {
+		const start = dayjs(event.start)
+		const end = dayjs(event.end)
+
+		const columnStart = start.day() + 1
+		const columnSpan = end.day() - start.day() + 1
+
+		return { columnStart, columnSpan }
+	}
+
+	const format = (date: Date, formatString: string) => {
+		return dayjs(date).format(formatString)
+	}
+
+	return new CalendarLocalizer({
 		weekdays: dayjsLib.weekdays,
 		firstVisibleDay: (date: Date, view: VIEW_NAMES): Date => firstVisibleDay(date, view, true),
 		lastVisibleDay: (date: Date, view: VIEW_NAMES): Date => lastVisibleDay(date, view, true),
 		visibleDays,
 		isBefore,
 		isAfter,
+		add,
+		subtract,
 		groupedEventsForPeriod,
+		calculateGridPlacement,
+		format,
+		messages: defaultMessages,
 	})
 }

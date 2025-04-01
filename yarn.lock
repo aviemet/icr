@@ -2189,6 +2189,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@formkit/auto-animate@npm:^0.8.2":
+  version: 0.8.2
+  resolution: "@formkit/auto-animate@npm:0.8.2"
+  checksum: 10c0/0b24af241c229f37643cd62ea78fd7fddf621c06516cf62452035ea0bf489b6b53068eea47abb40b6bb3653bb91c1efad8b7257014a3559d26ad77b47b5337cb
+  languageName: node
+  linkType: hard
+
 "@fragaria/address-formatter@npm:^6.5.0":
   version: 6.5.0
   resolution: "@fragaria/address-formatter@npm:6.5.0"
@@ -8420,6 +8427,7 @@ __metadata:
     "@dnd-kit/modifiers": "npm:^9.0.0"
     "@eslint/compat": "npm:^1.2.7"
     "@eslint/json": "npm:^0.11.0"
+    "@formkit/auto-animate": "npm:^0.8.2"
     "@fragaria/address-formatter": "npm:^6.5.0"
     "@inertiajs/react": "npm:^2.0.5"
     "@linaria/core": "npm:^6.3.0"
@@ -8496,6 +8504,7 @@ __metadata:
     jsonc-eslint-parser: "npm:^2.4.0"
     lint-staged: "npm:^15.5.0"
     lodash-es: "npm:^4.17.21"
+    mantine-contextmenu: "npm:^7.17.1"
     mantine-flagpack: "npm:^4.1.1"
     mantine-react-table: "npm:^2.0.0-beta.9"
     msw: "npm:^2.7.3"
@@ -10300,6 +10309,18 @@ __metadata:
   dependencies:
     tmpl: "npm:1.0.5"
   checksum: 10c0/b0e6e599780ce6bab49cc413eba822f7d1f0dfebd1c103eaa3785c59e43e22c59018323cf9e1708f0ef5329e94a745d163fcbb6bff8e4c6742f9be9e86f3500c
+  languageName: node
+  linkType: hard
+
+"mantine-contextmenu@npm:^7.17.1":
+  version: 7.17.1
+  resolution: "mantine-contextmenu@npm:7.17.1"
+  peerDependencies:
+    "@mantine/core": ">=7.12"
+    "@mantine/hooks": ">=7.12"
+    clsx: ">=2"
+    react: ">=18.2"
+  checksum: 10c0/820560fd38dc222017fe7f8d3824ef5b3eb5555562a47eb3cffde9aeb69487d5785a1e26fe4bf27ebdc4f1fa6a6a589e861510a8e2f09c73adadd372dc1444ea
   languageName: node
   linkType: hard
 

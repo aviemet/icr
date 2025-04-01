@@ -7,7 +7,6 @@ import FullReload from "vite-plugin-full-reload"
 import RubyPlugin from "vite-plugin-ruby"
 import tsconfigPaths from "vite-tsconfig-paths"
 
-
 const config = defineConfig({
 	build: {
 		sourcemap: true,
