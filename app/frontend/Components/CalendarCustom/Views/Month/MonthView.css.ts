@@ -30,14 +30,15 @@ export const daysContainer = css`
 
 export const row = css`
   position: relative;
-  border-bottom: ${ vars.colors.dark[2] } 1px solid;
   display: flex;
   flex: 1 1 0%;
   pointer-events: none;
+  border-bottom-color: light-dark(${ vars.colors.gray[5] }, ${ vars.colors.dark[2] });
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
 `
 
 export const columnHeading = css`
-  border-right: ${ vars.colors.dark[2] } 1px solid;
   flex: 1 1 0%;
   text-align: center;
   text-transform: uppercase;
@@ -46,6 +47,10 @@ export const columnHeading = css`
   justify-content: center;
   align-items: flex-start;
   padding-top: ${ vars.spacing.sm };
+
+  border-right-color: light-dark(${ vars.colors.gray[5] }, ${ vars.colors.dark[2] });
+  border-right-width: 1px;
+  border-right-style: solid;
 `
 
 export const rowLayerContainer = css`
@@ -74,14 +79,17 @@ export const contentLayer = css`
 `
 
 export const dateCellBackground = css`
-  border-right: ${ vars.colors.dark[2] } 1px solid;
   flex: 1 1 0%;
   pointer-events: all;
   background-color: none;
   transition: background-color 200ms linear;
+
+  border-right-color: light-dark(${ vars.colors.gray[5] }, ${ vars.colors.dark[2] });
+  border-right-width: 1px;
+  border-right-style: solid;
   
   &:hover {
-    background-color: ${ vars.colors.dark[7] };
+    background-color: light-dark(${ vars.colors.gray[2] }, ${ vars.colors.dark[7] });
   }
 `
 

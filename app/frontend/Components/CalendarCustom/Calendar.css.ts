@@ -12,7 +12,7 @@ export const calendar = css`
 export const calendarContainer = css`
 	flex: 1 1 0%;
 	padding: ${ vars.spacing.sm };
-	background-color: ${ vars.colors.dark[8] };
+	background-color: light-dark(${ vars.colors.gray[0] }, ${ vars.colors.dark[8] });
 	border-radius: ${ vars.radius.lg };
 	margin-bottom: ${ vars.spacing.md };
 `

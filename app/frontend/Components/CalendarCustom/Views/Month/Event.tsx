@@ -1,6 +1,7 @@
 import { useContextMenu, ContextMenuItemOptions } from "mantine-contextmenu"
 import { useCallback } from "react"
 
+import { DateTimeFormatter, Popover, Text } from "@/Components"
 import { CalendarEvent } from "@/Components/CalendarCustom"
 import { SearchIcon } from "@/Components/Icons"
 
@@ -39,25 +40,27 @@ const Event = ({
 	}, [contextMenuOptions, event])
 
 	return (
-		<div
-			className={ classes.event }
-			style={ {
-				"--column-start": columnStart,
-				"--column-span": columnSpan,
-			} as React.CSSProperties }
-			onClick={ handleClick }
-			onContextMenu={ showContextMenu([
-				{
-					key: "test",
-					icon: <SearchIcon />,
-					title: "Testing",
-					onClick: () => alert("TEST"),
-				},
-				...customMenuItemsWithDivider(),
-			]) }
-		>
-			{ children }
-		</div>
+		<Popover withArrow middlewares={ { shift: true } }>
+			<Popover.Target>
+				<div
+					className={ classes.event }
+					style={ {
+						"--column-start": columnStart,
+						"--column-span": columnSpan,
+					} as React.CSSProperties }
+					onClick={ handleClick }
+					onContextMenu={ showContextMenu([
+						...customMenuItemsWithDivider(),
+					]) }
+				>
+					{ children }
+				</div>
+			</Popover.Target>
+			<Popover.Dropdown>
+				<Text>{ event.title }</Text>
+				<Text>From <DateTimeFormatter>{ event.start }</DateTimeFormatter> to <DateTimeFormatter>{ event.end }</DateTimeFormatter></Text>
+			</Popover.Dropdown>
+		</Popover>
 	)
 }
 

@@ -4,6 +4,7 @@ import clsx from "clsx"
 import { useMemo } from "react"
 
 import { Box, Button, Group, Menu } from "@/Components"
+import { FloatingIndicator } from "@/Components/Button/FloatingIndicator"
 import { useCalendarContext } from "@/Components/CalendarCustom"
 import { CalendarLocalizer } from "@/Components/CalendarCustom/lib/localizers"
 import { NAVIGATION, VIEW_NAMES, viewComponents, VIEWS } from "@/Components/CalendarCustom/Views"
@@ -59,7 +60,15 @@ const Toolbar = ({
 				</Menu>
 			</Box>
 
-			<Box component="span" className={ clsx("rbc-btn-group") }>
+			{ Array.isArray(views) && <FloatingIndicator options={
+				views.map(name => ({
+					key: name,
+					title: localizer.messages.views[name],
+					onClick: () => handleViewChange(name),
+				}))
+			} /> }
+
+			{ /* <Box component="span" className={ clsx("rbc-btn-group") }>
 				{ Array.isArray(views) && views.map(name => {
 					return (
 						<Button
@@ -71,7 +80,7 @@ const Toolbar = ({
 						</Button>
 					)
 				}) }
-			</Box>
+			</Box> */ }
 		</Group>
 	)
 }
