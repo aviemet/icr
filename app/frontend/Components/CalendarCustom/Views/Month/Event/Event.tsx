@@ -3,15 +3,12 @@ import { useCallback } from "react"
 
 import { DateTimeFormatter, Popover, Text } from "@/Components"
 import { CalendarEvent } from "@/Components/CalendarCustom"
-import { SearchIcon } from "@/Components/Icons"
 
-import * as classes from "./MonthView.css"
+import * as classes from "./Event.css"
 
 interface Event<TEvent extends CalendarEvent = CalendarEvent> {
 	children: React.ReactNode
 	event: TEvent
-	columnStart: number
-	columnSpan: number
 	onClick?: (event: TEvent) => void
 	contextMenuOptions?: (event: TEvent) => ContextMenuItemOptions[]
 }
@@ -19,8 +16,6 @@ interface Event<TEvent extends CalendarEvent = CalendarEvent> {
 const Event = ({
 	children,
 	event,
-	columnStart,
-	columnSpan,
 	onClick,
 	contextMenuOptions,
 }: Event) => {
@@ -44,14 +39,13 @@ const Event = ({
 			<Popover.Target>
 				<div
 					className={ classes.event }
-					style={ {
-						"--column-start": columnStart,
-						"--column-span": columnSpan,
-					} as React.CSSProperties }
 					onClick={ handleClick }
-					onContextMenu={ showContextMenu([
-						...customMenuItemsWithDivider(),
-					]) }
+					onContextMenu={ contextMenuOptions
+						? showContextMenu([
+							...customMenuItemsWithDivider(),
+						])
+						: undefined
+					}
 				>
 					{ children }
 				</div>
@@ -64,4 +58,4 @@ const Event = ({
 	)
 }
 
-export default Event
+export { Event }

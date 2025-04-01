@@ -18,7 +18,8 @@ export const themeObject: Partial<CustomMantineTheme> = {
 	defaultRadius: "sm",
 	spacing: {
 		xxl: "calc(2.5rem * var(--mantine-scale))",
-		xxs: "calc(0.5rem * var(--mantine-scale))",
+		xs: "calc(0.5rem * var(--mantine-scale))",
+		xxs: "calc(0.25rem * var(--mantine-scale))",
 	},
 	shadows: {
 		xs: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)",

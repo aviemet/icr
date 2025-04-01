@@ -18,6 +18,7 @@ export const NAVIGATION = {
 	previous: "previous",
 	today: "today",
 	next: "next",
+	date: "date",
 } as const
 export type NAVIGATION_ACTION = keyof typeof NAVIGATION
 

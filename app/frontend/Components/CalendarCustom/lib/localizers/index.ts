@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 
 import { VIEW_NAMES } from "@/Components/CalendarCustom/Views"
+import { DisplayStrategy, DisplayStrategyFunction } from "@/Components/CalendarCustom/Views/Month/displayStrategies"
 
 import { CalendarEvent } from "../.."
 import { CalendarMessages, defaultMessages } from "../messages"
@@ -20,10 +21,20 @@ type CalendarLocalizerMethods = {
 	isAfter: (date: Date, compareDate: Date) => boolean
 	add: (date: Date, amount: number, unit: TIME_UNIT) => Date
 	subtract: (date: Date, amount: number, unit: TIME_UNIT) => Date
-	groupedEventsForPeriod: <TEvent extends CalendarEvent = CalendarEvent>(events: TEvent[], date: Date, view: VIEW_NAMES) => Map<string, TEvent[]>
+	groupedEventsForPeriod: <TEvent extends CalendarEvent = CalendarEvent>(
+		events: TEvent[],
+		date: Date,
+		view: VIEW_NAMES,
+		localizer: CalendarLocalizer,
+		displayStrategy?: DisplayStrategy | DisplayStrategyFunction
+	) => Map<string, TEvent[]>
 	calculateGridPlacement: <TEvent extends CalendarEvent = CalendarEvent>(event: TEvent) => { columnStart: number, columnSpan: number }
 	format: (date: Date, format: string) => string
 	messages: CalendarMessages
+	dayOfWeek: (date: Date) => number
+	startOf: (date: Date, unit: TIME_UNIT) => Date
+	endOf: (date: Date, unit: TIME_UNIT) => Date
+	dateWithinRange: (view: VIEW_NAMES, date: Date, compareDate?: Date) => boolean
 }
 
 export class CalendarLocalizer {
@@ -39,6 +50,10 @@ export class CalendarLocalizer {
 	subtract: CalendarLocalizerMethods["subtract"]
 	format: CalendarLocalizerMethods["format"]
 	messages: CalendarLocalizerMethods["messages"]
+	dayOfWeek: CalendarLocalizerMethods["dayOfWeek"]
+	startOf: CalendarLocalizerMethods["startOf"]
+	endOf: CalendarLocalizerMethods["endOf"]
+	dateWithinRange: CalendarLocalizerMethods["dateWithinRange"]
 
 	constructor(fns: CalendarLocalizerMethods) {
 		this.weekdays = fns.weekdays
@@ -53,6 +68,10 @@ export class CalendarLocalizer {
 		this.subtract = fns.subtract
 		this.format = fns.format
 		this.messages = fns.messages || defaultMessages
+		this.dayOfWeek = fns.dayOfWeek
+		this.startOf = fns.startOf
+		this.endOf = fns.endOf
+		this.dateWithinRange = fns.dateWithinRange
 	}
 }
 

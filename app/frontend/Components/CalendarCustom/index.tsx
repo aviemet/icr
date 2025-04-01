@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import React, { useMemo, useState, useEffect, useCallback } from "react"
+import React, { useMemo, useState, useCallback } from "react"
 
 import { CalendarLocalizer, useDefaultLocalizer } from "@/Components/CalendarCustom/lib/localizers"
 import Toolbar from "@/Components/CalendarCustom/Toolbar"
@@ -10,10 +10,10 @@ import { viewComponents, VIEWS, VIEW_NAMES, NAVIGATION_ACTION } from "./Views"
 
 export interface CalendarEvent {
 	id: string | number
-	allDay?: boolean | undefined
-	title: React.ReactNode | undefined
-	start: Date | undefined
-	end: Date | undefined
+	title: React.ReactNode
+	start: Date
+	end: Date
+	allDay?: boolean
 }
 
 type CalendarContext<TEvent extends CalendarEvent = CalendarEvent> = {

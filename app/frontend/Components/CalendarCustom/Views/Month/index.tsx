@@ -4,8 +4,7 @@ import { useMemo } from "react"
 
 import { CalendarEvent, useCalendarContext } from "@/Components/CalendarCustom"
 import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/Components/CalendarCustom/Views"
-import Event from "@/Components/CalendarCustom/Views/Month/Event"
-import { SearchIcon } from "@/Components/Icons"
+import { EventWrapper, Event } from "@/Components/CalendarCustom/Views/Month/Event"
 
 import * as classes from "./MonthView.css"
 
@@ -17,7 +16,9 @@ const MonthViewComponent = ({
 }: MonthViewProps) => {
 	const { date, localizer, events } = useCalendarContext()
 
-	const eventsByDay = useMemo(() => localizer.groupedEventsForPeriod(events, date, VIEWS.month), [date, events, localizer])
+	const eventsByDay = useMemo(() => {
+		return localizer.groupedEventsForPeriod(events, date, VIEWS.month, localizer)
+	}, [date, events, localizer])
 
 	const weekdays = useMemo(() => localizer.weekdays(), [localizer])
 	const weeks = useMemo(() => {
@@ -54,22 +55,17 @@ const MonthViewComponent = ({
 								const { columnStart, columnSpan } = localizer.calculateGridPlacement(event)
 
 								return (
-									<Event
-										key={ event.id }
-										event={ event }
+									<EventWrapper
 										columnStart={ columnStart }
 										columnSpan={ columnSpan }
-										contextMenuOptions={ event => {
-											return [{
-												key: "test",
-												icon: <SearchIcon />,
-												title: "Testing",
-												onClick: () => alert("TEST"),
-											}]
-										} }
 									>
-										{ event.title }
-									</Event>
+										<Event
+											key={ event.id }
+											event={ event }
+										>
+											{ event.title }
+										</Event>
+									</EventWrapper>
 								)
 							})
 						)

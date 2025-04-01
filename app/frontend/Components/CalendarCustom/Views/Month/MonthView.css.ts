@@ -3,7 +3,7 @@ import { css } from "@linaria/core"
 import { rem, vars } from "@/lib"
 
 const headingHeight = rem(25)
-const eventHeight = rem(22)
+export const eventHeight = rem(22)
 
 export const monthView = css`
 	position: absolute;
@@ -100,20 +100,4 @@ export const dateCellHeading = css`
   background: transparent;
   flex: 1 1 0%;
   height: ${ headingHeight };
-`
-
-export const event = css`
-  --column-start: 1;
-  --column-span: 1;
-  height: ${ eventHeight };
-  overflow: hidden;
-  pointer-events: all;
-  background-color: ${ vars.colors.primary };
-  font-size: 0.75rem;
-  border-radius: ${ vars.radius.sm };
-  padding: 2px 5px;
-  margin: 1px 3px;
-  color: ${ vars.colors.black };
-  grid-column: var(--column-start) / span var(--column-span);
-  cursor: pointer;
 `
