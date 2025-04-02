@@ -118,10 +118,7 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 				title: handleEventTitle(schedule, schedule.shift.employee),
 				start: schedule.starts_at,
 				end: schedule.ends_at,
-				resource: {
-					backgroundColor: schedule.shift.employee.color,
-					employee: schedule.shift.employee,
-				},
+				color: schedule.shift.employee.color,
 			}
 		}) || []
 	}, [schedules, handleEventTitle])

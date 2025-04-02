@@ -14,12 +14,12 @@ import * as classes from "./Toolbar.css"
 
 
 interface ToolbarProps {
-	views: readonly VIEW_NAMES[]
+	views?: readonly VIEW_NAMES[]
 	view: VIEW_NAMES
 }
 
 const Toolbar = ({
-	views,
+	views = Object.values(VIEWS),
 	view,
 }: ToolbarProps) => {
 	const { date, localizer, handleViewChange, handleDateChange } = useCalendarContext()

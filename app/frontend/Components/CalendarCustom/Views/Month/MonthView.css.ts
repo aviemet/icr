@@ -71,7 +71,7 @@ export const contentLayer = css`
   flex: 1 1 0%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(auto-fill, ${ eventHeight });
+  grid-template-rows: repeat(auto-fill, calc(${ eventHeight } + 2px));
   pointer-events: none;
   grid-auto-flow: dense;
   row-gap: 2px;
@@ -100,7 +100,4 @@ export const dateCellHeading = css`
   background: transparent;
   flex: 1 1 0%;
   height: ${ headingHeight };
-`
-
-export const continues = css`
 `

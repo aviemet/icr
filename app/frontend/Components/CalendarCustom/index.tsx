@@ -14,6 +14,7 @@ export interface CalendarEvent {
 	start: Date
 	end: Date
 	allDay?: boolean
+	color?: string
 }
 
 type CalendarContext<TEvent extends CalendarEvent = CalendarEvent> = {
@@ -32,7 +33,7 @@ interface CalendarProps<TEvent extends CalendarEvent = CalendarEvent> {
 	defaultView: VIEW_NAMES
 	events: TEvent[]
 	localizer?: CalendarLocalizer
-	views?: Partial<VIEW_NAMES[]>
+	views?: readonly VIEW_NAMES[]
 }
 
 const Calendar = <TEvent extends CalendarEvent = CalendarEvent>({

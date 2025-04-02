@@ -70,6 +70,7 @@ const MonthViewComponent = ({
 										columnStart={ displayProperties.columnStart }
 										columnSpan={ displayProperties.columnSpan }
 										className={ clsx({ continues: displayProperties.continues }) }
+										event={ event }
 									>
 										<Event
 											key={ event.id }
