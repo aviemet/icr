@@ -1,6 +1,7 @@
 ---
 description: Typescript Rules
 globs: *.ts, *.tsx
+alwaysApply: false
 ---
 You are an expert in TypeScript, Node.js, Vite, Vitest, Inertia.js, React, Mantine, TanStack Query, CSS, HTML, UI and UX.
 
@@ -119,6 +120,7 @@ You are an expert in TypeScript, Node.js, Vite, Vitest, Inertia.js, React, Manti
 - Use CSS modules for styling, name CSS files using the same name as the root component with the extension ".css.ts". CSS module files use Linaria and should import the "css" method from "@/lib".
 - Implement responsive design; use a mobile-first approach.
 - Use Mantine's dark mode methods for implementing visual themes in CSS files.
+- Always use clsx to wrap CSS classes passed to a className prop
 
 ## Global State
 

@@ -8,8 +8,10 @@ import { FloatingIndicator } from "@/Components/Button/FloatingIndicator"
 import { useCalendarContext } from "@/Components/CalendarCustom"
 import { NAVIGATION, VIEW_NAMES, viewComponents, VIEWS } from "@/Components/CalendarCustom/Views"
 import { PreviousIcon, NextIcon, DownArrowIcon } from "@/Components/Icons"
+import { useAnimateWidth } from "@/lib/hooks/useAnimateWidth"
 
 import * as classes from "./Toolbar.css"
+
 
 interface ToolbarProps {
 	views: readonly VIEW_NAMES[]
@@ -21,7 +23,11 @@ const Toolbar = ({
 	view,
 }: ToolbarProps) => {
 	const { date, localizer, handleViewChange, handleDateChange } = useCalendarContext()
-	const [opened, { toggle, close }] = useDisclosure(false)
+	const [opened, { close }] = useDisclosure(false)
+
+	const [wrapperRef, contentRef] = useAnimateWidth<HTMLDivElement>({
+		speed: 100,
+	})
 
 	const handlePickDate = (d: DateValue) => {
 		close()
@@ -47,78 +53,83 @@ const Toolbar = ({
 	return (
 		<Group justify="space-between" my="md">
 
-			{ /* Time navigation buttons */ }
-			<Paper className={ clsx(classes.buttonsContainer) }>
+			<Box className={ clsx(classes.leftSection) }>
+				{ /* Time navigation buttons */ }
+				<Paper className={ clsx(classes.buttonsContainer) }>
 
-				<Button
-					onClick={ () => handleDateChange(NAVIGATION.previous) }
-					variant="subtle"
-					mx="xxs"
-					{ ...buttonStyles }
-				>
-					<PreviousIcon />{ localizer.messages.navigation.previous }
-				</Button>
+					<Button
+						onClick={ () => handleDateChange(NAVIGATION.previous) }
+						variant="subtle"
+						mx="xxs"
+						{ ...buttonStyles }
+					>
+						<PreviousIcon />{ localizer.messages.navigation.previous }
+					</Button>
 
-				<Button
-					onClick={ () => handleDateChange(NAVIGATION.today) }
-					variant={ localizer.dateWithinRange(view, date) ? "filled" : "subtle" }
-					{ ...buttonStyles }
-				>
-					{ localizer.messages.navigation.today }
-				</Button>
+					<Button
+						onClick={ () => handleDateChange(NAVIGATION.today) }
+						variant={ localizer.dateWithinRange(view, date) ? "filled" : "subtle" }
+						{ ...buttonStyles }
+					>
+						{ localizer.messages.navigation.today }
+					</Button>
 
-				<Button
-					onClick={ () => handleDateChange(NAVIGATION.next) }
-					variant="subtle"
-					mx="xxs"
-					{ ...buttonStyles }
-				>
-					{ localizer.messages.navigation.next }<NextIcon />
-				</Button>
+					<Button
+						onClick={ () => handleDateChange(NAVIGATION.next) }
+						variant="subtle"
+						mx="xxs"
+						{ ...buttonStyles }
+					>
+						{ localizer.messages.navigation.next }<NextIcon />
+					</Button>
 
-			</Paper>
+				</Paper>
+			</Box>
 
 			{ /* Title and date navigation dropdown */ }
-			<Paper className={ clsx(classes.buttonsContainer) }>
-				<Menu opened={ opened } onClose={ close } >
-					<Menu.Target>
-						<Button
-							onClick={ toggle }
-							variant="subtle"
-							rightSection={
-								<Box className={ clsx(classes.datePickerMenu, { opened }) }>
-									<DownArrowIcon size={ 16 } />
-								</Box>
-							}
-							{ ...buttonStyles }
-						>
-							{ label }
-						</Button>
-					</Menu.Target>
+			<Paper className={ clsx(classes.buttonsContainer, classes.centerSection) } ref={ wrapperRef }>
+				<div ref={ contentRef }>
+					<Menu opened={ opened } onClose={ close }>
+						<Menu.Target>
+							<Button
+								variant="subtle"
+								className={ clsx(classes.dateButton) }
+								rightSection={
+									<Box className={ clsx(classes.datePickerMenu, { opened }) }>
+										<DownArrowIcon size={ 16 } />
+									</Box>
+								}
+								{ ...buttonStyles }
+							>
+								{ label }
+							</Button>
+						</Menu.Target>
 
-					<Menu.Dropdown>{ view === VIEWS.month
-						? <MonthPicker onChange={ handlePickDate } />
-						: <DatePicker onChange={ handlePickDate } />
-					}</Menu.Dropdown>
-				</Menu>
+						<Menu.Dropdown>{ view === VIEWS.month
+							? <MonthPicker onChange={ handlePickDate } />
+							: <DatePicker onChange={ handlePickDate } />
+						}</Menu.Dropdown>
+					</Menu>
+				</div>
 			</Paper>
 
 			{ /* Calendar view buttons */ }
-			{ views.length !== 0 && <FloatingIndicator
-				options={
-					views.map(name => ({
-						key: name,
-						title: localizer.messages.views[name],
-						onClick: () => handleViewChange(name),
-					}))
-				}
-				buttonProps={ {
-					size: "xs",
-					py: "xxs",
-					mx: "xxs",
-				} }
-			/> }
-
+			<Box className={ clsx(classes.rightSection) }>
+				{ views.length !== 0 && <FloatingIndicator
+					options={
+						views.map(name => ({
+							key: name,
+							title: localizer.messages.views[name],
+							onClick: () => handleViewChange(name),
+						}))
+					}
+					buttonProps={ {
+						size: "xs",
+						py: "xxs",
+						mx: "xxs",
+					} }
+				/> }
+			</Box>
 		</Group>
 	)
 }
