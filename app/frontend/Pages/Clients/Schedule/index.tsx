@@ -130,7 +130,7 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 		<>
 			<h1>{ client?.person?.name }</h1>
 
-			<Box style={ { width: "100%", height: "100%" } }>
+			<Box style={ { width: "100%", height: "1px", minHeight: "90%" } }>
 				<Calendar
 					events={ processedSchedules }
 					// onSelectEvent={ handleSelectEvent }

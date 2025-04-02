@@ -1,7 +1,7 @@
 import { Box, ElementProps, type BoxProps } from "@mantine/core"
 import clsx from "clsx"
 
-import classes from "./Section.module.css"
+import * as classes from "./Section.css"
 
 interface ISectionProps extends BoxProps, ElementProps<"section"> {
 	fullHeight?: boolean

@@ -60,22 +60,22 @@ RSpec.describe Setting, type: :model do
       end
     end
 
-    describe "pay_period_type" do
+    describe "payroll_period_type" do
       it "has default value" do
-        expect(described_class.pay_period_type).to eq(Setting::DEFAULT_SETTINGS[:pay_period_type])
+        expect(described_class.payroll_period_type).to eq(Setting::DEFAULT_SETTINGS[:payroll_period_type])
       end
 
       it "requires presence" do
-        expect { described_class.pay_period_type = nil }
+        expect { described_class.payroll_period_type = nil }
           .to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "only allows valid pay period types" do
-        Setting::PAY_PERIOD_TYPES.each_value do |valid_type|
-          expect { described_class.pay_period_type = valid_type }.not_to raise_error
+        Setting::PAYROLL_PERIOD_TYPES.each_value do |valid_type|
+          expect { described_class.payroll_period_type = valid_type }.not_to raise_error
         end
 
-        expect { described_class.pay_period_type = "invalid_type" }
+        expect { described_class.payroll_period_type = "invalid_type" }
           .to raise_error(ActiveRecord::RecordInvalid)
       end
     end

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 
 import { VIEW_NAMES } from "@/Components/CalendarCustom/Views"
-import { DisplayStrategy, DisplayStrategyFunction } from "@/Components/CalendarCustom/Views/Month/displayStrategies"
+import { DisplayStrategy, DisplayStrategyFunction, EventDisplayProperties } from "@/Components/CalendarCustom/Views/Month/displayStrategies"
 
 import { CalendarEvent } from "../.."
 import { CalendarMessages, defaultMessages } from "../messages"
@@ -11,6 +11,11 @@ export { dayJsLocalizer } from "./dayJsLocalizer"
 export type TIME_UNIT = "year" | "month" | "week" | "day" | "hour" | "minute" | "second"
 
 export type CalendarLocalizerFactory<TLib extends unknown> = (lib: TLib) => CalendarLocalizer
+
+type ProcessedEvent<TEvent extends CalendarEvent> = {
+	event: TEvent
+	displayProperties: EventDisplayProperties
+}
 
 type CalendarLocalizerMethods = {
 	weekdays: () => string[]
@@ -26,8 +31,8 @@ type CalendarLocalizerMethods = {
 		date: Date,
 		view: VIEW_NAMES,
 		localizer: CalendarLocalizer,
-		displayStrategy?: DisplayStrategy | DisplayStrategyFunction
-	) => Map<string, TEvent[]>
+		displayStrategy?: DisplayStrategy | DisplayStrategyFunction<TEvent>
+	) => Map<string, ProcessedEvent<TEvent>[]>
 	calculateGridPlacement: <TEvent extends CalendarEvent = CalendarEvent>(event: TEvent) => { columnStart: number, columnSpan: number }
 	format: (date: Date, format: string) => string
 	messages: CalendarMessages

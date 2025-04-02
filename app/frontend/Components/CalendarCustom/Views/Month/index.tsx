@@ -51,19 +51,21 @@ const MonthViewComponent = ({
 
 						const eventsForDay = eventsByDay.get(day.toISOString())
 						acc.contentCells.push(
-							eventsForDay && eventsForDay.map(event => {
-								const { columnStart, columnSpan } = localizer.calculateGridPlacement(event)
+							eventsForDay && eventsForDay.sort((eventA, eventB) => {
+								return localizer.isBefore(eventA.event.start, eventB.event.start) ? - 1 : 1
+							}).map(({ event, displayProperties }) => {
 
 								return (
 									<EventWrapper
-										columnStart={ columnStart }
-										columnSpan={ columnSpan }
+										columnStart={ displayProperties.columnStart }
+										columnSpan={ displayProperties.columnSpan }
 									>
 										<Event
 											key={ event.id }
 											event={ event }
 										>
-											{ event.title }
+											{ /* { event.title } */ }
+											{ `${localizer.format(event.start, "H:mm M/D")} - ${localizer.format(event.end, "H:mm M/D")}` }
 										</Event>
 									</EventWrapper>
 								)

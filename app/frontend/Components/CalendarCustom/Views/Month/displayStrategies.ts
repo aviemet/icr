@@ -3,7 +3,7 @@ import { CalendarLocalizer } from "@/Components/CalendarCustom/lib/localizers"
 import { coerceArray } from "@/lib"
 
 const spansWeekBorder = <TEvent extends CalendarEvent = CalendarEvent>(event: TEvent, localizer: CalendarLocalizer) => {
-	return localizer.dateWithinRange("week", event.end, event.start)
+	return !localizer.dateWithinRange("week", event.end, event.start)
 }
 
 const splitAtWeekBorders = <TEvent extends CalendarEvent = CalendarEvent>(event: TEvent, localizer: CalendarLocalizer) => {
@@ -40,10 +40,18 @@ const splitAtWeekBorders = <TEvent extends CalendarEvent = CalendarEvent>(event:
 	return events
 }
 
-export type DisplayStrategyFunction = <TEvent extends CalendarEvent = CalendarEvent>(
+export interface EventDisplayProperties {
+	columnStart: number
+	columnSpan: number
+}
+
+export type DisplayStrategyFunction<TEvent extends CalendarEvent = CalendarEvent> = (
 	event: TEvent,
 	localizer: CalendarLocalizer
-) => TEvent[]
+) => {
+	event: TEvent
+	displayProperties: EventDisplayProperties
+}[]
 
 export const strategies = {
 	/**
@@ -55,11 +63,19 @@ export const strategies = {
 	 * Events spanning multiple weeks will be split at week boundaries.
 	 */
 	stack: ((event, localizer) => {
+		let processedEvents: (typeof event)[]
+
 		if(spansWeekBorder(event, localizer)) {
-			return splitAtWeekBorders(event, localizer)
+			processedEvents = splitAtWeekBorders(event, localizer)
 		}
 
-		return coerceArray(event)
+		processedEvents = coerceArray(event)
+		return processedEvents.map(processedEvent => {
+			return {
+				event: processedEvent,
+				displayProperties: localizer.calculateGridPlacement(processedEvent),
+			}
+		})
 	}) satisfies DisplayStrategyFunction,
 
 	/**
@@ -67,7 +83,19 @@ export const strategies = {
 	 * Events will always span across days in which they appear.
 	 */
 	span: ((event, localizer) => {
-		return coerceArray(event)
+		let processedEvents: (typeof event)[]
+
+		if(spansWeekBorder(event, localizer)) {
+			processedEvents = splitAtWeekBorders(event, localizer)
+		}
+
+		processedEvents = coerceArray(event)
+		return processedEvents.map(processedEvent => {
+			return {
+				event: processedEvent,
+				displayProperties: localizer.calculateGridPlacement(processedEvent),
+			}
+		})
 	}) satisfies DisplayStrategyFunction,
 
 	/**
@@ -77,20 +105,28 @@ export const strategies = {
 	 * for each day in which they occur.
 	 */
 	split: ((event, localizer) => {
-		return coerceArray(event)
+		let processedEvents: (typeof event)[]
+
+		processedEvents = coerceArray(event)
+		return processedEvents.map(processedEvent => {
+			return {
+				event: processedEvent,
+				displayProperties: localizer.calculateGridPlacement(processedEvent),
+			}
+		})
 	}) satisfies DisplayStrategyFunction,
 } as const
 
 export type DisplayStrategy = keyof typeof strategies
 
 export function displayStrategies<TEvent extends CalendarEvent = CalendarEvent>(
-	strategy: DisplayStrategy | DisplayStrategyFunction,
+	strategy: DisplayStrategy | DisplayStrategyFunction<TEvent>,
 	event: TEvent,
 	localizer: CalendarLocalizer
-): TEvent[] {
+): ReturnType<DisplayStrategyFunction<TEvent>> {
 	if(typeof strategy === "function") {
-		return strategy(event, localizer)
+		return (strategy as unknown as DisplayStrategyFunction<TEvent>)(event, localizer)
 	}
 
-	return strategies[strategy](event, localizer)
+	return (strategies[strategy] as unknown as DisplayStrategyFunction<TEvent>)(event, localizer)
 }

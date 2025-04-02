@@ -10,7 +10,7 @@ import weekdayPlugin from "dayjs/plugin/weekday"
 
 import { CalendarLocalizer, CalendarLocalizerFactory, TIME_UNIT } from "@/Components/CalendarCustom/lib/localizers"
 import { VIEW_NAMES } from "@/Components/CalendarCustom/Views"
-import { displayStrategies, DisplayStrategy, DisplayStrategyFunction } from "@/Components/CalendarCustom/Views/Month/displayStrategies"
+import { displayStrategies, DisplayStrategy, DisplayStrategyFunction, EventDisplayProperties } from "@/Components/CalendarCustom/Views/Month/displayStrategies"
 
 import { CalendarEvent } from "../.."
 import { defaultMessages } from "../messages"
@@ -33,7 +33,16 @@ type DayjsLib = typeof dayjsLib & {
 	tz?: TZ
 }
 
+// First define the return type clearly
+type ProcessedEvent<TEvent extends CalendarEvent> = {
+	event: TEvent
+	displayProperties: EventDisplayProperties
+}
+
 export const dayJsLocalizer: CalendarLocalizerFactory<DayjsLib> = (dayjs) => {
+	/**
+	 * Date Localizer Functions
+	 */
 
 	const firstVisibleDay = <T extends boolean = true>(
 		date: Date,
@@ -135,25 +144,27 @@ export const dayJsLocalizer: CalendarLocalizerFactory<DayjsLib> = (dayjs) => {
 		return dayjs(date).isSame(compareDate, timeUnit)
 	}
 
+	/**
+	 * Calendar Display Functions
+	 */
+
 	const groupedEventsForPeriod = <TEvent extends CalendarEvent = CalendarEvent>(
 		events: TEvent[],
 		date: Date,
 		view: VIEW_NAMES,
 		localizer: CalendarLocalizer,
-		// TODO: default value needs to come from app preferences
-		displayStrategy: DisplayStrategy | DisplayStrategyFunction = "stack",
+		displayStrategy: DisplayStrategy | DisplayStrategyFunction<TEvent> = "stack",
 	) => {
 		const firstDay = firstVisibleDay(date, view)
 		const lastDay = lastVisibleDay(date, view)
 
-
-		const groupedEvents = new Map<string, TEvent[]>()
+		const groupedEvents = new Map<string, ProcessedEvent<TEvent>[]>()
 		events.forEach(event => {
 			if(dayjs(event.end).isAfter(firstDay) &&
 				dayjs(event.start).isBefore(lastDay)
 			) {
-				displayStrategies(displayStrategy, event, localizer).map(processedEvent => {
-					const eventGroupingString = dayjs(processedEvent.start).startOf("day").toISOString()
+				displayStrategies(displayStrategy, event, localizer).forEach(processedEvent => {
+					const eventGroupingString = dayjs(processedEvent.event.start).startOf("day").toISOString()
 					const daysEvents = groupedEvents.get(eventGroupingString) ?? []
 					daysEvents.push(processedEvent)
 					groupedEvents.set(eventGroupingString, daysEvents)
@@ -168,8 +179,11 @@ export const dayJsLocalizer: CalendarLocalizerFactory<DayjsLib> = (dayjs) => {
 		const start = dayjs(event.start)
 		const end = dayjs(event.end)
 
-		const columnStart = start.day() + 1
-		const columnSpan = end.day() - start.day() + 1
+		const startDay = start.day()
+		const endDay = end.day()
+
+		const columnStart = startDay + 1
+		const columnSpan = (endDay < startDay ? endDay + 7 : endDay) - startDay + 1
 
 		return { columnStart, columnSpan }
 	}
@@ -177,6 +191,10 @@ export const dayJsLocalizer: CalendarLocalizerFactory<DayjsLib> = (dayjs) => {
 	const format = (date: Date, formatString: string) => {
 		return dayjs(date).format(formatString)
 	}
+
+	/**
+	 * Return an instantiated localizer object
+	 */
 
 	return new CalendarLocalizer({
 		weekdays: dayjsLib.weekdays,

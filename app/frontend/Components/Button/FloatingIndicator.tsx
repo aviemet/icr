@@ -22,7 +22,7 @@ type FloatingIndicatorOption = {
 interface FloatingIndicatorProps extends PaperProps, ElementProps<"div">, MantineStyleProps {
 	options: FloatingIndicatorOption[]
 	size?: MantineSize
-	indicatorProps: ButtonProps
+	indicatorProps?: ButtonProps
 }
 
 const FloatingIndicator = ({
