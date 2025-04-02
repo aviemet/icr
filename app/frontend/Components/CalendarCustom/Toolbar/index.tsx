@@ -25,7 +25,7 @@ const Toolbar = ({
 	const { date, localizer, handleViewChange, handleDateChange } = useCalendarContext()
 	const [opened, { close }] = useDisclosure(false)
 
-	const [wrapperRef, contentRef] = useAnimateWidth<HTMLDivElement>({
+	const [wrapperRef, contentRef] = useAnimateWidth<HTMLDivElement, HTMLButtonElement>({
 		speed: 100,
 	})
 
@@ -87,11 +87,12 @@ const Toolbar = ({
 			</Box>
 
 			{ /* Title and date navigation dropdown */ }
-			<Paper className={ clsx(classes.buttonsContainer, classes.centerSection) } ref={ wrapperRef }>
-				<div ref={ contentRef }>
+			<Paper className={ clsx(classes.buttonsContainer, classes.centerSection) }>
+				<div ref={ wrapperRef }>
 					<Menu opened={ opened } onClose={ close }>
 						<Menu.Target>
 							<Button
+								ref={ contentRef }
 								variant="subtle"
 								className={ clsx(classes.dateButton) }
 								rightSection={
@@ -101,7 +102,9 @@ const Toolbar = ({
 								}
 								{ ...buttonStyles }
 							>
-								{ label }
+								<span >
+									{ label }
+								</span>
 							</Button>
 						</Menu.Target>
 

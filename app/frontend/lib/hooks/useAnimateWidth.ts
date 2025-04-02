@@ -5,9 +5,9 @@ type UseAnimateWidthOptions = {
 	transition?: CSSProperties["transitionTimingFunction"]
 }
 
-export function useAnimateWidth<T extends HTMLElement>(options?: UseAnimateWidthOptions) {
-	const wrapperRef = useRef<T>(null)
-	const contentRef = useRef<T>(null)
+export function useAnimateWidth<TW extends HTMLElement, TC extends HTMLElement>(options?: UseAnimateWidthOptions) {
+	const wrapperRef = useRef<TW>(null)
+	const contentRef = useRef<TC>(null)
 
 	const mergedOptions: UseAnimateWidthOptions = Object.assign({
 		speed: 200,
@@ -24,7 +24,7 @@ export function useAnimateWidth<T extends HTMLElement>(options?: UseAnimateWidth
 		contentRef.current.style.width = "fit-content"
 
 		const resizeObserver = new ResizeObserver(entries => {
-			const width = entries[0].contentRect.width
+			const width = entries[0].borderBoxSize[0].inlineSize
 			wrapperRef.current?.style.setProperty("--content-width", `${width}px`)
 		})
 
