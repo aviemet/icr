@@ -10,14 +10,8 @@ export const root = css`
 `
 
 export const control = css`
-	padding: var(--floating-indicator-padding);
-	padding-left: var(--floating-indicator-indicator-padding);
-	padding-right: var(--floating-indicator-indicator-padding);
 	color: light-dark(${ vars.colors.black }, ${ vars.colors.white });
-	font-size: ${ vars.fontSizes.sm };
 	transition: color 100ms ease-in-out;
-	font-weight: 500;
-	height: var(--mantine-button-height);
 	display: inline-flex;
 	align-items: center;
 
@@ -31,8 +25,7 @@ export const controlLabel = css`
 	z-index: 1;
 `
 export const indicator = css`
+	margin-top: 1px;
 	background-color: ${ vars.colors.primaryColors.filled };
 	border-radius:  var(--floating-indicator-radius);
-	padding-left: var(--floating-indicator-indicator-padding);
-	padding-right: var(--floating-indicator-indicator-padding);
 `

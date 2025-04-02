@@ -84,7 +84,7 @@ const Toolbar = ({
 					<Menu.Target>
 						<Button
 							onClick={ toggle }
-							variant="transparent"
+							variant="subtle"
 							rightSection={
 								<Box className={ clsx(classes.datePickerMenu, { opened }) }>
 									<DownArrowIcon size={ 16 } />
@@ -104,13 +104,20 @@ const Toolbar = ({
 			</Paper>
 
 			{ /* Calendar view buttons */ }
-			{ views.length !== 0 && <FloatingIndicator options={
-				views.map(name => ({
-					key: name,
-					title: localizer.messages.views[name],
-					onClick: () => handleViewChange(name),
-				}))
-			} /> }
+			{ views.length !== 0 && <FloatingIndicator
+				options={
+					views.map(name => ({
+						key: name,
+						title: localizer.messages.views[name],
+						onClick: () => handleViewChange(name),
+					}))
+				}
+				buttonProps={ {
+					size: "xs",
+					py: "xxs",
+					mx: "xxs",
+				} }
+			/> }
 
 		</Group>
 	)

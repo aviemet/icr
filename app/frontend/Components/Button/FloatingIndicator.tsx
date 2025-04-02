@@ -2,12 +2,12 @@ import {
 	Paper,
 	Box,
 	FloatingIndicator as MantineFloatingIndicator,
-	UnstyledButton,
 	ElementProps,
 	MantineStyleProps,
 	PaperProps,
 	type MantineSize,
 	ButtonProps,
+	Button,
 } from "@mantine/core"
 import { useState } from "react"
 
@@ -22,16 +22,15 @@ type FloatingIndicatorOption = {
 interface FloatingIndicatorProps extends PaperProps, ElementProps<"div">, MantineStyleProps {
 	options: FloatingIndicatorOption[]
 	size?: MantineSize
-	indicatorProps?: ButtonProps
+	buttonProps?: ButtonProps
 }
 
 const FloatingIndicator = ({
 	options,
 	radius = "sm",
-	size = "sm",
 	p = "xxs",
-	indicatorProps = {
-		p: "sm",
+	buttonProps = {
+		size: "sm",
 	},
 	...props
 }: FloatingIndicatorProps) => {
@@ -57,24 +56,22 @@ const FloatingIndicator = ({
 			p={ p }
 			style={ {
 				"--floating-indicator-radius": `var(--mantine-radius-${radius})`,
-				"--floating-indicator-padding": `var(--mantine-spacing-${p})`,
-				"--floating-indicator-indicator-padding": `var(--mantine-spacing-${indicatorProps.p})`,
 			} as React.CSSProperties }
-			{ ...props }
 		>
 			{ options.map((item, index) => (
-				<UnstyledButton
+				<Button
 					key={ item.key }
 					className={ classes.control }
 					ref={ setControlRef(index) }
 					onClick={ () => handleClick(item, index) }
 					mod={ { active: active === index } }
-					size={ size }
+					variant="subtle"
+					{ ...buttonProps }
 				>
 					<Box className={ classes.controlLabel }>
 						{ item.title }
 					</Box>
-				</UnstyledButton>
+				</Button>
 			)) }
 
 			<MantineFloatingIndicator
