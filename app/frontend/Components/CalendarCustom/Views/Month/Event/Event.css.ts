@@ -3,14 +3,6 @@ import { css } from "@linaria/core"
 import { eventHeight } from "@/Components/CalendarCustom/Views/Month/MonthView.css"
 import { vars } from "@/lib"
 
-export const eventWrapper = css`
-  --column-start: 1;
-  --column-span: 1;
-  height: ${ eventHeight };
-  overflow: hidden;
-  pointer-events: all;
-  grid-column: var(--column-start) / span var(--column-span);
-`
 
 export const event = css`
   background-color: ${ vars.colors.primary };
@@ -22,4 +14,17 @@ export const event = css`
   cursor: pointer;
   height: ${ eventHeight };
   overflow: hidden;
+`
+
+export const eventWrapper = css`
+  --column-start: 1;
+  --column-span: 1;
+  height: ${ eventHeight };
+  overflow: hidden;
+  pointer-events: all;
+  grid-column: var(--column-start) / span var(--column-span);
+
+  &.${ event } {
+    border: 1px solid orange;
+  }
 `

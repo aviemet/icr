@@ -16,10 +16,12 @@ const MonthViewComponent = ({
 }: MonthViewProps) => {
 	const { date, localizer, events } = useCalendarContext()
 
+	// Group all events by their date for efficient lookup when rendering
 	const eventsByDay = useMemo(() => {
 		return localizer.groupedEventsForPeriod(events, date, VIEWS.month, localizer)
 	}, [date, events, localizer])
 
+	// Split the month into weeks for grid layout
 	const weekdays = useMemo(() => localizer.weekdays(), [localizer])
 	const weeks = useMemo(() => {
 		return chunk(localizer.visibleDays(date, VIEWS.month), weekdays.length)
@@ -36,29 +38,38 @@ const MonthViewComponent = ({
 
 			<div className={ clsx(classes.daysContainer) }>
 				{ weeks.map((week, index) => {
+					// Reduce over each week as a row to build the week display elements
 					const { backgroundCells, headingCells, contentCells } = week.reduce((acc, day) => {
-
+						/**
+						 * BACKGROUND LAYER
+						 */
 						acc.backgroundCells.push(
-							<div className={ clsx(classes.dateCellBackground) } key={ day.toISOString() }>
-							</div>
+							<div className={ clsx(classes.dateCellBackground) } key={ day.toISOString() } />
 						)
 
+						/**
+						 * HEADING LAYER
+						 */
 						acc.headingCells.push(
 							<div className={ clsx(classes.dateCellHeading) } key={ day.toISOString() }>
 								{ day.getDate() }
 							</div>
 						)
 
+						/**
+						 * EVENTS LAYER
+						 */
 						const eventsForDay = eventsByDay.get(day.toISOString())
-						acc.contentCells.push(
-							eventsForDay && eventsForDay.sort((eventA, eventB) => {
-								return localizer.isBefore(eventA.event.start, eventB.event.start) ? - 1 : 1
-							}).map(({ event, displayProperties }) => {
 
+						acc.contentCells.push(
+							eventsForDay && eventsForDay.map(({ event, displayProperties }) => {
+								// Render each event with its proper column positioning
+								// displayProperties contains layout info like how many columns the event spans
 								return (
 									<EventWrapper
 										columnStart={ displayProperties.columnStart }
 										columnSpan={ displayProperties.columnSpan }
+										className={ clsx({ continues: displayProperties.continues }) }
 									>
 										<Event
 											key={ event.id }

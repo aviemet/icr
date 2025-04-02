@@ -101,3 +101,6 @@ export const dateCellHeading = css`
   flex: 1 1 0%;
   height: ${ headingHeight };
 `
+
+export const continues = css`
+`

@@ -1,11 +1,13 @@
 import clsx from "clsx"
+import { CSSProperties, PropsWithChildren } from "react"
 
 import * as classes from "./Event.css"
 
-interface EventWrapperProps {
-	children: React.ReactNode
+interface EventWrapperProps extends PropsWithChildren {
 	columnStart: number
 	columnSpan: number
+	className?: string
+	style?: CSSProperties
 }
 
 /**

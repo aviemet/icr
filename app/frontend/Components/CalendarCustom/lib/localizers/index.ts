@@ -5,6 +5,7 @@ import { DisplayStrategy, DisplayStrategyFunction, EventDisplayProperties } from
 
 import { CalendarEvent } from "../.."
 import { CalendarMessages, defaultMessages } from "../messages"
+import { SortedArray } from "@/lib/Collections/SortedArray"
 
 export { dayJsLocalizer } from "./dayJsLocalizer"
 
@@ -32,7 +33,7 @@ type CalendarLocalizerMethods = {
 		view: VIEW_NAMES,
 		localizer: CalendarLocalizer,
 		displayStrategy?: DisplayStrategy | DisplayStrategyFunction<TEvent>
-	) => Map<string, ProcessedEvent<TEvent>[]>
+	) => Map<string, SortedArray<ProcessedEvent<TEvent>>>
 	calculateGridPlacement: <TEvent extends CalendarEvent = CalendarEvent>(event: TEvent) => { columnStart: number, columnSpan: number }
 	format: (date: Date, format: string) => string
 	messages: CalendarMessages
@@ -49,6 +50,11 @@ export class CalendarLocalizer {
 	visibleDays: CalendarLocalizerMethods["visibleDays"]
 	isBefore: CalendarLocalizerMethods["isBefore"]
 	isAfter: CalendarLocalizerMethods["isAfter"]
+	/**
+	 * Filters events outside of view window. 
+	 * Groups events by start date into a Map. 
+	 * Breaks long events into multiples based on the display strategy. 
+	 */
 	groupedEventsForPeriod: CalendarLocalizerMethods["groupedEventsForPeriod"]
 	calculateGridPlacement: CalendarLocalizerMethods["calculateGridPlacement"]
 	add: CalendarLocalizerMethods["add"]

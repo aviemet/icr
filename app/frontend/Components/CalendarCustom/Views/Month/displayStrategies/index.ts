@@ -1,15 +1,24 @@
 import { CalendarEvent } from "@/Components/CalendarCustom"
 import { CalendarLocalizer } from "@/Components/CalendarCustom/lib/localizers"
-import { coerceArray } from "@/lib"
 
-const spansWeekBorder = <TEvent extends CalendarEvent = CalendarEvent>(event: TEvent, localizer: CalendarLocalizer) => {
+import { spanStrategy } from "./span"
+import { splitStrategy } from "./split"
+import { stackStrategy } from "./stack"
+
+const adjustMidnightTime = (date: Date): Date => {
+	if(date.getHours() !== 0 || date.getMinutes() !== 0) return date
+
+	return new Date(date.getTime() - 1)
+}
+
+export const spansWeekBorder = <TEvent extends CalendarEvent = CalendarEvent>(event: TEvent, localizer: CalendarLocalizer) => {
 	return !localizer.dateWithinRange("week", event.end, event.start)
 }
 
-const splitAtWeekBorders = <TEvent extends CalendarEvent = CalendarEvent>(event: TEvent, localizer: CalendarLocalizer) => {
+export const splitAtWeekBorders = <TEvent extends CalendarEvent = CalendarEvent>(event: TEvent, localizer: CalendarLocalizer) => {
 	const events: TEvent[] = []
 	let currentStart = event.start
-	let currentEnd = event.end
+	let currentEnd = adjustMidnightTime(event.end)
 
 	while(localizer.startOf(currentStart, "week").getTime() !==
 			 localizer.startOf(currentEnd, "week").getTime()) {
@@ -43,6 +52,7 @@ const splitAtWeekBorders = <TEvent extends CalendarEvent = CalendarEvent>(event:
 export interface EventDisplayProperties {
 	columnStart: number
 	columnSpan: number
+	continues?: true
 }
 
 export type DisplayStrategyFunction<TEvent extends CalendarEvent = CalendarEvent> = (
@@ -62,41 +72,13 @@ export const strategies = {
 	 * days in which they occur within the same week.
 	 * Events spanning multiple weeks will be split at week boundaries.
 	 */
-	stack: ((event, localizer) => {
-		let processedEvents: (typeof event)[]
-
-		if(spansWeekBorder(event, localizer)) {
-			processedEvents = splitAtWeekBorders(event, localizer)
-		}
-
-		processedEvents = coerceArray(event)
-		return processedEvents.map(processedEvent => {
-			return {
-				event: processedEvent,
-				displayProperties: localizer.calculateGridPlacement(processedEvent),
-			}
-		})
-	}) satisfies DisplayStrategyFunction,
+	stack: stackStrategy,
 
 	/**
 	 * Span strategy
 	 * Events will always span across days in which they appear.
 	 */
-	span: ((event, localizer) => {
-		let processedEvents: (typeof event)[]
-
-		if(spansWeekBorder(event, localizer)) {
-			processedEvents = splitAtWeekBorders(event, localizer)
-		}
-
-		processedEvents = coerceArray(event)
-		return processedEvents.map(processedEvent => {
-			return {
-				event: processedEvent,
-				displayProperties: localizer.calculateGridPlacement(processedEvent),
-			}
-		})
-	}) satisfies DisplayStrategyFunction,
+	span: spanStrategy,
 
 	/**
 	 * Split strategy
@@ -104,17 +86,7 @@ export const strategies = {
 	 * into multiple events, at midnight, appearing individually
 	 * for each day in which they occur.
 	 */
-	split: ((event, localizer) => {
-		let processedEvents: (typeof event)[]
-
-		processedEvents = coerceArray(event)
-		return processedEvents.map(processedEvent => {
-			return {
-				event: processedEvent,
-				displayProperties: localizer.calculateGridPlacement(processedEvent),
-			}
-		})
-	}) satisfies DisplayStrategyFunction,
+	split: splitStrategy,
 } as const
 
 export type DisplayStrategy = keyof typeof strategies

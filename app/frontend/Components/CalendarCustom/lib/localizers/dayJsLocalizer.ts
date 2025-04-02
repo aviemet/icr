@@ -14,6 +14,7 @@ import { displayStrategies, DisplayStrategy, DisplayStrategyFunction, EventDispl
 
 import { CalendarEvent } from "../.."
 import { defaultMessages } from "../messages"
+import { SortedArray } from "@/lib/Collections/SortedArray"
 
 dayjsLib.extend(localeData)
 dayjsLib.extend(weekdayPlugin)
@@ -158,18 +159,22 @@ export const dayJsLocalizer: CalendarLocalizerFactory<DayjsLib> = (dayjs) => {
 		const firstDay = firstVisibleDay(date, view)
 		const lastDay = lastVisibleDay(date, view)
 
-		const groupedEvents = new Map<string, ProcessedEvent<TEvent>[]>()
+		const groupedEvents = new Map<string, SortedArray<ProcessedEvent<TEvent>>>()
+		
 		events.forEach(event => {
-			if(dayjs(event.end).isAfter(firstDay) &&
-				dayjs(event.start).isBefore(lastDay)
-			) {
-				displayStrategies(displayStrategy, event, localizer).forEach(processedEvent => {
-					const eventGroupingString = dayjs(processedEvent.event.start).startOf("day").toISOString()
-					const daysEvents = groupedEvents.get(eventGroupingString) ?? []
-					daysEvents.push(processedEvent)
-					groupedEvents.set(eventGroupingString, daysEvents)
-				})
-			}
+			if (!dayjs(event.end).isAfter(firstDay) || !dayjs(event.start).isBefore(lastDay)) return
+
+			displayStrategies(displayStrategy, event, localizer).forEach(processedEvent => {
+				const mapKey = dayjs(processedEvent.event.start).startOf("day").toISOString()
+				
+				if (!groupedEvents.has(mapKey)) {
+					groupedEvents.set(mapKey, new SortedArray((a, b) => 
+						dayjs(a.event.start).valueOf() - dayjs(b.event.start).valueOf()
+					))
+				}
+				
+				groupedEvents.get(mapKey)!.push(processedEvent)
+			})
 		})
 
 		return groupedEvents

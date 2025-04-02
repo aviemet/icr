@@ -52,7 +52,7 @@ const Event = ({
 			</Popover.Target>
 			<Popover.Dropdown>
 				<Text>{ event.title }</Text>
-				<Text>From <DateTimeFormatter>{ event.start }</DateTimeFormatter> to <DateTimeFormatter>{ event.end }</DateTimeFormatter></Text>
+				<Text>From <DateTimeFormatter format="dateTimeShort">{ event.start }</DateTimeFormatter> to <DateTimeFormatter format="dateTimeShort">{ event.end }</DateTimeFormatter></Text>
 			</Popover.Dropdown>
 		</Popover>
 	)

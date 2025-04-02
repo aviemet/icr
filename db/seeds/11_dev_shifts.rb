@@ -40,7 +40,7 @@ if Rails.env.development?
   if Client.second.calendar_events
 
     ActiveRecord::Base.transaction do
-      shift_length = 8
+      shift_length = 9
 
       client = Client.second
 
