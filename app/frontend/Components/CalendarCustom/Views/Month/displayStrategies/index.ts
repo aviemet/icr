@@ -55,13 +55,21 @@ export interface EventDisplayProperties {
 	continues?: true
 }
 
+export type CompareFunction<TEvent extends CalendarEvent = CalendarEvent> = (
+	a: EventDisplayDetails<TEvent>,
+	b: EventDisplayDetails<TEvent>
+) => number
+
+export interface EventDisplayDetails<TEvent extends CalendarEvent = CalendarEvent> {
+	event: TEvent
+	displayProperties: EventDisplayProperties
+	compare: CompareFunction<TEvent>
+}
+
 export type DisplayStrategyFunction<TEvent extends CalendarEvent = CalendarEvent> = (
 	event: TEvent,
 	localizer: CalendarLocalizer
-) => {
-	event: TEvent
-	displayProperties: EventDisplayProperties
-}[]
+) => EventDisplayDetails<TEvent>[]
 
 export const strategies = {
 	/**

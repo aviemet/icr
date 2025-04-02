@@ -6,6 +6,7 @@ import { DisplayStrategy, DisplayStrategyFunction, EventDisplayProperties } from
 import { CalendarEvent } from "../.."
 import { CalendarMessages, defaultMessages } from "../messages"
 import { SortedArray } from "@/lib/Collections/SortedArray"
+import { EventDisplayDetails } from "@/Components/CalendarCustom/Views/Month/displayStrategies"
 
 export { dayJsLocalizer } from "./dayJsLocalizer"
 
@@ -13,12 +14,7 @@ export type TIME_UNIT = "year" | "month" | "week" | "day" | "hour" | "minute" | 
 
 export type CalendarLocalizerFactory<TLib extends unknown> = (lib: TLib) => CalendarLocalizer
 
-type ProcessedEvent<TEvent extends CalendarEvent> = {
-	event: TEvent
-	displayProperties: EventDisplayProperties
-}
-
-type CalendarLocalizerMethods = {
+export interface CalendarLocalizerMethods {
 	weekdays: () => string[]
 	firstVisibleDay: (date: Date, view: VIEW_NAMES) => Date
 	lastVisibleDay: (date: Date, view: VIEW_NAMES) => Date
@@ -27,13 +23,18 @@ type CalendarLocalizerMethods = {
 	isAfter: (date: Date, compareDate: Date) => boolean
 	add: (date: Date, amount: number, unit: TIME_UNIT) => Date
 	subtract: (date: Date, amount: number, unit: TIME_UNIT) => Date
+	/**
+	 * Filters events outside of view window. 
+	 * Groups events by start date into a Map. 
+	 * Breaks long events into multiples based on the display strategy. 
+	 */
 	groupedEventsForPeriod: <TEvent extends CalendarEvent = CalendarEvent>(
 		events: TEvent[],
 		date: Date,
 		view: VIEW_NAMES,
 		localizer: CalendarLocalizer,
 		displayStrategy?: DisplayStrategy | DisplayStrategyFunction<TEvent>
-	) => Map<string, SortedArray<ProcessedEvent<TEvent>>>
+	) => Map<string, SortedArray<EventDisplayDetails<TEvent>>>
 	calculateGridPlacement: <TEvent extends CalendarEvent = CalendarEvent>(event: TEvent) => { columnStart: number, columnSpan: number }
 	format: (date: Date, format: string) => string
 	messages: CalendarMessages
@@ -50,11 +51,6 @@ export class CalendarLocalizer {
 	visibleDays: CalendarLocalizerMethods["visibleDays"]
 	isBefore: CalendarLocalizerMethods["isBefore"]
 	isAfter: CalendarLocalizerMethods["isAfter"]
-	/**
-	 * Filters events outside of view window. 
-	 * Groups events by start date into a Map. 
-	 * Breaks long events into multiples based on the display strategy. 
-	 */
 	groupedEventsForPeriod: CalendarLocalizerMethods["groupedEventsForPeriod"]
 	calculateGridPlacement: CalendarLocalizerMethods["calculateGridPlacement"]
 	add: CalendarLocalizerMethods["add"]

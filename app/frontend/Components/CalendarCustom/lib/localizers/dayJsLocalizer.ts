@@ -10,7 +10,8 @@ import weekdayPlugin from "dayjs/plugin/weekday"
 
 import { CalendarLocalizer, CalendarLocalizerFactory, TIME_UNIT } from "@/Components/CalendarCustom/lib/localizers"
 import { VIEW_NAMES } from "@/Components/CalendarCustom/Views"
-import { displayStrategies, DisplayStrategy, DisplayStrategyFunction, EventDisplayProperties } from "@/Components/CalendarCustom/Views/Month/displayStrategies"
+import { displayStrategies, DisplayStrategy, DisplayStrategyFunction, EventDisplayDetails, EventDisplayProperties } from "@/Components/CalendarCustom/Views/Month/displayStrategies"
+import { strategies } from "@/Components/CalendarCustom/Views/Month/displayStrategies"
 
 import { CalendarEvent } from "../.."
 import { defaultMessages } from "../messages"
@@ -32,12 +33,6 @@ interface TZ {
 
 type DayjsLib = typeof dayjsLib & {
 	tz?: TZ
-}
-
-// First define the return type clearly
-type ProcessedEvent<TEvent extends CalendarEvent> = {
-	event: TEvent
-	displayProperties: EventDisplayProperties
 }
 
 export const dayJsLocalizer: CalendarLocalizerFactory<DayjsLib> = (dayjs) => {
@@ -158,19 +153,20 @@ export const dayJsLocalizer: CalendarLocalizerFactory<DayjsLib> = (dayjs) => {
 	) => {
 		const firstDay = firstVisibleDay(date, view)
 		const lastDay = lastVisibleDay(date, view)
+		const strategy = typeof displayStrategy === "string" 
+		? (strategies[displayStrategy] as unknown as DisplayStrategyFunction<TEvent>)
+		: displayStrategy
 
-		const groupedEvents = new Map<string, SortedArray<ProcessedEvent<TEvent>>>()
+		const groupedEvents = new Map<string, SortedArray<EventDisplayDetails<TEvent>>>()
 		
 		events.forEach(event => {
 			if (!dayjs(event.end).isAfter(firstDay) || !dayjs(event.start).isBefore(lastDay)) return
 
-			displayStrategies(displayStrategy, event, localizer).forEach(processedEvent => {
+			strategy(event, localizer).forEach(processedEvent => {
 				const mapKey = dayjs(processedEvent.event.start).startOf("day").toISOString()
 				
 				if (!groupedEvents.has(mapKey)) {
-					groupedEvents.set(mapKey, new SortedArray((a, b) => 
-						dayjs(a.event.start).valueOf() - dayjs(b.event.start).valueOf()
-					))
+					groupedEvents.set(mapKey, new SortedArray(processedEvent.compare))
 				}
 				
 				groupedEvents.get(mapKey)!.push(processedEvent)
