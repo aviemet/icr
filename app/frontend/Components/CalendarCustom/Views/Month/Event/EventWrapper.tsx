@@ -1,8 +1,9 @@
+import { darken, isLightColor, lighten } from "@mantine/core"
 import clsx from "clsx"
 import { CSSProperties, PropsWithChildren } from "react"
 
 import { CalendarEvent } from "@/Components/CalendarCustom"
-import { calculateContrastingColor, vars } from "@/lib"
+import { vars } from "@/lib"
 import useStore from "@/lib/store"
 
 import * as classes from "./Event.css"
@@ -32,6 +33,7 @@ const EventWrapper = <TEvent extends CalendarEvent = CalendarEvent>({
 	const eventColor = event.color || vars.colors.primaryColors.filled
 
 	const contrastingColor = getContrastingColor(eventColor)
+
 	return (
 		<div
 			className={ clsx(classes.eventWrapper, {
@@ -42,6 +44,7 @@ const EventWrapper = <TEvent extends CalendarEvent = CalendarEvent>({
 				"--column-span": columnSpan,
 				"--event-color": eventColor,
 				"--contrasting-color": contrastingColor,
+				"--hover-color": isLightColor(eventColor) ? lighten(eventColor, 0.15) : darken(eventColor, 0.15),
 				...style,
 			} as React.CSSProperties }
 		>

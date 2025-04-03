@@ -76,8 +76,8 @@ const MonthViewComponent = ({
 											key={ event.id }
 											event={ event }
 										>
-											{ /* { event.title } */ }
-											{ `${localizer.format(event.start, "H:mm M/D")} - ${localizer.format(event.end, "H:mm M/D")}` }
+											{ event.title }
+											{ /* { `${localizer.format(event.start, "H:mm M/D")} - ${localizer.format(event.end, "H:mm M/D")}` } */ }
 										</Event>
 									</EventWrapper>
 								)
