@@ -5,7 +5,10 @@ import { useCallback } from "react"
 
 import { Box, BoxProps, DateTimeFormatter, Popover, Text } from "@/Components"
 import { CalendarEvent } from "@/Components/Calendar"
+import { useEventDisplay } from "@/Components/Calendar/hooks/useEventDisplay"
+import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 
+import { DisplayStrategy, DisplayStrategyFunction } from "../displayStrategies"
 import * as classes from "./Event.css"
 
 interface Event<TEvent extends CalendarEvent = CalendarEvent> extends
@@ -13,6 +16,8 @@ interface Event<TEvent extends CalendarEvent = CalendarEvent> extends
 	event: TEvent
 	onClick?: (event: TEvent) => void
 	contextMenuOptions?: (event: TEvent) => ContextMenuItemOptions[]
+	strategy: DisplayStrategy | DisplayStrategyFunction<TEvent>
+	localizer: CalendarLocalizer
 }
 
 const Event = ({
@@ -21,8 +26,11 @@ const Event = ({
 	event,
 	onClick,
 	contextMenuOptions,
+	strategy,
+	localizer,
 }: Event) => {
 	const { showContextMenu } = useContextMenu()
+	const { className: displayClassName } = useEventDisplay(event, typeof strategy === "string" ? strategy : "span", localizer)
 
 	const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 		onClick?.(event)
@@ -41,7 +49,11 @@ const Event = ({
 		<Popover withArrow middlewares={ { shift: true } }>
 			<Popover.Target>
 				<Box
-					className={ clsx(classes.event, className) }
+					className={ clsx(
+						classes.event,
+						displayClassName,
+						className
+					) }
 					onClick={ handleClick }
 					onContextMenu={ contextMenuOptions
 						? showContextMenu([

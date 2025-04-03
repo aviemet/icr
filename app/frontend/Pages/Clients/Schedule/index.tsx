@@ -22,7 +22,6 @@ interface ScheduleProps {
 }
 
 const Schedule = ({ client, schedules }: ScheduleProps) => {
-	const { getContrastingColor } = useStore()
 	const { settings } = usePageProps()
 
 	const newShiftModalRef = useRef<string>()

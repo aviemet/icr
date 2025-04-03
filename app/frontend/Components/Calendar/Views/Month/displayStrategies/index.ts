@@ -24,7 +24,6 @@ export const splitAtWeekBorders = <TEvent extends CalendarEvent = CalendarEvent>
 		localizer.startOf(currentStart, "week").getTime() !==
 		localizer.startOf(currentEnd, "week").getTime()
 	) {
-		console.log({ currentStart, currentEnd })
 		// Find the end of the current week
 		const weekEnd = localizer.endOf(currentStart, "week")
 
