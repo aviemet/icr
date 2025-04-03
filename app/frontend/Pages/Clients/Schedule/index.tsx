@@ -1,22 +1,19 @@
 import { router } from "@inertiajs/react"
 import { modals } from "@mantine/modals"
-import { pick } from "lodash-es"
 import React, { useCallback, useMemo, useRef } from "react"
-import { type NavigateAction, type View, type Event, SlotInfo } from "react-big-calendar"
 
 import {
 	Box,
-	// Calendar,
+	Calendar,
 } from "@/Components"
-import Calendar from "@/Components/CalendarCustom"
 import { buildShiftTitle, formatEventTitle, theme } from "@/lib"
 import { calendarParams } from "@/lib/dates"
 import { usePageProps } from "@/lib/hooks"
 import useStore from "@/lib/store"
+import { initials } from "@/lib/strings"
 
 import NewShiftForm from "./NewShiftForm"
 import ShiftInfo from "./ShiftInfo"
-import { initials } from "../../../lib/strings"
 
 
 interface ScheduleProps {
@@ -29,19 +26,6 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 	const { settings } = usePageProps()
 
 	const newShiftModalRef = useRef<string>()
-
-	const handleSelectEvent = useCallback((event: Event, e: React.SyntheticEvent<HTMLElement, globalThis.Event>) => {
-		modals.open({
-			title: event.resource.employee.person.name,
-			children: (
-				<ShiftInfo event={ event } />
-			),
-		})
-	}, [])
-
-	const handleSelectSlot = useCallback((info: SlotInfo) => {
-		// console.log({ info })
-	}, [])
 
 	const handleNewShiftSuccess = useCallback(() => {
 		if(!newShiftModalRef.current) return
@@ -61,39 +45,6 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 				/>
 			),
 		})
-	}, [])
-
-	const handleDateChange = useCallback((newDate: Date, view: View, action: NavigateAction) => {
-		// console.log("handleDateChange", { newDate, view, action })
-	}, [])
-
-	const handleViewChange = useCallback((view: View) => {
-		// console.log("handleViewChange", { view })
-	}, [])
-
-	const handleRangeChange = useCallback((start: Date, end: Date, view: View) => {
-		// console.log("handleRangeChange", { start, end, view })
-		router.get(`/clients/${client.slug}/schedule`,
-			calendarParams(start, end, view),
-			{
-				only: ["schedules"],
-				preserveState: true,
-				preserveScroll: true,
-			},
-		)
-	}, [])
-
-	const eventStyleGetter = useCallback((event: Event) => {
-		let defaultColor = theme.colors.blue[5]
-
-		const eventColor = event?.resource?.backgroundColor || defaultColor
-
-		return {
-			style: {
-				backgroundColor: eventColor,
-				color: getContrastingColor(eventColor),
-			},
-		}
 	}, [])
 
 	const handleEventTitle = useCallback((

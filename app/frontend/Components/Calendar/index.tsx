@@ -1,115 +1,100 @@
 import clsx from "clsx"
-import dayjs from "dayjs"
-import React, { useCallback, useMemo, useRef } from "react"
-import {
-	Calendar,
-	DateHeaderProps,
-	ToolbarProps,
-	Views,
-	dayjsLocalizer,
-	type CalendarProps,
-	type DateLocalizer,
-	type Event,
-	type View,
-} from "react-big-calendar"
-import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop"
+import React, { useMemo, useState, useCallback } from "react"
 
-import { useLocation } from "@/lib/hooks"
+import { CalendarLocalizer, useDefaultLocalizer } from "@/Components/Calendar/lib/localizers"
+import Toolbar from "@/Components/Calendar/Toolbar"
+import { createContext } from "@/lib/hooks"
 
 import * as classes from "./Calendar.css"
-import DateCellWrapper from "./DateCellWrapper"
-import MonthDateHeader from "./MonthDateHeader"
-import MonthEvent from "./MonthEvent"
-import MonthHeader from "./MonthHeader"
-import { NewShiftClick } from "./NewShiftButton"
-import Toolbar from "./Toolbar"
+import { viewComponents, VIEWS, VIEW_NAMES, NAVIGATION_ACTION } from "./Views"
+import { ErrorBoundary } from "../ErrorBoundary"
 
-const DragAndDropCalendar = withDragAndDrop(Calendar<Event, {}>)
-
-const dayjsLocalizerInstance = dayjsLocalizer(dayjs)
-
-interface CalendarComponentProps
-	extends Omit<CalendarProps<Event, {}>, "localizer" | "onRangeChange"> {
-
-	localizer?: DateLocalizer
-	onRangeChange?: (start: Date, end: Date, view: View) => void
-	onNewShift?: NewShiftClick
-	dnd?: boolean
+export interface CalendarEvent {
+	id: string | number
+	title: React.ReactNode
+	start: Date
+	end: Date
+	allDay?: boolean
+	color?: string
 }
 
-const CalendarComponent = ({
-	showAllEvents = true,
-	localizer = dayjsLocalizerInstance,
-	defaultView = Views.MONTH,
-	startAccessor = "start",
-	endAccessor = "end",
-	onRangeChange,
-	className,
-	onNewShift,
-	dnd = false,
-	...props
-}: CalendarComponentProps) => {
-	const { params } = useLocation()
+type CalendarContext<TEvent extends CalendarEvent = CalendarEvent> = {
+	date: Date
+	events: TEvent[]
+	localizer: CalendarLocalizer
+	handleViewChange: (view: VIEW_NAMES) => void
+	handleDateChange: (action: NAVIGATION_ACTION, newDate?: Date) => void
+}
 
-	const startingView = useMemo(() => {
-		if(params.has("view")) {
-			const view = params.get("view")!.toUpperCase()
+const [useCalendarContext, CalendarProvider] = createContext<CalendarContext>()
+export { useCalendarContext }
 
-			if(view in Views) {
-				return Views[view as keyof typeof Views]
-			}
-		}
-		return defaultView
-	}, [defaultView, params])
+interface CalendarProps<TEvent extends CalendarEvent = CalendarEvent> {
+	defaultDate: Date
+	defaultView: VIEW_NAMES
+	events: TEvent[]
+	localizer?: CalendarLocalizer
+	views?: readonly VIEW_NAMES[]
+}
 
-	const viewRef = useRef(startingView)
+const Calendar = <TEvent extends CalendarEvent = CalendarEvent>({
+	defaultDate,
+	defaultView = VIEWS.month,
+	events,
+	localizer,
+	views = Object.values(VIEWS),
+}: CalendarProps<TEvent>) => {
+	const localLocalizer = useDefaultLocalizer(localizer)
 
-	/**
-	 * Rewrite date range change method to stabilize interface
-	 */
-	const handleRangeChange = useCallback((range: Date[] | { start: Date, end: Date }, view?: View | undefined) => {
-		if(view) viewRef.current = view
+	const [date, setDate] = useState<Date>(defaultDate || new Date())
+	const [currentView, setCurrentView] = useState<VIEW_NAMES>(defaultView)
 
-		if(!onRangeChange) return
+	const ViewComponent = useMemo(() => viewComponents[currentView], [currentView])
 
-		let start, end
-		if(Array.isArray(range)) {
-			start = range[0]
-			end = range[range.length - 1]
-		} else {
-			start = range.start
-			end = range.end
-		}
-
-		onRangeChange(start, end, viewRef.current)
+	const handleViewChange = useCallback((view: VIEW_NAMES) => {
+		setCurrentView(view)
 	}, [])
 
-	const components = useMemo(() => ({
-		dateCellWrapper: DateCellWrapper,
-		toolbar: Toolbar,
-		month: {
-			dateHeader: (props: DateHeaderProps) => <MonthDateHeader { ...props } onNewShift={ onNewShift } />,
-			event: MonthEvent,
-			header: MonthHeader,
-		},
-	}), [])
+	const handleDateChange = useCallback((action: NAVIGATION_ACTION, newDate?: Date) => {
+		if(!localLocalizer) return undefined
 
-	const InternalCalendarComponent = dnd
-		? DragAndDropCalendar
-		: Calendar
+		const nextDate = ViewComponent.navigate(
+			newDate || date,
+			action,
+			{
+				date: date,
+				today: new Date(),
+				localizer: localLocalizer,
+				events: events,
+			}
+		)
+		setDate(nextDate)
+	}, [ViewComponent, date, events, localLocalizer])
+
+	const calendarProviderState = useMemo(() => ({
+		date,
+		events,
+		localizer: localLocalizer as CalendarLocalizer,
+		handleViewChange,
+		handleDateChange,
+	}), [date, events, localLocalizer, handleViewChange, handleDateChange])
+
+
+	if(!localLocalizer) return null
 
 	return (
-		<InternalCalendarComponent
-			selectable
-			className={ clsx(classes.darkTheme, classes.calendar, className) }
-			showAllEvents={ showAllEvents }
-			localizer={ localizer }
-			onRangeChange={ handleRangeChange }
-			defaultView={ viewRef.current }
-			// components={ components }
-			{ ...props }
-		/>
+		<ErrorBoundary>
+			<CalendarProvider value={ calendarProviderState }>
+				<Toolbar views={ views } view={ currentView } />
+
+				<div className={ clsx(classes.calendar) }>
+					<div className={ clsx(classes.calendarContainer) }>
+						<ViewComponent />
+					</div>
+				</div>
+			</CalendarProvider>
+		</ErrorBoundary>
 	)
 }
 
-export default React.memo(CalendarComponent)
+export default Calendar

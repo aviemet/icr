@@ -1,21 +1,13 @@
-import { router } from "@inertiajs/react"
-import { modals } from "@mantine/modals"
 import { pick } from "lodash-es"
-import React, { useCallback, useMemo, useRef } from "react"
-import { type NavigateAction, type View, type Event, SlotInfo } from "react-big-calendar"
+import React, { useCallback, useMemo } from "react"
 
 import {
 	Box,
-	// Calendar,
+	Calendar,
 } from "@/Components"
-import Calendar from "@/Components/CalendarCustom"
-import { buildShiftTitle, formatEventTitle, theme } from "@/lib"
-import { calendarParams } from "@/lib/dates"
+import { buildShiftTitle, formatEventTitle, initials } from "@/lib"
 import { usePageProps } from "@/lib/hooks"
 import useStore from "@/lib/store"
-
-import ShiftInfo from "./ShiftInfo"
-
 
 interface ScheduleProps {
 	client: Schema.ClientsShow
@@ -31,7 +23,19 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 		employee: Schema.EmployeesPersisted
 	) => {
 		try {
-			return formatEventTitle(settings.shift_title_format, schedule.starts_at, pick(employee, ["first_name", "last_name", "full_name"]))
+			const templateVars = {
+				first_name: employee.first_name,
+				last_name: employee.last_name,
+				full_name: employee.full_name,
+				first_initial: initials(employee.first_name),
+				last_initial: initials(employee.last_name),
+			}
+			return formatEventTitle(
+				settings.shift_title_format,
+				schedule.starts_at,
+				schedule.ends_at,
+				templateVars
+			)
 		// eslint-disable-next-line no-unused-vars
 		} catch(e) {
 			return schedule.name || buildShiftTitle({
@@ -40,7 +44,7 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 				name: employee.full_name,
 			})
 		}
-	}, [])
+	}, [settings.shift_title_format])
 
 	const processedSchedules = useMemo(() => {
 		return schedules?.map(schedule => {
