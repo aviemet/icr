@@ -7,6 +7,7 @@ import { createContext } from "@/lib/hooks"
 
 import * as classes from "./Calendar.css"
 import { viewComponents, VIEWS, VIEW_NAMES, NAVIGATION_ACTION } from "./Views"
+import { ErrorBoundary } from "../ErrorBoundary"
 
 export interface CalendarEvent {
 	id: string | number
@@ -82,15 +83,17 @@ const Calendar = <TEvent extends CalendarEvent = CalendarEvent>({
 	if(!localLocalizer) return null
 
 	return (
-		<CalendarProvider value={ calendarProviderState }>
-			<Toolbar views={ views } view={ currentView } />
+		<ErrorBoundary>
+			<CalendarProvider value={ calendarProviderState }>
+				<Toolbar views={ views } view={ currentView } />
 
-			<div className={ clsx(classes.calendar) }>
-				<div className={ clsx(classes.calendarContainer) }>
-					<ViewComponent />
+				<div className={ clsx(classes.calendar) }>
+					<div className={ clsx(classes.calendarContainer) }>
+						<ViewComponent />
+					</div>
 				</div>
-			</div>
-		</CalendarProvider>
+			</CalendarProvider>
+		</ErrorBoundary>
 	)
 }
 

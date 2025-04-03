@@ -8,7 +8,7 @@ import { ReactQueryFunction } from ".."
 export const useGetEmployeesAsOptions: ReactQueryFunction<Schema.EmployeesOptions[]> = (options) => {
 	return useQuery({
 		queryKey: ["employees"],
-		queryFn: async () => {
+		queryFn: async() => {
 			const res = await axios.get(Routes.apiEmployeesOptions())
 			return res.data
 		},

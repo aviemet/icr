@@ -33,6 +33,10 @@ export const leftSection = css`
   flex: 1;
   justify-items: flex-start;
   white-space: nowrap;
+
+  & > .${ buttonsContainer } {
+    width: fit-content;
+  }
 `
 
 export const centerSection = css`
@@ -40,6 +44,7 @@ export const centerSection = css`
 
 export const rightSection = css`
   flex: 1;
-  justify-items: flex-end;
+  display: flex;
+  justify-content: flex-end;
   white-space: nowrap;
 `

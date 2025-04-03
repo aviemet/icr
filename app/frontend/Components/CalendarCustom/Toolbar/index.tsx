@@ -51,7 +51,7 @@ const Toolbar = ({
 	}
 
 	return (
-		<Group justify="space-between" my="md">
+		<Group my="md">
 
 			<Box className={ clsx(classes.leftSection) }>
 				{ /* Time navigation buttons */ }
