@@ -1,13 +1,15 @@
+import { ElementProps } from "@mantine/core"
+import clsx from "clsx"
 import { useContextMenu, ContextMenuItemOptions } from "mantine-contextmenu"
 import { useCallback } from "react"
 
-import { DateTimeFormatter, Popover, Text } from "@/Components"
+import { Box, BoxProps, DateTimeFormatter, Popover, Text } from "@/Components"
 import { CalendarEvent } from "@/Components/CalendarCustom"
 
 import * as classes from "./Event.css"
 
-interface Event<TEvent extends CalendarEvent = CalendarEvent> {
-	children: React.ReactNode
+interface Event<TEvent extends CalendarEvent = CalendarEvent> extends
+	BoxProps, Omit<ElementProps<"div", keyof BoxProps>, "onClick"> {
 	event: TEvent
 	onClick?: (event: TEvent) => void
 	contextMenuOptions?: (event: TEvent) => ContextMenuItemOptions[]
@@ -15,6 +17,7 @@ interface Event<TEvent extends CalendarEvent = CalendarEvent> {
 
 const Event = ({
 	children,
+	className,
 	event,
 	onClick,
 	contextMenuOptions,
@@ -37,8 +40,8 @@ const Event = ({
 	return (
 		<Popover withArrow middlewares={ { shift: true } }>
 			<Popover.Target>
-				<div
-					className={ classes.event }
+				<Box
+					className={ clsx(classes.event, className) }
 					onClick={ handleClick }
 					onContextMenu={ contextMenuOptions
 						? showContextMenu([
@@ -48,7 +51,7 @@ const Event = ({
 					}
 				>
 					{ children }
-				</div>
+				</Box>
 			</Popover.Target>
 			<Popover.Dropdown>
 				<Text>{ event.title }</Text>

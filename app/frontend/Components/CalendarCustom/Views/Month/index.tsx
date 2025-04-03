@@ -59,21 +59,23 @@ const MonthViewComponent = ({
 						/**
 						 * EVENTS LAYER
 						 */
-						const eventsForDay = eventsByDay.get(day.toISOString())
-
 						acc.contentCells.push(
-							eventsForDay && eventsForDay.map(({ event, displayProperties }) => {
+							(eventsByDay.get(day.toISOString()) || []).map(({ event, displayProperties }) => {
 								// Render each event with its proper column positioning
 								// displayProperties contains layout info like how many columns the event spans
 								return (
 									<EventWrapper
+										key={ event.id }
 										columnStart={ displayProperties.columnStart }
 										columnSpan={ displayProperties.columnSpan }
-										className={ clsx({ continues: displayProperties.continues }) }
 										event={ event }
 									>
 										<Event
 											key={ event.id }
+											className={ clsx({
+												filled: !!displayProperties.continues,
+												indicator: !displayProperties.continues,
+											}) }
 											event={ event }
 										>
 											{ event.title }

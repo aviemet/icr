@@ -5,23 +5,26 @@ import { spanStrategy } from "./span"
 import { splitStrategy } from "./split"
 import { stackStrategy } from "./stack"
 
-const adjustMidnightTime = (date: Date): Date => {
-	if(date.getHours() !== 0 || date.getMinutes() !== 0) return date
-
-	return new Date(date.getTime() - 1)
-}
-
-export const spansWeekBorder = <TEvent extends CalendarEvent = CalendarEvent>(event: TEvent, localizer: CalendarLocalizer) => {
+export const spansWeekBorder = <TEvent extends CalendarEvent = CalendarEvent>(
+	event: TEvent,
+	localizer: CalendarLocalizer
+) => {
 	return !localizer.dateWithinRange("week", event.end, event.start)
 }
 
-export const splitAtWeekBorders = <TEvent extends CalendarEvent = CalendarEvent>(event: TEvent, localizer: CalendarLocalizer) => {
+export const splitAtWeekBorders = <TEvent extends CalendarEvent = CalendarEvent>(
+	event: TEvent,
+	localizer: CalendarLocalizer
+) => {
 	const events: TEvent[] = []
 	let currentStart = event.start
-	let currentEnd = adjustMidnightTime(event.end)
+	let currentEnd = localizer.adjustMidnightTime(event.end)
 
-	while(localizer.startOf(currentStart, "week").getTime() !==
-			 localizer.startOf(currentEnd, "week").getTime()) {
+	while(
+		localizer.startOf(currentStart, "week").getTime() !==
+		localizer.startOf(currentEnd, "week").getTime()
+	) {
+		console.log({ currentStart, currentEnd })
 		// Find the end of the current week
 		const weekEnd = localizer.endOf(currentStart, "week")
 

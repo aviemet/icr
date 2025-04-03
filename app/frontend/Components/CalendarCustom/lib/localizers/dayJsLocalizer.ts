@@ -10,12 +10,16 @@ import weekdayPlugin from "dayjs/plugin/weekday"
 
 import { CalendarLocalizer, CalendarLocalizerFactory, TIME_UNIT } from "@/Components/CalendarCustom/lib/localizers"
 import { VIEW_NAMES } from "@/Components/CalendarCustom/Views"
-import { displayStrategies, DisplayStrategy, DisplayStrategyFunction, EventDisplayDetails, EventDisplayProperties } from "@/Components/CalendarCustom/Views/Month/displayStrategies"
-import { strategies } from "@/Components/CalendarCustom/Views/Month/displayStrategies"
+import {
+	DisplayStrategy,
+	DisplayStrategyFunction,
+	EventDisplayDetails,
+	strategies,
+} from "@/Components/CalendarCustom/Views/Month/displayStrategies"
+import { SortedArray } from "@/lib/Collections/SortedArray"
 
 import { CalendarEvent } from "../.."
 import { defaultMessages } from "../messages"
-import { SortedArray } from "@/lib/Collections/SortedArray"
 
 dayjsLib.extend(localeData)
 dayjsLib.extend(weekdayPlugin)
@@ -140,6 +144,13 @@ export const dayJsLocalizer: CalendarLocalizerFactory<DayjsLib> = (dayjs) => {
 		return dayjs(date).isSame(compareDate, timeUnit)
 	}
 
+	const adjustMidnightTime = (date: Date) => {
+		const d = dayjs(date)
+		if(d.hour() !== 0 || d.minute() !== 0) return date
+
+		return d.subtract(1, "millisecond").toDate()
+	}
+
 	/**
 	 * Calendar Display Functions
 	 */
@@ -153,23 +164,25 @@ export const dayJsLocalizer: CalendarLocalizerFactory<DayjsLib> = (dayjs) => {
 	) => {
 		const firstDay = firstVisibleDay(date, view)
 		const lastDay = lastVisibleDay(date, view)
-		const strategy = typeof displayStrategy === "string" 
-		? (strategies[displayStrategy] as unknown as DisplayStrategyFunction<TEvent>)
-		: displayStrategy
+		const strategy = typeof displayStrategy === "string"
+			? (strategies[displayStrategy] as unknown as DisplayStrategyFunction<TEvent>)
+			: displayStrategy
 
 		const groupedEvents = new Map<string, SortedArray<EventDisplayDetails<TEvent>>>()
-		
-		events.forEach(event => {
-			if (!dayjs(event.end).isAfter(firstDay) || !dayjs(event.start).isBefore(lastDay)) return
 
+		events.forEach(event => {
+			// Ignore events outside visible range for current view
+			if(!dayjs(event.end).isAfter(firstDay) || !dayjs(event.start).isBefore(lastDay)) return
+
+			// Group events by start time
 			strategy(event, localizer).forEach(processedEvent => {
-				const mapKey = dayjs(processedEvent.event.start).startOf("day").toISOString()
-				
-				if (!groupedEvents.has(mapKey)) {
-					groupedEvents.set(mapKey, new SortedArray(processedEvent.compare))
+				const sortingKey = dayjs(processedEvent.event.start).startOf("day").toISOString()
+
+				if(!groupedEvents.has(sortingKey)) {
+					groupedEvents.set(sortingKey, new SortedArray(processedEvent.compare))
 				}
-				
-				groupedEvents.get(mapKey)!.push(processedEvent)
+
+				groupedEvents.get(sortingKey)!.push(processedEvent)
 			})
 		})
 
@@ -178,7 +191,7 @@ export const dayJsLocalizer: CalendarLocalizerFactory<DayjsLib> = (dayjs) => {
 
 	const calculateGridPlacement = <TEvent extends CalendarEvent = CalendarEvent>(event: TEvent) => {
 		const start = dayjs(event.start)
-		const end = dayjs(event.end)
+		const end = dayjs(adjustMidnightTime((event.end)))
 
 		const startDay = start.day()
 		const endDay = end.day()
@@ -214,5 +227,6 @@ export const dayJsLocalizer: CalendarLocalizerFactory<DayjsLib> = (dayjs) => {
 		startOf,
 		endOf,
 		dateWithinRange,
+		adjustMidnightTime,
 	})
 }

@@ -15,7 +15,10 @@ const compareStack = <TEvent extends CalendarEvent = CalendarEvent>(
 	return a.event.start.valueOf() - b.event.start.valueOf()
 }
 
-export const stackStrategy: DisplayStrategyFunction = <TEvent extends CalendarEvent>(event: TEvent, localizer: CalendarLocalizer) => {
+export const stackStrategy: DisplayStrategyFunction = <TEvent extends CalendarEvent>(
+	event: TEvent,
+	localizer: CalendarLocalizer
+) => {
 	let processedEvents: (typeof event)[]
 
 	if(spansWeekBorder(event, localizer)) {
@@ -26,6 +29,7 @@ export const stackStrategy: DisplayStrategyFunction = <TEvent extends CalendarEv
 	return processedEvents.map((processedEvent, index) => {
 		const displayProperties: EventDisplayProperties = localizer.calculateGridPlacement(processedEvent)
 
+		// console.log({ index, length: processedEvents.length })
 		if(index < processedEvents.length) {
 			displayProperties.continues = true
 		}

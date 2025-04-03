@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react"
 
 import { VIEW_NAMES } from "@/Components/CalendarCustom/Views"
-import { DisplayStrategy, DisplayStrategyFunction, EventDisplayProperties } from "@/Components/CalendarCustom/Views/Month/displayStrategies"
+import {
+	DisplayStrategy,
+	DisplayStrategyFunction,
+	EventDisplayDetails,
+} from "@/Components/CalendarCustom/Views/Month/displayStrategies"
+import { SortedArray } from "@/lib/Collections/SortedArray"
 
 import { CalendarEvent } from "../.."
 import { CalendarMessages, defaultMessages } from "../messages"
-import { SortedArray } from "@/lib/Collections/SortedArray"
-import { EventDisplayDetails } from "@/Components/CalendarCustom/Views/Month/displayStrategies"
 
 export { dayJsLocalizer } from "./dayJsLocalizer"
 
@@ -23,10 +26,21 @@ export interface CalendarLocalizerMethods {
 	isAfter: (date: Date, compareDate: Date) => boolean
 	add: (date: Date, amount: number, unit: TIME_UNIT) => Date
 	subtract: (date: Date, amount: number, unit: TIME_UNIT) => Date
+	dayOfWeek: (date: Date) => number
+	startOf: (date: Date, unit: TIME_UNIT) => Date
+	endOf: (date: Date, unit: TIME_UNIT) => Date
+	dateWithinRange: (view: VIEW_NAMES, date: Date, compareDate?: Date) => boolean
 	/**
-	 * Filters events outside of view window. 
-	 * Groups events by start date into a Map. 
-	 * Breaks long events into multiples based on the display strategy. 
+	 * Subtracts 1 millisecond if the time is midnight.
+	 * Ensures reading the date for an event ending at midnight returns the starting day
+	 * rather than the next day, which would cause the event to flow to the next date cell
+	 */
+	adjustMidnightTime: (date: Date) => Date
+
+	/**
+	 * Filters events outside of view window.
+	 * Groups events by start date into a Map.
+	 * Breaks long events into multiples based on the display strategy.
 	 */
 	groupedEventsForPeriod: <TEvent extends CalendarEvent = CalendarEvent>(
 		events: TEvent[],
@@ -38,10 +52,6 @@ export interface CalendarLocalizerMethods {
 	calculateGridPlacement: <TEvent extends CalendarEvent = CalendarEvent>(event: TEvent) => { columnStart: number, columnSpan: number }
 	format: (date: Date, format: string) => string
 	messages: CalendarMessages
-	dayOfWeek: (date: Date) => number
-	startOf: (date: Date, unit: TIME_UNIT) => Date
-	endOf: (date: Date, unit: TIME_UNIT) => Date
-	dateWithinRange: (view: VIEW_NAMES, date: Date, compareDate?: Date) => boolean
 }
 
 export class CalendarLocalizer {
@@ -51,16 +61,17 @@ export class CalendarLocalizer {
 	visibleDays: CalendarLocalizerMethods["visibleDays"]
 	isBefore: CalendarLocalizerMethods["isBefore"]
 	isAfter: CalendarLocalizerMethods["isAfter"]
-	groupedEventsForPeriod: CalendarLocalizerMethods["groupedEventsForPeriod"]
-	calculateGridPlacement: CalendarLocalizerMethods["calculateGridPlacement"]
 	add: CalendarLocalizerMethods["add"]
 	subtract: CalendarLocalizerMethods["subtract"]
-	format: CalendarLocalizerMethods["format"]
-	messages: CalendarLocalizerMethods["messages"]
 	dayOfWeek: CalendarLocalizerMethods["dayOfWeek"]
 	startOf: CalendarLocalizerMethods["startOf"]
 	endOf: CalendarLocalizerMethods["endOf"]
 	dateWithinRange: CalendarLocalizerMethods["dateWithinRange"]
+	adjustMidnightTime: CalendarLocalizerMethods["adjustMidnightTime"]
+	groupedEventsForPeriod: CalendarLocalizerMethods["groupedEventsForPeriod"]
+	calculateGridPlacement: CalendarLocalizerMethods["calculateGridPlacement"]
+	format: CalendarLocalizerMethods["format"]
+	messages: CalendarLocalizerMethods["messages"]
 
 	constructor(fns: CalendarLocalizerMethods) {
 		this.weekdays = fns.weekdays
@@ -79,6 +90,7 @@ export class CalendarLocalizer {
 		this.startOf = fns.startOf
 		this.endOf = fns.endOf
 		this.dateWithinRange = fns.dateWithinRange
+		this.adjustMidnightTime = fns.adjustMidnightTime
 	}
 }
 
