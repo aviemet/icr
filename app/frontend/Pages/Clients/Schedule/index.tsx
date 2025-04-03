@@ -16,6 +16,7 @@ import useStore from "@/lib/store"
 
 import NewShiftForm from "./NewShiftForm"
 import ShiftInfo from "./ShiftInfo"
+import { initials } from "../../../lib/strings"
 
 
 interface ScheduleProps {
@@ -100,7 +101,19 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 		employee: Schema.EmployeesPersisted
 	) => {
 		try {
-			return formatEventTitle(settings.shift_title_format, schedule.starts_at, pick(employee, ["first_name", "last_name", "full_name"]))
+			const templateVars = {
+				first_name: employee.first_name,
+				last_name: employee.last_name,
+				full_name: employee.full_name,
+				first_initial: initials(employee.first_name),
+				last_initial: initials(employee.last_name),
+			}
+			return formatEventTitle(
+				settings.shift_title_format,
+				schedule.starts_at,
+				schedule.ends_at,
+				templateVars
+			)
 		// eslint-disable-next-line no-unused-vars
 		} catch(e) {
 			return schedule.name || buildShiftTitle({
@@ -109,7 +122,7 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 				name: employee.full_name,
 			})
 		}
-	}, [])
+	}, [settings.shift_title_format])
 
 	const processedSchedules = useMemo(() => {
 		return schedules?.map(schedule => {

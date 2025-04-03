@@ -29,7 +29,7 @@ class Setting < RailsSettings::Base
     default_language: "en",
     default_currency: "USD",
     default_timezone: "America/Los_Angeles",
-    shift_title_format: "{h:mm} - {full_name}",
+    shift_title_format: "{start:h:mma} - {end:h:mma}: {full_name}",
     overtime_weekly_hours: 40,
     overtime_daily_hours: 8,
     payroll_period_type: PAY_PERIOD_TYPES[:semi_monthly],
@@ -48,11 +48,14 @@ class Setting < RailsSettings::Base
     presence: true
   }
 
-  ALLOWED_TEMPLATE_VARS = %i(first_name last_name full_name).freeze
+  ########################
+  # Event Title Template #
+  ########################
+  ALLOWED_TEMPLATE_VARS = %i(first_name last_name full_name first_initial last_initial).freeze
   field :shift_title_format, type: :string, default: DEFAULT_SETTINGS[:shift_title_format], validates: {
     presence: true,
     format: {
-      with: %r(\A[^{}]*(\{(?:#{ALLOWED_TEMPLATE_VARS.join('|')}|[YMDHhmsAa\-/ :]+)\}[^{}]*)*\z),
+      with: %r(\A[^{}]*(\{(?:#{ALLOWED_TEMPLATE_VARS.join('|')}|(?:start|end):[YMDHhmsAa\-/ :]+)\}[^{}]*)*\z),
       message: "must contain valid variables and date formats"
     }
   }

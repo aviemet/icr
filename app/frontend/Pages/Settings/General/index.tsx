@@ -3,7 +3,7 @@ import { Form, Submit, TextInput } from "@/Components/Form"
 import {
 	FormCurrenciesDropdown,
 	FormLanguagesDropdown,
-	FormPayPeriodsDropdown,
+	// FormPayPeriodsDropdown,
 	FormTimezonesDropdown,
 } from "@/Features/Dropdowns"
 import { Routes, withLayout } from "@/lib"
