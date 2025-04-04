@@ -1,6 +1,7 @@
 import { css } from "@linaria/core"
 
 import { borderColor } from "../../Calendar.css"
+import { event } from "./components/Event/Event.css"
 
 import { rem, vars } from "@/lib"
 
@@ -51,7 +52,7 @@ export const columnHeading = css`
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-top: ${ vars.spacing.sm };
+  padding: ${ vars.spacing.xxs };
 
   border-right-color: ${ borderColor };
   border-right-width: 1px;

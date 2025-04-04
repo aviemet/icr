@@ -4,6 +4,8 @@ import { eventHeight } from "../../MonthView.css"
 
 import { vars } from "@/lib"
 
+const triangleWidth = 3
+
 export const eventWrapper = css`
   --column-start: 1;
   --column-span: 1;
@@ -20,8 +22,6 @@ export const eventWrapper = css`
   grid-column: var(--column-start) / span var(--column-span);
 `
 
-const triangleWidth = 3
-
 export const event = css`
   font-size: ${ vars.fontSizes.xs };
   border-radius: ${ vars.radius.sm };
@@ -31,9 +31,11 @@ export const event = css`
   cursor: pointer;
   min-height: ${ eventHeight };
   height: ${ eventHeight };
-  transition: background-color 200ms ease-in-out;
-  /* overflow: hidden; */
   position: relative;
+
+  &, &:before, &:after {
+    transition: all 200ms ease-in-out;
+  }
 
   & > span {
     overflow: hidden;
@@ -41,11 +43,11 @@ export const event = css`
 
   &.filled {
     background-color: var(--event-color);
-    /* Using light-dark just to increase specificity */
-    color: light-dark(var(--contrasting-color), var(--contrasting-color));
+    color: var(--contrasting-color);
 
     &:hover {
-      background-color: var(--hover-color);
+      /* background-color: var(--hover-color);
+      outline: 1px solid color-mix(in srgb, var(--event-color) 100%, var(--contrasting-color)); */
     }
   }
 
@@ -115,5 +117,3 @@ export const event = css`
     }
   }
 `
-
-export const eventContinues = css``

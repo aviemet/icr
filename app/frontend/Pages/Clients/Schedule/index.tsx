@@ -9,15 +9,11 @@ import {
 } from "@/Components"
 import { DisplayStrategy } from "@/Components/Calendar/Views/Month/displayStrategies"
 import { Select } from "@/Components/Inputs"
-import { buildShiftTitle, formatEventTitle, theme } from "@/lib"
-import { calendarParams } from "@/lib/dates"
+import { buildShiftTitle, formatEventTitle } from "@/lib"
 import { usePageProps } from "@/lib/hooks"
-import useStore from "@/lib/store"
 import { initials } from "@/lib/strings"
 
 import NewShiftForm from "./NewShiftForm"
-import ShiftInfo from "./ShiftInfo"
-
 
 interface ScheduleProps {
 	client: Schema.ClientsShow

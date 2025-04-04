@@ -1,10 +1,9 @@
-import { Box, darken, isLightColor, lighten, Popover, Text } from "@mantine/core"
+import { Box, darken, isLightColor, lighten } from "@mantine/core"
 import clsx from "clsx"
 import { ContextMenuItemOptions, useContextMenu } from "mantine-contextmenu"
 import { CSSProperties, PropsWithChildren, useCallback } from "react"
 
 import { CalendarEvent } from "@/Components/Calendar"
-import { DateTimeFormatter } from "@/Components/Formatters"
 import { vars } from "@/lib"
 import useStore from "@/lib/store"
 
@@ -17,6 +16,7 @@ interface EventWrapperProps<TEvent extends CalendarEvent = CalendarEvent> extend
 	style?: CSSProperties
 	event: TEvent
 	contextMenuOptions?: (event: TEvent) => ContextMenuItemOptions[]
+	setHoverId: React.Dispatch<React.SetStateAction<string | number>>
 }
 
 /**
@@ -31,6 +31,7 @@ const EventWrapper = <TEvent extends CalendarEvent = CalendarEvent>({
 	style,
 	event,
 	contextMenuOptions,
+	setHoverId,
 }: EventWrapperProps<TEvent>) => {
 	const { getContrastingColor } = useStore()
 
@@ -51,9 +52,7 @@ const EventWrapper = <TEvent extends CalendarEvent = CalendarEvent>({
 
 	return (
 		<Box
-			className={ clsx(classes.eventWrapper, {
-				[classes.eventContinues]: columnSpan > 1,
-			}) }
+			className={ clsx(classes.eventWrapper) }
 			style={ {
 				"--column-start": columnStart,
 				"--column-span": columnSpan,
@@ -69,16 +68,11 @@ const EventWrapper = <TEvent extends CalendarEvent = CalendarEvent>({
 				])
 				: undefined
 			}
+			data-id={ event.id }
+			onMouseOver={ () => setHoverId(String(event.id)) }
+			onMouseOut={ () => setHoverId("") }
 		>
-			<Popover withArrow middlewares={ { shift: true } }>
-				<Popover.Target>
-					{ children }
-				</Popover.Target>
-				<Popover.Dropdown>
-					<Text>{ event.title }</Text>
-					<Text>From <DateTimeFormatter format="dateTimeShort">{ event.start }</DateTimeFormatter> to <DateTimeFormatter format="dateTimeShort">{ event.end }</DateTimeFormatter></Text>
-				</Popover.Dropdown>
-			</Popover>
+			{ children }
 		</Box>
 	)
 }

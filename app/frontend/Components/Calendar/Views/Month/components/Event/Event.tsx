@@ -29,10 +29,7 @@ const Event = ({
 
 	return (
 		<Box
-			className={ clsx(
-				classes.event,
-				className
-			) }
+			className={ clsx(classes.event, className) }
 			onClick={ handleClick }
 		>
 			<Box component="span">{ children }</Box>

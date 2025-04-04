@@ -1,12 +1,13 @@
 import clsx from "clsx"
 import { chunk } from "lodash-es"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 
 import { CalendarEvent, useCalendarContext } from "@/Components/Calendar"
 import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/Components/Calendar/Views"
 
 import { DaysHeading } from "./components/DaysHeading"
 import { EventWrapper, Event } from "./components/Event"
+import { event as eventClassName } from "./components/Event/Event.css"
 import { groupedEventsForPeriod } from "./displayStrategies"
 import * as classes from "./MonthView.css"
 
@@ -19,6 +20,8 @@ const MonthViewComponent = ({
 }: MonthViewProps) => {
 	const { date, localizer, events } = useCalendarContext()
 
+	const [hoverId, setHoverId] = useState<string | number>("")
+
 	// Group all events by their date for efficient lookup when rendering
 	const eventsByDay = useMemo(() => {
 		return groupedEventsForPeriod(events, date, VIEWS.month, localizer, displayStrategy)
@@ -30,8 +33,36 @@ const MonthViewComponent = ({
 		return chunk(localizer.visibleDays(date, VIEWS.month), weekdays.length)
 	}, [date, localizer, weekdays.length])
 
+	// Generate dynamic hover styles
+	const dynamicHoverStyles = useMemo(() => {
+		if(!hoverId) return ""
+		const safeHoverId = String(hoverId).replace(/"/g, '\\"')
+
+		return `
+      .${classes.monthView} [data-id="${safeHoverId}"] .${eventClassName} {
+				--event-color: black;
+        background-color: var(--hover-color);
+        outline: 1px solid color-mix(in srgb, var(--event-color) 50%, white);
+      }
+      /* Apply to pseudo-elements for continued events */
+      .${classes.monthView} [data-id="${safeHoverId}"] .${eventClassName}.continues-on::after {
+        border-left-color: var(--hover-color);
+      }
+      .${classes.monthView} [data-id="${safeHoverId}"] .${eventClassName}.continued-from::before {
+        border-top-color: var(--hover-color);
+        border-bottom-color: var(--hover-color);
+      }
+    `
+	}, [hoverId])
+
 	return (
-		<div className={ clsx(classes.monthView, className) } style={ style }>
+		<div
+			className={ clsx(classes.monthView, className) }
+			style={ style }
+		>
+			{ /* Inject the dynamic styles */ }
+			<style>{ dynamicHoverStyles }</style>
+
 			<DaysHeading weekdays={ weekdays } />
 
 			<div className={ clsx(classes.daysContainer) }>
@@ -58,13 +89,13 @@ const MonthViewComponent = ({
 						 */
 						acc.contentCells.push(
 							(eventsByDay.get(day.toISOString()) || []).map(({ event, displayProperties }) => {
-								console.log({ displayProperties })
 								return (
 									<EventWrapper
 										key={ `${event.id}-${displayProperties.displayStart?.toISOString() || event.start.toISOString()}` }
 										columnStart={ displayProperties.columnStart }
 										columnSpan={ displayProperties.columnSpan }
 										event={ event }
+										setHoverId={ setHoverId }
 									>
 										<Event
 											key={ `${event.id}-${displayProperties.displayStart?.toISOString() || event.start.toISOString()}` }
