@@ -4,6 +4,7 @@ import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 import { AgendaView } from "./Agenda"
 import { DayView } from "./Day"
 import { MonthView } from "./Month"
+import { DisplayStrategy } from "./Month/displayStrategies"
 import { WeekView } from "./Week"
 
 export const VIEWS = {
@@ -25,6 +26,7 @@ export type NAVIGATION_ACTION = keyof typeof NAVIGATION
 export interface BaseViewProps<TEvent extends CalendarEvent = CalendarEvent> {
 	className?: string
 	style?: React.CSSProperties
+	displayStrategy?: DisplayStrategy
 }
 
 export type DateRange = { start: Date, end: Date }

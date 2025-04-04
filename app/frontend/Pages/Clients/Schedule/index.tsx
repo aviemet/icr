@@ -1,11 +1,14 @@
 import { router } from "@inertiajs/react"
 import { modals } from "@mantine/modals"
-import React, { useCallback, useMemo, useRef } from "react"
+import React, { useCallback, useMemo, useRef, useState } from "react"
 
 import {
 	Box,
 	Calendar,
+	Group,
 } from "@/Components"
+import { DisplayStrategy } from "@/Components/Calendar/Views/Month/displayStrategies"
+import { Select } from "@/Components/Inputs"
 import { buildShiftTitle, formatEventTitle, theme } from "@/lib"
 import { calendarParams } from "@/lib/dates"
 import { usePageProps } from "@/lib/hooks"
@@ -25,6 +28,8 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 	const { settings } = usePageProps()
 
 	const newShiftModalRef = useRef<string>()
+
+	const [displayStrategy, setDisplayStrategy] = useState<DisplayStrategy>("stack")
 
 	const handleNewShiftSuccess = useCallback(() => {
 		if(!newShiftModalRef.current) return
@@ -88,11 +93,24 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 
 	return (
 		<>
-			<h1>{ client?.person?.name }</h1>
-
+			<Group justify="space-between">
+				<h1>{ client?.person?.name }</h1>
+				<Box>
+					<Select
+						options={ [
+							{ value: "stack", label: "Stack" },
+							{ value: "span", label: "Span" },
+							{ value: "split", label: "Split" },
+						] as { value: DisplayStrategy, label: string }[] }
+						value={ displayStrategy }
+						onChange={ option => setDisplayStrategy(option) }
+					/>
+				</Box>
+			</Group>
 			<Box style={ { width: "100%", height: "1px", minHeight: "90%" } }>
 				<Calendar
 					events={ processedSchedules }
+					displayStrategy={ displayStrategy }
 					// onSelectEvent={ handleSelectEvent }
 					// onSelectSlot={ handleSelectSlot }
 					// onNavigate={ handleDateChange }

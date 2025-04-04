@@ -16,7 +16,7 @@ export function useEventDisplay<TEvent extends CalendarEvent = CalendarEvent>(
 ): EventDisplayResult {
 	return useMemo(() => {
 		const startDay = localizer.startOf(event.start, "day")
-		const endDay = localizer.startOf(event.end, "day")
+		const endDay = localizer.startOf(localizer.adjustMidnightTime(event.end), "day")
 		const spansMultipleDays = startDay.getTime() !== endDay.getTime()
 
 		switch(strategy) {

@@ -73,10 +73,6 @@ const MonthViewComponent = ({
 									>
 										<Event
 											key={ event.id }
-											className={ clsx({
-												filled: !!displayProperties.continues,
-												indicator: !displayProperties.continues,
-											}) }
 											event={ event }
 											strategy={ displayStrategy }
 											localizer={ localizer }
