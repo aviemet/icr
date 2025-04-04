@@ -8,11 +8,11 @@ const headingHeight = rem(25)
 export const eventHeight = rem(22)
 
 export const monthView = css`
-	position: absolute;
-	inset: 0;
+	position: relative;
 	display: flex;  
 	flex-direction: column;
-	overflow: hidden;
+	flex: 1 1 auto;
+	min-height: 0;
 	margin: 0;
 `
 
@@ -28,22 +28,19 @@ export const daysContainer = css`
 	margin: 0;
 	display: flex;
 	flex-direction: column;
-	flex: 1;
-	height: 100%;
+	flex: 1 1 auto;
+	min-height: 0;
 `
 
 export const row = css`
 	position: relative;
 	display: flex;
-	flex: 1;
+	flex: 1 1 0%;
 	pointer-events: none;
 	border-top-color: ${ borderColor };
 	border-top-width: 1px;
 	border-top-style: solid;
-
-  /* &:last-child {
-    border-bottom: none;
-  } */
+	padding-bottom: ${ vars.spacing.xs };
 `
 
 export const columnHeading = css`
@@ -66,22 +63,29 @@ export const columnHeading = css`
 `
 
 export const rowLayerContainer = css`
-	position: absolute;
-	inset: 0;
+	position: relative;
 	display: flex;
+	flex: 1;
 	pointer-events: none;
-	height: 100%;
 `
 
 export const backgroundLayer = css`
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
 `
 
 export const headingLayer = css`
-
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
 `
 
 export const contentLayer = css`
-  flex: 1 1 0%;
+  position: relative;
+  flex: 1;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(auto-fill, calc(${ eventHeight } + 2px));

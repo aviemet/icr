@@ -113,22 +113,19 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 					/>
 				</Box>
 			</Group>
-			<Box style={ { width: "100%", height: "1px", minHeight: "90%" } }>
-				<Calendar
-					defaultDate={ new Date() }
-					defaultView="month"
-					events={ processedSchedules }
-					displayStrategy={ displayStrategy }
-					// onSelectEvent={ handleSelectEvent }
-					// onSelectSlot={ handleSelectSlot }
-					// onNavigate={ handleDateChange }
-					// onView={ handleViewChange }
-					// onRangeChange={ handleRangeChange }
-					// eventPropGetter={ eventStyleGetter }
-					// onNewShift={ handleNewShift }
-				/>
-			</Box>
-
+			<Calendar
+				defaultDate={ new Date() }
+				defaultView="month"
+				events={ processedSchedules }
+				displayStrategy={ displayStrategy }
+				// onSelectEvent={ handleSelectEvent }
+				// onSelectSlot={ handleSelectSlot }
+				// onNavigate={ handleDateChange }
+				// onView={ handleViewChange }
+				// onRangeChange={ handleRangeChange }
+				// eventPropGetter={ eventStyleGetter }
+				// onNewShift={ handleNewShift }
+			/>
 		</>
 	)
 }

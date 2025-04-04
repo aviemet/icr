@@ -1,7 +1,7 @@
 import { DatePicker, DateValue, MonthPicker } from "@mantine/dates"
 import { useDisclosure } from "@mantine/hooks"
 import clsx from "clsx"
-import { useMemo } from "react"
+import { forwardRef, useMemo } from "react"
 
 import { Box, Button, Group, Menu, Paper } from "@/Components"
 import { FloatingIndicator } from "@/Components/Button/FloatingIndicator"
@@ -18,10 +18,13 @@ interface ToolbarProps {
 	view: VIEW_NAMES
 }
 
-const Toolbar = ({
-	views = Object.values(VIEWS),
-	view,
-}: ToolbarProps) => {
+const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>((
+	{
+		views = Object.values(VIEWS),
+		view,
+	},
+	ref,
+) => {
 	const { date, localizer, handleViewChange, handleDateChange } = useCalendarContext()
 	const [opened, { close }] = useDisclosure(false)
 
@@ -51,7 +54,7 @@ const Toolbar = ({
 	}
 
 	return (
-		<Group my="md">
+		<Group my="md" ref={ ref }>
 
 			<Box className={ clsx(classes.leftSection) }>
 				{ /* Time navigation buttons */ }
@@ -135,6 +138,6 @@ const Toolbar = ({
 			</Box>
 		</Group>
 	)
-}
+})
 
 export default Toolbar

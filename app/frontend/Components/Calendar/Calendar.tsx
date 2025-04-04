@@ -1,5 +1,6 @@
+import { Box } from "@mantine/core"
 import clsx from "clsx"
-import React, { useMemo, useState, useCallback } from "react"
+import React, { useMemo, useState, useCallback, useRef, useLayoutEffect } from "react"
 
 import { CalendarEvent, CalendarProvider } from "@/Components/Calendar"
 import { CalendarLocalizer, useDefaultLocalizer } from "@/Components/Calendar/lib/localizers"
@@ -31,6 +32,16 @@ const Calendar = <TEvent extends CalendarEvent = CalendarEvent>({
 
 	const [date, setDate] = useState<Date>(defaultDate || new Date())
 	const [currentView, setCurrentView] = useState<VIEW_NAMES>(defaultView)
+	const [minHeight, setMinHeight] = useState("100%")
+
+	const toolbarRef = useRef<HTMLDivElement>(null)
+
+	useLayoutEffect(() => {
+		if(!toolbarRef.current) return
+
+		const { height } = toolbarRef.current.getBoundingClientRect()
+		setMinHeight(`calc(100% - ${height}px)`)
+	}, [])
 
 	const ViewComponent = useMemo(() => viewComponents[currentView], [currentView])
 
@@ -62,21 +73,22 @@ const Calendar = <TEvent extends CalendarEvent = CalendarEvent>({
 		handleDateChange,
 	}), [date, events, localLocalizer, handleViewChange, handleDateChange])
 
-
 	if(!localLocalizer) return null
 
 	return (
-		<ErrorBoundary>
-			<CalendarProvider value={ calendarProviderState }>
-				<Toolbar views={ views } view={ currentView } />
+		<Box className={ clsx(classes.calendarOuterContainer) } style={ { minHeight } }>
+			<ErrorBoundary>
+				<CalendarProvider value={ calendarProviderState }>
+					<Toolbar ref={ toolbarRef } views={ views } view={ currentView } />
 
-				<div className={ clsx(classes.calendar) }>
-					<div className={ clsx(classes.calendarContainer) }>
-						<ViewComponent displayStrategy={ displayStrategy }/>
+					<div className={ clsx(classes.calendar) }>
+						<div className={ clsx(classes.calendarInnerContainer) }>
+							<ViewComponent displayStrategy={ displayStrategy }/>
+						</div>
 					</div>
-				</div>
-			</CalendarProvider>
-		</ErrorBoundary>
+				</CalendarProvider>
+			</ErrorBoundary>
+		</Box>
 	)
 }
 
