@@ -16,7 +16,7 @@ interface EventWrapperProps<TEvent extends CalendarEvent = CalendarEvent> extend
 	style?: CSSProperties
 	event: TEvent
 	contextMenuOptions?: (event: TEvent) => ContextMenuItemOptions[]
-	setHoverId: React.Dispatch<React.SetStateAction<string | number>>
+	setHoverId: React.Dispatch<React.SetStateAction<string>>
 }
 
 /**

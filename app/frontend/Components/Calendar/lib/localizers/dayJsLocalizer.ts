@@ -140,6 +140,10 @@ export const dayJsLocalizer: CalendarLocalizerFactory<DayjsLib> = (dayjs) => {
 		return dayjs(date).isSame(compareDate, timeUnit)
 	}
 
+	const duration = (start: Date, end: Date) => {
+		return Math.round(dayjs.duration(dayjs(end).diff(start)).asMinutes())
+	}
+
 	const adjustMidnightTime = (date: Date) => {
 		const d = dayjs(date)
 		if(d.hour() !== 0 || d.minute() !== 0) return date
@@ -171,6 +175,7 @@ export const dayJsLocalizer: CalendarLocalizerFactory<DayjsLib> = (dayjs) => {
 		startOf,
 		endOf,
 		dateWithinRange,
+		duration,
 		adjustMidnightTime,
 	})
 }

@@ -5,22 +5,27 @@ import { useMemo, useState } from "react"
 import { CalendarEvent, useCalendarContext } from "@/Components/Calendar"
 import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/Components/Calendar/Views"
 
+import DailyTotals from "./components/DailyTotals"
 import { DaysHeading } from "./components/DaysHeading"
 import { EventWrapper, Event } from "./components/Event"
-import { event as eventClassName } from "./components/Event/Event.css"
 import { groupedEventsForPeriod } from "./displayStrategies"
 import * as classes from "./MonthView.css"
+import { useDynamicHoverStyles } from "./useDynamicHoverStyles"
 
-interface MonthViewProps<TEvent extends CalendarEvent = CalendarEvent> extends BaseViewProps<TEvent> {}
+interface MonthViewProps<TEvent extends CalendarEvent = CalendarEvent> extends BaseViewProps<TEvent> {
+	showDailyTotals?: boolean
+}
 
 const MonthViewComponent = ({
 	className,
 	style,
 	displayStrategy = "span",
+	showDailyTotals = true,
 }: MonthViewProps) => {
 	const { date, localizer, events } = useCalendarContext()
 
-	const [hoverId, setHoverId] = useState<string | number>("")
+	const [hoverId, setHoverId] = useState<string>("")
+	const dynamicHoverStyles = useDynamicHoverStyles(hoverId)
 
 	// Group all events by their date for efficient lookup when rendering
 	const eventsByDay = useMemo(() => {
@@ -33,27 +38,7 @@ const MonthViewComponent = ({
 		return chunk(localizer.visibleDays(date, VIEWS.month), weekdays.length)
 	}, [date, localizer, weekdays.length])
 
-	// Generate dynamic hover styles
-	const dynamicHoverStyles = useMemo(() => {
-		if(!hoverId) return ""
-		const safeHoverId = String(hoverId).replace(/"/g, '\\"')
-
-		return `
-      .${classes.monthView} [data-id="${safeHoverId}"] .${eventClassName} {
-				--event-color: black;
-        background-color: var(--hover-color);
-        outline: 1px solid color-mix(in srgb, var(--event-color) 50%, white);
-      }
-      /* Apply to pseudo-elements for continued events */
-      .${classes.monthView} [data-id="${safeHoverId}"] .${eventClassName}.continues-on::after {
-        border-left-color: var(--hover-color);
-      }
-      .${classes.monthView} [data-id="${safeHoverId}"] .${eventClassName}.continued-from::before {
-        border-top-color: var(--hover-color);
-        border-bottom-color: var(--hover-color);
-      }
-    `
-	}, [hoverId])
+	// const dailyTotals = new Map<string, number>()
 
 	return (
 		<div
@@ -68,18 +53,19 @@ const MonthViewComponent = ({
 			<div className={ clsx(classes.daysContainer) }>
 				{ weeks.map((week, index) => {
 					const { backgroundCells, headingCells, contentCells } = week.reduce((acc, day) => {
+						const dayMapKey = day.toISOString()
 						/**
 						 * BACKGROUND LAYER
 						 */
 						acc.backgroundCells.push(
-							<div className={ clsx(classes.dateCellBackground) } key={ day.toISOString() } />
+							<div className={ clsx(classes.dateCellBackground) } key={ dayMapKey } />
 						)
 
 						/**
 						 * HEADING LAYER
 						 */
 						acc.headingCells.push(
-							<div className={ clsx(classes.dateCellHeading) } key={ day.toISOString() }>
+							<div className={ clsx(classes.dateCellHeading) } key={ dayMapKey }>
 								{ day.getDate() }
 							</div>
 						)
@@ -88,17 +74,21 @@ const MonthViewComponent = ({
 						 * EVENTS LAYER
 						 */
 						acc.contentCells.push(
-							(eventsByDay.get(day.toISOString()) || []).map(({ event, displayProperties }) => {
+							(eventsByDay.get(dayMapKey) || []).map(({ event, displayProperties }) => {
+								// let dailyTotal = dailyTotals.get(dayMapKey) ?? 0
+								// dailyTotal += localizer.duration(displayProperties.displayStart, displayProperties.displayEnd)
+								// dailyTotals.set(dayMapKey, dailyTotal)
+
 								return (
 									<EventWrapper
-										key={ `${event.id}-${displayProperties.displayStart?.toISOString() || event.start.toISOString()}` }
+										key={ `${event.id}-${displayProperties.displayStart.toISOString() || event.start.toISOString()}` }
 										columnStart={ displayProperties.columnStart }
 										columnSpan={ displayProperties.columnSpan }
 										event={ event }
 										setHoverId={ setHoverId }
 									>
 										<Event
-											key={ `${event.id}-${displayProperties.displayStart?.toISOString() || event.start.toISOString()}` }
+											key={ `${event.id}-${displayProperties.displayStart.toISOString() || event.start.toISOString()}` }
 											event={ event }
 											displayProperties={ displayProperties }
 											localizer={ localizer }
