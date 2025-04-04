@@ -14,7 +14,6 @@ import {
 } from "./middleware"
 import { runAxe } from "./middleware/axe"
 
-
 const pages = import.meta.glob<PagesObject>("../Pages/**/index.tsx")
 
 dayjs.extend(localizedFormat)
@@ -36,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	createInertiaApp({
 		title: title => `${SITE_TITLE} - ${title}`,
 
-		resolve: async (name) => {
+		resolve: async(name) => {
 			const page: PagesObject = (await pages[`../Pages/${name}/index.tsx`]())
 
 			return handlePageLayout(page)
