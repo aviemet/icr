@@ -29,7 +29,7 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 
 	const newShiftModalRef = useRef<string>()
 
-	const [displayStrategy, setDisplayStrategy] = useState<DisplayStrategy>("stack")
+	const [displayStrategy, setDisplayStrategy] = useState<DisplayStrategy>("split")
 
 	const handleNewShiftSuccess = useCallback(() => {
 		if(!newShiftModalRef.current) return
@@ -53,7 +53,9 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 
 	const handleEventTitle = useCallback((
 		schedule: Schema.CalendarEventsShow,
-		employee: Schema.EmployeesPersisted
+		employee: Schema.EmployeesPersisted,
+		displayStart?: Date,
+		displayEnd?: Date
 	) => {
 		try {
 			const templateVars = {
@@ -65,30 +67,30 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 			}
 			return formatEventTitle(
 				settings.shift_title_format,
-				schedule.starts_at,
-				schedule.ends_at,
+				displayStart || schedule.starts_at,
+				displayEnd || schedule.ends_at,
 				templateVars
 			)
 		// eslint-disable-next-line no-unused-vars
 		} catch(e) {
 			return schedule.name || buildShiftTitle({
-				start: schedule.starts_at,
-				end: schedule.ends_at,
+				start: displayStart || schedule.starts_at,
+				end: displayEnd || schedule.ends_at,
 				name: employee.full_name,
 			})
 		}
 	}, [settings.shift_title_format])
 
 	const processedSchedules = useMemo(() => {
-		return schedules?.map(schedule => {
-			return {
-				id: schedule.id,
-				title: handleEventTitle(schedule, schedule.shift.employee),
-				start: schedule.starts_at,
-				end: schedule.ends_at,
-				color: schedule.shift.employee.color,
-			}
-		}) || []
+		return schedules?.map(schedule => ({
+			id: schedule.id,
+			title: handleEventTitle(schedule, schedule.shift.employee),
+			start: schedule.starts_at,
+			end: schedule.ends_at,
+			color: schedule.shift.employee.color,
+			getTitleWithDisplayTimes: (displayStart?: Date, displayEnd?: Date) =>
+				handleEventTitle(schedule, schedule.shift.employee, displayStart, displayEnd),
+		})) || []
 	}, [schedules, handleEventTitle])
 
 	return (
@@ -103,12 +105,18 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 							{ value: "split", label: "Split" },
 						] as { value: DisplayStrategy, label: string }[] }
 						value={ displayStrategy }
-						onChange={ option => setDisplayStrategy(option) }
+						onChange={ (value: string | null) => {
+							if(value && (value === "stack" || value === "span" || value === "split")) {
+								setDisplayStrategy(value)
+							}
+						} }
 					/>
 				</Box>
 			</Group>
 			<Box style={ { width: "100%", height: "1px", minHeight: "90%" } }>
 				<Calendar
+					defaultDate={ new Date() }
+					defaultView="month"
 					events={ processedSchedules }
 					displayStrategy={ displayStrategy }
 					// onSelectEvent={ handleSelectEvent }

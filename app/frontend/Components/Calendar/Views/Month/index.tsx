@@ -4,14 +4,13 @@ import { useMemo } from "react"
 
 import { CalendarEvent, useCalendarContext } from "@/Components/Calendar"
 import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/Components/Calendar/Views"
-import { EventWrapper, Event } from "@/Components/Calendar/Views/Month/Event"
 
-import { DisplayStrategy, DisplayStrategyFunction } from "./displayStrategies"
+import { DaysHeading } from "./components/DaysHeading"
+import { EventWrapper, Event } from "./components/Event"
+import { groupedEventsForPeriod } from "./displayStrategies"
 import * as classes from "./MonthView.css"
 
-interface MonthViewProps<TEvent extends CalendarEvent = CalendarEvent> extends BaseViewProps<TEvent> {
-	displayStrategy?: DisplayStrategy | DisplayStrategyFunction
-}
+interface MonthViewProps<TEvent extends CalendarEvent = CalendarEvent> extends BaseViewProps<TEvent> {}
 
 const MonthViewComponent = ({
 	className,
@@ -22,7 +21,7 @@ const MonthViewComponent = ({
 
 	// Group all events by their date for efficient lookup when rendering
 	const eventsByDay = useMemo(() => {
-		return localizer.groupedEventsForPeriod(events, date, VIEWS.month, localizer, displayStrategy)
+		return groupedEventsForPeriod(events, date, VIEWS.month, localizer, displayStrategy)
 	}, [date, events, localizer, displayStrategy])
 
 	// Split the month into weeks for grid layout
@@ -33,13 +32,8 @@ const MonthViewComponent = ({
 
 	return (
 		<div className={ clsx(classes.monthView, className) } style={ style }>
-			<div className={ clsx(classes.daysHeading) }>
-				{ weekdays.map(day => (
-					<div key={ day } className={ clsx(classes.columnHeading) }>
-						{ day }
-					</div>
-				)) }
-			</div>
+			<DaysHeading weekdays={ weekdays } />
+
 			<div className={ clsx(classes.daysContainer) }>
 				{ weeks.map((week, index) => {
 					const { backgroundCells, headingCells, contentCells } = week.reduce((acc, day) => {
@@ -64,18 +58,20 @@ const MonthViewComponent = ({
 						 */
 						acc.contentCells.push(
 							(eventsByDay.get(day.toISOString()) || []).map(({ event, displayProperties }) => {
+								console.log({ displayProperties })
 								return (
 									<EventWrapper
-										key={ event.id }
+										key={ `${event.id}-${displayProperties.displayStart?.toISOString() || event.start.toISOString()}` }
 										columnStart={ displayProperties.columnStart }
 										columnSpan={ displayProperties.columnSpan }
 										event={ event }
 									>
 										<Event
-											key={ event.id }
+											key={ `${event.id}-${displayProperties.displayStart?.toISOString() || event.start.toISOString()}` }
 											event={ event }
-											strategy={ displayStrategy }
+											displayProperties={ displayProperties }
 											localizer={ localizer }
+											className={ clsx(displayProperties.className) }
 										>
 											{ event.title }
 										</Event>

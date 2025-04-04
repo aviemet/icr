@@ -75,6 +75,7 @@ export const contentLayer = css`
   pointer-events: none;
   grid-auto-flow: dense;
   row-gap: 2px;
+  column-gap: 3px;
   margin-top: ${ headingHeight };
 `
 

@@ -1,8 +1,10 @@
-import { darken, isLightColor, lighten } from "@mantine/core"
+import { Box, darken, isLightColor, lighten, Popover, Text } from "@mantine/core"
 import clsx from "clsx"
-import { CSSProperties, PropsWithChildren } from "react"
+import { ContextMenuItemOptions, useContextMenu } from "mantine-contextmenu"
+import { CSSProperties, PropsWithChildren, useCallback } from "react"
 
 import { CalendarEvent } from "@/Components/Calendar"
+import { DateTimeFormatter } from "@/Components/Formatters"
 import { vars } from "@/lib"
 import useStore from "@/lib/store"
 
@@ -14,6 +16,7 @@ interface EventWrapperProps<TEvent extends CalendarEvent = CalendarEvent> extend
 	className?: string
 	style?: CSSProperties
 	event: TEvent
+	contextMenuOptions?: (event: TEvent) => ContextMenuItemOptions[]
 }
 
 /**
@@ -27,15 +30,27 @@ const EventWrapper = <TEvent extends CalendarEvent = CalendarEvent>({
 	children,
 	style,
 	event,
+	contextMenuOptions,
 }: EventWrapperProps<TEvent>) => {
 	const { getContrastingColor } = useStore()
+
+	const { showContextMenu } = useContextMenu()
 
 	const eventColor = event.color || vars.colors.primaryColors.filled
 
 	const contrastingColor = getContrastingColor(eventColor)
 
+	const customMenuItemsWithDivider = useCallback(() => {
+		if(!contextMenuOptions) return []
+
+		return [
+			{ key: "divider" },
+			...contextMenuOptions?.(event),
+		]
+	}, [contextMenuOptions, event])
+
 	return (
-		<div
+		<Box
 			className={ clsx(classes.eventWrapper, {
 				[classes.eventContinues]: columnSpan > 1,
 			}) }
@@ -47,9 +62,24 @@ const EventWrapper = <TEvent extends CalendarEvent = CalendarEvent>({
 				"--hover-color": isLightColor(eventColor) ? lighten(eventColor, 0.15) : darken(eventColor, 0.15),
 				...style,
 			} as React.CSSProperties }
+			data-event-id={ event.id }
+			onContextMenu={ contextMenuOptions
+				? showContextMenu([
+					...customMenuItemsWithDivider(),
+				])
+				: undefined
+			}
 		>
-			{ children }
-		</div>
+			<Popover withArrow middlewares={ { shift: true } }>
+				<Popover.Target>
+					{ children }
+				</Popover.Target>
+				<Popover.Dropdown>
+					<Text>{ event.title }</Text>
+					<Text>From <DateTimeFormatter format="dateTimeShort">{ event.start }</DateTimeFormatter> to <DateTimeFormatter format="dateTimeShort">{ event.end }</DateTimeFormatter></Text>
+				</Popover.Dropdown>
+			</Popover>
+		</Box>
 	)
 }
 

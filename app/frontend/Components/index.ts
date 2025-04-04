@@ -1,6 +1,6 @@
 export { default as Button } from "./Button"
 export * from "./Button"
-export { default as Calendar } from "./Calendar"
+export { Calendar } from "./Calendar"
 export { default as Code } from "./Code"
 export { default as ConditionalWrapper } from "./ConditionalWrapper"
 export { default as DangerousHtml } from "./DangerousHtml"

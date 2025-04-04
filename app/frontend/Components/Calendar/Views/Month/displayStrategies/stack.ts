@@ -1,8 +1,10 @@
+import clsx from "clsx"
+
 import { CalendarEvent } from "@/Components/Calendar"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 import { coerceArray } from "@/lib"
 
-import { DisplayStrategyFunction, EventDisplayDetails, EventDisplayProperties, spansWeekBorder, splitAtWeekBorders } from "."
+import { calculateGridPlacement, DisplayStrategyFunction, EventDisplayDetails, EventDisplayProperties, spansWeekBorder, splitAtWeekBorders } from "."
 
 const compareStack = <TEvent extends CalendarEvent = CalendarEvent>(
 	a: EventDisplayDetails<TEvent>,
@@ -49,21 +51,28 @@ export const stackStrategy: DisplayStrategyFunction = <TEvent extends CalendarEv
 	}
 
 	return processedEvents.map((processedEvent, index) => {
-		let displayProperties: EventDisplayProperties
+		const displayProperties = {
+			displayStart: processedEvent.start,
+			displayEnd: processedEvent.end,
+			columnStart: 1,
+			columnSpan: 1,
+			className: "",
+		} as const satisfies EventDisplayProperties
 
 		if(shouldSpanDays(processedEvent, localizer)) {
-			// For events that span 2+ days, show the full span
-			displayProperties = localizer.calculateGridPlacement(processedEvent)
+			Object.assign(displayProperties, {
+				...calculateGridPlacement(processedEvent, localizer),
+				className: clsx("filled", {
+					"continues-on": processedEvents.length > 1 && index !== processedEvents.length,
+					"continued-from": processedEvents.length > 1 && index !== 0,
+				}),
+			})
 		} else {
-			// For events that end the next day, only show on the start day
-			displayProperties = {
-				columnStart: localizer.calculateGridPlacement(processedEvent).columnStart,
+			Object.assign(displayProperties, {
+				columnStart: calculateGridPlacement(processedEvent, localizer).columnStart,
 				columnSpan: 1,
-			}
-		}
-
-		if(index < processedEvents.length - 1) {
-			displayProperties.continues = true
+				className: clsx("indicator"),
+			})
 		}
 
 		return {

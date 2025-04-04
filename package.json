@@ -129,6 +129,7 @@
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
     "postcss-syntax": "^0.36.2",
+    "react-component-analyzer": "^1.0.53",
     "stylelint": "^16.17.0",
     "stylelint-config-standard": "^37.0.0",
     "ts-jest": "^29.3.1",

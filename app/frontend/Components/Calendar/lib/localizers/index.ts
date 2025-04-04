@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react"
 
 import { VIEW_NAMES } from "@/Components/Calendar/Views"
-import {
-	DisplayStrategy,
-	DisplayStrategyFunction,
-	EventDisplayDetails,
-} from "@/Components/Calendar/Views/Month/displayStrategies"
-import { SortedArray } from "@/lib/Collections/SortedArray"
 
-import { CalendarEvent } from "../.."
 import { CalendarMessages, defaultMessages } from "../messages"
 
 export { dayJsLocalizer } from "./dayJsLocalizer"
@@ -24,6 +17,7 @@ export interface CalendarLocalizerMethods {
 	visibleDays: (date: Date, view: VIEW_NAMES) => Date[]
 	isBefore: (date: Date, compareDate: Date) => boolean
 	isAfter: (date: Date, compareDate: Date) => boolean
+	isSame: (date: Date, compareDate: Date, unit: TIME_UNIT) => boolean
 	add: (date: Date, amount: number, unit: TIME_UNIT) => Date
 	subtract: (date: Date, amount: number, unit: TIME_UNIT) => Date
 	dayOfWeek: (date: Date) => number
@@ -36,20 +30,6 @@ export interface CalendarLocalizerMethods {
 	 * rather than the next day, which would cause the event to flow to the next date cell
 	 */
 	adjustMidnightTime: (date: Date) => Date
-
-	/**
-	 * Filters events outside of view window.
-	 * Groups events by start date into a Map.
-	 * Breaks long events into multiples based on the display strategy.
-	 */
-	groupedEventsForPeriod: <TEvent extends CalendarEvent = CalendarEvent>(
-		events: TEvent[],
-		date: Date,
-		view: VIEW_NAMES,
-		localizer: CalendarLocalizer,
-		displayStrategy?: DisplayStrategy | DisplayStrategyFunction<TEvent>
-	) => Map<string, SortedArray<EventDisplayDetails<TEvent>>>
-	calculateGridPlacement: <TEvent extends CalendarEvent = CalendarEvent>(event: TEvent) => { columnStart: number, columnSpan: number }
 	format: (date: Date, format: string) => string
 	messages: CalendarMessages
 }
@@ -61,6 +41,7 @@ export class CalendarLocalizer {
 	visibleDays: CalendarLocalizerMethods["visibleDays"]
 	isBefore: CalendarLocalizerMethods["isBefore"]
 	isAfter: CalendarLocalizerMethods["isAfter"]
+	isSame: CalendarLocalizerMethods["isSame"]
 	add: CalendarLocalizerMethods["add"]
 	subtract: CalendarLocalizerMethods["subtract"]
 	dayOfWeek: CalendarLocalizerMethods["dayOfWeek"]
@@ -68,8 +49,6 @@ export class CalendarLocalizer {
 	endOf: CalendarLocalizerMethods["endOf"]
 	dateWithinRange: CalendarLocalizerMethods["dateWithinRange"]
 	adjustMidnightTime: CalendarLocalizerMethods["adjustMidnightTime"]
-	groupedEventsForPeriod: CalendarLocalizerMethods["groupedEventsForPeriod"]
-	calculateGridPlacement: CalendarLocalizerMethods["calculateGridPlacement"]
 	format: CalendarLocalizerMethods["format"]
 	messages: CalendarLocalizerMethods["messages"]
 
@@ -80,8 +59,7 @@ export class CalendarLocalizer {
 		this.visibleDays = fns.visibleDays
 		this.isBefore = fns.isBefore
 		this.isAfter = fns.isAfter
-		this.groupedEventsForPeriod = fns.groupedEventsForPeriod
-		this.calculateGridPlacement = fns.calculateGridPlacement
+		this.isSame = fns.isSame
 		this.add = fns.add
 		this.subtract = fns.subtract
 		this.format = fns.format
