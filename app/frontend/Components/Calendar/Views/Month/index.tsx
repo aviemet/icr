@@ -27,7 +27,7 @@ const MonthViewComponent = ({
 	const [hoverId, setHoverId] = useState<string>("")
 	const dynamicHoverStyles = useDynamicHoverStyles(hoverId)
 
-	// Group all events by their date for efficient lookup when rendering
+	// Group all events by their date for efficient lookup
 	const eventsByDay = useMemo(() => {
 		return groupedEventsForPeriod(events, date, VIEWS.month, localizer, displayStrategy)
 	}, [date, events, localizer, displayStrategy])
@@ -37,8 +37,6 @@ const MonthViewComponent = ({
 	const weeks = useMemo(() => {
 		return chunk(localizer.visibleDays(date, VIEWS.month), weekdays.length)
 	}, [date, localizer, weekdays.length])
-
-	// const dailyTotals = new Map<string, number>()
 
 	return (
 		<div
@@ -52,7 +50,7 @@ const MonthViewComponent = ({
 
 			<div className={ clsx(classes.daysContainer) }>
 				{ weeks.map((week, index) => {
-					const { backgroundCells, headingCells, contentCells } = week.reduce((acc, day) => {
+					const { backgroundCells, headingCells, contentCells, totalCells } = week.reduce((acc, day) => {
 						const dayMapKey = day.toISOString()
 						/**
 						 * BACKGROUND LAYER
@@ -73,11 +71,18 @@ const MonthViewComponent = ({
 						/**
 						 * EVENTS LAYER
 						 */
+						const dayEvents = eventsByDay.get(dayMapKey) || []
+						let dailyMinutesTotal = 0
+
 						acc.contentCells.push(
-							(eventsByDay.get(dayMapKey) || []).map(({ event, displayProperties }) => {
-								// let dailyTotal = dailyTotals.get(dayMapKey) ?? 0
-								// dailyTotal += localizer.duration(displayProperties.displayStart, displayProperties.displayEnd)
-								// dailyTotals.set(dayMapKey, dailyTotal)
+							dayEvents.map(({ event, displayProperties }) => {
+								// Calculate daily total as we process each event
+								if(showDailyTotals) {
+									dailyMinutesTotal += localizer.duration(
+										displayProperties.displayStart,
+										displayProperties.displayEnd
+									)
+								}
 
 								return (
 									<EventWrapper
@@ -101,11 +106,23 @@ const MonthViewComponent = ({
 							})
 						)
 
+						/**
+						 * DAILY TOTALS LAYER
+						 */
+						if(showDailyTotals) {
+							acc.totalCells.push(
+								<div key={ `total_${dayMapKey}` } className={ clsx(classes.dateCellFooter) }>
+									<DailyTotals dailyMinutesTotal={ dailyMinutesTotal } />
+								</div>
+							)
+						}
+
 						return acc
 					}, {
 						backgroundCells: [] as React.ReactNode[],
 						headingCells: [] as React.ReactNode[],
 						contentCells: [] as React.ReactNode[],
+						totalCells: [] as React.ReactNode[],
 					})
 
 					return (
@@ -119,6 +136,11 @@ const MonthViewComponent = ({
 							<div className={ clsx(classes.rowLayerContainer, classes.contentLayer) }>
 								{ contentCells }
 							</div>
+							{ showDailyTotals && (
+								<div className={ clsx(classes.rowLayerContainer, classes.footerLayer) }>
+									{ totalCells }
+								</div>
+							) }
 						</div>
 					)
 				}) }

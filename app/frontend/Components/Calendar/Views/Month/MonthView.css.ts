@@ -124,3 +124,25 @@ export const dateCellHeading = css`
   flex: 1 1 0%;
   height: ${ headingHeight };
 `
+
+export const dateCellFooter = css`
+  font-size: 12px;
+  text-align: right;
+  padding: 0 ${ vars.spacing.xxs };
+  background: transparent;
+  flex: 1 1 0%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+`
+
+export const footerLayer = css`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  pointer-events: none;
+  height: ${ vars.spacing.md };
+`
