@@ -1,5 +1,7 @@
 import { css } from "@linaria/core"
 
+import { borderColor } from "../../Calendar.css"
+
 import { rem, vars } from "@/lib"
 
 const headingHeight = rem(25)
@@ -9,33 +11,39 @@ export const monthView = css`
 	position: absolute;
 	inset: 0;
 	display: flex;  
-  flex-direction: column;
+	flex-direction: column;
+	overflow: hidden;
+	margin: 0;
 `
 
 export const daysHeading = css`
 	width: 100%;
-  flex: 1 1 0%;
-  margin: 0;
-  align-items: stretch;
-  display: flex;
-  flex: none;
+	margin: 0;
+	align-items: stretch;
+	display: flex;
+	flex: none;
 `
 
 export const daysContainer = css`
-  margin: 0;
-  flex: 1 1 0%;
-  display: flex;
-  flex-direction: column;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	height: 100%;
 `
 
 export const row = css`
-  position: relative;
-  display: flex;
-  flex: 1 1 0%;
-  pointer-events: none;
-  border-bottom-color: light-dark(${ vars.colors.gray[5] }, ${ vars.colors.dark[2] });
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
+	position: relative;
+	display: flex;
+	flex: 1;
+	pointer-events: none;
+	border-top-color: ${ borderColor };
+	border-top-width: 1px;
+	border-top-style: solid;
+
+  /* &:last-child {
+    border-bottom: none;
+  } */
 `
 
 export const columnHeading = css`
@@ -48,16 +56,21 @@ export const columnHeading = css`
   align-items: flex-start;
   padding-top: ${ vars.spacing.sm };
 
-  border-right-color: light-dark(${ vars.colors.gray[5] }, ${ vars.colors.dark[2] });
+  border-right-color: ${ borderColor };
   border-right-width: 1px;
   border-right-style: solid;
+
+  &:last-child {
+    border-right: none;
+  }
 `
 
 export const rowLayerContainer = css`
-  position: absolute;
-  inset: 0;
-  display: flex;
-  pointer-events: none;
+	position: absolute;
+	inset: 0;
+	display: flex;
+	pointer-events: none;
+	height: 100%;
 `
 
 export const backgroundLayer = css`
@@ -85,9 +98,13 @@ export const dateCellBackground = css`
   background-color: none;
   transition: background-color 200ms linear;
 
-  border-right-color: light-dark(${ vars.colors.gray[5] }, ${ vars.colors.dark[2] });
+  border-right-color: ${ borderColor };
   border-right-width: 1px;
   border-right-style: solid;
+
+  &:last-child {
+    border-right: none;
+  }
   
   &:hover {
     background-color: light-dark(${ vars.colors.gray[2] }, ${ vars.colors.dark[7] });
