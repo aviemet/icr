@@ -19,10 +19,11 @@ export const useGetClientsAsOptions: ReactQueryFunction<Schema.ClientsOptions[]>
 
 export const useGetClientSchedules: ReactQueryFunction<Schema.CalendarEventsShow[], {
 	slug: string
-	view: VIEW_NAMES
+	view?: VIEW_NAMES
+	date?: string | Date
 }> = ({ slug, ...params }, options) => {
 	return useQuery({
-		queryKey: [`clients/${slug}/schedule`],
+		queryKey: [`clients/${slug}/schedule`, params],
 		queryFn: async() => {
 			const res = await axios.get(Routes.apiClientSchedule(slug, params))
 			return res.data

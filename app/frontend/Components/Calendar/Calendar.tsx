@@ -1,6 +1,6 @@
 import { Box } from "@mantine/core"
 import clsx from "clsx"
-import React, { useMemo, useState, useCallback, useRef, useLayoutEffect } from "react"
+import { useMemo, useState, useCallback, useRef, useLayoutEffect } from "react"
 
 import { CalendarEvent, CalendarProvider } from "@/Components/Calendar"
 import { CalendarLocalizer, useDefaultLocalizer } from "@/Components/Calendar/lib/localizers"
@@ -18,6 +18,7 @@ interface CalendarProps<TEvent extends CalendarEvent = CalendarEvent> {
 	localizer?: CalendarLocalizer
 	views?: readonly VIEW_NAMES[]
 	displayStrategy: DisplayStrategy
+	onNavigate?: (newDate: Date, action: NAVIGATION_ACTION, view: VIEW_NAMES) => void
 }
 
 const Calendar = <TEvent extends CalendarEvent = CalendarEvent>({
@@ -27,6 +28,7 @@ const Calendar = <TEvent extends CalendarEvent = CalendarEvent>({
 	localizer,
 	views = Object.values(VIEWS),
 	displayStrategy,
+	onNavigate,
 }: CalendarProps<TEvent>) => {
 	const localLocalizer = useDefaultLocalizer(localizer)
 
@@ -62,8 +64,13 @@ const Calendar = <TEvent extends CalendarEvent = CalendarEvent>({
 				events: events,
 			}
 		)
+
 		setDate(nextDate)
-	}, [ViewComponent, date, events, localLocalizer])
+
+		onNavigate?.(nextDate, action, currentView)
+
+		return nextDate
+	}, [ViewComponent, date, events, localLocalizer, onNavigate, currentView])
 
 	const calendarProviderState = useMemo(() => ({
 		date,
@@ -71,7 +78,13 @@ const Calendar = <TEvent extends CalendarEvent = CalendarEvent>({
 		localizer: localLocalizer as CalendarLocalizer,
 		handleViewChange,
 		handleDateChange,
-	}), [date, events, localLocalizer, handleViewChange, handleDateChange])
+	}), [
+		date,
+		events,
+		localLocalizer,
+		handleViewChange,
+		handleDateChange,
+	])
 
 	if(!localLocalizer) return null
 

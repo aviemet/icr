@@ -5,4 +5,15 @@ class Api::EmployeesController < Api::ApiController
   def options
     render json: employees.render(:options)
   end
+
+  def schedule
+    schedules = Employee
+      .includes([:person])
+      .find_by(slug: params[:slug])
+      .calendar_events
+      .includes([:recurring_patterns, shift: [employee: [:person, :job_title, :calendar_customization]]])
+      .between(*DateRangeCalculator.new(params).call)
+
+    render json: schedules.render
+  end
 end

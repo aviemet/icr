@@ -16,14 +16,14 @@ type ReactQueryFunctionBasic<T, E = Error> = (
 	options?: LimitedQueryOptions<T, E>
 ) => UseQueryResult<T, E>
 
-type ReactQueryFunctionWithParams<T, P extends Record<string, string | number | string[]>, E = Error> = (
+type ReactQueryFunctionWithParams<T, P extends Record<string, string | number | string[] | Date | null | undefined>, E = Error> = (
 	params: P, options?: LimitedQueryOptions<T, E>
 ) => UseQueryResult<T, E>
 
 export type ReactQueryFunction<T, P = undefined, E = Error> =
 	P extends undefined
 		? ReactQueryFunctionBasic<T, E>
-		: P extends Record<string, string | number | string[]>
+		: P extends Record<string, string | number | string[] | Date | null | undefined>
 			? ReactQueryFunctionWithParams<T, P, E>
 			: never
 
