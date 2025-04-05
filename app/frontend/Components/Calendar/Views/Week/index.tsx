@@ -1,11 +1,41 @@
-import { CalendarEvent } from "@/Components/Calendar"
+import clsx from "clsx"
+import { useMemo } from "react"
+
+import { CalendarEvent, useCalendarContext } from "@/Components/Calendar"
+import TimeGrid from "@/Components/Calendar/components/TimeGrid"
 import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/Components/Calendar/Views"
 
-interface WeekViewProps<TEvent extends CalendarEvent = CalendarEvent> extends BaseViewProps<TEvent> {}
+import * as classes from "./WeekView.css"
 
-const WeekViewComponent = (props: WeekViewProps) => {
+interface WeekViewProps<TEvent extends CalendarEvent = CalendarEvent> extends BaseViewProps<TEvent> {
+	className?: string
+	style?: React.CSSProperties
+}
+
+interface DayHeading {
+	date: Date
+	label: string
+}
+
+const WeekViewComponent = ({ className, style }: WeekViewProps) => {
+	const { date, localizer } = useCalendarContext()
+
+	const columnHeadings = useMemo(() => {
+		const days = localizer.visibleDays(date, VIEWS.week)
+		return days.map(day => ({
+			date: day,
+			label: localizer.format(day, "ddd, MMM D"),
+		}))
+	}, [date, localizer])
+
 	return (
-		<div>WeekView</div>
+		<div className={ clsx(classes.weekView, className) } style={ style }>
+			<TimeGrid
+				columnHeadings={ columnHeadings }
+				startTime={ localizer.startOf(date, "day") }
+				endTime={ localizer.endOf(date, "day") }
+			/>
+		</div>
 	)
 }
 
