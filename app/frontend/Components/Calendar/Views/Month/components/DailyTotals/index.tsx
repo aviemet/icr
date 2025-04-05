@@ -1,5 +1,6 @@
-import { Box } from "@mantine/core"
 import clsx from "clsx"
+
+import { Box, Group } from "@/Components"
 
 import * as classes from "./DailyTotals.css"
 
@@ -10,7 +11,10 @@ interface DailyTotalsProps {
 const DailyTotals = ({ dailyMinutesTotal }: DailyTotalsProps) => {
 	return (
 		<Box className={ clsx((classes.dailyTotals)) }>
-			{ dailyMinutesTotal / 60 }
+			<Group justify="space-between">
+				<Box>Total Hours</Box>
+				<Box>{ dailyMinutesTotal / 60 }</Box>
+			</Group>
 		</Box>
 	)
 }

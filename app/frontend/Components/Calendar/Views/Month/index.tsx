@@ -3,6 +3,7 @@ import { chunk } from "lodash-es"
 import { useMemo, useState } from "react"
 
 import { CalendarEvent, useCalendarContext } from "@/Components/Calendar"
+import { calculateDailyHours } from "@/Components/Calendar/lib/calculateDailyHours"
 import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/Components/Calendar/Views"
 
 import DailyTotals from "./components/DailyTotals"
@@ -31,6 +32,11 @@ const MonthViewComponent = ({
 	const eventsByDay = useMemo(() => {
 		return groupedEventsForPeriod(events, date, VIEWS.month, localizer, displayStrategy)
 	}, [date, events, localizer, displayStrategy])
+
+	// Calculate daily totals once for all days
+	const dailyTotals = useMemo(() => {
+		return calculateDailyHours(events, localizer)
+	}, [events, localizer])
 
 	// Split the month into weeks for grid layout
 	const weekdays = useMemo(() => localizer.weekdays(), [localizer])
@@ -77,38 +83,27 @@ const MonthViewComponent = ({
 						 * EVENTS LAYER
 						 */
 						const dayEvents = eventsByDay.get(dayMapKey) || []
-						let dailyMinutesTotal = 0
 
 						acc.contentCells.push(
-							dayEvents.map(({ event, displayProperties }) => {
-								// Calculate daily total as we process each event
-								if(showDailyTotals) {
-									dailyMinutesTotal += localizer.duration(
-										displayProperties.displayStart,
-										displayProperties.displayEnd
-									)
-								}
-
-								return (
-									<EventWrapper
+							dayEvents.map(({ event, displayProperties }) => (
+								<EventWrapper
+									key={ `${event.id}-${displayProperties.displayStart.toISOString() || event.start.toISOString()}` }
+									columnStart={ displayProperties.columnStart }
+									columnSpan={ displayProperties.columnSpan }
+									event={ event }
+									setHoverId={ setHoverId }
+								>
+									<Event
 										key={ `${event.id}-${displayProperties.displayStart.toISOString() || event.start.toISOString()}` }
-										columnStart={ displayProperties.columnStart }
-										columnSpan={ displayProperties.columnSpan }
 										event={ event }
-										setHoverId={ setHoverId }
+										displayProperties={ displayProperties }
+										localizer={ localizer }
+										className={ clsx(displayProperties.className) }
 									>
-										<Event
-											key={ `${event.id}-${displayProperties.displayStart.toISOString() || event.start.toISOString()}` }
-											event={ event }
-											displayProperties={ displayProperties }
-											localizer={ localizer }
-											className={ clsx(displayProperties.className) }
-										>
-											{ typeof event.title === "string" ? event.title : event.title({ start: displayProperties.displayStart, end: displayProperties.displayEnd }) }
-										</Event>
-									</EventWrapper>
-								)
-							})
+										{ typeof event.title === "string" ? event.title : event.title({ start: displayProperties.displayStart, end: displayProperties.displayEnd }) }
+									</Event>
+								</EventWrapper>
+							))
 						)
 
 						/**
@@ -117,7 +112,7 @@ const MonthViewComponent = ({
 						if(showDailyTotals) {
 							acc.totalCells.push(
 								<div key={ `total_${dayMapKey}` } className={ clsx(classes.dateCellFooter) }>
-									<DailyTotals dailyMinutesTotal={ dailyMinutesTotal } />
+									<DailyTotals dailyMinutesTotal={ dailyTotals.get(dayMapKey) || 0 } />
 								</div>
 							)
 						}
