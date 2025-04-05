@@ -1,7 +1,6 @@
 import { css } from "@linaria/core"
 
 import { borderColor } from "../../Calendar.css"
-import { event } from "./components/Event/Event.css"
 
 import { rem, vars } from "@/lib"
 
@@ -53,6 +52,7 @@ export const columnHeading = css`
   justify-content: center;
   align-items: flex-start;
   padding: ${ vars.spacing.xxs };
+  overflow: hidden;
 
   border-right-color: ${ borderColor };
   border-right-width: 1px;
@@ -116,6 +116,27 @@ export const dateCellBackground = css`
   }
 `
 
+export const dateToday = css`
+  font-weight: 600;
+  color: light-dark(${ vars.colors.gray[7] }, ${ vars.colors.gray[9] });
+  
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: ${ vars.spacing.xl };
+    height: ${ vars.spacing.xl };
+    border-radius: 50%;
+    background-color: light-dark(${ vars.colors.gray[4] }, ${ vars.colors.dark[0] });
+    border: 2px solid light-dark(${ vars.colors.gray[7] }, ${ vars.colors.dark[6] });
+    transition: all 200ms ease;
+
+    &:hover {
+      background: ${ vars.colors.blue[1] };
+    }
+  }
+`
+
 export const dateCellHeading = css`
   font-size: 14px;
   color: ${ vars.colors.dark[2] };
@@ -123,6 +144,9 @@ export const dateCellHeading = css`
   background: transparent;
   flex: 1 1 0%;
   height: ${ headingHeight };
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 export const dateCellFooter = css`

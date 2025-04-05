@@ -63,8 +63,13 @@ const MonthViewComponent = ({
 						 * HEADING LAYER
 						 */
 						acc.headingCells.push(
-							<div className={ clsx(classes.dateCellHeading) } key={ dayMapKey }>
-								{ day.getDate() }
+							<div
+								className={ clsx(classes.dateCellHeading, {
+									[classes.dateToday]: localizer.isSame(day, new Date(), "day"),
+								}) }
+								key={ dayMapKey }
+							>
+								<span>{ day.getDate() }</span>
 							</div>
 						)
 
