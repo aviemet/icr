@@ -7,6 +7,8 @@ import { CalendarLocalizer, useDefaultLocalizer } from "@/Components/Calendar/li
 import Toolbar from "@/Components/Calendar/Toolbar"
 
 import * as classes from "./Calendar.css"
+import EventDetailsPopover from "./EventDetailsPopover"
+import { useEventPopover } from "./EventDetailsPopover/useEventPopover"
 import { viewComponents, VIEWS, VIEW_NAMES, NAVIGATION_ACTION } from "./Views"
 import { ErrorBoundary } from "../ErrorBoundary"
 import { DisplayStrategy } from "./Views/Month/displayStrategies"
@@ -34,10 +36,19 @@ const Calendar = <TEvent extends CalendarEvent = CalendarEvent>({
 
 	const [date, setDate] = useState<Date>(defaultDate || new Date())
 	const [currentView, setCurrentView] = useState<VIEW_NAMES>(defaultView)
-	const [minHeight, setMinHeight] = useState("100%")
+
+	const {
+		popoverOpen,
+		selectedEvent,
+		popoverPosition,
+		popoverRef,
+		handleEventClick,
+	} = useEventPopover()
 
 	const toolbarRef = useRef<HTMLDivElement>(null)
 
+	// Account for toolbar height in calendar wrapper height
+	const [minHeight, setMinHeight] = useState("100%")
 	useLayoutEffect(() => {
 		if(!toolbarRef.current) return
 
@@ -78,15 +89,17 @@ const Calendar = <TEvent extends CalendarEvent = CalendarEvent>({
 		localizer: localLocalizer as CalendarLocalizer,
 		handleViewChange,
 		handleDateChange,
+		onEventClick: handleEventClick,
 	}), [
 		date,
 		events,
 		localLocalizer,
 		handleViewChange,
 		handleDateChange,
+		handleEventClick,
 	])
 
-	if(!localLocalizer) return null
+	if(!localLocalizer) return <></>
 
 	return (
 		<Box className={ clsx(classes.calendarOuterContainer) } style={ { minHeight } }>
@@ -99,6 +112,16 @@ const Calendar = <TEvent extends CalendarEvent = CalendarEvent>({
 							<ViewComponent displayStrategy={ displayStrategy }/>
 						</div>
 					</div>
+
+					{ /* Event Details Popover */ }
+					{ popoverOpen && selectedEvent && popoverPosition && (
+						<EventDetailsPopover
+							ref={ popoverRef }
+							event={ selectedEvent }
+							position={ popoverPosition }
+						/>
+					) }
+
 				</CalendarProvider>
 			</ErrorBoundary>
 		</Box>

@@ -20,6 +20,7 @@ type CalendarContext<TEvent extends CalendarEvent = CalendarEvent> = {
 	localizer: CalendarLocalizer
 	handleViewChange: (view: VIEW_NAMES) => void
 	handleDateChange: (action: NAVIGATION_ACTION, newDate?: Date) => void
+	onEventClick: (event: TEvent, element: HTMLElement) => void
 }
 
 const [useCalendarContext, CalendarProvider] = createContext<CalendarContext>()

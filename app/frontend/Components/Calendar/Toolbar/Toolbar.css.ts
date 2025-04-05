@@ -4,7 +4,7 @@ import { vars } from "@/lib"
 
 export const buttonsContainer = css`
   position: relative;
-  background-color: light-dark(${ vars.colors.gray[0] }, ${ vars.colors.gray[9] });
+  background-color: light-dark(${ vars.colors.gray[0] }, ${ vars.colors.dark[8] });
   padding: ${ vars.spacing.xxs };
   border: 1px solid light-dark(${ vars.colors.gray[2] }, ${ vars.colors.gray[7] });
 

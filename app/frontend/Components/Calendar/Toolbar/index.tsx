@@ -26,7 +26,7 @@ const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>((
 	ref,
 ) => {
 	const { date, localizer, handleViewChange, handleDateChange } = useCalendarContext()
-	const [opened, { close }] = useDisclosure(false)
+	const [opened, { close, toggle }] = useDisclosure(false)
 
 	const [wrapperRef, contentRef] = useAnimateWidth<HTMLDivElement, HTMLButtonElement>({
 		speed: 100,
@@ -98,6 +98,7 @@ const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>((
 								ref={ contentRef }
 								variant="subtle"
 								className={ clsx(classes.dateButton) }
+								onClick={ toggle }
 								rightSection={
 									<Box className={ clsx(classes.datePickerMenu, { opened }) }>
 										<DownArrowIcon size={ 16 } />
