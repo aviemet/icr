@@ -17,7 +17,7 @@ export const useGetClientsAsOptions: ReactQueryFunction<Schema.ClientsOptions[]>
 	})
 }
 
-export const useGetClientSchedules: ReactQueryFunction<Schema.CalendarEventsShow[], {
+export const useGetClientSchedules: ReactQueryFunction<Schema.CalendarEventsClient[], {
 	slug: string
 	view?: VIEW_NAMES
 	date?: string | Date

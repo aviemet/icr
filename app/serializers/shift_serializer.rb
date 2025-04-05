@@ -23,6 +23,4 @@ class ShiftSerializer < ApplicationSerializer
     :employee_id,
     :calendar_event_id,
   )
-
-  belongs_to :employee, serializer: Employees::PersistedSerializer
 end

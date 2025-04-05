@@ -66,7 +66,7 @@ class ClientsController < ApplicationController
     render inertia: "Clients/Schedule", props: {
       client: -> { client.render(:show) },
       schedules: lambda {
-        schedules.render(:show)
+        schedules.render(:client)
       },
     }
   end

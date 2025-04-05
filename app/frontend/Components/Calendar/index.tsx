@@ -1,13 +1,13 @@
-import React from "react"
-
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 import { createContext } from "@/lib/hooks"
 
 import { VIEW_NAMES, NAVIGATION_ACTION } from "./Views"
 
+export type CalendarEventTitleCallback = (event: Pick<CalendarEvent, "start" | "end" | "allDay">) => string
+
 export interface CalendarEvent {
 	id: string | number
-	title: React.ReactNode
+	title: string | CalendarEventTitleCallback
 	start: Date
 	end: Date
 	allDay?: boolean

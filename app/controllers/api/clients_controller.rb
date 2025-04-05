@@ -16,6 +16,6 @@ class Api::ClientsController < ApplicationController
       .includes([:recurring_patterns, shift: [employee: [:person, :job_title, :calendar_customization]]])
       .between(*DateRangeCalculator.new(params).call)
 
-    render json: schedules.render
+    render json: schedules.render(:client)
   end
 end

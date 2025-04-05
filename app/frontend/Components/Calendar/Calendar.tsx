@@ -20,7 +20,7 @@ interface CalendarProps<TEvent extends CalendarEvent = CalendarEvent> {
 	events: TEvent[]
 	localizer?: CalendarLocalizer
 	views?: readonly VIEW_NAMES[]
-	displayStrategy: DisplayStrategy
+	displayStrategy?: DisplayStrategy
 	onNavigate?: (newDate: Date, action: NAVIGATION_ACTION, view: VIEW_NAMES) => void
 }
 

@@ -37,6 +37,7 @@ class Setting < RailsSettings::Base
     payroll_period_date: "1",
     payroll_period_date_2: "15",
     calendar_layout_style: "split",
+    calendar_split_events_show_original_times: false
   }.freeze
 
   field :company_name, type: :string, default: DEFAULT_SETTINGS[:company_name], validates: { presence: true }
@@ -82,8 +83,11 @@ class Setting < RailsSettings::Base
     inclusion: { in: %w(15 20 -1) }
   }
 
-  field :calendar_layout_style, type: :string, default: "split", validates: {
+  layout_styles = %w(span stack split)
+  layout_style_type = layout_styles.map { |s| "\"#{s}\"" }.join("|")
+  field :calendar_layout_style, type: layout_style_type, default: "split", validates: {
     presence: true,
-    inclusion: { in: %w(span stack split)}
+    inclusion: { in: layout_styles }
   }
+  field :calendar_split_events_show_original_times, type: :boolean, default: false
 end

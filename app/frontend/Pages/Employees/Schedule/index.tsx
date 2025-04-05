@@ -4,23 +4,22 @@ import {
 	Box,
 	Calendar,
 } from "@/Components"
+import { CalendarEventTitleCallback } from "@/Components/Calendar"
 import { useShiftTitleFormatter } from "@/lib/hooks/useShiftTitleFormatter"
 
 interface ScheduleProps {
-	client: Schema.ClientsShow
-	schedules: Schema.CalendarEventsShow[]
+	employee: Schema.EmployeesShow
+	schedules: Schema.CalendarEventsEmployee[]
 }
 
-const Schedule = ({ client, schedules }: ScheduleProps) => {
+const Schedule = ({ employee, schedules }: ScheduleProps) => {
 	const formatShiftTitle = useShiftTitleFormatter()
 
 	const processedSchedules = useMemo(() => {
 		return schedules?.map(schedule => {
-			const employee = schedule.shift.employee
-
 			return {
 				id: schedule.id,
-				title: formatShiftTitle(schedule, employee),
+				title: ((event) => formatShiftTitle(event, schedule.clients)) satisfies CalendarEventTitleCallback,
 				start: schedule.starts_at,
 				end: schedule.ends_at,
 			}
@@ -29,7 +28,7 @@ const Schedule = ({ client, schedules }: ScheduleProps) => {
 
 	return (
 		<>
-			<h1>{ client?.person?.name }</h1>
+			<h1>{ employee.name }</h1>
 
 			<Box style={ { width: "100%", height: "100%" } }>
 				<Calendar

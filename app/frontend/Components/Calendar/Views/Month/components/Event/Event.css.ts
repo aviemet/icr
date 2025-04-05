@@ -25,7 +25,7 @@ export const eventWrapper = css`
 export const event = css`
   font-size: ${ vars.fontSizes.xs };
   border-radius: ${ vars.radius.sm };
-  padding: 2px 5px;
+  padding: 2px 5px 2px 6px;
   margin: 1px 3px;
   color: light-dark(${ vars.colors.black }, ${ vars.colors.white });
   cursor: pointer;
@@ -96,6 +96,7 @@ export const event = css`
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     margin-left: ${ triangleWidth + 5 }px;
+    padding-left: 1px;
     width: calc(100% - ${ triangleWidth + 9 }px);
     position: relative;
 

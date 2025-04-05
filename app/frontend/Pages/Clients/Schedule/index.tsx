@@ -5,9 +5,8 @@ import {
 	Calendar,
 	Group,
 } from "@/Components"
+import { CalendarEventTitleCallback } from "@/Components/Calendar"
 import { NAVIGATION_ACTION, VIEW_NAMES, VIEWS } from "@/Components/Calendar/Views"
-import { DisplayStrategy } from "@/Components/Calendar/Views/Month/displayStrategies"
-import { Select } from "@/Components/Inputs"
 import { useShiftTitleFormatter } from "@/lib/hooks/useShiftTitleFormatter"
 import { useGetClientSchedules } from "@/queries/clients"
 
@@ -15,7 +14,7 @@ import { useGetClientSchedules } from "@/queries/clients"
 
 interface ScheduleProps {
 	client: Schema.ClientsShow
-	schedules: Schema.CalendarEventsShow[]
+	schedules: Schema.CalendarEventsClient[]
 }
 
 // Ensure a value is a Date object
@@ -26,7 +25,6 @@ const ensureDate = (value: unknown): Date => {
 }
 
 const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
-	const [displayStrategy, setDisplayStrategy] = useState<DisplayStrategy>("split")
 	const formatShiftTitle = useShiftTitleFormatter()
 
 	const [queryParams, setQueryParams] = useState<{ date: Date, view: VIEW_NAMES }>({
@@ -48,16 +46,16 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 	}, [])
 
 	const processedSchedules = useMemo(() => {
-		return data?.map(event => {
+		return data?.map(schedule => {
 			// Ensure dates are proper Date objects
-			const start = ensureDate(event.starts_at)
-			const end = ensureDate(event.ends_at)
+			const start = ensureDate(schedule.starts_at)
+			const end = ensureDate(schedule.ends_at)
 
-			const employee = event.shift.employee
+			const employee = schedule.shift.employee
 
 			return {
-				id: event.id,
-				title: formatShiftTitle(event, employee),
+				id: schedule.id,
+				title: ((event) => formatShiftTitle(event, employee)) satisfies CalendarEventTitleCallback,
 				start,
 				end,
 				color: employee.color,
@@ -69,27 +67,13 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 		<>
 			<Group justify="space-between">
 				<h1>{ client?.person?.name }</h1>
-				<Box>
-					<Select
-						options={ [
-							{ value: "stack", label: "Stack" },
-							{ value: "span", label: "Span" },
-							{ value: "split", label: "Split" },
-						] as { value: DisplayStrategy, label: string }[] }
-						value={ displayStrategy }
-						onChange={ (value: string | null) => {
-							if(value && (value === "stack" || value === "span" || value === "split")) {
-								setDisplayStrategy(value)
-							}
-						} }
-					/>
-				</Box>
+				<Box></Box>
 			</Group>
+
 			<Calendar
 				defaultDate={ new Date() }
 				defaultView="month"
 				events={ processedSchedules }
-				displayStrategy={ displayStrategy }
 				onNavigate={ handleNavigate }
 				// onSelectEvent={ handleSelectEvent }
 				// onSelectSlot={ handleSelectSlot }

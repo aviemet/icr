@@ -111,7 +111,7 @@ export const formatEventTitle = (
 	startTime: Date,
 	endTime: Date,
 	vars: TemplateVars
-) => {
+): string => {
 	// Replace template variables
 	let result = template
 	Object.entries(vars).forEach(([key, value]) => {
