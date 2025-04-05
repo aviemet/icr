@@ -8,17 +8,17 @@ interface PopoverPosition {
 	left: number
 }
 
-interface UseEventPopoverReturn {
+interface UseEventPopoverReturn<TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any> {
 	popoverOpen: boolean
-	selectedEvent: CalendarEvent | null
+	selectedEvent: TEvent | null
 	popoverPosition: PopoverPosition | null
 	popoverRef: React.RefObject<HTMLDivElement | null>
-	handleEventClick: (event: CalendarEvent, element: HTMLElement) => void
+	handleEventClick: (event: TEvent, element: HTMLElement) => void
 	closePopover: () => void
 }
 
-export const useEventPopover = (): UseEventPopoverReturn => {
-	const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null)
+const useEventPopover = <TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any>(): UseEventPopoverReturn<TEvent, TResources> => {
+	const [selectedEvent, setSelectedEvent] = useState<TEvent | null>(null)
 	const [popoverPosition, setPopoverPosition] = useState<PopoverPosition | null>(null)
 	const [clickedElement, setClickedElement] = useState<HTMLElement | null>(null)
 
@@ -32,13 +32,13 @@ export const useEventPopover = (): UseEventPopoverReturn => {
 		setClickedElement(null)
 	}, [close])
 
-	const openPopover = useCallback((event: CalendarEvent, position: PopoverPosition) => {
-		setSelectedEvent((event))
+	const openPopover = useCallback((event: TEvent, position: PopoverPosition) => {
+		setSelectedEvent(event)
 		setPopoverPosition(position)
 		open()
 	}, [open])
 
-	const handleEventClick = useCallback((event: CalendarEvent, element: HTMLElement) => {
+	const handleEventClick = useCallback((event: TEvent, element: HTMLElement) => {
 		const rect = element.getBoundingClientRect()
 		const scrollTop = window.scrollY || document.documentElement.scrollTop
 		const scrollLeft = window.scrollX || document.documentElement.scrollLeft
@@ -105,3 +105,6 @@ export const useEventPopover = (): UseEventPopoverReturn => {
 		closePopover,
 	}
 }
+
+export { useEventPopover }
+export type { UseEventPopoverReturn }

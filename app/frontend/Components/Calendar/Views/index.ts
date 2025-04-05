@@ -23,7 +23,7 @@ export const NAVIGATION = {
 } as const
 export type NAVIGATION_ACTION = keyof typeof NAVIGATION
 
-export interface BaseViewProps<TEvent extends CalendarEvent = CalendarEvent> {
+export interface BaseViewProps<TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any> {
 	className?: string
 	style?: React.CSSProperties
 	displayStrategy?: DisplayStrategy | DisplayStrategyFunction
@@ -31,17 +31,17 @@ export interface BaseViewProps<TEvent extends CalendarEvent = CalendarEvent> {
 
 export type DateRange = { start: Date, end: Date }
 
-export type ViewStaticMethodProps<TEvent extends CalendarEvent = CalendarEvent> = {
+export type ViewStaticMethodProps<TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any> = {
 	date: Date
 	today: Date
 	localizer: CalendarLocalizer
 	events: TEvent[] | undefined
 }
 
-export type ViewComponent<TProps extends BaseViewProps = BaseViewProps, TEvent extends CalendarEvent = CalendarEvent> = React.ComponentType<TProps> & {
-	range: (date: Date, props: ViewStaticMethodProps<TEvent>) => DateRange
-	navigate: (date: Date, action: NAVIGATION_ACTION, props: ViewStaticMethodProps<TEvent>) => Date
-	title: (date: Date, props: ViewStaticMethodProps<TEvent>) => string
+export type ViewComponent<TProps extends BaseViewProps = BaseViewProps, TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any> = React.ComponentType<TProps> & {
+	range: (date: Date, props: ViewStaticMethodProps<TEvent, TResources>) => DateRange
+	navigate: (date: Date, action: NAVIGATION_ACTION, props: ViewStaticMethodProps<TEvent, TResources>) => Date
+	title: (date: Date, props: ViewStaticMethodProps<TEvent, TResources>) => string
 }
 
 export function validateViewComponent<TProps extends BaseViewProps, TEvent extends CalendarEvent>(

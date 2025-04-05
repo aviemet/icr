@@ -9,7 +9,7 @@ import useStore from "@/lib/store"
 
 import * as classes from "./Event.css"
 
-interface EventWrapperProps<TEvent extends CalendarEvent = CalendarEvent> extends PropsWithChildren {
+interface EventWrapperProps<TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any> extends PropsWithChildren {
 	columnStart: number
 	columnSpan: number
 	className?: string
@@ -24,7 +24,7 @@ interface EventWrapperProps<TEvent extends CalendarEvent = CalendarEvent> extend
  * Internal only, used solely to position the event on the calendar view.
  * Event component is passed as children, which can be customized.
  */
-const EventWrapper = <TEvent extends CalendarEvent = CalendarEvent>({
+const EventWrapper = <TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any>({
 	columnStart,
 	columnSpan,
 	children,
@@ -32,7 +32,7 @@ const EventWrapper = <TEvent extends CalendarEvent = CalendarEvent>({
 	event,
 	contextMenuOptions,
 	setHoverId,
-}: EventWrapperProps<TEvent>) => {
+}: EventWrapperProps<TEvent, TResources>) => {
 	const { getContrastingColor } = useStore()
 
 	const { showContextMenu } = useContextMenu()

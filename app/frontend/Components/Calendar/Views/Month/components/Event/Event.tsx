@@ -8,7 +8,7 @@ import { EventDisplayProperties } from "@/Components/Calendar/Views/Month/displa
 
 import * as classes from "./Event.css"
 
-interface Event<TEvent extends CalendarEvent = CalendarEvent> extends
+interface Event<TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any> extends
 	BoxProps, Omit<ElementProps<"div", keyof BoxProps>, "onClick"> {
 	event: TEvent
 	onClick?: (event: TEvent, element: HTMLElement) => void
@@ -16,13 +16,13 @@ interface Event<TEvent extends CalendarEvent = CalendarEvent> extends
 	displayProperties: EventDisplayProperties
 }
 
-const Event = ({
+const Event = <TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any>({
 	children,
 	className,
 	event,
 	onClick,
 	displayProperties,
-}: Event) => {
+}: Event<TEvent, TResources>) => {
 	// Get the onEventClick handler from context
 	const { onEventClick } = useCalendarContext()
 
@@ -31,7 +31,7 @@ const Event = ({
 		if(onClick) {
 			onClick(event, e.currentTarget)
 		} else if(onEventClick) {
-			onEventClick(event, e.currentTarget)
+			onEventClick(event as CalendarEvent<any>, e.currentTarget)
 		}
 	}
 

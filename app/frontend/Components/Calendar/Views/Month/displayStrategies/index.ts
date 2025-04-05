@@ -16,21 +16,21 @@ export interface EventDisplayProperties {
 	className?: string
 }
 
-export type CompareFunction<TEvent extends CalendarEvent = CalendarEvent> = (
-	a: EventDisplayDetails<TEvent>,
-	b: EventDisplayDetails<TEvent>
+export type CompareFunction<TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any> = (
+	a: EventDisplayDetails<TEvent, TResources>,
+	b: EventDisplayDetails<TEvent, TResources>
 ) => number
 
-export interface EventDisplayDetails<TEvent extends CalendarEvent = CalendarEvent> {
+export interface EventDisplayDetails<TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any> {
 	event: TEvent
 	displayProperties: EventDisplayProperties
-	compare: CompareFunction<TEvent>
+	compare: CompareFunction<TEvent, TResources>
 }
 
-export type DisplayStrategyFunction<TEvent extends CalendarEvent = CalendarEvent> = (
+export type DisplayStrategyFunction<TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any> = (
 	event: TEvent,
 	localizer: CalendarLocalizer
-) => EventDisplayDetails<TEvent>[]
+) => EventDisplayDetails<TEvent, TResources>[]
 
 const strategies = {
 	/**
@@ -68,16 +68,16 @@ export type DisplayStrategy = keyof typeof strategies
  * @param localizer CalendarLocalizer
  * @returns DisplayStrategyFunction
  */
-export function displayStrategies<TEvent extends CalendarEvent = CalendarEvent>(
-	strategy: DisplayStrategy | DisplayStrategyFunction<TEvent>,
+export function displayStrategies<TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any>(
+	strategy: DisplayStrategy | DisplayStrategyFunction<TEvent, TResources>,
 	event: TEvent,
 	localizer: CalendarLocalizer
-): ReturnType<DisplayStrategyFunction<TEvent>> {
+): ReturnType<DisplayStrategyFunction<TEvent, TResources>> {
 	if(typeof strategy === "function") {
-		return (strategy as unknown as DisplayStrategyFunction<TEvent>)(event, localizer)
+		return (strategy as unknown as DisplayStrategyFunction<TEvent, TResources>)(event, localizer)
 	}
 
-	return (strategies[strategy] as unknown as DisplayStrategyFunction<TEvent>)(event, localizer)
+	return (strategies[strategy] as unknown as DisplayStrategyFunction<TEvent, TResources>)(event, localizer)
 }
 
 /*******************************************
@@ -89,20 +89,20 @@ export function displayStrategies<TEvent extends CalendarEvent = CalendarEvent>(
  * Groups events by start date into a Map.
  * Breaks long events into multiples based on the display strategy.
  */
-export const groupedEventsForPeriod = <TEvent extends CalendarEvent = CalendarEvent>(
+export const groupedEventsForPeriod = <TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any>(
 	events: TEvent[],
 	date: Date,
 	view: VIEW_NAMES,
 	localizer: CalendarLocalizer,
-	displayStrategy: DisplayStrategy | DisplayStrategyFunction<TEvent> = "stack",
+	displayStrategy: DisplayStrategy | DisplayStrategyFunction<TEvent, TResources> = "stack",
 ) => {
 	const firstDay = localizer.firstVisibleDay(date, view)
 	const lastDay = localizer.lastVisibleDay(date, view)
 	const strategy = typeof displayStrategy === "string"
-		? (strategies[displayStrategy] as unknown as DisplayStrategyFunction<TEvent>)
+		? (strategies[displayStrategy] as unknown as DisplayStrategyFunction<TEvent, TResources>)
 		: displayStrategy
 
-	const groupedEvents = new Map<string, SortedArray<EventDisplayDetails<TEvent>>>()
+	const groupedEvents = new Map<string, SortedArray<EventDisplayDetails<TEvent, TResources>>>()
 
 	events.forEach(event => {
 		// Ignore events outside visible range for current view
@@ -126,7 +126,7 @@ export const groupedEventsForPeriod = <TEvent extends CalendarEvent = CalendarEv
 /**
  *
  */
-export const calculateGridPlacement = <TEvent extends CalendarEvent = CalendarEvent>(event: TEvent, localizer: CalendarLocalizer) => {
+export const calculateGridPlacement = <TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any>(event: TEvent, localizer: CalendarLocalizer) => {
 	const start = event.start
 	const end = localizer.adjustMidnightTime(event.end)
 
@@ -142,7 +142,7 @@ export const calculateGridPlacement = <TEvent extends CalendarEvent = CalendarEv
 /**
  *
  */
-export const spansWeekBorder = <TEvent extends CalendarEvent = CalendarEvent>(
+export const spansWeekBorder = <TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any>(
 	event: TEvent,
 	localizer: CalendarLocalizer
 ) => {
@@ -152,7 +152,7 @@ export const spansWeekBorder = <TEvent extends CalendarEvent = CalendarEvent>(
 /**
  *
  */
-export const splitAtWeekBorders = <TEvent extends CalendarEvent = CalendarEvent>(
+export const splitAtWeekBorders = <TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any>(
 	event: TEvent,
 	localizer: CalendarLocalizer
 ) => {

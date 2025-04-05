@@ -5,8 +5,9 @@ import {
 	Calendar,
 	Group,
 } from "@/Components"
-import { CalendarEventTitleCallback } from "@/Components/Calendar"
+import { CalendarEvent, CalendarEventTitleCallback } from "@/Components/Calendar"
 import { NAVIGATION_ACTION, VIEW_NAMES, VIEWS } from "@/Components/Calendar/Views"
+import EventPopoverContent from "@/Features/Clients/EventPopoverContent"
 import { useShiftTitleFormatter } from "@/lib/hooks/useShiftTitleFormatter"
 import { useGetClientSchedules } from "@/queries/clients"
 
@@ -16,6 +17,13 @@ interface ScheduleProps {
 	client: Schema.ClientsShow
 	schedules: Schema.CalendarEventsClient[]
 }
+
+interface ScheduleResources {
+	employee: Schema.ShiftsClient["employee"]
+	client: Schema.ClientsShow
+}
+
+type ScheduleEvent = CalendarEvent<ScheduleResources>
 
 // Ensure a value is a Date object
 const ensureDate = (value: unknown): Date => {
@@ -55,13 +63,14 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 
 			return {
 				id: schedule.id,
-				title: ((event) => formatShiftTitle(event, employee)) satisfies CalendarEventTitleCallback,
+				title: ((event) => formatShiftTitle(event, employee)) satisfies CalendarEventTitleCallback<ScheduleEvent>,
 				start,
 				end,
 				color: employee.color,
-			}
+				resources: { employee, client },
+			} satisfies ScheduleEvent
 		}) || []
-	}, [data, formatShiftTitle])
+	}, [client, data, formatShiftTitle])
 
 	return (
 		<>
@@ -70,11 +79,12 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 				<Box></Box>
 			</Group>
 
-			<Calendar
+			<Calendar<ScheduleEvent>
 				defaultDate={ new Date() }
 				defaultView="month"
 				events={ processedSchedules }
 				onNavigate={ handleNavigate }
+				eventPopoverContent={ (event, localizer) => <EventPopoverContent event={ event } localizer={ localizer } /> }
 				// onSelectEvent={ handleSelectEvent }
 				// onSelectSlot={ handleSelectSlot }
 				// onView={ handleViewChange }
