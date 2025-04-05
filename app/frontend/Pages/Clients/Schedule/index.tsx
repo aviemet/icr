@@ -8,9 +8,7 @@ import {
 import { NAVIGATION_ACTION, VIEW_NAMES, VIEWS } from "@/Components/Calendar/Views"
 import { DisplayStrategy } from "@/Components/Calendar/Views/Month/displayStrategies"
 import { Select } from "@/Components/Inputs"
-import { buildShiftTitle, formatEventTitle } from "@/lib"
-import { usePageProps } from "@/lib/hooks"
-import { initials } from "@/lib/strings"
+import { useShiftTitleFormatter } from "@/lib/hooks/useShiftTitleFormatter"
 import { useGetClientSchedules } from "@/queries/clients"
 
 // import NewShiftForm from "./NewShiftForm"
@@ -28,8 +26,8 @@ const ensureDate = (value: unknown): Date => {
 }
 
 const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
-	const { settings } = usePageProps()
 	const [displayStrategy, setDisplayStrategy] = useState<DisplayStrategy>("split")
+	const formatShiftTitle = useShiftTitleFormatter()
 
 	const [queryParams, setQueryParams] = useState<{ date: Date, view: VIEW_NAMES }>({
 		date: new Date(),
@@ -49,66 +47,23 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 		})
 	}, [])
 
-	const handleEventTitle = useCallback((
-		schedule: Schema.CalendarEventsShow,
-		employee: Schema.EmployeesPersisted,
-		displayStart?: Date,
-		displayEnd?: Date
-	) => {
-		try {
-			const templateVars = {
-				first_name: employee.first_name,
-				last_name: employee.last_name,
-				full_name: employee.full_name,
-				first_initial: initials(employee.first_name),
-				last_initial: initials(employee.last_name),
-			}
-
-			// Ensure dates are Date objects
-			const start = displayStart ? ensureDate(displayStart) : ensureDate(schedule.starts_at)
-			const end = displayEnd ? ensureDate(displayEnd) : ensureDate(schedule.ends_at)
-
-			return formatEventTitle(
-				settings.shift_title_format,
-				start,
-				end,
-				templateVars
-			)
-		// eslint-disable-next-line no-unused-vars
-		} catch(e) {
-			// Ensure dates are Date objects even in the error case
-			const start = displayStart ? ensureDate(displayStart) : ensureDate(schedule.starts_at)
-			const end = displayEnd ? ensureDate(displayEnd) : ensureDate(schedule.ends_at)
-
-			return schedule.name || buildShiftTitle({
-				start,
-				end,
-				name: employee.full_name,
-			})
-		}
-	}, [settings.shift_title_format])
-
 	const processedSchedules = useMemo(() => {
-		return data?.map(schedule => {
+		return data?.map(event => {
 			// Ensure dates are proper Date objects
-			const start = ensureDate(schedule.starts_at)
-			const end = ensureDate(schedule.ends_at)
+			const start = ensureDate(event.starts_at)
+			const end = ensureDate(event.ends_at)
+
+			const employee = event.shift.employee
 
 			return {
-				id: schedule.id,
-				title: handleEventTitle(schedule, schedule.shift.employee),
+				id: event.id,
+				title: formatShiftTitle(event, employee),
 				start,
 				end,
-				color: schedule.shift.employee.color,
-				getTitleWithDisplayTimes: (displayStart?: Date, displayEnd?: Date) => {
-					// Ensure displayStart and displayEnd are Date objects
-					const dsDate = displayStart ? ensureDate(displayStart) : undefined
-					const deDate = displayEnd ? ensureDate(displayEnd) : undefined
-					return handleEventTitle(schedule, schedule.shift.employee, dsDate, deDate)
-				},
+				color: employee.color,
 			}
 		}) || []
-	}, [data, handleEventTitle])
+	}, [data, formatShiftTitle])
 
 	return (
 		<>

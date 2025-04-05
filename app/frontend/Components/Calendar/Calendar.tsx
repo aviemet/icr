@@ -5,6 +5,7 @@ import { useMemo, useState, useCallback, useRef, useLayoutEffect } from "react"
 import { CalendarEvent, CalendarProvider } from "@/Components/Calendar"
 import { CalendarLocalizer, useDefaultLocalizer } from "@/Components/Calendar/lib/localizers"
 import Toolbar from "@/Components/Calendar/Toolbar"
+import { usePageProps } from "@/lib/hooks"
 
 import * as classes from "./Calendar.css"
 import EventDetailsPopover from "./EventDetailsPopover"
@@ -36,6 +37,8 @@ const Calendar = <TEvent extends CalendarEvent = CalendarEvent>({
 
 	const [date, setDate] = useState<Date>(defaultDate || new Date())
 	const [currentView, setCurrentView] = useState<VIEW_NAMES>(defaultView)
+
+	const { settings: { calendar_layout_style } } = usePageProps()
 
 	const {
 		popoverOpen,
@@ -109,7 +112,7 @@ const Calendar = <TEvent extends CalendarEvent = CalendarEvent>({
 
 					<div className={ clsx(classes.calendar) }>
 						<div className={ clsx(classes.calendarInnerContainer) }>
-							<ViewComponent displayStrategy={ displayStrategy }/>
+							<ViewComponent displayStrategy={ displayStrategy || calendar_layout_style }/>
 						</div>
 					</div>
 

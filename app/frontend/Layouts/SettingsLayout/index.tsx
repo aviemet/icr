@@ -15,6 +15,7 @@ interface SettingsLayoutProps {
 
 const links = [
 	{ label: "General", href: "/settings/general" },
+	{ label: "Calendar", href: "/settings/calendar" },
 	{ label: "People", href: "/settings/people" },
 	{ label: "Job Titles", href: "/settings/job_titles" },
 	{ label: "Payroll", href: "/settings/payroll" },

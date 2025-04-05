@@ -54,6 +54,7 @@ Rails.application.routes.draw do
   get "settings/general", to: "settings#show"
   namespace :settings do
     get "", to: redirect("/settings/general")
+    resource :calendars, path: :calendar, only: [:show, :update], as: :calendar
     resources :people, param: :slug
     resources :job_titles, param: :slug
     resource :payrolls, path: :payroll, only: [:show, :update], as: :payroll
