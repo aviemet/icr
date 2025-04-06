@@ -4,19 +4,19 @@ import { useMemo, useState } from "react"
 
 import { useCalendarContext, CalendarGenerics } from "@/Components/Calendar"
 import { calculateDailyHours } from "@/Components/Calendar/lib/calculateDailyHours"
-import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/Components/Calendar/Views"
+import { BaseViewProps, createViewComponent, NAVIGATION, VIEW_NAMES, VIEWS } from "@/Components/Calendar/Views"
 
 import DailyTotals from "./components/DailyTotals"
 import { DaysHeading } from "./components/DaysHeading"
 import { EventWrapper, Event } from "./components/Event"
 import * as classes from "./MonthView.css"
 import { useDynamicHoverStyles } from "./useDynamicHoverStyles"
-import { DisplayStrategyFunction, StrategyType } from "../../lib/displayStrategies/DisplayStrategyManager"
+import { displayStrategies } from "../../lib/displayStrategies"
 import { useDisplayStrategy } from "../../lib/displayStrategies/useDisplayStrategy"
 
 interface MonthViewProps<T extends CalendarGenerics> extends BaseViewProps<T> {
 	showDailyTotals?: boolean
-	displayStrategy: StrategyType | DisplayStrategyFunction<T>
+	displayStrategy: keyof typeof displayStrategies["month"]
 }
 
 const MonthViewComponent = <T extends CalendarGenerics>({
@@ -27,8 +27,7 @@ const MonthViewComponent = <T extends CalendarGenerics>({
 }: MonthViewProps<T>) => {
 	const { date, localizer, events } = useCalendarContext()
 
-	const { groupAndFilterEvents } = useDisplayStrategy<T>(VIEWS.month, displayStrategy)
-	const eventsByDay = groupAndFilterEvents()
+	const eventsByDay = useDisplayStrategy<T, "month">(VIEWS.month, displayStrategy)
 
 	const [hoverId, setHoverId] = useState<string>("")
 	const dynamicHoverStyles = useDynamicHoverStyles(hoverId)

@@ -1,10 +1,18 @@
 import clsx from "clsx"
 
 import { CalendarGenerics } from "@/Components/Calendar"
-import { DisplayStrategyFunction, EventDisplayDetails, EventDisplayProperties } from "@/Components/Calendar/lib/displayStrategies/DisplayStrategyManager"
-import { calculateGridPlacement, spansWeekBorder, splitAtDayBoundaries, splitAtWeekBorders } from "@/Components/Calendar/lib/eventLayout"
+import {
+	DisplayStrategyFunction,
+	EventDisplayDetails,
+	EventDisplayProperties,
+} from "@/Components/Calendar/lib/displayStrategies/DisplayStrategyManager"
+import {
+	calculateGridPlacement,
+	spansWeekBorder,
+	splitAtDayBoundaries,
+	splitAtWeekBorders,
+} from "@/Components/Calendar/lib/eventLayout"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
-
 
 const compareSplit = <T extends CalendarGenerics>(
 	a: EventDisplayDetails<T>,

@@ -1,22 +1,24 @@
 import { CalendarGenerics, useCalendarContext } from "../.."
-import { DisplayStrategyFunction, StrategyType } from "./DisplayStrategyManager"
 import { VIEW_NAMES } from "../../Views"
 
-import { displayStrategyManager } from "."
+import { DisplayStrategyFunction, displayStrategies, groupAndFilterEvents } from "."
 
-export const useDisplayStrategy = <T extends CalendarGenerics>(
-	view: VIEW_NAMES,
-	displayStrategy: StrategyType | DisplayStrategyFunction<T>
+export const useDisplayStrategy = <T extends CalendarGenerics, V extends VIEW_NAMES>(
+	view: V,
+	displayStrategy: keyof (typeof displayStrategies)[V]
 ) => {
 	const { date, localizer, events } = useCalendarContext()
 
-	return {
-		groupAndFilterEvents: () => displayStrategyManager.groupAndFilterEvents(
-			view,
-			displayStrategy,
-			events,
-			date,
-			localizer
-		),
+	const strategy = displayStrategies[view][displayStrategy] as DisplayStrategyFunction<T>
+	if(!strategy) {
+		throw new Error(`Invalid strategy "${String(displayStrategy)}" for view "${view}"`)
 	}
+
+	return groupAndFilterEvents(
+		view,
+		strategy,
+		events,
+		date,
+		localizer
+	)
 }

@@ -20,7 +20,7 @@ interface CalendarProps<T extends CalendarGenerics> {
 	events: T["Event"][]
 	localizer?: CalendarLocalizer
 	views?: readonly VIEW_NAMES[]
-	displayStrategy?: StrategyType | DisplayStrategyFunction<T>
+	displayStrategies?: Partial<Record<VIEW_NAMES, StrategyType | DisplayStrategyFunction<T>>>
 	onNavigate?: (newDate: Date, action: NAVIGATION_ACTION, view: VIEW_NAMES) => void
 	eventPopoverContent?: (event: T["Event"], localizer: CalendarLocalizer) => React.ReactNode
 }
@@ -31,7 +31,7 @@ const Calendar = <T extends CalendarGenerics>({
 	events,
 	localizer,
 	views = Object.values(VIEWS),
-	displayStrategy = "split",
+	displayStrategies = {},
 	onNavigate,
 	eventPopoverContent,
 }: CalendarProps<T>) => {
@@ -41,6 +41,13 @@ const Calendar = <T extends CalendarGenerics>({
 	const [currentView, setCurrentView] = useState<VIEW_NAMES>(defaultView)
 
 	const { settings: { calendar_layout_style } } = usePageProps()
+
+	const localDisplayStrategies = Object.assign({
+		month: calendar_layout_style,
+		week: "overlap",
+		day: "overlap",
+		agenda: "overlap",
+	}, displayStrategies)
 
 	const {
 		popoverOpen,
@@ -114,7 +121,7 @@ const Calendar = <T extends CalendarGenerics>({
 
 					<div className={ clsx(classes.calendar) }>
 						<div className={ clsx(classes.calendarInnerContainer) }>
-							<ViewComponent displayStrategy={ displayStrategy || calendar_layout_style }/>
+							<ViewComponent displayStrategy={ localDisplayStrategies[currentView] }/>
 						</div>
 					</div>
 

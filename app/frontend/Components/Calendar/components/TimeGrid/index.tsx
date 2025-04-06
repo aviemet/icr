@@ -6,10 +6,15 @@ import { CalendarGenerics, useCalendarContext } from "@/Components/Calendar"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 import useStore from "@/lib/store"
 
-import { DisplayStrategyName, getDisplayStrategy } from "./strategies"
+import Headings from "./components/Headings"
 import * as classes from "./TimeGrid.css"
+import { columnHeadings } from "./TimeGrid.css"
+import { displayStrategies } from "../../lib/displayStrategies"
+import { useDisplayStrategy } from "../../lib/displayStrategies/useDisplayStrategy"
+import { VIEWS } from "../../Views"
+import TimeColumn from "./components/TimeColumn"
 
-interface DayHeading {
+export interface TimeGridHeading {
 	date: Date
 	label: string
 }
@@ -19,7 +24,7 @@ interface TimeGridProps {
 	style?: React.CSSProperties
 	startTime?: Date
 	endTime?: Date
-	columnHeadings: DayHeading[]
+	columnHeadings: TimeGridHeading[]
 	/**
 	 * Number of minutes between each time slot
 	 * @default 30
@@ -27,9 +32,9 @@ interface TimeGridProps {
 	timeIncrement?: number
 	/**
 	 * How to display overlapping events
-	 * @default "stack"
+	 * @default "overlap"
 	 */
-	displayStrategy?: DisplayStrategyName
+	displayStrategy?: keyof typeof displayStrategies["week"]
 }
 
 const generateTimeSlots = (start: Date, end: Date, increment: number, localizer: CalendarLocalizer) => {
@@ -60,138 +65,53 @@ const TimeGrid = <T extends CalendarGenerics = CalendarGenerics>({
 	})(),
 	columnHeadings,
 	timeIncrement = 30,
-	displayStrategy = "stack",
+	displayStrategy = "overlap",
 }: TimeGridProps) => {
 	const { localizer, events, onEventClick } = useCalendarContext()
 	const { getContrastingColor } = useStore()
-	const strategy = getDisplayStrategy(displayStrategy)
+	const eventsByDay = useDisplayStrategy<T, "week">(VIEWS.week, displayStrategy)
 
 	const timeSlots = useMemo(() => {
 		return generateTimeSlots(new Date(startTime), new Date(endTime), timeIncrement, localizer)
 	}, [startTime, endTime, timeIncrement, localizer])
 
-	const timeSlotStyle = useMemo(() => ({
-		"--time-slot-height": `${timeIncrement / 30 * 60}px`,
-	} as React.CSSProperties), [timeIncrement])
-
 	const eventContainerStyle = useMemo(() => ({
 		"--column-count": columnHeadings.length,
 	} as React.CSSProperties), [columnHeadings.length])
 
-	const eventsGroupedByColumn = useMemo(() => {
-		const groupedEvents = new Map<number, T["Event"][]>()
-
-		const splitAtDayBoundaries = (event: T["Event"], columnStart: Date, columnEnd: Date) => {
-			const segments: T["Event"][] = []
-			let currentStart = event.start
-			let currentEnd = event.end
-
-			while(localizer.startOf(currentStart, "day").getTime() !==
-				   localizer.startOf(currentEnd, "day").getTime()) {
-				// Find the end of the current day
-				const dayEnd = localizer.endOf(currentStart, "day")
-
-				// Only add segment if it overlaps with the target column
-				if(dayEnd >= columnStart && currentStart <= columnEnd) {
-					segments.push({
-						...event,
-						displayStart: currentStart < columnStart ? columnStart : currentStart,
-						displayEnd: dayEnd > columnEnd ? columnEnd : dayEnd,
-					})
-				}
-
-				// Move to start of next day
-				currentStart = localizer.add(dayEnd, 1, "day")
-				currentStart = localizer.startOf(currentStart, "day")
-			}
-
-			// Add final segment if there are remaining hours in the last day
-			// and it overlaps with the target column
-			if(localizer.isBefore(currentStart, currentEnd) &&
-				currentEnd >= columnStart && currentStart <= columnEnd) {
-				segments.push({
-					...event,
-					displayStart: currentStart < columnStart ? columnStart : currentStart,
-					displayEnd: currentEnd > columnEnd ? columnEnd : currentEnd,
-				})
-			}
-
-			return segments
-		}
-
-		events.forEach(event => {
-			columnHeadings.forEach((heading, columnIndex) => {
-				const columnStart = localizer.startOf(heading.date, "day")
-				const columnEnd = localizer.endOf(heading.date, "day")
-
-				// Event should appear in this column if it overlaps with the column's day
-				if(event.end > columnStart && event.start < columnEnd) {
-					const columnEvents = groupedEvents.get(columnIndex) || []
-
-					if(displayStrategy === "split") {
-						// Split the event at day boundaries
-						const segments = splitAtDayBoundaries(event, columnStart, columnEnd)
-						columnEvents.push(...segments)
-					} else {
-						// For non-split strategies, only show in the column where the event starts
-						if(localizer.isSame(event.start, heading.date, "day")) {
-							columnEvents.push({
-								...event,
-								displayStart: event.start,
-								displayEnd: event.end,
-							})
-						}
-					}
-
-					groupedEvents.set(columnIndex, columnEvents)
-				}
-			})
-		})
-
-		return groupedEvents
-	}, [events, columnHeadings, localizer, displayStrategy])
-
 	const renderedEvents = useMemo(() => {
 		const allRenderedEvents: JSX.Element[] = []
 
-		eventsGroupedByColumn.forEach((columnEvents, columnIndex) => {
-			columnEvents.forEach((event) => {
-				const position = strategy.calculatePosition(
-					event,
-					columnIndex,
-					columnEvents,
-					localizer,
-					columnHeadings
-				)
+		columnHeadings.forEach((heading, columnIndex) => {
+			const dayEvents = eventsByDay.get(heading.date.toISOString())
+			if(!dayEvents) return
 
+			dayEvents.forEach(({ event, displayProperties }) => {
 				const eventColor = event.color || "var(--mantine-primary-color-filled)"
 				const contrastingColor = getContrastingColor(eventColor)
-
-				const { column, startRow, span, width, left, zIndex } = position
 
 				allRenderedEvents.push(
 					<Box
 						key={ `${event.id}-${columnIndex}` }
 						className={ clsx(
 							classes.event,
-							...strategy.getClassNames()
+							displayProperties.className
 						) }
 						style={ {
-							"--event-column": column,
-							"--event-start-row": startRow,
-							"--event-span": span,
+							"--event-column": displayProperties.columnStart,
+							"--event-start-row": localizer.duration(displayProperties.displayStart, startTime) / timeIncrement,
+							"--event-span": localizer.duration(displayProperties.displayEnd, displayProperties.displayStart) / timeIncrement,
 							"--event-color": eventColor,
 							"--contrasting-color": contrastingColor,
-							"--event-width": width,
-							"--event-left": left,
-							"--event-z-index": zIndex,
+							"--event-width": `${100 / displayProperties.columnSpan}%`,
+							"--event-left": `${(displayProperties.columnStart - 1) * (100 / displayProperties.columnSpan)}%`,
 						} as React.CSSProperties }
 						onClick={ (e) => onEventClick?.(event, e.currentTarget) }
 					>
 						{ typeof event.title === "function"
 							? event.title({
-								start: event.displayStart || event.start,
-								end: event.displayEnd || event.end,
+								start: displayProperties.displayStart,
+								end: displayProperties.displayEnd,
 							})
 							: event.title }
 					</Box>
@@ -200,38 +120,27 @@ const TimeGrid = <T extends CalendarGenerics = CalendarGenerics>({
 		})
 
 		return allRenderedEvents
-	}, [eventsGroupedByColumn, strategy, localizer, columnHeadings, getContrastingColor, onEventClick])
+	}, [eventsByDay, columnHeadings, localizer, timeIncrement, startTime, getContrastingColor, onEventClick])
 
 	return (
-		<div className={ clsx(classes.timeGrid, className) } style={ style }>
+		<div className={ clsx(classes.timeGrid, className) } style={ {
+			"--time-slot-height": `${timeIncrement / 30 * 60}px`,
+		} as React.CSSProperties }>
+
 			{ /* Corner spacer */ }
 			<div className={ classes.cornerSpacer } />
 
 			{ /* Column headings */ }
-			<div className={ classes.headerArea }>
-				<div className={ classes.columnHeadings }>
-					{ columnHeadings.map((heading, index) => (
-						<div key={ index } className={ classes.columnHeading }>
-							{ heading.label }
-						</div>
-					)) }
-				</div>
-			</div>
+			<Headings columnHeadings={ columnHeadings } />
 
 			{ /* Time column */ }
-			<div className={ classes.timeColumn }>
-				{ timeSlots.map((time) => (
-					<div key={ time.toISOString() } className={ classes.timeSlot } style={ timeSlotStyle }>
-						{ localizer.format(time, "h:mm a") }
-					</div>
-				)) }
-			</div>
+			<TimeColumn timeSlots={ timeSlots } />
 
 			{ /* Content area with events */ }
 			<div className={ classes.contentArea }>
 				<div className={ classes.contentGrid }>
 					{ /* Grid lines */ }
-					<div className={ classes.gridLines } style={ timeSlotStyle } />
+					<div className={ classes.gridLines } />
 					<div className={ classes.eventContainer } style={ eventContainerStyle }>
 						{ renderedEvents }
 					</div>

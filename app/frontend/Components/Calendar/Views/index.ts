@@ -26,7 +26,7 @@ export type NAVIGATION_ACTION = keyof typeof NAVIGATION
 export interface BaseViewProps<T extends CalendarGenerics> {
 	className?: string
 	style?: React.CSSProperties
-	displayStrategy?: StrategyType | DisplayStrategyFunction<T>
+	displayStrategy: StrategyType | DisplayStrategyFunction<T>
 }
 
 export type DateRange = { start: Date, end: Date }
