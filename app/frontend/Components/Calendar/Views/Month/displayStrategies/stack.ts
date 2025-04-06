@@ -1,14 +1,14 @@
 import clsx from "clsx"
 
-import { CalendarEvent } from "@/Components/Calendar"
+import { CalendarGenerics } from "@/Components/Calendar"
+import { DisplayStrategyFunction, EventDisplayDetails, EventDisplayProperties } from "@/Components/Calendar/lib/displayStrategies"
+import { calculateGridPlacement, spansWeekBorder, splitAtWeekBorders } from "@/Components/Calendar/lib/eventLayout"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 import { coerceArray } from "@/lib"
 
-import { calculateGridPlacement, DisplayStrategyFunction, EventDisplayDetails, EventDisplayProperties, spansWeekBorder, splitAtWeekBorders } from "."
-
-const compareStack = <TEvent extends CalendarEvent = CalendarEvent>(
-	a: EventDisplayDetails<TEvent>,
-	b: EventDisplayDetails<TEvent>
+const compareStack = <T extends CalendarGenerics>(
+	a: EventDisplayDetails<T>,
+	b: EventDisplayDetails<T>
 ) => {
 	// Stack strategy: longer events get higher priority
 	const spanDiff = b.displayProperties.columnSpan - a.displayProperties.columnSpan
@@ -17,8 +17,8 @@ const compareStack = <TEvent extends CalendarEvent = CalendarEvent>(
 	return a.event.start.valueOf() - b.event.start.valueOf()
 }
 
-const shouldSpanDays = <TEvent extends CalendarEvent>(
-	event: TEvent,
+const shouldSpanDays = <T extends CalendarGenerics>(
+	event: T["Event"],
 	localizer: CalendarLocalizer
 ): boolean => {
 	const startDay = localizer.startOf(event.start, "day")
@@ -31,15 +31,15 @@ const shouldSpanDays = <TEvent extends CalendarEvent>(
 	return daysDiff >= 2
 }
 
-const shouldSplitAtWeekBoundary = <TEvent extends CalendarEvent>(
-	event: TEvent,
+const shouldSplitAtWeekBoundary = <T extends CalendarGenerics>(
+	event: T["Event"],
 	localizer: CalendarLocalizer
 ): boolean => {
 	return spansWeekBorder(event, localizer) && shouldSpanDays(event, localizer)
 }
 
-export const stackStrategy: DisplayStrategyFunction = <TEvent extends CalendarEvent>(
-	event: TEvent,
+export const stackStrategy: DisplayStrategyFunction<CalendarGenerics> = <T extends CalendarGenerics>(
+	event: T["Event"],
 	localizer: CalendarLocalizer
 ) => {
 	let processedEvents: (typeof event)[]
@@ -78,7 +78,7 @@ export const stackStrategy: DisplayStrategyFunction = <TEvent extends CalendarEv
 		return {
 			event: processedEvent,
 			displayProperties,
-			compare: compareStack<TEvent>,
+			compare: compareStack<T>,
 		}
 	})
 }

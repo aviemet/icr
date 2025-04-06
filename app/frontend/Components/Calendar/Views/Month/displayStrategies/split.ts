@@ -1,57 +1,21 @@
 import clsx from "clsx"
 
-import { CalendarEvent } from "@/Components/Calendar"
+import { CalendarGenerics } from "@/Components/Calendar"
+import { DisplayStrategyFunction, EventDisplayDetails, EventDisplayProperties } from "@/Components/Calendar/lib/displayStrategies"
+import { calculateGridPlacement, spansWeekBorder, splitAtDayBoundaries, splitAtWeekBorders } from "@/Components/Calendar/lib/eventLayout"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 
-import { calculateGridPlacement, DisplayStrategyFunction, EventDisplayDetails, EventDisplayProperties, spansWeekBorder, splitAtWeekBorders } from "."
 
-const compareSplit = <TEvent extends CalendarEvent = CalendarEvent>(
-	a: EventDisplayDetails<TEvent>,
-	b: EventDisplayDetails<TEvent>
+const compareSplit = <T extends CalendarGenerics>(
+	a: EventDisplayDetails<T>,
+	b: EventDisplayDetails<T>
 ) => {
 	// Split strategy: sort by start time since all events are single-day
 	return a.event.start.valueOf() - b.event.start.valueOf()
 }
 
-const splitAtDayBoundaries = <TEvent extends CalendarEvent = CalendarEvent>(
-	event: TEvent,
-	localizer: CalendarLocalizer
-) => {
-	const events: { event: TEvent, displayStart: Date, displayEnd: Date }[] = []
-	let currentStart = event.start
-	let currentEnd = localizer.adjustMidnightTime(event.end)
-
-	while(localizer.startOf(currentStart, "day").getTime() !==
-		   localizer.startOf(currentEnd, "day").getTime()) {
-		// Find the end of the current day
-		const dayEnd = localizer.endOf(currentStart, "day")
-
-		// Add event segment for current day with display times
-		events.push({
-			event,
-			displayStart: currentStart,
-			displayEnd: dayEnd,
-		})
-
-		// Move to start of next day
-		currentStart = localizer.add(dayEnd, 1, "day")
-		currentStart = localizer.startOf(currentStart, "day")
-	}
-
-	// Add final segment if there are remaining hours in the last day
-	if(localizer.isBefore(currentStart, currentEnd)) {
-		events.push({
-			event,
-			displayStart: currentStart,
-			displayEnd: currentEnd,
-		})
-	}
-
-	return events
-}
-
-export const splitStrategy: DisplayStrategyFunction = <TEvent extends CalendarEvent>(
-	event: TEvent,
+export const splitStrategy: DisplayStrategyFunction<CalendarGenerics> = <T extends CalendarGenerics>(
+	event: T["Event"],
 	localizer: CalendarLocalizer
 ) => {
 	// First split at week boundaries if needed
@@ -99,7 +63,7 @@ export const splitStrategy: DisplayStrategyFunction = <TEvent extends CalendarEv
 		return {
 			event: processed.event,
 			displayProperties,
-			compare: compareSplit<TEvent>,
+			compare: compareSplit,
 		}
 	})
 }

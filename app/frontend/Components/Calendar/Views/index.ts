@@ -1,11 +1,11 @@
-import { CalendarEvent } from "@/Components/Calendar"
+import { CalendarGenerics } from "@/Components/Calendar"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 
 import { AgendaView } from "./Agenda"
 import { DayView } from "./Day"
 import { MonthView } from "./Month"
-import { DisplayStrategy, DisplayStrategyFunction } from "./Month/displayStrategies"
 import { WeekView } from "./Week"
+import { StrategyType, DisplayStrategyFunction } from "../lib/displayStrategies"
 
 export const VIEWS = {
 	month: "month",
@@ -23,29 +23,29 @@ export const NAVIGATION = {
 } as const
 export type NAVIGATION_ACTION = keyof typeof NAVIGATION
 
-export interface BaseViewProps<TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any> {
+export interface BaseViewProps<T extends CalendarGenerics> {
 	className?: string
 	style?: React.CSSProperties
-	displayStrategy?: DisplayStrategy | DisplayStrategyFunction
+	displayStrategy?: StrategyType | DisplayStrategyFunction<T>
 }
 
 export type DateRange = { start: Date, end: Date }
 
-export type ViewStaticMethodProps<TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any> = {
+export type ViewStaticMethodProps<T extends CalendarGenerics> = {
 	date: Date
 	today: Date
 	localizer: CalendarLocalizer
-	events: TEvent[] | undefined
+	events: T["Event"][]
 }
 
-export type ViewComponent<TProps extends BaseViewProps = BaseViewProps, TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any> = React.ComponentType<TProps> & {
-	range: (date: Date, props: ViewStaticMethodProps<TEvent, TResources>) => DateRange
-	navigate: (date: Date, action: NAVIGATION_ACTION, props: ViewStaticMethodProps<TEvent, TResources>) => Date
-	title: (date: Date, props: ViewStaticMethodProps<TEvent, TResources>) => string
+export type ViewComponent<T extends CalendarGenerics, Props extends BaseViewProps<T> = BaseViewProps<T>> = React.ComponentType<Props> & {
+	range: (date: Date, props: ViewStaticMethodProps<T>) => DateRange
+	navigate: (date: Date, action: NAVIGATION_ACTION, props: ViewStaticMethodProps<T>) => Date
+	title: (date: Date, props: ViewStaticMethodProps<T>) => string
 }
 
-export function validateViewComponent<TProps extends BaseViewProps, TEvent extends CalendarEvent>(
-	component: ViewComponent<TProps, TEvent>
+export function validateViewComponent<T extends CalendarGenerics, Props extends BaseViewProps<T>>(
+	component: ViewComponent<T, Props>
 ) {
 	if(typeof component.range !== "function")
 		throw new Error("View component must implement static range method")
@@ -55,18 +55,15 @@ export function validateViewComponent<TProps extends BaseViewProps, TEvent exten
 		throw new Error("View component must implement static title method")
 }
 
-export function createViewComponent<
-	TEvent extends CalendarEvent = CalendarEvent,
-	TProps extends BaseViewProps<TEvent> = BaseViewProps<TEvent>
->(
-	component: React.ComponentType<TProps>,
+export function createViewComponent<T extends CalendarGenerics, Props extends BaseViewProps<T> = BaseViewProps<T>>(
+	component: React.ComponentType<Props>,
 	staticProps: {
-		range: ViewComponent<TProps, TEvent>["range"]
-		navigate: ViewComponent<TProps, TEvent>["navigate"]
-		title: ViewComponent<TProps, TEvent>["title"]
+		range: ViewComponent<T, Props>["range"]
+		navigate: ViewComponent<T, Props>["navigate"]
+		title: ViewComponent<T, Props>["title"]
 	}
-): ViewComponent<TProps, TEvent> {
-	const viewComponent = component as ViewComponent<TProps, TEvent>
+): ViewComponent<T, Props> {
+	const viewComponent = component as ViewComponent<T, Props>
 	viewComponent.range = staticProps.range
 	viewComponent.navigate = staticProps.navigate
 	viewComponent.title = staticProps.title
@@ -76,9 +73,9 @@ export function createViewComponent<
 	return viewComponent
 }
 
-export const viewComponents: Record<VIEW_NAMES, ViewComponent> = {
+export const viewComponents = {
 	[VIEWS.month]: MonthView,
 	[VIEWS.week]: WeekView,
 	[VIEWS.day]: DayView,
 	[VIEWS.agenda]: AgendaView,
-}
+} as const

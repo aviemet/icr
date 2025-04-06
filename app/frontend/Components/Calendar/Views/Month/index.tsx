@@ -2,36 +2,36 @@ import clsx from "clsx"
 import { chunk } from "lodash-es"
 import { useMemo, useState } from "react"
 
-import { CalendarEvent, useCalendarContext } from "@/Components/Calendar"
+import { useCalendarContext, CalendarGenerics } from "@/Components/Calendar"
 import { calculateDailyHours } from "@/Components/Calendar/lib/calculateDailyHours"
+import { type StrategyType, type DisplayStrategyFunction } from "@/Components/Calendar/lib/displayStrategies"
 import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/Components/Calendar/Views"
 
 import DailyTotals from "./components/DailyTotals"
 import { DaysHeading } from "./components/DaysHeading"
 import { EventWrapper, Event } from "./components/Event"
-import { groupedEventsForPeriod } from "./displayStrategies"
 import * as classes from "./MonthView.css"
 import { useDynamicHoverStyles } from "./useDynamicHoverStyles"
+import { useDisplayStrategy } from "../../lib/displayStrategies/useDisplayStrategy"
 
-interface MonthViewProps<TEvent extends CalendarEvent = CalendarEvent> extends BaseViewProps<TEvent> {
+interface MonthViewProps<T extends CalendarGenerics> extends BaseViewProps<T> {
 	showDailyTotals?: boolean
+	displayStrategy: StrategyType | DisplayStrategyFunction<T>
 }
 
-const MonthViewComponent = ({
+const MonthViewComponent = <T extends CalendarGenerics>({
 	className,
 	style,
-	displayStrategy = "span",
+	displayStrategy,
 	showDailyTotals = true,
-}: MonthViewProps) => {
+}: MonthViewProps<T>) => {
 	const { date, localizer, events } = useCalendarContext()
+	const strategy = useDisplayStrategy<T>(VIEWS.month, displayStrategy)
+
+	const eventsByDay = strategy.groupAndFilterEvents()
 
 	const [hoverId, setHoverId] = useState<string>("")
 	const dynamicHoverStyles = useDynamicHoverStyles(hoverId)
-
-	// Group all events by their date for efficient lookup
-	const eventsByDay = useMemo(() => {
-		return groupedEventsForPeriod(events, date, VIEWS.month, localizer, displayStrategy)
-	}, [date, events, localizer, displayStrategy])
 
 	// Calculate daily totals once for all days
 	const dailyTotals = useMemo(() => {
@@ -82,29 +82,31 @@ const MonthViewComponent = ({
 						/**
 						 * EVENTS LAYER
 						 */
-						const dayEvents = eventsByDay.get(dayMapKey) || []
+						const dayEvents = eventsByDay.get(dayMapKey)
 
-						acc.contentCells.push(
-							dayEvents.map(({ event, displayProperties }) => (
-								<EventWrapper
-									key={ `${event.id}-${displayProperties.displayStart.toISOString() || event.start.toISOString()}` }
-									columnStart={ displayProperties.columnStart }
-									columnSpan={ displayProperties.columnSpan }
-									event={ event }
-									setHoverId={ setHoverId }
-								>
-									<Event
+						if(dayEvents) {
+							acc.contentCells.push(
+								dayEvents.map(({ event, displayProperties }) => (
+									<EventWrapper
 										key={ `${event.id}-${displayProperties.displayStart.toISOString() || event.start.toISOString()}` }
+										columnStart={ displayProperties.columnStart }
+										columnSpan={ displayProperties.columnSpan }
 										event={ event }
-										displayProperties={ displayProperties }
-										localizer={ localizer }
-										className={ clsx(displayProperties.className) }
+										setHoverId={ setHoverId }
 									>
-										{ typeof event.title === "string" ? event.title : event.title({ start: displayProperties.displayStart, end: displayProperties.displayEnd }) }
-									</Event>
-								</EventWrapper>
-							))
-						)
+										<Event
+											key={ `${event.id}-${displayProperties.displayStart.toISOString() || event.start.toISOString()}` }
+											event={ event }
+											displayProperties={ displayProperties }
+											localizer={ localizer }
+											className={ clsx(displayProperties.className) }
+										>
+											{ typeof event.title === "string" ? event.title : event.title({ start: displayProperties.displayStart, end: displayProperties.displayEnd }) }
+										</Event>
+									</EventWrapper>
+								))
+							)
+						}
 
 						/**
 						 * DAILY TOTALS LAYER

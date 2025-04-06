@@ -3,19 +3,19 @@ import clsx from "clsx"
 import { ContextMenuItemOptions, useContextMenu } from "mantine-contextmenu"
 import { CSSProperties, PropsWithChildren, useCallback } from "react"
 
-import { CalendarEvent } from "@/Components/Calendar"
+import { CalendarGenerics } from "@/Components/Calendar"
 import { vars } from "@/lib"
 import useStore from "@/lib/store"
 
 import * as classes from "./Event.css"
 
-interface EventWrapperProps<TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any> extends PropsWithChildren {
+interface EventWrapperProps<T extends CalendarGenerics> extends PropsWithChildren {
 	columnStart: number
 	columnSpan: number
 	className?: string
 	style?: CSSProperties
-	event: TEvent
-	contextMenuOptions?: (event: TEvent) => ContextMenuItemOptions[]
+	event: T["Event"]
+	contextMenuOptions?: (event: T["Event"]) => ContextMenuItemOptions[]
 	setHoverId: React.Dispatch<React.SetStateAction<string>>
 }
 
@@ -24,7 +24,7 @@ interface EventWrapperProps<TEvent extends CalendarEvent<TResources> = CalendarE
  * Internal only, used solely to position the event on the calendar view.
  * Event component is passed as children, which can be customized.
  */
-const EventWrapper = <TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any>({
+const EventWrapper = <T extends CalendarGenerics>({
 	columnStart,
 	columnSpan,
 	children,
@@ -32,7 +32,7 @@ const EventWrapper = <TEvent extends CalendarEvent<TResources> = CalendarEvent<a
 	event,
 	contextMenuOptions,
 	setHoverId,
-}: EventWrapperProps<TEvent, TResources>) => {
+}: EventWrapperProps<T>) => {
 	const { getContrastingColor } = useStore()
 
 	const { showContextMenu } = useContextMenu()

@@ -1,5 +1,10 @@
-import { CalendarEvent } from "@/Components/Calendar"
+import { CalendarGenerics } from "@/Components/Calendar"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
+
+export interface DayHeading {
+	date: Date
+	label: string
+}
 
 export interface EventPosition {
 	column: number
@@ -10,13 +15,14 @@ export interface EventPosition {
 	zIndex?: number
 }
 
-export interface TimeGridDisplayStrategy {
+export interface TimeGridDisplayStrategy<T extends CalendarGenerics = CalendarGenerics> {
 	name: "stack" | "split"
 	calculatePosition: (
-		event: CalendarEvent,
+		event: T["Event"],
 		columnIndex: number,
-		columnEvents: CalendarEvent[],
-		localizer: CalendarLocalizer
+		columnEvents: T["Event"][],
+		localizer: CalendarLocalizer,
+		columnHeadings: DayHeading[]
 	) => EventPosition
 	getClassNames: () => string[]
 }

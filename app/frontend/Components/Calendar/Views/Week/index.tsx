@@ -1,13 +1,13 @@
 import clsx from "clsx"
 import { useMemo } from "react"
 
-import { CalendarEvent, useCalendarContext } from "@/Components/Calendar"
+import { useCalendarContext, CalendarGenerics } from "@/Components/Calendar"
 import TimeGrid from "@/Components/Calendar/components/TimeGrid"
 import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/Components/Calendar/Views"
 
 import * as classes from "./WeekView.css"
 
-interface WeekViewProps<TEvent extends CalendarEvent = CalendarEvent> extends BaseViewProps<TEvent> {
+interface WeekViewProps<T extends CalendarGenerics> extends BaseViewProps<T> {
 	className?: string
 	style?: React.CSSProperties
 }
@@ -17,7 +17,7 @@ interface DayHeading {
 	label: string
 }
 
-const WeekViewComponent = ({ className, style }: WeekViewProps) => {
+const WeekViewComponent = ({ className, style }: WeekViewProps<CalendarGenerics>) => {
 	const { date, localizer } = useCalendarContext()
 
 	const columnHeadings = useMemo(() => {

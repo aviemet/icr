@@ -2,7 +2,7 @@ import clsx from "clsx"
 import { useMemo } from "react"
 
 import { Box } from "@/Components"
-import { CalendarEvent, useCalendarContext } from "@/Components/Calendar"
+import { CalendarGenerics, useCalendarContext } from "@/Components/Calendar"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 import useStore from "@/lib/store"
 
@@ -45,7 +45,7 @@ const generateTimeSlots = (start: Date, end: Date, increment: number, localizer:
 	return slots
 }
 
-const TimeGrid = ({
+const TimeGrid = <T extends CalendarGenerics = CalendarGenerics>({
 	className,
 	style,
 	startTime = (() => {
@@ -79,41 +79,99 @@ const TimeGrid = ({
 	} as React.CSSProperties), [columnHeadings.length])
 
 	const eventsGroupedByColumn = useMemo(() => {
-		const groupedEvents = new Map<number, CalendarEvent[]>()
+		const groupedEvents = new Map<number, T["Event"][]>()
+
+		const splitAtDayBoundaries = (event: T["Event"], columnStart: Date, columnEnd: Date) => {
+			const segments: T["Event"][] = []
+			let currentStart = event.start
+			let currentEnd = event.end
+
+			while(localizer.startOf(currentStart, "day").getTime() !==
+				   localizer.startOf(currentEnd, "day").getTime()) {
+				// Find the end of the current day
+				const dayEnd = localizer.endOf(currentStart, "day")
+
+				// Only add segment if it overlaps with the target column
+				if(dayEnd >= columnStart && currentStart <= columnEnd) {
+					segments.push({
+						...event,
+						displayStart: currentStart < columnStart ? columnStart : currentStart,
+						displayEnd: dayEnd > columnEnd ? columnEnd : dayEnd,
+					})
+				}
+
+				// Move to start of next day
+				currentStart = localizer.add(dayEnd, 1, "day")
+				currentStart = localizer.startOf(currentStart, "day")
+			}
+
+			// Add final segment if there are remaining hours in the last day
+			// and it overlaps with the target column
+			if(localizer.isBefore(currentStart, currentEnd) &&
+				currentEnd >= columnStart && currentStart <= columnEnd) {
+				segments.push({
+					...event,
+					displayStart: currentStart < columnStart ? columnStart : currentStart,
+					displayEnd: currentEnd > columnEnd ? columnEnd : currentEnd,
+				})
+			}
+
+			return segments
+		}
 
 		events.forEach(event => {
-			const columnIndex = columnHeadings.findIndex(heading =>
-				localizer.isSame(event.start, heading.date, "day")
-			)
+			columnHeadings.forEach((heading, columnIndex) => {
+				const columnStart = localizer.startOf(heading.date, "day")
+				const columnEnd = localizer.endOf(heading.date, "day")
 
-			if(columnIndex !== - 1) {
-				const columnEvents = groupedEvents.get(columnIndex) || []
-				columnEvents.push(event)
-				groupedEvents.set(columnIndex, columnEvents)
-			}
+				// Event should appear in this column if it overlaps with the column's day
+				if(event.end > columnStart && event.start < columnEnd) {
+					const columnEvents = groupedEvents.get(columnIndex) || []
+
+					if(displayStrategy === "split") {
+						// Split the event at day boundaries
+						const segments = splitAtDayBoundaries(event, columnStart, columnEnd)
+						columnEvents.push(...segments)
+					} else {
+						// For non-split strategies, only show in the column where the event starts
+						if(localizer.isSame(event.start, heading.date, "day")) {
+							columnEvents.push({
+								...event,
+								displayStart: event.start,
+								displayEnd: event.end,
+							})
+						}
+					}
+
+					groupedEvents.set(columnIndex, columnEvents)
+				}
+			})
 		})
 
 		return groupedEvents
-	}, [events, columnHeadings, localizer])
+	}, [events, columnHeadings, localizer, displayStrategy])
 
 	const renderedEvents = useMemo(() => {
 		const allRenderedEvents: JSX.Element[] = []
 
 		eventsGroupedByColumn.forEach((columnEvents, columnIndex) => {
 			columnEvents.forEach((event) => {
-				const { column, startRow, span, width, left, zIndex } = strategy.calculatePosition(
+				const position = strategy.calculatePosition(
 					event,
 					columnIndex,
 					columnEvents,
-					localizer
+					localizer,
+					columnHeadings
 				)
 
 				const eventColor = event.color || "var(--mantine-primary-color-filled)"
 				const contrastingColor = getContrastingColor(eventColor)
 
+				const { column, startRow, span, width, left, zIndex } = position
+
 				allRenderedEvents.push(
 					<Box
-						key={ event.id }
+						key={ `${event.id}-${columnIndex}` }
 						className={ clsx(
 							classes.event,
 							...strategy.getClassNames()
@@ -131,7 +189,10 @@ const TimeGrid = ({
 						onClick={ (e) => onEventClick?.(event, e.currentTarget) }
 					>
 						{ typeof event.title === "function"
-							? event.title({ start: event.start, end: event.end })
+							? event.title({
+								start: event.displayStart || event.start,
+								end: event.displayEnd || event.end,
+							})
 							: event.title }
 					</Box>
 				)
@@ -139,7 +200,7 @@ const TimeGrid = ({
 		})
 
 		return allRenderedEvents
-	}, [events, columnHeadings, localizer, onEventClick, getContrastingColor, strategy])
+	}, [eventsGroupedByColumn, strategy, localizer, columnHeadings, getContrastingColor, onEventClick])
 
 	return (
 		<div className={ clsx(classes.timeGrid, className) } style={ style }>

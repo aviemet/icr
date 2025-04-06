@@ -2,27 +2,27 @@ import { ElementProps } from "@mantine/core"
 import clsx from "clsx"
 
 import { Box, BoxProps } from "@/Components"
-import { CalendarEvent, useCalendarContext } from "@/Components/Calendar"
+import { useCalendarContext, CalendarGenerics } from "@/Components/Calendar"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 import { EventDisplayProperties } from "@/Components/Calendar/Views/Month/displayStrategies"
 
 import * as classes from "./Event.css"
 
-interface Event<TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any> extends
+interface Event<T extends CalendarGenerics> extends
 	BoxProps, Omit<ElementProps<"div", keyof BoxProps>, "onClick"> {
-	event: TEvent
-	onClick?: (event: TEvent, element: HTMLElement) => void
+	event: T["Event"]
+	onClick?: (event: T["Event"], element: HTMLElement) => void
 	localizer: CalendarLocalizer
 	displayProperties: EventDisplayProperties
 }
 
-const Event = <TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any>({
+const Event = <T extends CalendarGenerics>({
 	children,
 	className,
 	event,
 	onClick,
 	displayProperties,
-}: Event<TEvent, TResources>) => {
+}: Event<T>) => {
 	// Get the onEventClick handler from context
 	const { onEventClick } = useCalendarContext()
 
@@ -31,7 +31,7 @@ const Event = <TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TR
 		if(onClick) {
 			onClick(event, e.currentTarget)
 		} else if(onEventClick) {
-			onEventClick(event as CalendarEvent<any>, e.currentTarget)
+			onEventClick(event as T["Event"], e.currentTarget)
 		}
 	}
 

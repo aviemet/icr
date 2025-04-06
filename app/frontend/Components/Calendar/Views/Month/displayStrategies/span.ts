@@ -1,14 +1,15 @@
 import clsx from "clsx"
 
-import { CalendarEvent } from "@/Components/Calendar"
+import { CalendarGenerics } from "@/Components/Calendar"
+import { DisplayStrategyFunction, EventDisplayDetails, EventDisplayProperties } from "@/Components/Calendar/lib/displayStrategies"
+import { calculateGridPlacement, spansWeekBorder, splitAtWeekBorders } from "@/Components/Calendar/lib/eventLayout"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 import { coerceArray } from "@/lib"
 
-import { calculateGridPlacement, DisplayStrategyFunction, EventDisplayDetails, EventDisplayProperties, spansWeekBorder, splitAtWeekBorders } from "."
 
-const compareSpan = <TEvent extends CalendarEvent>(
-	a: EventDisplayDetails<TEvent>,
-	b: EventDisplayDetails<TEvent>
+const compareSpan = <T extends CalendarGenerics>(
+	a: EventDisplayDetails<T>,
+	b: EventDisplayDetails<T>
 ) => {
 	// Span strategy: longer events get higher priority
 	const spanDiff = b.displayProperties.columnSpan - a.displayProperties.columnSpan
@@ -21,7 +22,10 @@ const compareSpan = <TEvent extends CalendarEvent>(
  * Span strategy
  * Events will always span across days in which they appear.
  */
-export const spanStrategy: DisplayStrategyFunction = <TEvent extends CalendarEvent>(event: TEvent, localizer: CalendarLocalizer) => {
+export const spanStrategy: DisplayStrategyFunction<CalendarGenerics> = <T extends CalendarGenerics>(
+	event: T["Event"],
+	localizer: CalendarLocalizer
+) => {
 	let processedEvents: (typeof event)[]
 
 	if(spansWeekBorder(event, localizer)) {
@@ -50,7 +54,7 @@ export const spanStrategy: DisplayStrategyFunction = <TEvent extends CalendarEve
 		return {
 			event: processedEvent,
 			displayProperties,
-			compare: compareSpan<TEvent>,
+			compare: compareSpan<T>,
 		}
 	})
 }

@@ -1,13 +1,23 @@
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 import { createContext } from "@/lib/hooks"
 
+import { DisplayStrategyRegistry } from "./lib/displayStrategies"
 import { VIEW_NAMES, NAVIGATION_ACTION } from "./Views"
 
-export type CalendarEventTitleCallback<TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any> = (event: Pick<TEvent, "start" | "end" | "allDay">) => string
+export type Resources = Record<string, object>
 
-export interface CalendarEvent<TResources = any> {
+/**
+ * Abstract a long type which is otherwise reused across the entire project:
+ * <TEvent extends CalendarEvent<TResources>, TResources extends Resources = Resources>
+ */
+export type CalendarGenerics<TResources extends Resources = Resources> = {
+	Event: CalendarEvent<TResources>
+	Resources: TResources
+}
+
+export interface CalendarEvent<TResources extends Resources = Resources> {
 	id: string | number
-	title: string | CalendarEventTitleCallback<CalendarEvent<TResources>, TResources>
+	title: string | ((event: Pick<CalendarEvent<TResources>, "start" | "end" | "allDay">) => string)
 	start: Date
 	end: Date
 	allDay?: boolean
@@ -15,19 +25,22 @@ export interface CalendarEvent<TResources = any> {
 	resources?: TResources
 }
 
-type CalendarContext<TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any> = {
+export type CalendarEventTitleCallback<T extends CalendarGenerics> = (event: Pick<T["Event"], "start" | "end" | "allDay">) => string
+
+type CalendarContext<T extends CalendarGenerics> = {
 	date: Date
-	events: TEvent[]
+	events: T["Event"][]
 	localizer: CalendarLocalizer
 	handleViewChange: (view: VIEW_NAMES) => void
 	handleDateChange: (action: NAVIGATION_ACTION, newDate?: Date) => void
-	onEventClick: (event: TEvent, element: HTMLElement) => void
+	onEventClick: (event: T["Event"], element: HTMLElement) => void
+	displayStrategyRegistry: DisplayStrategyRegistry
 }
 
-const [useCalendarContext, ContextProvider] = createContext<CalendarContext<CalendarEvent<any>, any>>()
+const [useCalendarContext, ContextProvider] = createContext<CalendarContext<CalendarGenerics>>()
 
-export const CalendarProvider = ContextProvider as unknown as <TEvent extends CalendarEvent<TResources> = CalendarEvent<any>, TResources = any>(
-	props: React.PropsWithChildren<{ value: CalendarContext<TEvent, TResources> }>
+export const CalendarProvider = ContextProvider as unknown as <T extends CalendarGenerics>(
+	props: React.PropsWithChildren<{ value: CalendarContext<T> }>
 ) => JSX.Element
 
 export { useCalendarContext }
