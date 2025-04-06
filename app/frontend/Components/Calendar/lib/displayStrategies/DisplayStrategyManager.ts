@@ -11,7 +11,6 @@ export interface EventDisplayProperties {
 	displayEnd: Date
 	columnStart: number
 	columnSpan: number
-	continues?: true
 	className?: string
 }
 
@@ -31,10 +30,10 @@ export type DisplayStrategyFunction<T extends CalendarGenerics> = (
 	localizer: CalendarLocalizer
 ) => EventDisplayDetails<T>[]
 
-export class DisplayStrategyRegistry {
+export class DisplayStrategyManager {
 	private strategies = new Map<VIEW_NAMES, Map<StrategyType, DisplayStrategyFunction<any>>>()
 
-	register<T extends CalendarGenerics>(
+	registerStrategy<T extends CalendarGenerics>(
 		viewType: VIEW_NAMES,
 		strategyType: StrategyType,
 		strategy: DisplayStrategyFunction<T>
@@ -45,33 +44,30 @@ export class DisplayStrategyRegistry {
 		this.strategies.get(viewType)!.set(strategyType, strategy)
 	}
 
-	getStrategy<T extends CalendarGenerics>(
-		viewType: VIEW_NAMES,
-		strategyType: StrategyType | DisplayStrategyFunction<T>
-	): DisplayStrategyFunction<T> {
+	getDisplayStrategy<T extends CalendarGenerics>(
+		view: VIEW_NAMES,
+		strategyType: StrategyType | DisplayStrategyFunction<T>,
+	) {
 		const strategy = typeof strategyType === "string"
-			? this.strategies.get(viewType)?.get(strategyType)
+			? this.strategies.get(view)?.get(strategyType)
 			: strategyType
 
 		if(!strategy) {
-			throw new Error(`Strategy "${strategyType}" not found for ${viewType} view`)
+			throw new Error(`Strategy "${strategyType}" not found for ${view} view`)
 		}
 
 		return strategy as DisplayStrategyFunction<T>
 	}
 
-	/**
-	 * Filters events outside of view window.
-	 * Groups events by start date into a Map.
-	 * Breaks long events into multiples based on the display strategy.
-	 */
-	groupedEventsForPeriod<T extends CalendarGenerics>(
+	groupAndFilterEvents<T extends CalendarGenerics>(
+		view: VIEW_NAMES,
+		strategyType: StrategyType | DisplayStrategyFunction<T>,
 		events: T["Event"][],
 		date: Date,
-		view: VIEW_NAMES,
-		localizer: CalendarLocalizer,
-		strategy: DisplayStrategyFunction<T>
+		localizer: CalendarLocalizer
 	) {
+		const strategy = this.getDisplayStrategy<T>(view, strategyType)
+
 		const firstDay = localizer.firstVisibleDay(date, view)
 		const lastDay = localizer.lastVisibleDay(date, view)
 

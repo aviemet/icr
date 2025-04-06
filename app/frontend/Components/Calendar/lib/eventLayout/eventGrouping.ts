@@ -2,7 +2,7 @@ import { CalendarGenerics } from "@/Components/Calendar"
 import { SortedArray } from "@/lib/Collections/SortedArray"
 
 import { VIEW_NAMES } from "../../Views"
-import { DisplayStrategyFunction, EventDisplayDetails } from "../displayStrategies"
+import { DisplayStrategyFunction, EventDisplayDetails } from "../displayStrategies/DisplayStrategyManager"
 import { CalendarLocalizer } from "../localizers"
 
 /**

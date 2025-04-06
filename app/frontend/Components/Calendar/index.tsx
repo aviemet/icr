@@ -1,7 +1,6 @@
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 import { createContext } from "@/lib/hooks"
 
-import { DisplayStrategyRegistry } from "./lib/displayStrategies"
 import { VIEW_NAMES, NAVIGATION_ACTION } from "./Views"
 
 export type Resources = Record<string, object>
@@ -34,7 +33,6 @@ type CalendarContext<T extends CalendarGenerics> = {
 	handleViewChange: (view: VIEW_NAMES) => void
 	handleDateChange: (action: NAVIGATION_ACTION, newDate?: Date) => void
 	onEventClick: (event: T["Event"], element: HTMLElement) => void
-	displayStrategyRegistry: DisplayStrategyRegistry
 }
 
 const [useCalendarContext, ContextProvider] = createContext<CalendarContext<CalendarGenerics>>()

@@ -1,7 +1,7 @@
 import clsx from "clsx"
 
 import { CalendarGenerics } from "@/Components/Calendar"
-import { DisplayStrategyFunction, EventDisplayDetails, EventDisplayProperties } from "@/Components/Calendar/lib/displayStrategies"
+import { DisplayStrategyFunction, EventDisplayDetails, EventDisplayProperties } from "@/Components/Calendar/lib/displayStrategies/DisplayStrategyManager"
 import { calculateGridPlacement, spansWeekBorder, splitAtDayBoundaries, splitAtWeekBorders } from "@/Components/Calendar/lib/eventLayout"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 
@@ -54,10 +54,6 @@ export const splitStrategy: DisplayStrategyFunction<CalendarGenerics> = <T exten
 				"continues-on": processedEvents.length > 1 && index < processedEvents.length - 1,
 				"continued-from": processedEvents.length > 1 && index !== 0,
 			}),
-		}
-
-		if(index < processedEvents.length - 1) {
-			displayProperties.continues = true
 		}
 
 		return {

@@ -5,7 +5,7 @@ import { AgendaView } from "./Agenda"
 import { DayView } from "./Day"
 import { MonthView } from "./Month"
 import { WeekView } from "./Week"
-import { StrategyType, DisplayStrategyFunction } from "../lib/displayStrategies"
+import { DisplayStrategyFunction, StrategyType } from "../lib/displayStrategies/DisplayStrategyManager"
 
 export const VIEWS = {
 	month: "month",

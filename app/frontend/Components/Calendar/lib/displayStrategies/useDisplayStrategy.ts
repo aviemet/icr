@@ -1,16 +1,22 @@
 import { CalendarGenerics, useCalendarContext } from "../.."
-import { DisplayStrategyFunction, StrategyType } from "./DisplayStrategyRegistry"
+import { DisplayStrategyFunction, StrategyType } from "./DisplayStrategyManager"
 import { VIEW_NAMES } from "../../Views"
 
-import { displayStrategyRegistry } from "."
+import { displayStrategyManager } from "."
 
-
-export const useDisplayStrategy = <T extends CalendarGenerics>(view: VIEW_NAMES, displayStrategy: StrategyType | DisplayStrategyFunction<T>) => {
+export const useDisplayStrategy = <T extends CalendarGenerics>(
+	view: VIEW_NAMES,
+	displayStrategy: StrategyType | DisplayStrategyFunction<T>
+) => {
 	const { date, localizer, events } = useCalendarContext()
 
-	const strategy = displayStrategyRegistry.getStrategy(view, displayStrategy)
-
-	const groupAndFilterEvents = () => displayStrategyRegistry.groupedEventsForPeriod(events, date, view, localizer, strategy)
-
-	return { groupAndFilterEvents }
+	return {
+		groupAndFilterEvents: () => displayStrategyManager.groupAndFilterEvents(
+			view,
+			displayStrategy,
+			events,
+			date,
+			localizer
+		),
+	}
 }

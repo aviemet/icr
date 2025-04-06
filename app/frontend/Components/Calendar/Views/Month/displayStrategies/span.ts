@@ -47,10 +47,6 @@ export const spanStrategy: DisplayStrategyFunction<CalendarGenerics> = <T extend
 			}),
 		}
 
-		if(index < processedEvents.length) {
-			displayProperties.continues = true
-		}
-
 		return {
 			event: processedEvent,
 			displayProperties,

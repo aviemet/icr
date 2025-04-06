@@ -4,7 +4,6 @@ import { useMemo, useState } from "react"
 
 import { useCalendarContext, CalendarGenerics } from "@/Components/Calendar"
 import { calculateDailyHours } from "@/Components/Calendar/lib/calculateDailyHours"
-import { type StrategyType, type DisplayStrategyFunction } from "@/Components/Calendar/lib/displayStrategies"
 import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/Components/Calendar/Views"
 
 import DailyTotals from "./components/DailyTotals"
@@ -12,6 +11,7 @@ import { DaysHeading } from "./components/DaysHeading"
 import { EventWrapper, Event } from "./components/Event"
 import * as classes from "./MonthView.css"
 import { useDynamicHoverStyles } from "./useDynamicHoverStyles"
+import { DisplayStrategyFunction, StrategyType } from "../../lib/displayStrategies/DisplayStrategyManager"
 import { useDisplayStrategy } from "../../lib/displayStrategies/useDisplayStrategy"
 
 interface MonthViewProps<T extends CalendarGenerics> extends BaseViewProps<T> {
@@ -26,9 +26,9 @@ const MonthViewComponent = <T extends CalendarGenerics>({
 	showDailyTotals = true,
 }: MonthViewProps<T>) => {
 	const { date, localizer, events } = useCalendarContext()
-	const strategy = useDisplayStrategy<T>(VIEWS.month, displayStrategy)
 
-	const eventsByDay = strategy.groupAndFilterEvents()
+	const { groupAndFilterEvents } = useDisplayStrategy<T>(VIEWS.month, displayStrategy)
+	const eventsByDay = groupAndFilterEvents()
 
 	const [hoverId, setHoverId] = useState<string>("")
 	const dynamicHoverStyles = useDynamicHoverStyles(hoverId)

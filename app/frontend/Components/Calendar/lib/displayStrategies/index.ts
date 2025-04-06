@@ -1,14 +1,12 @@
-import { DisplayStrategyRegistry } from "./DisplayStrategyRegistry"
+import { DisplayStrategyManager } from "./DisplayStrategyManager"
 import { spanStrategy, splitStrategy, stackStrategy } from "../../Views/Month/displayStrategies"
 
-export * from "./DisplayStrategyRegistry"
-
 // Create a new registry instance for initialization
-const displayStrategyRegistry = new DisplayStrategyRegistry()
+const displayStrategyManager = new DisplayStrategyManager()
 
 // Register all strategies
-displayStrategyRegistry.register("month", "split", splitStrategy)
-displayStrategyRegistry.register("month", "stack", stackStrategy)
-displayStrategyRegistry.register("month", "span", spanStrategy)
+displayStrategyManager.registerStrategy("month", "split", splitStrategy)
+displayStrategyManager.registerStrategy("month", "stack", stackStrategy)
+displayStrategyManager.registerStrategy("month", "span", spanStrategy)
 
-export { displayStrategyRegistry }
+export { displayStrategyManager }

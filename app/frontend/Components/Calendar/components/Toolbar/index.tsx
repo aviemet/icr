@@ -44,7 +44,7 @@ const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>((
 			date,
 			today: new Date(),
 			localizer,
-			events: undefined,
+			events: [],
 		})
 	}, [date, localizer, view])
 

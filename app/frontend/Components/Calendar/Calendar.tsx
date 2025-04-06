@@ -4,15 +4,15 @@ import { useMemo, useState, useCallback, useRef, useLayoutEffect } from "react"
 
 import { CalendarProvider, CalendarContext, CalendarGenerics } from "@/Components/Calendar"
 import Toolbar from "@/Components/Calendar/components/Toolbar"
-import { displayStrategyRegistry, StrategyType } from "@/Components/Calendar/lib/displayStrategies"
 import { CalendarLocalizer, useDefaultLocalizer } from "@/Components/Calendar/lib/localizers"
 import { usePageProps } from "@/lib/hooks"
 
 import * as classes from "./Calendar.css"
 import EventDetailsPopover from "./components/EventDetailsPopover"
 import { useEventPopover } from "./components/EventDetailsPopover/useEventPopover"
-import { viewComponents, VIEWS, VIEW_NAMES, NAVIGATION_ACTION } from "./Views"
+import { viewComponents, VIEWS, VIEW_NAMES, NAVIGATION_ACTION, ViewComponent } from "./Views"
 import { ErrorBoundary } from "../ErrorBoundary"
+import { DisplayStrategyFunction, StrategyType } from "./lib/displayStrategies/DisplayStrategyManager"
 
 interface CalendarProps<T extends CalendarGenerics> {
 	defaultDate: Date
@@ -20,7 +20,7 @@ interface CalendarProps<T extends CalendarGenerics> {
 	events: T["Event"][]
 	localizer?: CalendarLocalizer
 	views?: readonly VIEW_NAMES[]
-	displayStrategy?: StrategyType
+	displayStrategy?: StrategyType | DisplayStrategyFunction<T>
 	onNavigate?: (newDate: Date, action: NAVIGATION_ACTION, view: VIEW_NAMES) => void
 	eventPopoverContent?: (event: T["Event"], localizer: CalendarLocalizer) => React.ReactNode
 }
@@ -61,7 +61,7 @@ const Calendar = <T extends CalendarGenerics>({
 		setMinHeight(`calc(100% - ${height}px)`)
 	}, [])
 
-	const ViewComponent = useMemo(() => viewComponents[currentView], [currentView])
+	const ViewComponent = useMemo(() => viewComponents[currentView] as unknown as ViewComponent<T>, [currentView])
 
 	const handleViewChange = useCallback((view: VIEW_NAMES) => {
 		setCurrentView(view)
@@ -95,7 +95,6 @@ const Calendar = <T extends CalendarGenerics>({
 		handleViewChange,
 		handleDateChange,
 		onEventClick: handleEventClick,
-		displayStrategyRegistry,
 	}), [
 		date,
 		events,
