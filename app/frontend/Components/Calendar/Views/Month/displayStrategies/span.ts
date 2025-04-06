@@ -5,7 +5,7 @@ import {
 	DisplayStrategyFunction,
 	EventDisplayDetails,
 	EventDisplayProperties,
-} from "@/Components/Calendar/lib/displayStrategies/DisplayStrategyManager"
+} from "@/Components/Calendar/lib/displayStrategies"
 import {
 	calculateGridPlacement,
 	spansWeekBorder,

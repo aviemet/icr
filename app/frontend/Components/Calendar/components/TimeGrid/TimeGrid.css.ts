@@ -1,5 +1,9 @@
 import { css } from "@linaria/core"
 
+import { rem } from "@/lib"
+
+const rowHeight = rem(60)
+
 export const timeGrid = css`
   display: grid;
   grid-auto-flow: dense;
@@ -22,7 +26,7 @@ export const timeColumn = css`
 `
 
 export const timeSlot = css`
-  height: var(--time-slot-height, 60px);
+  height: ${ rowHeight };
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
@@ -82,13 +86,13 @@ export const gridLines = css`
     var(--mantine-color-gray-3) 1px,
     transparent 1px
   );
-  background-size: 100% var(--time-slot-height, 60px);
+  background-size: 100% ${ rowHeight };
 
   /* Dotted lines for half hours */
   &::after {
     content: "";
     position: absolute;
-    top: calc(var(--time-slot-height, 60px) / 2);
+    top: calc(${ rowHeight } / 2);
     left: 0;
     right: 0;
     bottom: 0;
@@ -97,7 +101,7 @@ export const gridLines = css`
       var(--mantine-color-gray-2) 1px,
       transparent 1px
     );
-    background-size: 100% var(--time-slot-height, 60px);
+    background-size: 100% ${ rowHeight };
     mask-image: linear-gradient(
       to right,
       black 2px,
@@ -143,46 +147,11 @@ export const cornerSpacer = css`
   border-bottom: 1px solid var(--mantine-color-gray-3);
 `
 
-export const eventContainer = css`
+export const eventsContainer = css`
   position: absolute;
   inset: 0;
   display: grid;
   grid-template-columns: repeat(var(--column-count), 1fr);
   grid-template-rows: repeat(48, 1fr); /* 24 hours * 2 (30 min slots) */
   pointer-events: none;
-`
-
-export const event = css`
-  pointer-events: auto;
-  background-color: var(--event-color);
-  color: var(--contrasting-color);
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  overflow: hidden;
-  cursor: pointer;
-  grid-column: var(--event-column);
-  grid-row: var(--event-start-row) / span var(--event-span);
-  margin: 2px;
-  z-index: 1;
-  transition: all 200ms ease-in-out;
-
-  &:hover {
-    filter: brightness(0.9);
-  }
-`
-
-export const stackedEvent = css`
-  position: relative;
-  z-index: var(--event-z-index);
-
-  &:hover {
-    z-index: 999;
-  }
-`
-
-export const splitEvent = css`
-  width: var(--event-width, 100%);
-  left: var(--event-left, 0);
-  position: relative;
 `

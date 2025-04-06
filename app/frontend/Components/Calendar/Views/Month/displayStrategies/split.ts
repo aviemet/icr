@@ -5,7 +5,7 @@ import {
 	DisplayStrategyFunction,
 	EventDisplayDetails,
 	EventDisplayProperties,
-} from "@/Components/Calendar/lib/displayStrategies/DisplayStrategyManager"
+} from "@/Components/Calendar/lib/displayStrategies"
 import {
 	calculateGridPlacement,
 	spansWeekBorder,
@@ -38,7 +38,7 @@ export const splitStrategy: DisplayStrategyFunction<CalendarGenerics> = <T exten
 		const spansMultipleDays = startDay.getTime() !== endDay.getTime()
 
 		if(spansMultipleDays) {
-			return splitAtDayBoundaries(weekEvent, localizer)
+			return splitAtDayBoundaries<T>(weekEvent, localizer)
 		} else {
 			return [{
 				event: weekEvent,

@@ -3,7 +3,7 @@ import clsx from "clsx"
 
 import { Box, BoxProps } from "@/Components"
 import { useCalendarContext, CalendarGenerics } from "@/Components/Calendar"
-import { EventDisplayProperties } from "@/Components/Calendar/lib/displayStrategies/DisplayStrategyManager"
+import { EventDisplayProperties } from "@/Components/Calendar/lib/displayStrategies"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 
 import * as classes from "./Event.css"

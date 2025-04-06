@@ -8,11 +8,11 @@ import { CalendarLocalizer, useDefaultLocalizer } from "@/Components/Calendar/li
 import { usePageProps } from "@/lib/hooks"
 
 import * as classes from "./Calendar.css"
+import { ErrorBoundary } from "../ErrorBoundary"
 import EventDetailsPopover from "./components/EventDetailsPopover"
 import { useEventPopover } from "./components/EventDetailsPopover/useEventPopover"
+import { DisplayStrategyFunction, ViewStrategyType } from "./lib/displayStrategies"
 import { viewComponents, VIEWS, VIEW_NAMES, NAVIGATION_ACTION, ViewComponent } from "./Views"
-import { ErrorBoundary } from "../ErrorBoundary"
-import { DisplayStrategyFunction, StrategyType } from "./lib/displayStrategies/DisplayStrategyManager"
 
 interface CalendarProps<T extends CalendarGenerics> {
 	defaultDate: Date
@@ -20,7 +20,7 @@ interface CalendarProps<T extends CalendarGenerics> {
 	events: T["Event"][]
 	localizer?: CalendarLocalizer
 	views?: readonly VIEW_NAMES[]
-	displayStrategies?: Partial<Record<VIEW_NAMES, StrategyType | DisplayStrategyFunction<T>>>
+	displayStrategies?: Partial<Record<VIEW_NAMES, ViewStrategyType<VIEW_NAMES> | DisplayStrategyFunction<T>>>
 	onNavigate?: (newDate: Date, action: NAVIGATION_ACTION, view: VIEW_NAMES) => void
 	eventPopoverContent?: (event: T["Event"], localizer: CalendarLocalizer) => React.ReactNode
 }

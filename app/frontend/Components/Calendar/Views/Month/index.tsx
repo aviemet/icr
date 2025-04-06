@@ -4,7 +4,7 @@ import { useMemo, useState } from "react"
 
 import { useCalendarContext, CalendarGenerics } from "@/Components/Calendar"
 import { calculateDailyHours } from "@/Components/Calendar/lib/calculateDailyHours"
-import { BaseViewProps, createViewComponent, NAVIGATION, VIEW_NAMES, VIEWS } from "@/Components/Calendar/Views"
+import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/Components/Calendar/Views"
 
 import DailyTotals from "./components/DailyTotals"
 import { DaysHeading } from "./components/DaysHeading"

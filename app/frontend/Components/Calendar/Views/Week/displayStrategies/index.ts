@@ -1,7 +1,7 @@
-import { weekStackStrategy as overlapStrategy } from "./stack"
+import { weekOverlapStrategy } from "./overlap"
 
 export const weekDisplayStrategies = {
-	overlap: overlapStrategy,
+	overlap: weekOverlapStrategy,
 } as const
 
 export type WeekStrategyType = keyof typeof weekDisplayStrategies
