@@ -121,7 +121,9 @@ const Calendar = <T extends CalendarGenerics>({
 
 					<div className={ clsx(classes.calendar) }>
 						<div className={ clsx(classes.calendarInnerContainer) }>
-							<ViewComponent displayStrategy={ localDisplayStrategies[currentView] }/>
+							<ErrorBoundary>
+								<ViewComponent displayStrategy={ localDisplayStrategies[currentView] }/>
+							</ErrorBoundary>
 						</div>
 					</div>
 

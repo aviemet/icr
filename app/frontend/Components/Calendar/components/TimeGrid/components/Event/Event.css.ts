@@ -1,22 +1,36 @@
 import { css } from "@linaria/core"
 
+import { vars } from "@/lib"
+
+export const eventWrapper = css`
+  --column-start: 1;
+  --grid-row-start: 1;
+  --grid-row-end: 1;
+  --event-color: ${ vars.colors.primaryColors.filled };
+  --contrasting-color: light-dark(${ vars.colors.black }, ${ vars.colors.white });
+  --hover-color: color-mix(
+          in srgb,
+          var(--event-color) 85%,
+          white
+        );
+  overflow: hidden;
+  margin: 1px;
+  font-size: ${ vars.fontSizes.xs };
+  grid-column: var(--column-start);
+  grid-row: var(--grid-row-start) / var(--grid-row-end);
+  z-index: 1;
+`
+
 export const event = css`
-  pointer-events: auto;
   background-color: var(--event-color);
   color: var(--contrasting-color);
   padding: 4px 8px;
   border-radius: 4px;
-  font-size: 0.875rem;
-  overflow: hidden;
   cursor: pointer;
-  grid-column: var(--event-column);
-  grid-row: var(--event-start-row) / span var(--event-span);
-  margin: 2px;
-  z-index: 1;
-  transition: all 200ms ease-in-out;
 
   &:hover {
     filter: brightness(0.9);
+    z-index: 2;
   }
 `
 

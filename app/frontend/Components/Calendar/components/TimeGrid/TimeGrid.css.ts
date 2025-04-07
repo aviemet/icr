@@ -6,10 +6,8 @@ const rowHeight = rem(60)
 
 export const timeGrid = css`
   display: grid;
-  grid-auto-flow: dense;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto 1fr;
-  width: 100%;
   height: 100%;
   overflow: hidden;
 `
@@ -56,69 +54,36 @@ export const timeSlot = css`
   }
 `
 
+export const cornerSpacer = css`
+  grid-column: 1;
+  grid-row: 1;
+  border-right: 1px solid var(--mantine-color-gray-3);
+  border-bottom: 1px solid var(--mantine-color-gray-3);
+`
+
 export const contentArea = css`
-  grid-row: 2;
   grid-column: 2;
+  grid-row: 2;
+  overflow-y: auto;
   position: relative;
-  min-height: 100%;
 `
 
 export const contentGrid = css`
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 1fr;
-  position: relative;
+  display: flex;
   min-height: 100%;
+  border-left: 1px solid var(--mantine-color-gray-3);
 `
 
 export const gridLines = css`
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   pointer-events: none;
-  z-index: 0;
-
-  /* Solid lines for hours */
   background-image: linear-gradient(
     to bottom,
     var(--mantine-color-gray-3) 1px,
     transparent 1px
   );
   background-size: 100% ${ rowHeight };
-
-  /* Dotted lines for half hours */
-  &::after {
-    content: "";
-    position: absolute;
-    top: calc(${ rowHeight } / 2);
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: linear-gradient(
-      to bottom,
-      var(--mantine-color-gray-2) 1px,
-      transparent 1px
-    );
-    background-size: 100% ${ rowHeight };
-    mask-image: linear-gradient(
-      to right,
-      black 2px,
-      black 2px,
-      black 4px,
-      transparent 4px
-    );
-    mask-size: 6px 100%;
-    -webkit-mask-image: linear-gradient(
-      to right,
-      black 2px,
-      black 2px,
-      black 4px,
-      transparent 4px
-    );
-    -webkit-mask-size: 6px 100%;
-  }
 `
 
 export const headerArea = css`
@@ -140,18 +105,9 @@ export const columnHeading = css`
   color: var(--mantine-color-gray-7);
 `
 
-export const cornerSpacer = css`
-  grid-row: 1;
-  grid-column: 1;
-  border-right: 1px solid var(--mantine-color-gray-3);
-  border-bottom: 1px solid var(--mantine-color-gray-3);
-`
-
 export const eventsContainer = css`
-  position: absolute;
-  inset: 0;
   display: grid;
-  grid-template-columns: repeat(var(--column-count), 1fr);
-  grid-template-rows: repeat(48, 1fr); /* 24 hours * 2 (30 min slots) */
-  pointer-events: none;
+  flex: 1;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(${ rowHeight }, 1fr);
 `

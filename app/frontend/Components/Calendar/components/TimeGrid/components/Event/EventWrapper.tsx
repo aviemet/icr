@@ -1,6 +1,7 @@
 import clsx from "clsx"
 
 import { CalendarGenerics } from "@/Components/Calendar"
+import { EventDisplayProperties } from "@/Components/Calendar/lib/displayStrategies"
 
 import * as classes from "./Event.css"
 
@@ -9,20 +10,20 @@ interface EventWrapperProps<T extends CalendarGenerics> {
 	columnStart: number
 	columnSpan: number
 	children: React.ReactNode
+	style?: React.CSSProperties
+	displayProperties: EventDisplayProperties
 }
 
 const EventWrapper = <T extends CalendarGenerics>({
-	columnStart,
-	columnSpan,
 	children,
+	style,
+	displayProperties,
 }: EventWrapperProps<T>) => {
 	return (
 		<div
-			className={ clsx(classes.event) }
+			className={ clsx(classes.eventWrapper) }
 			style={ {
-				"--event-column": columnStart,
-				"--event-width": `${100 / columnSpan}%`,
-				"--event-left": `${(columnStart - 1) * (100 / columnSpan)}%`,
+				...style,
 			} as React.CSSProperties }
 		>
 			{ children }

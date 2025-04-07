@@ -73,11 +73,13 @@ const TimeGrid = <T extends CalendarGenerics>({
 		return generateTimeSlots(new Date(startTime), new Date(endTime), timeIncrement, localizer)
 	}, [startTime, endTime, timeIncrement, localizer])
 
+	const rowsPerDay = (24 * 60) / timeIncrement
+
 	return (
 		<div className={ clsx(classes.timeGrid, className) } style={ {
-			"--time-slot-height": `${timeIncrement / 30 * 60}px`,
+			"--rows-per-day": rowsPerDay,
+			...style,
 		} as React.CSSProperties }>
-
 			<div className={ classes.cornerSpacer } />
 
 			<Headings columnHeadings={ columnHeadings } />
@@ -85,41 +87,47 @@ const TimeGrid = <T extends CalendarGenerics>({
 			<TimeColumn timeSlots={ timeSlots } />
 
 			<div className={ classes.contentArea }>
-
 				<div className={ classes.contentGrid }>
-
 					<div className={ classes.gridLines } />
-
 					<div className={ classes.eventsContainer }>
 						{ columnHeadings.map((heading, columnIndex) => {
 							const dayEvents = eventsByDay.get(heading.date.toISOString())
 							if(!dayEvents) return null
 
-							return dayEvents.map(({ event, displayProperties }) => (
-								<EventWrapper
-									key={ `${event.id}-${columnIndex}` }
-									event={ event }
-									columnStart={ displayProperties.columnStart }
-									columnSpan={ displayProperties.columnSpan }
-								>
-									<Event
-										event={ event }
+							return dayEvents.map(({ event, displayProperties }) => {
+								const startOfDay = localizer.startOf(displayProperties.displayStart, "day")
+								const startMinutes = localizer.duration(displayProperties.displayStart, startOfDay) / (1000 * 60)
+								const endMinutes = localizer.duration(displayProperties.displayEnd, startOfDay) / (1000 * 60)
+
+								const startRow = Math.floor(startMinutes / timeIncrement) + 1
+								const endRow = Math.ceil(endMinutes / timeIncrement) + 1
+
+								return (
+									<EventWrapper
+										style={ {
+											"--column-start": columnIndex + 1,
+											"--grid-row-start": startRow,
+											"--grid-row-end": endRow,
+										} as React.CSSProperties }
 										displayProperties={ displayProperties }
-										localizer={ localizer }
-										startTime={ startTime }
-										timeIncrement={ timeIncrement }
-										className={ clsx(displayProperties.className) }
-										onEventClick={ onEventClick }
-									/>
-								</EventWrapper>
-							))
+									>
+										<Event
+											key={ event.id }
+											event={ event }
+											localizer={ localizer }
+											displayProperties={ displayProperties }
+											startTime={ startTime }
+											timeIncrement={ timeIncrement }
+											className={ clsx(displayProperties.className) }
+											onEventClick={ onEventClick }
+										/>
+									</EventWrapper>
+								)
+							})
 						}) }
 					</div>
-
 				</div>
-
 			</div>
-
 		</div>
 	)
 }

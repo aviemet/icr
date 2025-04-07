@@ -6,6 +6,8 @@ import { EventDisplayProperties } from "@/Components/Calendar/lib/displayStrateg
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 import useStore from "@/lib/store"
 
+import * as classes from "./Event.css"
+
 interface EventProps<T extends CalendarGenerics> {
 	event: T["Event"]
 	displayProperties: EventDisplayProperties
@@ -13,6 +15,7 @@ interface EventProps<T extends CalendarGenerics> {
 	startTime: Date
 	timeIncrement: number
 	className?: string
+	style?: React.CSSProperties
 	onEventClick?: (event: T["Event"], element: HTMLElement) => void
 }
 
@@ -23,6 +26,7 @@ const Event = <T extends CalendarGenerics>({
 	startTime,
 	timeIncrement,
 	className,
+	style,
 	onEventClick,
 }: EventProps<T>) => {
 	const { getContrastingColor } = useStore()
@@ -31,12 +35,11 @@ const Event = <T extends CalendarGenerics>({
 
 	return (
 		<Box
-			className={ clsx(className) }
+			className={ clsx(classes.event, className) }
 			style={ {
-				"--event-start-row": localizer.duration(displayProperties.displayStart, startTime) / timeIncrement,
-				"--event-span": localizer.duration(displayProperties.displayEnd, displayProperties.displayStart) / timeIncrement,
 				"--event-color": eventColor,
 				"--contrasting-color": contrastingColor,
+				...style,
 			} as React.CSSProperties }
 			onClick={ (e) => onEventClick?.(event, e.currentTarget) }
 		>
