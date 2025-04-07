@@ -9,42 +9,54 @@ import {
 	ButtonProps,
 	Button,
 } from "@mantine/core"
-import { useState } from "react"
+import { useUncontrolled } from "@mantine/hooks"
+import { useRef, useState } from "react"
 
 import * as classes from "./FloatingIndicator.css"
 
-type FloatingIndicatorOption = {
-	key: string
+type FloatingIndicatorOption<T extends string = string> = {
+	key: T
 	title: string
-	onClick: (key: string) => void
+	onClick?: (key: T) => void
 }
 
-interface FloatingIndicatorProps extends PaperProps, ElementProps<"div">, MantineStyleProps {
-	options: FloatingIndicatorOption[]
+interface FloatingIndicatorProps<T extends string = string> extends PaperProps, ElementProps<"div">, MantineStyleProps {
+	options: FloatingIndicatorOption<T>[]
 	size?: MantineSize
 	buttonProps?: ButtonProps
+	value?: T
+	onValueChange?: (value: T) => void
+	defaultValue?: T
 }
 
-const FloatingIndicator = ({
+const FloatingIndicator = <T extends string = string>({
 	options,
 	radius = "sm",
 	p = "xxs",
 	buttonProps = {
 		size: "sm",
 	},
+	value,
+	onValueChange,
+	defaultValue,
 	...props
-}: FloatingIndicatorProps) => {
+}: FloatingIndicatorProps<T>) => {
 	const [rootRef, setRootRef] = useState<HTMLDivElement | null>(null)
-	const [controlsRefs, setControlsRefs] = useState<Record<string, HTMLButtonElement | null>>({})
-	const [active, setActive] = useState(0)
+	const controlsRefs = useRef<Record<string, HTMLButtonElement | null>>({})
 
-	const setControlRef = (index: number) => (node: HTMLButtonElement) => {
-		controlsRefs[index] = node
-		setControlsRefs(controlsRefs)
+	const [currentValue, handleChange] = useUncontrolled<T>({
+		value,
+		onChange: onValueChange,
+		defaultValue: defaultValue,
+		finalValue: options[0]?.key,
+	})
+
+	const setControlRef = (key: T) => (node: HTMLButtonElement | null) => {
+		controlsRefs.current[key] = node
 	}
 
-	const handleClick = (item: FloatingIndicatorOption, index: number) => {
-		setActive(index)
+	const handleClick = (item: FloatingIndicatorOption<T>) => {
+		handleChange(item.key)
 		item.onClick?.(item.key)
 	}
 
@@ -57,14 +69,15 @@ const FloatingIndicator = ({
 			style={ {
 				"--floating-indicator-radius": `var(--mantine-radius-${radius})`,
 			} as React.CSSProperties }
+			{ ...props }
 		>
-			{ options.map((item, index) => (
+			{ options.map((item) => (
 				<Button
 					key={ item.key }
 					className={ classes.control }
-					ref={ setControlRef(index) }
-					onClick={ () => handleClick(item, index) }
-					mod={ { active: active === index } }
+					ref={ setControlRef(item.key) }
+					onClick={ () => handleClick(item) }
+					mod={ { active: currentValue === item.key } }
 					variant="subtle"
 					{ ...buttonProps }
 				>
@@ -74,11 +87,13 @@ const FloatingIndicator = ({
 				</Button>
 			)) }
 
-			<MantineFloatingIndicator
-				target={ controlsRefs[active] }
-				parent={ rootRef }
-				className={ classes.indicator }
-			/>
+			{ currentValue && controlsRefs.current[currentValue] && rootRef && (
+				<MantineFloatingIndicator
+					target={ controlsRefs.current[currentValue] }
+					parent={ rootRef }
+					className={ classes.indicator }
+				/>
+			) }
 		</Paper>
 	)
 }

@@ -12,11 +12,6 @@ interface WeekViewProps<T extends CalendarGenerics> extends BaseViewProps<T> {
 	style?: React.CSSProperties
 }
 
-interface DayHeading {
-	date: Date
-	label: string
-}
-
 const WeekViewComponent = ({ className, style }: WeekViewProps<CalendarGenerics>) => {
 	const { date, localizer } = useCalendarContext()
 
@@ -31,6 +26,7 @@ const WeekViewComponent = ({ className, style }: WeekViewProps<CalendarGenerics>
 	return (
 		<div className={ clsx(classes.weekView, className) } style={ style }>
 			<TimeGrid
+				view={ VIEWS.week }
 				columnHeadings={ columnHeadings }
 				startTime={ localizer.startOf(date, "day") }
 				endTime={ localizer.endOf(date, "day") }

@@ -43,9 +43,24 @@ const useEventPopover = <T extends CalendarGenerics>(): UseEventPopoverReturn<T>
 		const scrollTop = window.scrollY || document.documentElement.scrollTop
 		const scrollLeft = window.scrollX || document.documentElement.scrollLeft
 
+		// Check if the clicked element is inside a TimeGrid
+		const isTimeGrid = element.closest('[data-calendar-view="time-grid"]') !== null
+
+		// Default position is bottom
+		let topPosition = rect.bottom + scrollTop
+
+		if(isTimeGrid) {
+			// For TimeGrid, position above the element initially
+			// We don't know the popover height yet, so we use rect.top.
+			// The useLayoutEffect will adjust it precisely later.
+			topPosition = rect.top + scrollTop
+		}
+
 		setClickedElement(element)
 		openPopover(event, {
-			top: rect.bottom + scrollTop,
+			// Use the calculated initial top position
+			top: topPosition,
+			// Keep initial left calculation simple, layout effect centers it
 			left: rect.left + scrollLeft,
 		})
 	}, [openPopover])
@@ -74,22 +89,45 @@ const useEventPopover = <T extends CalendarGenerics>(): UseEventPopoverReturn<T>
 			const scrollLeft = window.scrollX || document.documentElement.scrollLeft
 
 			const eventRect = clickedElement.getBoundingClientRect()
+			const isTimeGrid = clickedElement.closest('[data-calendar-view="time-grid"]') !== null
+
+			// Define potential positions
+			const topAlignTop = eventRect.top + scrollTop // Align popover top to event top
+			const bottomAlignBottom = eventRect.bottom + scrollTop + 5 // Align popover top below event bottom (gap)
+			const topAlignBottom = eventRect.top + scrollTop - popoverRect.height - 5 // Align popover bottom above event top (gap)
+
+			let top: number
+
+			if(isTimeGrid) {
+				// Prefer top-to-top alignment for TimeGrid
+				if(topAlignTop + popoverRect.height <= viewportHeight + scrollTop) {
+					top = topAlignTop
+				} else {
+					// Fallback: position below event if top-to-top doesn't fit
+					top = bottomAlignBottom
+				}
+			} else {
+				// Prefer positioning below event for Month/Other views
+				if(bottomAlignBottom + popoverRect.height <= viewportHeight + scrollTop) {
+					top = bottomAlignBottom
+				} else {
+					// Fallback: position above event if below doesn't fit
+					top = topAlignBottom
+				}
+			}
 
 			// Center horizontally on the event
 			let left = eventRect.left + (eventRect.width / 2) - (popoverRect.width / 2) + scrollLeft
-			let top = popoverPosition.top
 
-			// Ensure popover stays within viewport bounds
-			if(left + popoverRect.width > viewportWidth + scrollLeft) {
-				left = viewportWidth - popoverRect.width + scrollLeft - 20
+			// Ensure horizontal bounds
+			if(left < scrollLeft + 10) {
+				left = scrollLeft + 10
 			}
-			if(left < scrollLeft) {
-				left = scrollLeft + 20
-			}
-			if(top + popoverRect.height > viewportHeight + scrollTop) {
-				top = top - popoverRect.height - 40
+			if(left + popoverRect.width > viewportWidth + scrollLeft - 10) {
+				left = viewportWidth + scrollLeft - popoverRect.width - 10
 			}
 
+			// Update position if calculated values differ from current state
 			if(popoverPosition.top !== top || popoverPosition.left !== left) {
 				setPopoverPosition({ top, left })
 			}

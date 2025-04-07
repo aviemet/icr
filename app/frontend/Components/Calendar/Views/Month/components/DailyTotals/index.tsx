@@ -13,7 +13,7 @@ const DailyTotals = ({ dailyMinutesTotal }: DailyTotalsProps) => {
 		<Box className={ clsx((classes.dailyTotals)) }>
 			<Group justify="space-between">
 				<Box>Total Hours</Box>
-				<Box>{ dailyMinutesTotal / 60 }</Box>
+				<Box>{ Math.round(dailyMinutesTotal / 60) }</Box>
 			</Group>
 		</Box>
 	)

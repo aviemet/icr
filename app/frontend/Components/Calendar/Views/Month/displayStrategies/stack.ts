@@ -2,91 +2,89 @@ import clsx from "clsx"
 
 import { CalendarGenerics } from "@/Components/Calendar"
 import {
-	DisplayStrategyFunction,
-	EventDisplayDetails,
-	EventDisplayProperties,
-} from "@/Components/Calendar/lib/displayStrategies"
+	BaseDisplayStrategy,
+} from "@/Components/Calendar/lib/displayStrategies/BaseDisplayStrategy"
 import {
-	calculateGridPlacement,
-	spansWeekBorder,
-	splitAtWeekBorders,
-} from "@/Components/Calendar/lib/eventLayout"
-import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
-import { coerceArray } from "@/lib"
+	EventDisplayDetails,
+	GridDisplayProperties,
+} from "@/Components/Calendar/lib/displayStrategies/types"
 
-const compareStack = <T extends CalendarGenerics>(
-	a: EventDisplayDetails<T>,
-	b: EventDisplayDetails<T>
-) => {
-	// Stack strategy: longer events get higher priority
-	const spanDiff = b.displayProperties.columnSpan - a.displayProperties.columnSpan
-	if(spanDiff !== 0) return spanDiff
+/**
+ * Month Stack Strategy:
+ * - Splits events only if they cross week boundaries AND span multiple days.
+ * - Renders events spanning multiple days within a week as a full span ("filled").
+ * - Renders single-day events or segments as indicators ("indicator") in their start column.
+ */
+export class MonthStackStrategy<T extends CalendarGenerics>
+	extends BaseDisplayStrategy<T, GridDisplayProperties> {
+	/**
+	 * Helper to determine if an event segment should be rendered as a full span.
+	 * Based on the original logic: only spans if it covers 2 or more days.
+	 */
+	protected shouldSpanDays(segment: { start: Date, end: Date }): boolean {
+		const startDay = this.config.localizer.startOf(segment.start, "day")
+		const endDay = this.config.localizer.startOf(
+			this.config.localizer.adjustMidnightTime(segment.end),
+			"day"
+		)
 
-	return a.event.start.valueOf() - b.event.start.valueOf()
-}
+		const daysDiff = Math.floor((endDay.getTime() - startDay.getTime()) / (1000 * 60 * 60 * 24))
 
-const shouldSpanDays = <T extends CalendarGenerics>(
-	event: T["Event"],
-	localizer: CalendarLocalizer
-): boolean => {
-	const startDay = localizer.startOf(event.start, "day")
-	const endDay = localizer.startOf(event.end, "day")
-
-	// Calculate the difference in days
-	const daysDiff = Math.floor((endDay.getTime() - startDay.getTime()) / (24 * 60 * 60 * 1000))
-
-	// Only span if the event ends 2 or more days after it starts
-	return daysDiff >= 2
-}
-
-const shouldSplitAtWeekBoundary = <T extends CalendarGenerics>(
-	event: T["Event"],
-	localizer: CalendarLocalizer
-): boolean => {
-	return spansWeekBorder(event, localizer) && shouldSpanDays(event, localizer)
-}
-
-export const stackStrategy: DisplayStrategyFunction<CalendarGenerics> = <T extends CalendarGenerics>(
-	event: T["Event"],
-	localizer: CalendarLocalizer
-) => {
-	let processedEvents: (typeof event)[]
-
-	if(shouldSplitAtWeekBoundary(event, localizer)) {
-		processedEvents = splitAtWeekBorders(event, localizer)
-	} else {
-		processedEvents = coerceArray(event)
+		return daysDiff >= 1
 	}
 
-	return processedEvents.map((processedEvent, index) => {
-		const displayProperties = {
-			displayStart: processedEvent.start,
-			displayEnd: processedEvent.end,
-			columnStart: 1,
-			columnSpan: 1,
-			className: "",
-		} as const satisfies EventDisplayProperties
+	/**
+	 * Helper to determine if an event needs splitting at week boundaries.
+	 * Based on original logic: only splits if it crosses a week border AND should span days.
+	 */
+	protected shouldSplitAtWeekBoundary(event: T["Event"]): boolean {
+		return this.spansWeekBorder(event) && this.shouldSpanDays(event)
+	}
 
-		if(shouldSpanDays(processedEvent, localizer)) {
-			Object.assign(displayProperties, {
-				...calculateGridPlacement(processedEvent, localizer),
-				className: clsx("filled", {
-					"continues-on": processedEvents.length > 1 && index !== processedEvents.length,
-					"continued-from": processedEvents.length > 1 && index !== 0,
-				}),
-			})
-		} else {
-			Object.assign(displayProperties, {
-				columnStart: calculateGridPlacement(processedEvent, localizer).columnStart,
-				columnSpan: 1,
-				className: clsx("indicator"),
-			})
-		}
+	processEvent(event: T["Event"]): EventDisplayDetails<T, GridDisplayProperties>[] {
+		const weekSegments: T["Event"][] = this.shouldSplitAtWeekBoundary(event)
+			? this.splitAtWeekBoundaries(event)
+			: [{ ...event }]
 
-		return {
-			event: processedEvent,
-			displayProperties,
-			compare: compareStack<T>,
-		}
-	})
+		return weekSegments.map((segment, index) => {
+			const gridPlacement = this.calculateMonthGridPlacement(segment)
+			const shouldRenderAsSpan = this.shouldSpanDays(segment)
+
+			let displayProperties: GridDisplayProperties
+
+			if(shouldRenderAsSpan) {
+				displayProperties = {
+					displayStart: segment.start,
+					displayEnd: segment.end,
+					columnStart: gridPlacement.columnStart,
+					columnSpan: gridPlacement.columnSpan,
+					className: clsx(
+						"filled",
+						this.getContinuationClasses(index, weekSegments.length)
+					),
+				}
+			} else {
+				displayProperties = {
+					displayStart: segment.start,
+					displayEnd: segment.end,
+					columnStart: gridPlacement.columnStart,
+					columnSpan: 1,
+					className: clsx("indicator"),
+				}
+			}
+
+			return {
+				event: event,
+				displayProperties,
+				compare: this.compare,
+			}
+		})
+	}
+
+	compare(a: EventDisplayDetails<T, GridDisplayProperties>, b: EventDisplayDetails<T, GridDisplayProperties>): number {
+		const spanDiff = b.displayProperties.columnSpan - a.displayProperties.columnSpan
+		if(spanDiff !== 0) return spanDiff
+
+		return a.displayProperties.displayStart.valueOf() - b.displayProperties.displayStart.valueOf()
+	}
 }

@@ -2,7 +2,7 @@ import clsx from "clsx"
 
 import { Box } from "@/Components"
 import { CalendarGenerics } from "@/Components/Calendar"
-import { EventDisplayProperties } from "@/Components/Calendar/lib/displayStrategies"
+import { TimeGridDisplayProperties } from "@/Components/Calendar/lib/displayStrategies"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 import useStore from "@/lib/store"
 
@@ -10,7 +10,7 @@ import * as classes from "./Event.css"
 
 interface EventProps<T extends CalendarGenerics> {
 	event: T["Event"]
-	displayProperties: EventDisplayProperties
+	displayProperties: TimeGridDisplayProperties
 	localizer: CalendarLocalizer
 	startTime: Date
 	timeIncrement: number

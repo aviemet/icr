@@ -1,8 +1,9 @@
 import { css } from "@linaria/core"
 
-import { rem } from "@/lib"
+import { rem, vars } from "@/lib"
 
 const rowHeight = rem(60)
+const borderColor = `light-dark(${ vars.colors.dark[6] }, ${ vars.colors.gray[3] })`
 
 export const timeGrid = css`
   display: grid;
@@ -15,8 +16,6 @@ export const timeGrid = css`
 export const timeColumn = css`
   display: flex;
   flex-direction: column;
-  padding-right: 1rem;
-  border-right: 1px solid var(--mantine-color-gray-3);
   grid-row: 2;
   grid-column: 1;
   position: relative;
@@ -25,43 +24,46 @@ export const timeColumn = css`
 
 export const timeSlot = css`
   height: ${ rowHeight };
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-end;
-  color: var(--mantine-color-gray-6);
-  font-size: var(--mantine-font-size-sm);
+  color: light-dark(${ vars.colors.dark[7] }, ${ vars.colors.gray[4] });
+  font-size: ${ vars.fontSizes.xxs };
+  font-weight: 700;
   position: relative;
-  padding-top: 0.25rem;
+  text-align: right;
 
-  /* Solid line at the top of each time slot */
+  span { 
+    position: relative;
+    display: inline-block;
+    transform: translateY(-60%);
+    padding-right: 0.5rem;
+  }
+
   &::before {
     content: "";
     position: absolute;
     top: 0;
-    left: 0;
-    right: -1rem;
-    border-top: 1px solid var(--mantine-color-gray-3);
+    bottom: 0;
+    right: 0;
+    width: 0.25rem;
+    border-top: 1px solid ${ borderColor };
   }
 
-  /* Dotted line in the middle of each time slot */
   &::after {
     content: "";
     position: absolute;
     top: 50%;
     left: 0;
-    right: -1rem;
-    border-top: 1px dotted var(--mantine-color-gray-2);
+    right: -0.5rem;
+    border-top: 1px dotted light-dark(${ vars.colors.dark[8] }, ${ vars.colors.gray[6] });
   }
 `
 
 export const cornerSpacer = css`
   grid-column: 1;
   grid-row: 1;
-  border-right: 1px solid var(--mantine-color-gray-3);
-  border-bottom: 1px solid var(--mantine-color-gray-3);
 `
 
 export const contentArea = css`
+  padding-top: 1px;
   grid-column: 2;
   grid-row: 2;
   overflow-y: auto;
@@ -69,9 +71,8 @@ export const contentArea = css`
 `
 
 export const contentGrid = css`
-  display: flex;
   min-height: 100%;
-  border-left: 1px solid var(--mantine-color-gray-3);
+  border-left: 1px solid ${ borderColor };
 `
 
 export const gridLines = css`
@@ -80,7 +81,7 @@ export const gridLines = css`
   pointer-events: none;
   background-image: linear-gradient(
     to bottom,
-    var(--mantine-color-gray-3) 1px,
+    ${ borderColor } 1px,
     transparent 1px
   );
   background-size: 100% ${ rowHeight };
@@ -89,7 +90,6 @@ export const gridLines = css`
 export const headerArea = css`
   grid-row: 1;
   grid-column: 2;
-  border-bottom: 1px solid var(--mantine-color-gray-3);
 `
 
 export const columnHeadings = css`
@@ -97,17 +97,18 @@ export const columnHeadings = css`
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
   padding: 0.5rem;
+  border-left: 1px solid ${ borderColor };
 `
 
 export const columnHeading = css`
   text-align: center;
   font-weight: 500;
-  color: var(--mantine-color-gray-7);
+  color: light-dark(${ vars.colors.dark[7] }, ${ vars.colors.gray[3] });
 `
 
 export const eventsContainer = css`
   display: grid;
-  flex: 1;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(${ rowHeight }, 1fr);
+  position: relative;
+  grid-template-columns: repeat(var(--column-count, 7), 1fr);
+  grid-template-rows: repeat(var(--rows-per-day, 48), ${ rowHeight });
 `

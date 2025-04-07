@@ -1,31 +1,37 @@
 import { CalendarGenerics } from "@/Components/Calendar"
 
-import { CalendarLocalizer } from "../localizers"
-
-export interface EventDisplayProperties {
+export interface BaseDisplayProperties {
 	displayStart: Date
 	displayEnd: Date
+	className?: string
+	allDay?: boolean
+}
+
+export interface GridDisplayProperties extends BaseDisplayProperties {
 	columnStart: number
 	columnSpan: number
-	className?: string
 }
 
-export type CompareFunction<T extends CalendarGenerics> = (
-	a: EventDisplayDetails<T>,
-	b: EventDisplayDetails<T>
+export interface TimeGridDisplayProperties extends GridDisplayProperties {
+	rowStart: number
+	rowEnd: number
+}
+
+export interface AgendaDisplayProperties extends BaseDisplayProperties {
+
+}
+
+export type CompareFunction<T extends CalendarGenerics, P extends BaseDisplayProperties> = (
+	a: EventDisplayDetails<T, P>,
+	b: EventDisplayDetails<T, P>
 ) => number
 
-export interface EventDisplayDetails<T extends CalendarGenerics> {
+
+export interface EventDisplayDetails<
+	T extends CalendarGenerics,
+	P extends BaseDisplayProperties
+> {
 	event: T["Event"]
-	displayProperties: EventDisplayProperties
-	compare: CompareFunction<T>
-}
-
-export type DisplayStrategyFunction<T extends CalendarGenerics> = (
-	event: T["Event"],
-	localizer: CalendarLocalizer
-) => EventDisplayDetails<T>[]
-
-export type ViewStrategies<T extends string> = {
-	[K in T]: DisplayStrategyFunction<any>
+	displayProperties: P
+	compare: CompareFunction<T, P>
 }

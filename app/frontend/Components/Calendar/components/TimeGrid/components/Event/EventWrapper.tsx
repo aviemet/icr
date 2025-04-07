@@ -1,28 +1,29 @@
 import clsx from "clsx"
 
 import { CalendarGenerics } from "@/Components/Calendar"
-import { EventDisplayProperties } from "@/Components/Calendar/lib/displayStrategies"
+import { TimeGridDisplayProperties } from "@/Components/Calendar/lib/displayStrategies/types"
 
 import * as classes from "./Event.css"
 
-interface EventWrapperProps<T extends CalendarGenerics> {
+interface EventWrapperProps<T extends CalendarGenerics, P extends TimeGridDisplayProperties = TimeGridDisplayProperties> {
 	event: T["Event"]
-	columnStart: number
-	columnSpan: number
 	children: React.ReactNode
 	style?: React.CSSProperties
-	displayProperties: EventDisplayProperties
+	displayProperties: P
 }
 
-const EventWrapper = <T extends CalendarGenerics>({
+const EventWrapper = <T extends CalendarGenerics, P extends TimeGridDisplayProperties = TimeGridDisplayProperties>({
 	children,
 	style,
 	displayProperties,
-}: EventWrapperProps<T>) => {
+}: EventWrapperProps<T, P>) => {
 	return (
 		<div
 			className={ clsx(classes.eventWrapper) }
 			style={ {
+				"--column-start": displayProperties.columnStart,
+				"--grid-row-start": displayProperties.rowStart,
+				"--grid-row-end": displayProperties.rowEnd,
 				...style,
 			} as React.CSSProperties }
 		>

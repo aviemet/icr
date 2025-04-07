@@ -29,6 +29,9 @@ export const themeObject: Partial<CustomMantineTheme> = {
 		xl: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)",
 		xxl: "0 29px 52px rgba(0,0,0,0.40), 0 25px 16px rgba(0,0,0,0.20)",
 	},
+	fontSizes: {
+		xxs: "calc(0.6rem * var(--mantine-scale))",
+	},
 	components: {
 		Modal: {
 			defaultProps: {

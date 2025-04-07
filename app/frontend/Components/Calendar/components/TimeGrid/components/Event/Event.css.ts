@@ -27,6 +27,8 @@ export const event = css`
   padding: 4px 8px;
   border-radius: 4px;
   cursor: pointer;
+  height: calc(100% - 2px);
+  transition: background-color 200ms ease-in-out;
 
   &:hover {
     filter: brightness(0.9);

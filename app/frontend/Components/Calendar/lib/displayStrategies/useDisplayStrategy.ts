@@ -1,24 +1,60 @@
+import { useMemo } from "react"
+
+import { SortedArray } from "@/lib/Collections/SortedArray"
+
 import { CalendarGenerics, useCalendarContext } from "../.."
 import { VIEW_NAMES } from "../../Views"
 
-import { DisplayStrategyFunction, displayStrategies, groupAndFilterEvents } from "."
+import {
+	groupAndFilterEvents,
+	displayStrategyFactories,
+	ViewStrategyName,
+	BaseDisplayStrategy,
+	StrategyConfig,
+	BaseDisplayProperties,
+	EventDisplayDetails,
+	DisplayStrategyFactories,
+} from "."
 
-export const useDisplayStrategy = <T extends CalendarGenerics, V extends VIEW_NAMES>(
+
+export const useDisplayStrategy = <
+	T extends CalendarGenerics,
+	V extends keyof DisplayStrategyFactories,
+	P extends BaseDisplayProperties
+>(
 	view: V,
-	displayStrategy: keyof (typeof displayStrategies)[V]
-) => {
+	strategyName: ViewStrategyName<V>,
+	viewConfig?: Partial<StrategyConfig>
+): Map<string, SortedArray<EventDisplayDetails<T, P>>> => {
 	const { date, localizer, events } = useCalendarContext()
 
-	const strategy = displayStrategies[view][displayStrategy] as DisplayStrategyFunction<T>
-	if(!strategy) {
-		throw new Error(`Invalid strategy "${String(displayStrategy)}" for view "${view}"`)
-	}
+	return useMemo(() => {
+		const currentView = view as keyof typeof displayStrategyFactories
 
-	return groupAndFilterEvents(
-		view,
-		strategy,
-		events,
-		date,
-		localizer
-	)
+		const strategyFactory = displayStrategyFactories[currentView]?.[strategyName as keyof typeof displayStrategyFactories[typeof currentView]]
+
+		if(!strategyFactory) {
+			const nameStr = String(strategyName)
+			// eslint-disable-next-line no-console
+			console.error(`Invalid strategy factory for view="${currentView}", name="${nameStr}"`)
+			throw new Error(`Invalid strategy factory for view="${currentView}", name="${nameStr}"`)
+		}
+
+		const config: StrategyConfig = {
+			localizer,
+			...(viewConfig || {}),
+		}
+
+		const typedFactory = strategyFactory as (config: StrategyConfig) => BaseDisplayStrategy<T, P>
+		const strategyInstance = typedFactory(config)
+
+		return groupAndFilterEvents<T, P>(
+			currentView as VIEW_NAMES,
+			strategyInstance,
+			events,
+			date,
+			localizer
+		) as Map<string, SortedArray<EventDisplayDetails<T, P>>>
+
+	}, [view, strategyName, viewConfig, date, localizer, events])
 }

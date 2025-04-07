@@ -122,12 +122,13 @@ const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>((
 
 			{ /* Calendar view buttons */ }
 			<Box className={ clsx(classes.rightSection) }>
-				{ views.length !== 0 && <FloatingIndicator
+				{ views.length !== 0 && <FloatingIndicator<VIEW_NAMES>
+					value={ view }
+					onValueChange={ handleViewChange }
 					options={
 						views.map(name => ({
 							key: name,
 							title: localizer.messages.views[name],
-							onClick: () => handleViewChange(name),
 						}))
 					}
 					buttonProps={ {

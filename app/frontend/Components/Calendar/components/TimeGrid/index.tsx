@@ -4,9 +4,13 @@ import { useMemo } from "react"
 import { CalendarGenerics, useCalendarContext } from "@/Components/Calendar"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 
-import { displayStrategies } from "../../lib/displayStrategies"
-import { useDisplayStrategy } from "../../lib/displayStrategies/useDisplayStrategy"
-import { VIEWS } from "../../Views"
+import {
+	useDisplayStrategy,
+	ViewStrategyName,
+	TimeGridDisplayProperties,
+	DisplayStrategyFactories,
+	displayStrategyFactories,
+} from "../../lib/displayStrategies"
 import { Event } from "./components/Event/Event"
 import { EventWrapper } from "./components/Event/EventWrapper"
 import Headings from "./components/Headings"
@@ -18,9 +22,11 @@ export interface TimeGridHeading {
 	label: string
 }
 
-interface TimeGridProps<T extends CalendarGenerics> {
+// eslint-disable-next-line no-unused-vars
+interface TimeGridProps<T extends CalendarGenerics, V extends keyof DisplayStrategyFactories> {
 	className?: string
 	style?: React.CSSProperties
+	view: V
 	startTime?: Date
 	endTime?: Date
 	columnHeadings: TimeGridHeading[]
@@ -31,17 +37,16 @@ interface TimeGridProps<T extends CalendarGenerics> {
 	timeIncrement?: number
 	/**
 	 * How to display overlapping events
-	 * @default "overlap"
 	 */
-	displayStrategy?: keyof typeof displayStrategies["week"]
+	displayStrategy?: ViewStrategyName<V>
 }
 
 const generateTimeSlots = (start: Date, end: Date, increment: number, localizer: CalendarLocalizer) => {
 	const slots: Date[] = []
 	let current = localizer.startOf(start, "hour")
-	const endTime = localizer.startOf(end, "hour")
+	const boundaryTime = localizer.add(localizer.startOf(end, "hour"), 1, "hour")
 
-	while(current <= endTime) {
+	while(localizer.isBefore(current, boundaryTime)) {
 		slots.push(current)
 		current = localizer.add(current, increment, "minute")
 	}
@@ -49,9 +54,13 @@ const generateTimeSlots = (start: Date, end: Date, increment: number, localizer:
 	return slots
 }
 
-const TimeGrid = <T extends CalendarGenerics>({
+const TimeGrid = <
+	T extends CalendarGenerics,
+	V extends keyof DisplayStrategyFactories
+>({
 	className,
 	style,
+	view,
 	startTime = (() => {
 		const date = new Date()
 		date.setHours(0, 0, 0, 0)
@@ -63,52 +72,70 @@ const TimeGrid = <T extends CalendarGenerics>({
 		return date
 	})(),
 	columnHeadings,
-	timeIncrement = 30,
-	displayStrategy = "overlap",
-}: TimeGridProps<T>) => {
+	timeIncrement = 60,
+	displayStrategy,
+}: TimeGridProps<T, V>) => {
 	const { localizer, onEventClick } = useCalendarContext()
-	const eventsByDay = useDisplayStrategy<T, "week">(VIEWS.week, displayStrategy)
+
+	const strategyNameToUse = displayStrategy || (() => {
+		const strategiesForView = displayStrategyFactories[view]
+		const defaultName = strategiesForView ? Object.keys(strategiesForView)[0] as ViewStrategyName<V> : undefined
+		if(!defaultName) {
+			// eslint-disable-next-line no-console
+			console.error(`No display strategies found for view: ${String(view)}. Cannot determine default.`)
+			throw new Error(`No display strategies found for view: ${String(view)}`)
+		}
+		// eslint-disable-next-line no-console
+		console.warn(`No displayStrategy provided for view '${String(view)}', falling back to '${String(defaultName)}'.`)
+		return defaultName
+	})()
+
+	const eventsByDay = useDisplayStrategy<T, V, TimeGridDisplayProperties>(
+		view,
+		strategyNameToUse,
+		{
+			timeIncrement,
+			startTime,
+			endTime,
+			viewColumns: columnHeadings.map(heading => heading.date),
+			columnCount: columnHeadings.length,
+		}
+	)
 
 	const timeSlots = useMemo(() => {
-		return generateTimeSlots(new Date(startTime), new Date(endTime), timeIncrement, localizer)
+		return generateTimeSlots(startTime, endTime, timeIncrement, localizer)
 	}, [startTime, endTime, timeIncrement, localizer])
 
 	const rowsPerDay = (24 * 60) / timeIncrement
 
 	return (
-		<div className={ clsx(classes.timeGrid, className) } style={ {
-			"--rows-per-day": rowsPerDay,
-			...style,
-		} as React.CSSProperties }>
+		<div
+			data-calendar-view="time-grid"
+			className={ clsx(classes.timeGrid, className) }
+			style={ {
+				"--rows-per-day": rowsPerDay,
+				"--column-count": columnHeadings.length,
+				...style,
+			} as React.CSSProperties }>
 			<div className={ classes.cornerSpacer } />
 
 			<Headings columnHeadings={ columnHeadings } />
 
 			<TimeColumn timeSlots={ timeSlots } />
 
-			<div className={ classes.contentArea }>
+			<div className={ classes.contentArea } style={ { "--rows-per-day": rowsPerDay } as React.CSSProperties }>
 				<div className={ classes.contentGrid }>
 					<div className={ classes.gridLines } />
 					<div className={ classes.eventsContainer }>
 						{ columnHeadings.map((heading, columnIndex) => {
-							const dayEvents = eventsByDay.get(heading.date.toISOString())
+							const dayEvents = eventsByDay?.get(heading.date.toISOString())
 							if(!dayEvents) return null
 
 							return dayEvents.map(({ event, displayProperties }) => {
-								const startOfDay = localizer.startOf(displayProperties.displayStart, "day")
-								const startMinutes = localizer.duration(displayProperties.displayStart, startOfDay) / (1000 * 60)
-								const endMinutes = localizer.duration(displayProperties.displayEnd, startOfDay) / (1000 * 60)
-
-								const startRow = Math.floor(startMinutes / timeIncrement) + 1
-								const endRow = Math.ceil(endMinutes / timeIncrement) + 1
-
 								return (
 									<EventWrapper
-										style={ {
-											"--column-start": columnIndex + 1,
-											"--grid-row-start": startRow,
-											"--grid-row-end": endRow,
-										} as React.CSSProperties }
+										key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
+										event={ event }
 										displayProperties={ displayProperties }
 									>
 										<Event

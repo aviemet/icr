@@ -4,17 +4,16 @@ import { ContextMenuItemOptions, useContextMenu } from "mantine-contextmenu"
 import { CSSProperties, PropsWithChildren, useCallback } from "react"
 
 import { CalendarGenerics } from "@/Components/Calendar"
+import { GridDisplayProperties } from "@/Components/Calendar/lib/displayStrategies"
 import { vars } from "@/lib"
 import useStore from "@/lib/store"
 
 import * as classes from "./Event.css"
 
-interface EventWrapperProps<T extends CalendarGenerics> extends PropsWithChildren {
-	columnStart: number
-	columnSpan: number
-	className?: string
+interface EventWrapperProps<T extends CalendarGenerics, P extends GridDisplayProperties = GridDisplayProperties> extends PropsWithChildren {
 	style?: CSSProperties
 	event: T["Event"]
+	displayProperties: P
 	contextMenuOptions?: (event: T["Event"]) => ContextMenuItemOptions[]
 	setHoverId: React.Dispatch<React.SetStateAction<string>>
 }
@@ -24,15 +23,14 @@ interface EventWrapperProps<T extends CalendarGenerics> extends PropsWithChildre
  * Internal only, used solely to position the event on the calendar view.
  * Event component is passed as children, which can be customized.
  */
-const EventWrapper = <T extends CalendarGenerics>({
-	columnStart,
-	columnSpan,
+const EventWrapper = <T extends CalendarGenerics, P extends GridDisplayProperties = GridDisplayProperties>({
 	children,
 	style,
 	event,
+	displayProperties,
 	contextMenuOptions,
 	setHoverId,
-}: EventWrapperProps<T>) => {
+}: EventWrapperProps<T, P>) => {
 	const { getContrastingColor } = useStore()
 
 	const { showContextMenu } = useContextMenu()
@@ -52,10 +50,10 @@ const EventWrapper = <T extends CalendarGenerics>({
 
 	return (
 		<Box
-			className={ clsx(classes.eventWrapper) }
+			className={ clsx(classes.eventWrapper, displayProperties.className) }
 			style={ {
-				"--column-start": columnStart,
-				"--column-span": columnSpan,
+				"--column-start": displayProperties.columnStart,
+				"--column-span": displayProperties.columnSpan,
 				"--event-color": eventColor,
 				"--contrasting-color": contrastingColor,
 				"--hover-color": isLightColor(eventColor) ? lighten(eventColor, 0.15) : darken(eventColor, 0.15),

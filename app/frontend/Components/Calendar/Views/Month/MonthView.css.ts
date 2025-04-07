@@ -97,6 +97,8 @@ export const contentLayer = css`
   margin-top: ${ headingHeight };
 `
 
+export const outOfRange = css``
+
 export const dateCellBackground = css`
   flex: 1 1 0%;
   pointer-events: all;
@@ -112,13 +114,35 @@ export const dateCellBackground = css`
   }
   
   &:hover {
-    background-color: light-dark(${ vars.colors.gray[2] }, ${ vars.colors.dark[7] });
+    background-color: light-dark(${ vars.colors.gray[1] }, ${ vars.colors.dark[7] });
+  }
+
+  &.${ outOfRange } {
+    background-color: light-dark(${ vars.colors.gray[2] }, ${ vars.colors.dark[6] });
+
+    &:hover {
+      background-color: light-dark(${ vars.colors.gray[1] }, ${ vars.colors.dark[8] });
+    }
+  }
+`
+
+export const dateCellHeading = css`
+  font-size: 14px;
+  color: light-dark(${ vars.colors.dark[4] }, ${ vars.colors.gray[2] });
+  background: transparent;
+  height: ${ headingHeight };
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+
+  &.${ outOfRange } {
+    color: light-dark(${ vars.colors.dark[2] }, ${ vars.colors.gray[2] });
   }
 `
 
 export const dateToday = css`
   font-weight: 600;
-  color: light-dark(${ vars.colors.gray[7] }, ${ vars.colors.gray[9] });
   
   span {
     display: flex;
@@ -130,23 +154,12 @@ export const dateToday = css`
     background-color: light-dark(${ vars.colors.gray[4] }, ${ vars.colors.dark[0] });
     border: 2px solid light-dark(${ vars.colors.gray[7] }, ${ vars.colors.dark[6] });
     transition: all 200ms ease;
+    color: light-dark(${ vars.colors.gray[7] }, ${ vars.colors.gray[9] });
 
     &:hover {
       background: ${ vars.colors.blue[1] };
     }
   }
-`
-
-export const dateCellHeading = css`
-  font-size: 14px;
-  color: ${ vars.colors.dark[2] };
-  text-align: center;
-  background: transparent;
-  flex: 1 1 0%;
-  height: ${ headingHeight };
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `
 
 export const dateCellFooter = css`

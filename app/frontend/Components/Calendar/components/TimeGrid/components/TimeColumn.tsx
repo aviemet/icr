@@ -15,7 +15,9 @@ const TimeColumn = ({
 		<div className={ classes.timeColumn }>
 			{ timeSlots.map((time) => (
 				<div key={ time.toISOString() } className={ classes.timeSlot }>
-					{ localizer.format(time, "h:mm a") }
+					<span>
+						{ localizer.format(time, `h${time.getMinutes() === 0 ? "" : ":mm "} A`) }
+					</span>
 				</div>
 			)) }
 		</div>

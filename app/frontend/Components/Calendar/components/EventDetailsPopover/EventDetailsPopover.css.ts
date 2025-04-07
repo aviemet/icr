@@ -5,7 +5,6 @@ import { vars } from "@/lib"
 export const container = css`
 	position: absolute;
 	z-index: 1000;
-	/* transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1); */
 	transform-origin: top left;
 	opacity: 1;
 

@@ -24,6 +24,7 @@ export const eventWrapper = css`
 
 export const event = css`
   font-size: ${ vars.fontSizes.xs };
+  letter-spacing: -1px;
   border-radius: ${ vars.radius.sm };
   padding: 2px 5px 2px 6px;
   margin: 1px 3px;
@@ -44,6 +45,7 @@ export const event = css`
   &.filled {
     background-color: var(--event-color);
     color: var(--contrasting-color);
+    box-shadow: ${ vars.shadows.xs };
 
     &:hover {
       /* background-color: var(--hover-color);

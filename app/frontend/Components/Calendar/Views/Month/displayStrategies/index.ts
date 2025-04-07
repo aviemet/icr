@@ -1,11 +1,12 @@
-import { spanStrategy } from "./span"
-import { splitStrategy } from "./split"
-import { stackStrategy } from "./stack"
+import { MonthSpanStrategy } from "./span"
+import { MonthSplitStrategy } from "./split"
+import { MonthStackStrategy } from "./stack"
+
 
 export const monthDisplayStrategies = {
-	split: splitStrategy,
-	stack: stackStrategy,
-	span: spanStrategy,
+	split: MonthSplitStrategy,
+	stack: MonthStackStrategy,
+	span: MonthSpanStrategy,
 } as const
 
 export type MonthStrategyType = keyof typeof monthDisplayStrategies

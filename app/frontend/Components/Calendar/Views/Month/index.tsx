@@ -2,32 +2,41 @@ import clsx from "clsx"
 import { chunk } from "lodash-es"
 import { useMemo, useState } from "react"
 
+
 import { useCalendarContext, CalendarGenerics } from "@/Components/Calendar"
 import { calculateDailyHours } from "@/Components/Calendar/lib/calculateDailyHours"
-import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/Components/Calendar/Views"
+import {
+	BaseViewProps,
+	createViewComponent,
+	NAVIGATION,
+	VIEWS,
+} from "@/Components/Calendar/Views"
 
 import DailyTotals from "./components/DailyTotals"
 import { DaysHeading } from "./components/DaysHeading"
 import { EventWrapper, Event } from "./components/Event"
 import * as classes from "./MonthView.css"
 import { useDynamicHoverStyles } from "./useDynamicHoverStyles"
-import { displayStrategies } from "../../lib/displayStrategies"
-import { useDisplayStrategy } from "../../lib/displayStrategies/useDisplayStrategy"
+import {
+	useDisplayStrategy,
+	ViewStrategyName,
+	GridDisplayProperties,
+} from "../../lib/displayStrategies"
 
 interface MonthViewProps<T extends CalendarGenerics> extends BaseViewProps<T> {
 	showDailyTotals?: boolean
-	displayStrategy: keyof typeof displayStrategies["month"]
+	displayStrategy: ViewStrategyName<"month">
 }
 
-const MonthViewComponent = <T extends CalendarGenerics>({
-	className,
-	style,
-	displayStrategy,
-	showDailyTotals = true,
-}: MonthViewProps<T>) => {
+const MonthViewComponent = <
+	T extends CalendarGenerics
+>({ className, style, displayStrategy, showDailyTotals = true }: MonthViewProps<T>) => {
 	const { date, localizer, events } = useCalendarContext()
 
-	const eventsByDay = useDisplayStrategy<T, "month">(VIEWS.month, displayStrategy)
+	const eventsByDay = useDisplayStrategy<T, "month", GridDisplayProperties>(
+		VIEWS.month,
+		displayStrategy
+	)
 
 	const [hoverId, setHoverId] = useState<string>("")
 	const dynamicHoverStyles = useDynamicHoverStyles(hoverId)
@@ -48,7 +57,7 @@ const MonthViewComponent = <T extends CalendarGenerics>({
 			className={ clsx(classes.monthView, className) }
 			style={ style }
 		>
-			{ /* Inject the dynamic styles */ }
+			{ /* Inject the split event hover styles */ }
 			<style>{ dynamicHoverStyles }</style>
 
 			<DaysHeading weekdays={ weekdays } />
@@ -61,7 +70,9 @@ const MonthViewComponent = <T extends CalendarGenerics>({
 						 * BACKGROUND LAYER
 						 */
 						acc.backgroundCells.push(
-							<div className={ clsx(classes.dateCellBackground) } key={ dayMapKey } />
+							<div className={ clsx(classes.dateCellBackground, {
+								[classes.outOfRange]: !localizer.isSame(day, date, "month"),
+							}) } key={ dayMapKey } />
 						)
 
 						/**
@@ -71,6 +82,7 @@ const MonthViewComponent = <T extends CalendarGenerics>({
 							<div
 								className={ clsx(classes.dateCellHeading, {
 									[classes.dateToday]: localizer.isSame(day, new Date(), "day"),
+									[classes.outOfRange]: !localizer.isSame(day, date, "month"),
 								}) }
 								key={ dayMapKey }
 							>
@@ -81,29 +93,38 @@ const MonthViewComponent = <T extends CalendarGenerics>({
 						/**
 						 * EVENTS LAYER
 						 */
-						const dayEvents = eventsByDay.get(dayMapKey)
+						const dayEvents = eventsByDay?.get(dayMapKey)
 
 						if(dayEvents) {
 							acc.contentCells.push(
-								dayEvents.map(({ event, displayProperties }) => (
-									<EventWrapper
-										key={ `${event.id}-${displayProperties.displayStart.toISOString() || event.start.toISOString()}` }
-										columnStart={ displayProperties.columnStart }
-										columnSpan={ displayProperties.columnSpan }
-										event={ event }
-										setHoverId={ setHoverId }
-									>
-										<Event
-											key={ `${event.id}-${displayProperties.displayStart.toISOString() || event.start.toISOString()}` }
-											event={ event }
+								dayEvents.map(({ event, displayProperties }) => {
+									if(
+										displayProperties.columnStart === undefined || displayProperties.columnSpan === undefined
+									) {
+										// eslint-disable-next-line no-console
+										console.warn("MonthView rendering missing grid properties", event, displayProperties)
+										return null
+									}
+
+									return (
+										<EventWrapper
+											key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
 											displayProperties={ displayProperties }
-											localizer={ localizer }
-											className={ clsx(displayProperties.className) }
+											event={ event }
+											setHoverId={ setHoverId }
 										>
-											{ typeof event.title === "string" ? event.title : event.title({ start: displayProperties.displayStart, end: displayProperties.displayEnd }) }
-										</Event>
-									</EventWrapper>
-								))
+											<Event
+												key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
+												event={ event }
+												displayProperties={ displayProperties }
+												localizer={ localizer }
+												className={ clsx(displayProperties.className) }
+											>
+												{ typeof event.title === "string" ? event.title : event.title({ start: displayProperties.displayStart, end: displayProperties.displayEnd }) }
+											</Event>
+										</EventWrapper>
+									)
+								})
 							)
 						}
 

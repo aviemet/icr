@@ -11,7 +11,7 @@ import * as classes from "./Calendar.css"
 import { ErrorBoundary } from "../ErrorBoundary"
 import EventDetailsPopover from "./components/EventDetailsPopover"
 import { useEventPopover } from "./components/EventDetailsPopover/useEventPopover"
-import { DisplayStrategyFunction, ViewStrategyType } from "./lib/displayStrategies"
+import { StrategyNameMap } from "./lib/displayStrategies"
 import { viewComponents, VIEWS, VIEW_NAMES, NAVIGATION_ACTION, ViewComponent } from "./Views"
 
 interface CalendarProps<T extends CalendarGenerics> {
@@ -20,7 +20,7 @@ interface CalendarProps<T extends CalendarGenerics> {
 	events: T["Event"][]
 	localizer?: CalendarLocalizer
 	views?: readonly VIEW_NAMES[]
-	displayStrategies?: Partial<Record<VIEW_NAMES, ViewStrategyType<VIEW_NAMES> | DisplayStrategyFunction<T>>>
+	displayStrategies?: Partial<StrategyNameMap>
 	onNavigate?: (newDate: Date, action: NAVIGATION_ACTION, view: VIEW_NAMES) => void
 	eventPopoverContent?: (event: T["Event"], localizer: CalendarLocalizer) => React.ReactNode
 }
@@ -38,7 +38,7 @@ const Calendar = <T extends CalendarGenerics>({
 	const localLocalizer = useDefaultLocalizer(localizer)
 
 	const [date, setDate] = useState<Date>(defaultDate || new Date())
-	const [currentView, setCurrentView] = useState<VIEW_NAMES>(defaultView)
+	const [currentView, setCurrentView] = useState<VIEW_NAMES>(VIEWS.month)
 
 	const { settings: { calendar_layout_style } } = usePageProps()
 
