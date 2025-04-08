@@ -1,7 +1,7 @@
 import clsx from "clsx"
 import { useMemo } from "react"
 
-import { CalendarGenerics, useCalendarContext } from "@/Components/Calendar"
+import { Resources, useCalendarContext } from "@/Components/Calendar"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 
 import {
@@ -23,7 +23,7 @@ export interface TimeGridHeading {
 }
 
 // eslint-disable-next-line no-unused-vars
-interface TimeGridProps<T extends CalendarGenerics, V extends keyof DisplayStrategyFactories> {
+interface TimeGridProps<TResources extends Resources, V extends keyof DisplayStrategyFactories = "week"> {
 	className?: string
 	style?: React.CSSProperties
 	view: V
@@ -55,8 +55,8 @@ const generateTimeSlots = (start: Date, end: Date, increment: number, localizer:
 }
 
 const TimeGrid = <
-	T extends CalendarGenerics,
-	V extends keyof DisplayStrategyFactories
+	TResources extends Resources,
+	V extends keyof DisplayStrategyFactories = "week"
 >({
 	className,
 	style,
@@ -74,8 +74,8 @@ const TimeGrid = <
 	columnHeadings,
 	timeIncrement = 60,
 	displayStrategy,
-}: TimeGridProps<T, V>) => {
-	const { localizer, onEventClick } = useCalendarContext()
+}: TimeGridProps<TResources, V>) => {
+	const { localizer, onEventClick } = useCalendarContext<TResources>()
 
 	const strategyNameToUse = displayStrategy || (() => {
 		const strategiesForView = displayStrategyFactories[view]
@@ -90,7 +90,7 @@ const TimeGrid = <
 		return defaultName
 	})()
 
-	const eventsByDay = useDisplayStrategy<T, V, TimeGridDisplayProperties>(
+	const eventsByDay = useDisplayStrategy<TResources, V, TimeGridDisplayProperties>(
 		view,
 		strategyNameToUse,
 		{
@@ -133,12 +133,12 @@ const TimeGrid = <
 
 							return dayEvents.map(({ event, displayProperties }) => {
 								return (
-									<EventWrapper
+									<EventWrapper<TResources>
 										key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
 										event={ event }
 										displayProperties={ displayProperties }
 									>
-										<Event
+										<Event<TResources>
 											key={ event.id }
 											event={ event }
 											localizer={ localizer }

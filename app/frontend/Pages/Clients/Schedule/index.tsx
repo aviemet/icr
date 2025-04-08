@@ -14,19 +14,17 @@ import { useGetClientSchedules } from "@/queries/clients"
 
 import NewShiftForm from "./NewShiftForm"
 
-// import NewShiftForm from "./NewShiftForm"
-
 interface ScheduleProps {
 	client: Schema.ClientsShow
 	schedules: Schema.CalendarEventsClient[]
 }
 
+// Add index signature back
 interface ScheduleResources {
+	[key: string]: object
 	employee: Schema.ShiftsClient["employee"]
 	client: Schema.ClientsShow
 }
-
-type ScheduleEvent = CalendarEvent<ScheduleResources>
 
 // Ensure a value is a Date object
 const ensureDate = (value: unknown): Date => {
@@ -56,22 +54,22 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 		})
 	}, [])
 
-	const processedSchedules = useMemo(() => {
+	const processedSchedules = useMemo((): CalendarEvent<ScheduleResources>[] => {
 		return data?.map(schedule => {
-			// Ensure dates are proper Date objects
 			const start = ensureDate(schedule.starts_at)
 			const end = ensureDate(schedule.ends_at)
-
 			const employee = schedule.shift.employee
 
 			return {
 				id: schedule.id,
-				title: ((event) => formatShiftTitle(event, employee)) satisfies CalendarEventTitleCallback<ScheduleEvent>,
+				// Use imported type for title callback
+				title: ((event) => formatShiftTitle(event, employee)) satisfies CalendarEventTitleCallback<ScheduleResources>,
 				start,
 				end,
 				color: employee.color,
 				resources: { employee, client },
-			} satisfies ScheduleEvent
+				// Use imported type for satisfies clause
+			} satisfies CalendarEvent<ScheduleResources>
 		}) || []
 	}, [client, data, formatShiftTitle])
 
@@ -89,37 +87,16 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 				<Box></Box>
 			</Group>
 
-			<Calendar<ScheduleEvent>
+			<Calendar<ScheduleResources>
 				defaultDate={ new Date() }
 				defaultView="month"
 				events={ processedSchedules }
 				onNavigate={ handleNavigate }
 				onSelectSlot={ handleSlotSelect }
 				eventPopoverContent={ (event, localizer) => <EventPopoverContent event={ event } localizer={ localizer } /> }
-				// onSelectEvent={ handleSelectEvent }
-				// onSelectSlot={ handleSelectSlot }
-				// onView={ handleViewChange }
-				// onRangeChange={ handleRangeChange }
-				// eventPropGetter={ eventStyleGetter }
-				// onNewShift={ handleNewShift }
 			/>
 		</>
 	)
 }
 
 export default Schedule
-
-/* TODO: We'll get to the new shift button eventually
-	const handleNewShift = useCallback((date: Date) => {
-		newShiftModalRef.current = modals.open({
-			title: "New Shift",
-			children: (
-				<NewShiftForm
-					client={ client }
-					selectedDate={ date }
-					onSuccess={ handleNewShiftSuccess }
-				/>
-			),
-		})
-	}, [client, handleNewShiftSuccess])
-	*/

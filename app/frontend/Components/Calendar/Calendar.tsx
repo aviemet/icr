@@ -2,7 +2,7 @@ import { Box } from "@mantine/core"
 import clsx from "clsx"
 import { useMemo, useState, useCallback, useRef, useLayoutEffect } from "react"
 
-import { CalendarProvider, CalendarContext, CalendarGenerics } from "@/Components/Calendar"
+import { CalendarProvider, CalendarContext, Resources, CalendarEvent } from "@/Components/Calendar"
 import Toolbar from "@/Components/Calendar/components/Toolbar"
 import { CalendarLocalizer, useDefaultLocalizer } from "@/Components/Calendar/lib/localizers"
 import { usePageProps } from "@/lib/hooks"
@@ -14,18 +14,19 @@ import { useEventPopover } from "./components/EventDetailsPopover/useEventPopove
 import { StrategyNameMap } from "./lib/displayStrategies"
 import { viewComponents, VIEWS, VIEW_NAMES, NAVIGATION_ACTION, ViewComponent } from "./Views"
 
-interface CalendarProps<T extends CalendarGenerics> {
+interface CalendarProps<TResources extends Resources> {
 	defaultDate: Date
 	defaultView: VIEW_NAMES
-	events: T["Event"][]
+	events: CalendarEvent<TResources>[]
 	localizer?: CalendarLocalizer
 	views?: readonly VIEW_NAMES[]
 	displayStrategies?: Partial<StrategyNameMap>
 	onNavigate?: (newDate: Date, action: NAVIGATION_ACTION, view: VIEW_NAMES) => void
-	eventPopoverContent?: (event: T["Event"], localizer: CalendarLocalizer) => React.ReactNode
+	eventPopoverContent?: (event: CalendarEvent<TResources>, localizer: CalendarLocalizer) => React.ReactNode
+	onSelectSlot?: (date: Date) => void
 }
 
-const Calendar = <T extends CalendarGenerics>({
+const Calendar = <TResources extends Resources>({
 	defaultDate,
 	defaultView = VIEWS.month,
 	events,
@@ -35,7 +36,7 @@ const Calendar = <T extends CalendarGenerics>({
 	onNavigate,
 	eventPopoverContent,
 	...props
-}: CalendarProps<T>) => {
+}: CalendarProps<TResources>) => {
 	const localLocalizer = useDefaultLocalizer(localizer)
 
 	const [date, setDate] = useState<Date>(defaultDate || new Date())
@@ -56,7 +57,7 @@ const Calendar = <T extends CalendarGenerics>({
 		popoverPosition,
 		popoverRef,
 		handleEventClick,
-	} = useEventPopover<T>()
+	} = useEventPopover<TResources>()
 
 	const toolbarRef = useRef<HTMLDivElement>(null)
 
@@ -69,7 +70,7 @@ const Calendar = <T extends CalendarGenerics>({
 		setMinHeight(`calc(100% - ${height}px)`)
 	}, [])
 
-	const ViewComponent = useMemo(() => viewComponents[currentView] as unknown as ViewComponent<T>, [currentView])
+	const ViewComponent = useMemo(() => viewComponents[currentView] as unknown as ViewComponent<TResources>, [currentView])
 
 	const handleViewChange = useCallback((view: VIEW_NAMES) => {
 		setCurrentView(view)
@@ -110,14 +111,14 @@ const Calendar = <T extends CalendarGenerics>({
 		handleViewChange,
 		handleDateChange,
 		handleEventClick,
-	]) as CalendarContext<T>
+	]) as CalendarContext<TResources>
 
 	if(!localLocalizer) return <></>
 
 	return (
 		<Box className={ clsx(classes.calendarOuterContainer) } style={ { minHeight } }>
 			<ErrorBoundary>
-				<CalendarProvider<T> value={ calendarProviderState }>
+				<CalendarProvider<TResources> value={ calendarProviderState }>
 					<Toolbar ref={ toolbarRef } views={ views } view={ currentView } />
 
 					<div className={ clsx(classes.calendar) }>
@@ -130,7 +131,7 @@ const Calendar = <T extends CalendarGenerics>({
 
 					{ /* Event Details Popover */ }
 					{ popoverOpen && selectedEvent && popoverPosition && localLocalizer && (
-						<EventDetailsPopover<T>
+						<EventDetailsPopover<TResources>
 							ref={ popoverRef }
 							event={ selectedEvent }
 							position={ popoverPosition }

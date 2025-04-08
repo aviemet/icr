@@ -2,7 +2,7 @@ import { useMemo } from "react"
 
 import { SortedArray } from "@/lib/Collections/SortedArray"
 
-import { CalendarGenerics, useCalendarContext } from "../.."
+import { Resources, useCalendarContext } from "../.."
 import { VIEW_NAMES } from "../../Views"
 
 import {
@@ -18,15 +18,15 @@ import {
 
 
 export const useDisplayStrategy = <
-	T extends CalendarGenerics,
+	TResources extends Resources,
 	V extends keyof DisplayStrategyFactories,
 	P extends BaseDisplayProperties
 >(
 	view: V,
 	strategyName: ViewStrategyName<V>,
 	viewConfig?: Partial<StrategyConfig>
-): Map<string, SortedArray<EventDisplayDetails<T, P>>> => {
-	const { date, localizer, events } = useCalendarContext()
+): Map<string, SortedArray<EventDisplayDetails<TResources, P>>> => {
+	const { date, localizer, events } = useCalendarContext<TResources>()
 
 	return useMemo(() => {
 		const currentView = view as keyof typeof displayStrategyFactories
@@ -45,16 +45,16 @@ export const useDisplayStrategy = <
 			...(viewConfig || {}),
 		}
 
-		const typedFactory = strategyFactory as (config: StrategyConfig) => BaseDisplayStrategy<T, P>
+		const typedFactory = strategyFactory as (config: StrategyConfig) => BaseDisplayStrategy<TResources, P>
 		const strategyInstance = typedFactory(config)
 
-		return groupAndFilterEvents<T, P>(
+		return groupAndFilterEvents<TResources, P>(
 			currentView as VIEW_NAMES,
 			strategyInstance,
 			events,
 			date,
 			localizer
-		) as Map<string, SortedArray<EventDisplayDetails<T, P>>>
+		) as Map<string, SortedArray<EventDisplayDetails<TResources, P>>>
 
 	}, [view, strategyName, viewConfig, date, localizer, events])
 }

@@ -3,7 +3,7 @@ import { chunk } from "lodash-es"
 import { useMemo, useState } from "react"
 
 
-import { useCalendarContext, CalendarGenerics } from "@/Components/Calendar"
+import { useCalendarContext, Resources } from "@/Components/Calendar"
 import { calculateDailyHours } from "@/Components/Calendar/lib/calculateDailyHours"
 import {
 	BaseViewProps,
@@ -23,17 +23,17 @@ import {
 	GridDisplayProperties,
 } from "../../lib/displayStrategies"
 
-interface MonthViewProps<T extends CalendarGenerics> extends BaseViewProps<T> {
+interface MonthViewProps<TResources extends Resources> extends BaseViewProps<TResources> {
 	showDailyTotals?: boolean
 	displayStrategy: ViewStrategyName<"month">
 }
 
 const MonthViewComponent = <
-	T extends CalendarGenerics
->({ className, style, displayStrategy, showDailyTotals = true, onSelectSlot }: MonthViewProps<T>) => {
-	const { date, localizer, events } = useCalendarContext()
+	TResources extends Resources
+>({ className, style, displayStrategy, showDailyTotals = true, onSelectSlot }: MonthViewProps<TResources>) => {
+	const { date, localizer, events } = useCalendarContext<TResources>()
 
-	const eventsByDay = useDisplayStrategy<T, "month", GridDisplayProperties>(
+	const eventsByDay = useDisplayStrategy<TResources, "month", GridDisplayProperties>(
 		VIEWS.month,
 		displayStrategy
 	)
@@ -125,20 +125,20 @@ const MonthViewComponent = <
 									}
 
 									return (
-										<EventWrapper
+										<EventWrapper<TResources>
 											key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
 											displayProperties={ displayProperties }
 											event={ event }
 											setHoverId={ setHoverId }
 										>
-											<Event
+											<Event<TResources>
 												key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
 												event={ event }
 												displayProperties={ displayProperties }
 												localizer={ localizer }
 												className={ clsx(displayProperties.className) }
 											>
-												{ typeof event.title === "string" ? event.title : event.title({ start: displayProperties.displayStart, end: displayProperties.displayEnd }) }
+												{ typeof event.title === "string" ? event.title : event.title({ start: displayProperties.displayStart, end: displayProperties.displayEnd, allDay: event.allDay, resources: event.resources }) }
 											</Event>
 										</EventWrapper>
 									)

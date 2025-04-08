@@ -1,12 +1,12 @@
-import { CalendarGenerics } from "@/Components/Calendar"
+import { Resources, CalendarEvent } from "@/Components/Calendar"
 
 import { CalendarLocalizer } from "../localizers"
 
 /**
  * Checks if an event spans across a week boundary
  */
-export const spansWeekBorder = <T extends CalendarGenerics>(
-	event: T["Event"],
+export const spansWeekBorder = <TResources extends Resources>(
+	event: CalendarEvent<TResources>,
 	localizer: CalendarLocalizer
 ) => {
 	return !localizer.dateWithinRange("week", event.end, event.start)
@@ -15,11 +15,11 @@ export const spansWeekBorder = <T extends CalendarGenerics>(
 /**
  * Splits an event into multiple events at week boundaries
  */
-export const splitAtWeekBorders = <T extends CalendarGenerics>(
-	event: T["Event"],
+export const splitAtWeekBorders = <TResources extends Resources>(
+	event: CalendarEvent<TResources>,
 	localizer: CalendarLocalizer
-) => {
-	const events: T["Event"][] = []
+): CalendarEvent<TResources>[] => {
+	const events: CalendarEvent<TResources>[] = []
 	let currentStart = event.start
 	let currentEnd = localizer.adjustMidnightTime(event.end)
 
@@ -57,11 +57,11 @@ export const splitAtWeekBorders = <T extends CalendarGenerics>(
 /**
  * Splits an event into multiple segments at day boundaries
  */
-export const splitAtDayBoundaries = <T extends CalendarGenerics>(
-	event: T["Event"],
+export const splitAtDayBoundaries = <TResources extends Resources>(
+	event: CalendarEvent<TResources>,
 	localizer: CalendarLocalizer
-) => {
-	const events: { event: T["Event"], displayStart: Date, displayEnd: Date }[] = []
+): { event: CalendarEvent<TResources>, displayStart: Date, displayEnd: Date }[] => {
+	const events: { event: CalendarEvent<TResources>, displayStart: Date, displayEnd: Date }[] = []
 	let currentStart = event.start
 	let currentEnd = localizer.adjustMidnightTime(event.end)
 

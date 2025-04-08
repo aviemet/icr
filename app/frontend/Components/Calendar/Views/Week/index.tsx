@@ -1,19 +1,19 @@
 import clsx from "clsx"
 import { useMemo } from "react"
 
-import { useCalendarContext, CalendarGenerics } from "@/Components/Calendar"
+import { useCalendarContext, Resources } from "@/Components/Calendar"
 import TimeGrid from "@/Components/Calendar/components/TimeGrid"
 import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/Components/Calendar/Views"
 
 import * as classes from "./WeekView.css"
 
-interface WeekViewProps<T extends CalendarGenerics> extends BaseViewProps<T> {
+interface WeekViewProps<TResources extends Resources> extends BaseViewProps<TResources> {
 	className?: string
 	style?: React.CSSProperties
 }
 
-const WeekViewComponent = ({ className, style }: WeekViewProps<CalendarGenerics>) => {
-	const { date, localizer } = useCalendarContext()
+const WeekViewComponent = <TResources extends Resources>({ className, style }: WeekViewProps<TResources>) => {
+	const { date, localizer } = useCalendarContext<TResources>()
 
 	const columnHeadings = useMemo(() => {
 		const days = localizer.visibleDays(date, VIEWS.week)
@@ -25,7 +25,7 @@ const WeekViewComponent = ({ className, style }: WeekViewProps<CalendarGenerics>
 
 	return (
 		<div className={ clsx(classes.weekView, className) } style={ style }>
-			<TimeGrid
+			<TimeGrid<TResources>
 				view={ VIEWS.week }
 				columnHeadings={ columnHeadings }
 				startTime={ localizer.startOf(date, "day") }

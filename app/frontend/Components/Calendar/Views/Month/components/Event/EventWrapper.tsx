@@ -3,18 +3,18 @@ import clsx from "clsx"
 import { ContextMenuItemOptions, useContextMenu } from "mantine-contextmenu"
 import { CSSProperties, PropsWithChildren, useCallback } from "react"
 
-import { CalendarGenerics } from "@/Components/Calendar"
+import { Resources, CalendarEvent } from "@/Components/Calendar"
 import { GridDisplayProperties } from "@/Components/Calendar/lib/displayStrategies"
 import { vars } from "@/lib"
 import useStore from "@/lib/store"
 
 import * as classes from "./Event.css"
 
-interface EventWrapperProps<T extends CalendarGenerics, P extends GridDisplayProperties = GridDisplayProperties> extends PropsWithChildren {
+interface EventWrapperProps<TResources extends Resources, P extends GridDisplayProperties = GridDisplayProperties> extends PropsWithChildren {
 	style?: CSSProperties
-	event: T["Event"]
+	event: CalendarEvent<TResources>
 	displayProperties: P
-	contextMenuOptions?: (event: T["Event"]) => ContextMenuItemOptions[]
+	contextMenuOptions?: (event: CalendarEvent<TResources>) => ContextMenuItemOptions[]
 	setHoverId: React.Dispatch<React.SetStateAction<string>>
 }
 
@@ -23,14 +23,14 @@ interface EventWrapperProps<T extends CalendarGenerics, P extends GridDisplayPro
  * Internal only, used solely to position the event on the calendar view.
  * Event component is passed as children, which can be customized.
  */
-const EventWrapper = <T extends CalendarGenerics, P extends GridDisplayProperties = GridDisplayProperties>({
+const EventWrapper = <TResources extends Resources, P extends GridDisplayProperties = GridDisplayProperties>({
 	children,
 	style,
 	event,
 	displayProperties,
 	contextMenuOptions,
 	setHoverId,
-}: EventWrapperProps<T, P>) => {
+}: EventWrapperProps<TResources, P>) => {
 	const { getContrastingColor } = useStore()
 
 	const { showContextMenu } = useContextMenu()

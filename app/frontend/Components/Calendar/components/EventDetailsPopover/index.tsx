@@ -2,20 +2,20 @@ import { Paper } from "@mantine/core"
 import clsx from "clsx"
 import React, { forwardRef, useEffect, useState } from "react"
 
-import { CalendarGenerics } from "@/Components/Calendar"
+import { Resources, CalendarEvent } from "@/Components/Calendar"
 import { vars } from "@/lib"
 
 import { DefaultPopoverContent } from "./DefaultPopoverContent"
 import * as classes from "./EventDetailsPopover.css"
 
-interface EventDetailsPopoverProps<T extends CalendarGenerics> {
-	event: T["Event"]
+interface EventDetailsPopoverProps<TResources extends Resources> {
+	event: CalendarEvent<TResources>
 	position: { top: number, left: number }
-	children?: (event: T["Event"]) => React.ReactNode
+	children?: (event: CalendarEvent<TResources>) => React.ReactNode
 }
 
-function EventDetailsPopover<T extends CalendarGenerics>(
-	props: EventDetailsPopoverProps<T>,
+function EventDetailsPopover<TResources extends Resources>(
+	props: EventDetailsPopoverProps<TResources>,
 	ref: React.ForwardedRef<HTMLDivElement | null>
 ) {
 	const { event, position, children } = props
@@ -53,6 +53,6 @@ function EventDetailsPopover<T extends CalendarGenerics>(
 	)
 }
 
-export default forwardRef(EventDetailsPopover) as <T extends CalendarGenerics>(
-	props: EventDetailsPopoverProps<T> & { ref?: React.ForwardedRef<HTMLDivElement | null> }
+export default forwardRef(EventDetailsPopover) as <TResources extends Resources>(
+	props: EventDetailsPopoverProps<TResources> & { ref?: React.ForwardedRef<HTMLDivElement | null> }
 ) => JSX.Element

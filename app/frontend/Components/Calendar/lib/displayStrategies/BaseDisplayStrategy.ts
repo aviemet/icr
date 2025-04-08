@@ -1,6 +1,6 @@
 import clsx from "clsx"
 
-import { CalendarGenerics } from "@/Components/Calendar"
+import { Resources, CalendarEvent } from "@/Components/Calendar"
 
 import { CalendarLocalizer } from "../localizers"
 import { BaseDisplayProperties, EventDisplayDetails } from "./types"
@@ -15,8 +15,8 @@ export interface StrategyConfig {
 }
 
 export abstract class BaseDisplayStrategy<
-	T extends CalendarGenerics,
-	P extends BaseDisplayProperties // Strategy declares the shape P it produces
+	TResources extends Resources,
+	P extends BaseDisplayProperties
 > {
 	protected config: StrategyConfig
 
@@ -31,12 +31,12 @@ export abstract class BaseDisplayStrategy<
    * Process an event and return display details with the specific shape P.
    * The implementation MUST return objects conforming to P.
    */
-	abstract processEvent(event: T["Event"]): EventDisplayDetails<T, P>[]
+	abstract processEvent(event: CalendarEvent<TResources>): EventDisplayDetails<TResources, P>[]
 
 	/**
    * Compare two events. It receives details containing properties of shape P.
    */
-	abstract compare(a: EventDisplayDetails<T, P>, b: EventDisplayDetails<T, P>): number
+	abstract compare(a: EventDisplayDetails<TResources, P>, b: EventDisplayDetails<TResources, P>): number
 
 	/**
    * Update the strategy configuration.
@@ -56,7 +56,7 @@ export abstract class BaseDisplayStrategy<
 	/**
    * Check if an event spans multiple days based on the localizer.
    */
-	protected spansMultipleDays(event: T["Event"]): boolean {
+	protected spansMultipleDays(event: CalendarEvent<TResources>): boolean {
 		const startDay = this.config.localizer.startOf(event.start, "day")
 		const endDay = this.config.localizer.startOf(
 			this.config.localizer.adjustMidnightTime(event.end),
@@ -68,7 +68,7 @@ export abstract class BaseDisplayStrategy<
 	/**
    * Check if an event spans week boundaries based on the localizer.
    */
-	protected spansWeekBorder(event: T["Event"]): boolean {
+	protected spansWeekBorder(event: CalendarEvent<TResources>): boolean {
 		return !this.config.localizer.dateWithinRange("week", event.end, event.start)
 	}
 
@@ -76,12 +76,12 @@ export abstract class BaseDisplayStrategy<
    * Split an event at day boundaries according to the localizer.
    * Returns segments with adjusted displayStart/displayEnd times.
    */
-	protected splitAtDayBoundaries(event: T["Event"]): Array<{
-		event: T["Event"]
+	protected splitAtDayBoundaries(event: CalendarEvent<TResources>): Array<{
+		event: CalendarEvent<TResources>
 		displayStart: Date
 		displayEnd: Date
 	}> {
-		const segments: Array<{ event: T["Event"], displayStart: Date, displayEnd: Date }> = []
+		const segments: Array<{ event: CalendarEvent<TResources>, displayStart: Date, displayEnd: Date }> = []
 		let currentStart = event.start
 		const finalEnd = this.config.localizer.adjustMidnightTime(event.end)
 
@@ -125,10 +125,10 @@ export abstract class BaseDisplayStrategy<
    * Split an event at week boundaries according to the localizer.
    * Returns segments with adjusted displayStart/displayEnd times.
    */
-	protected splitAtWeekBoundaries(event: T["Event"]): T["Event"][] {
+	protected splitAtWeekBoundaries(event: CalendarEvent<TResources>): CalendarEvent<TResources>[] {
 		const { localizer } = this.config
 
-		const segments: T["Event"][] = []
+		const segments: CalendarEvent<TResources>[] = []
 		let currentStart = event.start
 		const finalEnd = localizer.adjustMidnightTime(event.end)
 
@@ -169,8 +169,8 @@ export abstract class BaseDisplayStrategy<
 	/**
 	 * Calculates the grid column placement for an event in a calendar view
 	 */
-	protected calculateMonthGridPlacement<T extends CalendarGenerics>(
-		event: T["Event"]
+	protected calculateMonthGridPlacement(
+		event: CalendarEvent<TResources>
 	) {
 		const start = event.start
 		const end = this.config.localizer.adjustMidnightTime(event.end)

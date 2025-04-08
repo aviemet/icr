@@ -1,24 +1,24 @@
 import { useClickOutside, useDisclosure } from "@mantine/hooks"
 import { useCallback, useLayoutEffect, useState } from "react"
 
-import { CalendarGenerics } from "@/Components/Calendar"
+import { Resources, CalendarEvent } from "@/Components/Calendar"
 
 interface PopoverPosition {
 	top: number
 	left: number
 }
 
-interface UseEventPopoverReturn<T extends CalendarGenerics> {
+interface UseEventPopoverReturn<TResources extends Resources> {
 	popoverOpen: boolean
-	selectedEvent: T["Event"] | null
+	selectedEvent: CalendarEvent<TResources> | null
 	popoverPosition: PopoverPosition | null
 	popoverRef: React.RefObject<HTMLDivElement | null>
-	handleEventClick: (event: T["Event"], element: HTMLElement) => void
+	handleEventClick: (event: CalendarEvent<TResources>, element: HTMLElement) => void
 	closePopover: () => void
 }
 
-const useEventPopover = <T extends CalendarGenerics>(): UseEventPopoverReturn<T> => {
-	const [selectedEvent, setSelectedEvent] = useState<T["Event"] | null>(null)
+const useEventPopover = <TResources extends Resources>(): UseEventPopoverReturn<TResources> => {
+	const [selectedEvent, setSelectedEvent] = useState<CalendarEvent<TResources> | null>(null)
 	const [popoverPosition, setPopoverPosition] = useState<PopoverPosition | null>(null)
 	const [clickedElement, setClickedElement] = useState<HTMLElement | null>(null)
 
@@ -32,13 +32,13 @@ const useEventPopover = <T extends CalendarGenerics>(): UseEventPopoverReturn<T>
 		setClickedElement(null)
 	}, [close])
 
-	const openPopover = useCallback((event: T["Event"], position: PopoverPosition) => {
+	const openPopover = useCallback((event: CalendarEvent<TResources>, position: PopoverPosition) => {
 		setSelectedEvent(event)
 		setPopoverPosition(position)
 		open()
 	}, [open])
 
-	const handleEventClick = useCallback((event: T["Event"], element: HTMLElement) => {
+	const handleEventClick = useCallback((event: CalendarEvent<TResources>, element: HTMLElement) => {
 		const rect = element.getBoundingClientRect()
 		const scrollTop = window.scrollY || document.documentElement.scrollTop
 		const scrollLeft = window.scrollX || document.documentElement.scrollLeft

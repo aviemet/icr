@@ -2,13 +2,13 @@ import clsx from "clsx"
 import React from "react"
 
 import { Box, Group, Link, Stack, Text, Title } from "@/Components"
-import { CalendarEvent } from "@/Components/Calendar"
+import { CalendarEvent, Resources } from "@/Components/Calendar"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 import { Routes } from "@/lib"
 
 import * as classes from "./EventPopoverContent.css"
 
-interface ScheduleResources {
+interface ScheduleResources extends Resources {
 	employee: Schema.ShiftsClient["employee"]
 	client: Schema.ClientsShow
 }

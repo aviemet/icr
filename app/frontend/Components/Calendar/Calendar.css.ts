@@ -9,7 +9,6 @@ export const calendarOuterContainer = css`
 	flex-direction: column;
 	flex: 1 1 auto;
 	width: 100%;
-	/* min-height: 100%; */
 `
 
 export const calendar = css`

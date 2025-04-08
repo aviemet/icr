@@ -1,6 +1,6 @@
 import clsx from "clsx"
 
-import { CalendarGenerics } from "@/Components/Calendar"
+import { Resources, CalendarEvent } from "@/Components/Calendar"
 import {
 	BaseDisplayStrategy,
 } from "@/Components/Calendar/lib/displayStrategies/BaseDisplayStrategy"
@@ -15,8 +15,8 @@ import {
  * - Renders events spanning multiple days within a week as a full span ("filled").
  * - Renders single-day events or segments as indicators ("indicator") in their start column.
  */
-export class MonthStackStrategy<T extends CalendarGenerics>
-	extends BaseDisplayStrategy<T, GridDisplayProperties> {
+export class MonthStackStrategy<TResources extends Resources>
+	extends BaseDisplayStrategy<TResources, GridDisplayProperties> {
 	/**
 	 * Helper to determine if an event segment should be rendered as a full span.
 	 * Based on the original logic: only spans if it covers 2 or more days.
@@ -37,16 +37,16 @@ export class MonthStackStrategy<T extends CalendarGenerics>
 	 * Helper to determine if an event needs splitting at week boundaries.
 	 * Based on original logic: only splits if it crosses a week border AND should span days.
 	 */
-	protected shouldSplitAtWeekBoundary(event: T["Event"]): boolean {
+	protected shouldSplitAtWeekBoundary(event: CalendarEvent<TResources>): boolean {
 		return this.spansWeekBorder(event) && this.shouldSpanDays(event)
 	}
 
-	processEvent(event: T["Event"]): EventDisplayDetails<T, GridDisplayProperties>[] {
-		const weekSegments: T["Event"][] = this.shouldSplitAtWeekBoundary(event)
+	processEvent(event: CalendarEvent<TResources>): EventDisplayDetails<TResources, GridDisplayProperties>[] {
+		const weekSegments: CalendarEvent<TResources>[] = this.shouldSplitAtWeekBoundary(event)
 			? this.splitAtWeekBoundaries(event)
 			: [{ ...event }]
 
-		return weekSegments.map((segment, index) => {
+		return weekSegments.map((segment, index): EventDisplayDetails<TResources, GridDisplayProperties> => {
 			const gridPlacement = this.calculateMonthGridPlacement(segment)
 			const shouldRenderAsSpan = this.shouldSpanDays(segment)
 
@@ -81,7 +81,7 @@ export class MonthStackStrategy<T extends CalendarGenerics>
 		})
 	}
 
-	compare(a: EventDisplayDetails<T, GridDisplayProperties>, b: EventDisplayDetails<T, GridDisplayProperties>): number {
+	compare(a: EventDisplayDetails<TResources, GridDisplayProperties>, b: EventDisplayDetails<TResources, GridDisplayProperties>): number {
 		const spanDiff = b.displayProperties.columnSpan - a.displayProperties.columnSpan
 		if(spanDiff !== 0) return spanDiff
 

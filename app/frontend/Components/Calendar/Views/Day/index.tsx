@@ -1,12 +1,12 @@
-import { CalendarGenerics } from "@/Components/Calendar"
+import { Resources } from "@/Components/Calendar"
 import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/Components/Calendar/Views"
 
-interface DayViewProps<T extends CalendarGenerics> extends BaseViewProps<T> {
+interface DayViewProps<TResources extends Resources> extends BaseViewProps<TResources> {
 	className?: string
 	style?: React.CSSProperties
 }
 
-const DayViewComponent = (props: DayViewProps<CalendarGenerics>) => {
+const DayViewComponent = <TResources extends Resources>(props: DayViewProps<TResources>) => {
 	return (
 		<div>DayView</div>
 	)

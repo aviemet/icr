@@ -2,36 +2,34 @@ import { ElementProps } from "@mantine/core"
 import clsx from "clsx"
 
 import { Box, BoxProps } from "@/Components"
-import { useCalendarContext, CalendarGenerics } from "@/Components/Calendar"
-import { EventDisplayProperties } from "@/Components/Calendar/lib/displayStrategies"
+import { useCalendarContext, Resources, CalendarEvent } from "@/Components/Calendar"
+import { BaseDisplayProperties } from "@/Components/Calendar/lib/displayStrategies"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 
 import * as classes from "./Event.css"
 
-interface Event<T extends CalendarGenerics> extends
+interface Event<TResources extends Resources> extends
 	BoxProps, Omit<ElementProps<"div", keyof BoxProps>, "onClick"> {
-	event: T["Event"]
-	onClick?: (event: T["Event"], element: HTMLElement) => void
+	event: CalendarEvent<TResources>
+	onClick?: (event: CalendarEvent<TResources>, element: HTMLElement) => void
 	localizer: CalendarLocalizer
-	displayProperties: EventDisplayProperties
+	displayProperties: BaseDisplayProperties
 }
 
-const Event = <T extends CalendarGenerics>({
+const Event = <TResources extends Resources>({
 	children,
 	className,
 	event,
 	onClick,
 	displayProperties,
-}: Event<T>) => {
-	// Get the onEventClick handler from context
-	const { onEventClick } = useCalendarContext()
+}: Event<TResources>) => {
+	const { onEventClick } = useCalendarContext<TResources>()
 
 	const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-		// Use the provided onClick handler or the default one from context
 		if(onClick) {
 			onClick(event, e.currentTarget)
 		} else if(onEventClick) {
-			onEventClick(event as T["Event"], e.currentTarget)
+			onEventClick(event, e.currentTarget)
 		}
 	}
 

@@ -1,6 +1,6 @@
 import clsx from "clsx"
 
-import { CalendarGenerics } from "@/Components/Calendar"
+import { Resources, CalendarEvent } from "@/Components/Calendar"
 import {
 	BaseDisplayStrategy,
 } from "@/Components/Calendar/lib/displayStrategies/BaseDisplayStrategy"
@@ -16,14 +16,14 @@ import {
  * - Calculates row based on time slots using `timeIncrement` and `startTime` from config.
  * - Renders each segment as a filled block.
  */
-export class WeekOverlapStrategy<T extends CalendarGenerics>
-	extends BaseDisplayStrategy<T, TimeGridDisplayProperties> {
-	processEvent(event: T["Event"]): EventDisplayDetails<T, TimeGridDisplayProperties>[] {
+export class WeekOverlapStrategy<TResources extends Resources>
+	extends BaseDisplayStrategy<TResources, TimeGridDisplayProperties> {
+	processEvent(event: CalendarEvent<TResources>): EventDisplayDetails<TResources, TimeGridDisplayProperties>[] {
 		// 1. Split event into daily segments
 		const daySegments = this.splitAtDayBoundaries(event)
 
 		// 2. Generate display details for each segment
-		const processedDetails: EventDisplayDetails<T, TimeGridDisplayProperties>[] = []
+		const processedDetails: EventDisplayDetails<TResources, TimeGridDisplayProperties>[] = []
 
 		// Get view columns and total from config
 		const { viewColumns, localizer } = this.config
@@ -95,7 +95,7 @@ export class WeekOverlapStrategy<T extends CalendarGenerics>
 	 * Compares two event details for sorting.
 	 * Week overlap sorts by segment duration, then segment start time.
 	 */
-	compare(a: EventDisplayDetails<T, TimeGridDisplayProperties>, b: EventDisplayDetails<T, TimeGridDisplayProperties>): number {
+	compare(a: EventDisplayDetails<TResources, TimeGridDisplayProperties>, b: EventDisplayDetails<TResources, TimeGridDisplayProperties>): number {
 		const durationA = a.displayProperties.displayEnd.valueOf() - a.displayProperties.displayStart.valueOf()
 		const durationB = b.displayProperties.displayEnd.valueOf() - b.displayProperties.displayStart.valueOf()
 		const durationDiff = durationB - durationA // Longer duration first

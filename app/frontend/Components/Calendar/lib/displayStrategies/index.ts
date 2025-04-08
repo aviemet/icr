@@ -1,6 +1,6 @@
 import { SortedArray } from "@/lib/Collections/SortedArray"
 
-import { CalendarGenerics } from "../.."
+import { Resources, CalendarEvent } from "../.."
 import { BaseDisplayStrategy, StrategyConfig } from "./BaseDisplayStrategy"
 import { BaseDisplayProperties, EventDisplayDetails } from "./types"
 import { VIEW_NAMES } from "../../Views"
@@ -48,19 +48,19 @@ export type StrategyNameMap = {
  * Groups the resulting display details by day.
  */
 export const groupAndFilterEvents = <
-	T extends CalendarGenerics,
+	TResources extends Resources,
 	P extends BaseDisplayProperties
 >(
 	view: VIEW_NAMES,
-	strategy: BaseDisplayStrategy<T, P>,
-	events: T["Event"][],
+	strategy: BaseDisplayStrategy<TResources, P>,
+	events: CalendarEvent<TResources>[],
 	date: Date,
 	localizer: CalendarLocalizer
-) => {
+): Map<string, SortedArray<EventDisplayDetails<TResources, P>>> => {
 	const firstDay = localizer.firstVisibleDay(date, view)
 	const lastDay = localizer.lastVisibleDay(date, view)
 
-	const groupedEvents = new Map<string, SortedArray<EventDisplayDetails<T, P>>>()
+	const groupedEvents = new Map<string, SortedArray<EventDisplayDetails<TResources, P>>>()
 
 	events.forEach(event => {
 		// Ignore events outside visible range for current view
@@ -70,7 +70,7 @@ export const groupAndFilterEvents = <
 			const sortingKey = localizer.startOf(processedEvent.displayProperties.displayStart, "day").toISOString()
 
 			if(!groupedEvents.has(sortingKey)) {
-				groupedEvents.set(sortingKey, new SortedArray(strategy.compare.bind(strategy)))
+				groupedEvents.set(sortingKey, new SortedArray<EventDisplayDetails<TResources, P>>(strategy.compare.bind(strategy)))
 			}
 
 			groupedEvents.get(sortingKey)!.push(processedEvent)

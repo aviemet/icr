@@ -1,6 +1,6 @@
 import clsx from "clsx"
 
-import { CalendarGenerics } from "@/Components/Calendar"
+import { Resources, CalendarEvent } from "@/Components/Calendar"
 import {
 	BaseDisplayStrategy,
 } from "@/Components/Calendar/lib/displayStrategies/BaseDisplayStrategy"
@@ -15,16 +15,16 @@ import {
  * - Events are rendered spanning the columns representing the days they cover within a week.
  * - Can render as 'filled' or 'indicator' based on duration within the segment.
  */
-export class MonthSpanStrategy<T extends CalendarGenerics>
-	extends BaseDisplayStrategy<T, GridDisplayProperties> {
-	processEvent(event: T["Event"]): EventDisplayDetails<T, GridDisplayProperties>[] {
+export class MonthSpanStrategy<TResources extends Resources>
+	extends BaseDisplayStrategy<TResources, GridDisplayProperties> {
+	processEvent(event: CalendarEvent<TResources>): EventDisplayDetails<TResources, GridDisplayProperties>[] {
 		// 1. Split by week boundaries if necessary
-		const weekSegments: T["Event"][] = this.spansWeekBorder(event)
+		const weekSegments: CalendarEvent<TResources>[] = this.spansWeekBorder(event)
 			? this.splitAtWeekBoundaries(event)
 			: [{ ...event }] // Use a shallow copy
 
 		// 2. Generate display details for each week segment
-		return weekSegments.map((segment, index) => {
+		return weekSegments.map((segment, index): EventDisplayDetails<TResources, GridDisplayProperties> => {
 			// Determine if the segment itself spans multiple days (for styling)
 			const doesSpanMultipleDays = !this.config.localizer.isSame(
 				segment.start,
@@ -47,10 +47,9 @@ export class MonthSpanStrategy<T extends CalendarGenerics>
 			}
 
 			return {
-				// Use the *original* event object for identity, but the segment for display times
 				event: event,
 				displayProperties,
-				compare: this.compare, // Use the class's compare method
+				compare: this.compare,
 			}
 		})
 	}
@@ -60,7 +59,7 @@ export class MonthSpanStrategy<T extends CalendarGenerics>
 	 * Span strategy prioritizes longer events (wider columnSpan),
 	 * then falls back to start time.
 	 */
-	compare(a: EventDisplayDetails<T, GridDisplayProperties>, b: EventDisplayDetails<T, GridDisplayProperties>): number {
+	compare(a: EventDisplayDetails<TResources, GridDisplayProperties>, b: EventDisplayDetails<TResources, GridDisplayProperties>): number {
 		// Longer spans first
 		const spanDiff = b.displayProperties.columnSpan - a.displayProperties.columnSpan
 		if(spanDiff !== 0) return spanDiff
