@@ -34,6 +34,7 @@ const Calendar = <T extends CalendarGenerics>({
 	displayStrategies = {},
 	onNavigate,
 	eventPopoverContent,
+	...props
 }: CalendarProps<T>) => {
 	const localLocalizer = useDefaultLocalizer(localizer)
 
@@ -122,7 +123,7 @@ const Calendar = <T extends CalendarGenerics>({
 					<div className={ clsx(classes.calendar) }>
 						<div className={ clsx(classes.calendarInnerContainer) }>
 							<ErrorBoundary>
-								<ViewComponent displayStrategy={ localDisplayStrategies[currentView] }/>
+								<ViewComponent displayStrategy={ localDisplayStrategies[currentView] } { ...props }/>
 							</ErrorBoundary>
 						</div>
 					</div>

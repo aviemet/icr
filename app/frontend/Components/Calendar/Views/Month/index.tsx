@@ -30,7 +30,7 @@ interface MonthViewProps<T extends CalendarGenerics> extends BaseViewProps<T> {
 
 const MonthViewComponent = <
 	T extends CalendarGenerics
->({ className, style, displayStrategy, showDailyTotals = true }: MonthViewProps<T>) => {
+>({ className, style, displayStrategy, showDailyTotals = true, onSelectSlot }: MonthViewProps<T>) => {
 	const { date, localizer, events } = useCalendarContext()
 
 	const eventsByDay = useDisplayStrategy<T, "month", GridDisplayProperties>(
@@ -52,6 +52,20 @@ const MonthViewComponent = <
 		return chunk(localizer.visibleDays(date, VIEWS.month), weekdays.length)
 	}, [date, localizer, weekdays.length])
 
+	/**
+	 *
+	 * @param e
+	 */
+	const handleClickBackground = (e: React.MouseEvent<HTMLDivElement>) => {
+		const target = e.target as HTMLElement
+		const cell = target.closest<HTMLDivElement>(`.${classes.dateCellBackground}`)
+
+		if(cell && cell.dataset.date && onSelectSlot) {
+			const clickedDate = new Date(cell.dataset.date)
+			onSelectSlot(clickedDate)
+		}
+	}
+
 	return (
 		<div
 			className={ clsx(classes.monthView, className) }
@@ -70,9 +84,13 @@ const MonthViewComponent = <
 						 * BACKGROUND LAYER
 						 */
 						acc.backgroundCells.push(
-							<div className={ clsx(classes.dateCellBackground, {
-								[classes.outOfRange]: !localizer.isSame(day, date, "month"),
-							}) } key={ dayMapKey } />
+							<div
+								key={ dayMapKey }
+								className={ clsx(classes.dateCellBackground, {
+									[classes.outOfRange]: !localizer.isSame(day, date, "month"),
+								}) }
+								data-date={ dayMapKey }
+							/>
 						)
 
 						/**
@@ -149,7 +167,10 @@ const MonthViewComponent = <
 
 					return (
 						<div className={ clsx(classes.row) } key={ `week_${index}` }>
-							<div className={ clsx(classes.rowLayerContainer, classes.backgroundLayer) }>
+							<div
+								className={ clsx(classes.rowLayerContainer, classes.backgroundLayer) }
+								onClick={ handleClickBackground }
+							>
 								{ backgroundCells }
 							</div>
 							<div className={ clsx(classes.rowLayerContainer, classes.headingLayer) }>

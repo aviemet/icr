@@ -23,12 +23,22 @@ export const displayStrategyFactories = {
 	week: {
 		overlap: (config: StrategyConfig) => new WeekOverlapStrategy(config),
 	},
-	// day: { ... },
-	// agenda: { ... },
+	day:  {
+		// overlap: (config: StrategyConfig) => new DayOverlapStrategy(config),
+	},
+	agenda: {
+		// overlap: (config: StrategyConfig) => new AgendaOverlapStrategy(config),
+	},
 } as const
 
 export type DisplayStrategyFactories = typeof displayStrategyFactories
 export type ViewStrategyName<V extends keyof DisplayStrategyFactories> = keyof DisplayStrategyFactories[V]
+
+// Define a union type for all possible strategy names across all views
+export type AllViewStrategyNames = {
+	[V in keyof DisplayStrategyFactories]: ViewStrategyName<V>
+}[keyof DisplayStrategyFactories];
+
 export type StrategyNameMap = {
 	[V in VIEW_NAMES]: V extends keyof DisplayStrategyFactories ? ViewStrategyName<V> : never
 }

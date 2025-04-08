@@ -1,11 +1,12 @@
 import { CalendarGenerics } from "@/Components/Calendar"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 
+
 import { AgendaView } from "./Agenda"
 import { DayView } from "./Day"
 import { MonthView } from "./Month"
 import { WeekView } from "./Week"
-import { DisplayStrategyFunction, StrategyType } from "../lib/displayStrategies/DisplayStrategyManager"
+import { AllViewStrategyNames } from "../lib/displayStrategies"
 
 export const VIEWS = {
 	month: "month",
@@ -23,10 +24,12 @@ export const NAVIGATION = {
 } as const
 export type NAVIGATION_ACTION = keyof typeof NAVIGATION
 
+// eslint-disable-next-line no-unused-vars
 export interface BaseViewProps<T extends CalendarGenerics> {
 	className?: string
 	style?: React.CSSProperties
-	displayStrategy: StrategyType | DisplayStrategyFunction<T>
+	displayStrategy: AllViewStrategyNames
+	onSelectSlot?: (date: Date) => void
 }
 
 export type DateRange = { start: Date, end: Date }
