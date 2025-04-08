@@ -14,7 +14,6 @@ interface UseEventPopoverReturn<TResources extends Resources> {
 	popoverPosition: PopoverPosition | null
 	popoverRef: React.RefObject<HTMLDivElement | null>
 	handleEventClick: (event: CalendarEvent<TResources>, element: HTMLElement) => void
-	closePopover: () => void
 }
 
 const useEventPopover = <TResources extends Resources>(): UseEventPopoverReturn<TResources> => {
@@ -140,7 +139,6 @@ const useEventPopover = <TResources extends Resources>(): UseEventPopoverReturn<
 		popoverPosition,
 		popoverRef,
 		handleEventClick,
-		closePopover,
 	}
 }
 

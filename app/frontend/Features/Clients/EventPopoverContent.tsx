@@ -1,5 +1,4 @@
 import clsx from "clsx"
-import React from "react"
 
 import { Box, Group, Link, Stack, Text, Title } from "@/Components"
 import { CalendarEvent, Resources } from "@/Components/Calendar"

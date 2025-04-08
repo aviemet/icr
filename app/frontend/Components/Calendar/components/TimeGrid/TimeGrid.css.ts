@@ -29,6 +29,7 @@ export const timeSlot = css`
   font-weight: 700;
   position: relative;
   text-align: right;
+  padding-left: 0.5rem;
 
   span { 
     position: relative;

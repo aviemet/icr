@@ -1,4 +1,4 @@
-import { Box } from "@mantine/core"
+import { Box, Overlay } from "@mantine/core"
 import clsx from "clsx"
 import { useMemo, useState, useCallback, useRef, useLayoutEffect } from "react"
 
@@ -35,7 +35,7 @@ const Calendar = <TResources extends Resources>({
 	displayStrategies = {},
 	onNavigate,
 	eventPopoverContent,
-	...props
+	onSelectSlot,
 }: CalendarProps<TResources>) => {
 	const localLocalizer = useDefaultLocalizer(localizer)
 
@@ -97,6 +97,10 @@ const Calendar = <TResources extends Resources>({
 		return nextDate
 	}, [ViewComponent, date, events, localLocalizer, onNavigate, currentView])
 
+	const handleSelectSlot = (date: Date) => {
+		onSelectSlot?.(date)
+	}
+
 	const calendarProviderState = useMemo(() => ({
 		date,
 		events,
@@ -124,10 +128,14 @@ const Calendar = <TResources extends Resources>({
 					<div className={ clsx(classes.calendar) }>
 						<div className={ clsx(classes.calendarInnerContainer) }>
 							<ErrorBoundary>
-								<ViewComponent displayStrategy={ localDisplayStrategies[currentView] } { ...props }/>
+								<ViewComponent displayStrategy={ localDisplayStrategies[currentView] } onSelectSlot={ handleSelectSlot }/>
 							</ErrorBoundary>
 						</div>
+
+						{ /* Overlay - Rendered when popover is open */ }
+						{ popoverOpen && <Overlay opacity={ 0.1 } /> }
 					</div>
+
 
 					{ /* Event Details Popover */ }
 					{ popoverOpen && selectedEvent && popoverPosition && localLocalizer && (

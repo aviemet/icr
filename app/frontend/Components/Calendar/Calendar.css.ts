@@ -2,6 +2,7 @@ import { css } from "@linaria/core"
 
 import { vars } from "@/lib"
 
+
 export const borderColor = `light-dark(${ vars.colors.gray[5] }, ${ vars.colors.dark[2] })`
 
 export const calendarOuterContainer = css`
@@ -30,4 +31,9 @@ export const calendarInnerContainer = css`
 	border-radius: ${ vars.radius.lg };
 	border-width: 1px;
 	border-color: ${ borderColor };
+`
+
+export const popoverOverlay = css`
+	inset: 0;
+	z-index: 100;
 `

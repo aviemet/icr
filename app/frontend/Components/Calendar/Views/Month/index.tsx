@@ -54,7 +54,6 @@ const MonthViewComponent = <
 
 	/**
 	 *
-	 * @param e
 	 */
 	const handleClickBackground = (e: React.MouseEvent<HTMLDivElement>) => {
 		const target = e.target as HTMLElement
