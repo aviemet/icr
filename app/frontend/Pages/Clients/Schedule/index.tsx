@@ -71,23 +71,23 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 	const handleViewChange = useCallback((newView: VIEW_NAMES) => {
 		setCalendarView(newView)
 
-		const params = new URLSearchParams(location.search)
+		const params = new URLSearchParams()
 		params.set("date", datetime.dateUrl(calendarDate))
 		params.set("view", newView)
 		window.history.replaceState({}, "", `${location.pathname}?${params.toString()}`)
 
-	}, [location.pathname, location.search, calendarDate])
+	}, [calendarDate, location.pathname])
 
 	const handleNavigate = useCallback((newDate: Date, _action: NAVIGATION_ACTION, view: VIEW_NAMES) => {
 		setCalendarDate(newDate)
 		setCalendarView(view)
 
-		const params = new URLSearchParams(location.search)
+		const params = new URLSearchParams()
 		params.set("date", datetime.dateUrl(newDate))
 		params.set("view", view)
 		window.history.replaceState({}, "", `${location.pathname}?${params.toString()}`)
 
-	}, [location.pathname, location.search])
+	}, [location.pathname])
 
 	const processedSchedules = useMemo((): CalendarEvent<ScheduleResources>[] => {
 		return data?.map(schedule => {
