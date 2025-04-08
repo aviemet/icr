@@ -1,3 +1,4 @@
+import { modals } from "@mantine/modals"
 import { useCallback, useMemo, useState } from "react"
 
 import {
@@ -10,6 +11,8 @@ import { NAVIGATION_ACTION, VIEW_NAMES, VIEWS } from "@/Components/Calendar/View
 import EventPopoverContent from "@/Features/Clients/EventPopoverContent"
 import { useShiftTitleFormatter } from "@/lib/hooks/useShiftTitleFormatter"
 import { useGetClientSchedules } from "@/queries/clients"
+
+import NewShiftForm from "./NewShiftForm"
 
 // import NewShiftForm from "./NewShiftForm"
 
@@ -72,6 +75,13 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 		}) || []
 	}, [client, data, formatShiftTitle])
 
+	const handleSlotSelect = (date: Date) => {
+		modals.open({
+			title: "New Shift",
+			children: <NewShiftForm client={ client } selectedDate={ date } />,
+		})
+	}
+
 	return (
 		<>
 			<Group justify="space-between">
@@ -84,6 +94,7 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 				defaultView="month"
 				events={ processedSchedules }
 				onNavigate={ handleNavigate }
+				onSelectSlot={ handleSlotSelect }
 				eventPopoverContent={ (event, localizer) => <EventPopoverContent event={ event } localizer={ localizer } /> }
 				// onSelectEvent={ handleSelectEvent }
 				// onSelectSlot={ handleSelectSlot }

@@ -121,7 +121,7 @@ export const dateCellBackground = css`
     background-color: light-dark(${ vars.colors.gray[2] }, ${ vars.colors.dark[6] });
 
     &:hover {
-      background-color: light-dark(${ vars.colors.gray[1] }, ${ vars.colors.dark[8] });
+      background-color: light-dark(${ vars.colors.gray[1] }, ${ vars.colors.dark[5] });
     }
   }
 `
