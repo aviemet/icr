@@ -1,30 +1,41 @@
 class DateRangeCalculator
   def initialize(params = {})
     @params = params
+    # Store the timezone if provided
+    @timezone = params[:timezone].presence
   end
 
   def call
-    case view
-    when "month"
-      month_range
-    when "week"
-      week_range
-    when "day"
-      day_range
-    when "agenda"
-      agenda_range
+    # Perform all calculations within the target timezone context
+    Time.use_zone(target_zone) do
+      case view
+      when "month"
+        month_range
+      when "week"
+        week_range
+      when "day"
+        day_range
+      when "agenda"
+        agenda_range
+      end
     end
   end
 
   private
 
-  attr_reader :params
+  attr_reader :params, :timezone
+
+  # Helper to get the target timezone name, falling back to server default
+  def target_zone
+    @target_zone ||= timezone || Time.zone.name
+  end
 
   def view
     params[:view] || "month"
   end
 
   def reference_date
+    # Ensure reference date parsing/creation happens within the target timezone
     @reference_date ||= parse_date_param || Time.current
   end
 
@@ -64,6 +75,7 @@ class DateRangeCalculator
   end
 
   def parse_date_param
+    # Parsing also happens within the Time.use_zone block from `call`
     Time.zone.parse(params[:date]) if params[:date]
   end
 end

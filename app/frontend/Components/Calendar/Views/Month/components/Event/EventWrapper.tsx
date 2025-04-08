@@ -1,3 +1,4 @@
+import { useAutoAnimate } from "@formkit/auto-animate/react"
 import { Box, darken, isLightColor, lighten } from "@mantine/core"
 import clsx from "clsx"
 import { ContextMenuItemOptions, useContextMenu } from "mantine-contextmenu"
@@ -31,6 +32,8 @@ const EventWrapper = <TResources extends Resources, P extends GridDisplayPropert
 	contextMenuOptions,
 	setHoverId,
 }: EventWrapperProps<TResources, P>) => {
+	const [animationParent] = useAutoAnimate()
+
 	const { getContrastingColor } = useStore()
 
 	const { showContextMenu } = useContextMenu()
@@ -50,6 +53,7 @@ const EventWrapper = <TResources extends Resources, P extends GridDisplayPropert
 
 	return (
 		<Box
+			ref={ animationParent }
 			className={ clsx(classes.eventWrapper, displayProperties.className) }
 			style={ {
 				"--column-start": displayProperties.columnStart,

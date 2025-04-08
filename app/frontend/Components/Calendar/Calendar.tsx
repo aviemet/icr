@@ -22,6 +22,7 @@ interface CalendarProps<TResources extends Resources> {
 	views?: readonly VIEW_NAMES[]
 	displayStrategies?: Partial<StrategyNameMap>
 	onNavigate?: (newDate: Date, action: NAVIGATION_ACTION, view: VIEW_NAMES) => void
+	onViewChange?: (view: VIEW_NAMES) => void
 	eventPopoverContent?: (event: CalendarEvent<TResources>, localizer: CalendarLocalizer) => React.ReactNode
 	onSelectSlot?: (date: Date) => void
 }
@@ -34,13 +35,14 @@ const Calendar = <TResources extends Resources>({
 	views = Object.values(VIEWS),
 	displayStrategies = {},
 	onNavigate,
+	onViewChange,
 	eventPopoverContent,
 	onSelectSlot,
 }: CalendarProps<TResources>) => {
 	const localLocalizer = useDefaultLocalizer(localizer)
 
 	const [date, setDate] = useState<Date>(defaultDate || new Date())
-	const [currentView, setCurrentView] = useState<VIEW_NAMES>(VIEWS.month)
+	const [currentView, setCurrentView] = useState<VIEW_NAMES>(defaultView)
 
 	const { settings: { calendar_layout_style } } = usePageProps()
 
@@ -74,7 +76,8 @@ const Calendar = <TResources extends Resources>({
 
 	const handleViewChange = useCallback((view: VIEW_NAMES) => {
 		setCurrentView(view)
-	}, [])
+		onViewChange?.(view)
+	}, [onViewChange])
 
 	const handleDateChange = useCallback((action: NAVIGATION_ACTION, newDate?: Date) => {
 		if(!localLocalizer) return undefined

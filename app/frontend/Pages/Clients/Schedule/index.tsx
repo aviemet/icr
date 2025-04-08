@@ -1,5 +1,5 @@
 import { modals } from "@mantine/modals"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useMemo, useState, useEffect } from "react"
 
 import {
 	Box,
@@ -9,6 +9,10 @@ import {
 import { CalendarEvent, CalendarEventTitleCallback } from "@/Components/Calendar"
 import { NAVIGATION_ACTION, VIEW_NAMES, VIEWS } from "@/Components/Calendar/Views"
 import EventPopoverContent from "@/Features/Clients/EventPopoverContent"
+import { ensureViewName } from "@/lib"
+import { ensureDate } from "@/lib/dates"
+import { datetime } from "@/lib/formatters"
+import { useLocation } from "@/lib/hooks"
 import { useShiftTitleFormatter } from "@/lib/hooks/useShiftTitleFormatter"
 import { useGetClientSchedules } from "@/queries/clients"
 
@@ -19,40 +23,71 @@ interface ScheduleProps {
 	schedules: Schema.CalendarEventsClient[]
 }
 
-// Add index signature back
 interface ScheduleResources {
 	[key: string]: object
 	employee: Schema.ShiftsClient["employee"]
 	client: Schema.ClientsShow
 }
 
-// Ensure a value is a Date object
-const ensureDate = (value: unknown): Date => {
-	if(value instanceof Date) return value
-	if(typeof value === "string" || typeof value === "number") return new Date(value)
-	return new Date() // Fallback
-}
-
 const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 	const formatShiftTitle = useShiftTitleFormatter()
+	const location = useLocation()
+	const userTimezone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone, [])
 
-	const [queryParams, setQueryParams] = useState<{ date: Date, view: VIEW_NAMES }>({
-		date: new Date(),
-		view: VIEWS.month,
-	})
+	const [calendarDate, setCalendarDate] = useState<Date>(ensureDate(location.params.get("date")))
+	const [calendarView, setCalendarView] = useState<VIEW_NAMES>(ensureViewName(location.params.get("view")))
 
-	// Use React Query to fetch schedules with the initial data from Inertia
-	const { data } = useGetClientSchedules({ slug: client.slug, ...queryParams }, {
+	const { data } = useGetClientSchedules({
+		slug: client.slug,
+		date: datetime.dateUrl(calendarDate),
+		view: calendarView,
+		timezone: userTimezone,
+	}, {
 		initialData: initialSchedules,
 		refetchOnWindowFocus: false,
 	})
 
-	const handleNavigate = useCallback((newDate: Date, action: NAVIGATION_ACTION, view: VIEW_NAMES) => {
-		setQueryParams({
-			date: newDate,
-			view: view,
-		})
-	}, [])
+	/**
+	 * Synchronize URL params with local calendar state
+	 */
+	useEffect(() => {
+		const viewParam = location.params.get("view") as VIEW_NAMES | undefined
+		const dateParam = location.params.get("date")
+
+		const viewFromUrl = viewParam && Object.values(VIEWS).includes(viewParam) ? viewParam : VIEWS.month
+		let dateFromUrl = dateParam ? new Date(dateParam) : new Date()
+		if(isNaN(dateFromUrl.getTime())) {
+			dateFromUrl = new Date()
+		}
+
+		if(viewFromUrl !== calendarView) {
+			setCalendarView(viewFromUrl)
+		}
+		if(datetime.dateUrl(dateFromUrl) !== datetime.dateUrl(calendarDate)) {
+			setCalendarDate(dateFromUrl)
+		}
+	}, [location.params, calendarView, calendarDate])
+
+	const handleViewChange = useCallback((newView: VIEW_NAMES) => {
+		setCalendarView(newView)
+
+		const params = new URLSearchParams(location.search)
+		params.set("date", datetime.dateUrl(calendarDate))
+		params.set("view", newView)
+		window.history.replaceState({}, "", `${location.pathname}?${params.toString()}`)
+
+	}, [location.pathname, location.search, calendarDate])
+
+	const handleNavigate = useCallback((newDate: Date, _action: NAVIGATION_ACTION, view: VIEW_NAMES) => {
+		setCalendarDate(newDate)
+		setCalendarView(view)
+
+		const params = new URLSearchParams(location.search)
+		params.set("date", datetime.dateUrl(newDate))
+		params.set("view", view)
+		window.history.replaceState({}, "", `${location.pathname}?${params.toString()}`)
+
+	}, [location.pathname, location.search])
 
 	const processedSchedules = useMemo((): CalendarEvent<ScheduleResources>[] => {
 		return data?.map(schedule => {
@@ -62,13 +97,11 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 
 			return {
 				id: schedule.id,
-				// Use imported type for title callback
 				title: ((event) => formatShiftTitle(event, employee)) satisfies CalendarEventTitleCallback<ScheduleResources>,
 				start,
 				end,
 				color: employee.color,
 				resources: { employee, client },
-				// Use imported type for satisfies clause
 			} satisfies CalendarEvent<ScheduleResources>
 		}) || []
 	}, [client, data, formatShiftTitle])
@@ -88,10 +121,11 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 			</Group>
 
 			<Calendar<ScheduleResources>
-				defaultDate={ new Date() }
-				defaultView="month"
+				defaultDate={ calendarDate }
+				defaultView={ calendarView }
 				events={ processedSchedules }
 				onNavigate={ handleNavigate }
+				onViewChange={ handleViewChange }
 				onSelectSlot={ handleSlotSelect }
 				eventPopoverContent={ (event, localizer) => <EventPopoverContent event={ event } localizer={ localizer } /> }
 			/>

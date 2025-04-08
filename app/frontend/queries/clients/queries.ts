@@ -21,6 +21,7 @@ export const useGetClientSchedules: ReactQueryFunction<Schema.CalendarEventsClie
 	slug: string
 	view?: VIEW_NAMES
 	date?: string | Date
+	timezone?: string
 }> = ({ slug, ...params }, options) => {
 	return useQuery({
 		queryKey: [`clients/${slug}/schedule`, params],

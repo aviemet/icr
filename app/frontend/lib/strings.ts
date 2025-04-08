@@ -1,5 +1,7 @@
 import dayjs from "dayjs"
 
+import { VIEW_NAMES, VIEWS } from "@/Components/Calendar/Views"
+
 import { formatter } from "."
 
 export { default as aOrAn } from "indefinite"
@@ -134,4 +136,16 @@ export const formatEventTitle = (
 	)
 
 	return result
+}
+
+
+function isViewKey(obj: object, key: string | undefined | null): key is keyof typeof obj {
+	return !!key && Object.prototype.hasOwnProperty.call(obj, key)
+}
+
+export const ensureViewName = (name: string | null | undefined): VIEW_NAMES => {
+	if(isViewKey(VIEWS, name)) {
+		return name
+	}
+	return VIEWS.month
 }

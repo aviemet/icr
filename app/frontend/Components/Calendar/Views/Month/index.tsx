@@ -23,6 +23,7 @@ import {
 	GridDisplayProperties,
 } from "../../lib/displayStrategies"
 
+
 interface MonthViewProps<TResources extends Resources> extends BaseViewProps<TResources> {
 	showDailyTotals?: boolean
 	displayStrategy: ViewStrategyName<"month">
@@ -31,6 +32,7 @@ interface MonthViewProps<TResources extends Resources> extends BaseViewProps<TRe
 const MonthViewComponent = <
 	TResources extends Resources
 >({ className, style, displayStrategy, showDailyTotals = true, onSelectSlot }: MonthViewProps<TResources>) => {
+
 	const { date, localizer, events } = useCalendarContext<TResources>()
 
 	const eventsByDay = useDisplayStrategy<TResources, "month", GridDisplayProperties>(
