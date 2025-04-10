@@ -1,6 +1,6 @@
 import clsx from "clsx"
 
-import { Resources, CalendarEvent } from "@/Components/Calendar"
+import { EventResources, CalendarEvent } from "@/Components/Calendar"
 import {
 	BaseDisplayStrategy,
 } from "@/Components/Calendar/lib/displayStrategies/BaseDisplayStrategy"
@@ -16,24 +16,24 @@ import {
  * - Each final segment represents the event's presence on a single day.
  * - Renders as a filled block occupying one column.
  */
-export class MonthSplitStrategy<TResources extends Resources>
-	extends BaseDisplayStrategy<TResources, GridDisplayProperties> {
+export class MonthSplitStrategy<TEventResources extends EventResources>
+	extends BaseDisplayStrategy<TEventResources, GridDisplayProperties> {
 	/**
 	 * Processes an event, splitting it by week and day boundaries.
 	 * Returns an array of display details, one for each day the event appears on.
 	 */
-	processEvent(event: CalendarEvent<TResources>): EventDisplayDetails<TResources, GridDisplayProperties>[] {
-		const weekSegments: CalendarEvent<TResources>[] = this.spansWeekBorder(event)
+	processEvent(event: CalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, GridDisplayProperties>[] {
+		const weekSegments: CalendarEvent<TEventResources>[] = this.spansWeekBorder(event)
 			? this.splitAtWeekBoundaries(event)
 			: [{ ...event }]
 
-		type DaySegment = { event: CalendarEvent<TResources>, displayStart: Date, displayEnd: Date };
+		type DaySegment = { event: CalendarEvent<TEventResources>, displayStart: Date, displayEnd: Date };
 
-		const daySegments: DaySegment[] = weekSegments.flatMap((weekSegment: CalendarEvent<TResources>) =>
+		const daySegments: DaySegment[] = weekSegments.flatMap((weekSegment: CalendarEvent<TEventResources>) =>
 			this.splitAtDayBoundaries(weekSegment)
 		)
 
-		return daySegments.map((segment: DaySegment, index: number): EventDisplayDetails<TResources, GridDisplayProperties> => {
+		return daySegments.map((segment: DaySegment, index: number): EventDisplayDetails<TEventResources, GridDisplayProperties> => {
 			// Calculate grid placement for the specific day segment
 			// Pass the correct object shape { start, end } using segment's display times
 			const gridPlacement = this.calculateMonthGridPlacement({
@@ -65,7 +65,7 @@ export class MonthSplitStrategy<TResources extends Resources>
 	 * Compares two event details for sorting.
 	 * Split strategy sorts primarily by start time, as all segments are single-day.
 	 */
-	compare(a: EventDisplayDetails<TResources, GridDisplayProperties>, b: EventDisplayDetails<TResources, GridDisplayProperties>): number {
+	compare(a: EventDisplayDetails<TEventResources, GridDisplayProperties>, b: EventDisplayDetails<TEventResources, GridDisplayProperties>): number {
 		const startDiff = a.displayProperties.displayStart.valueOf() - b.displayProperties.displayStart.valueOf()
 		if(startDiff !== 0) return startDiff
 

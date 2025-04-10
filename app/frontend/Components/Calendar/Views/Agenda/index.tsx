@@ -1,12 +1,12 @@
-import { Resources } from "@/Components/Calendar"
+import { EventResources } from "@/Components/Calendar"
 import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/Components/Calendar/Views"
 
-interface AgendaViewProps<TResources extends Resources> extends BaseViewProps<TResources> {
+interface AgendaViewProps<TEventResources extends EventResources> extends BaseViewProps<TEventResources> {
 	className?: string
 	style?: React.CSSProperties
 }
 
-const AgendaViewComponent = <TResources extends Resources>(props: AgendaViewProps<TResources>) => {
+const AgendaViewComponent = <TEventResources extends EventResources>(props: AgendaViewProps<TEventResources>) => {
 	return (
 		<div>AgendaView</div>
 	)

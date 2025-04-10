@@ -1,60 +1,50 @@
 import { useMemo } from "react"
 
-import { SortedArray } from "@/lib/Collections/SortedArray"
-
-import { Resources, useCalendarContext } from "../.."
+import { EventResources, useCalendarContext } from "../.."
 import { VIEW_NAMES } from "../../Views"
 
 import {
-	groupAndFilterEvents,
 	displayStrategyFactories,
 	ViewStrategyName,
 	BaseDisplayStrategy,
 	StrategyConfig,
 	BaseDisplayProperties,
-	EventDisplayDetails,
 	DisplayStrategyFactories,
 } from "."
 
 
 export const useDisplayStrategy = <
-	TResources extends Resources,
+	TEventResources extends EventResources,
 	V extends keyof DisplayStrategyFactories,
 	P extends BaseDisplayProperties
 >(
 	view: V,
 	strategyName: ViewStrategyName<V>,
 	viewConfig?: Partial<StrategyConfig>
-): Map<string, SortedArray<EventDisplayDetails<TResources, P>>> => {
-	const { date, localizer, events } = useCalendarContext<TResources>()
+) => {
+	const { date, localizer, events, groupByResource } = useCalendarContext<TEventResources>()
 
 	return useMemo(() => {
-		const currentView = view as keyof typeof displayStrategyFactories
+		const currentView = view
+		const strategiesForView: DisplayStrategyFactories[typeof currentView] = displayStrategyFactories[currentView]
 
-		const strategyFactory = displayStrategyFactories[currentView]?.[strategyName as keyof typeof displayStrategyFactories[typeof currentView]]
-
-		if(!strategyFactory) {
-			const nameStr = String(strategyName)
-			// eslint-disable-next-line no-console
-			console.error(`Invalid strategy factory for view="${currentView}", name="${nameStr}"`)
-			throw new Error(`Invalid strategy factory for view="${currentView}", name="${nameStr}"`)
+		if(!strategiesForView || !strategiesForView.hasOwnProperty(strategyName)) {
+			throw new Error(`Invalid strategy factory for view="${currentView}", name="${String(strategyName)}"`)
 		}
 
-		const config: StrategyConfig = {
+		const strategyFactory = strategiesForView[strategyName] as (config: StrategyConfig) => BaseDisplayStrategy<TEventResources, P>
+
+		const strategyInstance = strategyFactory({
 			localizer,
 			...(viewConfig || {}),
-		}
+		})
 
-		const typedFactory = strategyFactory as (config: StrategyConfig) => BaseDisplayStrategy<TResources, P>
-		const strategyInstance = typedFactory(config)
-
-		return groupAndFilterEvents<TResources, P>(
+		return strategyInstance.groupAndFilterEvents(
 			currentView as VIEW_NAMES,
-			strategyInstance,
 			events,
 			date,
-			localizer
-		) as Map<string, SortedArray<EventDisplayDetails<TResources, P>>>
+			groupByResource
+		)
 
-	}, [view, strategyName, viewConfig, date, localizer, events])
+	}, [view, strategyName, viewConfig, date, localizer, events, groupByResource])
 }

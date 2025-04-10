@@ -2,8 +2,7 @@ import clsx from "clsx"
 import { chunk } from "lodash-es"
 import { useMemo, useState } from "react"
 
-
-import { useCalendarContext, Resources } from "@/Components/Calendar"
+import { useCalendarContext, EventResources } from "@/Components/Calendar"
 import { calculateDailyHours } from "@/Components/Calendar/lib/calculateDailyHours"
 import {
 	BaseViewProps,
@@ -23,19 +22,18 @@ import {
 	GridDisplayProperties,
 } from "../../lib/displayStrategies"
 
-
-interface MonthViewProps<TResources extends Resources> extends BaseViewProps<TResources> {
+interface MonthViewProps<TEventResources extends EventResources> extends BaseViewProps<TEventResources> {
 	showDailyTotals?: boolean
 	displayStrategy: ViewStrategyName<"month">
 }
 
 const MonthViewComponent = <
-	TResources extends Resources
->({ className, style, displayStrategy, showDailyTotals = true, onSelectSlot }: MonthViewProps<TResources>) => {
+	TEventResources extends EventResources
+>({ className, style, displayStrategy, showDailyTotals = true, onSelectSlot }: MonthViewProps<TEventResources>) => {
 
-	const { date, localizer, events } = useCalendarContext<TResources>()
+	const { date, localizer, events } = useCalendarContext<TEventResources>()
 
-	const eventsByDay = useDisplayStrategy<TResources, "month", GridDisplayProperties>(
+	const eventsByDay = useDisplayStrategy<TEventResources, "month", GridDisplayProperties>(
 		VIEWS.month,
 		displayStrategy
 	)
@@ -126,13 +124,13 @@ const MonthViewComponent = <
 									}
 
 									return (
-										<EventWrapper<TResources>
+										<EventWrapper<TEventResources>
 											key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
 											displayProperties={ displayProperties }
 											event={ event }
 											setHoverId={ setHoverId }
 										>
-											<Event<TResources>
+											<Event<TEventResources>
 												key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
 												event={ event }
 												displayProperties={ displayProperties }

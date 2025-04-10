@@ -1,1 +1,1 @@
-export { DayStackStrategy } from "./stack"
+export { DayOverlapStrategy } from "./overlap"

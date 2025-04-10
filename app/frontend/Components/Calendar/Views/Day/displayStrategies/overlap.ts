@@ -10,13 +10,12 @@ import {
 } from "@/Components/Calendar/lib/displayStrategies/types"
 
 /**
- * Week Overlap Strategy:
- * - Splits events by day boundaries.
- * - Calculates column based on day of week.
+ * Day Overlap Strategy:
+ * - Assumes events are already filtered for the correct day OR resource column.
  * - Calculates row based on time slots using `timeIncrement` and `startTime` from config.
- * - Renders each segment as a filled block.
+ * - Assigns column 1 / span 1 by default (grouping handles the column distinction).
  */
-export class WeekOverlapStrategy<TEventResources extends EventResources>
+export class DayOverlapStrategy<TEventResources extends EventResources>
 	extends BaseDisplayStrategy<TEventResources, TimeGridDisplayProperties> {
 
 	processEvent(event: CalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, TimeGridDisplayProperties>[] {
@@ -83,15 +82,14 @@ export class WeekOverlapStrategy<TEventResources extends EventResources>
 
 	/**
 	 * Compares two event details for sorting.
-	 * Week overlap sorts by segment duration, then segment start time.
+	 * Day overlap strategy: sort by duration then start time.
 	 */
 	compare(a: EventDisplayDetails<TEventResources, TimeGridDisplayProperties>, b: EventDisplayDetails<TEventResources, TimeGridDisplayProperties>): number {
 		const durationA = a.displayProperties.displayEnd.valueOf() - a.displayProperties.displayStart.valueOf()
 		const durationB = b.displayProperties.displayEnd.valueOf() - b.displayProperties.displayStart.valueOf()
-		const durationDiff = durationB - durationA // Longer duration first
+		const durationDiff = durationB - durationA
 		if(durationDiff !== 0) return durationDiff
 
-		// If durations are equal, earlier start time first
 		return a.displayProperties.displayStart.valueOf() - b.displayProperties.displayStart.valueOf()
 	}
 }

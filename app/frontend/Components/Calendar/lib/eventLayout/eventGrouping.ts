@@ -1,4 +1,4 @@
-import { Resources, CalendarEvent } from "@/Components/Calendar"
+import { EventResources, CalendarEvent } from "@/Components/Calendar"
 import { SortedArray } from "@/lib/Collections/SortedArray"
 
 import { VIEW_NAMES } from "../../Views"
@@ -12,19 +12,19 @@ import { CalendarLocalizer } from "../localizers"
  * Breaks long events into multiples based on the display strategy.
  */
 export const groupedEventsForPeriod = <
-	TResources extends Resources,
+	TEventResources extends EventResources,
 	P extends BaseDisplayProperties
 >(
-	events: CalendarEvent<TResources>[],
+	events: CalendarEvent<TEventResources>[],
 	date: Date,
 	view: VIEW_NAMES,
 	localizer: CalendarLocalizer,
-	strategy: BaseDisplayStrategy<TResources, P>
-): Map<string, SortedArray<EventDisplayDetails<TResources, P>>> => {
+	strategy: BaseDisplayStrategy<TEventResources, P>
+): Map<string, SortedArray<EventDisplayDetails<TEventResources, P>>> => {
 	const firstDay = localizer.firstVisibleDay(date, view)
 	const lastDay = localizer.lastVisibleDay(date, view)
 
-	const groupedEvents = new Map<string, SortedArray<EventDisplayDetails<TResources, P>>>()
+	const groupedEvents = new Map<string, SortedArray<EventDisplayDetails<TEventResources, P>>>()
 
 	events.forEach(event => {
 		// Ignore events outside visible range for current view

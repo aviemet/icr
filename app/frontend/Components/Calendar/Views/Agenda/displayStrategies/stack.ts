@@ -1,6 +1,6 @@
 import clsx from "clsx"
 
-import { Resources, CalendarEvent } from "@/Components/Calendar"
+import { EventResources, CalendarEvent } from "@/Components/Calendar"
 import {
 	BaseDisplayStrategy,
 } from "@/Components/Calendar/lib/displayStrategies/BaseDisplayStrategy"
@@ -14,10 +14,10 @@ import {
  * - Renders event as a single entry.
  * - Sorting is done by start time, then duration.
  */
-export class AgendaStackStrategy<TResources extends Resources>
-	extends BaseDisplayStrategy<TResources, AgendaDisplayProperties> {
+export class AgendaStackStrategy<TEventResources extends EventResources>
+	extends BaseDisplayStrategy<TEventResources, AgendaDisplayProperties> {
 
-	processEvent(event: CalendarEvent<TResources>): EventDisplayDetails<TResources, AgendaDisplayProperties>[] {
+	processEvent(event: CalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, AgendaDisplayProperties>[] {
 		// Agenda view typically doesn't involve complex grid calculations
 		// It just needs the event data and maybe basic display flags.
 		const displayProperties: AgendaDisplayProperties = {
@@ -39,7 +39,7 @@ export class AgendaStackStrategy<TResources extends Resources>
 	 * Compares two event details for sorting.
 	 * Agenda stack strategy: sort by start time then duration.
 	 */
-	compare(a: EventDisplayDetails<TResources, AgendaDisplayProperties>, b: EventDisplayDetails<TResources, AgendaDisplayProperties>): number {
+	compare(a: EventDisplayDetails<TEventResources, AgendaDisplayProperties>, b: EventDisplayDetails<TEventResources, AgendaDisplayProperties>): number {
 		const startDiff = a.event.start.valueOf() - b.event.start.valueOf()
 		if(startDiff !== 0) return startDiff
 

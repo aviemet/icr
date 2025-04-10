@@ -1,12 +1,12 @@
-import { Resources, CalendarEvent } from "@/Components/Calendar"
+import { EventResources, CalendarEvent } from "@/Components/Calendar"
 
 import { CalendarLocalizer } from "../localizers"
 
 /**
  * Checks if an event spans across a week boundary
  */
-export const spansWeekBorder = <TResources extends Resources>(
-	event: CalendarEvent<TResources>,
+export const spansWeekBorder = <TEventResources extends EventResources>(
+	event: CalendarEvent<TEventResources>,
 	localizer: CalendarLocalizer
 ) => {
 	return !localizer.dateWithinRange("week", event.end, event.start)
@@ -15,11 +15,11 @@ export const spansWeekBorder = <TResources extends Resources>(
 /**
  * Splits an event into multiple events at week boundaries
  */
-export const splitAtWeekBorders = <TResources extends Resources>(
-	event: CalendarEvent<TResources>,
+export const splitAtWeekBorders = <TEventResources extends EventResources>(
+	event: CalendarEvent<TEventResources>,
 	localizer: CalendarLocalizer
-): CalendarEvent<TResources>[] => {
-	const events: CalendarEvent<TResources>[] = []
+): CalendarEvent<TEventResources>[] => {
+	const events: CalendarEvent<TEventResources>[] = []
 	let currentStart = event.start
 	let currentEnd = localizer.adjustMidnightTime(event.end)
 
@@ -57,11 +57,11 @@ export const splitAtWeekBorders = <TResources extends Resources>(
 /**
  * Splits an event into multiple segments at day boundaries
  */
-export const splitAtDayBoundaries = <TResources extends Resources>(
-	event: CalendarEvent<TResources>,
+export const splitAtDayBoundaries = <TEventResources extends EventResources>(
+	event: CalendarEvent<TEventResources>,
 	localizer: CalendarLocalizer
-): { event: CalendarEvent<TResources>, displayStart: Date, displayEnd: Date }[] => {
-	const events: { event: CalendarEvent<TResources>, displayStart: Date, displayEnd: Date }[] = []
+): { event: CalendarEvent<TEventResources>, displayStart: Date, displayEnd: Date }[] => {
+	const events: { event: CalendarEvent<TEventResources>, displayStart: Date, displayEnd: Date }[] = []
 	let currentStart = event.start
 	let currentEnd = localizer.adjustMidnightTime(event.end)
 

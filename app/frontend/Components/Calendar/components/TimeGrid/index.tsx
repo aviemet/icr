@@ -1,7 +1,7 @@
 import clsx from "clsx"
 import { useMemo } from "react"
 
-import { Resources, useCalendarContext } from "@/Components/Calendar"
+import { EventResources, useCalendarContext } from "@/Components/Calendar"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 
 import {
@@ -20,10 +20,11 @@ import * as classes from "./TimeGrid.css"
 export interface TimeGridHeading {
 	date: Date
 	label: string
+	resourceId?: string | number
 }
 
 // eslint-disable-next-line no-unused-vars
-interface TimeGridProps<TResources extends Resources, V extends keyof DisplayStrategyFactories = "week"> {
+interface TimeGridProps<TEventResources extends EventResources, V extends keyof DisplayStrategyFactories = "week"> {
 	className?: string
 	style?: React.CSSProperties
 	view: V
@@ -55,7 +56,7 @@ const generateTimeSlots = (start: Date, end: Date, increment: number, localizer:
 }
 
 const TimeGrid = <
-	TResources extends Resources,
+	TEventResources extends EventResources,
 	V extends keyof DisplayStrategyFactories = "week"
 >({
 	className,
@@ -74,8 +75,8 @@ const TimeGrid = <
 	columnHeadings,
 	timeIncrement = 60,
 	displayStrategy,
-}: TimeGridProps<TResources, V>) => {
-	const { localizer, onEventClick } = useCalendarContext<TResources>()
+}: TimeGridProps<TEventResources, V>) => {
+	const { localizer, onEventClick, groupByResource } = useCalendarContext<TEventResources>()
 
 	const strategyNameToUse = displayStrategy || (() => {
 		const strategiesForView = displayStrategyFactories[view]
@@ -90,15 +91,14 @@ const TimeGrid = <
 		return defaultName
 	})()
 
-	const eventsByDay = useDisplayStrategy<TResources, V, TimeGridDisplayProperties>(
+	const eventsByColumn = useDisplayStrategy<TEventResources, V, TimeGridDisplayProperties>(
 		view,
 		strategyNameToUse,
 		{
 			timeIncrement,
 			startTime,
 			endTime,
-			viewColumns: columnHeadings.map(heading => heading.date),
-			columnCount: columnHeadings.length,
+			columnHeadings: columnHeadings,
 		}
 	)
 
@@ -128,17 +128,23 @@ const TimeGrid = <
 					<div className={ classes.gridLines } />
 					<div className={ classes.eventsContainer }>
 						{ columnHeadings.map((heading, columnIndex) => {
-							const dayEvents = eventsByDay?.get(heading.date.toISOString())
-							if(!dayEvents) return null
+							// Determine the correct key based on grouping
+							const key = groupByResource && heading.resourceId !== undefined
+								? String(heading.resourceId)
+								: heading.date.toISOString()
 
-							return dayEvents.map(({ event, displayProperties }) => {
+							const columnEvents = eventsByColumn?.get(key)
+
+							if(!columnEvents) return null
+
+							return columnEvents.map(({ event, displayProperties }) => {
 								return (
-									<EventWrapper<TResources>
+									<EventWrapper<TEventResources>
 										key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
 										event={ event }
 										displayProperties={ displayProperties }
 									>
-										<Event<TResources>
+										<Event<TEventResources>
 											key={ event.id }
 											event={ event }
 											localizer={ localizer }

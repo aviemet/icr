@@ -2,7 +2,7 @@ import { Box, Overlay } from "@mantine/core"
 import clsx from "clsx"
 import { useMemo, useState, useCallback, useRef, useLayoutEffect } from "react"
 
-import { CalendarProvider, CalendarContext, Resources, CalendarEvent } from "@/Components/Calendar"
+import { CalendarProvider, CalendarContext, EventResources, CalendarEvent, Resource } from "@/Components/Calendar"
 import Toolbar from "@/Components/Calendar/components/Toolbar"
 import { CalendarLocalizer, useDefaultLocalizer } from "@/Components/Calendar/lib/localizers"
 import { usePageProps } from "@/lib/hooks"
@@ -12,22 +12,24 @@ import { ErrorBoundary } from "../ErrorBoundary"
 import EventDetailsPopover from "./components/EventDetailsPopover"
 import { useEventPopover } from "./components/EventDetailsPopover/useEventPopover"
 import { StrategyNameMap } from "./lib/displayStrategies"
-import { viewComponents, VIEWS, VIEW_NAMES, NAVIGATION_ACTION, ViewComponent } from "./Views"
+import { viewComponents, VIEWS, VIEW_NAMES, NAVIGATION_ACTION } from "./Views"
 
-interface CalendarProps<TResources extends Resources> {
-	defaultDate: Date
-	defaultView: VIEW_NAMES
-	events: CalendarEvent<TResources>[]
+interface CalendarProps<TEventResources extends EventResources = EventResources> {
+	defaultDate?: Date
+	defaultView?: VIEW_NAMES
+	events: CalendarEvent<TEventResources>[]
 	localizer?: CalendarLocalizer
 	views?: readonly VIEW_NAMES[]
 	displayStrategies?: Partial<StrategyNameMap>
 	onNavigate?: (newDate: Date, action: NAVIGATION_ACTION, view: VIEW_NAMES) => void
 	onViewChange?: (view: VIEW_NAMES) => void
-	eventPopoverContent?: (event: CalendarEvent<TResources>, localizer: CalendarLocalizer) => React.ReactNode
+	eventPopoverContent?: (event: CalendarEvent<TEventResources>, localizer: CalendarLocalizer) => React.ReactNode
 	onSelectSlot?: (date: Date) => void
+	resources?: Resource[]
+	groupByResource?: boolean
 }
 
-const Calendar = <TResources extends Resources>({
+const Calendar = <TEventResources extends EventResources>({
 	defaultDate,
 	defaultView = VIEWS.month,
 	events,
@@ -38,7 +40,9 @@ const Calendar = <TResources extends Resources>({
 	onViewChange,
 	eventPopoverContent,
 	onSelectSlot,
-}: CalendarProps<TResources>) => {
+	resources = [],
+	groupByResource = false,
+}: CalendarProps<TEventResources>) => {
 	const localLocalizer = useDefaultLocalizer(localizer)
 
 	const [date, setDate] = useState<Date>(defaultDate || new Date())
@@ -46,12 +50,37 @@ const Calendar = <TResources extends Resources>({
 
 	const { settings: { calendar_layout_style } } = usePageProps()
 
-	const localDisplayStrategies = Object.assign({
-		month: calendar_layout_style,
+	const localDisplayStrategies = useMemo(() => Object.assign({
+		month: calendar_layout_style ?? "overlap",
 		week: "overlap",
 		day: "overlap",
 		agenda: "overlap",
-	}, displayStrategies)
+	}, displayStrategies), [calendar_layout_style, displayStrategies])
+
+	const resourcesById = useMemo(() => {
+		const map = new Map<string | number, Resource>()
+		if(process.env.NODE_ENV !== "production") {
+			const uniqueIds = new Set<string | number>()
+			const duplicateIds = new Set<string | number>()
+			for(const resource of resources) {
+				if(uniqueIds.has(resource.id)) {
+					duplicateIds.add(resource.id)
+				} else {
+					uniqueIds.add(resource.id)
+				}
+			}
+			if(duplicateIds.size > 0) {
+				// eslint-disable-next-line no-console
+				console.warn(
+					`[CalendarComponent] Duplicate resource IDs found: ${Array.from(duplicateIds).join(", ")}. Ensure IDs are unique.`
+				)
+			}
+		}
+		for(const resource of resources) {
+			map.set(resource.id, resource)
+		}
+		return map
+	}, [resources])
 
 	const {
 		popoverOpen,
@@ -59,11 +88,10 @@ const Calendar = <TResources extends Resources>({
 		popoverPosition,
 		popoverRef,
 		handleEventClick,
-	} = useEventPopover<TResources>()
+	} = useEventPopover<TEventResources>()
 
 	const toolbarRef = useRef<HTMLDivElement>(null)
 
-	// Account for toolbar height in calendar wrapper height
 	const [minHeight, setMinHeight] = useState("100%")
 	useLayoutEffect(() => {
 		if(!toolbarRef.current) return
@@ -72,7 +100,7 @@ const Calendar = <TResources extends Resources>({
 		setMinHeight(`calc(100% - ${height}px)`)
 	}, [])
 
-	const ViewComponent = useMemo(() => viewComponents[currentView] as unknown as ViewComponent<TResources>, [currentView])
+	const ViewComponent = useMemo(() => viewComponents[currentView], [currentView])
 
 	const handleViewChange = useCallback((view: VIEW_NAMES) => {
 		setCurrentView(view)
@@ -82,7 +110,7 @@ const Calendar = <TResources extends Resources>({
 	const handleDateChange = useCallback((action: NAVIGATION_ACTION, newDate?: Date) => {
 		if(!localLocalizer) return undefined
 
-		const nextDate = ViewComponent.navigate(
+		const nextDate = (ViewComponent as any).navigate(
 			newDate || date,
 			action,
 			{
@@ -90,6 +118,7 @@ const Calendar = <TResources extends Resources>({
 				today: new Date(),
 				localizer: localLocalizer,
 				events: events,
+				resourcesById: resourcesById,
 			}
 		)
 
@@ -98,19 +127,21 @@ const Calendar = <TResources extends Resources>({
 		onNavigate?.(nextDate, action, currentView)
 
 		return nextDate
-	}, [ViewComponent, date, events, localLocalizer, onNavigate, currentView])
+	}, [ViewComponent, date, events, localLocalizer, onNavigate, currentView, resourcesById])
 
-	const handleSelectSlot = (date: Date) => {
+	const handleSelectSlot = useCallback((date: Date) => {
 		onSelectSlot?.(date)
-	}
+	}, [onSelectSlot])
 
-	const calendarProviderState = useMemo(() => ({
+	const calendarProviderState = useMemo<CalendarContext<TEventResources>>(() => ({
 		date,
 		events,
 		localizer: localLocalizer as CalendarLocalizer,
 		handleViewChange,
 		handleDateChange,
 		onEventClick: handleEventClick,
+		resourcesById,
+		groupByResource,
 	}), [
 		date,
 		events,
@@ -118,14 +149,16 @@ const Calendar = <TResources extends Resources>({
 		handleViewChange,
 		handleDateChange,
 		handleEventClick,
-	]) as CalendarContext<TResources>
+		resourcesById,
+		groupByResource,
+	])
 
 	if(!localLocalizer) return <></>
 
 	return (
 		<Box className={ clsx(classes.calendarOuterContainer) } style={ { minHeight } }>
 			<ErrorBoundary>
-				<CalendarProvider<TResources> value={ calendarProviderState }>
+				<CalendarProvider<TEventResources> value={ calendarProviderState }>
 					<Toolbar ref={ toolbarRef } views={ views } view={ currentView } />
 
 					<div className={ clsx(classes.calendar) }>
@@ -142,7 +175,7 @@ const Calendar = <TResources extends Resources>({
 
 					{ /* Event Details Popover */ }
 					{ popoverOpen && selectedEvent && popoverPosition && localLocalizer && (
-						<EventDetailsPopover<TResources>
+						<EventDetailsPopover<TEventResources>
 							ref={ popoverRef }
 							event={ selectedEvent }
 							position={ popoverPosition }

@@ -1,23 +1,23 @@
 import { useClickOutside, useDisclosure } from "@mantine/hooks"
 import { useCallback, useLayoutEffect, useState } from "react"
 
-import { Resources, CalendarEvent } from "@/Components/Calendar"
+import { EventResources, CalendarEvent } from "@/Components/Calendar"
 
 interface PopoverPosition {
 	top: number
 	left: number
 }
 
-interface UseEventPopoverReturn<TResources extends Resources> {
+interface UseEventPopoverReturn<TEventResources extends EventResources> {
 	popoverOpen: boolean
-	selectedEvent: CalendarEvent<TResources> | null
+	selectedEvent: CalendarEvent<TEventResources> | null
 	popoverPosition: PopoverPosition | null
 	popoverRef: React.RefObject<HTMLDivElement | null>
-	handleEventClick: (event: CalendarEvent<TResources>, element: HTMLElement) => void
+	handleEventClick: (event: CalendarEvent<TEventResources>, element: HTMLElement) => void
 }
 
-const useEventPopover = <TResources extends Resources>(): UseEventPopoverReturn<TResources> => {
-	const [selectedEvent, setSelectedEvent] = useState<CalendarEvent<TResources> | null>(null)
+const useEventPopover = <TEventResources extends EventResources>(): UseEventPopoverReturn<TEventResources> => {
+	const [selectedEvent, setSelectedEvent] = useState<CalendarEvent<TEventResources> | null>(null)
 	const [popoverPosition, setPopoverPosition] = useState<PopoverPosition | null>(null)
 	const [clickedElement, setClickedElement] = useState<HTMLElement | null>(null)
 
@@ -31,13 +31,13 @@ const useEventPopover = <TResources extends Resources>(): UseEventPopoverReturn<
 		setClickedElement(null)
 	}, [close])
 
-	const openPopover = useCallback((event: CalendarEvent<TResources>, position: PopoverPosition) => {
+	const openPopover = useCallback((event: CalendarEvent<TEventResources>, position: PopoverPosition) => {
 		setSelectedEvent(event)
 		setPopoverPosition(position)
 		open()
 	}, [open])
 
-	const handleEventClick = useCallback((event: CalendarEvent<TResources>, element: HTMLElement) => {
+	const handleEventClick = useCallback((event: CalendarEvent<TEventResources>, element: HTMLElement) => {
 		const rect = element.getBoundingClientRect()
 		const scrollTop = window.scrollY || document.documentElement.scrollTop
 		const scrollLeft = window.scrollX || document.documentElement.scrollLeft

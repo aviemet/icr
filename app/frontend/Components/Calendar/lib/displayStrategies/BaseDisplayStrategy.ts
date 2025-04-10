@@ -1,21 +1,23 @@
 import clsx from "clsx"
 
-import { Resources, CalendarEvent } from "@/Components/Calendar"
+import { EventResources, CalendarEvent } from "@/Components/Calendar"
+import { SortedArray } from "@/lib/Collections/SortedArray"
 
 import { CalendarLocalizer } from "../localizers"
 import { BaseDisplayProperties, EventDisplayDetails } from "./types"
+import { TimeGridHeading } from "../../components/TimeGrid"
+import { VIEW_NAMES } from "../../Views"
 
 export interface StrategyConfig {
 	localizer: CalendarLocalizer
 	timeIncrement?: number
 	startTime?: Date
 	endTime?: Date
-	columnCount?: number
-	viewColumns?: Date[]
+	columnHeadings?: TimeGridHeading[]
 }
 
 export abstract class BaseDisplayStrategy<
-	TResources extends Resources,
+	TEventResources extends EventResources,
 	P extends BaseDisplayProperties
 > {
 	protected config: StrategyConfig
@@ -31,12 +33,12 @@ export abstract class BaseDisplayStrategy<
    * Process an event and return display details with the specific shape P.
    * The implementation MUST return objects conforming to P.
    */
-	abstract processEvent(event: CalendarEvent<TResources>): EventDisplayDetails<TResources, P>[]
+	abstract processEvent(event: CalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, P>[]
 
 	/**
    * Compare two events. It receives details containing properties of shape P.
    */
-	abstract compare(a: EventDisplayDetails<TResources, P>, b: EventDisplayDetails<TResources, P>): number
+	abstract compare(a: EventDisplayDetails<TEventResources, P>, b: EventDisplayDetails<TEventResources, P>): number
 
 	/**
    * Update the strategy configuration.
@@ -56,7 +58,7 @@ export abstract class BaseDisplayStrategy<
 	/**
    * Check if an event spans multiple days based on the localizer.
    */
-	protected spansMultipleDays(event: CalendarEvent<TResources>): boolean {
+	protected spansMultipleDays(event: CalendarEvent<TEventResources>): boolean {
 		const startDay = this.config.localizer.startOf(event.start, "day")
 		const endDay = this.config.localizer.startOf(
 			this.config.localizer.adjustMidnightTime(event.end),
@@ -68,7 +70,7 @@ export abstract class BaseDisplayStrategy<
 	/**
    * Check if an event spans week boundaries based on the localizer.
    */
-	protected spansWeekBorder(event: CalendarEvent<TResources>): boolean {
+	protected spansWeekBorder(event: CalendarEvent<TEventResources>): boolean {
 		return !this.config.localizer.dateWithinRange("week", event.end, event.start)
 	}
 
@@ -76,12 +78,12 @@ export abstract class BaseDisplayStrategy<
    * Split an event at day boundaries according to the localizer.
    * Returns segments with adjusted displayStart/displayEnd times.
    */
-	protected splitAtDayBoundaries(event: CalendarEvent<TResources>): Array<{
-		event: CalendarEvent<TResources>
+	protected splitAtDayBoundaries(event: CalendarEvent<TEventResources>): Array<{
+		event: CalendarEvent<TEventResources>
 		displayStart: Date
 		displayEnd: Date
 	}> {
-		const segments: Array<{ event: CalendarEvent<TResources>, displayStart: Date, displayEnd: Date }> = []
+		const segments: Array<{ event: CalendarEvent<TEventResources>, displayStart: Date, displayEnd: Date }> = []
 		let currentStart = event.start
 		const finalEnd = this.config.localizer.adjustMidnightTime(event.end)
 
@@ -125,10 +127,10 @@ export abstract class BaseDisplayStrategy<
    * Split an event at week boundaries according to the localizer.
    * Returns segments with adjusted displayStart/displayEnd times.
    */
-	protected splitAtWeekBoundaries(event: CalendarEvent<TResources>): CalendarEvent<TResources>[] {
+	protected splitAtWeekBoundaries(event: CalendarEvent<TEventResources>): CalendarEvent<TEventResources>[] {
 		const { localizer } = this.config
 
-		const segments: CalendarEvent<TResources>[] = []
+		const segments: CalendarEvent<TEventResources>[] = []
 		let currentStart = event.start
 		const finalEnd = localizer.adjustMidnightTime(event.end)
 
@@ -170,7 +172,7 @@ export abstract class BaseDisplayStrategy<
 	 * Calculates the grid column placement for an event in a calendar view
 	 */
 	protected calculateMonthGridPlacement(
-		event: CalendarEvent<TResources>
+		event: CalendarEvent<TEventResources>
 	) {
 		const start = event.start
 		const end = this.config.localizer.adjustMidnightTime(event.end)
@@ -197,9 +199,6 @@ export abstract class BaseDisplayStrategy<
 			return null
 		}
 
-		// Base implementation assumes a span of 1 column.
-		// Strategies needing multi-column spans (like month view) will need
-		// to override or use a different calculation method.
 		const columnStart = columnIndex + 1 // CSS grid is 1-based
 		const columnSpan = 1
 
@@ -247,4 +246,53 @@ export abstract class BaseDisplayStrategy<
 			"continued-from": totalSegments > 1 && index > 0,
 		})
 	}
+
+	/**
+	 * Filters events based on view range and processes them using a given strategy instance.
+	 * Groups the resulting display details by day.
+	 */
+	public groupAndFilterEvents(
+		view: VIEW_NAMES,
+		events: CalendarEvent<TEventResources>[],
+		date: Date,
+		groupByResource?: boolean
+	): Map<string, SortedArray<EventDisplayDetails<TEventResources, P>>> {
+		const firstDay = this.config.localizer.firstVisibleDay(date, view)
+		const lastDay = this.config.localizer.lastVisibleDay(date, view)
+
+		const groupedEvents = new Map<string, SortedArray<EventDisplayDetails<TEventResources, P>>>()
+
+		const isResourceGroup = Boolean(groupByResource) && (this.config.columnHeadings ?? []).length > 0
+
+		events.forEach(event => {
+			// Ignore events outside visible range for current view
+			if(!this.config.localizer.isAfter(event.end, firstDay) || !this.config.localizer.isBefore(event.start, lastDay)) return
+
+			this.processEvent(event).forEach(processedEvent => {
+				const key = isResourceGroup && event.resourceId !== undefined
+					? this.resourceKey(event.resourceId)
+					: this.dateKey(processedEvent.displayProperties.displayStart)
+
+				if(!key) return
+
+				if(!groupedEvents.has(key)) {
+					groupedEvents.set(key, new SortedArray<EventDisplayDetails<TEventResources, P>>(this.compare.bind(this)))
+				}
+				groupedEvents.get(key)!.push(processedEvent)
+			})
+		})
+
+		return groupedEvents
+	}
+
+	private dateKey = (date: Date) => this.config.localizer.startOf(date, "day").toISOString()
+
+	private resourceKey = (resourceId: string | number | undefined) => {
+		const matchingHeading = this.config.columnHeadings!.find(h => h.resourceId === resourceId)
+
+		if(matchingHeading) return String(resourceId)
+
+		return undefined
+	}
+
 }

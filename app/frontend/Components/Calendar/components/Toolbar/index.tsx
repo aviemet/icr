@@ -25,7 +25,7 @@ const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>((
 	},
 	ref,
 ) => {
-	const { date, localizer, handleViewChange, handleDateChange } = useCalendarContext()
+	const { date, localizer, handleViewChange, handleDateChange, resourcesById } = useCalendarContext()
 	const [opened, { close, toggle }] = useDisclosure(false)
 
 	const [wrapperRef, contentRef] = useAnimateWidth<HTMLDivElement, HTMLButtonElement>({
@@ -45,8 +45,9 @@ const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>((
 			today: new Date(),
 			localizer,
 			events: [],
+			resourcesById,
 		})
-	}, [date, localizer, view])
+	}, [date, localizer, view, resourcesById])
 
 	const buttonStyles = {
 		py: 0,

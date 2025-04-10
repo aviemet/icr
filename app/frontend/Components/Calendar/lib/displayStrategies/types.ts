@@ -1,4 +1,4 @@
-import { Resources, CalendarEvent } from "@/Components/Calendar"
+import { EventResources, CalendarEvent } from "@/Components/Calendar"
 
 export interface BaseDisplayProperties {
 	displayStart: Date
@@ -21,17 +21,17 @@ export interface AgendaDisplayProperties extends BaseDisplayProperties {
 
 }
 
-export type CompareFunction<TResources extends Resources, P extends BaseDisplayProperties> = (
-	a: EventDisplayDetails<TResources, P>,
-	b: EventDisplayDetails<TResources, P>
+export type CompareFunction<TEventResources extends EventResources, P extends BaseDisplayProperties> = (
+	a: EventDisplayDetails<TEventResources, P>,
+	b: EventDisplayDetails<TEventResources, P>
 ) => number
 
 
 export interface EventDisplayDetails<
-	TResources extends Resources,
+	TEventResources extends EventResources,
 	P extends BaseDisplayProperties
 > {
-	event: CalendarEvent<TResources>
+	event: CalendarEvent<TEventResources>
 	displayProperties: P
-	compare: CompareFunction<TResources, P>
+	compare: CompareFunction<TEventResources, P>
 }
