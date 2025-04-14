@@ -1,15 +1,11 @@
 import clsx from "clsx"
 import { useMemo } from "react"
 
-import { EventResources, useCalendarContext } from "@/Components/Calendar"
-import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
-
+import { EventResources, useCalendarContext } from "../../"
 import {
 	useDisplayStrategy,
 	ViewStrategyName,
 	TimeGridDisplayProperties,
-	DisplayStrategyFactories,
-	displayStrategyFactories,
 } from "../../lib/displayStrategies"
 import { Event } from "./components/Event/Event"
 import { EventWrapper } from "./components/Event/EventWrapper"
@@ -23,8 +19,12 @@ export interface TimeGridHeading {
 	resourceId?: string | number
 }
 
-// eslint-disable-next-line no-unused-vars
-interface TimeGridProps<TEventResources extends EventResources, V extends keyof DisplayStrategyFactories = "week"> {
+
+interface TimeGridProps<
+	// eslint-disable-next-line no-unused-vars
+	TEventResources extends EventResources,
+	V extends "week" | "day" = "week"
+> {
 	className?: string
 	style?: React.CSSProperties
 	view: V
@@ -36,75 +36,51 @@ interface TimeGridProps<TEventResources extends EventResources, V extends keyof 
 	 * @default 30
 	 */
 	timeIncrement?: number
-	/**
-	 * How to display overlapping events
-	 */
 	displayStrategy?: ViewStrategyName<V>
-}
-
-const generateTimeSlots = (start: Date, end: Date, increment: number, localizer: CalendarLocalizer) => {
-	const slots: Date[] = []
-	let current = localizer.startOf(start, "hour")
-	const boundaryTime = localizer.add(localizer.startOf(end, "hour"), 1, "hour")
-
-	while(localizer.isBefore(current, boundaryTime)) {
-		slots.push(current)
-		current = localizer.add(current, increment, "minute")
-	}
-
-	return slots
 }
 
 const TimeGrid = <
 	TEventResources extends EventResources,
-	V extends keyof DisplayStrategyFactories = "week"
+	V extends "week" | "day" = "week"
 >({
 	className,
 	style,
 	view,
-	startTime = (() => {
-		const date = new Date()
-		date.setHours(0, 0, 0, 0)
-		return date
-	})(),
-	endTime = (() => {
-		const date = new Date()
-		date.setHours(23, 59, 59, 999)
-		return date
-	})(),
+	startTime,
+	endTime,
 	columnHeadings,
 	timeIncrement = 60,
-	displayStrategy,
+	displayStrategy = "overlap",
 }: TimeGridProps<TEventResources, V>) => {
 	const { localizer, onEventClick, groupByResource } = useCalendarContext<TEventResources>()
 
-	const strategyNameToUse = displayStrategy || (() => {
-		const strategiesForView = displayStrategyFactories[view]
-		const defaultName = strategiesForView ? Object.keys(strategiesForView)[0] as ViewStrategyName<V> : undefined
-		if(!defaultName) {
-			// eslint-disable-next-line no-console
-			console.error(`No display strategies found for view: ${String(view)}. Cannot determine default.`)
-			throw new Error(`No display strategies found for view: ${String(view)}`)
+	const localStartTime = startTime || localizer.startOf(new Date(), "day")
+	const localEndTime = endTime || localizer.endOf(new Date(), "day")
+
+	const timeSlots = useMemo(() => {
+		const slots: Date[] = []
+
+		let current = localizer.startOf(localStartTime, "hour")
+		const boundaryTime = localizer.add(localizer.startOf(localEndTime, "hour"), 1, "hour")
+
+		while(localizer.isBefore(current, boundaryTime)) {
+			slots.push(current)
+			current = localizer.add(current, timeIncrement, "minute")
 		}
-		// eslint-disable-next-line no-console
-		console.warn(`No displayStrategy provided for view '${String(view)}', falling back to '${String(defaultName)}'.`)
-		return defaultName
-	})()
+
+		return slots
+	}, [localStartTime, localEndTime, timeIncrement, localizer])
 
 	const eventsByColumn = useDisplayStrategy<TEventResources, V, TimeGridDisplayProperties>(
 		view,
-		strategyNameToUse,
+		displayStrategy,
 		{
 			timeIncrement,
-			startTime,
-			endTime,
-			columnHeadings: columnHeadings,
+			startTime: localStartTime,
+			endTime: localEndTime,
+			columnHeadings,
 		}
 	)
-
-	const timeSlots = useMemo(() => {
-		return generateTimeSlots(startTime, endTime, timeIncrement, localizer)
-	}, [startTime, endTime, timeIncrement, localizer])
 
 	const rowsPerDay = (24 * 60) / timeIncrement
 
@@ -131,13 +107,14 @@ const TimeGrid = <
 							// Determine the correct key based on grouping
 							const key = groupByResource && heading.resourceId !== undefined
 								? String(heading.resourceId)
-								: heading.date.toISOString()
+								: localizer.startOf(heading.date, "day").toISOString()
 
 							const columnEvents = eventsByColumn?.get(key)
 
 							if(!columnEvents) return null
 
 							return columnEvents.map(({ event, displayProperties }) => {
+
 								return (
 									<EventWrapper<TEventResources>
 										key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
@@ -149,7 +126,7 @@ const TimeGrid = <
 											event={ event }
 											localizer={ localizer }
 											displayProperties={ displayProperties }
-											startTime={ startTime }
+											startTime={ localStartTime }
 											timeIncrement={ timeIncrement }
 											className={ clsx(displayProperties.className) }
 											onEventClick={ onEventClick }

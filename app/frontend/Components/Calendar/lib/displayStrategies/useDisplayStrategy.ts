@@ -12,7 +12,6 @@ import {
 	DisplayStrategyFactories,
 } from "."
 
-
 export const useDisplayStrategy = <
 	TEventResources extends EventResources,
 	V extends keyof DisplayStrategyFactories,

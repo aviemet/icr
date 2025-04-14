@@ -5,6 +5,8 @@ import { useMemo, useState, useCallback, useRef, useLayoutEffect } from "react"
 import { CalendarProvider, CalendarContext, EventResources, BaseCalendarEvent, Resource } from "@/Components/Calendar"
 import Toolbar from "@/Components/Calendar/components/Toolbar"
 import { CalendarLocalizer, useDefaultLocalizer } from "@/Components/Calendar/lib/localizers"
+import { invariant } from "@/lib"
+import { hasUniqueValues } from "@/lib/collections"
 import { usePageProps } from "@/lib/hooks"
 
 import * as classes from "./Calendar.css"
@@ -14,7 +16,7 @@ import { useEventPopover } from "./components/EventDetailsPopover/useEventPopove
 import { StrategyNameMap } from "./lib/displayStrategies"
 import { viewComponents, VIEWS, VIEW_NAMES, NAVIGATION_ACTION } from "./Views"
 
-interface CalendarProps<TEventResources extends EventResources = EventResources> {
+export interface CalendarProps<TEventResources extends EventResources = EventResources> {
 	defaultDate?: Date
 	defaultView?: VIEW_NAMES
 	events: BaseCalendarEvent<TEventResources>[]
@@ -50,6 +52,17 @@ const Calendar = <TEventResources extends EventResources>({
 	const [date, setDate] = useState<Date>(defaultDate || new Date())
 	const [currentView, setCurrentView] = useState<VIEW_NAMES>(defaultView)
 
+	const {
+		popoverOpen,
+		selectedEvent,
+		popoverPosition,
+		popoverRef,
+		handleEventClick,
+	} = useEventPopover<TEventResources>()
+
+	/**
+	 * Read and build display strategy preferences object from settings
+	 */
 	const { settings: { calendar_layout_style } } = usePageProps()
 
 	const localDisplayStrategies = useMemo(() => Object.assign({
@@ -59,42 +72,27 @@ const Calendar = <TEventResources extends EventResources>({
 		agenda: "overlap",
 	}, displayStrategies), [calendar_layout_style, displayStrategies])
 
+	/**
+	 * Collect resources for building headings
+	 */
 	const resourcesById = useMemo(() => {
-		const map = new Map<string | number, Resource>()
-		if(process.env.NODE_ENV !== "production") {
-			const uniqueIds = new Set<string | number>()
-			const duplicateIds = new Set<string | number>()
-			for(const resource of resources) {
-				if(uniqueIds.has(resource.id)) {
-					duplicateIds.add(resource.id)
-				} else {
-					uniqueIds.add(resource.id)
-				}
-			}
-			if(duplicateIds.size > 0) {
-				// eslint-disable-next-line no-console
-				console.warn(
-					`[CalendarComponent] Duplicate resource IDs found: ${Array.from(duplicateIds).join(", ")}. Ensure IDs are unique.`
-				)
-			}
-		}
+		const resourcesMap = new Map<string | number, Resource>()
+
+		invariant(hasUniqueValues(resources, "id"), "[CalendarComponent] Duplicate resource IDs found: Ensure IDs are unique.")
+
 		for(const resource of resources) {
-			map.set(resource.id, resource)
+			resourcesMap.set(resource.id, resource)
 		}
-		return map
+
+		return resourcesMap
 	}, [resources])
 
-	const {
-		popoverOpen,
-		selectedEvent,
-		popoverPosition,
-		popoverRef,
-		handleEventClick,
-	} = useEventPopover<TEventResources>()
-
+	/**
+	 * Compensate for toolbar height
+	 */
+	const [minHeight, setMinHeight] = useState("100%")
 	const toolbarRef = useRef<HTMLDivElement>(null)
 
-	const [minHeight, setMinHeight] = useState("100%")
 	useLayoutEffect(() => {
 		if(!toolbarRef.current) return
 

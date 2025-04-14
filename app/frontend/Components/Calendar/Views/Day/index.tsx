@@ -49,6 +49,7 @@ const DayViewComponent = <TEventResources extends EventResources>({
 				columnHeadings={ columnHeadings }
 				startTime={ startTime }
 				endTime={ endTime }
+				displayStrategy="overlap"
 			/>
 		</div>
 	)

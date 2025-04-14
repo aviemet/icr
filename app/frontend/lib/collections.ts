@@ -34,3 +34,17 @@ export const matchesAtPosition = (arr: string[], ...args: [number, string][]) =>
 
 	return true
 }
+
+export const hasUniqueValues = <T extends Record<K, PropertyKey>, K extends keyof T>(
+	array: T[],
+	key: K
+): boolean => {
+	const seen = new Set<T[K]>()
+
+	for(const item of array) {
+		if(seen.has(item[key])) return false
+		seen.add(item[key])
+	}
+
+	return true
+}

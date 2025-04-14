@@ -54,4 +54,6 @@ export const CalendarProvider = <TEventResources extends EventResources>(
 	return <ContextObject.Provider value={ props.value }>{ props.children }</ContextObject.Provider>
 }
 
-export { Calendar } from "./Calendar"
+// export { Calendar } from "./Calendar"
+
+export { DefaultCalendar as Calendar } from "./DefaultCalendar"

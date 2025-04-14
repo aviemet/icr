@@ -1,5 +1,3 @@
-import { Routes } from "@/lib"
-
 export * as Routes from "./routes/routes"
 export * as formatter from "./formatters"
 
@@ -17,3 +15,4 @@ export const polymorphicRoute = (model: string, param: string | number) => {
 }
 
 export * from "./mergeRefs"
+export { invariant } from "./invariant"
