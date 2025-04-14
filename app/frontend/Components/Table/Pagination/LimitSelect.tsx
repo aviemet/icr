@@ -53,7 +53,7 @@ const LimitSelect = ({ pagination, model }: LimitSelectProps) => {
 			my={ 0 }
 			withCheckIcon={ false }
 			className={ clsx(classes.limitSelect) }
-			rightSectionWidth='1rem'
+			rightSectionWidth="1rem"
 			defaultValue={ String(pagination.limit) || String(defaultLimit) }
 			data={ [
 				{ value: "10", label: "10" },

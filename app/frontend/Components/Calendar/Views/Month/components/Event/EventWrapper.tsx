@@ -4,7 +4,7 @@ import clsx from "clsx"
 import { ContextMenuItemOptions, useContextMenu } from "mantine-contextmenu"
 import { CSSProperties, PropsWithChildren, useCallback } from "react"
 
-import { EventResources, CalendarEvent } from "@/Components/Calendar"
+import { EventResources, BaseCalendarEvent } from "@/Components/Calendar"
 import { GridDisplayProperties } from "@/Components/Calendar/lib/displayStrategies"
 import { vars } from "@/lib"
 import useStore from "@/lib/store"
@@ -13,9 +13,9 @@ import * as classes from "./Event.css"
 
 interface EventWrapperProps<TEventResources extends EventResources, P extends GridDisplayProperties = GridDisplayProperties> extends PropsWithChildren {
 	style?: CSSProperties
-	event: CalendarEvent<TEventResources>
+	event: BaseCalendarEvent<TEventResources>
 	displayProperties: P
-	contextMenuOptions?: (event: CalendarEvent<TEventResources>) => ContextMenuItemOptions[]
+	contextMenuOptions?: (event: BaseCalendarEvent<TEventResources>) => ContextMenuItemOptions[]
 	setHoverId: React.Dispatch<React.SetStateAction<string>>
 }
 
@@ -54,7 +54,7 @@ const EventWrapper = <TEventResources extends EventResources, P extends GridDisp
 	return (
 		<Box
 			ref={ animationParent }
-			className={ clsx(classes.eventWrapper, displayProperties.className) }
+			className={ clsx(classes.monthEventWrapper, displayProperties.className) }
 			style={ {
 				"--column-start": displayProperties.columnStart,
 				"--column-span": displayProperties.columnSpan,

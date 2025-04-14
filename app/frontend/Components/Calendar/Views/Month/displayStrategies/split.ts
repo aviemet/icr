@@ -1,6 +1,6 @@
 import clsx from "clsx"
 
-import { EventResources, CalendarEvent } from "@/Components/Calendar"
+import { EventResources, BaseCalendarEvent } from "@/Components/Calendar"
 import {
 	BaseDisplayStrategy,
 } from "@/Components/Calendar/lib/displayStrategies/BaseDisplayStrategy"
@@ -22,14 +22,14 @@ export class MonthSplitStrategy<TEventResources extends EventResources>
 	 * Processes an event, splitting it by week and day boundaries.
 	 * Returns an array of display details, one for each day the event appears on.
 	 */
-	processEvent(event: CalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, GridDisplayProperties>[] {
-		const weekSegments: CalendarEvent<TEventResources>[] = this.spansWeekBorder(event)
+	processEvent(event: BaseCalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, GridDisplayProperties>[] {
+		const weekSegments: BaseCalendarEvent<TEventResources>[] = this.spansWeekBorder(event)
 			? this.splitAtWeekBoundaries(event)
 			: [{ ...event }]
 
-		type DaySegment = { event: CalendarEvent<TEventResources>, displayStart: Date, displayEnd: Date };
+		type DaySegment = { event: BaseCalendarEvent<TEventResources>, displayStart: Date, displayEnd: Date };
 
-		const daySegments: DaySegment[] = weekSegments.flatMap((weekSegment: CalendarEvent<TEventResources>) =>
+		const daySegments: DaySegment[] = weekSegments.flatMap((weekSegment: BaseCalendarEvent<TEventResources>) =>
 			this.splitAtDayBoundaries(weekSegment)
 		)
 

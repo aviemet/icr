@@ -1,6 +1,6 @@
 import clsx from "clsx"
 
-import { EventResources, CalendarEvent } from "@/Components/Calendar"
+import { EventResources, BaseCalendarEvent } from "@/Components/Calendar"
 import {
 	BaseDisplayStrategy,
 } from "@/Components/Calendar/lib/displayStrategies/BaseDisplayStrategy"
@@ -18,7 +18,7 @@ import {
 export class DayOverlapStrategy<TEventResources extends EventResources>
 	extends BaseDisplayStrategy<TEventResources, TimeGridDisplayProperties> {
 
-	processEvent(event: CalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, TimeGridDisplayProperties>[] {
+	processEvent(event: BaseCalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, TimeGridDisplayProperties>[] {
 		const daySegments = this.splitAtDayBoundaries(event)
 		const processedDetails: EventDisplayDetails<TEventResources, TimeGridDisplayProperties>[] = []
 

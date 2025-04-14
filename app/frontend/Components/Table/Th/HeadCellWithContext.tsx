@@ -8,7 +8,6 @@ import { useLocation } from "@/lib/hooks"
 import { type TableHeadCellProps } from "."
 
 
-
 interface HeadCellWithContextProps extends TableHeadCellProps {
 	rows?: Record<string, any>[]
 }

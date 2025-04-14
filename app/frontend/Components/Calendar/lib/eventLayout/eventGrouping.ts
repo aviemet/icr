@@ -1,4 +1,4 @@
-import { EventResources, CalendarEvent } from "@/Components/Calendar"
+import { EventResources, BaseCalendarEvent } from "@/Components/Calendar"
 import { SortedArray } from "@/lib/Collections/SortedArray"
 
 import { VIEW_NAMES } from "../../Views"
@@ -15,7 +15,7 @@ export const groupedEventsForPeriod = <
 	TEventResources extends EventResources,
 	P extends BaseDisplayProperties
 >(
-	events: CalendarEvent<TEventResources>[],
+	events: BaseCalendarEvent<TEventResources>[],
 	date: Date,
 	view: VIEW_NAMES,
 	localizer: CalendarLocalizer,

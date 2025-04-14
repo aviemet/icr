@@ -1,6 +1,6 @@
 import clsx from "clsx"
 
-import { EventResources, CalendarEvent } from "@/Components/Calendar"
+import { EventResources, BaseCalendarEvent } from "@/Components/Calendar"
 import {
 	BaseDisplayStrategy,
 } from "@/Components/Calendar/lib/displayStrategies/BaseDisplayStrategy"
@@ -37,12 +37,12 @@ export class MonthStackStrategy<TEventResources extends EventResources>
 	 * Helper to determine if an event needs splitting at week boundaries.
 	 * Based on original logic: only splits if it crosses a week border AND should span days.
 	 */
-	protected shouldSplitAtWeekBoundary(event: CalendarEvent<TEventResources>): boolean {
+	protected shouldSplitAtWeekBoundary(event: BaseCalendarEvent<TEventResources>): boolean {
 		return this.spansWeekBorder(event) && this.shouldSpanDays(event)
 	}
 
-	processEvent(event: CalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, GridDisplayProperties>[] {
-		const weekSegments: CalendarEvent<TEventResources>[] = this.shouldSplitAtWeekBoundary(event)
+	processEvent(event: BaseCalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, GridDisplayProperties>[] {
+		const weekSegments: BaseCalendarEvent<TEventResources>[] = this.shouldSplitAtWeekBoundary(event)
 			? this.splitAtWeekBoundaries(event)
 			: [{ ...event }]
 

@@ -15,7 +15,7 @@ const SwatchPicker = ({ value, onChange }: SwatchPickerProps) => {
 
 	const colors = useCallback(() => {
 		return Object.keys(theme.colors).filter(color => {
-			return !["dark","gray"].includes(color)
+			return !["dark", "gray"].includes(color)
 		}).map((color) => (
 			<ColorSwatch
 				key={ color }

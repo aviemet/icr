@@ -1,6 +1,6 @@
 import clsx from "clsx"
 
-import { EventResources, CalendarEvent } from "@/Components/Calendar"
+import { EventResources, BaseCalendarEvent } from "@/Components/Calendar"
 import {
 	BaseDisplayStrategy,
 } from "@/Components/Calendar/lib/displayStrategies/BaseDisplayStrategy"
@@ -17,9 +17,9 @@ import {
  */
 export class MonthSpanStrategy<TEventResources extends EventResources>
 	extends BaseDisplayStrategy<TEventResources, GridDisplayProperties> {
-	processEvent(event: CalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, GridDisplayProperties>[] {
+	processEvent(event: BaseCalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, GridDisplayProperties>[] {
 		// 1. Split by week boundaries if necessary
-		const weekSegments: CalendarEvent<TEventResources>[] = this.spansWeekBorder(event)
+		const weekSegments: BaseCalendarEvent<TEventResources>[] = this.spansWeekBorder(event)
 			? this.splitAtWeekBoundaries(event)
 			: [{ ...event }] // Use a shallow copy
 

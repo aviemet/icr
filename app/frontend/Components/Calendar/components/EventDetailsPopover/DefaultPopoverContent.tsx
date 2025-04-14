@@ -1,13 +1,13 @@
 import { Stack, Text, Title, Group, Box } from "@mantine/core"
 import clsx from "clsx"
 
-import { useCalendarContext, EventResources, CalendarEvent } from "@/Components/Calendar"
+import { useCalendarContext, EventResources, BaseCalendarEvent } from "@/Components/Calendar"
 import { vars } from "@/lib"
 
 import * as classes from "./EventDetailsPopover.css"
 
 interface DefaultPopoverContentProps<TEventResources extends EventResources> {
-	event: CalendarEvent<TEventResources>
+	event: BaseCalendarEvent<TEventResources>
 }
 
 const DefaultPopoverContent = <TEventResources extends EventResources>({ event }: DefaultPopoverContentProps<TEventResources>) => {

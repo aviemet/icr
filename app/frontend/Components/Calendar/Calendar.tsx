@@ -2,7 +2,7 @@ import { Box, Overlay } from "@mantine/core"
 import clsx from "clsx"
 import { useMemo, useState, useCallback, useRef, useLayoutEffect } from "react"
 
-import { CalendarProvider, CalendarContext, EventResources, CalendarEvent, Resource } from "@/Components/Calendar"
+import { CalendarProvider, CalendarContext, EventResources, BaseCalendarEvent, Resource } from "@/Components/Calendar"
 import Toolbar from "@/Components/Calendar/components/Toolbar"
 import { CalendarLocalizer, useDefaultLocalizer } from "@/Components/Calendar/lib/localizers"
 import { usePageProps } from "@/lib/hooks"
@@ -17,16 +17,17 @@ import { viewComponents, VIEWS, VIEW_NAMES, NAVIGATION_ACTION } from "./Views"
 interface CalendarProps<TEventResources extends EventResources = EventResources> {
 	defaultDate?: Date
 	defaultView?: VIEW_NAMES
-	events: CalendarEvent<TEventResources>[]
+	events: BaseCalendarEvent<TEventResources>[]
 	localizer?: CalendarLocalizer
 	views?: readonly VIEW_NAMES[]
 	displayStrategies?: Partial<StrategyNameMap>
 	onNavigate?: (newDate: Date, action: NAVIGATION_ACTION, view: VIEW_NAMES) => void
 	onViewChange?: (view: VIEW_NAMES) => void
-	eventPopoverContent?: (event: CalendarEvent<TEventResources>, localizer: CalendarLocalizer) => React.ReactNode
+	eventPopoverContent?: (event: BaseCalendarEvent<TEventResources>, localizer: CalendarLocalizer) => React.ReactNode
 	onSelectSlot?: (date: Date) => void
 	resources?: Resource[]
 	groupByResource?: boolean
+	maxEvents?: number
 }
 
 const Calendar = <TEventResources extends EventResources>({
@@ -42,6 +43,7 @@ const Calendar = <TEventResources extends EventResources>({
 	onSelectSlot,
 	resources = [],
 	groupByResource = false,
+	maxEvents = Infinity,
 }: CalendarProps<TEventResources>) => {
 	const localLocalizer = useDefaultLocalizer(localizer)
 
@@ -142,6 +144,7 @@ const Calendar = <TEventResources extends EventResources>({
 		onEventClick: handleEventClick,
 		resourcesById,
 		groupByResource,
+		maxEvents,
 	}), [
 		date,
 		events,
@@ -151,6 +154,7 @@ const Calendar = <TEventResources extends EventResources>({
 		handleEventClick,
 		resourcesById,
 		groupByResource,
+		maxEvents,
 	])
 
 	if(!localLocalizer) return <></>

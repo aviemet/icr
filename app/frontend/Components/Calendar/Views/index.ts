@@ -1,4 +1,4 @@
-import { CalendarEvent, Resource, EventResources } from "@/Components/Calendar"
+import { BaseCalendarEvent, Resource, EventResources } from "@/Components/Calendar"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 
 
@@ -38,7 +38,7 @@ export interface ViewStaticMethodProps<TEventResources extends EventResources = 
 	date: Date
 	today: Date
 	localizer: CalendarLocalizer
-	events: CalendarEvent<TEventResources>[]
+	events: BaseCalendarEvent<TEventResources>[]
 	resourcesById: Map<string | number, Resource>
 }
 

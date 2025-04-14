@@ -1,11 +1,11 @@
-import { CalendarEvent, EventResources } from "../.."
+import { BaseCalendarEvent, EventResources } from "../.."
 import { CalendarLocalizer } from "../localizers"
 
 /**
  * Calculates the grid column placement for an event in a calendar view
  */
 export const calculateGridPlacement = <TEventResources extends EventResources = EventResources>(
-	event: CalendarEvent<TEventResources>,
+	event: BaseCalendarEvent<TEventResources>,
 	localizer: CalendarLocalizer
 ) => {
 	const start = event.start

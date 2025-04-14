@@ -77,7 +77,7 @@ const Sidebar = () => {
 						href={ Routes.employees() }
 						leftSection={ <EmployeeIcon /> }
 						rightSection={ matchesAtPosition(paths, [0, "employees"]) && <NextIcon /> }
-						active={ matchesAtPosition(paths, [0,  "employees"]) }
+						active={ matchesAtPosition(paths, [0, "employees"]) }
 					/>
 					<MenuLink
 						label="Timesheets"
@@ -94,7 +94,7 @@ const Sidebar = () => {
 						href={ Routes.settings() }
 						leftSection={ <SettingsIcon /> }
 						rightSection={ matchesAtPosition(paths, [0, "settings"]) && <NextIcon /> }
-						active={  matchesAtPosition(paths, [0, "settings"]) }
+						active={ matchesAtPosition(paths, [0, "settings"]) }
 					/>
 				</AppShell.Section>
 

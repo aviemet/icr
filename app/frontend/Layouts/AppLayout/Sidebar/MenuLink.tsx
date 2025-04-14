@@ -1,6 +1,6 @@
 import clsx from "clsx"
 
-import { NavLink, NavLinkProps , ActionIcon, Box, Group, Tooltip } from "@/Components"
+import { NavLink, NavLinkProps, ActionIcon, Box, Group, Tooltip } from "@/Components"
 import useStore from "@/lib/store"
 
 import * as classes from "../AppLayout.css"

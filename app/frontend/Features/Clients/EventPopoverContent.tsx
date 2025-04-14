@@ -1,7 +1,7 @@
 import clsx from "clsx"
 
 import { Box, Group, Link, Stack, Text, Title } from "@/Components"
-import { CalendarEvent, Resources } from "@/Components/Calendar"
+import { BaseCalendarEvent, Resources } from "@/Components/Calendar"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 import { Routes } from "@/lib"
 
@@ -13,7 +13,7 @@ interface ScheduleResources extends Resources {
 }
 
 interface EventPopoverContentProps {
-	event: CalendarEvent<ScheduleResources>
+	event: BaseCalendarEvent<ScheduleResources>
 	localizer: CalendarLocalizer
 }
 

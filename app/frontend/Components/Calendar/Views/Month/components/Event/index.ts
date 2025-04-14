@@ -1,2 +1,2 @@
-export { Event } from "./Event"
+export { MonthEvent } from "./MonthEvent"
 export { EventWrapper } from "./EventWrapper"

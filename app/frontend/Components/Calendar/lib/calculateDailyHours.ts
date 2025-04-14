@@ -1,4 +1,4 @@
-import { CalendarEvent, EventResources } from "@/Components/Calendar"
+import { BaseCalendarEvent, EventResources } from "@/Components/Calendar"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 
 /**
@@ -7,7 +7,7 @@ import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
  * and the value is the total minutes worked that day.
  */
 export function calculateDailyHours<TEventResources extends EventResources = EventResources>(
-	events: CalendarEvent<TEventResources>[],
+	events: BaseCalendarEvent<TEventResources>[],
 	localizer: CalendarLocalizer
 ): Map<string, number> {
 	const dailyTotals = new Map<string, number>()

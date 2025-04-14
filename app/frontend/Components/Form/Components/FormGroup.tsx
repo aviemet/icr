@@ -23,7 +23,7 @@ const FormGroup = ({
 			condition={ grid }
 			wrapper={ children => (
 				<Grid.Col>
-					<Grid component='fieldset' className={ clsx({ outline }) } style={ {
+					<Grid component="fieldset" className={ clsx({ outline }) } style={ {
 						marginTop: legend ? "0.5rem" : undefined,
 					} }>
 						{ children }
@@ -31,7 +31,7 @@ const FormGroup = ({
 				</Grid.Col>
 			) }
 			elseWrapper={ children => (
-				<Box component='fieldset' className={ clsx({ outline }) } style={ {
+				<Box component="fieldset" className={ clsx({ outline }) } style={ {
 					marginTop: legend ? "0.5rem" : undefined,
 				} }>
 					{ children }

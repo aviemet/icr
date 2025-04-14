@@ -1,6 +1,6 @@
 import clsx from "clsx"
 
-import { EventResources, CalendarEvent } from "@/Components/Calendar"
+import { EventResources, BaseCalendarEvent } from "@/Components/Calendar"
 import {
 	BaseDisplayStrategy,
 } from "@/Components/Calendar/lib/displayStrategies/BaseDisplayStrategy"
@@ -17,7 +17,7 @@ import {
 export class AgendaStackStrategy<TEventResources extends EventResources>
 	extends BaseDisplayStrategy<TEventResources, AgendaDisplayProperties> {
 
-	processEvent(event: CalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, AgendaDisplayProperties>[] {
+	processEvent(event: BaseCalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, AgendaDisplayProperties>[] {
 		// Agenda view typically doesn't involve complex grid calculations
 		// It just needs the event data and maybe basic display flags.
 		const displayProperties: AgendaDisplayProperties = {

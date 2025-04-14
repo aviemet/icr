@@ -2,16 +2,16 @@ import { Paper } from "@mantine/core"
 import clsx from "clsx"
 import React, { forwardRef, useEffect, useState } from "react"
 
-import { EventResources, CalendarEvent } from "@/Components/Calendar"
+import { EventResources, BaseCalendarEvent } from "@/Components/Calendar"
 import { vars } from "@/lib"
 
 import { DefaultPopoverContent } from "./DefaultPopoverContent"
 import * as classes from "./EventDetailsPopover.css"
 
 interface EventDetailsPopoverProps<TEventResources extends EventResources> {
-	event: CalendarEvent<TEventResources>
+	event: BaseCalendarEvent<TEventResources>
 	position: { top: number, left: number }
-	children?: (event: CalendarEvent<TEventResources>) => React.ReactNode
+	children?: (event: BaseCalendarEvent<TEventResources>) => React.ReactNode
 }
 
 function EventDetailsPopover<TEventResources extends EventResources>(

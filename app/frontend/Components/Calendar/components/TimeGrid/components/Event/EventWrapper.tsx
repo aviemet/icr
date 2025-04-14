@@ -1,12 +1,12 @@
 import clsx from "clsx"
 
-import { EventResources, CalendarEvent } from "@/Components/Calendar"
+import { EventResources, BaseCalendarEvent } from "@/Components/Calendar"
 import { TimeGridDisplayProperties } from "@/Components/Calendar/lib/displayStrategies/types"
 
 import * as classes from "./Event.css"
 
 interface EventWrapperProps<TEventResources extends EventResources, P extends TimeGridDisplayProperties = TimeGridDisplayProperties> {
-	event: CalendarEvent<TEventResources>
+	event: BaseCalendarEvent<TEventResources>
 	children: React.ReactNode
 	style?: React.CSSProperties
 	displayProperties: P
