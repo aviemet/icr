@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { useMemo } from "react"
+import { useMemo, useRef } from "react"
 
 import { EventResources, useCalendarContext } from "../../"
 import {
@@ -12,7 +12,7 @@ import { EventWrapper } from "./components/Event/EventWrapper"
 import Headings from "./components/Headings"
 import TimeColumn from "./components/TimeColumn"
 import * as classes from "./TimeGrid.css"
-import { CalendarTransitionContainer } from "../../lib/useAnimation/CalendarTransitionContainer"
+import { CalendarTransitionContainer } from "../../lib/CalendarTransitionContainer"
 
 export interface TimeGridHeading {
 	date: Date
@@ -84,8 +84,11 @@ const TimeGrid = <
 
 	const rowsPerDay = (24 * 60) / timeIncrement
 
+	const animationContainerRef = useRef<HTMLDivElement>(null)
+
 	return (
 		<div
+			ref={ animationContainerRef }
 			data-calendar-view="time-grid"
 			className={ clsx(classes.timeGrid, className) }
 			style={ {
@@ -95,14 +98,14 @@ const TimeGrid = <
 			} as React.CSSProperties }>
 			<div className={ classes.cornerSpacer } />
 
-			<CalendarTransitionContainer<TEventResources> className={ classes.contentGrid }>
+			<CalendarTransitionContainer containerRef={ animationContainerRef }>
 				<Headings columnHeadings={ columnHeadings } />
 			</CalendarTransitionContainer>
 
 			<TimeColumn timeSlots={ timeSlots } />
 
 			<div className={ classes.contentArea } style={ { "--rows-per-day": rowsPerDay } as React.CSSProperties }>
-				<CalendarTransitionContainer<TEventResources> className={ classes.contentGrid }>
+				<CalendarTransitionContainer containerRef={ animationContainerRef }>
 					<div className={ classes.gridLines } />
 					<div className={ classes.eventsContainer }>
 						{ columnHeadings.map((heading, columnIndex) => {

@@ -73,10 +73,6 @@ export const contentArea = css`
   position: relative;
 `
 
-export const contentGrid = css`
-  min-height: 100%;
-`
-
 export const gridLines = css`
   position: absolute;
   inset: 0;
