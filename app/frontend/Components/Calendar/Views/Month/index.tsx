@@ -34,7 +34,6 @@ interface MonthViewProps<TEventResources extends EventResources> extends BaseVie
 const MonthViewComponent = <
 	TEventResources extends EventResources
 >({ className, style, displayStrategy, showDailyTotals = true, onSelectSlot }: MonthViewProps<TEventResources>) => {
-
 	const { date, localizer, events, maxEvents, prevDateRef } = useCalendarContext<TEventResources>()
 
 	const [containerRef, containerRect] = useResizeObserver()

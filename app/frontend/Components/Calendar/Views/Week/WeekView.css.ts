@@ -6,4 +6,15 @@ export const weekView = css`
   min-height: 600px;
   display: flex;
   flex-direction: column;
+  position: relative;
 `
+
+export const animationContainer = css`
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+	min-height: 0;
+	width: 100%;
+`
+

@@ -20,6 +20,7 @@ export const timeColumn = css`
   grid-column: 1;
   position: relative;
   z-index: 1;
+  border-right: 1px solid ${ borderColor };
 `
 
 export const timeSlot = css`
@@ -61,6 +62,7 @@ export const timeSlot = css`
 export const cornerSpacer = css`
   grid-column: 1;
   grid-row: 1;
+  border-right: 1px solid ${ borderColor };
 `
 
 export const contentArea = css`
@@ -73,7 +75,6 @@ export const contentArea = css`
 
 export const contentGrid = css`
   min-height: 100%;
-  border-left: 1px solid ${ borderColor };
 `
 
 export const gridLines = css`
@@ -98,7 +99,6 @@ export const columnHeadings = css`
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
   padding: 0.5rem;
-  border-left: 1px solid ${ borderColor };
 `
 
 export const columnHeading = css`
@@ -112,4 +112,8 @@ export const eventsContainer = css`
   position: relative;
   grid-template-columns: repeat(var(--column-count, 7), 1fr);
   grid-template-rows: repeat(var(--rows-per-day, 48), ${ rowHeight });
+`
+
+export const timeGridEvent = css`
+  width: calc(100% - rem(8));
 `

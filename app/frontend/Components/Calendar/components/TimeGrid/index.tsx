@@ -12,13 +12,13 @@ import { EventWrapper } from "./components/Event/EventWrapper"
 import Headings from "./components/Headings"
 import TimeColumn from "./components/TimeColumn"
 import * as classes from "./TimeGrid.css"
+import { CalendarTransitionContainer } from "../../lib/useAnimation/CalendarTransitionContainer"
 
 export interface TimeGridHeading {
 	date: Date
 	label: string
 	resourceId?: string | number
 }
-
 
 interface TimeGridProps<
 	// eslint-disable-next-line no-unused-vars
@@ -95,12 +95,14 @@ const TimeGrid = <
 			} as React.CSSProperties }>
 			<div className={ classes.cornerSpacer } />
 
-			<Headings columnHeadings={ columnHeadings } />
+			<CalendarTransitionContainer<TEventResources> className={ classes.contentGrid }>
+				<Headings columnHeadings={ columnHeadings } />
+			</CalendarTransitionContainer>
 
 			<TimeColumn timeSlots={ timeSlots } />
 
 			<div className={ classes.contentArea } style={ { "--rows-per-day": rowsPerDay } as React.CSSProperties }>
-				<div className={ classes.contentGrid }>
+				<CalendarTransitionContainer<TEventResources> className={ classes.contentGrid }>
 					<div className={ classes.gridLines } />
 					<div className={ classes.eventsContainer }>
 						{ columnHeadings.map((heading, columnIndex) => {
@@ -114,7 +116,6 @@ const TimeGrid = <
 							if(!columnEvents) return null
 
 							return columnEvents.map(({ event, displayProperties }) => {
-
 								return (
 									<EventWrapper<TEventResources>
 										key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
@@ -128,7 +129,7 @@ const TimeGrid = <
 											displayProperties={ displayProperties }
 											startTime={ localStartTime }
 											timeIncrement={ timeIncrement }
-											className={ clsx(displayProperties.className) }
+											className={ clsx(displayProperties.className, classes.timeGridEvent) }
 											onEventClick={ onEventClick }
 										/>
 									</EventWrapper>
@@ -136,7 +137,7 @@ const TimeGrid = <
 							})
 						}) }
 					</div>
-				</div>
+				</CalendarTransitionContainer>
 			</div>
 		</div>
 	)
