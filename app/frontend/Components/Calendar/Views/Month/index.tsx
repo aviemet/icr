@@ -2,7 +2,7 @@ import { useResizeObserver } from "@mantine/hooks"
 import clsx from "clsx"
 import { motion, AnimatePresence } from "framer-motion"
 import { chunk } from "lodash-es"
-import { CSSProperties, useMemo, useState, useRef, useEffect } from "react"
+import { CSSProperties, useMemo, useState } from "react"
 
 import { useCalendarContext, EventResources } from "@/Components/Calendar"
 import { calculateDailyHours } from "@/Components/Calendar/lib/calculateDailyHours"
@@ -12,6 +12,7 @@ import {
 	NAVIGATION,
 	VIEWS,
 } from "@/Components/Calendar/Views"
+import { ensureDate } from "@/lib/dates"
 
 import DailyTotals from "./components/DailyTotals"
 import { DaysHeading } from "./components/DaysHeading"
@@ -34,21 +35,11 @@ const MonthViewComponent = <
 	TEventResources extends EventResources
 >({ className, style, displayStrategy, showDailyTotals = true, onSelectSlot }: MonthViewProps<TEventResources>) => {
 
-	const { date, localizer, events, maxEvents } = useCalendarContext<TEventResources>()
+	const { date, localizer, events, maxEvents, prevDateRef } = useCalendarContext<TEventResources>()
 
 	const [containerRef, containerRect] = useResizeObserver()
-	const prevDateRef = useRef(date)
-	const [direction, setDirection] = useState(0)
 
-	useEffect(() => {
-		// Determine slide direction based on date change
-		if(localizer.isBefore(date, prevDateRef.current)) {
-			setDirection(- 1) // Slide from left
-		} else if(localizer.isAfter(date, prevDateRef.current)) {
-			setDirection(1) // Slide from right
-		}
-		prevDateRef.current = date
-	}, [date, localizer])
+	const direction = localizer.isBefore(date, ensureDate(prevDateRef.current)) ? - 1 : 1
 
 	const variants = {
 		enter: (direction: number) => ({
@@ -120,7 +111,7 @@ const MonthViewComponent = <
 						animate="center"
 						exit="exit"
 						transition={ {
-							x: { type: "spring", stiffness: 300, damping: 30 },
+							x: { type: "tween", duration: 0.2, ease: "easeInOut" },
 							opacity: { duration: 0.2 },
 						} }
 						className={ classes.animationContainer }

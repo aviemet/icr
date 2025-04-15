@@ -50,6 +50,7 @@ const Calendar = <TEventResources extends EventResources>({
 	const localLocalizer = useDefaultLocalizer(localizer)
 
 	const [date, setDate] = useState<Date>(defaultDate || new Date())
+	const prevDateRef = useRef<Date>(date) // Track previous date for animation direction
 	const [currentView, setCurrentView] = useState<VIEW_NAMES>(defaultView)
 
 	const {
@@ -122,6 +123,7 @@ const Calendar = <TEventResources extends EventResources>({
 			}
 		)
 
+		prevDateRef.current = date
 		setDate(nextDate)
 
 		onNavigate?.(nextDate, action, currentView)
@@ -143,6 +145,7 @@ const Calendar = <TEventResources extends EventResources>({
 		resourcesById,
 		groupByResource,
 		maxEvents,
+		prevDateRef,
 	}), [
 		date,
 		events,
@@ -153,6 +156,7 @@ const Calendar = <TEventResources extends EventResources>({
 		resourcesById,
 		groupByResource,
 		maxEvents,
+		prevDateRef,
 	])
 
 	if(!localLocalizer) return <></>

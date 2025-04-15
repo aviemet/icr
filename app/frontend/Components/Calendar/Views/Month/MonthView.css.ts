@@ -158,13 +158,12 @@ export const dateToday = css`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: ${ vars.spacing.xl };
-    height: ${ vars.spacing.xl };
+    width: 1.55rem;
+    height: 1.55rem;
     border-radius: 50%;
-    background-color: light-dark(${ vars.colors.gray[4] }, ${ vars.colors.dark[0] });
-    border: 2px solid light-dark(${ vars.colors.gray[7] }, ${ vars.colors.dark[6] });
+    background-color: ${ vars.colors.primaryColors.filled };
+    border: 1px solid light-dark(${ vars.colors.gray[4] }, ${ vars.colors.dark[4] });
     transition: all 200ms ease;
-    color: light-dark(${ vars.colors.gray[7] }, ${ vars.colors.gray[9] });
 
     &:hover {
       background: ${ vars.colors.blue[1] };
