@@ -34,7 +34,6 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 	const location = useLocation()
 	const userTimezone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone, [])
 
-
 	const [calendarDate, setCalendarDate] = useState<Date>(ensureDate(location.params.get("date")))
 	const [calendarView, setCalendarView] = useState<VIEW_NAMES>(ensureViewName(location.params.get("view")))
 

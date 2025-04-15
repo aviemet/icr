@@ -52,6 +52,7 @@
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "dinero.js": "^1.9.1",
+    "framer-motion": "^12.7.2",
     "google-libphonenumber": "^3.2.40",
     "indefinite": "^2.5.1",
     "lodash-es": "^4.17.21",

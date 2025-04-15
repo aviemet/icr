@@ -14,6 +14,16 @@ export const monthView = css`
 	flex: 1 1 auto;
 	min-height: 0;
 	margin: 0;
+	overflow: hidden;
+`
+
+export const animationContainer = css`
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+	min-height: 0;
+	width: 100%;
 `
 
 export const daysHeading = css`
