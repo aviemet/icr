@@ -1,7 +1,6 @@
-export { default as AddressDisplay } from "./Formatters/Address"
 export { default as Button } from "./Button"
 export * from "./Button"
-export { default as Calendar } from "./Calendar"
+export { Calendar } from "./Calendar"
 export { default as Code } from "./Code"
 export { default as ConditionalWrapper } from "./ConditionalWrapper"
 export { default as DangerousHtml } from "./DangerousHtml"
@@ -17,6 +16,8 @@ export { default as Table } from "./Table"
 export { type TableProps } from "./Table/Table"
 export { default as Label } from "./Label"
 export { default as Tabs } from "./Tabs"
+
+export * from "./Formatters"
 
 // Export UI library components as a proxy to allow easy refactoring
 export {

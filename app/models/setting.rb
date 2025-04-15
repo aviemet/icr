@@ -13,6 +13,8 @@
 #  index_settings_on_var  (var) UNIQUE
 #
 class Setting < RailsSettings::Base
+  include Renderable
+
   cache_prefix { "v1" }
 
   PAY_PERIOD_TYPES = {
@@ -27,13 +29,15 @@ class Setting < RailsSettings::Base
     default_language: "en",
     default_currency: "USD",
     default_timezone: "America/Los_Angeles",
-    shift_title_format: "{h:mm} - {full_name}",
+    shift_title_format: "{start:h:mma} - {end:h:mma}: {full_name}",
     overtime_weekly_hours: 40,
     overtime_daily_hours: 8,
     payroll_period_type: PAY_PERIOD_TYPES[:semi_monthly],
     payroll_period_day: "monday",
     payroll_period_date: "1",
     payroll_period_date_2: "15",
+    calendar_layout_style: "split",
+    calendar_split_events_show_original_times: false
   }.freeze
 
   field :company_name, type: :string, default: DEFAULT_SETTINGS[:company_name], validates: { presence: true }
@@ -46,11 +50,14 @@ class Setting < RailsSettings::Base
     presence: true
   }
 
-  ALLOWED_TEMPLATE_VARS = %i(first_name last_name full_name).freeze
+  ########################
+  # Event Title Template #
+  ########################
+  ALLOWED_TEMPLATE_VARS = %i(first_name last_name full_name first_initial last_initial).freeze
   field :shift_title_format, type: :string, default: DEFAULT_SETTINGS[:shift_title_format], validates: {
     presence: true,
     format: {
-      with: %r(\A[^{}]*(\{(?:#{ALLOWED_TEMPLATE_VARS.join('|')}|[YMDHhmsAa\-/ :]+)\}[^{}]*)*\z),
+      with: %r(\A[^{}]*(\{(?:#{ALLOWED_TEMPLATE_VARS.join('|')}|(?:start|end):[YMDHhmsAa\-/ :]+)\}[^{}]*)*\z),
       message: "must contain valid variables and date formats"
     }
   }
@@ -76,9 +83,11 @@ class Setting < RailsSettings::Base
     inclusion: { in: %w(15 20 -1) }
   }
 
-  def self.render
-    Setting.keys.to_h { |key|
-      [key.to_sym, Setting.send(key.to_sym)]
-    }
-  end
+  layout_styles = %w(span stack split)
+  layout_style_type = layout_styles.map { |s| "\"#{s}\"" }.join("|")
+  field :calendar_layout_style, type: layout_style_type, default: "split", validates: {
+    presence: true,
+    inclusion: { in: layout_styles }
+  }
+  field :calendar_split_events_show_original_times, type: :boolean, default: false
 end

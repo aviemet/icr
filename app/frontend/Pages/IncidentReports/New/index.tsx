@@ -1,6 +1,6 @@
 import { Title, Page, Section } from "@/Components"
-import { Routes } from "@/lib"
 import IncidentReportForm from "@/Features/IncidentReports/Form"
+import { Routes } from "@/lib"
 
 interface INewIncidentReportProps {
 	incident_report: Schema.IncidentReportsFormData

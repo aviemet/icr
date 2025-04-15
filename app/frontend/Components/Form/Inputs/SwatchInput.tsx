@@ -1,8 +1,11 @@
 import { forwardRef, type ForwardedRef } from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
+
 import SwatchInput, { type SwatchInputProps } from "@/Components/Inputs/SwatchInput"
-import { type InputConflicts, type BaseFormInputProps } from "."
+
 import InputWrapper from "../Components/InputWrapper"
+
+import { type InputConflicts, type BaseFormInputProps } from "."
 
 interface FormSwatchInputProps<TForm extends NestedObject = NestedObject>
 	extends

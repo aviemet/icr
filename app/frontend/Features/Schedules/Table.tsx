@@ -1,8 +1,9 @@
 import * as React from "react"
-import { Routes } from "@/lib"
+
 import { Box, Link, Paper, Table } from "@/Components"
 import { EditButton } from "@/Components/Button"
 import { type TableProps } from "@/Components/Table/Table"
+import { Routes } from "@/lib"
 
 const ScheduleTable = (props: TableProps) => {
 	return (

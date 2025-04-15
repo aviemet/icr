@@ -1,6 +1,6 @@
 import { Title, Page, Section } from "@/Components"
-import { Routes } from "@/lib"
 import VendorForm from "@/Features/Vendors/Form"
+import { Routes } from "@/lib"
 
 interface INewVendorProps {
 	vendor: Schema.VendorsFormData

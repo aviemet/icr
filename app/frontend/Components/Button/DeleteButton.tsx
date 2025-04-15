@@ -1,6 +1,7 @@
 import { Link } from "@/Components"
-import { type LinkProps } from "../Link"
 import { TrashIcon } from "@/Components/Icons"
+
+import { type LinkProps } from "../Link"
 
 interface DeleteButtonProps extends Omit<LinkProps, "children"> {
 	label?: string

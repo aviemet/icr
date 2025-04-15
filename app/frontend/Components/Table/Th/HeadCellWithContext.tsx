@@ -1,9 +1,12 @@
-import React, { useMemo, useRef } from "react"
-import { Link, Flex } from "@/Components"
-import cx from "clsx"
-import { type TableHeadCellProps } from "."
-import { useLocation } from "@/lib/hooks"
 import { Table } from "@mantine/core"
+import clsx from "clsx"
+import React, { useMemo, useRef } from "react"
+
+import { Link, Flex } from "@/Components"
+import { useLocation } from "@/lib/hooks"
+
+import { type TableHeadCellProps } from "."
+
 
 interface HeadCellWithContextProps extends TableHeadCellProps {
 	rows?: Record<string, any>[]
@@ -50,7 +53,7 @@ const HeadCellWithContext = ({
 	return (
 		<Table.Th
 			ref={ thRef }
-			className={ cx(
+			className={ clsx(
 				{ "table-column-fit": fitContent },
 				{ "sortable": showSortLink },
 				{ [direction]: showSortLink && paramsSort === sort },

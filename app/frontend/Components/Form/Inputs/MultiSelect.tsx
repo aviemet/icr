@@ -1,10 +1,13 @@
+import { type ComboboxData } from "@mantine/core"
 import { forwardRef, type ForwardedRef } from "react"
 import { NestedObject, UseFormProps, useInertiaInput } from "use-inertia-form"
+
 import MultiSelect, { type MultiSelectInputProps } from "@/Components/Inputs/MultiSelect"
-import { type ComboboxData } from "@mantine/core"
-import { type InputConflicts, type BaseFormInputProps } from "."
 import { exclude, isUnset, coerceArray } from "@/lib"
+
 import InputWrapper from "../Components/InputWrapper"
+
+import { type InputConflicts, type BaseFormInputProps } from "."
 
 type OmittedDropdownTypes = InputConflicts | "onDropdownOpen" | "onDropdownClose" | "onOptionSubmit" | "onClear"
 export interface FormMultiSelectProps<TForm extends NestedObject = NestedObject>

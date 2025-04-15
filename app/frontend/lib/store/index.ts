@@ -1,7 +1,8 @@
 import { create } from "zustand"
+
 import { createContrastingColorSlice, type ContrastingColorSlice } from "./contrastingColorSlice"
-import { createLayoutSlice, type LayoutSlice } from "./layoutSlice"
 import { createDefaultsSlice, type DefaultsSlice } from "./defaultsSlice"
+import { createLayoutSlice, type LayoutSlice } from "./layoutSlice"
 
 type GlobalStore = ContrastingColorSlice & LayoutSlice & DefaultsSlice
 

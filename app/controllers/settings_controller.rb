@@ -17,14 +17,25 @@ class SettingsController < ApplicationController
     authorize Setting
 
     ActiveRecord::Base.transaction do
-
       settings_params.each_key do |key|
-        Setting.send("#{key}=", settings_params[key].strip) unless settings_params[key].nil?
+        Setting.send("#{key}=", settings_params[key].to_s.strip) unless settings_params[key].nil?
       end
 
       redirect_to settings_path, success: t("settings.notices.updated")
-    rescue StandardError
-      redirect_to settings_path, inertia: { errors: ["There were errors"] }
+    rescue ActiveRecord::RecordInvalid => e
+      Rails.logger.error "Settings validation failed: #{e.message}"
+      flash[:error] = t("settings.errors.update_failed")
+
+      redirect_to settings_path, inertia: { errors: e.record.errors }
+    rescue StandardError => e
+      Rails.logger.error "Settings update failed: #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
+
+      errors = ActiveModel::Errors.new(Setting)
+      errors.add(:base, e.message)
+      flash[:error] = t("settings.errors.update_failed")
+
+      redirect_to settings_path, inertia: { errors: errors }
     end
   end
 end

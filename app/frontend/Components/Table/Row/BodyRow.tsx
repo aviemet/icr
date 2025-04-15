@@ -1,9 +1,13 @@
-import React, { forwardRef, useCallback } from "react"
-import { type TableRow } from "./index"
 import { Table } from "@mantine/core"
+import React, { forwardRef, useCallback } from "react"
+
+import { usePageProps } from "@/lib/hooks"
+
 import RowCheckbox from "./RowCheckbox"
 import { useTableContext } from "../TableContext"
-import { usePageProps } from "@/lib/hooks"
+
+import { type TableRow } from "./index"
+
 
 interface RowInContextProps extends TableRow {
 	name?: string

@@ -1,15 +1,17 @@
-import React, { useEffect, useMemo } from "react"
-import { router } from "@inertiajs/react"
 import { type VisitOptions } from "@inertiajs/core"
-import { debounce } from "lodash"
-import { useTableContext } from "../TableContext"
-import { TextInput } from "@/Components/Inputs"
-import { SearchIcon, CrossIcon } from "@/Components/Icons"
+import { router } from "@inertiajs/react"
 import { ActionIcon, Box } from "@mantine/core"
 import { useSessionStorage } from "@mantine/hooks"
-import ColumnPicker from "./ColumnPicker"
-import AdvancedSearch from "./AdvancedSearch"
+import { debounce } from "lodash-es"
+import React, { useEffect, useMemo } from "react"
+
+import { SearchIcon, CrossIcon } from "@/Components/Icons"
+import { TextInput } from "@/Components/Inputs"
 import { useInit, useLocation } from "@/lib/hooks"
+
+import ColumnPicker from "./ColumnPicker"
+import { useTableContext } from "../TableContext"
+import AdvancedSearch from "./AdvancedSearch"
 import * as classes from "../Table.css"
 
 interface SearchInputProps {

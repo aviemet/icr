@@ -1,6 +1,8 @@
+import { Table } from "@mantine/core"
+
 import { useTableContext } from "../TableContext"
 import HeadCellWithContext from "./HeadCellWithContext"
-import { Table } from "@mantine/core"
+
 import { type TableHeadCellProps } from "."
 
 const HeadCell = ({ children, ...props }: TableHeadCellProps) => {

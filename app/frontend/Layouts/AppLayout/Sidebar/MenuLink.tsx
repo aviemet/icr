@@ -1,9 +1,10 @@
-import { NavLink, NavLinkProps } from "@/Components"
-import { ActionIcon, Box, Group, Tooltip } from "@/Components"
+import clsx from "clsx"
 
-import cx from "clsx"
-import * as classes from "../AppLayout.css"
+import { NavLink, NavLinkProps, ActionIcon, Box, Group, Tooltip } from "@/Components"
 import useStore from "@/lib/store"
+
+import * as classes from "../AppLayout.css"
+
 
 interface MenuLinkProps extends NavLinkProps {}
 
@@ -12,7 +13,7 @@ const MenuLink = ({ children, className, active, mb = "sm", ...props }: MenuLink
 
 	return (
 		<NavLink
-			className={ cx(classes.navLink, { active }) }
+			className={ clsx(classes.navLink, { active }) }
 			mb={ mb }
 			active={ active }
 			{ ...props }
@@ -34,7 +35,7 @@ const MenuLink = ({ children, className, active, mb = "sm", ...props }: MenuLink
 						{ icon  }
 					</ActionIcon>
 				</Tooltip>
-				<Box className={ cx('hidden-when-closed') }>{ children }</Box>
+				<Box className={ clsx('hidden-when-closed') }>{ children }</Box>
 			</Group> */ }
 		</NavLink>
 	)

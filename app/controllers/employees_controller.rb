@@ -54,13 +54,13 @@ class EmployeesController < ApplicationController
   def schedule
     schedules = employee
       .all_events
-      .includes([:recurring_patterns, shift: [employee: [:person, :job_title, :calendar_customization]]])
+      .includes([:recurring_patterns, :shift, :clients])
       .between(range_start, range_end)
 
     render inertia: "Employees/Schedule", props: {
       employee: -> { employee.render(:show) },
       schedules: lambda {
-        schedules.render(:show)
+        schedules.render(:employee)
       },
     }
   end

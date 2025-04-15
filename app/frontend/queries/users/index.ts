@@ -1,7 +1,9 @@
-import { exclude, Routes } from "@/lib"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
+
+import { exclude, Routes } from "@/lib"
 import { UserPreferences, UserTablePreferences } from "@/types"
-import { useMutation, useQueryClient  } from "@tanstack/react-query"
+
 import { type ReactMutationFunction } from ".."
 
 export const useUpdateUserPreferences: ReactMutationFunction<Schema.User, UserPreferences, { userId: string }> = (
@@ -10,7 +12,7 @@ export const useUpdateUserPreferences: ReactMutationFunction<Schema.User, UserPr
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async (data) => {
+		mutationFn: async(data) => {
 			const res = await axios.patch(Routes.apiUpdateUserPreferences(options.params.userId), {
 				user: { user_preferences: data },
 			})
@@ -34,7 +36,7 @@ export const useUpdateTablePreferences: ReactMutationFunction<Schema.User, UserT
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async (data) => {
+		mutationFn: async(data) => {
 			const res = await axios.patch(Routes.apiUpdateTablePreferences(options.params.userId), {
 				user: { table_preferences: data },
 			})

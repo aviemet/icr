@@ -1,7 +1,9 @@
 import { Divider, Grid } from "@/Components"
 import { Form, Submit } from "@/Components/Form"
 import { Routes, withLayout } from "@/lib"
+
 import Overtime from "./FormInputs/Overtime"
+import OvertimeExemptions from "./FormInputs/OvertimeExemptions"
 import Payroll from "./FormInputs/Payroll"
 import ShiftTypes from "./FormInputs/ShiftTypes"
 
@@ -39,7 +41,9 @@ const CalendarSettings = ({ settings, shift_types }: CalendarSettingsProps) => {
 			</Form>
 
 			<Divider my="lg" />
+			<OvertimeExemptions />
 
+			<Divider my="lg" />
 			<ShiftTypes shift_types={ shift_types } />
 		</>
 	)

@@ -1,12 +1,13 @@
-import { useMemo } from "react"
-import { Box } from "@/Components"
 import addressFormatter from "@fragaria/address-formatter"
+import { useMemo } from "react"
 
-interface AddressDisplayProps {
+import { Box } from "@/Components"
+
+interface AddressFormatterProps {
 	address: Schema.Address
 }
 
-const AddressDisplay = ({ address }: AddressDisplayProps) => {
+const AddressFormatter = ({ address }: AddressFormatterProps) => {
 	const formatAddressLines = useMemo(() => {
 		const addressData = {
 			road: address.address_2
@@ -39,4 +40,4 @@ const AddressDisplay = ({ address }: AddressDisplayProps) => {
 	)
 }
 
-export default AddressDisplay
+export default AddressFormatter

@@ -14,8 +14,9 @@ if rspec_files.length == 1 && rspec_files[0] == "spec"
     add_group "Controllers", "app/controllers"
     add_group "Serializers", "app/serializers"
     add_group "Jobs", "app/jobs"
-    add_group "Services", "app/services"
     add_group "Policies", "app/policies"
+    add_group "Services", "app/services"
+    add_group "Queries", "app/queries"
   end
 end
 

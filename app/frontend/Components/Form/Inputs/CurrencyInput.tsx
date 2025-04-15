@@ -1,10 +1,13 @@
 import { forwardRef, type ForwardedRef } from "react"
-import CurrencyInput, { type CurrencyInputProps } from "@/Components/Inputs/CurrencyInput"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
-import { InputConflicts, type BaseFormInputProps } from "."
-import { type  Money } from "@/types"
+
+import CurrencyInput, { type CurrencyInputProps } from "@/Components/Inputs/CurrencyInput"
 import { useCurrency } from "@/lib/hooks"
+import { type  Money } from "@/types"
+
 import InputWrapper from "../Components/InputWrapper"
+
+import { InputConflicts, type BaseFormInputProps } from "."
 
 interface INumberInputProps<TForm extends NestedObject = NestedObject>
 	extends

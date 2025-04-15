@@ -1,6 +1,6 @@
-import { Routes } from "@/lib"
 import { IndexPageTemplate } from "@/Features"
 import ClientsTable from "@/Features/Clients/Table"
+import { Routes } from "@/lib"
 
 interface ClientIndexProps {
 	clients: Schema.ClientsIndex[]

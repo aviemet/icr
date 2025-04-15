@@ -1,7 +1,9 @@
-import Button from "./index"
-import { Modal } from "@/Components"
 import { useMantineTheme, type ModalProps, type ButtonProps } from "@mantine/core"
 import axios from "axios"
+
+import { Modal } from "@/Components"
+
+import Button from "./index"
 
 interface ModalFormButtonProps {
 	children?: string | React.ReactElement

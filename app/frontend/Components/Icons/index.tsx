@@ -24,7 +24,7 @@ export {
 	MdOutlineSearch as SearchIcon,
 	MdViewColumn as ColumnsIcon,
 	MdAdd as NewIcon,
-	MdOutlineDelete as TrashIcon,
+	// MdOutlineDelete as TrashIcon,
 	MdOutlineContactMail as EmployeeIcon,
 } from "react-icons/md"
 
@@ -53,6 +53,7 @@ export {
 
 export {
 	FaHome as HomeIcon,
+	FaRegTrashAlt as TrashIcon,
 } from "react-icons/fa"
 
 export {

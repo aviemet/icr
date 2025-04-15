@@ -1,98 +1,51 @@
-import React  from "react"
-import { router } from "@inertiajs/react"
-import { buildShiftTitle, theme } from "@/lib"
-import dayjs from "dayjs"
+import { useMemo } from "react"
+
 import {
 	Box,
 	Calendar,
 } from "@/Components"
-import { type NavigateAction, type View, type Event } from "react-big-calendar"
-import { modals } from "@mantine/modals"
-import useStore from "@/lib/store"
-import ShiftInfo from "./ShiftInfo"
+import { CalendarEventTitleCallback } from "@/Components/Calendar"
+import { useShiftTitleFormatter } from "@/lib/hooks/useShiftTitleFormatter"
 
 interface ScheduleProps {
 	employee: Schema.EmployeesShow
-	schedules: Schema.CalendarEventsShow[]
+	schedules: Schema.CalendarEventsEmployee[]
 }
 
 const Schedule = ({ employee, schedules }: ScheduleProps) => {
-	const { getContrastingColor } = useStore()
+	const formatShiftTitle = useShiftTitleFormatter()
 
-	const handleSelectEvent = (event: Event, e: React.SyntheticEvent<HTMLElement, globalThis.Event>) => {
-		modals.open({
-			title: event.resource.employee.person.name,
-			children: (
-				<ShiftInfo event={ event } />
-			),
-		})
-	}
-
-	const handleDateChange = (newDate: Date, view: View, action: NavigateAction) => {
-		// console.log({ date: params })
-	}
-
-	const handleViewChange = (view: View) => {
-		// console.log({ view })
-	}
-
-	const handleRangeChange = (start: Date, end: Date, view: View) => {
-		router.get(`/employees/${employee.slug}/schedule`,
-			{
-				start: dayjs(start).format("YYYY-MM-DD"),
-				end: dayjs(end).format("YYYY-MM-DD"),
-				view,
-			},
-			{
-				only: ["shifts"],
-				preserveState: true,
-				preserveScroll: true,
-			},
-		)
-	}
-
-	const eventStyleGetter = (event: Event) => {
-		let defaultColor = theme.colors.blue[5]
-
-		const eventColor = event?.resource?.backgroundColor || defaultColor
-
-		return {
-			style: {
-				backgroundColor: eventColor,
-				color: getContrastingColor(eventColor),
-			},
-		}
-	}
+	const processedSchedules = useMemo(() => {
+		return schedules?.map(schedule => {
+			return {
+				id: schedule.id,
+				title: ((event) => formatShiftTitle(event, schedule.clients)) satisfies CalendarEventTitleCallback,
+				start: schedule.starts_at,
+				end: schedule.ends_at,
+			}
+		}) || []
+	}, [schedules, formatShiftTitle])
 
 	return (
 		<>
-			<h1>{ employee?.person?.name }</h1>
-			<Box>
+			<h1>{ employee.name }</h1>
+
+			<Box style={ { width: "100%", height: "100%" } }>
 				<Calendar
-					events={ schedules?.map(schedule => {
-						return {
-							id: schedule.id,
-							title:  buildShiftTitle({
-								start: schedule.starts_at,
-								end: schedule.ends_at,
-								name: schedule.shift.employee.person.name,
-							}),
-							start: schedule.starts_at,
-							end: schedule.ends_at,
-							resource: {
-								backgroundColor: schedule.shift.employee.color,
-								employee: schedule.shift.employee,
-							},
-						}
-					}) || [] }
-					onSelectEvent={ handleSelectEvent }
+					defaultDate={ new Date() }
+					defaultView="month"
+					displayStrategy="split"
+					events={ processedSchedules }
+					// onSelectEvent={ handleSelectEvent }
 					// onSelectSlot={ handleSelectSlot }
-					onNavigate={ handleDateChange }
-					onView={ handleViewChange }
-					onRangeChange={ handleRangeChange }
-					eventPropGetter={ eventStyleGetter }
+					// onNavigate={ handleDateChange }
+					// onView={ handleViewChange }
+					// onRangeChange={ handleRangeChange }
+					// eventPropGetter={ eventStyleGetter }
+					// onNewShift={ handleNewShift }
 				/>
 			</Box>
+
 		</>
 	)
 }

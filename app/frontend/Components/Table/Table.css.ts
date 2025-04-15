@@ -1,6 +1,7 @@
-import { vars, theme } from "@/lib/theme"
-import { rem } from "@mantine/core"
 import { css } from "@linaria/core"
+import { rem } from "@mantine/core"
+
+import { vars, theme } from "@/lib/theme"
 
 export const wrapper = css`
 	overflow: auto;
@@ -133,6 +134,11 @@ export const section = css`
 export const searchWrapper = css`
 	display: flex;
 	flex: 1;
+
+	button.column-picker {
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+	}
 `
 
 export const searchInput = css`

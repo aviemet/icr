@@ -1,12 +1,15 @@
+import { type ComboboxData, type ComboboxItem, type ComboboxItemGroup } from "@mantine/core"
 import { forwardRef, type ForwardedRef } from "react"
 import { useInertiaInput, type UseFormProps, NestedObject } from "use-inertia-form"
-import { type ComboboxData, type ComboboxItem, type ComboboxItemGroup } from "@mantine/core"
-import { exclude } from "@/lib"
+
 import { ConditionalWrapper, Group } from "@/Components"
 import { ModalFormButton } from "@/Components/Button"
 import SelectInput, { type SelectInputProps } from "@/Components/Inputs/Select"
-import { type BaseFormInputProps } from "."
+import { exclude } from "@/lib"
+
 import InputWrapper from "../Components/InputWrapper"
+
+import { type BaseFormInputProps } from "."
 
 export type SelectOption = string | ComboboxItem | ComboboxItemGroup<string | ComboboxItem>
 export { type ComboboxData, ComboboxItem, ComboboxItemGroup }

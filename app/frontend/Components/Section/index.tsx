@@ -1,6 +1,7 @@
 import { Box, ElementProps, type BoxProps } from "@mantine/core"
-import cx from "clsx"
-import classes from "./Section.module.css"
+import clsx from "clsx"
+
+import * as classes from "./Section.css"
 
 interface ISectionProps extends BoxProps, ElementProps<"section"> {
 	fullHeight?: boolean
@@ -10,7 +11,7 @@ const Section = ({ children, fullHeight = false, className, ...props }: ISection
 	return (
 		<Box
 			component="section"
-			className={ cx(classes, className, { fullHeight }) }
+			className={ clsx(classes, className, { fullHeight }) }
 			{ ...props }
 		>
 			{ children }

@@ -1,6 +1,7 @@
+import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
+
 import { Grid } from "@/Components"
 import { Form, TextInput, Submit } from "@/Components/Form"
-import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
 
 type PersonFormData = {
 	person: Schema.PeopleFormData

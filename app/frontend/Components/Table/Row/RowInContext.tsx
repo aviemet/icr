@@ -1,9 +1,11 @@
 import React, { forwardRef } from "react"
+
 import { useTableSectionContext } from "../TableContext"
+import BodyRow from "./BodyRow"
+import HeadRow from "./HeadRow"
+
 import { type TableRow } from "./index"
 
-import HeadRow from "./HeadRow"
-import BodyRow from "./BodyRow"
 
 interface RowInContextProps extends Omit<TableRow, "ref"> {
 	name?: string

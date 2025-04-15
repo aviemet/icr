@@ -1,4 +1,6 @@
 import { ActionIcon, Menu, type MenuTargetProps } from "@mantine/core"
+import { forwardRef } from "react"
+
 import { DotsIcon } from "@/Components/Icons"
 
 interface IMenuTargetProps extends Omit<MenuTargetProps, "children"> {
@@ -8,10 +10,10 @@ interface IMenuTargetProps extends Omit<MenuTargetProps, "children"> {
 	color?: string
 }
 
-const MenuTarget = ({ children, icon, variant, color, ...props }: IMenuTargetProps) => {
+const MenuTarget = forwardRef(({ children, icon, variant, color, ...props }: IMenuTargetProps, ref: React.ForwardedRef<HTMLDivElement>) => {
 	if(!children) {
 		return (
-			<Menu.Target { ...props }>
+			<Menu.Target ref={ ref } { ...props }>
 				<ActionIcon color={ color } variant={ variant } >
 					{ icon || <DotsIcon /> }
 				</ActionIcon>
@@ -24,6 +26,6 @@ const MenuTarget = ({ children, icon, variant, color, ...props }: IMenuTargetPro
 			{ children }
 		</Menu.Target>
 	)
-}
+})
 
 export default MenuTarget

@@ -1,6 +1,6 @@
 import { Group, Title, Menu, Page, Section, Table } from "@/Components"
-import { Routes, withLayout } from "@/lib"
 import EmployeesTable from "@/Features/Employees/Table"
+import { Routes, withLayout } from "@/lib"
 
 interface ShowJobTitleProps {
 	job_title: Schema.JobTitlesShow

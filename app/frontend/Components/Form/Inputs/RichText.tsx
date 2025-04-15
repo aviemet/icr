@@ -1,10 +1,13 @@
+import clsx from "clsx"
 import { forwardRef, type ForwardedRef } from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
+
 import RichTextInput, { type RichTextInputProps } from "@/Components/Inputs/RichText"
+
+import InputWrapper from "../Components/InputWrapper"
+
 import { type InputConflicts, type BaseFormInputProps } from "."
 
-import cx from "clsx"
-import InputWrapper from "../Components/InputWrapper"
 
 interface FormRichTextInputProps<TForm extends NestedObject = NestedObject>
 	extends
@@ -55,7 +58,7 @@ const RichText = forwardRef(<TForm extends NestedObject = NestedObject>(
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			{ label && <label className={ cx({ required }) } htmlFor={ id || inputId }>
+			{ label && <label className={ clsx({ required }) } htmlFor={ id || inputId }>
 				{ label }
 			</label> }
 			<RichTextInput

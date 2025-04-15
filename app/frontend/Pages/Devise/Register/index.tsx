@@ -1,8 +1,9 @@
+import { type UseFormProps } from "use-inertia-form"
+
 import { Box, Grid, Title, Link } from "@/Components"
 import { Form, TextInput, PasswordInput, Submit, Field } from "@/Components/Form"
-import { Routes, withLayout } from "@/lib"
-import { type UseFormProps } from "use-inertia-form"
 import { AuthPaperLayout } from "@/Features"
+import { Routes, withLayout } from "@/lib"
 
 type TRegisterFormData = {
 	user: {

@@ -61,12 +61,12 @@ class ClientsController < ApplicationController
       .find_by(slug: params[:slug])
       .calendar_events
       .includes([:recurring_patterns, shift: [employee: [:person, :job_title, :calendar_customization]]])
-      .between(range_start, range_end)
+      .between(*DateRangeCalculator.new(params).call)
 
     render inertia: "Clients/Schedule", props: {
       client: -> { client.render(:show) },
       schedules: lambda {
-        schedules.render(:show)
+        schedules.render(:client)
       },
     }
   end
@@ -100,15 +100,5 @@ class ClientsController < ApplicationController
 
     client.destroy!
     redirect_to clients_url, notice: t("clients.notices.destroyed")
-  end
-
-  private
-
-  def range_start
-    params[:start] || Time.current.beginning_of_month.prev_occurring(:sunday)
-  end
-
-  def range_end
-    params[:end] || Time.current.end_of_month.next_occurring(:saturday)
   end
 end

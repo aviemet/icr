@@ -1,8 +1,9 @@
-import { type PayrollPeriodType } from "@/types/PayrollPeriodType"
+import { ComboboxItem } from "@mantine/core"
+
 import { Box } from "@/Components"
 import { Select } from "@/Components/Form"
-import { ComboboxItem } from "@mantine/core"
 import { rem } from "@/lib"
+import { type PayrollPeriodType } from "@/types/PayrollPeriodType"
 
 const DayOfWeekSelect = () => <Select
 	name="payroll_period_day"

@@ -1,6 +1,6 @@
-import React, { forwardRef } from "react"
-import { Button, ButtonProps } from "@mantine/core"
 import { Link } from "@inertiajs/react"
+import { Button, ButtonProps } from "@mantine/core"
+import React, { forwardRef } from "react"
 
 interface IButtonLinkProps
 	extends ButtonProps,

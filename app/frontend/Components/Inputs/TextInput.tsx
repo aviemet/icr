@@ -1,10 +1,12 @@
-import React, { forwardRef, useState } from "react"
 import { TextInput, type TextInputProps as MantineTextInputProps } from "@mantine/core"
-import { withInjectedProps, type BaseInputProps } from "."
-import Label from "./Label"
+import React, { forwardRef } from "react"
+
 import InputWrapper from "./InputWrapper"
+import Label from "./Label"
 import { CrossIcon } from "../Icons"
-import { isUnset } from "@/lib"
+
+import { withInjectedProps, type BaseInputProps } from "."
+
 
 export interface TextInputProps extends MantineTextInputProps, BaseInputProps {
 	clearable?: boolean
@@ -19,7 +21,7 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputProps>((
 		wrapper,
 		wrapperProps,
 		clearable = false,
-		value,
+		value = "",
 		onChange,
 		readOnly,
 		disableAutofill = true,
@@ -27,15 +29,8 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputProps>((
 	},
 	ref,
 ) => {
-	// Manage value as a local state to enable clearable feature
-	const [localValue, setLocalValue] = useState(value || "")
-
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if(onChange) {
-			onChange(e)
-		} else {
-			setLocalValue(e.target.value)
-		}
+		onChange?.(e)
 	}
 
 	const handleClear = () => {
@@ -58,10 +53,10 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputProps>((
 				ref={ ref }
 				name={ name }
 				id={ inputId }
-				value={ value || localValue }
+				value={ value }
 				onChange={ handleChange }
 				required={ required }
-				rightSection={ !readOnly && clearable && !isUnset(value) && <CrossIcon onClick={ handleClear } /> }
+				rightSection={ !readOnly && clearable && value !== "" && <CrossIcon onClick={ handleClear } /> }
 				{ ...withInjectedProps(props, {
 					disableAutofill,
 				}) }

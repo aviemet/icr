@@ -1,8 +1,11 @@
-import { useTableContext } from "@/Components/Table/TableContext"
-import { Box, Title, Group, Divider } from "@mantine/core"
+import { router } from "@inertiajs/react"
+import { Box, Title, Group, Divider, useMantineTheme } from "@mantine/core"
+
 import { Menu } from "@/Components"
 import { TrashIcon } from "@/Components/Icons"
-import { router } from "@inertiajs/react"
+import { useTableContext } from "@/Components/Table/TableContext"
+
+
 import * as classes from "./IndexPage.css"
 
 export interface IndexTableTitleSectionProps {
@@ -17,7 +20,9 @@ export interface IndexTableTitleSectionProps {
 }
 
 const IndexTableTitleSection = ({ children, title, deleteRoute, menuOptions }: IndexTableTitleSectionProps) => {
+	const theme = useMantineTheme()
 	const { tableState: { selected } } = useTableContext()
+
 
 	const deleteRecords = () => {
 		if(!deleteRoute) return
@@ -49,7 +54,10 @@ const IndexTableTitleSection = ({ children, title, deleteRoute, menuOptions }: I
 						{ deleteRoute && selected.size > 0 && <>
 							<Divider />
 
-							<Menu.Item leftSection={ <TrashIcon size={ 14 } color='red' /> } onClick={ deleteRecords }>
+							<Menu.Item
+								onClick={ deleteRecords }
+								leftSection={ <TrashIcon size={ 14 } color={ theme.colors.red[6] } /> }
+							>
 								Delete
 							</Menu.Item>
 						</> }

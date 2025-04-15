@@ -1,6 +1,7 @@
-import React, { useCallback } from "react"
 import { Group, useMantineTheme, ColorSwatch, CheckIcon, rem, useComputedColorScheme } from "@mantine/core"
-import cx from "clsx"
+import clsx from "clsx"
+import React, { useCallback } from "react"
+
 import * as classes from "./SwatchPicker.css"
 
 export interface SwatchPickerProps {
@@ -14,7 +15,7 @@ const SwatchPicker = ({ value, onChange }: SwatchPickerProps) => {
 
 	const colors = useCallback(() => {
 		return Object.keys(theme.colors).filter(color => {
-			return !["dark","gray"].includes(color)
+			return !["dark", "gray"].includes(color)
 		}).map((color) => (
 			<ColorSwatch
 				key={ color }
@@ -23,7 +24,7 @@ const SwatchPicker = ({ value, onChange }: SwatchPickerProps) => {
 				type="button"
 				onClick={ () => onChange(color) }
 				radius="sm"
-				className={ cx(classes.colorSwatch) }
+				className={ clsx(classes.colorSwatch) }
 				style={ {
 					color: colorScheme === "dark" ? theme.colors[color][2] : theme.white,
 

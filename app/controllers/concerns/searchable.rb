@@ -9,11 +9,14 @@ module Searchable
     before_action :remove_empty_query_parameters
 
     ##
-    # Searches and sorts model using search params
-    # model: ActiveRecord object
-    #   Sortable fields in nested models use dot-notation: "related_model.field"
-    #   To sort by a method on the model class which is not a database field, use `self`: "self.calculated_number"
-    ##
+    # @param [ActiveRecord::Base] model The model to perform the search on
+    # @return [ActiveRecord::Relation] The filtered and sorted relation
+    # @example
+    #   search(User)
+    #
+    # Searches and sorts model using search params.
+    # Sortable fields in nested models use dot-notation: "related_model.field"
+    # To sort by a method on the model class which is not a database field, use `self`: "self.calculated_number"
     def search(model)
       sort(
         advanced_search(basic_search(model)),
@@ -50,7 +53,14 @@ module Searchable
       end,
     }
 
-    # Apply defaults to the paginate method
+    ##
+    # @param [ActiveRecord::Relation] resource The relation to paginate
+    # @param [String, nil] key The key used to determine pagination limit from user preferences
+    # @return [ActiveRecord::Relation] The paginated relation
+    # @example
+    #   paginate(User.all, 'users')
+    #
+    # Apply defaults to the paginate method using user-specific limits
     def paginate(resource, key)
       resource.page(params[:page] || 1).per(key ? current_user.limit(key) : nil)
     end

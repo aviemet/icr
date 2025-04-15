@@ -1,4 +1,4 @@
-import { cloneDeep, unset } from "lodash"
+import { cloneDeep, unset } from "lodash-es"
 
 export { default as NestedObject } from "./Collections/NestedObject"
 export { default as NestedURLSearchParams } from "./Collections/NestedURLSearchParams"
@@ -30,6 +30,20 @@ export const matchesAtPosition = (arr: string[], ...args: [number, string][]) =>
 
 	for(const [index, value] of args) {
 		if(arr.length < index + 1 || arr[index] !== value) return false
+	}
+
+	return true
+}
+
+export const hasUniqueValues = <T extends Record<K, PropertyKey>, K extends keyof T>(
+	array: T[],
+	key: K
+): boolean => {
+	const seen = new Set<T[K]>()
+
+	for(const item of array) {
+		if(seen.has(item[key])) return false
+		seen.add(item[key])
 	}
 
 	return true

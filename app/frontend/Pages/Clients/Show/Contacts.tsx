@@ -4,9 +4,10 @@ import {
 	Text,
 	Group,
 	Section,
-	AddressDisplay,
+	AddressFormatter,
 } from "@/Components"
 import { PhoneFormatter, EmailFormatter } from "@/Components/Formatters"
+
 import { type ShowClientProps } from "."
 
 interface ClientContactsProps extends ShowClientProps {}
@@ -49,7 +50,7 @@ const Contacts = ({ client }: ClientContactsProps) => {
 				{ client.person.contact.addresses.map(address => (
 					<Box key={ address.id }>
 						<Group gap="lg">
-							<AddressDisplay address={ address } />
+							<AddressFormatter address={ address } />
 						</Group>
 					</Box>
 				)) }

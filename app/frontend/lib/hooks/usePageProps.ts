@@ -1,5 +1,5 @@
-import { usePage } from "@inertiajs/react"
 import { PageProps, Errors, ErrorBag } from "@inertiajs/core"
+import { usePage } from "@inertiajs/react"
 
 export interface SharedInertiaProps extends PageProps {
 	auth: {

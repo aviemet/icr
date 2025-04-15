@@ -1,6 +1,6 @@
 import { Page, Section, Title } from "@/Components"
-import { Routes, withLayout } from "@/lib"
 import PersonForm from "@/Features/Settings/People/Form"
+import { Routes, withLayout } from "@/lib"
 
 interface EditPersonProps {
 	person: Schema.PeopleEdit

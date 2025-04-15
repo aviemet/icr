@@ -1,8 +1,10 @@
+import clsx from "clsx"
 import React from "react"
+
 import { useTableContext } from "./TableContext"
+
 import Table from "."
 
-import cx from "clsx"
 
 const RowIterator = ({ render }: { render: (obj: any) => JSX.Element }) => {
 	const { tableState: { selected, rows, columns, selectable } } = useTableContext()
@@ -22,7 +24,7 @@ const RowIterator = ({ render }: { render: (obj: any) => JSX.Element }) => {
 	const injectRowProps = (row: JSX.Element) => {
 		return React.cloneElement(row, {
 			name: row.key,
-			className: cx(
+			className: clsx(
 				{ checked: selected.has(String(row.key!)) },
 			),
 		})

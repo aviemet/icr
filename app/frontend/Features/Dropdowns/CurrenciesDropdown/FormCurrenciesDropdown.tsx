@@ -1,7 +1,9 @@
+import { isEmpty } from "lodash-es"
 import React from "react"
+
 import { Select as FormSelect } from "@/Components/Form"
 import { useGetCurrencies } from "@/queries/locale"
-import { isEmpty } from "lodash"
+
 import { type FormAsyncDropdown } from ".."
 
 interface FormCurrenciesDropdownProps extends Omit<FormAsyncDropdown<Schema.CurrencyOption>, "name"> {

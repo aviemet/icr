@@ -1,5 +1,6 @@
+import { omit } from "lodash-es"
 import { useState, useEffect, useMemo } from "react"
-import { omit } from "lodash"
+
 import { NestedURLSearchParams } from "@/lib/collections"
 
 const useLocation = () => {

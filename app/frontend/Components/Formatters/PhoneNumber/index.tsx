@@ -1,5 +1,6 @@
-import { Anchor } from "@/Components"
 import { PhoneNumberUtil, PhoneNumberFormat } from "google-libphonenumber"
+
+import { Anchor } from "@/Components"
 
 const phoneUtil = PhoneNumberUtil.getInstance()
 

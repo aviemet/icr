@@ -1,5 +1,10 @@
 import { createInertiaApp, router } from "@inertiajs/react"
+import dayjs from "dayjs"
+import duration from "dayjs/plugin/duration"
+import localizedFormat from "dayjs/plugin/localizedFormat"
+import relativeTime from "dayjs/plugin/relativeTime"
 import { createRoot } from "react-dom/client"
+
 import { LAYOUTS } from "../Layouts"
 import {
 	applyPropsMiddleware,
@@ -8,11 +13,6 @@ import {
 	handlePageLayout,
 } from "./middleware"
 import { runAxe } from "./middleware/axe"
-
-import dayjs from "dayjs"
-import localizedFormat from "dayjs/plugin/localizedFormat"
-import duration from "dayjs/plugin/duration"
-import relativeTime from "dayjs/plugin/relativeTime"
 
 const pages = import.meta.glob<PagesObject>("../Pages/**/index.tsx")
 
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	createInertiaApp({
 		title: title => `${SITE_TITLE} - ${title}`,
 
-		resolve: async (name) => {
+		resolve: async(name) => {
 			const page: PagesObject = (await pages[`../Pages/${name}/index.tsx`]())
 
 			return handlePageLayout(page)

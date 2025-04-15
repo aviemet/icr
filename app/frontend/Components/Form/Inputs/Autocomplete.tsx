@@ -1,8 +1,12 @@
 import { forwardRef, type ForwardedRef } from "react"
-import AutocompleteInput, { type AutocompleteProps } from "@/Components/Inputs/AutocompleteInput"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
-import { InputConflicts, type BaseFormInputProps } from "."
+
+import AutocompleteInput, { type AutocompleteProps } from "@/Components/Inputs/AutocompleteInput"
+
 import InputWrapper from "../Components/InputWrapper"
+
+import { InputConflicts, type BaseFormInputProps } from "."
+
 
 interface FormAutocompleteProps<TForm extends NestedObject = NestedObject>
 	extends

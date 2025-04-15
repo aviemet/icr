@@ -1,12 +1,13 @@
-import { Routes, withLayout } from "@/lib"
 import { Box, Grid } from "@/Components"
 import { Form, Submit, TextInput } from "@/Components/Form"
 import {
 	FormCurrenciesDropdown,
 	FormLanguagesDropdown,
-	FormPayPeriodsDropdown,
+	// FormPayPeriodsDropdown,
 	FormTimezonesDropdown,
 } from "@/Features/Dropdowns"
+import { Routes, withLayout } from "@/lib"
+
 import ShiftTitleFormatInput from "./ShiftTitleFormatInput"
 
 export type GeneralSettingsFormData = {
@@ -17,7 +18,7 @@ interface GeneralSettingsProps {
 	settings: Schema.Setting
 }
 
-const General = ({ settings }: GeneralSettingsProps) => {
+const GeneralSettings = ({ settings }: GeneralSettingsProps) => {
 	return (
 		<Box>
 			<Form<GeneralSettingsFormData>
@@ -57,10 +58,6 @@ const General = ({ settings }: GeneralSettingsProps) => {
 					</Grid.Col>
 
 					<Grid.Col>
-						<ShiftTitleFormatInput settings={ settings } />
-					</Grid.Col>
-
-					<Grid.Col>
 						<Submit>Update Settings</Submit>
 					</Grid.Col>
 				</Grid>
@@ -69,4 +66,4 @@ const General = ({ settings }: GeneralSettingsProps) => {
 	)
 }
 
-export default withLayout(General, "settings")
+export default withLayout(GeneralSettings, "settings")

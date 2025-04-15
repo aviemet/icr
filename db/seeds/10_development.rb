@@ -1,7 +1,7 @@
 if Rails.env.development?
   if Setting.count == 0
     Setting.company_name = "ICR SLS"
-    Setting.pay_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
+    Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
   end
 
   dev_password = "Complex1!"

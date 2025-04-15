@@ -1,5 +1,5 @@
-import { type InertiaFormProps as DefaultInertiaFormProps, InertiaHeadProps } from "@inertiajs/core-react"
 import { Page, PageProps, Errors, ErrorBag } from "@inertiajs/core"
+import { type InertiaFormProps as DefaultInertiaFormProps, InertiaHeadProps } from "@inertiajs/core-react"
 
 declare global {
 

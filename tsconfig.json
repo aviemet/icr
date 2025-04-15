@@ -116,7 +116,7 @@
     "public",
   ],
   "include": [
-    "./app/frontend/**/*",
+    "./app/frontend/**/*"
   ],
   "compileOnSave": false
 }

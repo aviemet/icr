@@ -1,15 +1,16 @@
 import { router } from "@inertiajs/react"
-import { Routes } from "@/lib"
+import { Button } from "@mantine/core"
 import axios from "axios"
+import clsx from "clsx"
+
 import { Menu } from "@/Components"
 import { ColumnsIcon } from "@/Components/Icons"
 import { Checkbox } from "@/Components/Inputs"
-import { useTableContext } from "../TableContext"
-import { Button } from "@mantine/core"
+import { Routes } from "@/lib"
 import { usePageProps } from "@/lib/hooks"
 
-import cx from "clsx"
 import * as classes from "../Table.css"
+import { useTableContext } from "../TableContext"
 
 const ColumnPicker = () => {
 	const { auth: { user } } = usePageProps()
@@ -36,7 +37,7 @@ const ColumnPicker = () => {
 	return (
 		<Menu closeOnItemClick={ false } position="bottom-end">
 			<Menu.Target>
-				<Button size="md" p="xs" className={ cx(classes.columnPickerButton) }>
+				<Button p="xxs" className={ clsx("column-picker") }>
 					<ColumnsIcon size={ 24 } />
 				</Button>
 			</Menu.Target>

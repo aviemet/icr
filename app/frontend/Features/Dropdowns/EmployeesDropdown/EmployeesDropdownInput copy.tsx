@@ -1,8 +1,10 @@
+import { isEmpty } from "lodash-es"
 import { forwardRef } from "react"
+
 import { Select } from "@/Components/Inputs"
-import { type AsyncDropdown } from ".."
 import { useGetEmployeesAsOptions } from "@/queries"
-import { isEmpty } from "lodash"
+
+import { type AsyncDropdown } from ".."
 
 interface ItemsDropdownProps extends Omit<AsyncDropdown<Schema.EmployeesOptions>, "name"> {
 	name?: string

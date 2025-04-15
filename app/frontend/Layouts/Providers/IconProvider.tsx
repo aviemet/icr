@@ -1,5 +1,6 @@
-import { withDefaults } from "@/lib"
 import { IconContext, type IconContext as IconContextProps } from "react-icons"
+
+import { withDefaults } from "@/lib"
 
 const defaultClassName = "react-icon"
 const defaultSize = "1rem"

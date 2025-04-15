@@ -1,13 +1,15 @@
-import { useMemo } from "react"
 import { MantineProvider, createTheme, type CSSVariablesResolver } from "@mantine/core"
 import { type CSSVariables } from "@mantine/core/lib/core/MantineProvider/convert-css-variables/css-variables-object-to-string"
 import { ModalsProvider } from "@mantine/modals"
 import { Notifications } from "@mantine/notifications"
-import { theme as themeObject, vars } from "@/lib/theme"
-import { toKebabCase } from "@/lib"
-import useStore from "@/lib/store"
+import { ContextMenuProvider } from "mantine-contextmenu"
+import { useMemo } from "react"
+
 import { Flash } from "@/Components"
+import { toKebabCase } from "@/lib"
 import { useInit } from "@/lib/hooks"
+import useStore from "@/lib/store"
+import { theme as themeObject, vars } from "@/lib/theme"
 
 const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 	/**
@@ -42,6 +44,7 @@ const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 
 	useInit(() => {
 		if(import.meta.env.MODE === "development") {
+			console.log({ theme })
 			console.log({ vars })
 		}
 	})
@@ -52,11 +55,13 @@ const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 			defaultColorScheme="dark"
 			cssVariablesResolver={ cssVariablesResolver }
 		>
-			<ModalsProvider labels={ { confirm: "Submit", cancel: "Cancel" } }>
-				<Notifications />
-				<Flash />
-				{ children }
-			</ModalsProvider>
+			<ContextMenuProvider>
+				<ModalsProvider labels={ { confirm: "Submit", cancel: "Cancel" } }>
+					<Notifications />
+					<Flash />
+					{ children }
+				</ModalsProvider>
+			</ContextMenuProvider>
 		</MantineProvider>
 	)
 }

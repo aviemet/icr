@@ -1,4 +1,8 @@
-import { type SelectProps, type InputProps } from "@mantine/core"
+import {
+	type SelectProps,
+	type InputProps,
+	type MantineSize as OriginalMantineSize,
+} from "@mantine/core"
 
 type OverriddenColors = {
 	[key in keyof Colors]: key extends "primary"
@@ -41,6 +45,8 @@ declare module "@mantine/vanilla-extract" {
 }
 
 declare module "@mantine/core" {
+	export type MantineSize = OriginalMantineSize | "xxl" | "xxs"
+
 	export interface MantineThemeOther {
 		colorSchemeOption: (light: any, dark: any) => any
 		header: {

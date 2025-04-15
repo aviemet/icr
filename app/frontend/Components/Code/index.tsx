@@ -1,6 +1,6 @@
 import { Code, type CodeProps as MantineCodeProps } from "@mantine/core"
+import clsx from "clsx"
 
-import cx from "clsx"
 import * as classes from "./Code.css"
 
 interface CodeProps extends MantineCodeProps {
@@ -10,7 +10,7 @@ interface CodeProps extends MantineCodeProps {
 const index = ({ wrap = false, className, ...props }: CodeProps) => {
 	return (
 		<Code
-			className={ cx([classes.code, { no_wrap: wrap }, className]) }
+			className={ clsx([classes.code, { no_wrap: wrap }, className]) }
 			{ ...props }
 		/>
 	)

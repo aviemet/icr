@@ -1,7 +1,9 @@
+import { type TableThProps } from "@mantine/core"
+
+import { usePageProps } from "@/lib/hooks"
+
 import { useTableContext } from "../TableContext"
 import HeadCell from "./HeadCell"
-import { type TableThProps } from "@mantine/core"
-import { usePageProps } from "@/lib/hooks"
 
 export interface TableHeadCellProps extends TableThProps {
 	fitContent?: boolean

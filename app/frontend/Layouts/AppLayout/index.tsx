@@ -1,15 +1,20 @@
-import { useEffect } from "react"
 import { Box, useMantineTheme } from "@mantine/core"
+import { useDisclosure } from "@mantine/hooks"
+import { useEffect } from "react"
+
 import { AppShell } from "@/Components"
+import useStore from "@/lib/store"
+
+import Footer from "./Footer"
 import Sidebar from "./Sidebar"
 // import Topbar from './Topbar'
-import Footer from "./Footer"
-import useStore from "@/lib/store"
-import { useDisclosure } from "@mantine/hooks"
+
+
 import { LayoutProps } from "../index"
 
 import "@mantine/tiptap/styles.css"
-import cx from "clsx"
+import clsx from "clsx"
+
 import * as classes from "./AppLayout.css"
 
 const AppLayout = ({ children }: LayoutProps) => {
@@ -42,9 +47,9 @@ const AppLayout = ({ children }: LayoutProps) => {
 			{ /* <Topbar /> */ }
 			<Sidebar />
 			<Footer />
-			<AppShell.Main className={ cx(classes.main) }>
+			<AppShell.Main className={ clsx(classes.main) }>
 				<div id="above-content-portal"></div>
-				<Box className={ cx(classes.wrapper) } p="xs">
+				<Box className={ clsx(classes.wrapper) } p="xs">
 					{ children }
 				</Box>
 			</AppShell.Main>

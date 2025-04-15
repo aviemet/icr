@@ -1,8 +1,11 @@
-import React, { forwardRef } from "react"
 import { PasswordInput, type PasswordInputProps as MantinePasswordInputProps } from "@mantine/core"
-import Label from "./Label"
-import { type BaseInputProps } from "."
+import React, { forwardRef } from "react"
+
 import InputWrapper from "./InputWrapper"
+import Label from "./Label"
+
+import { type BaseInputProps } from "."
+
 
 export interface PasswordInputProps
 	extends

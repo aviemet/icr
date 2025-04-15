@@ -1,8 +1,12 @@
 import { forwardRef, type ForwardedRef } from "react"
-import NumberInput, { type NumberInputProps } from "@/Components/Inputs/NumberInput"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
-import { type InputConflicts, type BaseFormInputProps } from "."
+
+import NumberInput, { type NumberInputProps } from "@/Components/Inputs/NumberInput"
+
 import InputWrapper from "../Components/InputWrapper"
+
+import { type InputConflicts, type BaseFormInputProps } from "."
+
 
 interface FormNumberInputProps<TForm extends NestedObject = NestedObject>
 	extends
