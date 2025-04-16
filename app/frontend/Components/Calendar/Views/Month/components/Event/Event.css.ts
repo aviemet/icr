@@ -32,6 +32,7 @@ export const monthEventWrapper = css`
 export const monthEvent = css`
   min-height: ${ eventHeight };
   height: ${ eventHeight };
+  padding: 2px 4px 2px 8px;
 
   &, &:before, &:after {
     transition: all 200ms ease-in-out;

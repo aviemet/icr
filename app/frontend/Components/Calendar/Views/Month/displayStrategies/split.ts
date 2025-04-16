@@ -49,7 +49,7 @@ export class MonthSplitStrategy<TEventResources extends EventResources>
 				displayEnd: segment.displayEnd,
 				allDay: event.allDay,
 				columnStart: gridPlacement.columnStart,
-				columnSpan: 1, // Split strategy always results in 1-day segments
+				columnSpan: event.allDay ? gridPlacement.columnSpan : 1,
 				className: clsx(
 					"filled", // Split events are typically shown as solid blocks
 					this.getContinuationClasses(index, daySegments.length), {

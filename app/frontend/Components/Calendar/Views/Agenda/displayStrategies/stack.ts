@@ -10,21 +10,20 @@ import {
 } from "@/Components/Calendar/lib/displayStrategies/types"
 
 /**
- * Agenda Stack Strategy (Placeholder/Basic Implementation)
- * - Renders event as a single entry.
- * - Sorting is done by start time, then duration.
+ * Agenda Stack Strategy
+ * - Groups events by day
+ * - Sorts events by all-day status (all-day first), then start time, then duration
  */
 export class AgendaStackStrategy<TEventResources extends EventResources>
 	extends BaseDisplayStrategy<TEventResources, AgendaDisplayProperties> {
 
 	processEvent(event: BaseCalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, AgendaDisplayProperties>[] {
-		// Agenda view typically doesn't involve complex grid calculations
-		// It just needs the event data and maybe basic display flags.
 		const displayProperties: AgendaDisplayProperties = {
 			displayStart: event.start,
 			displayEnd: event.end,
-			// className could indicate all-day, etc.
-			className: clsx({ "all-day": event.allDay }),
+			className: clsx({
+				"all-day": event.allDay,
+			}),
 			allDay: event.allDay,
 		}
 
@@ -37,14 +36,21 @@ export class AgendaStackStrategy<TEventResources extends EventResources>
 
 	/**
 	 * Compares two event details for sorting.
-	 * Agenda stack strategy: sort by start time then duration.
+	 * Agenda stack strategy: sort by all-day status (all-day first), then start time, then duration.
 	 */
 	compare(a: EventDisplayDetails<TEventResources, AgendaDisplayProperties>, b: EventDisplayDetails<TEventResources, AgendaDisplayProperties>): number {
+		// All-day events come first
+		if(a.event.allDay !== b.event.allDay) {
+			return a.event.allDay ? - 1 : 1
+		}
+
+		// Sort by start time
 		const startDiff = a.event.start.valueOf() - b.event.start.valueOf()
 		if(startDiff !== 0) return startDiff
 
+		// For events with same start time, longer duration first
 		const durationA = a.event.end.valueOf() - a.event.start.valueOf()
 		const durationB = b.event.end.valueOf() - b.event.start.valueOf()
-		return durationB - durationA // Longer duration first for same start time
+		return durationB - durationA
 	}
 }

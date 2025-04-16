@@ -50,7 +50,7 @@ export const row = css`
 	border-top-color: ${ borderColor };
 	border-top-width: 1px;
 	border-top-style: solid;
-	padding-bottom: ${ vars.spacing.xs };
+	padding-bottom: calc(${ vars.spacing.md } + 2px);
 `
 
 export const columnHeading = css`

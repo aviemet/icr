@@ -87,6 +87,11 @@ export abstract class BaseDisplayStrategy<
 		let currentStart = event.start
 		const finalEnd = this.config.localizer.adjustMidnightTime(event.end)
 
+		// Short circuit if event is all day
+		if(event.allDay) {
+			return [{ event, displayStart: currentStart, displayEnd: event.end }]
+		}
+
 		// Ensure we don't get stuck in an infinite loop if start >= end
 		if(!this.config.localizer.isBefore(currentStart, finalEnd)) {
 			return [{ event, displayStart: currentStart, displayEnd: finalEnd }]

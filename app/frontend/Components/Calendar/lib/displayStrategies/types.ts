@@ -18,7 +18,7 @@ export interface TimeGridDisplayProperties extends GridDisplayProperties {
 }
 
 export interface AgendaDisplayProperties extends BaseDisplayProperties {
-
+	// No additional properties needed for agenda view
 }
 
 export type CompareFunction<TEventResources extends EventResources, P extends BaseDisplayProperties> = (
