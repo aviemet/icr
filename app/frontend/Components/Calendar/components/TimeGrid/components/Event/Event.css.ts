@@ -4,8 +4,9 @@ import { vars } from "@/lib"
 
 export const eventWrapper = css`
   --column-start: 1;
-  --grid-row-start: 1;
-  --grid-row-end: 1;
+  --column-span: 1;
+  --row-start: 1;
+  --row-span: 1;
   --event-color: ${ vars.colors.primaryColors.filled };
   --contrasting-color: light-dark(${ vars.colors.black }, ${ vars.colors.white });
   --hover-color: color-mix(
@@ -16,15 +17,17 @@ export const eventWrapper = css`
   overflow: hidden;
   margin: 1px;
   font-size: ${ vars.fontSizes.xs };
-  grid-column: var(--column-start);
-  grid-row: var(--grid-row-start) / var(--grid-row-end);
+  grid-column: var(--column-start) / span var(--column-span);
+  grid-row: var(--row-start) / span var(--row-span);
   z-index: 1;
 `
 
-export const event = css`
+export const allDayEvent = css``
+
+export const timeGridEvent = css`
   background-color: var(--event-color);
   color: var(--contrasting-color);
-  padding: 4px 8px;
+  padding: 4px 4px 4px 8px;
   border-radius: 4px;
   cursor: pointer;
   height: calc(100% - 2px);
@@ -33,6 +36,26 @@ export const event = css`
   &:hover {
     filter: brightness(0.9);
     z-index: 2;
+  }
+
+  &.${ allDayEvent } {
+  padding: 2px 4px 0 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  grid-column: var(--column-start) / span var(--column-span);
+  position: relative;
+
+  &.continues-from {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-left: 0;
+  }
+
+  &.continues-to {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-right: 0;
+  }
   }
 `
 

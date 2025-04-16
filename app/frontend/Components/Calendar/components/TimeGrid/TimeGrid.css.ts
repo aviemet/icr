@@ -1,11 +1,9 @@
 import { css } from "@linaria/core"
 
-import { eventHeight } from "../../Views/Month/MonthView.css"
-
 import { rem, vars } from "@/lib"
 
 const rowHeight = rem(60)
-const timeGridWidth = rem(45)
+const timeGridWidth = rem(50)
 const borderColor = `light-dark(${ vars.colors.dark[6] }, ${ vars.colors.gray[3] })`
 const gridColor = `light-dark(${ vars.colors.gray[3] }, ${ vars.colors.dark[4] })`
 
@@ -41,32 +39,17 @@ export const columnHeading = css`
 
 export const allDaySection = css`
   display: grid;
-
   grid-template-columns: ${ timeGridWidth } 1fr;
-  grid-template-rows: 1fr;
-
+  grid-template-rows: auto;
 `
 
 export const allDayEvents = css`
   display: grid;
   grid-template-columns: repeat(var(--column-count, 7), 1fr);
-  grid-template-rows: repeat(auto-fill, calc(${ eventHeight } + 2px));
+  grid-auto-rows: ${ rem(24) };
   padding: 0.5rem;
   gap: 0.25rem;
   overflow-y: auto;
-`
-
-export const allDayEvent = css`
-  background-color: ${ vars.colors.blue[6] };
-  color: ${ vars.colors.white };
-  padding: 0.25rem 0.5rem;
-  border-radius: ${ vars.radius.sm };
-  font-size: ${ vars.fontSizes.xs };
-  margin: 0.125rem 0;
-  cursor: pointer;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 `
 
 export const eventsSection = css`
@@ -87,6 +70,7 @@ export const timeColumn = css`
   position: relative;
   z-index: 1;
   border-right: 1px solid ${ borderColor };
+  width: ${ timeGridWidth };
 `
 
 export const timeSlot = css`
@@ -125,7 +109,6 @@ export const timeSlot = css`
   }
 `
 
-
 export const gridLines = css`
   position: absolute;
   inset: 0;
@@ -154,5 +137,7 @@ export const eventsContainer = css`
 `
 
 export const timeGridEvent = css`
-  width: calc(100% - rem(8));
+  width: calc(100% - ${ rem(8) });
+  grid-column: var(--column-start) / span var(--column-span);
+  grid-row: var(--row-start) / span var(--row-span);
 `

@@ -11,25 +11,81 @@ import {
 
 /**
  * Week Overlap Strategy:
- * - Splits events by day boundaries.
- * - Calculates column based on day of week.
- * - Calculates row based on time slots using `timeIncrement` and `startTime` from config.
- * - Renders each segment as a filled block.
+ * - For regular events:
+ *   - Splits events by day boundaries
+ *   - Calculates column based on day of week
+ *   - Calculates row based on time slots using timeIncrement and startTime
+ * - For all-day events:
+ *   - Only splits at week boundaries
+ *   - Spans across days within the same week
+ *   - Renders in the all-day section
  */
 export class WeekOverlapStrategy<TEventResources extends EventResources>
 	extends BaseDisplayStrategy<TEventResources, TimeGridDisplayProperties> {
 
 	processEvent(event: BaseCalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, TimeGridDisplayProperties>[] {
-		const daySegments = this.splitAtDayBoundaries(event)
-		const processedDetails: EventDisplayDetails<TEventResources, TimeGridDisplayProperties>[] = []
-
-		// Use columnHeadings from config
 		const { columnHeadings, localizer } = this.config
 		if(!columnHeadings || columnHeadings.length === 0) {
 			// eslint-disable-next-line no-console
 			console.error("WeekOverlapStrategy requires columnHeadings in config.")
 			return []
 		}
+
+		// Handle all-day events differently
+		if(event.allDay) {
+			// Split at week boundaries if necessary
+			const weekSegments: BaseCalendarEvent<TEventResources>[] = this.spansWeekBorder(event)
+				? this.splitAtWeekBoundaries(event)
+				: [{ ...event }]
+
+			return weekSegments.map((segment, index) => {
+				const segmentStartDay = localizer.startOf(segment.start, "day")
+				const segmentEndDay = localizer.startOf(localizer.adjustMidnightTime(segment.end), "day")
+
+				// Find the column indices for start and end
+				const startColumnIndex = columnHeadings.findIndex(heading =>
+					localizer.isSame(heading.date, segmentStartDay, "day")
+				)
+
+				const endColumnIndex = columnHeadings.findIndex(heading =>
+					localizer.isSame(heading.date, segmentEndDay, "day")
+				)
+
+				if(startColumnIndex === - 1) {
+					// eslint-disable-next-line no-console
+					console.warn("Segment start date not found in columnHeadings for event", event.id, segment)
+					return null
+				}
+
+				const columnSpan = endColumnIndex === - 1
+					? columnHeadings.length - startColumnIndex
+					: endColumnIndex - startColumnIndex + 1
+
+				const displayProperties: TimeGridDisplayProperties = {
+					displayStart: segment.start,
+					displayEnd: segment.end,
+					columnStart: startColumnIndex + 1,
+					columnSpan,
+					rowStart: 1,
+					rowEnd: 2,
+					className: clsx(
+						"filled",
+						this.getContinuationClasses(index, weekSegments.length)
+					),
+				}
+
+				return {
+					event,
+					displayProperties,
+					compare: this.compare,
+				}
+			}).filter((detail): detail is EventDisplayDetails<TEventResources, TimeGridDisplayProperties> => detail !== null)
+		}
+
+		// Handle regular events (original logic)
+		const daySegments = this.splitAtDayBoundaries(event)
+		const processedDetails: EventDisplayDetails<TEventResources, TimeGridDisplayProperties>[] = []
+
 		const totalColumns = columnHeadings.length
 
 		for(let index = 0; index < daySegments.length; index++) {
@@ -86,9 +142,19 @@ export class WeekOverlapStrategy<TEventResources extends EventResources>
 	 * Week overlap sorts by segment duration, then segment start time.
 	 */
 	compare(a: EventDisplayDetails<TEventResources, TimeGridDisplayProperties>, b: EventDisplayDetails<TEventResources, TimeGridDisplayProperties>): number {
+		// All-day events should always be sorted among themselves by duration
+		if(a.event.allDay && b.event.allDay) {
+			const durationA = a.displayProperties.displayEnd.valueOf() - a.displayProperties.displayStart.valueOf()
+			const durationB = b.displayProperties.displayEnd.valueOf() - b.displayProperties.displayStart.valueOf()
+			const durationDiff = durationB - durationA
+			if(durationDiff !== 0) return durationDiff
+			return a.displayProperties.displayStart.valueOf() - b.displayProperties.displayStart.valueOf()
+		}
+
+		// Regular events sorted by duration then start time
 		const durationA = a.displayProperties.displayEnd.valueOf() - a.displayProperties.displayStart.valueOf()
 		const durationB = b.displayProperties.displayEnd.valueOf() - b.displayProperties.displayStart.valueOf()
-		const durationDiff = durationB - durationA // Longer duration first
+		const durationDiff = durationB - durationA
 		if(durationDiff !== 0) return durationDiff
 
 		// If durations are equal, earlier start time first
