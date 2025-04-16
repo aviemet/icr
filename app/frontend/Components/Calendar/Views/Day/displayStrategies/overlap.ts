@@ -19,16 +19,36 @@ export class DayOverlapStrategy<TEventResources extends EventResources>
 	extends BaseDisplayStrategy<TEventResources, TimeGridDisplayProperties> {
 
 	processEvent(event: BaseCalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, TimeGridDisplayProperties>[] {
-		const daySegments = this.splitAtDayBoundaries(event)
-		const processedDetails: EventDisplayDetails<TEventResources, TimeGridDisplayProperties>[] = []
-
-		// Use columnHeadings from config
 		const { columnHeadings, localizer } = this.config
 		if(!columnHeadings || columnHeadings.length === 0) {
 			// eslint-disable-next-line no-console
-			console.error("WeekOverlapStrategy requires columnHeadings in config.")
+			console.error("DayOverlapStrategy requires columnHeadings in config.")
 			return []
 		}
+
+		// Handle all-day events differently
+		if(event.allDay) {
+			const displayProperties: TimeGridDisplayProperties = {
+				displayStart: event.start,
+				displayEnd: event.end,
+				columnStart: 1,
+				columnSpan: 1,
+				rowStart: 1,
+				rowEnd: 2,
+				className: "filled",
+			}
+
+			return [{
+				event,
+				displayProperties,
+				compare: this.compare,
+			}]
+		}
+
+		// Handle regular events
+		const daySegments = this.splitAtDayBoundaries(event)
+		const processedDetails: EventDisplayDetails<TEventResources, TimeGridDisplayProperties>[] = []
+
 		const totalColumns = columnHeadings.length
 
 		for(let index = 0; index < daySegments.length; index++) {
@@ -85,6 +105,13 @@ export class DayOverlapStrategy<TEventResources extends EventResources>
 	 * Day overlap strategy: sort by duration then start time.
 	 */
 	compare(a: EventDisplayDetails<TEventResources, TimeGridDisplayProperties>, b: EventDisplayDetails<TEventResources, TimeGridDisplayProperties>): number {
+		// All-day events should always be at the top
+		if(a.event.allDay && !b.event.allDay) return - 1
+		if(!a.event.allDay && b.event.allDay) return 1
+		if(a.event.allDay && b.event.allDay) {
+			return a.displayProperties.displayStart.valueOf() - b.displayProperties.displayStart.valueOf()
+		}
+
 		const durationA = a.displayProperties.displayEnd.valueOf() - a.displayProperties.displayStart.valueOf()
 		const durationB = b.displayProperties.displayEnd.valueOf() - b.displayProperties.displayStart.valueOf()
 		const durationDiff = durationB - durationA
