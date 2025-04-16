@@ -1,5 +1,3 @@
-import { usePage } from "@inertiajs/react"
-
 import { Code, Section, Text, Title } from "@/Components"
 
 interface ShowErrorProps {
@@ -12,7 +10,6 @@ interface ShowErrorProps {
 }
 
 const ShowError = ({ status, server_error }: ShowErrorProps) => {
-	console.log({ status, server_error })
 	const title = {
 		503: "Service Unavailable",
 		500: "Server Error",
