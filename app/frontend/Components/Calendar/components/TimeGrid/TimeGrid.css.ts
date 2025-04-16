@@ -1,5 +1,7 @@
 import { css } from "@linaria/core"
 
+import { eventHeight } from "../../Views/Month/MonthView.css"
+
 import { rem, vars } from "@/lib"
 
 const rowHeight = rem(60)
@@ -132,6 +134,7 @@ export const allDaySection = css`
   padding: 0.5rem;
   display: grid;
   grid-template-columns: repeat(var(--column-count, 7), 1fr);
+  grid-template-rows: repeat(auto-fill, calc(${ eventHeight } + 2px));
   gap: 0.25rem;
   overflow-y: auto;
 `
