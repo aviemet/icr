@@ -2,17 +2,15 @@ import clsx from "clsx"
 import { useMemo, useRef } from "react"
 
 import { EventResources, useCalendarContext } from "../../"
+import { EventNode } from "./components/Event"
+import TimeColumn from "./components/TimeColumn"
+import * as classes from "./TimeGrid.css"
+import { CalendarTransitionContainer } from "../../lib/CalendarTransitionContainer"
 import {
 	useDisplayStrategy,
 	ViewStrategyName,
 	TimeGridDisplayProperties,
 } from "../../lib/displayStrategies"
-import { Event } from "./components/Event/Event"
-import { EventWrapper } from "./components/Event/EventWrapper"
-import Headings from "./components/Headings"
-import TimeColumn from "./components/TimeColumn"
-import * as classes from "./TimeGrid.css"
-import { CalendarTransitionContainer } from "../../lib/CalendarTransitionContainer"
 
 export interface TimeGridHeading {
 	date: Date
@@ -57,20 +55,6 @@ const TimeGrid = <
 	const localStartTime = startTime || localizer.startOf(new Date(), "day")
 	const localEndTime = endTime || localizer.endOf(new Date(), "day")
 
-	const timeSlots = useMemo(() => {
-		const slots: Date[] = []
-
-		let current = localizer.startOf(localStartTime, "hour")
-		const boundaryTime = localizer.add(localizer.startOf(localEndTime, "hour"), 1, "hour")
-
-		while(localizer.isBefore(current, boundaryTime)) {
-			slots.push(current)
-			current = localizer.add(current, timeIncrement, "minute")
-		}
-
-		return slots
-	}, [localStartTime, localEndTime, timeIncrement, localizer])
-
 	const eventsByColumn = useDisplayStrategy<TEventResources, V, TimeGridDisplayProperties>(
 		view,
 		displayStrategy,
@@ -86,6 +70,45 @@ const TimeGrid = <
 
 	const animationContainerRef = useRef<HTMLDivElement>(null)
 
+	// Separate all-day events from standard events to be
+	// rendered in different sections
+	const { allDayEvents, standardEvents } = useMemo(() => {
+		const result = {
+			allDayEvents: [] as React.ReactNode[],
+			standardEvents: [] as React.ReactNode[],
+		}
+
+		columnHeadings.forEach((heading) => {
+			const key = groupByResource && heading.resourceId !== undefined
+				? String(heading.resourceId)
+				: localizer.startOf(heading.date, "day").toISOString()
+
+			const columnEvents = eventsByColumn?.get(key)
+			if(!columnEvents) return
+
+			columnEvents.forEach(({ event, displayProperties }) => {
+				const eventNode = (
+					<EventNode<TEventResources>
+						key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
+						event={ event }
+						displayProperties={ displayProperties }
+						startTime={ localStartTime }
+						timeIncrement={ timeIncrement }
+						onEventClick={ onEventClick }
+					/>
+				)
+
+				if(event.allDay) {
+					result.allDayEvents.push(eventNode)
+				} else {
+					result.standardEvents.push(eventNode)
+				}
+			})
+		})
+
+		return result
+	}, [columnHeadings, eventsByColumn, localizer, groupByResource, localStartTime, timeIncrement, onEventClick])
+
 	return (
 		<div
 			ref={ animationContainerRef }
@@ -96,49 +119,50 @@ const TimeGrid = <
 				"--column-count": columnHeadings.length,
 				...style,
 			} as React.CSSProperties }>
-			<div className={ classes.cornerSpacer } />
 
-			<CalendarTransitionContainer containerRef={ animationContainerRef }>
-				<Headings columnHeadings={ columnHeadings } />
-			</CalendarTransitionContainer>
+			{ /* Column Headers */ }
+			<div className={ classes.headerArea }>
+				<div className={ classes.cornerSpacer } />
 
-			<TimeColumn timeSlots={ timeSlots } />
-
-			<div className={ classes.contentArea } style={ { "--rows-per-day": rowsPerDay } as React.CSSProperties }>
 				<CalendarTransitionContainer containerRef={ animationContainerRef }>
-					<div className={ classes.gridLines } />
-					<div className={ classes.eventsContainer }>
-						{ columnHeadings.map((heading, columnIndex) => {
-							// Determine the correct key based on grouping
-							const key = groupByResource && heading.resourceId !== undefined
-								? String(heading.resourceId)
-								: localizer.startOf(heading.date, "day").toISOString()
+					<div className={ classes.columnHeadings }>
+						{ columnHeadings.map((heading, index) => (
+							<div key={ index } className={ classes.columnHeading }>
+								{ heading.label }
+							</div>
+						)) }
+					</div>
+				</CalendarTransitionContainer>
+			</div>
 
-							const columnEvents = eventsByColumn?.get(key)
+			{ /* All Day Events */ }
+			<div className={ classes.allDaySection }>
+				<div className={ classes.cornerSpacer } />
+				<CalendarTransitionContainer containerRef={ animationContainerRef }>
+					<div className={ classes.allDayEvents }>
+						{ allDayEvents }
+					</div>
+				</CalendarTransitionContainer>
+			</div>
 
-							if(!columnEvents) return null
+			{ /* Standard Events */ }
+			<div className={ classes.eventsSection }>
+				<TimeColumn
+					start={ localStartTime }
+					end={ localEndTime }
+					increment={ timeIncrement }
+				/>
 
-							return columnEvents.map(({ event, displayProperties }) => {
-								return (
-									<EventWrapper<TEventResources>
-										key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
-										event={ event }
-										displayProperties={ displayProperties }
-									>
-										<Event<TEventResources>
-											key={ event.id }
-											event={ event }
-											localizer={ localizer }
-											displayProperties={ displayProperties }
-											startTime={ localStartTime }
-											timeIncrement={ timeIncrement }
-											className={ clsx(displayProperties.className, classes.timeGridEvent) }
-											onEventClick={ onEventClick }
-										/>
-									</EventWrapper>
-								)
-							})
-						}) }
+				{ /* Render standard timed events */ }
+				<CalendarTransitionContainer containerRef={ animationContainerRef }>
+					<div
+						className={ classes.contentArea }
+						style={ { "--rows-per-day": rowsPerDay } as React.CSSProperties }
+					>
+						<div className={ classes.gridLines } />
+						<div className={ classes.eventsContainer }>
+							{ standardEvents }
+						</div>
 					</div>
 				</CalendarTransitionContainer>
 			</div>

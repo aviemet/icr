@@ -54,7 +54,7 @@ export const dayJsLocalizer: CalendarLocalizerFactory<DayjsLib> = (dayjs) => {
 				d = dayjs(date).startOf("day")
 				break
 			case "agenda":
-				d = dayjs(date).startOf("day")
+				d = dayjs(date).startOf("month").startOf("day")
 				break
 			default:
 				d = dayjs(date).startOf("day")
@@ -81,7 +81,7 @@ export const dayJsLocalizer: CalendarLocalizerFactory<DayjsLib> = (dayjs) => {
 				d = dayjs(date).endOf("day")
 				break
 			case "agenda":
-				d = dayjs(date).endOf("day")
+				d = dayjs(date).endOf("month").endOf("day")
 				break
 			default:
 				d = dayjs(date).endOf("day")

@@ -9,6 +9,8 @@ import {
 	GridDisplayProperties,
 } from "@/Components/Calendar/lib/displayStrategies/types"
 
+import * as classes from "../../../Calendar.css"
+
 /**
  * Month Split Strategy:
  * - Splits events first by week boundaries if they cross.
@@ -45,11 +47,14 @@ export class MonthSplitStrategy<TEventResources extends EventResources>
 			const displayProperties: GridDisplayProperties = {
 				displayStart: segment.displayStart,
 				displayEnd: segment.displayEnd,
+				allDay: event.allDay,
 				columnStart: gridPlacement.columnStart,
-				columnSpan: 1, // Split strategy always results in 1-day segments
+				columnSpan: event.allDay ? gridPlacement.columnSpan : 1,
 				className: clsx(
 					"filled", // Split events are typically shown as solid blocks
-					this.getContinuationClasses(index, daySegments.length)
+					this.getContinuationClasses(index, daySegments.length), {
+						[classes.allDayEvent]: event.allDay,
+					}
 				),
 			}
 
@@ -66,6 +71,17 @@ export class MonthSplitStrategy<TEventResources extends EventResources>
 	 * Split strategy sorts primarily by start time, as all segments are single-day.
 	 */
 	compare(a: EventDisplayDetails<TEventResources, GridDisplayProperties>, b: EventDisplayDetails<TEventResources, GridDisplayProperties>): number {
+		// All-day events should always be at the top
+		if(a.event.allDay && !b.event.allDay) return - 1
+		if(!a.event.allDay && b.event.allDay) return 1
+		if(a.event.allDay && b.event.allDay) {
+			// For all-day events, sort by duration then start time
+			const spanDiff = b.displayProperties.columnSpan - a.displayProperties.columnSpan
+			if(spanDiff !== 0) return spanDiff
+			return a.displayProperties.displayStart.valueOf() - b.displayProperties.displayStart.valueOf()
+		}
+
+		// Other events sorted by start time
 		const startDiff = a.displayProperties.displayStart.valueOf() - b.displayProperties.displayStart.valueOf()
 		if(startDiff !== 0) return startDiff
 

@@ -13,16 +13,18 @@ export type EventResources = Record<string, object>
 
 export interface BaseCalendarEvent<TEventResources extends EventResources = EventResources> {
 	id: string | number
-	title: string | ((event: Pick<BaseCalendarEvent<TEventResources>, "start" | "end" | "allDay" | "resources" | "resourceId">) => string)
+	title: string
+	titleBuilder?: CalendarEventTitleCallback<TEventResources>
 	start: Date
 	end: Date
 	allDay?: boolean
 	color?: string
+	description?: string
 	resources?: TEventResources
 	resourceId?: string | number
 }
 
-export type CalendarEventTitleCallback<TEventResources extends EventResources = EventResources> = (event: Pick<BaseCalendarEvent<TEventResources>, "start" | "end" | "allDay" | "resources" | "resourceId">) => string
+export type CalendarEventTitleCallback<TEventResources extends EventResources = EventResources> = (event: Pick<BaseCalendarEvent<TEventResources>, "start" | "end" | "allDay" | "title" | "resources" | "resourceId">) => string
 
 interface CalendarContextValue<TEventResources extends EventResources = EventResources> {
 	date: Date

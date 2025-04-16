@@ -4,29 +4,57 @@ module ErrorHandling
   extend ActiveSupport::Concern
 
   included do
-    rescue_from(ActiveRecord::RecordNotFound) do |exception|
-      handle_exception(exception, 404)
-    end
+    unless self.respond_to?(:skip_handle_exceptions) && self.skip_handle_exceptions
 
-    # TODO: Handle 401, 403, 422 errors
+    # Order matters: more general errors first, more specific errors last
 
-    rescue_from(StandardError) do |exception|
-      handle_exception(exception, 505)
+    # 500: Server Error - Catch all standard errors
+      rescue_from(StandardError) do |exception|
+        handle_exception(exception, 500)
+      end
+
+    # 503: Service Unavailable
+      rescue_from(
+        Net::OpenTimeout,
+        Net::ReadTimeout,
+        Errno::ECONNREFUSED,
+      ) do |exception|
+        handle_exception(exception, 503)
+      end
+
+    # 404: Page Not Found
+      rescue_from(
+        ActiveRecord::RecordNotFound,
+        ActionController::RoutingError,
+        AbstractController::ActionNotFound,
+      ) do |exception|
+        handle_exception(exception, 404)
+      end
+
+    # 403: Forbidden
+      rescue_from(
+        Pundit::NotAuthorizedError,
+      ) do |exception|
+        handle_exception(exception, 403)
+      end
     end
 
     protected
 
     def handle_exception(exception, status)
       logger.error exception
-      render_error(exception, status)
 
-      error_method_name = "error_#{status}_path"
+      error_details = if Rails.env.development?
+                        {
+                          message: exception.message,
+                          backtrace: exception.backtrace&.first(5),
+                          class: exception.class.name
+                        }
+                      end
 
-      redirect_to send(error_method_name), inertia: {
-        exception:,
-        status:,
+      redirect_to error_path(status:), flash: {
+        server_error: error_details,
       }
     end
-
   end
 end

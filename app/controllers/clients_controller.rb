@@ -56,9 +56,7 @@ class ClientsController < ApplicationController
 
   # @route GET /clients/:slug/schedule (schedule_client)
   def schedule
-    schedules = Client
-      .includes([:person])
-      .find_by(slug: params[:slug])
+    schedules = client
       .calendar_events
       .includes([:recurring_patterns, shift: [employee: [:person, :job_title, :calendar_customization]]])
       .between(*DateRangeCalculator.new(params).call)

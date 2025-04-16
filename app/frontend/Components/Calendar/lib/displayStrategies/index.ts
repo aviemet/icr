@@ -1,5 +1,6 @@
 import { StrategyConfig } from "./BaseDisplayStrategy"
 import { VIEW_NAMES } from "../../Views"
+import { AgendaStackStrategy } from "../../Views/Agenda/displayStrategies/stack"
 import { DayOverlapStrategy } from "../../Views/Day/displayStrategies/overlap"
 import { MonthSpanStrategy } from "../../Views/Month/displayStrategies/span"
 import { MonthSplitStrategy } from "../../Views/Month/displayStrategies/split"
@@ -23,7 +24,7 @@ export const displayStrategyFactories = {
 		overlap: (config: StrategyConfig) => new DayOverlapStrategy(config),
 	},
 	agenda: {
-		// overlap: (config: StrategyConfig) => new AgendaOverlapStrategy(config),
+		stack: (config: StrategyConfig) => new AgendaStackStrategy(config),
 	},
 } as const
 

@@ -107,6 +107,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_30_234449) do
     t.string "name"
     t.datetime "starts_at"
     t.datetime "ends_at"
+    t.boolean "all_day", default: false, null: false
     t.uuid "parent_id"
     t.uuid "created_by_id"
     t.datetime "created_at", null: false

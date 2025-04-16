@@ -9,6 +9,8 @@ import {
 	GridDisplayProperties,
 } from "@/Components/Calendar/lib/displayStrategies/types"
 
+import * as classes from "../../../Calendar.css"
+
 /**
  * Month Stack Strategy:
  * - Splits events only if they cross week boundaries AND span multiple days.
@@ -56,20 +58,23 @@ export class MonthStackStrategy<TEventResources extends EventResources>
 				displayProperties = {
 					displayStart: segment.start,
 					displayEnd: segment.end,
+					allDay: event.allDay,
 					columnStart: gridPlacement.columnStart,
 					columnSpan: gridPlacement.columnSpan,
-					className: clsx(
-						"filled",
-						this.getContinuationClasses(index, weekSegments.length)
-					),
+					className: clsx("filled", this.getContinuationClasses(index, weekSegments.length), {
+						[classes.allDayEvent]: event.allDay,
+					}),
 				}
 			} else {
 				displayProperties = {
 					displayStart: segment.start,
 					displayEnd: segment.end,
+					allDay: event.allDay,
 					columnStart: gridPlacement.columnStart,
 					columnSpan: 1,
-					className: clsx("indicator"),
+					className: clsx("indicator", {
+						[classes.allDayEvent]: event.allDay,
+					}),
 				}
 			}
 
@@ -82,9 +87,19 @@ export class MonthStackStrategy<TEventResources extends EventResources>
 	}
 
 	compare(a: EventDisplayDetails<TEventResources, GridDisplayProperties>, b: EventDisplayDetails<TEventResources, GridDisplayProperties>): number {
+		// All-day events should always be at the top
+		if(a.event.allDay && !b.event.allDay) return - 1
+		if(!a.event.allDay && b.event.allDay) return 1
+		if(a.event.allDay && b.event.allDay) {
+			// For all-day events, sort by duration then start time
+			const spanDiff = b.displayProperties.columnSpan - a.displayProperties.columnSpan
+			if(spanDiff !== 0) return spanDiff
+			return a.displayProperties.displayStart.valueOf() - b.displayProperties.displayStart.valueOf()
+		}
+
+		// Other events sorted by start time
 		const spanDiff = b.displayProperties.columnSpan - a.displayProperties.columnSpan
 		if(spanDiff !== 0) return spanDiff
-
 		return a.displayProperties.displayStart.valueOf() - b.displayProperties.displayStart.valueOf()
 	}
 }

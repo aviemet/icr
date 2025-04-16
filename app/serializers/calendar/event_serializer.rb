@@ -3,6 +3,7 @@
 # Table name: calendar_events
 #
 #  id            :uuid             not null, primary key
+#  all_day       :boolean          default(FALSE), not null
 #  ends_at       :datetime
 #  name          :string
 #  starts_at     :datetime
@@ -32,8 +33,10 @@ class Calendar::EventSerializer < ApplicationSerializer
     :updated_at,
     :starts_at,
     :ends_at,
+    :all_day,
   )
 
   has_many :recurring_patterns, serializer: Calendar::RecurringPatternSerializer
   has_one :shift, serializer: ShiftSerializer
+  has_many :event_participants, serializer: EventParticipantSerializer
 end

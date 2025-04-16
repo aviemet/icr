@@ -23,8 +23,14 @@ const DefaultPopoverContent = <TEventResources extends EventResources>({ event }
 						style={ { backgroundColor: color } }
 					/>
 					<Title order={ 4 }>
-						{ typeof event.title === "function"
-							? event.title({ start: event.start, end: event.end, allDay: event.allDay, resources: event.resources })
+						{ event.titleBuilder
+							? event.titleBuilder({
+								start: event.start,
+								end: event.end,
+								allDay: event.allDay,
+								title: event.title,
+								resources: event.resources,
+							})
 							: event.title
 						}
 					</Title>

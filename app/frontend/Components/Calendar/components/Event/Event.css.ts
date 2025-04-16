@@ -5,11 +5,11 @@ import { vars } from "@/lib"
 export const event = css`
   font-size: ${ vars.fontSizes.xs };
   border-radius: ${ vars.radius.sm };
-  padding: 2px 5px 2px 6px;
+  color: var(--contrasting-color);
   margin: 1px 3px;
-  color: light-dark(${ vars.colors.black }, ${ vars.colors.white });
   cursor: pointer;
   position: relative;
+  text-overflow: ellipsis;
 
   &.filled {
     background-color: var(--event-color);

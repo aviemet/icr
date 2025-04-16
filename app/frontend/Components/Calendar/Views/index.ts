@@ -1,12 +1,12 @@
 import { BaseCalendarEvent, Resource, EventResources } from "@/Components/Calendar"
 import { CalendarLocalizer } from "@/Components/Calendar/lib/localizers"
 
-
 import { AgendaView } from "./Agenda"
 import { DayView } from "./Day"
 import { MonthView } from "./Month"
 import { WeekView } from "./Week"
 import { AllViewStrategyNames } from "../lib/displayStrategies"
+import { BaseDisplayProperties } from "../lib/displayStrategies/types"
 
 export const VIEWS = {
 	month: "month",
@@ -24,12 +24,17 @@ export const NAVIGATION = {
 } as const
 export type NAVIGATION_ACTION = keyof typeof NAVIGATION
 
-// eslint-disable-next-line no-unused-vars
+export type ViewTitleBuilder<TEventResources extends EventResources> = (
+	event: BaseCalendarEvent<TEventResources>,
+	displayProperties: BaseDisplayProperties
+) => string
+
 export interface BaseViewProps<TEventResources extends EventResources = EventResources> {
 	className?: string
 	style?: React.CSSProperties
 	displayStrategy: AllViewStrategyNames
 	onSelectSlot?: (date: Date) => void
+	titleBuilder?: ViewTitleBuilder<TEventResources>
 }
 
 export type DateRange = { start: Date, end: Date }

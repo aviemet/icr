@@ -19,11 +19,15 @@ const EventWrapper = <TEventResources extends EventResources, P extends TimeGrid
 }: EventWrapperProps<TEventResources, P>) => {
 	return (
 		<div
-			className={ clsx(classes.eventWrapper) }
+			className={ clsx(
+				classes.eventWrapper,
+				displayProperties.className
+			) }
 			style={ {
 				"--column-start": displayProperties.columnStart,
-				"--grid-row-start": displayProperties.rowStart,
-				"--grid-row-end": displayProperties.rowEnd,
+				"--column-span": displayProperties.columnSpan,
+				"--row-start": displayProperties.rowStart,
+				"--row-span": displayProperties.rowEnd - displayProperties.rowStart,
 				...style,
 			} as React.CSSProperties }
 		>

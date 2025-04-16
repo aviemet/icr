@@ -70,7 +70,7 @@ const Calendar = <TEventResources extends EventResources>({
 		month: calendar_layout_style ?? "overlap",
 		week: "overlap",
 		day: "overlap",
-		agenda: "overlap",
+		agenda: "stack",
 	}, displayStrategies), [calendar_layout_style, displayStrategies])
 
 	/**
@@ -175,7 +175,7 @@ const Calendar = <TEventResources extends EventResources>({
 						</div>
 
 						{ /* Overlay - Rendered when popover is open */ }
-						{ popoverOpen && <Overlay opacity={ 0.1 } /> }
+						{ popoverOpen && <Overlay opacity={ 0 } /> }
 					</div>
 
 
