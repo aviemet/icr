@@ -8,6 +8,8 @@ interface HeadingsProps {
 const Headings = ({ columnHeadings }: HeadingsProps) => {
 	return (
 		<div className={ classes.headerArea }>
+			<div className={ classes.cornerSpacer } />
+
 			<div className={ classes.columnHeadings }>
 				{ columnHeadings.map((heading, index) => (
 					<div key={ index } className={ classes.columnHeading }>

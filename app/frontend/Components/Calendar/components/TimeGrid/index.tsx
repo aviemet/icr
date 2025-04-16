@@ -1,7 +1,8 @@
 import clsx from "clsx"
 import { useMemo, useRef } from "react"
 
-import { EventResources, useCalendarContext, BaseCalendarEvent } from "../../"
+import { EventResources, useCalendarContext } from "../../"
+import { AllDaySection } from "./components/AllDaySection"
 import {
 	useDisplayStrategy,
 	ViewStrategyName,
@@ -82,87 +83,84 @@ const TimeGrid = <
 				"--column-count": columnHeadings.length,
 				...style,
 			} as React.CSSProperties }>
-			<div className={ classes.cornerSpacer } />
 
 			<Headings columnHeadings={ columnHeadings } />
 
-			{ /* { hasAllDayEvents && (
-				<div className={ classes.allDaySection }>
-					{ columnHeadings.map((heading) => {
-						const key = groupByResource && heading.resourceId !== undefined
-							? String(heading.resourceId)
-							: localizer.startOf(heading.date, "day").toISOString()
+			{ /* { columnHeadings.map((heading, columnIndex) => {
 
-						const columnEvents = allDayEvents.get(key) || []
+				// Determine the correct key based on grouping
+				const key = groupByResource && heading.resourceId !== undefined
+					? String(heading.resourceId)
+					: localizer.startOf(heading.date, "day").toISOString()
 
-						return columnEvents.map((event: BaseCalendarEvent<TEventResources>) => (
-							<div
-								key={ event.id }
-								className={ classes.allDayEvent }
-								onClick={ (e) => onEventClick?.(event, e.currentTarget) }
-								title={ event.titleBuilder
-									? event.titleBuilder(event)
-									: event.title
-								}
-							>
-								{ event.titleBuilder
-									? event.titleBuilder(event)
-									: event.title
-								}
-							</div>
-						))
-					}) }
-				</div>
-			) } */ }
+				const columnEvents = eventsByColumn?.get(key)
 
-			<TimeColumn timeSlots={ useMemo(() => {
-				const slots: Date[] = []
+				if(!columnEvents) return null
 
-				let current = localizer.startOf(localStartTime, "hour")
-				const boundaryTime = localizer.add(localizer.startOf(localEndTime, "hour"), 1, "hour")
+				const { allDayEvents, standardEvents } = columnEvents.reduce((acc, event, index) => {
 
-				while(localizer.isBefore(current, boundaryTime)) {
-					slots.push(current)
-					current = localizer.add(current, timeIncrement, "minute")
-				}
 
-				return slots
-			}, [localStartTime, localEndTime, timeIncrement, localizer]) } />
+				}, {
+					allDayEvents: [] as React.ReactNode[],
+					standardEvents: [] as React.ReactNode[],
+				})
+			}) } */ }
 
-			<div className={ classes.contentArea } style={ { "--rows-per-day": rowsPerDay } as React.CSSProperties }>
-				<div className={ classes.gridLines } />
-				<div className={ classes.eventsContainer }>
-					{ columnHeadings.map((heading, columnIndex) => {
+
+			<AllDaySection>
+				<></>
+			</AllDaySection>
+
+			<div className={ classes.eventsSection }>
+				<TimeColumn timeSlots={ useMemo(() => {
+					const slots: Date[] = []
+
+					let current = localizer.startOf(localStartTime, "hour")
+					const boundaryTime = localizer.add(localizer.startOf(localEndTime, "hour"), 1, "hour")
+
+					while(localizer.isBefore(current, boundaryTime)) {
+						slots.push(current)
+						current = localizer.add(current, timeIncrement, "minute")
+					}
+
+					return slots
+				}, [localStartTime, localEndTime, timeIncrement, localizer]) } />
+
+				<div className={ classes.contentArea } style={ { "--rows-per-day": rowsPerDay } as React.CSSProperties }>
+					<div className={ classes.gridLines } />
+					<div className={ classes.eventsContainer }>
+						{ columnHeadings.map((heading, columnIndex) => {
 						// Determine the correct key based on grouping
-						const key = groupByResource && heading.resourceId !== undefined
-							? String(heading.resourceId)
-							: localizer.startOf(heading.date, "day").toISOString()
+							const key = groupByResource && heading.resourceId !== undefined
+								? String(heading.resourceId)
+								: localizer.startOf(heading.date, "day").toISOString()
 
-						const columnEvents = eventsByColumn?.get(key)
+							const columnEvents = eventsByColumn?.get(key)
 
-						if(!columnEvents) return null
+							if(!columnEvents) return null
 
-						return columnEvents.map(({ event, displayProperties }) => {
-							return (
-								<EventWrapper<TEventResources>
-									key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
-									event={ event }
-									displayProperties={ displayProperties }
-								>
-									<Event<TEventResources>
-										key={ event.id }
+							return columnEvents.map(({ event, displayProperties }) => {
+								return (
+									<EventWrapper<TEventResources>
+										key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
 										event={ event }
-										localizer={ localizer }
 										displayProperties={ displayProperties }
-										startTime={ localStartTime }
-										timeIncrement={ timeIncrement }
-										className={ clsx(displayProperties.className, classes.timeGridEvent) }
-										onEventClick={ onEventClick }
-									/>
-								</EventWrapper>
-							)
-						})
-					}) }
+									>
+										<Event<TEventResources>
+											key={ event.id }
+											event={ event }
+											localizer={ localizer }
+											displayProperties={ displayProperties }
+											startTime={ localStartTime }
+											timeIncrement={ timeIncrement }
+											className={ clsx(displayProperties.className, classes.timeGridEvent) }
+											onEventClick={ onEventClick }
+										/>
+									</EventWrapper>
+								)
+							})
+						}) }
+					</div>
 				</div>
 			</div>
 		</div>

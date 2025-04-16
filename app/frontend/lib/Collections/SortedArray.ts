@@ -52,7 +52,7 @@ export class SortedArray<T> implements Iterable<T> {
 		this.compareFn = compareFn
 	}
 
-	private ensureSorted(): void {
+	private sort(): void {
 		if(!this.isDirty) return
 
 		this.items.sort(this.compareFn)
@@ -67,23 +67,24 @@ export class SortedArray<T> implements Iterable<T> {
 	}
 
 	get(index: number): T {
-		this.ensureSorted()
+		this.sort()
 
 		return this.items[index]
 	}
 
 	// Make the class iterable
 	[Symbol.iterator](): Iterator<T> {
-		this.ensureSorted()
+		this.sort()
 
 		return this.items[Symbol.iterator]()
 	}
 
 	// Array-like methods
-	map<U>(callbackfn: (value: T, index: number, array: T[]) => U): U[] {
-		this.ensureSorted()
 
-		return this.items.map(callbackfn)
+	map<U>(callback: (value: T, index: number, array: T[]) => U): U[] {
+		this.sort()
+
+		return this.items.map(callback)
 	}
 
 	get length(): number {
@@ -91,14 +92,20 @@ export class SortedArray<T> implements Iterable<T> {
 	}
 
 	filter(predicate: (value: T, index: number, array: T[]) => boolean): T[] {
-		this.ensureSorted()
+		this.sort()
 
 		return this.items.filter(predicate)
 	}
 
-	forEach(callbackfn: (value: T, index: number, array: T[]) => void): void {
-		this.ensureSorted()
+	forEach(callback: (value: T, index: number, array: T[]) => void): void {
+		this.sort()
 
-		this.items.forEach(callbackfn)
+		this.items.forEach(callback)
+	}
+
+	reduce<U>(callback: (accumulator: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U {
+		this.sort()
+
+		return this.items.reduce(callback, initialValue)
 	}
 }
