@@ -38,6 +38,7 @@ export class MonthSpanStrategy<TEventResources extends EventResources>
 			const displayProperties: GridDisplayProperties = {
 				displayStart: segment.start,
 				displayEnd: segment.end,
+				allDay: event.allDay,
 				columnStart: gridPlacement.columnStart,
 				columnSpan: gridPlacement.columnSpan,
 				className: clsx(
@@ -60,6 +61,16 @@ export class MonthSpanStrategy<TEventResources extends EventResources>
 	 * then falls back to start time.
 	 */
 	compare(a: EventDisplayDetails<TEventResources, GridDisplayProperties>, b: EventDisplayDetails<TEventResources, GridDisplayProperties>): number {
+		// All-day events should always be at the top
+		if(a.event.allDay && !b.event.allDay) return - 1
+		if(!a.event.allDay && b.event.allDay) return 1
+		if(a.event.allDay && b.event.allDay) {
+			// For all-day events, sort by duration then start time
+			const spanDiff = b.displayProperties.columnSpan - a.displayProperties.columnSpan
+			if(spanDiff !== 0) return spanDiff
+			return a.displayProperties.displayStart.valueOf() - b.displayProperties.displayStart.valueOf()
+		}
+
 		// Longer spans first
 		const spanDiff = b.displayProperties.columnSpan - a.displayProperties.columnSpan
 		if(spanDiff !== 0) return spanDiff

@@ -1,6 +1,6 @@
 if Rails.env.development?
 
-  if Client.first.calendar_events == 0
+  if Client.first.calendar_events.empty?
 
     attendant_job = JobTitle.find_by(slug: "attendant")
 
@@ -37,7 +37,7 @@ if Rails.env.development?
 
   end
 
-  if Client.second.calendar_events
+  if Client.second.calendar_events.empty?
 
     ActiveRecord::Base.transaction do
       shift_length = 9

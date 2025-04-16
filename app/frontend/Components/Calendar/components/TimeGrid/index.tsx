@@ -1,7 +1,7 @@
 import clsx from "clsx"
 import { useMemo, useRef } from "react"
 
-import { EventResources, useCalendarContext } from "../../"
+import { EventResources, useCalendarContext, BaseCalendarEvent } from "../../"
 import {
 	useDisplayStrategy,
 	ViewStrategyName,
@@ -52,7 +52,7 @@ const TimeGrid = <
 	timeIncrement = 60,
 	displayStrategy = "overlap",
 }: TimeGridProps<TEventResources, V>) => {
-	const { localizer, onEventClick, groupByResource } = useCalendarContext<TEventResources>()
+	const { localizer, onEventClick, events, groupByResource } = useCalendarContext<TEventResources>()
 
 	const localStartTime = startTime || localizer.startOf(new Date(), "day")
 	const localEndTime = endTime || localizer.endOf(new Date(), "day")
@@ -70,6 +70,35 @@ const TimeGrid = <
 
 		return slots
 	}, [localStartTime, localEndTime, timeIncrement, localizer])
+
+	const allDayEvents = useMemo(() => {
+		if(!events) return new Map()
+
+		const eventsByColumn = new Map<string, BaseCalendarEvent<TEventResources>[]>()
+
+		for(const event of events) {
+			if(!event.allDay) continue
+
+			for(const heading of columnHeadings) {
+				const key = groupByResource && heading.resourceId !== undefined
+					? String(heading.resourceId)
+					: localizer.startOf(heading.date, "day").toISOString()
+
+				if(localizer.startOf(heading.date, "day").valueOf() >= localizer.startOf(event.start, "day").valueOf() &&
+					localizer.startOf(heading.date, "day").valueOf() <= localizer.startOf(event.end, "day").valueOf()) {
+					const columnEvents = eventsByColumn.get(key) || []
+					columnEvents.push(event)
+					eventsByColumn.set(key, columnEvents)
+				}
+			}
+		}
+
+		return eventsByColumn
+	}, [events, columnHeadings, groupByResource, localizer])
+
+	const hasAllDayEvents = useMemo(() => {
+		return Array.from(allDayEvents.values()).some(events => events.length > 0)
+	}, [allDayEvents])
 
 	const eventsByColumn = useDisplayStrategy<TEventResources, V, TimeGridDisplayProperties>(
 		view,
@@ -101,6 +130,35 @@ const TimeGrid = <
 			<CalendarTransitionContainer containerRef={ animationContainerRef }>
 				<Headings columnHeadings={ columnHeadings } />
 			</CalendarTransitionContainer>
+
+			{ hasAllDayEvents && (
+				<div className={ classes.allDaySection }>
+					{ columnHeadings.map((heading) => {
+						const key = groupByResource && heading.resourceId !== undefined
+							? String(heading.resourceId)
+							: localizer.startOf(heading.date, "day").toISOString()
+
+						const columnEvents = allDayEvents.get(key) || []
+
+						return columnEvents.map((event: BaseCalendarEvent<TEventResources>) => (
+							<div
+								key={ event.id }
+								className={ classes.allDayEvent }
+								onClick={ (e) => onEventClick?.(event, e.currentTarget) }
+								title={ event.titleBuilder
+									? event.titleBuilder(event)
+									: event.title
+								}
+							>
+								{ event.titleBuilder
+									? event.titleBuilder(event)
+									: event.title
+								}
+							</div>
+						))
+					}) }
+				</div>
+			) }
 
 			<TimeColumn timeSlots={ timeSlots } />
 

@@ -4,11 +4,12 @@ import { rem, vars } from "@/lib"
 
 const rowHeight = rem(60)
 const borderColor = `light-dark(${ vars.colors.dark[6] }, ${ vars.colors.gray[3] })`
+const gridColor = `light-dark(${ vars.colors.gray[3] }, ${ vars.colors.dark[4] })`
 
 export const timeGrid = css`
   display: grid;
   grid-template-columns: auto 1fr;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto auto 1fr;
   height: 100%;
   overflow: hidden;
 `
@@ -16,7 +17,7 @@ export const timeGrid = css`
 export const timeColumn = css`
   display: flex;
   flex-direction: column;
-  grid-row: 2;
+  grid-row: 2 / span 2;
   grid-column: 1;
   position: relative;
   z-index: 1;
@@ -68,7 +69,7 @@ export const cornerSpacer = css`
 export const contentArea = css`
   padding-top: 1px;
   grid-column: 2;
-  grid-row: 2;
+  grid-row: 3;
   overflow-y: auto;
   position: relative;
 `
@@ -77,12 +78,20 @@ export const gridLines = css`
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-image: linear-gradient(
-    to bottom,
-    ${ borderColor } 1px,
-    transparent 1px
-  );
-  background-size: 100% ${ rowHeight };
+  background-image: 
+    linear-gradient(
+      to right,
+      ${ gridColor } 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      ${ gridColor } 1px,
+      transparent 1px
+    );
+  background-size: 
+    calc(100% / var(--column-count, 7)) 100%,
+    100% ${ rowHeight };
 `
 
 export const headerArea = css`
@@ -112,4 +121,30 @@ export const eventsContainer = css`
 
 export const timeGridEvent = css`
   width: calc(100% - rem(8));
+`
+
+export const allDaySection = css`
+  grid-row: 2;
+  grid-column: 2;
+  border-bottom: 1px solid ${ borderColor };
+  min-height: ${ rowHeight };
+  max-height: calc(${ rowHeight } * 2);
+  padding: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(var(--column-count, 7), 1fr);
+  gap: 0.25rem;
+  overflow-y: auto;
+`
+
+export const allDayEvent = css`
+  background-color: ${ vars.colors.blue[6] };
+  color: ${ vars.colors.white };
+  padding: 0.25rem 0.5rem;
+  border-radius: ${ vars.radius.sm };
+  font-size: ${ vars.fontSizes.xs };
+  margin: 0.125rem 0;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `

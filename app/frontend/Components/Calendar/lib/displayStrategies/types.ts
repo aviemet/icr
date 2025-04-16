@@ -3,8 +3,8 @@ import { EventResources, BaseCalendarEvent } from "@/Components/Calendar"
 export interface BaseDisplayProperties {
 	displayStart: Date
 	displayEnd: Date
-	className?: string
 	allDay?: boolean
+	className?: string
 }
 
 export interface GridDisplayProperties extends BaseDisplayProperties {

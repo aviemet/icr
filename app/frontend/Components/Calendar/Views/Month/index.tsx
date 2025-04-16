@@ -143,7 +143,15 @@ const MonthViewComponent = <
 												localizer={ localizer }
 												className={ clsx(displayProperties.className) }
 											>
-												{ typeof event.title === "string" ? event.title : event.title({ start: displayProperties.displayStart, end: displayProperties.displayEnd, allDay: event.allDay, resources: event.resources }) }
+												{ event.titleBuilder
+													? event.titleBuilder({
+														start: displayProperties.displayStart,
+														end: displayProperties.displayEnd,
+														allDay: event.allDay,
+														title: event.title,
+														resources: event.resources,
+													})
+													: event.title }
 											</MonthEvent>
 										</EventWrapper>
 									)

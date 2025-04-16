@@ -43,11 +43,12 @@ const Event = <TEventResources extends EventResources>({
 			} as React.CSSProperties }
 			onClick={ (e) => onEventClick?.(event, e.currentTarget) }
 		>
-			{ typeof event.title === "function"
-				? event.title({
+			{ event.titleBuilder
+				? event.titleBuilder({
 					start: displayProperties.displayStart,
 					end: displayProperties.displayEnd,
 					allDay: displayProperties.allDay,
+					title: event.title,
 					resources: event.resources,
 				})
 				: event.title }

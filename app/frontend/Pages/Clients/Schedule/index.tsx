@@ -6,14 +6,14 @@ import {
 	Calendar,
 	Group,
 } from "@/Components"
-import { BaseCalendarEvent, CalendarEventTitleCallback } from "@/Components/Calendar"
+import { BaseCalendarEvent } from "@/Components/Calendar"
 import { NAVIGATION_ACTION, VIEW_NAMES } from "@/Components/Calendar/Views"
 import EventPopoverContent from "@/Features/Clients/EventPopoverContent"
 import { ensureViewName } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
 import { useLocation } from "@/lib/hooks"
-import { useShiftTitleFormatter } from "@/lib/hooks/useShiftTitleFormatter"
+import { useEventTitleFormatter } from "@/lib/hooks/useEventTitleFormatter"
 import { useGetClientSchedules } from "@/queries/clients"
 
 import NewShiftForm from "./NewShiftForm"
@@ -30,7 +30,7 @@ interface ScheduleResources {
 }
 
 const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
-	const formatShiftTitle = useShiftTitleFormatter()
+	const formatEventTitle = useEventTitleFormatter()
 	const location = useLocation()
 	const userTimezone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone, [])
 
@@ -69,18 +69,20 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 		return data?.map(schedule => {
 			const start = ensureDate(schedule.starts_at)
 			const end = ensureDate(schedule.ends_at)
-			const employee = schedule.shift.employee
+			const employee = schedule?.shift?.employee
 
 			return {
 				id: schedule.id,
-				title: ((event) => formatShiftTitle(event, employee)) satisfies CalendarEventTitleCallback<ScheduleResources>,
+				title: schedule.name ?? "",
+				titleBuilder: (event) => formatEventTitle(event, employee),
 				start,
 				end,
-				color: employee.color,
+				allDay: schedule.all_day,
+				color: employee?.color,
 				resources: { employee, client },
 			} satisfies BaseCalendarEvent<ScheduleResources>
 		}) || []
-	}, [client, data, formatShiftTitle])
+	}, [client, data, formatEventTitle])
 
 	const handleSlotSelect = (date: Date) => {
 		modals.open({

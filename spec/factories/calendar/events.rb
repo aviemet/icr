@@ -3,6 +3,7 @@
 # Table name: calendar_events
 #
 #  id            :uuid             not null, primary key
+#  all_day       :boolean          default(FALSE), not null
 #  ends_at       :datetime
 #  name          :string
 #  starts_at     :datetime

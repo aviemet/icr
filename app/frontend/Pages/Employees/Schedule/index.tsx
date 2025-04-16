@@ -5,7 +5,7 @@ import {
 	Calendar,
 } from "@/Components"
 import { CalendarEventTitleCallback } from "@/Components/Calendar"
-import { useShiftTitleFormatter } from "@/lib/hooks/useShiftTitleFormatter"
+import { useShiftTitleFormatter } from "@/lib/hooks/useEventTitleFormatter"
 
 interface ScheduleProps {
 	employee: Schema.EmployeesShow

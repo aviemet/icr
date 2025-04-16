@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_30_234449) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_15_223241) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -111,6 +111,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_30_234449) do
     t.uuid "created_by_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "all_day", default: false, null: false
     t.index ["created_by_id"], name: "index_calendar_events_on_created_by_id"
     t.index ["parent_id"], name: "index_calendar_events_on_parent_id"
   end

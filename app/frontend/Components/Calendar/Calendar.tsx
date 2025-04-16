@@ -175,7 +175,7 @@ const Calendar = <TEventResources extends EventResources>({
 						</div>
 
 						{ /* Overlay - Rendered when popover is open */ }
-						{ popoverOpen && <Overlay opacity={ 0.1 } /> }
+						{ popoverOpen && <Overlay opacity={ 0 } /> }
 					</div>
 
 
