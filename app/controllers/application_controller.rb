@@ -15,5 +15,5 @@ class ApplicationController < ActionController::Base
   include InertiaShare::Settings
   include InertiaShare::Permissions
 
-  include ErrorHandling
+  # include ErrorHandling
 end

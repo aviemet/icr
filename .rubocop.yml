@@ -115,6 +115,8 @@ RSpec/ExampleLength:
   Enabled: false
 RSpec/InstanceVariable:
   Enabled: false
+RSpec/MetadataStyle:
+  Enabled: false
 
 # Relaxed.Ruby.Style
 ## Version 2.5
