@@ -4,34 +4,57 @@ import {
 	Box,
 	Calendar,
 } from "@/Components"
-import { CalendarEventTitleCallback } from "@/Components/Calendar"
-import { useShiftTitleFormatter } from "@/lib/hooks/useEventTitleFormatter"
+import { BaseCalendarEvent } from "@/Components/Calendar"
+import useEventTitleFormatter from "@/lib/hooks/useEventTitleFormatter"
 
 interface ScheduleProps {
 	employee: Schema.EmployeesShow
 	schedules: Schema.CalendarEventsEmployee[]
 }
 
-const Schedule = ({ employee, schedules }: ScheduleProps) => {
-	const formatShiftTitle = useShiftTitleFormatter()
+interface ScheduleResources {
+	[key: string]: object
+	employee: Schema.ShiftsEmployee
+}
 
-	const processedSchedules = useMemo(() => {
-		return schedules?.map(schedule => {
-			return {
-				id: schedule.id,
-				title: ((event) => formatShiftTitle(event, schedule.clients)) satisfies CalendarEventTitleCallback,
-				start: schedule.starts_at,
-				end: schedule.ends_at,
-			}
-		}) || []
-	}, [schedules, formatShiftTitle])
+const Schedule = ({ employee, schedules }: ScheduleProps) => {
+	// const formatEventTitle = useEventTitleFormatter()
+
+	// const { data } = useGetEmployeeSchedules({
+	// 	slug: client.slug,
+	// 	date: datetime.dateUrl(calendarDate),
+	// 	view: calendarView,
+	// 	timezone: userTimezone,
+	// }, {
+	// 	initialData: initialSchedules,
+	// 	refetchOnWindowFocus: false,
+	// })
+
+
+	// const processedSchedules = useMemo((): BaseCalendarEvent<ScheduleResources>[] => {
+	// 	return data?.map(schedule => {
+	// 		const start = ensureDate(schedule.starts_at)
+	// 		const end = ensureDate(schedule.ends_at)
+	// 		const employee = schedule?.shift?.employee
+
+	// 		return {
+	// 			id: schedule.id,
+	// 			title: schedule.name ?? "",
+	// 			titleBuilder: (event) => formatEventTitle(event, schedule.clients),
+	// 			start,
+	// 			end,
+	// 			allDay: schedule.all_day,
+	// 			resources: { employee },
+	// 		} satisfies BaseCalendarEvent<ScheduleResources>
+	// 	}) || []
+	// }, [client, data, formatEventTitle])
 
 	return (
 		<>
 			<h1>{ employee.name }</h1>
 
 			<Box style={ { width: "100%", height: "100%" } }>
-				<Calendar
+				{ /* <Calendar
 					defaultDate={ new Date() }
 					defaultView="month"
 					displayStrategy="split"
@@ -43,7 +66,7 @@ const Schedule = ({ employee, schedules }: ScheduleProps) => {
 					// onRangeChange={ handleRangeChange }
 					// eventPropGetter={ eventStyleGetter }
 					// onNewShift={ handleNewShift }
-				/>
+				/> */ }
 			</Box>
 
 		</>

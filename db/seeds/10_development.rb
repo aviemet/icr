@@ -10,7 +10,7 @@ if Rails.env.development?
     admin = User.create({
       email: "aviemet@gmail.com",
       password: dev_password,
-      confirmed_at: Date.new,
+      confirmed_at: Time.zone.now,
       time_zone: "America/Los_Angeles"
     })
     admin.add_role :admin
@@ -45,7 +45,7 @@ if Rails.env.development?
     User.create({
       email: "client@gmail.com",
       password: dev_password,
-      confirmed_at: Date.new,
+      confirmed_at: Time.zone.now,
       time_zone: "America/Los_Angeles"
     })
   end
@@ -54,7 +54,7 @@ if Rails.env.development?
     facilitator_user = User.create({
       email: "facilitator@gmail.com",
       password: dev_password,
-      confirmed_at: Date.new,
+      confirmed_at: Time.zone.now,
       time_zone: "America/Los_Angeles",
       person: FactoryBot.create(:person)
     })
@@ -71,7 +71,7 @@ if Rails.env.development?
     director_user = User.create({
       email: "director@gmail.com",
       password: dev_password,
-      confirmed_at: Date.new,
+      confirmed_at: Time.zone.now,
       time_zone: "America/Los_Angeles",
       person: FactoryBot.create(:person)
     })

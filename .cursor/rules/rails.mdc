@@ -1,6 +1,7 @@
 ---
 description: Ruby on Rails
 globs: *.rb
+alwaysApply: false
 ---
 You are an expert in Ruby on Rails, PostgreSQL, Hotwire (Turbo and Stimulus), and Tailwind CSS.
   
@@ -83,6 +84,44 @@ You are an expert in Ruby on Rails, PostgreSQL, Hotwire (Turbo and Stimulus), an
 
   - Focus on user workflows to ensure app functionality.
   - Set up and tear down test environments properly to maintain test independence.
+
+  ### Inertia Testing 
+
+  - Inertia has its own set of rspec assertions, use them when appropriate to test inertia specific actions. Examples below:
+
+    ```ruby
+    RSpec.describe '/events', inertia: true do
+      describe '#index' do
+        let!(:event) { Event.create!(title: 'Foo', start_date: '2024-02-21', description: 'Foo bar') }
+
+        it "renders inertia component" do
+          get events_path
+
+          # check the component
+          expect(inertia).to render_component 'Event/Index'
+          # or
+          expect_inertia.to render_component 'Event/Index'
+          # same as above
+          expect(inertia.component).to eq 'Event/Index'
+
+          # props (including shared props)
+          expect(inertia).to have_exact_props({title: 'Foo', description: 'Foo bar'})
+          expect(inertia).to include_props({title: 'Foo'})
+
+          # access props
+          expect(inertia.props[:title]).to eq 'Foo'
+
+          # view data
+          expect(inertia).to have_exact_view_data({meta: 'Foo bar'})
+          expect(inertia).to include_view_data({meta: 'Foo bar'})
+
+          # access view data
+          expect(inertia.view_data[:meta]).to eq 'Foo bar'
+        end
+      end
+    end
+  ```
+
 
 ## Security
 

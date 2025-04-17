@@ -1,27 +1,43 @@
 require "rails_helper"
 
-RSpec.describe "InertiaShare", type: :request do
-  describe "shared data" do
-    it "includes auth data" do
-      user = create(:user)
-      sign_in user
+RSpec.describe "InertiaShare Concerns", type: :request do
+  describe "shared data provided via Inertia", inertia: true do
+    login_admin
 
+    it "includes auth data (from InertiaShare::Auth)" do
       get root_path
-
       expect(response).to be_successful
-      shared_data = response.headers["X-Inertia-Share"]
-      parsed_data = JSON.parse(shared_data)
-      expect(parsed_data["auth"]["user"]).to be_present
+
+      expect_inertia.to include_props(
+        auth: a_hash_including(
+          user: a_hash_including(
+            email: @admin.email,
+          ),
+        ),
+      )
     end
 
-    it "includes flash messages" do
-      sign_in create(:user)
+    it "includes menu data (from InertiaShare::Menu)" do
+      get root_path
+      expect(response).to be_successful
 
-      get root_path, params: {}, flash: { success: "Test message" }
+      expect_inertia.to include_props(menu: {})
+    end
 
-      shared_data = response.headers["X-Inertia-Share"]
-      parsed_data = JSON.parse(shared_data)
-      expect(parsed_data["flash"]["success"]).to eq("Test message")
+    it "includes permissions (from InertiaShare::Permissions)" do
+      get root_path
+      expect(response).to be_successful
+
+      expect_inertia.to include_props(permissions: an_instance_of(Hash))
+    end
+
+    it "includes settings (from InertiaShare::Settings)" do
+      allow(Setting).to receive(:render).and_return({ theme: "dark", language: "en" })
+
+      get root_path
+      expect(response).to be_successful
+
+      expect_inertia.to include_props(settings: { theme: "dark", language: "en" })
     end
   end
 end

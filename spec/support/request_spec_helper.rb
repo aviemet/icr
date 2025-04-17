@@ -1,3 +1,5 @@
+require "warden"
+
 module RequestSpecHelper
   include Warden::Test::Helpers
 

@@ -1,6 +1,8 @@
 import clsx from "clsx"
 import { useMemo, useRef } from "react"
 
+import useStickySentinel from "@/lib/hooks/useStickySentinel"
+
 import { EventResources, useCalendarContext } from "../../"
 import { EventNode } from "./components/Event"
 import TimeColumn from "./components/TimeColumn"
@@ -51,6 +53,8 @@ const TimeGrid = <
 	displayStrategy = "overlap",
 }: TimeGridProps<TEventResources, V>) => {
 	const { localizer, onEventClick, groupByResource } = useCalendarContext<TEventResources>()
+
+	const [headerRef, isStuck] = useStickySentinel<HTMLDivElement>()
 
 	const localStartTime = startTime || localizer.startOf(new Date(), "day")
 	const localEndTime = endTime || localizer.endOf(new Date(), "day")
@@ -121,13 +125,15 @@ const TimeGrid = <
 			} as React.CSSProperties }>
 
 			{ /* Column Headers */ }
-			<div className={ classes.headerArea }>
-				<div className={ classes.cornerSpacer } />
+			<div ref={ headerRef } className={ clsx(classes.headerArea, {
+				"stuck": !isStuck,
+			}) }>
+				<div className={ clsx(classes.cornerSpacer) } />
 
 				<CalendarTransitionContainer containerRef={ animationContainerRef }>
-					<div className={ classes.columnHeadings }>
+					<div className={ clsx(classes.columnHeadings) }>
 						{ columnHeadings.map((heading, index) => (
-							<div key={ index } className={ classes.columnHeading }>
+							<div key={ index } className={ clsx(classes.columnHeading) }>
 								{ heading.label }
 							</div>
 						)) }
@@ -136,17 +142,17 @@ const TimeGrid = <
 			</div>
 
 			{ /* All Day Events */ }
-			<div className={ classes.allDaySection }>
-				<div className={ classes.cornerSpacer } />
+			<div className={ clsx(classes.allDaySection) }>
+				<div className={ clsx(classes.cornerSpacer) } />
 				<CalendarTransitionContainer containerRef={ animationContainerRef }>
-					<div className={ classes.allDayEvents }>
+					<div className={ clsx(classes.allDayEvents) }>
 						{ allDayEvents }
 					</div>
 				</CalendarTransitionContainer>
 			</div>
 
 			{ /* Standard Events */ }
-			<div className={ classes.eventsSection }>
+			<div className={ clsx(classes.eventsSection) }>
 				<TimeColumn
 					start={ localStartTime }
 					end={ localEndTime }
@@ -156,11 +162,11 @@ const TimeGrid = <
 				{ /* Render standard timed events */ }
 				<CalendarTransitionContainer containerRef={ animationContainerRef }>
 					<div
-						className={ classes.contentArea }
+						className={ clsx(classes.contentArea) }
 						style={ { "--rows-per-day": rowsPerDay } as React.CSSProperties }
 					>
-						<div className={ classes.gridLines } />
-						<div className={ classes.eventsContainer }>
+						<div className={ clsx(classes.gridLines) } />
+						<div className={ clsx(classes.eventsContainer) }>
 							{ standardEvents }
 						</div>
 					</div>

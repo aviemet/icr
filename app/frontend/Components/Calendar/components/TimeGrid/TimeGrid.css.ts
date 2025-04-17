@@ -18,6 +18,16 @@ export const headerArea = css`
   display: grid;
   grid-template-columns: ${ timeGridWidth } 1fr;
   grid-template-rows: 1fr;
+  position: sticky;
+  top: calc(0px - ${ vars.spacing.xs });
+  z-index: 10;
+  background-color: light-dark(${ vars.colors.gray[0] }, ${ vars.colors.dark[8] });
+  border-bottom: 1px solid ${ gridColor };
+
+  &.stuck {
+    border-top-left-radius: ${ vars.radius.lg };
+    border-top-right-radius: ${ vars.radius.lg };
+  }
 `
 
 export const cornerSpacer = css`
