@@ -13,11 +13,6 @@ require "rails_helper"
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/incident_reports" do
-
-  before do
-    login_admin
-  end
-
   # This should return the minimal set of attributes required to create a valid
   # IncidentReport. As you add validations to IncidentReport, be sure to
   # adjust the attributes here as well.

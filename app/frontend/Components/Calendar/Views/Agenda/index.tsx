@@ -6,6 +6,7 @@ import { EventResources, BaseCalendarEvent } from "@/Components/Calendar"
 import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/Components/Calendar/Views"
 
 import * as classes from "./AgendaView.css"
+import { DayHeader } from "./components/DayHeader"
 import { AgendaDisplayProperties, ViewStrategyName, useDisplayStrategy } from "../../lib/displayStrategies"
 
 
@@ -110,13 +111,13 @@ const AgendaViewComponent = <TEventResources extends EventResources>({
 
 				return (
 					<Box key={ dayKey } className={ classes.dayGroup }>
-						<Text className={ classes.dayHeader }>
+						<DayHeader>
 							{ date.toLocaleDateString(undefined, {
 								weekday: "long",
 								month: "long",
 								day: "numeric",
 							}) }
-						</Text>
+						</DayHeader>
 
 						{ sortedEvents.map(({ event, displayProperties }) =>
 							renderEvent(event, displayProperties)
