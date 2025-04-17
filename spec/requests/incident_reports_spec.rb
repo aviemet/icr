@@ -14,6 +14,10 @@ require "rails_helper"
 
 RSpec.describe "/incident_reports" do
 
+  before do
+    login_admin
+  end
+
   # This should return the minimal set of attributes required to create a valid
   # IncidentReport. As you add validations to IncidentReport, be sure to
   # adjust the attributes here as well.
@@ -26,6 +30,7 @@ RSpec.describe "/incident_reports" do
   }
 
   describe "GET /index" do
+    login_admin
     it "renders a successful response" do
       IncidentReport.create! valid_attributes
       get incident_reports_url
@@ -34,6 +39,7 @@ RSpec.describe "/incident_reports" do
   end
 
   describe "GET /show" do
+    login_admin
     it "renders a successful response" do
       incident_report = IncidentReport.create! valid_attributes
       get incident_report_url(incident_report)
@@ -42,6 +48,7 @@ RSpec.describe "/incident_reports" do
   end
 
   describe "GET /new" do
+    login_admin
     it "renders a successful response" do
       get new_incident_report_url
       expect(response).to be_successful
@@ -57,6 +64,7 @@ RSpec.describe "/incident_reports" do
   end
 
   describe "POST /create" do
+    login_admin
     context "with valid parameters" do
       it "creates a new IncidentReport" do
         expect {
@@ -86,6 +94,7 @@ RSpec.describe "/incident_reports" do
   end
 
   describe "PATCH /update" do
+    login_admin
     context "with valid parameters" do
       let(:new_attributes) {
         skip("Add a hash of attributes valid for your model")
@@ -118,6 +127,7 @@ RSpec.describe "/incident_reports" do
   end
 
   describe "DELETE /destroy" do
+    login_admin
     it "destroys the requested incident_report" do
       incident_report = IncidentReport.create! valid_attributes
       expect {

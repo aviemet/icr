@@ -4,16 +4,17 @@ module ErrorHandling
   extend ActiveSupport::Concern
 
   included do
-    unless self.respond_to?(:skip_handle_exceptions) && self.skip_handle_exceptions
+    # Skip error handling in test environment or if skipped by controller
+    unless Rails.env.test? || (self.respond_to?(:skip_handle_exceptions) && self.skip_handle_exceptions)
 
-    # Order matters: more general errors first, more specific errors last
+      # Order matters: more general errors first, more specific errors last
 
-    # 500: Server Error - Catch all standard errors
+      # 500: Server Error - Catch all standard errors
       rescue_from(StandardError) do |exception|
         handle_exception(exception, 500)
       end
 
-    # 503: Service Unavailable
+      # 503: Service Unavailable
       rescue_from(
         Net::OpenTimeout,
         Net::ReadTimeout,
@@ -22,7 +23,7 @@ module ErrorHandling
         handle_exception(exception, 503)
       end
 
-    # 404: Page Not Found
+      # 404: Page Not Found
       rescue_from(
         ActiveRecord::RecordNotFound,
         ActionController::RoutingError,
@@ -31,7 +32,7 @@ module ErrorHandling
         handle_exception(exception, 404)
       end
 
-    # 403: Forbidden
+      # 403: Forbidden
       rescue_from(
         Pundit::NotAuthorizedError,
       ) do |exception|
