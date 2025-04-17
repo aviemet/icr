@@ -1,0 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+This project is built to run as a single instance for a company. 
+There is no multi-tennancy. 
+The Company details are stored in a singleton style settings model.

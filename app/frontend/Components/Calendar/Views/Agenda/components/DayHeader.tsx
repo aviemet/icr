@@ -14,7 +14,7 @@ export const DayHeader = ({ children }: DayHeaderProps) => {
 
 	return (
 		<Text ref={ headerRef } className={ clsx(classes.dayHeader, {
-			[classes.stuck]: isStuck,
+			unstuck: isStuck,
 		}) }>
 			{ children }
 		</Text>
