@@ -157,6 +157,9 @@ class Employee < ApplicationRecord
     through: :active_clients_attendants,
     source: :client
 
+  has_many :employee_trainings, dependent: :destroy, inverse_of: :employee
+  has_many :trainings, through: :employee_trainings
+
   scope :includes_associated, -> { includes([:person, :job_title, :calendar_customization]) }
 
   def all_events

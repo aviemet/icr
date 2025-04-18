@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_30_234449) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_17_233106) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -235,6 +235,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_30_234449) do
     t.uuid "contact_id"
     t.index ["category_id"], name: "index_emails_on_category_id"
     t.index ["contact_id"], name: "index_emails_on_contact_id"
+  end
+
+  create_table "employee_trainings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "employee_id", null: false
+    t.uuid "training_id", null: false
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_id", "training_id"], name: "index_employee_trainings_on_employee_id_and_training_id", unique: true
+    t.index ["employee_id"], name: "index_employee_trainings_on_employee_id"
+    t.index ["training_id"], name: "index_employee_trainings_on_training_id"
   end
 
   create_table "employees", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -530,6 +541,35 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_30_234449) do
     t.index ["medication_id"], name: "index_prescriptions_on_medication_id"
   end
 
+  create_table "requirement_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "requirement_id", null: false
+    t.string "fulfillable_type", null: false
+    t.uuid "fulfillable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["fulfillable_type", "fulfillable_id"], name: "index_requirement_items_on_fulfillable"
+    t.index ["requirement_id", "fulfillable_type", "fulfillable_id"], name: "index_req_items_on_req_fulfillable_unique", unique: true
+    t.index ["requirement_id"], name: "index_requirement_items_on_requirement_id"
+  end
+
+  create_table "requirement_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "requirements", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.uuid "requirement_type_id", null: false
+    t.string "scope_type"
+    t.integer "scope_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["requirement_type_id"], name: "index_requirements_on_requirement_type_id"
+  end
+
   create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "resource_type"
@@ -606,6 +646,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_30_234449) do
     t.datetime "updated_at", null: false
     t.index ["approved_by_id"], name: "index_timesheets_on_approved_by_id"
     t.index ["employee_id"], name: "index_timesheets_on_employee_id"
+  end
+
+  create_table "trainings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.integer "estimated_minutes"
+    t.datetime "active_on"
+    t.datetime "inactive_on"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -705,6 +755,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_30_234449) do
   add_foreign_key "doctors_clients", "doctors"
   add_foreign_key "emails", "categories"
   add_foreign_key "emails", "contacts"
+  add_foreign_key "employee_trainings", "employees"
+  add_foreign_key "employee_trainings", "trainings"
   add_foreign_key "employees", "people"
   add_foreign_key "employees_job_titles", "employees"
   add_foreign_key "employees_job_titles", "job_titles"
@@ -726,6 +778,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_30_234449) do
   add_foreign_key "prescriptions", "doctors"
   add_foreign_key "prescriptions", "dosages"
   add_foreign_key "prescriptions", "medications"
+  add_foreign_key "requirement_items", "requirements"
+  add_foreign_key "requirements", "requirement_types"
   add_foreign_key "shift_template_entries", "employees"
   add_foreign_key "shift_template_entries", "shift_templates"
   add_foreign_key "shift_templates", "clients"
