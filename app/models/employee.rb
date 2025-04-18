@@ -22,6 +22,8 @@
 #  fk_rails_...  (person_id => people.id)
 #
 class Employee < ApplicationRecord
+  self.table_name = "employees"
+
   include Identificationable
   include Participantable
   include CalendarCustomizable
@@ -45,12 +47,12 @@ class Employee < ApplicationRecord
   ##############
   # Job Titles #
   ##############
-  has_many :employees_job_titles, dependent: :destroy
-  has_many :job_titles, through: :employees_job_titles
+  has_many :employees_job_titles, class_name: "Employee::EmployeesJobTitle", dependent: :destroy
+  has_many :job_titles, through: :employees_job_titles, class_name: "Employee::JobTitle"
   has_one :active_employees_job_title, -> {
     where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", 1.second.from_now, 1.second.from_now)
-  }, class_name: "EmployeesJobTitle", dependent: :destroy, inverse_of: :employee
-  has_one :job_title, through: :active_employees_job_title, source: :job_title
+  }, class_name: "Employee::EmployeesJobTitle", dependent: :destroy, inverse_of: :employee
+  has_one :job_title, through: :active_employees_job_title, source: :job_title, class_name: "Employee::JobTitle"
 
   def job_title=(new_job_title)
     assign_job_title(new_job_title)
@@ -59,8 +61,8 @@ class Employee < ApplicationRecord
   def assign_job_title(new_job_title, starts_at: Time.current)
     if new_job_title.is_a?(String) || new_job_title.is_a?(Symbol)
       search_term = new_job_title.to_s
-      new_job_title = JobTitle.find_by(name: search_term.titleize) ||
-        JobTitle.find_by(slug: search_term.parameterize)
+      new_job_title = Employee::JobTitle.find_by(name: search_term.titleize) ||
+        Employee::JobTitle.find_by(slug: search_term.parameterize)
     end
 
     # Don't create a new assignment if it's the same job title
@@ -73,6 +75,8 @@ class Employee < ApplicationRecord
       employees_job_titles.create!(
         job_title: new_job_title,
         starts_at: starts_at,
+        application_type: :new_hire,
+        offer_status: :accepted,
       )
     end
 
@@ -88,21 +92,21 @@ class Employee < ApplicationRecord
   #############
   # Pay Rates #
   #############
-  has_many :pay_rates, dependent: :destroy
+  has_many :pay_rates, class_name: "Employee::PayRate", dependent: :destroy
 
   ############
   # Managers #
   ############
   # Join table for employees managed by employee
   has_many :managed_employees_managers,
-    class_name: "EmployeesManager",
+    class_name: "Employee::EmployeesManager",
     foreign_key: :manager_id,
     dependent: :destroy,
     inverse_of: :manager
   has_many :managed_employees, through: :managed_employees_managers, source: :employee
 
   has_many :managers_employees_managers,
-    class_name: "EmployeesManager",
+    class_name: "Employee::EmployeesManager",
     dependent: nil,
     inverse_of: :employee
   has_many :managers, through: :managers_employees_managers, source: :manager
@@ -111,7 +115,7 @@ class Employee < ApplicationRecord
   # Managed Clients #
   ###################
   has_many :clients_managers,
-  class_name: "ClientsManager",
+    class_name: "ClientsManager",
     foreign_key: :manager_id,
     dependent: :destroy,
     inverse_of: :manager
@@ -157,7 +161,7 @@ class Employee < ApplicationRecord
     through: :active_clients_attendants,
     source: :client
 
-  has_many :employee_trainings, dependent: :destroy, inverse_of: :employee
+  has_many :employee_trainings, class_name: "Employee::EmployeeTraining", dependent: :destroy, inverse_of: :employee
   has_many :trainings, through: :employee_trainings
 
   scope :includes_associated, -> { includes([:person, :job_title, :calendar_customization]) }

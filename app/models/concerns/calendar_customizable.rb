@@ -2,7 +2,10 @@ module CalendarCustomizable
   extend ActiveSupport::Concern
 
   included do
-    has_one :calendar_customization, as: :customizer, dependent: :destroy
+    has_one :calendar_customization,
+      as: :customizer,
+      class_name: "Calendar::Customization",
+      dependent: :destroy
 
     before_create :assign_default_color
 

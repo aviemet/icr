@@ -14,7 +14,7 @@
 #  index_job_titles_on_slug  (slug) UNIQUE
 #
 FactoryBot.define do
-  factory :job_title do
+  factory :job_title, class: "Employee::JobTitle" do
     name { Faker::Job.title }
     description { Faker::Lorem.paragraph }
   end

@@ -21,7 +21,7 @@
 #
 #  fk_rails_...  (employee_id => employees.id)
 #
-class PayRate < ApplicationRecord
+class Employee::PayRate < ApplicationRecord
   resourcify
 
   monetize :rate_cents, numericality: {

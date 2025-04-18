@@ -22,7 +22,7 @@
 #  fk_rails_...  (employee_id => employees.id)
 #  fk_rails_...  (manager_id => employees.id)
 #
-class EmployeesManager < ApplicationRecord
+class Employee::EmployeesManager < ApplicationRecord
   resourcify
 
   belongs_to :manager, class_name: "Employee"
@@ -33,6 +33,7 @@ class EmployeesManager < ApplicationRecord
   validates :starts_at, presence: true
   validate :ends_at_after_starts_at, if: :ends_at?
 
+  # Only allow 1 employee/manager relationship per pair of employees
   validates :manager_id, uniqueness: {
     scope: :employee_id,
     conditions: -> { where(ends_at: nil) },

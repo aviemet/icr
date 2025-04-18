@@ -14,7 +14,7 @@
 #  index_calendar_customizations_on_color_mappings  (color_mappings) USING gin
 #  index_calendar_customizations_on_customizer      (customizer_type,customizer_id)
 #
-class CalendarCustomization < ApplicationRecord
+class Calendar::Customization < ApplicationRecord
   resourcify
 
   belongs_to :customizer, polymorphic: true

@@ -22,13 +22,13 @@
 #  fk_rails_...  (employee_id => employees.id)
 #  fk_rails_...  (training_id => trainings.id)
 #
-class EmployeeTraining < ApplicationRecord
+class Employee::EmployeeTraining < ApplicationRecord
   include PgSearchable
   pg_search_config(
-    against: [:employee, :training, :completed_at],
+    against: [:completed_at],
     associated_against: {
-      employee: [],
-      training: [],
+      employee: [:number],
+      training: [:name],
     },
   )
 
@@ -40,10 +40,16 @@ class EmployeeTraining < ApplicationRecord
 
   # Ensure an employee can only have one record per training
   validates :training_id, uniqueness: { scope: :employee_id }
-  # validates :completed_at, presence: true, if: -> { false } # Optional: Validation if completed_at must be set eventually? Or handle via status?
 
-  # Optional: Define status enum if needed instead of just completed_at
-  # enum status: { not_started: 0, in_progress: 1, completed: 2 }
+  def status
+    if completed_at.present?
+      :completed
+    elsif started_at.present?
+      :in_progress
+    else
+      :not_started
+    end
+  end
 
   scope :includes_associated, -> { includes([:employee, :training]) }
 end

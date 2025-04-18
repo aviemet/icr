@@ -13,7 +13,9 @@
 #
 #  index_job_titles_on_slug  (slug) UNIQUE
 #
-class JobTitle < ApplicationRecord
+class Employee::JobTitle < ApplicationRecord
+  self.table_name = "job_titles"
+
   extend FriendlyId
   friendly_id :name, use: [:slugged, :history]
 
@@ -23,16 +25,18 @@ class JobTitle < ApplicationRecord
   rolify
   resourcify
 
-  has_many :employees_job_titles, dependent: :nullify
-  has_many :employees, through: :employees_job_titles, dependent: :nullify
+  has_many :employees_job_titles,
+    class_name: "Employee::EmployeesJobTitle",
+    dependent: :nullify
+  has_many :employees, through: :employees_job_titles
 
   has_many :active_employees_job_titles, -> {
     where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Date.current, Date.current)
-  }, class_name: "EmployeesJobTitle", dependent: nil, inverse_of: :job_title
-
+  }, class_name: "Employee::EmployeesJobTitle", dependent: nil, inverse_of: :job_title
   has_many :active_employees, through: :active_employees_job_titles, source: :employee
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
 
-  scope :includes_associated, -> { includes([]) }
+  scope :includes_associated, -> { includes([:active_employees]) }
+  scope :with_active_employees, -> { joins(:active_employees_job_titles).distinct }
 end

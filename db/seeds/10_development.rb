@@ -24,10 +24,10 @@ if Rails.env.development?
 
   end
 
-  if JobTitle.count == 0
-    JobTitle.create({ name: "Attendant" })
-    JobTitle.create({ name: "Facilitator" })
-    JobTitle.create({ name: "Director" })
+  if Employee::JobTitle.count == 0
+    Employee::JobTitle.create({ name: "Attendant" })
+    Employee::JobTitle.create({ name: "Facilitator" })
+    Employee::JobTitle.create({ name: "Director" })
   end
 
   if Client.count == 0
@@ -63,7 +63,7 @@ if Rails.env.development?
       person: facilitator_user.person
     },)
 
-    facilitator.assign_job_title(JobTitle.find_by(slug: "facilitator"))
+    facilitator.assign_job_title(Employee::JobTitle.find_by(slug: "facilitator"))
 
     FactoryBot.create(:address, contact: facilitator.person.contact, category: Category.type(:address).sample)
     FactoryBot.create(:phone, contact: facilitator.person.contact, category: Category.type(:phone).sample)
@@ -80,7 +80,7 @@ if Rails.env.development?
       person: director_user.person
     },)
 
-    director.assign_job_title(JobTitle.find_by(slug: "director"))
+    director.assign_job_title(Employee::JobTitle.find_by(slug: "director"))
 
     FactoryBot.create(:address, contact: director.person.contact, category: Category.type(:address).sample)
     FactoryBot.create(:phone, contact: director.person.contact, category: Category.type(:phone).sample)
