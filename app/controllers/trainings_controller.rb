@@ -1,9 +1,9 @@
 class TrainingsController < ApplicationController
   include Searchable
-  
-  expose :trainings, -> { search(Training.new.includes_associated) }
-  expose :training, scope: ->{ Training.new.includes_associated }
-  
+
+  expose :trainings, -> { policy_scope(search(Training.includes_associated)) }
+  expose :training, scope: ->{ policy_scope(Training.includes_associated) }
+
   sortable_fields %w(name description estimated_minutes active_on inactive_on)
 
   strong_params :training, permit: [:name, :description, :estimated_minutes, :active_on, :inactive_on]
@@ -12,7 +12,7 @@ class TrainingsController < ApplicationController
     authorize trainings
 
     paginated_trainings = paginate(trainings, :trainings)
-    
+
     render inertia: "Trainings/Index", props: {
       trainings: -> { paginated_trainings.render(:index) },
       pagination: -> { {
