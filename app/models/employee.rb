@@ -2,15 +2,18 @@
 #
 # Table name: employees
 #
-#  id          :uuid             not null, primary key
-#  active_at   :date
-#  color       :string
-#  inactive_at :date
-#  number      :string
-#  slug        :string           not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  person_id   :uuid             not null
+#  id                   :uuid             not null, primary key
+#  active_at            :date
+#  color                :string
+#  eligible_for_hire    :boolean          default(TRUE), not null
+#  inactive_at          :date
+#  ineligibility_reason :text
+#  number               :string
+#  slug                 :string           not null
+#  status               :integer
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  person_id            :uuid             not null
 #
 # Indexes
 #
@@ -36,11 +39,23 @@ class Employee < ApplicationRecord
 
   include PgSearchable
   pg_search_config(
-    against: [:active_at, :inactive_at, :number],
+    against: [:active_at, :inactive_at, :number, :status],
     associated_against: {
       person: [:first_name, :last_name],
     },
   )
+
+  # Define the employment status enum
+  enum :status, {
+    applicant: 0,
+    offered: 1,
+    employed: 2,
+    declined: 3,
+    terminated: 4
+  }
+
+  # Define default status for new records
+  after_initialize :set_default_status, if: :new_record?
 
   resourcify
 
@@ -164,6 +179,19 @@ class Employee < ApplicationRecord
   has_many :employee_trainings, class_name: "Employee::EmployeeTraining", dependent: :destroy, inverse_of: :employee
   has_many :trainings, through: :employee_trainings
 
+  ####################
+  # Interview Notes  #
+  ####################
+  # Notes given by this employee as an interviewer
+  has_many :interview_notes, class_name: "Employee::InterviewNote", dependent: :destroy, inverse_of: :interviewer
+
+  # Scopes for new attributes
+  scope :applicants, -> { where(status: :applicant) }
+  scope :actively_employed, -> { where(status: :employed) }
+  scope :terminated, -> { where(status: :terminated) }
+  scope :eligible_for_hire, -> { where(eligible_for_hire: true) }
+  scope :not_eligible_for_hire, -> { where(eligible_for_hire: false) }
+
   scope :includes_associated, -> { includes([:person, :job_title, :calendar_customization]) }
 
   def all_events
@@ -174,10 +202,14 @@ class Employee < ApplicationRecord
   end
 
   def active?
-    active_at.present? && (inactive_at.nil? || inactive_at > Time.current)
+    employed? && active_at.present? && (inactive_at.nil? || inactive_at > Time.current)
   end
 
   private
+
+  def set_default_status
+    self.status ||= :applicant
+  end
 
   def slug_candidates
     if person&.name

@@ -124,3 +124,5 @@ group :test do
   gem "simplecov", ">= 0.22.0"
   gem "pundit-matchers", ">= 3.1"
 end
+
+gem "state_machines-activerecord", "~> 0.9.0"

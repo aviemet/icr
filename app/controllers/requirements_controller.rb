@@ -8,6 +8,7 @@ class RequirementsController < ApplicationController
 
   strong_params :requirement, permit: [:name, :description, :requirement_type_id, :scope_type, :scope_id]
 
+  # @route GET /requirements (requirements)
   def index
     authorize requirements
 
@@ -22,6 +23,7 @@ class RequirementsController < ApplicationController
     }
   end
 
+  # @route GET /requirements/:id (requirement)
   def show
     authorize requirement
     render inertia: "Requirement/Requirements/Show", props: {
@@ -29,6 +31,7 @@ class RequirementsController < ApplicationController
     }
   end
 
+  # @route GET /requirements/new (new_requirement)
   def new
     authorize Requirement::Requirement.new
     render inertia: "Requirement/Requirements/New", props: {
@@ -36,6 +39,7 @@ class RequirementsController < ApplicationController
     }
   end
 
+  # @route GET /requirements/:id/edit (edit_requirement)
   def edit
     authorize requirement
     render inertia: "Requirement/Requirements/Edit", props: {
@@ -43,6 +47,7 @@ class RequirementsController < ApplicationController
     }
   end
 
+  # @route POST /requirements (requirements)
   def create
     authorize Requirement::Requirement.new
     if requirement.save
@@ -52,6 +57,8 @@ class RequirementsController < ApplicationController
     end
   end
 
+  # @route PATCH /requirements/:id (requirement)
+  # @route PUT /requirements/:id (requirement)
   def update
     authorize requirement
     if requirement.update(requirement_params)
@@ -61,6 +68,7 @@ class RequirementsController < ApplicationController
     end
   end
 
+  # @route DELETE /requirements/:id (requirement)
   def destroy
     authorize requirement
     requirement.destroy!

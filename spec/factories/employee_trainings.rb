@@ -4,6 +4,7 @@
 #
 #  id           :uuid             not null, primary key
 #  completed_at :datetime
+#  started_at   :datetime
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  employee_id  :uuid             not null
@@ -18,7 +19,7 @@
 # Foreign Keys
 #
 #  fk_rails_...  (employee_id => employees.id)
-#  fk_rails_...  (training_id => trainings.id)
+#  fk_rails_...  (training_id => employee_trainings.id)
 #
 FactoryBot.define do
   factory :employee_training do

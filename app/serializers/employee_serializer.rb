@@ -2,15 +2,18 @@
 #
 # Table name: employees
 #
-#  id          :uuid             not null, primary key
-#  active_at   :date
-#  color       :string
-#  inactive_at :date
-#  number      :string
-#  slug        :string           not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  person_id   :uuid             not null
+#  id                   :uuid             not null, primary key
+#  active_at            :date
+#  color                :string
+#  eligible_for_hire    :boolean          default(TRUE), not null
+#  inactive_at          :date
+#  ineligibility_reason :text
+#  number               :string
+#  slug                 :string           not null
+#  status               :integer
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  person_id            :uuid             not null
 #
 # Indexes
 #

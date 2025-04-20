@@ -57,45 +57,46 @@ const Sidebar = () => {
 
 				<Divider />
 
-				<AppShell.Section mt="xs" p={ 0 } grow className={ clsx(classes.navigation) }>
-					<MenuLink
-						label="Dashboard"
-						href={ Routes.root() }
-						leftSection={ <DashboardIcon /> }
-						rightSection={ matchesAtPosition(paths, [0, ""]) && <NextIcon /> }
-						active={ matchesAtPosition(paths, [0, ""]) }
-					/>
-					{ permissions?.clients?.index && <MenuLink
-						label="Clients"
-						href={ Routes.clients() }
-						leftSection={ <ClientIcon /> }
-						rightSection={ matchesAtPosition(paths, [0, "clients"]) && <NextIcon /> }
-						active={ matchesAtPosition(paths, [0, "clients"]) }
-					/> }
-					<MenuLink
-						label="Employees"
-						href={ Routes.employees() }
-						leftSection={ <EmployeeIcon /> }
-						rightSection={ matchesAtPosition(paths, [0, "employees"]) && <NextIcon /> }
-						active={ matchesAtPosition(paths, [0, "employees"]) }
-					/>
-					<MenuLink
-						label="Timesheets"
-						href={ Routes.timesheets() }
-						leftSection={ <ClockIcon /> }
-						rightSection={ matchesAtPosition(paths, [0, "timesheets"]) && <NextIcon /> }
-						active={ matchesAtPosition(paths, [0, "timesheets"]) }
-					/>
-				</AppShell.Section>
-
-				<AppShell.Section p={ 0 }>
-					<MenuLink
-						label="Settings"
-						href={ Routes.settings() }
-						leftSection={ <SettingsIcon /> }
-						rightSection={ matchesAtPosition(paths, [0, "settings"]) && <NextIcon /> }
-						active={ matchesAtPosition(paths, [0, "settings"]) }
-					/>
+				<AppShell.Section mt="xs" p={ 0 } grow className={ classes.nav }>
+					<ul>
+						<MenuLink
+							label="Dashboard"
+							href={ Routes.root() }
+							leftSection={ <DashboardIcon /> }
+							active={ matchesAtPosition(paths, [0, ""]) }
+						/>
+						{ permissions?.clients?.index && (
+							<MenuLink
+								label="Clients"
+								href={ Routes.clients() }
+								leftSection={ <ClientIcon /> }
+								active={ matchesAtPosition(paths, [0, "clients"]) }
+							/>
+						) }
+						<MenuLink
+							label="Employees"
+							href={ Routes.employees() }
+							leftSection={ <EmployeeIcon /> }
+							active={ matchesAtPosition(paths, [0, "employees"]) }
+						>
+							<MenuLink
+								label="Training"
+								href={ Routes.trainings() }
+							/>
+						</MenuLink>
+						<MenuLink
+							label="Timesheets"
+							href={ Routes.timesheets() }
+							leftSection={ <ClockIcon /> }
+							active={ matchesAtPosition(paths, [0, "timesheets"]) }
+						/>
+						<MenuLink
+							label="Settings"
+							href={ Routes.settings() }
+							leftSection={ <SettingsIcon /> }
+							active={ matchesAtPosition(paths, [0, "settings"]) }
+						/>
+					</ul>
 				</AppShell.Section>
 
 			</AppShell.Navbar>

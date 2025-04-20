@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_18_061410) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_20_153044) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -255,6 +255,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_18_061410) do
     t.date "inactive_at"
     t.string "number"
     t.string "color"
+    t.integer "status"
+    t.boolean "eligible_for_hire", default: true, null: false
+    t.text "ineligibility_reason"
     t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -468,6 +471,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_18_061410) do
     t.index ["client_id"], name: "index_incident_reports_on_client_id"
     t.index ["reported_by_id"], name: "index_incident_reports_on_reported_by_id"
     t.index ["reported_to_id"], name: "index_incident_reports_on_reported_to_id"
+  end
+
+  create_table "interview_notes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "note"
+    t.integer "recommendation"
+    t.uuid "employee_id", null: false
+    t.uuid "interview_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_id"], name: "index_interview_notes_on_employee_id"
+    t.index ["interview_id"], name: "index_interview_notes_on_interview_id"
   end
 
   create_table "interview_participants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -811,6 +825,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_18_061410) do
   add_foreign_key "incident_reports", "clients"
   add_foreign_key "incident_reports", "people", column: "reported_by_id"
   add_foreign_key "incident_reports", "people", column: "reported_to_id"
+  add_foreign_key "interview_notes", "employees"
+  add_foreign_key "interview_notes", "employees", column: "interview_id"
   add_foreign_key "interview_participants", "interviews"
   add_foreign_key "interview_participants", "people"
   add_foreign_key "interviews", "employees"

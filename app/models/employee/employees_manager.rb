@@ -23,6 +23,7 @@
 #  fk_rails_...  (manager_id => employees.id)
 #
 class Employee::EmployeesManager < ApplicationRecord
+  self.table_name = "employees_managers"
   resourcify
 
   belongs_to :manager, class_name: "Employee"

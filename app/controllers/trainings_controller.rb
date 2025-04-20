@@ -8,6 +8,7 @@ class TrainingsController < ApplicationController
 
   strong_params :training, permit: [:name, :description, :estimated_minutes, :active_on, :inactive_on]
 
+  # @route GET /employees/trainings (trainings)
   def index
     authorize trainings
 
@@ -22,6 +23,7 @@ class TrainingsController < ApplicationController
     }
   end
 
+  # @route GET /employees/trainings/:id (training)
   def show
     authorize training
     render inertia: "Trainings/Show", props: {
@@ -29,6 +31,7 @@ class TrainingsController < ApplicationController
     }
   end
 
+  # @route GET /employees/trainings/new (new_training)
   def new
     authorize Training.new
     render inertia: "Trainings/New", props: {
@@ -36,6 +39,7 @@ class TrainingsController < ApplicationController
     }
   end
 
+  # @route GET /employees/trainings/:id/edit (edit_training)
   def edit
     authorize training
     render inertia: "Trainings/Edit", props: {
@@ -43,6 +47,7 @@ class TrainingsController < ApplicationController
     }
   end
 
+  # @route POST /employees/trainings (trainings)
   def create
     authorize Training.new
     if training.save
@@ -52,15 +57,18 @@ class TrainingsController < ApplicationController
     end
   end
 
+  # @route PATCH /employees/trainings/:id (training)
+  # @route PUT /employees/trainings/:id (training)
   def update
     authorize training
     if training.update(training_params)
       redirect_to training, notice: "Training was successfully updated."
     else
-      redirect_to edit_training_path, inertia: { errors: training.errors }
+      redirect_to edit_training_path(training), inertia: { errors: training.errors }
     end
   end
 
+  # @route DELETE /employees/trainings/:id (training)
   def destroy
     authorize training
     training.destroy!

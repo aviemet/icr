@@ -68,7 +68,13 @@ Rails.application.routes.draw do
 
   resources :clients, param: :slug, concerns: :schedulable
 
-  resources :employees, param: :slug, concerns: :schedulable
+  scope "/employees" do
+    resources :trainings
+  end
+
+  resources :employees, param: :slug, concerns: :schedulable do
+    resources :employee_trainings, path: "trainings"
+  end
 
   resources :households, param: :slug
 
@@ -83,8 +89,6 @@ Rails.application.routes.draw do
   resources :doctors, param: :slug
 
   resources :requirements
-
-  resources :trainings
 
   draw(:api)
 end

@@ -8,6 +8,7 @@ class Employee::InterviewsController < ApplicationController
 
   strong_params :employee_interview, permit: [:employee_id, :scheduled_at, :notes]
 
+  # @route GET /employee/interviews (employee_interviews)
   def index
     authorize employee_interviews
 
@@ -22,6 +23,7 @@ class Employee::InterviewsController < ApplicationController
     }
   end
 
+  # @route GET /employee/interviews/:id (employee_interview)
   def show
     authorize employee_interview
     render inertia: "Employee/Interviews/Show", props: {
@@ -29,6 +31,7 @@ class Employee::InterviewsController < ApplicationController
     }
   end
 
+  # @route GET /employee/interviews/new (new_employee_interview)
   def new
     authorize Employee::Interview.new
     render inertia: "Employee/Interviews/New", props: {
@@ -36,6 +39,7 @@ class Employee::InterviewsController < ApplicationController
     }
   end
 
+  # @route GET /employee/interviews/:id/edit (edit_employee_interview)
   def edit
     authorize employee_interview
     render inertia: "Employee/Interviews/Edit", props: {
@@ -43,6 +47,7 @@ class Employee::InterviewsController < ApplicationController
     }
   end
 
+  # @route POST /employee/interviews (employee_interviews)
   def create
     authorize Employee::Interview.new
     if employee_interview.save
@@ -52,6 +57,8 @@ class Employee::InterviewsController < ApplicationController
     end
   end
 
+  # @route PATCH /employee/interviews/:id (employee_interview)
+  # @route PUT /employee/interviews/:id (employee_interview)
   def update
     authorize employee_interview
     if employee_interview.update(employee_interview_params)
@@ -61,6 +68,7 @@ class Employee::InterviewsController < ApplicationController
     end
   end
 
+  # @route DELETE /employee/interviews/:id (employee_interview)
   def destroy
     authorize employee_interview
     employee_interview.destroy!
