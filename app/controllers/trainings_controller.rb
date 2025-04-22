@@ -1,8 +1,8 @@
 class TrainingsController < ApplicationController
   include Searchable
 
-  expose :trainings, -> { policy_scope(search(Training.includes_associated)) }
-  expose :training, scope: ->{ policy_scope(Training.includes_associated) }
+  expose :trainings, -> { policy_scope(search(Employee::Training.includes_associated)) }
+  expose :training, scope: ->{ policy_scope(Employee::Training.includes_associated) }
 
   sortable_fields %w(name description estimated_minutes active_on inactive_on)
 
@@ -33,9 +33,9 @@ class TrainingsController < ApplicationController
 
   # @route GET /employees/trainings/new (new_training)
   def new
-    authorize Training.new
+    authorize Employee::Training.new
     render inertia: "Trainings/New", props: {
-      training: Training.new.render(:form_data)
+      training: Employee::Training.new.render(:form_data)
     }
   end
 
@@ -49,7 +49,7 @@ class TrainingsController < ApplicationController
 
   # @route POST /employees/trainings (trainings)
   def create
-    authorize Training.new
+    authorize Employee::Training.new
     if training.save
       redirect_to training, notice: "Training was successfully created."
     else

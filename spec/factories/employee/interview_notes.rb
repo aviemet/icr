@@ -21,10 +21,10 @@
 #  fk_rails_...  (interview_id => employees.id)
 #
 FactoryBot.define do
-  factory :employee_interview_note, class: 'Employee::InterviewNote' do
-    employee { nil }
-    note { "MyText" }
-    interview { nil }
-    recommendation { 1 }
+  factory :interview_note, class: "Employee::InterviewNote" do
+    content { Faker::Lorem.paragraph }
+
+    interview
+    association :author, factory: :user
   end
 end

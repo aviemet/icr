@@ -237,18 +237,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_20_153044) do
     t.index ["contact_id"], name: "index_emails_on_contact_id"
   end
 
-  create_table "employee_trainings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "employee_id", null: false
-    t.uuid "training_id", null: false
-    t.datetime "started_at"
-    t.datetime "completed_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["employee_id", "training_id"], name: "index_employee_trainings_on_employee_id_and_training_id", unique: true
-    t.index ["employee_id"], name: "index_employee_trainings_on_employee_id"
-    t.index ["training_id"], name: "index_employee_trainings_on_training_id"
-  end
-
   create_table "employees", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "person_id", null: false
     t.date "active_at"
@@ -294,6 +282,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_20_153044) do
     t.index ["employee_id"], name: "index_employees_managers_on_employee_id"
     t.index ["manager_id", "employee_id"], name: "index_employees_managers_unique_relationship", unique: true, where: "(ends_at IS NULL)"
     t.index ["manager_id"], name: "index_employees_managers_on_manager_id"
+  end
+
+  create_table "employees_trainings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "employee_id", null: false
+    t.uuid "training_id", null: false
+    t.datetime "started_at"
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_id", "training_id"], name: "index_employees_trainings_on_employee_id_and_training_id", unique: true
+    t.index ["employee_id"], name: "index_employees_trainings_on_employee_id"
+    t.index ["training_id"], name: "index_employees_trainings_on_training_id"
   end
 
   create_table "employment_statuses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -808,13 +808,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_20_153044) do
   add_foreign_key "doctors_clients", "doctors"
   add_foreign_key "emails", "categories"
   add_foreign_key "emails", "contacts"
-  add_foreign_key "employee_trainings", "employee_trainings", column: "training_id"
-  add_foreign_key "employee_trainings", "employees"
   add_foreign_key "employees", "people"
   add_foreign_key "employees_job_titles", "employees"
   add_foreign_key "employees_job_titles", "job_titles"
   add_foreign_key "employees_managers", "employees"
   add_foreign_key "employees_managers", "employees", column: "manager_id"
+  add_foreign_key "employees_trainings", "employees"
+  add_foreign_key "employees_trainings", "trainings"
   add_foreign_key "employment_statuses", "employees"
   add_foreign_key "employment_statuses", "users", column: "updated_by_id"
   add_foreign_key "event_participants", "calendar_events"

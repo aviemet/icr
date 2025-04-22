@@ -47,8 +47,26 @@ FactoryBot.define do
 
     trait :employed do
       status { :employed }
-      active_at { Time.zone.now }
+      active_at { 1.month.ago }
       inactive_at { nil }
+
+      after(:build) do |employee|
+        job_title = build(:job_title)
+        employee.employees_job_titles << build(
+          :employees_job_title,
+          employee: employee,
+          job_title: job_title,
+          starts_at: employee.active_at,
+          ends_at: nil,
+        )
+
+        employee.pay_rates << build(
+          :pay_rate,
+          employee: employee,
+          starts_at: employee.active_at,
+          ends_at: nil,
+        )
+      end
     end
 
     trait :declined do
@@ -56,9 +74,35 @@ FactoryBot.define do
     end
 
     trait :terminated do
+      transient do
+        termination_date { Time.zone.now }
+      end
+
       status { :terminated }
-      active_at { 1.year.ago }
-      inactive_at { Time.zone.now }
+      inactive_at { termination_date }
+
+      after(:build) do |employee, evaluator|
+        job_title = build(:job_title)
+        employee.employees_job_titles << build(
+          :employees_job_title,
+          employee: employee,
+          job_title: job_title,
+          starts_at: evaluator.termination_date - 1.month,
+          ends_at: evaluator.termination_date,
+        )
+
+        employee.pay_rates << build(
+          :pay_rate,
+          employee: employee,
+          starts_at: evaluator.termination_date - 1.month,
+          ends_at: evaluator.termination_date,
+        )
+      end
+    end
+
+    trait :ineligible do
+      eligible_for_hire { false }
+      ineligibility_reason { "Marked ineligible by factory trait." }
     end
   end
 end

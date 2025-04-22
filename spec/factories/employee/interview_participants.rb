@@ -20,9 +20,10 @@
 #  fk_rails_...  (person_id => people.id)
 #
 FactoryBot.define do
-  factory :employee_interview_participant, class: 'Employee::InterviewParticipant' do
-    person { nil }
-    employee_interview { nil }
-    notes { "MyText" }
+  factory :interview_participant, class: "Employee::InterviewParticipant" do
+    role { :interviewer }
+
+    interview
+    user
   end
 end

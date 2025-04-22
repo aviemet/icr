@@ -46,8 +46,6 @@ class Employee < ApplicationRecord
     },
   )
 
-  attribute :status, :integer, default: 0
-
   # Define the employment status enum
   enum :status, {
     applicant: 0,
@@ -182,10 +180,9 @@ class Employee < ApplicationRecord
   ####################
   # Interview Notes  #
   ####################
-  # Notes given by this employee as an interviewer
+
   has_many :interview_notes, class_name: "Employee::InterviewNote", dependent: :destroy, inverse_of: :interviewer
 
-  # Scopes for new attributes
   scope :applicants, -> { where(status: :applicant) }
   scope :actively_employed, -> { where(status: :employed) }
   scope :terminated, -> { where(status: :terminated) }
@@ -205,20 +202,8 @@ class Employee < ApplicationRecord
     employed? && active_at.present? && (inactive_at.nil? || inactive_at > Time.current)
   end
 
-  # State Machine Callbacks & Guards
-  def activate_employment
-    update(active_at: Time.current, inactive_at: nil)
-  end
-
-  def deactivate_employment
-    update(inactive_at: Time.current)
-    # Decide if termination should automatically mark as ineligible
-    # update(inactive_at: Time.current, eligible_for_hire: false)
-  end
-
-  # Guard method for the state machine
   def eligible_for_hire?
-    eligible_for_hire # Assumes this is a boolean attribute on the model
+    eligible_for_hire
   end
 
   private

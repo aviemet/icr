@@ -18,9 +18,11 @@
 #  fk_rails_...  (employee_id => employees.id)
 #
 FactoryBot.define do
-  factory :employee_interview, class: 'Employee::Interview' do
-    employee { nil }
-    scheduled_at { "2025-04-17 23:11:29" }
-    notes { "MyText" }
+  factory :interview, class: "Employee::Interview" do
+    starts_at { 1.day.from_now }
+    ends_at { starts_at + 1.hour }
+    status { :scheduled }
+
+    employee
   end
 end

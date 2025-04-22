@@ -1,66 +1,74 @@
-# app/models/concerns/employee/state_machine.rb
 module Employee::StateMachine
   extend ActiveSupport::Concern
 
   included do
+    include AASM
 
-    state_machine :status, initial: :applicant, action: :save do
-      # Let state_machines know we are using the enum defined in Employee model
-      # Note: Direct enum integration might need verification with state_machines gem specifics.
-      # If direct enum integration isn't straightforward, we might map integer values here.
-      # Let's assume for now it works with the enum names directly or underlying integers.
-
-      state :applicant, value: 0 # Explicitly map to enum value if needed
-      state :offered, value: 1
-      state :employed, value: 2
-      state :declined, value: 3
-      state :terminated, value: 4
+    aasm column: :status, enum: true do
+      state :applicant, initial: true
+      state :offered
+      state :employed
+      state :declined
+      state :terminated
+      state :application_withdrawn
 
       event :make_offer do
-        transition applicant: :offered
-        # after do |employee, transition| ... end
+        transitions from: :applicant,
+          to: :offered,
+          after: :make_offer,
+          guard: :eligible_for_hire?
+      end
+
+      event :close_application do
+        transitions from: :applicant,
+          to: :application_withdrawn
       end
 
       event :accept_offer do
-        transition offered: :employed
-        # Use callbacks to set active_at etc.
+        transitions from: :offered,
+          to: :employed,
+          after: :activate_employment
       end
 
       event :reject_offer do
-        transition offered: :declined
-        # after do |employee, transition| ... end
+        transitions from: :offered,
+        to: :declined,
+        after: :offer_declined
       end
 
       event :terminate do
-        # Allow termination from most states
-        transition [:employed, :applicant, :offered, :declined] => :terminated
+        transitions from: [:employed],
+          to: :terminated,
+          after: :deactivate_employment
       end
 
-      # Example guard for re-hiring
       event :reconsider do
-        transition [:declined, :terminated] => :applicant, if: :eligible_for_hire?
+        transitions from: [:declined, :terminated, :application_withdrawn],
+          to: :applicant,
+          after: :make_offer,
+          guard: :eligible_for_hire?
       end
+    end
 
-      # Define callbacks using after_transition
-      after_transition to: :employed, do: :activate_employment
-      after_transition to: :terminated, do: :deactivate_employment
+    def activate_employment
+      update(active_at: Time.current, inactive_at: nil)
+    end
 
-      # --- Callbacks defined within the main Employee model ---
-      # It's often cleaner to keep the callback method definitions
-      # in the main model class itself, even if triggered from the concern.
-      # Or they can be defined here within the `included` block or the module itself.
-      # Let's plan to define activate_employment and deactivate_employment
-      # in the main employee.rb file for better visibility.
+    def deactivate_employment
+      now = Time.current
+      update(inactive_at: now)
 
-      # --- Helper methods provided by state_machines ---
-      # The gem automatically provides methods like:
-      # employee.applicant?, employee.offered?, etc.
-      # employee.can_make_offer?, employee.can_accept_offer?, etc.
-      # employee.make_offer, employee.make_offer! etc.
+      current_job_assignment = employees_job_titles.where("starts_at <= ? AND ends_at IS NULL", now).first
+      current_job_assignment&.update(ends_at: now)
+
+      current_pay_rate = pay_rates.where("starts_at <= ? AND ends_at IS NULL", now).first
+      current_pay_rate&.update(ends_at: now)
+    end
+
+    def make_offer
+    end
+
+    def offer_declined
     end
   end
-
-  # Instance methods related to state machine logic could go here
-  # but activate_employment/deactivate_employment are closely tied
-  # to Employee attributes, so keeping them in employee.rb is fine.
 end
