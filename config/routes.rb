@@ -70,7 +70,12 @@ Rails.application.routes.draw do
     resources :interviews, path: "interviews"
   end
 
-  resources :employees, param: :slug, concerns: :schedulable
+  resources :employees, param: :slug, concerns: :schedulable do
+    member do
+      get :status
+      put :status, action: :update_status
+    end
+  end
 
   resources :households, param: :slug
 

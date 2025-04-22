@@ -6,7 +6,7 @@ class EmployeesController < ApplicationController
 
   sortable_fields %w(person_id active_at inactive_at number)
 
-  strong_params :employee, permit: [:person_id, :active_at, :inactive_at, :number]
+  strong_params :employee, permit: [:person_id, :active_at, :inactive_at, :number, :status, :ineligibility_reason, :termination_reason]
 
   # @route GET /employees (employees)
   def index
@@ -65,6 +65,25 @@ class EmployeesController < ApplicationController
     }
   end
 
+  # @route GET /employees/:slug/status (status_employee)
+  def status
+    render inertia: "Employees/Status", props: {
+      employee: employee.render(:show)
+    }
+  end
+
+  # @route PUT /employees/:slug/status (status_employee)
+  def update_status
+    if employee.update(employee_status_params)
+      redirect_to employee_path(employee), notice: "Employee status updated successfully"
+    else
+      render inertia: "Employees/Status", props: {
+        employee: employee.render(:show),
+        errors: employee.errors
+      }
+    end
+  end
+
   # @route POST /employees (employees)
   def create
     authorize Employee.new
@@ -102,4 +121,5 @@ class EmployeesController < ApplicationController
   def range_end
     params[:end] || Time.current.end_of_month.next_occurring(:saturday)
   end
+
 end

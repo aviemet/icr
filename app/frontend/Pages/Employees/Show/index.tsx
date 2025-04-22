@@ -17,6 +17,7 @@ const tabsList = [
 
 const ShowEmployee = ({ employee }: ShowEmployeeProps) => {
 	const title = employee?.person?.name || "Employee"
+	const status = employee?.status
 
 	return (
 		<Page title={ title } breadcrumbs={ [
@@ -38,6 +39,9 @@ const ShowEmployee = ({ employee }: ShowEmployeeProps) => {
 							<Menu.Dropdown>
 								<Menu.Link href={ Routes.editEmployee(employee.slug) }>
 									Edit Employee
+								</Menu.Link>
+								<Menu.Link href={ Routes.statusEmployee(employee.slug) }>
+									Change Status
 								</Menu.Link>
 							</Menu.Dropdown>
 						</Menu>

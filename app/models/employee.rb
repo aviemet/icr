@@ -206,6 +206,11 @@ class Employee < ApplicationRecord
     eligible_for_hire
   end
 
+  validates :active_at, presence: true, if: -> { employed? }
+  validates :inactive_at, presence: true, if: -> { terminated? }
+  validates :termination_reason, presence: true, if: -> { terminated? }
+  validates :ineligibility_reason, presence: true, if: -> { application_withdrawn? }
+
   private
 
   def slug_candidates

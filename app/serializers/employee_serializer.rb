@@ -36,6 +36,7 @@ class EmployeeSerializer < ApplicationSerializer
     :active_at,
     :inactive_at,
     :color,
+    :status,
   )
 
   belongs_to :person, serializer: PersonSerializer
