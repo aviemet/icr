@@ -1,7 +1,8 @@
-import { Routes } from '@/lib'
-import { IndexPageTemplate } from '@/Features'
-import { NewIcon } from '@/Components/Icons'
-import TrainingsTable from '../Table'
+import { NewIcon } from "@/Components/Icons"
+import { IndexPageTemplate } from "@/Features"
+import { Routes } from "@/lib"
+
+import TrainingsTable from "../Table"
 
 interface TrainingIndexProps {
 	trainings: Schema.TrainingsIndex[]
@@ -15,9 +16,8 @@ const TrainingsIndex = ({ trainings, pagination }: TrainingIndexProps) => {
 			model="trainings"
 			rows={ trainings }
 			pagination={ pagination }
-			deleteRoute={ Routes.trainings() }
 			menuOptions={ [
-				{ label: 'New Training', href: Routes.newTraining(), icon: <NewIcon /> },
+				{ label: "New Training", href: Routes.newTraining(), icon: <NewIcon /> },
 			] }
 		>
 			<TrainingsTable />

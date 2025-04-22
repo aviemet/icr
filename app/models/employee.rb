@@ -33,6 +33,7 @@ class Employee < ApplicationRecord
   include Personable
   include Attachment::HasImages
   include Attachment::HasDocuments
+  include Employee::StateMachine
 
   extend FriendlyId
   friendly_id :slug_candidates, use: [:slugged, :history]
@@ -45,6 +46,8 @@ class Employee < ApplicationRecord
     },
   )
 
+  attribute :status, :integer, default: 0
+
   # Define the employment status enum
   enum :status, {
     applicant: 0,
@@ -53,9 +56,6 @@ class Employee < ApplicationRecord
     declined: 3,
     terminated: 4
   }
-
-  # Define default status for new records
-  after_initialize :set_default_status, if: :new_record?
 
   resourcify
 
@@ -205,11 +205,23 @@ class Employee < ApplicationRecord
     employed? && active_at.present? && (inactive_at.nil? || inactive_at > Time.current)
   end
 
-  private
-
-  def set_default_status
-    self.status ||= :applicant
+  # State Machine Callbacks & Guards
+  def activate_employment
+    update(active_at: Time.current, inactive_at: nil)
   end
+
+  def deactivate_employment
+    update(inactive_at: Time.current)
+    # Decide if termination should automatically mark as ineligible
+    # update(inactive_at: Time.current, eligible_for_hire: false)
+  end
+
+  # Guard method for the state machine
+  def eligible_for_hire?
+    eligible_for_hire # Assumes this is a boolean attribute on the model
+  end
+
+  private
 
   def slug_candidates
     if person&.name

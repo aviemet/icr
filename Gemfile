@@ -43,6 +43,7 @@ gem "friendly_id", "~> 5.5"
 gem "good_job", "~> 4.7"
 gem "mini_magick", "~> 5.1"
 gem "active_storage_validations", "~> 2.0"
+gem "state_machines-activerecord", "~> 0.9.0"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data"
@@ -124,5 +125,3 @@ group :test do
   gem "simplecov", ">= 0.22.0"
   gem "pundit-matchers", ">= 3.1"
 end
-
-gem "state_machines-activerecord", "~> 0.9.0"

@@ -3,10 +3,8 @@ module Employee::StateMachine
   extend ActiveSupport::Concern
 
   included do
-    # Add the gem 'state_machines-activerecord' to your Gemfile
-    # Ensure you have the 'status' integer column in your employees table
 
-    state_machine :status, initial: :applicant, action: :save do # Assuming save persists state
+    state_machine :status, initial: :applicant, action: :save do
       # Let state_machines know we are using the enum defined in Employee model
       # Note: Direct enum integration might need verification with state_machines gem specifics.
       # If direct enum integration isn't straightforward, we might map integer values here.
@@ -26,7 +24,6 @@ module Employee::StateMachine
       event :accept_offer do
         transition offered: :employed
         # Use callbacks to set active_at etc.
-        after :activate_employment
       end
 
       event :reject_offer do
@@ -37,13 +34,16 @@ module Employee::StateMachine
       event :terminate do
         # Allow termination from most states
         transition [:employed, :applicant, :offered, :declined] => :terminated
-        after :deactivate_employment
       end
 
       # Example guard for re-hiring
       event :reconsider do
         transition [:declined, :terminated] => :applicant, if: :eligible_for_hire?
       end
+
+      # Define callbacks using after_transition
+      after_transition to: :employed, do: :activate_employment
+      after_transition to: :terminated, do: :deactivate_employment
 
       # --- Callbacks defined within the main Employee model ---
       # It's often cleaner to keep the callback method definitions

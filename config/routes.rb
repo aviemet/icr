@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  namespace :employee do
-    resources :interviews
-  end
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
@@ -69,12 +66,11 @@ Rails.application.routes.draw do
   resources :clients, param: :slug, concerns: :schedulable
 
   scope "/employees" do
-    resources :trainings
+    resources :trainings, path: "trainings"
+    resources :interviews, path: "interviews"
   end
 
-  resources :employees, param: :slug, concerns: :schedulable do
-    resources :employee_trainings, path: "trainings"
-  end
+  resources :employees, param: :slug, concerns: :schedulable
 
   resources :households, param: :slug
 

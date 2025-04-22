@@ -1,18 +1,19 @@
-import { Title, Page, Section } from '@/Components'
-import { Routes } from '@/lib'
-import TrainingForm from '../Form'
+import { Title, Page, Section } from "@/Components"
+import { Routes } from "@/lib"
+
+import TrainingForm from "../Form"
 
 interface NewTrainingProps {
 	training: Schema.TrainingsFormData
 }
 
 const NewTraining = ({ ...data }: NewTrainingProps) => {
-	const title = 'New Training'
+	const title = "New Training"
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: 'Trainings', href: Routes.trainings() },
-			{ title: 'New Training', href: window.location.href },
+			{ title: "Trainings", href: Routes.trainings() },
+			{ title: "New Training", href: window.location.href },
 		] }>
 
 			<Section>

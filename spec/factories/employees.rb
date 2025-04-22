@@ -30,5 +30,35 @@ FactoryBot.define do
     number { Faker::Alphanumeric.alpha(number: 8).upcase }
 
     person
+
+    # Traits Example Usage:
+    # build(:employee) -> applicant
+    # build(:employee, :offered) -> offered employee (in memory)
+    # create(:employee, :employed) -> employed employee (persisted)
+    # create(:employee, :terminated, inactive_at: Date.new(2024, 1, 1)) -> terminated on specific date
+    # build_stubbed(:employee, :employed) -> stubbed employed employee
+
+    # You can still combine traits with overrides:
+    # build(:employee, :employed, active_at: Date.new(2022, 6, 1))
+
+    trait :offered do
+      status { :offered }
+    end
+
+    trait :employed do
+      status { :employed }
+      active_at { Time.zone.now }
+      inactive_at { nil }
+    end
+
+    trait :declined do
+      status { :declined }
+    end
+
+    trait :terminated do
+      status { :terminated }
+      active_at { 1.year.ago }
+      inactive_at { Time.zone.now }
+    end
   end
 end

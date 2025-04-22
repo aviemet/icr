@@ -1,5 +1,6 @@
 import { Title, Page, Section } from "@/Components"
 import { Routes } from "@/lib"
+
 import TrainingsForm from "../Form"
 
 interface EditTrainingProps {
@@ -17,10 +18,10 @@ const EditTraining = ({ training }: EditTrainingProps) => {
 		] }>
 			<Section>
 				<Title>{ title }</Title>
-				
+
 				<TrainingsForm
-					method='put'
-					to={ Routes.training() }
+					method="put"
+					to={ Routes.training(training.id) }
 					training={ training }
 				/>
 			</Section>

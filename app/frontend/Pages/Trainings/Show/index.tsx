@@ -1,16 +1,16 @@
-import { Group, Title, Menu, Page, Section } from '@/Components'
-import { Routes } from '@/lib'
+import { Group, Title, Menu, Page, Section } from "@/Components"
+import { Routes } from "@/lib"
 
 interface ShowTrainingProps {
 	training: Schema.TrainingsShow
 }
 
 const ShowTraining = ({ training }: ShowTrainingProps) => {
-	const title =  'Training'
+	const title = "Training"
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: 'Training', href: Routes.trainings() },
+			{ title: "Training", href: Routes.trainings() },
 			{ title, href: window.location.href },
 		] }>
 			<Section>

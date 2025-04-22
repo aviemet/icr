@@ -13,7 +13,7 @@
 #
 class TrainingSerializer < ApplicationSerializer
   object_as :training
-  
+
   attributes(
     :name,
     :description,
