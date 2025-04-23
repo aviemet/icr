@@ -49,10 +49,20 @@ export const navbar = css`
 		transition: opacity 200ms, display 200ms;
 	}
 
-	&.closed .hidden-when-closed {
-		opacity: 0;
-		display: none;
-		visibility: hidden;
+	&.closed {
+		.hidden-when-closed {
+			display: none;
+		}
+
+		.content {
+			> :not(:first-child) {
+				display: none;
+			}
+		}
+
+		.indicator {
+			display: none;
+		}
 	}
 
 	#site-logo, #site-logo svg {
@@ -91,7 +101,6 @@ export const navLink = css`
 	align-items: center;
 	justify-content: space-between;
 	padding: ${ vars.spacing.xs } ${ vars.spacing.sm };
-	border-radius: ${ vars.radius.sm };
 	color: ${ vars.colors.dark[9] };
 	text-decoration: none;
 	transition: all 0.15s ease-in-out;
@@ -121,13 +130,7 @@ export const navLink = css`
 	}
 
 	&.active {
-		background-color: var(--mantine-color-primary-light);
-		color: var(--mantine-color-primary-filled);
-
-		[data-mantine-color-scheme="dark"] & {
-			background-color: var(--mantine-color-primary-filled);
-			color: ${ vars.colors.white };
-		}
+		background-color: light-dark(${ vars.colors.primaryColors[1] }, ${ vars.colors.primaryColors[9] });
 	}
 `
 
@@ -144,12 +147,12 @@ export const submenu = css`
 	
 	[data-mantine-color-scheme="light"] & {
 		background-color: ${ vars.colors.white };
-		box-shadow: var(--mantine-shadow-md);
+		box-shadow: ${ vars.shadows.md };
 	}
 
 	[data-mantine-color-scheme="dark"] & {
 		background-color: ${ vars.colors.dark[8] };
-		box-shadow: var(--mantine-shadow-md);
+		box-shadow: ${ vars.shadows.md };
 	}
 `
 

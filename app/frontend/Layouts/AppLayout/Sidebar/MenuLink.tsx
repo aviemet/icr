@@ -2,6 +2,7 @@ import { Link } from "@inertiajs/react"
 import clsx from "clsx"
 import { ReactNode } from "react"
 
+import { Box } from "@/Components"
 import { NextIcon } from "@/Components/Icons"
 
 import * as classes from "../AppLayout.css"
@@ -27,10 +28,10 @@ const MenuLink = ({
 				href={ href }
 				className={ clsx(classes.navLink, { active }) }
 			>
-				<div className="content">
+				<Box className="content">
 					{ leftSection }
-					{ label }
-				</div>
+					<Box component="span">{ label }</Box>
+				</Box>
 				{ children && <NextIcon className="indicator" /> }
 			</Link>
 			{ children && (

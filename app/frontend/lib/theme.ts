@@ -31,6 +31,11 @@ export const themeObject: Partial<CustomMantineTheme> = {
 	},
 	fontSizes: {
 		xxs: "calc(0.6rem * var(--mantine-scale))",
+		xs: "calc(0.75rem * var(--mantine-scale))",
+		sm: "calc(0.875rem * var(--mantine-scale))",
+		md: "calc(1rem * var(--mantine-scale))",
+		lg: "calc(1.125rem * var(--mantine-scale))",
+		xl: "calc(1.25rem * var(--mantine-scale))",
 	},
 	components: {
 		Modal: {
