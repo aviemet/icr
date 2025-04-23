@@ -1,6 +1,6 @@
 import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
 
-import { Grid } from "@/Components"
+import { Paper, Stack } from "@/Components"
 import { Form } from "@/Components/Form"
 import { generateRandomColor } from "@/lib/colors"
 
@@ -29,9 +29,11 @@ const EmployeeForm = ({ method = "post", employee, jobTitles, ...props }: Employ
 			method={ method }
 			{ ...props }
 		>
-			<Grid>
-				<Inputs employee={ employee } jobTitles={ jobTitles } />
-			</Grid>
+			<Paper shadow="sm" p="xl" radius="md" withBorder>
+				<Stack>
+					<Inputs employee={ employee } jobTitles={ jobTitles } />
+				</Stack>
+			</Paper>
 		</Form>
 	)
 }

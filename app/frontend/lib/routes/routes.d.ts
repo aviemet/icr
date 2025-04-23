@@ -186,6 +186,16 @@ export const apiEmployeesOptions: ((
 
 /**
  * Generates rails route to
+ * /api/options/job_titles(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiJobTitlesOptions: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
  * /api/options/locales/languages(.:format)
  * @param {object | undefined} options
  * @returns {string} route path

@@ -4,7 +4,7 @@ import axios from "axios"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
 import { Routes } from "@/lib"
-import { useCreateCalendarEvent, useUpdateCalendarEvent } from "@/queries/calendar_events"
+import { useCreateCalendarEvent, useUpdateCalendarEvent } from "@/queries/calendarEvents"
 
 vi.mock("axios")
 
