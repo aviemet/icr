@@ -1,7 +1,7 @@
 import dayjs from "dayjs"
 import { useCallback } from "react"
 
-import { BaseCalendarEvent } from "@/Components/Calendar"
+import { BaseCalendarEvent } from "@/components/Calendar"
 import { buildShiftTitle, formatEventTitle } from "@/lib"
 import { usePageProps } from "@/lib/hooks"
 import { initials } from "@/lib/strings"

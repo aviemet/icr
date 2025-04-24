@@ -34,12 +34,12 @@ class TsxGenerator < Rails::Generators::NamedBase
 
   def create_single_view
     namespace = file_path.split("/").map(&:camelize).join("/")
-    empty_directory File.join("app/frontend/Pages", namespace)
-    template "index.tsx.tt", File.join("app/frontend/Pages", namespace, "index.tsx")
+    empty_directory File.join("app/frontend/pages", namespace)
+    template "index.tsx.tt", File.join("app/frontend/pages", namespace, "index.tsx")
   end
 
   def create_all_views
-    base_path = File.join("app/frontend/Pages", file_path.camelize)
+    base_path = File.join("app/frontend/pages", file_path.camelize)
     %w[Index Show Edit New].each do |action|
       empty_directory File.join(base_path, action)
       template "index.tsx.tt", File.join(base_path, action, "index.tsx")

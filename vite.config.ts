@@ -12,7 +12,7 @@ const config = defineConfig({
 		sourcemap: true,
 		rollupOptions: {
 			external: [
-				"./app/frontend/Images/*",
+				"./app/frontend/images/*",
 			],
 		},
 	},

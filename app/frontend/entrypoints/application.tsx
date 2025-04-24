@@ -5,7 +5,7 @@ import localizedFormat from "dayjs/plugin/localizedFormat"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { createRoot } from "react-dom/client"
 
-import { LAYOUTS } from "../Layouts"
+import { LAYOUTS } from "../layouts"
 import {
 	applyPropsMiddleware,
 	setupCSRFToken,
@@ -14,7 +14,7 @@ import {
 } from "./middleware"
 import { runAxe } from "./middleware/axe"
 
-const pages = import.meta.glob<PagesObject>("../Pages/**/index.tsx")
+const pages = import.meta.glob<PagesObject>("../pages/**/index.tsx")
 
 dayjs.extend(localizedFormat)
 dayjs.extend(localizedFormat)
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		title: title => `${SITE_TITLE} - ${title}`,
 
 		resolve: async(name) => {
-			const page: PagesObject = (await pages[`../Pages/${name}/index.tsx`]())
+			const page: PagesObject = (await pages[`../pages/${name}/index.tsx`]())
 
 			return handlePageLayout(page)
 		},

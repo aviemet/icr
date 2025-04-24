@@ -1,5 +1,5 @@
 import { type PagesObject } from "@/entrypoints/application"
-import { LAYOUTS } from "@/Layouts"
+import { LAYOUTS } from "@/layouts"
 
 type LayoutType = keyof typeof LAYOUTS
 

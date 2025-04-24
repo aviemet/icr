@@ -1,7 +1,7 @@
 import { type SelectProps, type InputProps } from "@mantine/core"
 import React from "react"
 
-import { type ISelectProps } from "@/Components/Inputs/Select"
+import { type ISelectProps } from "@/components/Inputs/Select"
 
 declare global {
 	type HTTPVerb = "post" | "put" | "get" | "patch" | "delete"

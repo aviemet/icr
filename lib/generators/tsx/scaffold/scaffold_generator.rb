@@ -33,11 +33,11 @@ module Tsx
       private
 
       def views_path
-        "app/frontend/Pages"
+        "app/frontend/pages"
       end
 
       def features_path
-        "app/frontend/Features"
+        "app/frontend/features"
       end
 
       def page_views

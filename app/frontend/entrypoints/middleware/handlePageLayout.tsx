@@ -5,7 +5,7 @@ import {
 	AppLayout,
 	SettingsLayout,
 	LayoutProps,
-} from "@/Layouts"
+} from "@/layouts"
 
 import { PagesObject } from "../application"
 
