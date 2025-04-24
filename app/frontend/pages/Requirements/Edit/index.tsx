@@ -1,7 +1,7 @@
 import { Title, Page, Section } from "@/components"
+import RequirementRequirementsForm from "@/features/Requirements/Form"
 import { Routes } from "@/lib"
 
-import RequirementRequirementsForm from "../Form"
 
 interface EditRequirementRequirementProps {
 	requirement_requirement: Schema.RequirementRequirementsEdit

@@ -22,8 +22,8 @@
 #  fk_rails_...  (employee_id => employees.id)
 #  fk_rails_...  (manager_id => employees.id)
 #
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe EmployeesManager, type: :model do
+RSpec.describe Employee::EmployeesManager, type: :model do
   pending "add some examples to (or delete) #{__FILE__}"
 end

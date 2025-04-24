@@ -1,8 +1,8 @@
 import { NewIcon } from "@/components/Icons"
 import { IndexPageTemplate } from "@/features"
+import TimesheetsTable from "@/features/TimeSheets/Table"
 import { Routes } from "@/lib"
 
-import TimesheetsTable from "../Table"
 
 interface TimesheetIndexProps {
 	timesheets: Schema.TimesheetsIndex[]

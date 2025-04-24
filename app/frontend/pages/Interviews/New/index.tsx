@@ -1,7 +1,7 @@
 import { Title, Page, Section } from "@/components"
+import EmployeeInterviewForm from "@/features/Interviews/Form"
 import { Routes } from "@/lib"
 
-import EmployeeInterviewForm from "../Form"
 
 interface NewEmployeeInterviewProps {
 	employee_interview: Schema.EmployeeInterviewsFormData

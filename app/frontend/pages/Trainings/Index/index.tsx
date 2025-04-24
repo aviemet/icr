@@ -1,8 +1,8 @@
 import { NewIcon } from "@/components/Icons"
 import { IndexPageTemplate } from "@/features"
+import TrainingsTable from "@/features/Trainings/Index"
 import { Routes } from "@/lib"
 
-import TrainingsTable from "../Table"
 
 interface TrainingIndexProps {
 	trainings: Schema.TrainingsIndex[]

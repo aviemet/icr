@@ -15,7 +15,7 @@
 #
 require "rails_helper"
 
-RSpec.describe JobTitle do
+RSpec.describe Employee::JobTitle do
   describe "Validations" do
     it "is valid with valid attributes" do
       expect(build(:job_title)).to be_valid

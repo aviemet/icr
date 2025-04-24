@@ -1,9 +1,9 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe JobTitlePolicy, type: :policy do
-  let(:user) { User.new }
-
+RSpec.describe Employee::JobTitlePolicy, type: :policy do
   subject { described_class }
+
+  let(:user) { User.new }
 
   permissions ".scope" do
     pending "add some examples to (or delete) #{__FILE__}"
