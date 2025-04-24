@@ -12,6 +12,7 @@
     "start": "RACK_ENV=production RAILS_ENV=production PORT=3000 NODE_ENV=production overmind start -f Procfile",
     "dev": "RAILS_ENV=development PORT=3000 NODE_ENV=development overmind start -f Procfile.dev",
     "test": "vitest",
+    "rspec": "RAILS_ENV=test bundle exec rake rspec_watcher:watch",
     "coverage": "vitest run --coverage",
     "lint": "eslint",
     "eslint:inspect": "npx @eslint/config-inspector@latest"
