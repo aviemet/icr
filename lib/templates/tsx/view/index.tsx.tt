@@ -1,0 +1,15 @@
+import { Title, Page, Section } from "@/Components"
+
+const <%= file_path.split("/").map(&:camelize).join("") %> = () => {
+	const title = "<%= file_path.split("/").last.titleize %>"
+
+	return (
+		<Page title={ title }>
+			<Section>
+				<Title>{ title }</Title>
+			</Section>
+		</Page>
+	)
+}
+
+export default <%= file_path.split("/").map(&:camelize).join("") %> 

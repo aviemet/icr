@@ -51,6 +51,8 @@ Rails.application.routes.draw do
 
   # SETTINGS PATHS #
 
+  get "users/:slug/settings", to: "users#settings", as: :user_settings
+
   get "settings/general", to: "settings#show"
   namespace :settings do
     get "", to: redirect("/settings/general")
@@ -65,7 +67,17 @@ Rails.application.routes.draw do
 
   resources :clients, param: :slug, concerns: :schedulable
 
-  resources :employees, param: :slug, concerns: :schedulable
+  scope "/employees" do
+    resources :trainings, path: "trainings"
+    resources :interviews, path: "interviews"
+  end
+
+  resources :employees, param: :slug, concerns: :schedulable do
+    member do
+      get :status
+      put :status, action: :update_status
+    end
+  end
 
   resources :households, param: :slug
 
@@ -78,6 +90,8 @@ Rails.application.routes.draw do
   resources :incident_reports
 
   resources :doctors, param: :slug
+
+  resources :requirements
 
   draw(:api)
 end

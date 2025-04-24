@@ -57,7 +57,7 @@ export {
 } from "react-icons/fa"
 
 export {
-	// FaPersonRays as ClientIcon,
+	FaArrowRotateLeft as RandomizeIcon,
 } from "react-icons/fa6"
 
 export {

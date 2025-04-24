@@ -6,6 +6,9 @@ class CreateEmployees < ActiveRecord::Migration[7.1]
       t.date :inactive_at
       t.string :number
       t.string :color
+      t.integer :status
+      t.boolean :eligible_for_hire, default: true, null: false
+      t.text :ineligibility_reason
 
       t.string :slug, null: false, index: { unique: true }
 

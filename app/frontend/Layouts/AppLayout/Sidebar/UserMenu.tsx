@@ -1,4 +1,4 @@
-import { Avatar, Link, Menu } from "@/Components"
+import { ActionIcon, Avatar, Menu } from "@/Components"
 import { LogoutIcon, UserSettingsIcon } from "@/Components/Icons"
 import { Routes } from "@/lib"
 
@@ -6,7 +6,7 @@ const UserMenu = () => {
 	return (
 		<Menu withArrow arrowPosition="center" position="bottom-start">
 			<Menu.Target>
-				<Avatar id="user-menu" />
+				<ActionIcon variant="transparent" p="lg"><Avatar id="user-menu" /></ActionIcon>
 			</Menu.Target>
 
 			<Menu.Dropdown>

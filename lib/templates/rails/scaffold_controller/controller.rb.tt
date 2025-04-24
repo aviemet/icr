@@ -2,11 +2,11 @@
 class <%= controller_class_name %>Controller < ApplicationController
   include Searchable
   
-  expose :<%= plural_table_name %>, -> { search(<%= orm_class.build(class_name) %>.includes_associated) }
+  expose :<%= plural_table_name %>, -> { search(<%= class_name %>.includes_associated) }
 <% if attributes.include?(:slug) -%>
-  expose :<%= singular_table_name %>, id: ->{ params[:slug] }, scope: ->{ <%= orm_class.build(class_name) %>.includes_associated }, find_by: :slug
+  expose :<%= singular_table_name %>, id: ->{ params[:slug] }, scope: ->{ <%= class_name %>.includes_associated }, find_by: :slug
   <% else -%>
-  expose :<%= singular_table_name %>, scope: ->{ <%= orm_class.build(class_name) %>.includes_associated }
+  expose :<%= singular_table_name %>, scope: ->{ <%= class_name %>.includes_associated }
   <% end -%>
 
   sortable_fields %w(<%= permitted_params.gsub(/[:,]/, '') %>)

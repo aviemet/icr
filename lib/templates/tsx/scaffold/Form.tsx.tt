@@ -1,6 +1,7 @@
-import { Grid } from '@/Components'
-import { Form, TextInput, Submit } from '@/Components/Form'
-import { type HTTPVerb, type UseFormProps } from 'use-inertia-form'
+import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
+
+import { Grid } from "@/Components"
+import { Form, TextInput, Submit } from "@/Components/Form"
 
 type <%= singular_table_name.camelize %>FormData = {
 	<%= singular_table_name %>: Schema.<%= plural_table_name.camelize %>FormData
@@ -13,7 +14,7 @@ export interface <%= singular_table_name.camelize %>FormProps {
 	<%= singular_table_name %>: Schema.<%= plural_table_name.camelize %>FormData
 }
 
-const <%= singular_table_name.camelize %>Form = ({ method = 'post', <%= singular_table_name %>, ...props }: <%= singular_table_name.camelize %>FormProps) => {
+const <%= singular_table_name.camelize %>Form = ({ method = "post", <%= singular_table_name %>, ...props }: <%= singular_table_name.camelize %>FormProps) => {
 	return (
 		<Form
 			model="<%= singular_table_name %>"
@@ -27,7 +28,7 @@ const <%= singular_table_name.camelize %>Form = ({ method = 'post', <%= singular
 				</Grid.Col><% end %><% end %>
 
 				<Grid.Col>
-					<Submit>{ <%= singular_table_name %>.id ? 'Update' : 'Create' } <%= singular_table_name.camelize %></Submit>
+					<Submit>{ <%= singular_table_name %>.id ? "Update" : "Create" } <%= singular_table_name.camelize %></Submit>
 				</Grid.Col>
 			</Grid>
 		</Form>

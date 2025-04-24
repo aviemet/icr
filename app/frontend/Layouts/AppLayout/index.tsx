@@ -1,26 +1,28 @@
 import { Box, useMantineTheme } from "@mantine/core"
-import { useDisclosure } from "@mantine/hooks"
+import { useDisclosure, useMediaQuery } from "@mantine/hooks"
+import clsx from "clsx"
 import { useEffect } from "react"
 
+import "@mantine/tiptap/styles.css"
 import { AppShell } from "@/Components"
 import useStore from "@/lib/store"
 
 import Footer from "./Footer"
 import Sidebar from "./Sidebar"
-// import Topbar from './Topbar'
-
-
+import Topbar from "./Topbar"
 import { LayoutProps } from "../index"
-
-import "@mantine/tiptap/styles.css"
-import clsx from "clsx"
-
 import * as classes from "./AppLayout.css"
 
 const AppLayout = ({ children }: LayoutProps) => {
 	const theme = useMantineTheme()
+	const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`)
+	const toggleSidebarOpen = useStore(state => state.toggleSidebarOpen)
 	const sidebarOpen = useStore(state => state.sidebarOpen)
 	const [mobileOpen, mobileHandlers] = useDisclosure(sidebarOpen)
+
+	useEffect(() => {
+		toggleSidebarOpen(!isMobile)
+	}, [isMobile, toggleSidebarOpen])
 
 	useEffect(() => {
 		if(sidebarOpen) {
@@ -32,8 +34,8 @@ const AppLayout = ({ children }: LayoutProps) => {
 
 	return (
 		<AppShell
-			// header={ { height: theme.other.header.height } }
 			layout="alt"
+			header={ { height: { base: theme.other.header.height }, collapsed: !isMobile } }
 			navbar={ {
 				width: { sm: sidebarOpen ? theme.other.navbar.width.open : theme.other.navbar.width.closed },
 				collapsed: {
@@ -41,10 +43,9 @@ const AppLayout = ({ children }: LayoutProps) => {
 				},
 				breakpoint: "sm",
 			} }
-
 			footer={ { height: theme.other.footer.height } }
 		>
-			{ /* <Topbar /> */ }
+			<Topbar />
 			<Sidebar />
 			<Footer />
 			<AppShell.Main className={ clsx(classes.main) }>

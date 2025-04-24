@@ -14,12 +14,19 @@ module Tsx
 
       def create_root_folder
         empty_directory File.join(views_path, controller_file_path.camelize).gsub("::", "/")
+        empty_directory File.join(features_path, controller_file_path.camelize).gsub("::", "/")
       end
 
       def copy_view_files
-        available_views.each do |view|
+        page_views.each do |view|
           filename = "#{view}.tsx"
           template filename, File.join(views_path, controller_file_path.camelize, filename).gsub("::", "/")
+        end
+
+        feature_components.each do |component|
+          component_path = File.join(features_path, controller_file_path.camelize, component)
+          empty_directory component_path.gsub("::", "/")
+          template "#{component}.tsx.tt", File.join(component_path, "index.tsx").gsub("::", "/")
         end
       end
 
@@ -29,8 +36,16 @@ module Tsx
         "app/frontend/Pages"
       end
 
-      def available_views
-        %w(Index/index Edit/index Show/index New/index Form Table)
+      def features_path
+        "app/frontend/Features"
+      end
+
+      def page_views
+        %w(Index/index Edit/index Show/index New/index)
+      end
+
+      def feature_components
+        %w(Form Table)
       end
     end
   end

@@ -1,10 +1,11 @@
 import clsx from "clsx"
 
-import { Box, AppShell, Group, Flex } from "@/Components"
+import { Box, AppShell, Group } from "@/Components"
 import useStore from "@/lib/store"
 
 import AvatarMenu from "./AvatarMenu"
 import * as classes from "../AppLayout.css"
+import ToggleSidebarButton from "../ToggleSidebarButton"
 
 const Topbar = () => {
 	const { sidebarOpen, siteTitle } = useStore()
@@ -12,7 +13,7 @@ const Topbar = () => {
 	return (
 		<AppShell.Header p="xs" className={ clsx(classes.topbar, { closed: !sidebarOpen }) }>
 			<Group>
-
+				<ToggleSidebarButton />
 				<Box style={ { flex: 1 } }>
 					{ siteTitle }
 				</Box>
@@ -20,7 +21,6 @@ const Topbar = () => {
 				<Group>
 					<AvatarMenu />
 				</Group>
-
 			</Group>
 		</AppShell.Header>
 	)

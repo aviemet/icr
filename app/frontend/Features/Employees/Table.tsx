@@ -1,4 +1,4 @@
-import { Table, Link, Group , DateTimeFormatter } from "@/Components"
+import { Table, Link, Group, DateTimeFormatter } from "@/Components"
 import { EditButton, ScheduleButton } from "@/Components/Button"
 import { type TableProps } from "@/Components/Table/Table"
 import { Routes } from "@/lib"

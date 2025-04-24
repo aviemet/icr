@@ -19,7 +19,7 @@ const EditEmployee = ({ employee }: EditEmployeeProps) => {
 				<Title>{ title }</Title>
 
 				<EmployeesForm
-					method='put'
+					method="put"
 					to={ Routes.employee(employee.slug) }
 					employee={ employee }
 				/>

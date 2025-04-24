@@ -1,4 +1,4 @@
-import { Group, Title, Menu, Page, Section, Tabs } from "@/Components"
+import { Badge, Group, Title, Menu, Page, Section, Tabs } from "@/Components"
 import { Routes } from "@/lib"
 
 import Contacts from "./Contacts"
@@ -17,6 +17,7 @@ const tabsList = [
 
 const ShowEmployee = ({ employee }: ShowEmployeeProps) => {
 	const title = employee?.person?.name || "Employee"
+	const status = employee?.status
 
 	return (
 		<Page title={ title } breadcrumbs={ [
@@ -25,21 +26,30 @@ const ShowEmployee = ({ employee }: ShowEmployeeProps) => {
 		] }>
 			<Section fullHeight>
 
-				<Group justify="space-between">
-					<Title>{ title }</Title>
+				<Group justify="space-between" align="flex-start">
+					<Group align="center" gap="sm">
+						<Title>{ title }</Title>
+						{ status && <Badge>{ status.charAt(0).toUpperCase() + status.slice(1) }</Badge> }
+					</Group>
 
-					<Menu position="bottom-end">
-						<Menu.Target />
-						<Menu.Dropdown>
-							<Menu.Link href={ Routes.editEmployee(employee.slug) }>
-								Edit Employee
-							</Menu.Link>
-						</Menu.Dropdown>
-					</Menu>
+					<Group>
+						<Menu position="bottom-end">
+							<Menu.Target>
+							</Menu.Target>
+							<Menu.Dropdown>
+								<Menu.Link href={ Routes.editEmployee(employee.slug) }>
+									Edit Employee
+								</Menu.Link>
+								<Menu.Link href={ Routes.statusEmployee(employee.slug) }>
+									Change Status
+								</Menu.Link>
+							</Menu.Dropdown>
+						</Menu>
+					</Group>
 				</Group>
 
 
-				<Tabs urlControlled={ true } defaultValue={ tabsList[0].id }>
+				<Tabs urlControlled={ true } defaultValue={ tabsList[0].id } mt="md">
 					<Tabs.List>
 						{ tabsList.map(tab => (
 							<Tabs.Tab key={ tab.id } value={ tab.id }>{ tab.label }</Tabs.Tab>

@@ -2,15 +2,18 @@
 #
 # Table name: employees
 #
-#  id          :uuid             not null, primary key
-#  active_at   :date
-#  color       :string
-#  inactive_at :date
-#  number      :string
-#  slug        :string           not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  person_id   :uuid             not null
+#  id                   :uuid             not null, primary key
+#  active_at            :date
+#  color                :string
+#  eligible_for_hire    :boolean          default(TRUE), not null
+#  inactive_at          :date
+#  ineligibility_reason :text
+#  number               :string
+#  slug                 :string           not null
+#  status               :integer
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  person_id            :uuid             not null
 #
 # Indexes
 #
@@ -22,35 +25,47 @@
 #  fk_rails_...  (person_id => people.id)
 #
 class Employee < ApplicationRecord
+  self.table_name = "employees"
+
   include Identificationable
   include Participantable
   include CalendarCustomizable
   include Personable
   include Attachment::HasImages
   include Attachment::HasDocuments
+  include Employee::StateMachine
 
   extend FriendlyId
   friendly_id :slug_candidates, use: [:slugged, :history]
 
   include PgSearchable
   pg_search_config(
-    against: [:active_at, :inactive_at, :number],
+    against: [:active_at, :inactive_at, :number, :status],
     associated_against: {
       person: [:first_name, :last_name],
     },
   )
+
+  # Define the employment status enum
+  enum :status, {
+    applicant: 0,
+    offered: 1,
+    employed: 2,
+    declined: 3,
+    terminated: 4
+  }
 
   resourcify
 
   ##############
   # Job Titles #
   ##############
-  has_many :employees_job_titles, dependent: :destroy
-  has_many :job_titles, through: :employees_job_titles
+  has_many :employees_job_titles, class_name: "Employee::EmployeesJobTitle", dependent: :destroy
+  has_many :job_titles, through: :employees_job_titles, class_name: "Employee::JobTitle"
   has_one :active_employees_job_title, -> {
     where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", 1.second.from_now, 1.second.from_now)
-  }, class_name: "EmployeesJobTitle", dependent: :destroy, inverse_of: :employee
-  has_one :job_title, through: :active_employees_job_title, source: :job_title
+  }, class_name: "Employee::EmployeesJobTitle", dependent: :destroy, inverse_of: :employee
+  has_one :job_title, through: :active_employees_job_title, source: :job_title, class_name: "Employee::JobTitle"
 
   def job_title=(new_job_title)
     assign_job_title(new_job_title)
@@ -59,8 +74,8 @@ class Employee < ApplicationRecord
   def assign_job_title(new_job_title, starts_at: Time.current)
     if new_job_title.is_a?(String) || new_job_title.is_a?(Symbol)
       search_term = new_job_title.to_s
-      new_job_title = JobTitle.find_by(name: search_term.titleize) ||
-        JobTitle.find_by(slug: search_term.parameterize)
+      new_job_title = Employee::JobTitle.find_by(name: search_term.titleize) ||
+        Employee::JobTitle.find_by(slug: search_term.parameterize)
     end
 
     # Don't create a new assignment if it's the same job title
@@ -73,6 +88,8 @@ class Employee < ApplicationRecord
       employees_job_titles.create!(
         job_title: new_job_title,
         starts_at: starts_at,
+        application_type: :new_hire,
+        offer_status: :accepted,
       )
     end
 
@@ -88,21 +105,21 @@ class Employee < ApplicationRecord
   #############
   # Pay Rates #
   #############
-  has_many :pay_rates, dependent: :destroy
+  has_many :pay_rates, class_name: "Employee::PayRate", dependent: :destroy
 
   ############
   # Managers #
   ############
   # Join table for employees managed by employee
   has_many :managed_employees_managers,
-    class_name: "EmployeesManager",
+    class_name: "Employee::EmployeesManager",
     foreign_key: :manager_id,
     dependent: :destroy,
     inverse_of: :manager
   has_many :managed_employees, through: :managed_employees_managers, source: :employee
 
   has_many :managers_employees_managers,
-    class_name: "EmployeesManager",
+    class_name: "Employee::EmployeesManager",
     dependent: nil,
     inverse_of: :employee
   has_many :managers, through: :managers_employees_managers, source: :manager
@@ -111,7 +128,7 @@ class Employee < ApplicationRecord
   # Managed Clients #
   ###################
   has_many :clients_managers,
-  class_name: "ClientsManager",
+    class_name: "ClientsManager",
     foreign_key: :manager_id,
     dependent: :destroy,
     inverse_of: :manager
@@ -157,6 +174,21 @@ class Employee < ApplicationRecord
     through: :active_clients_attendants,
     source: :client
 
+  has_many :employee_trainings, class_name: "Employee::EmployeeTraining", dependent: :destroy, inverse_of: :employee
+  has_many :trainings, through: :employee_trainings
+
+  ####################
+  # Interview Notes  #
+  ####################
+
+  has_many :interview_notes, class_name: "Employee::InterviewNote", dependent: :destroy, inverse_of: :interviewer
+
+  scope :applicants, -> { where(status: :applicant) }
+  scope :actively_employed, -> { where(status: :employed) }
+  scope :terminated, -> { where(status: :terminated) }
+  scope :eligible_for_hire, -> { where(eligible_for_hire: true) }
+  scope :not_eligible_for_hire, -> { where(eligible_for_hire: false) }
+
   scope :includes_associated, -> { includes([:person, :job_title, :calendar_customization]) }
 
   def all_events
@@ -167,8 +199,17 @@ class Employee < ApplicationRecord
   end
 
   def active?
-    active_at.present? && (inactive_at.nil? || inactive_at > Time.current)
+    employed? && active_at.present? && (inactive_at.nil? || inactive_at > Time.current)
   end
+
+  def eligible_for_hire?
+    eligible_for_hire
+  end
+
+  validates :active_at, presence: true, if: -> { employed? }
+  validates :inactive_at, presence: true, if: -> { terminated? }
+  validates :termination_reason, presence: true, if: -> { terminated? }
+  validates :ineligibility_reason, presence: true, if: -> { application_withdrawn? }
 
   private
 
