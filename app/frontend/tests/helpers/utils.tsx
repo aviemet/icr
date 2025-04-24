@@ -1,7 +1,7 @@
 import { render, RenderOptions } from "@testing-library/react"
 import React, { FC, ReactElement } from "react"
 
-import Providers from "@/Layouts/Providers"
+import Providers from "@/layouts/Providers"
 
 const AllTheProviders: FC<{ children: React.ReactNode }> = ({ children }) => {
 	return (

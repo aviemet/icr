@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 
-import { VIEW_NAMES } from "@/Components/Calendar/Views/index"
+import { VIEW_NAMES } from "@/components/Calendar/Views/index"
 import { Routes } from "@/lib"
 
 import { ReactQueryFunction } from ".."
