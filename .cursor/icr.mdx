@@ -6,11 +6,11 @@ This is a single-instance Rails application designed to run for a single company
 ## Project Milestones
 
 ### Phase 1: Core Authentication and Authorization
-- [ ] User authentication system
-- [ ] Role-based authorization using Pundit and Rolify
-  - [ ] Define core roles (admin, manager, facilitator, employee)
-  - [ ] Set up user groups management
-  - [ ] Implement authorization policies
+- [x] User authentication system
+- [x] Role-based authorization using Pundit and Rolify
+  - [x] Define core roles (admin, manager, facilitator, employee)
+  - [x] Set up user groups management
+  - [x] Implement authorization policies
   - [ ] UI visibility controls based on user permissions
 - [ ] Basic user profile management
 
@@ -91,12 +91,62 @@ This is a single-instance Rails application designed to run for a single company
 ## Feature Documentation
 *Document completed features and their core functionality here*
 
+### Permission System
+The permission system provides fine-grained access control with support for complex conditions:
+
+#### Components
+- **Permission Groups**: Define sets of permissions with effects (allow/deny) and conditions
+- **Permission Assignments**: Link permission groups to users or job titles with optional time restrictions
+- **Permission Resolution**: Evaluates permissions based on precedence levels and conditions
+
+#### Key Features
+- **Precedence Levels**: Higher precedence permissions override lower ones
+- **Explicit Allow/Deny**: At each precedence level, deny takes priority over allow
+- **Conditional Access**: Supports conditions like:
+  - Owner-only access (user must own the record)
+  - Time-restricted access (only valid during specific time windows)
+  - Custom conditions (extensible for specific needs)
+
+#### Usage
+```ruby
+# Creating a permission group
+permission_group = Permission::Group.create!(
+  name: "Time-restricted View",
+  description: "Allow viewing during business hours",
+  permissions: [{
+    resource: "clients",
+    action: "view",
+    effect: "allow",
+    conditions: {
+      time_restricted: {
+        start_time: "09:00",
+        end_time: "17:00"
+      }
+    }
+  }]
+)
+
+# Assigning permissions
+Permission::Assignment.create!(
+  permissionable: user,
+  group: permission_group,
+  starts_at: Time.current
+)
+
+# Checking permissions
+user.permission?("clients", "view", context)
+```
+
 ## Technical Decisions
 ### Authentication & Authorization
 - Using Devise for authentication
 - Using Pundit for authorization policies
 - Using Rolify for role management
-- Authorization will be enforced at both API and UI levels
+- Authorization enforced at both API and UI levels
+- Fine-grained permissions through custom permission system
+  - Supports complex conditions (time-based, owner-only)
+  - Hierarchical with precedence levels
+  - Polymorphic assignments (users, job titles)
 
 ### Document Management
 - Documents will be stored using Active Storage
