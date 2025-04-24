@@ -6,13 +6,9 @@ import {
 	Box,
 	Flex,
 	Text,
-	Link,
-	Tooltip,
-	Avatar,
 	Divider,
 } from "@/Components"
-import { ClientIcon, ClockIcon, DashboardIcon, EmployeeIcon, LogoutIcon, NextIcon, SettingsIcon } from "@/Components/Icons"
-import { TextInput } from "@/Components/Inputs"
+import { ClientIcon, ClockIcon, DashboardIcon, EmployeeIcon, SettingsIcon } from "@/Components/Icons"
 import IconProvider from "@/Layouts/Providers/IconProvider"
 import { matchesAtPosition, Routes } from "@/lib"
 import { useLocation, usePageProps } from "@/lib/hooks"
@@ -90,6 +86,10 @@ const Sidebar = () => {
 							leftSection={ <ClockIcon /> }
 							active={ matchesAtPosition(paths, [0, "timesheets"]) }
 						/>
+					</ul>
+				</AppShell.Section>
+				<AppShell.Section>
+					<ul>
 						<MenuLink
 							label="Settings"
 							href={ Routes.settings() }

@@ -51,6 +51,8 @@ Rails.application.routes.draw do
 
   # SETTINGS PATHS #
 
+  get "users/:slug/settings", to: "users#settings", as: :user_settings
+
   get "settings/general", to: "settings#show"
   namespace :settings do
     get "", to: redirect("/settings/general")

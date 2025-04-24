@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
   include Searchable
 
-  expose :users, -> { search(User.all.includes_associated) }
-  expose :user, scope: -> { User.includes_associated }
+  expose :users, -> { policy_scope(search(User.all.includes_associated)) }
+  expose :user, scope: -> { policy_scope(User.includes_associated) }
 
   sortable_fields %w[email active first_name last_name number]
 
@@ -23,6 +23,13 @@ class UsersController < ApplicationController
     end
   rescue ActiveRecord::RecordInvalid
     redirect_to complete_registration_path
+  end
+
+  # @route GET /users/:slug/settings (user_settings)
+  def settings
+    render inertia: "Users/Settings", props: {
+      user:
+    }
   end
 
 end
