@@ -4,33 +4,15 @@ class PayrollPolicy < ApplicationPolicy
   end
 
   def index?
-    return true if admin?
-
-    if user.person&.employee?
-      return user.person.employee&.job_title&.has_permission?(:payroll, :index)
-    end
-
-    false
+    standard_auth(:index)
   end
 
   def show?
-    return true if admin?
-
-    if user.person&.employee?
-      return user.person.employee&.job_title&.has_permission?(:payroll, :show)
-    end
-
-    false
+    standard_auth(:show)
   end
 
   def create?
-    return true if admin?
-
-    if user.person&.employee?
-      return user.person.employee&.job_title&.has_permission?(:payroll, :create)
-    end
-
-    false
+    standard_auth(:create)
   end
 
   def new?
@@ -38,11 +20,7 @@ class PayrollPolicy < ApplicationPolicy
   end
 
   def edit?
-    if user.person&.employee?
-      return user.person.employee&.job_title&.has_permission?(:payroll, :edit)
-    end
-
-    false
+    standard_auth(:update)
   end
 
   def update?
@@ -50,12 +28,6 @@ class PayrollPolicy < ApplicationPolicy
   end
 
   def destroy?
-    return true if admin?
-
-    if user.person&.employee?
-      return user.person.employee&.job_title&.has_permission?(:payroll, :destroy)
-    end
-
-    false
+    standard_auth(:destroy)
   end
 end

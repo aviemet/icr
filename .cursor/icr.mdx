@@ -1,0 +1,114 @@
+# ICR Project Documentation
+
+## Project Overview
+This is a single-instance Rails application designed to run for a single company. There is no multi-tenancy support, and company details are managed through a singleton settings model.
+
+## Project Milestones
+
+### Phase 1: Core Authentication and Authorization
+- [ ] User authentication system
+- [ ] Role-based authorization using Pundit and Rolify
+  - [ ] Define core roles (admin, manager, facilitator, employee)
+  - [ ] Set up user groups management
+  - [ ] Implement authorization policies
+  - [ ] UI visibility controls based on user permissions
+- [ ] Basic user profile management
+
+### Phase 2: Document Management System
+- [ ] Set up secure file storage system
+- [ ] Document upload and management
+  - [ ] Define document categories and types
+  - [ ] Version control for documents
+  - [ ] Document access controls
+- [ ] Document association with records (users, clients, etc.)
+
+### Phase 3: Employee Management
+- [ ] Employee onboarding workflow
+  - [ ] Personal information management
+  - [ ] Required documentation tracking
+  - [ ] Employment status tracking
+- [ ] Employee profile management
+  - [ ] Qualification tracking
+  - [ ] Document storage for IDs and certifications
+  - [ ] Medical information storage
+
+### Phase 4: Client Management
+- [ ] Client onboarding workflow
+  - [ ] Personal and medical information
+  - [ ] Care requirements documentation
+  - [ ] Emergency contact management
+- [ ] Client profile management
+  - [ ] Service history tracking
+  - [ ] Document management for client-specific files
+
+### Phase 5: Calendar and Scheduling
+- [ ] Core calendar functionality
+  - [ ] Multiple view strategies (day, week, month)
+  - [ ] Proper handling of overlapping events
+- [ ] Event management
+  - [ ] Recurring event support
+  - [ ] Schedule conflict detection
+  - [ ] Schedule assignment for employees and clients
+- [ ] Calendar access controls based on roles
+
+### Phase 6: Timesheet Management
+- [ ] Timesheet generation system
+  - [ ] Automatic generation based on schedules
+  - [ ] Manual entry support
+- [ ] Timesheet review workflow
+  - [ ] Facilitator review and approval process
+  - [ ] Manager final approval
+- [ ] Pay period management
+  - [ ] Configure pay period settings
+  - [ ] Automated reminders for approvals
+  - [ ] Deadline tracking
+
+### Phase 7: IHSS Hours Management
+- [ ] IHSS hours tracking system
+  - [ ] Manual hour assignment
+  - [ ] Automated assignment rules
+- [ ] Hours calculation engine
+  - [ ] Standard hours tracking
+  - [ ] IHSS hours tracking
+  - [ ] Overtime calculation for both types
+- [ ] Co-employment settings and rules
+
+## Conventions
+### Architecture
+- Single-tenant application
+- Company settings use singleton pattern
+
+### Development Guidelines
+- No multi-tenancy support
+- Changes must be atomic and focused
+- TypeScript is used for all JavaScript code
+  - Start with most restrictive type definitions
+  - Avoid `any`, `unknown`, and type casting with `as`
+  - Prefer existing type definitions and interfaces
+  - Use generics, Records, and Mapped types before inline types
+  - Type assertions are a last resort
+
+## Feature Documentation
+*Document completed features and their core functionality here*
+
+## Technical Decisions
+### Authentication & Authorization
+- Using Devise for authentication
+- Using Pundit for authorization policies
+- Using Rolify for role management
+- Authorization will be enforced at both API and UI levels
+
+### Document Management
+- Documents will be stored using Active Storage
+- Version control will be maintained for important documents
+- Access control will be managed through Pundit policies
+
+### Calendar System
+- Calendar must support multiple view strategies
+- Events must handle timezone conversions properly
+- Recurring events must follow RFC 5545 (iCalendar) specification
+
+### Timesheet System
+- Timesheets will be generated per pay period
+- System will maintain audit trail of all changes
+- Approval workflow will be multi-step

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_20_153044) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_24_203322) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -556,6 +556,31 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_20_153044) do
     t.index ["user_id"], name: "index_people_on_user_id"
   end
 
+  create_table "permission_assignments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "permission_group_id", null: false
+    t.string "permissionable_type", null: false
+    t.uuid "permissionable_id", null: false
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.jsonb "conditions"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["permission_group_id"], name: "index_permission_assignments_on_permission_group_id"
+    t.index ["permissionable_type", "permissionable_id"], name: "index_permission_assignments_on_permissionable"
+  end
+
+  create_table "permission_groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.jsonb "permissions"
+    t.string "slug"
+    t.integer "precedence"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_permission_groups_on_name", unique: true
+    t.index ["slug"], name: "index_permission_groups_on_slug", unique: true
+  end
+
   create_table "pg_search_documents", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "content"
     t.text "label"
@@ -832,6 +857,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_20_153044) do
   add_foreign_key "interviews", "employees"
   add_foreign_key "pay_rates", "employees"
   add_foreign_key "people", "users"
+  add_foreign_key "permission_assignments", "permission_groups"
   add_foreign_key "phones", "categories"
   add_foreign_key "phones", "contacts"
   add_foreign_key "prescriptions", "clients"

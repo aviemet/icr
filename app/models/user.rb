@@ -92,6 +92,27 @@ class User < ApplicationRecord
     active
   end
 
+  # Permission Groups
+  has_many :permission_assignments,
+    class_name: "Permission::Assignment",
+    as: :permissionable,
+    dependent: :destroy
+  has_many :permission_groups,
+    through: :permission_assignments,
+    source: :group
+
+  def permissionable_associations
+    [
+      self,
+      person&.employee&.job_title
+    ].compact
+  end
+
+  def permission?(resource, action, context = {})
+    @permission_resolver ||= Permission::Resolver.new(self)
+    @permission_resolver.can?(resource, action, context)
+  end
+
   private
 
   def coerce_json

@@ -298,3 +298,6 @@ RSpec/NestedGroups:
 
 Lint/DuplicateBranch:
   Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false

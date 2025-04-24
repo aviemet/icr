@@ -76,7 +76,28 @@ class ApplicationPolicy
 
   private
 
-  def standard_auth(_action)
-    admin?
+  def standard_auth(action)
+    return true if admin?
+
+    permission_context = build_permission_context
+    user.permission?(resource_name, action, permission_context)
+  end
+
+  def resource_name
+    @resource_name ||= record.class.name.underscore.pluralize
+  end
+
+  def build_permission_context
+    {
+      user_id: user.id,
+      record_user_id: record_owner_id
+    }
+  end
+
+  def record_owner_id
+    return nil unless record.respond_to?(:person_id)
+    return nil unless user.person
+
+    record.person_id == user.person.id ? user.id : nil
   end
 end

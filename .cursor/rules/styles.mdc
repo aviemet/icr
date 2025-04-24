@@ -1,6 +1,6 @@
 ---
 description: 
-globs: **/*
+globs: *.tsx,*.css.ts
 alwaysApply: false
 ---
 - DO NOT USE TAILWIND.
