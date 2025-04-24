@@ -1,8 +1,8 @@
 import { NewIcon } from "@/components/Icons"
 import { IndexPageTemplate } from "@/features"
+import EmployeeInterviewsTable from "@/features/Interviews/Table"
 import { Routes } from "@/lib"
 
-import EmployeeInterviewsTable from "../Table"
 
 interface EmployeeInterviewIndexProps {
 	employee_interviews: Schema.EmployeeInterviewsIndex[]

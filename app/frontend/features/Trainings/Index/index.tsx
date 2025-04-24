@@ -1,6 +1,5 @@
-import { Table, Link } from "@/components"
+import { Table, Link, type TableProps } from "@/components"
 import { EditButton } from "@/components/Button"
-import { type TableProps } from "@/components/Table/Table"
 import { Routes } from "@/lib"
 
 const TrainingTable = (props: TableProps) => {

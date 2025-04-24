@@ -1,7 +1,7 @@
 import { Title, Page, Section } from "@/components"
+import TimesheetsForm from "@/features/TimeSheets/Form"
 import { Routes } from "@/lib"
 
-import TimesheetsForm from "../Form"
 
 interface EditTimesheetProps {
 	timesheet: Schema.TimesheetsEdit
@@ -21,7 +21,7 @@ const EditTimesheet = ({ timesheet }: EditTimesheetProps) => {
 
 				<TimesheetsForm
 					method="put"
-					to={ Routes.timesheet() }
+					to={ Routes.timesheets() }
 					timesheet={ timesheet }
 				/>
 			</Section>

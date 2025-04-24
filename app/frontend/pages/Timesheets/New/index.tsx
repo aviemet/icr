@@ -1,7 +1,7 @@
 import { Title, Page, Section } from "@/components"
+import TimesheetForm from "@/features/TimeSheets/Form"
 import { Routes } from "@/lib"
 
-import TimesheetForm from "../Form"
 
 interface NewTimesheetProps {
 	timesheet: Schema.TimesheetsFormData

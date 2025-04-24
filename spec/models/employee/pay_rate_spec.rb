@@ -23,7 +23,7 @@
 #
 require "rails_helper"
 
-RSpec.describe PayRate do
+RSpec.describe Employee::PayRate do
   describe "Validations" do
     it "is valid with valid attributes" do
       expect(build(:pay_rate)).to be_valid

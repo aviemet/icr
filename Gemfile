@@ -115,6 +115,8 @@ group :development do
 end
 
 group :test do
+  gem "rspec-watcher", "~> 0.3.3"
+
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"

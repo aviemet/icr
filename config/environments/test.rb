@@ -68,4 +68,7 @@ Rails.application.configure do
   config.action_controller.raise_on_missing_callback_actions = true
 
   config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+
+  # Disable caching classes in when rspec-watcher is running
+  config.enable_reloading = ENV["RSPEC_WATCHER"] == "true"
 end

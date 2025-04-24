@@ -1,7 +1,7 @@
 import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
 
 import { Grid } from "@/components"
-import { Form, TextInput, Submit } from "@/components/Form"
+import { Form, Submit } from "@/components/Form"
 
 type TimesheetFormData = {
 	timesheet: Schema.TimesheetsFormData

@@ -1,8 +1,8 @@
 import { NewIcon } from "@/components/Icons"
 import { IndexPageTemplate } from "@/features"
+import RequirementRequirementsTable from "@/features/Requirements/Table"
 import { Routes } from "@/lib"
 
-import RequirementRequirementsTable from "../Table"
 
 interface RequirementRequirementIndexProps {
 	requirement_requirements: Schema.RequirementRequirementsIndex[]

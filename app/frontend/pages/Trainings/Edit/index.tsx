@@ -1,7 +1,7 @@
 import { Title, Page, Section } from "@/components"
+import TrainingsForm from "@/features/Trainings/Form"
 import { Routes } from "@/lib"
 
-import TrainingsForm from "../Form"
 
 interface EditTrainingProps {
 	training: Schema.TrainingsEdit
