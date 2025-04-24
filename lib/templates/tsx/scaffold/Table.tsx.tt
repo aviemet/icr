@@ -1,7 +1,7 @@
-import { Routes } from "@/lib"
 import { Table, Link } from "@/Components"
 import { EditButton } from "@/Components/Button"
 import { type TableProps } from "@/Components/Table/Table"
+import { Routes } from "@/lib"
 
 const <%= singular_table_name.camelize %>Table = (props: TableProps) => {
 	return (
