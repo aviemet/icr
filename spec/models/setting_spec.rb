@@ -71,7 +71,7 @@ RSpec.describe Setting, type: :model do
       end
 
       it "only allows valid pay period types" do
-        Setting::PAYROLL_PERIOD_TYPES.each_value do |valid_type|
+        Setting::PAY_PERIOD_TYPES.each_value do |valid_type|
           expect { described_class.payroll_period_type = valid_type }.not_to raise_error
         end
 
@@ -87,11 +87,11 @@ RSpec.describe Setting, type: :model do
 
       context "with valid formats" do
         [
-          "{full_name} - {YYYY-MM-DD}",
+          "{start:h:mma} - {end:h:mma}: {full_name}",
           "Shift for {first_name}",
-          "{last_name} - {MM/DD/YYYY HH:mm}",
+          "{last_name} - {start:MM/DD/YYYY HH:mm}",
           "Regular text without variables",
-          "{YYYY}-{MM}-{DD} {first_name}"
+          "{start:YYYY}-{end:MM}-{start:DD} {first_name} {last_initial}"
         ].each do |valid_format|
           it "accepts '#{valid_format}'" do
             expect { described_class.shift_title_format = valid_format }.not_to raise_error
@@ -106,7 +106,10 @@ RSpec.describe Setting, type: :model do
           "Unclosed brace {full_name",
           "Extra closing brace full_name}",
           "{{nested_braces}}",
-          "{unknown_variable}"
+          "{unknown_variable}",
+          "{full_name} - {YYYY-MM-DD}",
+          "{last_name} - {MM/DD/YYYY HH:mm}",
+          "{YYYY}-{MM}-{DD} {first_name}"
         ].each do |invalid_format|
           it "rejects '#{invalid_format}'" do
             expect { described_class.shift_title_format = invalid_format }
@@ -135,7 +138,7 @@ RSpec.describe Setting, type: :model do
 
     describe "ALLOWED_TEMPLATE_VARS" do
       it "defines expected template variables" do
-        expect(Setting::ALLOWED_TEMPLATE_VARS).to eq([:first_name, :last_name, :full_name])
+        expect(Setting::ALLOWED_TEMPLATE_VARS).to eq([:first_name, :last_name, :full_name, :first_initial, :last_initial])
       end
 
       it "is frozen" do

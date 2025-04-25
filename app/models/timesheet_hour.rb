@@ -29,6 +29,5 @@ class TimesheetHour < ApplicationRecord
   tracked
   resourcify
 
-
   scope :includes_associated, -> { includes([]) }
 end

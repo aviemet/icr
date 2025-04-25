@@ -180,12 +180,32 @@ RSpec.describe "/clients", :inertia do
     it "includes schedules within the date range" do
       client = create(:client)
       employee = create(:employee)
-      shift = create(:shift, employee: employee)
-      event = create(:calendar_event, client: client, shift: shift)
 
-      get schedule_client_url(client)
+      # Create an event within the range
+      in_range_shift = create(:shift, employee: employee)
+      in_range_event = create(:calendar_event,
+        shift: in_range_shift,
+        starts_at: Time.current.beginning_of_month + 5.days,
+        ends_at: Time.current.beginning_of_month + 5.days + 2.hours,)
+      create(:event_participant, calendar_event: in_range_event, participant: client)
 
-      expect(response.body).to include(event.to_json)
+      # Create an event outside the range
+      out_of_range_shift = create(:shift, employee: employee)
+      out_of_range_event = create(:calendar_event,
+        shift: out_of_range_shift,
+        starts_at: Time.current.beginning_of_month - 5.days,
+        ends_at: Time.current.beginning_of_month - 5.days + 2.hours,)
+      create(:event_participant, calendar_event: out_of_range_event, participant: client)
+
+      # Request the current month's schedule
+      get schedule_client_url(client), params: { view: "month", date: Time.current.to_date.to_s }
+
+      expect(response).to have_http_status(:ok)
+      expect_inertia.to render_component "Clients/Schedule"
+
+      schedule_ids = inertia.props[:schedules].map { |s| s[:id] }
+      expect(schedule_ids).to include(in_range_event.id)
+      expect(schedule_ids).not_to include(out_of_range_event.id)
     end
   end
 end

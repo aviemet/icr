@@ -103,7 +103,7 @@ class OvertimeExemption < ApplicationRecord
     start_str = start_time.strftime("%H:%M")
     end_str = end_time.strftime("%H:%M")
 
-    time_str >= start_str && time_str <= end_str
+    time_str.between?(start_str, end_str)
   end
 
   def evaluate_numeric(actual, expected, operator)
@@ -119,7 +119,7 @@ class OvertimeExemption < ApplicationRecord
     when "less_than_equal"
       actual <= expected
     when "between"
-      actual >= expected[0] && actual <= expected[1]
+      actual.between?(expected[0], expected[1])
     else
       false
     end

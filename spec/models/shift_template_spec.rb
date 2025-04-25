@@ -105,7 +105,7 @@ RSpec.describe ShiftTemplate, type: :model do
         ends_at: "23:00",)
 
       conflicts = template.check_conflicts
-      expect(conflicts).to include([entry1, entry2])
+      expect(conflicts).to include(contain_exactly(entry1, entry2))
     end
   end
 end

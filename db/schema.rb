@@ -442,7 +442,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_24_203322) do
   create_table "identifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "identificationable_type", null: false
     t.uuid "identificationable_id", null: false
-    t.integer "type"
+    t.integer "id_type"
     t.string "number"
     t.text "notes"
     t.date "issued_at"

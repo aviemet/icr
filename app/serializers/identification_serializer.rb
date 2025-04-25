@@ -5,11 +5,11 @@
 #  id                      :uuid             not null, primary key
 #  expires_at              :date
 #  extra_fields            :jsonb
+#  id_type                 :integer
 #  identificationable_type :string           not null
 #  issued_at               :date
 #  notes                   :text
 #  number                  :string
-#  type                    :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  category_id             :uuid             not null

@@ -78,7 +78,16 @@ class ShiftTemplate < ApplicationRecord
   private
 
   def entries_overlap?(entry1, entry2)
-    (entry1.starts_at < entry2.ends_at) && (entry1.ends_at > entry2.starts_at)
+    start1 = entry1.starts_at.seconds_since_midnight
+    end1 = entry1.ends_at.seconds_since_midnight
+    start2 = entry2.starts_at.seconds_since_midnight
+    end2 = entry2.ends_at.seconds_since_midnight
+
+    # Handle overnight shifts where end time is on the next day
+    end1 += 1.day.to_i if end1 < start1
+    end2 += 1.day.to_i if end2 < start2
+
+    (start1 < end2) && (end1 > start2)
   end
 
   def end_date_after_start_date

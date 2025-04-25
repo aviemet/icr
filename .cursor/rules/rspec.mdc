@@ -4,3 +4,5 @@ globs: *_spec.rb
 alwaysApply: false
 ---
 Avoid using `let` when setting up tests. Prefer setting up state and context in each test rather than introducing indirection by using `let`.
+
+In request specs, when testing inertia related responses and props, use the inertia rspec helpers.

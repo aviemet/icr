@@ -28,8 +28,10 @@ FactoryBot.define do
   factory :employee do
     active_at { Faker::Date.backward(days: 30) }
     number { Faker::Alphanumeric.alpha(number: 8).upcase }
+    status { :applicant }
+    eligible_for_hire { true }
 
-    person
+    person factory: %i[person_with_contacts]
 
     # Traits Example Usage:
     # build(:employee) -> applicant
@@ -42,35 +44,23 @@ FactoryBot.define do
     # build(:employee, :employed, active_at: Date.new(2022, 6, 1))
 
     trait :offered do
-      status { :offered }
+      after(:create) do |employee|
+        employee.make_offer! if employee.may_make_offer?
+      end
     end
 
     trait :employed do
-      status { :employed }
-      active_at { 1.month.ago }
-      inactive_at { nil }
-
-      after(:build) do |employee|
-        job_title = build(:job_title)
-        employee.employees_job_titles << build(
-          :employees_job_title,
-          employee: employee,
-          job_title: job_title,
-          starts_at: employee.active_at,
-          ends_at: nil,
-        )
-
-        employee.pay_rates << build(
-          :pay_rate,
-          employee: employee,
-          starts_at: employee.active_at,
-          ends_at: nil,
-        )
+      after(:create) do |employee|
+        employee.make_offer! if employee.may_make_offer?
+        employee.accept_offer! if employee.may_accept_offer?
       end
     end
 
     trait :declined do
-      status { :declined }
+      after(:create) do |employee|
+        employee.make_offer! if employee.may_make_offer?
+        employee.reject_offer! if employee.may_reject_offer?
+      end
     end
 
     trait :terminated do
@@ -78,25 +68,10 @@ FactoryBot.define do
         termination_date { Time.zone.now }
       end
 
-      status { :terminated }
-      inactive_at { termination_date }
-
-      after(:build) do |employee, evaluator|
-        job_title = build(:job_title)
-        employee.employees_job_titles << build(
-          :employees_job_title,
-          employee: employee,
-          job_title: job_title,
-          starts_at: evaluator.termination_date - 1.month,
-          ends_at: evaluator.termination_date,
-        )
-
-        employee.pay_rates << build(
-          :pay_rate,
-          employee: employee,
-          starts_at: evaluator.termination_date - 1.month,
-          ends_at: evaluator.termination_date,
-        )
+      after(:create) do |employee|
+        employee.make_offer! if employee.may_make_offer?
+        employee.accept_offer! if employee.may_accept_offer?
+        employee.terminate! if employee.may_terminate?
       end
     end
 

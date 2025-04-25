@@ -23,9 +23,9 @@
 #
 FactoryBot.define do
   factory :clients_attendant do
-    employee { nil }
-    client { nil }
-    starts_at { "2025-01-18 10:08:50" }
-    ends_at { "2025-01-18 10:08:50" }
+    attendant factory: :employee
+    client
+    starts_at { Time.current }
+    ends_at { nil }
   end
 end

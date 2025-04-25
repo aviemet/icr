@@ -6,7 +6,10 @@ class EmployeesController < ApplicationController
 
   sortable_fields %w(person_id active_at inactive_at number)
 
-  strong_params :employee, permit: [:person_id, :active_at, :inactive_at, :number, :status, :ineligibility_reason, :termination_reason]
+  strong_params :employee, permit: [
+    :person_id, :active_at, :inactive_at, :number, :status, :ineligibility_reason, :termination_reason,
+    person_attributes: [:first_name, :middle_name, :last_name, :nick_name, :dob]
+  ]
 
   # @route GET /employees (employees)
   def index
@@ -108,8 +111,12 @@ class EmployeesController < ApplicationController
   # @route DELETE /employees/:slug (employee)
   def destroy
     authorize employee
-    employee.destroy!
-    redirect_to employees_url, notice: t("employees.notices.created")
+
+    if employee.destroy
+      redirect_to employees_url, notice: t("employees.notices.destroyed")
+    else
+      redirect_to employees_url, alert: employee.errors.full_messages.join(", ")
+    end
   end
 
   private

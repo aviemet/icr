@@ -5,11 +5,11 @@
 #  id                      :uuid             not null, primary key
 #  expires_at              :date
 #  extra_fields            :jsonb
+#  id_type                 :integer
 #  identificationable_type :string           not null
 #  issued_at               :date
 #  notes                   :text
 #  number                  :string
-#  type                    :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  category_id             :uuid             not null
@@ -30,14 +30,23 @@ class Identification < ApplicationRecord
   include Attachment::HasDocuments
 
   include PgSearchable
-  pg_search_config(against: [:type, :number, :notes, :issued_at, :expires_at])
+  pg_search_config(against: [:id_type, :number, :notes, :issued_at, :expires_at])
 
   resourcify
 
   belongs_to :identificationable, polymorphic: true
 
+  enum :id_type, {
+    drivers_license: 0,
+    passport: 1,
+    state_id: 2,
+    military_id: 3,
+    employee_id: 4,
+    other: 5
+  }, _column: :type
+
   validates :number, presence: true
-  validates :type, presence: true
+  validates :id_type, presence: true
 
   scope :expired, -> { where(expires_at: ...Date.current) }
   scope :active, -> { where("expires_at > ? OR expires_at IS NULL", Date.current) }

@@ -11,7 +11,6 @@ class ErrorsController < ApplicationController
     response.status = status
 
     server_error = flash[:server_error] if flash[:server_error].present?
-
     # Render the error page
     render inertia: "Errors/Show", props: {
       status: params[:status],

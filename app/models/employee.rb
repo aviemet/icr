@@ -46,6 +46,8 @@ class Employee < ApplicationRecord
     },
   )
 
+  attribute :eligible_for_hire, :boolean, default: true
+
   # Define the employment status enum
   enum :status, {
     applicant: 0,
@@ -83,7 +85,7 @@ class Employee < ApplicationRecord
 
     transaction do
       # End the current job title at the start of the new one
-      active_employees_job_title&.update!(ends_at: starts_at)
+      active_employees_job_title&.update(ends_at: starts_at, application_type: :position_change, offer_status: :accepted)
 
       employees_job_titles.create!(
         job_title: new_job_title,
@@ -99,8 +101,8 @@ class Employee < ApplicationRecord
   ##########
   # Shifts #
   ##########
-  has_many :shifts, dependent: :nullify
-  has_many :shift_events, through: :shifts, class_name: "Calendar::Event", source: :calendar_event
+  has_many :shifts, dependent: :destroy
+  has_many :shift_events, through: :shifts, class_name: "Calendar::Event", source: :calendar_event, dependent: :destroy
 
   #############
   # Pay Rates #
@@ -174,14 +176,21 @@ class Employee < ApplicationRecord
     through: :active_clients_attendants,
     source: :client
 
-  has_many :employee_trainings, class_name: "Employee::EmployeeTraining", dependent: :destroy, inverse_of: :employee
-  has_many :trainings, through: :employee_trainings
+  ##############
+  # Trainings  #
+  ##############
+
+  has_many :employees_trainings, class_name: "Employee::EmployeesTraining", dependent: :destroy, inverse_of: :employee
+  has_many :trainings, through: :employees_trainings
 
   ####################
   # Interview Notes  #
   ####################
 
-  has_many :interview_notes, class_name: "Employee::InterviewNote", dependent: :destroy, inverse_of: :interviewer
+  has_many :interview_notes, class_name: "Employee::InterviewNote", dependent: :destroy, inverse_of: :employee
+
+  has_many :reported_incident_reports, class_name: "IncidentReport", foreign_key: :reported_by_id, dependent: :destroy, inverse_of: :reported_by
+  has_many :received_incident_reports, class_name: "IncidentReport", foreign_key: :reported_to_id, dependent: :destroy, inverse_of: :reported_to
 
   scope :applicants, -> { where(status: :applicant) }
   scope :actively_employed, -> { where(status: :employed) }
