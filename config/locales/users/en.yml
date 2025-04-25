@@ -1,5 +1,2 @@
 en:
   users:
-    notices:
-      updated: "User was successfully updated."
-      destroyed: "User was successfully destroyed."

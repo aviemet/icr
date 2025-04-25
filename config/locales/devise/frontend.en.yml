@@ -1,0 +1,19 @@
+en:
+  views:
+    devise:
+      login:
+        reset_password: Reset Password
+        register: Register
+        email: Email
+        password: Password
+        submit: Log In
+        remember_me: Remember Me
+      register:
+        title: Sign Up
+        email: Email
+        password: Password
+        confirm_password: Confirm Password
+        submit: Sign Up
+        login_instead: Log In Instead
+        errors:
+          passwords_must_match: Passwords must match

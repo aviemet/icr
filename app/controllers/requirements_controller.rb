@@ -51,7 +51,7 @@ class RequirementsController < ApplicationController
   def create
     authorize Requirement::Requirement.new
     if requirement.save
-      redirect_to requirement, notice: "Requirement was successfully created."
+      redirect_to requirement, notice: t("templates.controllers.notices.created", model: "Requirement")
     else
       redirect_to new_requirement_path, inertia: { errors: requirement.errors }
     end
@@ -62,7 +62,7 @@ class RequirementsController < ApplicationController
   def update
     authorize requirement
     if requirement.update(requirement_params)
-      redirect_to requirement, notice: "Requirement was successfully updated."
+      redirect_to requirement, notice: t("templates.controllers.notices.updated", model: "Requirement")
     else
       redirect_to edit_requirement_path, inertia: { errors: requirement.errors }
     end
@@ -72,6 +72,6 @@ class RequirementsController < ApplicationController
   def destroy
     authorize requirement
     requirement.destroy!
-    redirect_to requirements_url, notice: "Requirement was successfully destroyed."
+    redirect_to requirements_url, notice: t("templates.controllers.notices.destroyed", model: "Requirement")
   end
 end

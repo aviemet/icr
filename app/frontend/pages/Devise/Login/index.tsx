@@ -1,4 +1,5 @@
 import clsx from "clsx"
+import { useTranslation } from "react-i18next"
 import { type UseFormProps } from "use-inertia-form"
 
 import { Grid, Title, Link } from "@/components"
@@ -26,6 +27,7 @@ const defaultData = {
 }
 
 const Login = () => {
+	const { t } = useTranslation()
 	const { settings } = usePageProps()
 
 	const handleSubmit = ({ data }: UseFormProps<LoginFormData>) => {
@@ -37,10 +39,10 @@ const Login = () => {
 	return (
 		<AuthPaperLayout bottomLinks={ [
 			<Link href={ Routes.newUserPassword() } key="reset">
-				Reset Password
+				{ t("views.devise.login.reset_password") }
 			</Link>,
 			<Link href={ Routes.newUserRegistration() } key="register">
-				Register
+				{ t("views.devise.login.register") }
 			</Link>,
 		] }>
 			<Form
@@ -61,7 +63,7 @@ const Login = () => {
 						<Field>
 							<TextInput
 								name="email"
-								placeholder="Email"
+								placeholder={ t("views.devise.login.email") }
 								autoFocus
 								autoComplete="Email"
 								required
@@ -74,7 +76,7 @@ const Login = () => {
 						<Field>
 							<PasswordInput
 								name="password"
-								placeholder="Password"
+								placeholder={ t("views.devise.login.password") }
 								autoComplete="current-password"
 								required
 							/>
@@ -83,13 +85,13 @@ const Login = () => {
 
 					<Grid.Col>
 						<Field>
-							<Submit>Log In</Submit>
+							<Submit>{ t("views.devise.login.submit") }</Submit>
 						</Field>
 					</Grid.Col>
 
 					<Grid.Col>
 						<Field>
-							<Checkbox name="remember_me" label="Remember Me" />
+							<Checkbox name="remember_me" label={ t("views.devise.login.remember_me") } />
 						</Field>
 					</Grid.Col>
 

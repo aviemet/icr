@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import { IndexPageTemplate } from "@/features"
 import ClientsTable from "@/features/Clients/Table"
 import { Routes } from "@/lib"
@@ -8,9 +10,11 @@ interface ClientIndexProps {
 }
 
 const ClientsIndex = ({ clients, pagination }: ClientIndexProps) => {
+	const { t } = useTranslation()
+
 	return (
 		<IndexPageTemplate
-			title="Clients"
+			title={ t("views.clients.index.title") }
 			model="clients"
 			rows={ clients }
 			pagination={ pagination }

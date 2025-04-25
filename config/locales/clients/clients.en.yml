@@ -1,11 +1,5 @@
 en:
   clients:
-    notices:
-      created: "Client was successfully created."
-      updated: "Client was successfully updated."
-      destroyed: "Client was successfully destroyed."
-
-  clients_manager:
-    attributes:
-      manager_id:
-        already_manages: "already manages this client"
+    manager:
+      errors:
+        already_manages: Already manages this client

@@ -1,4 +1,5 @@
 import cx from "clsx"
+import { useTranslation } from "react-i18next"
 
 import { Box, Button, Card, Grid, Group, Link, Section, Stack, Text, Title } from "@/components"
 import {
@@ -14,6 +15,7 @@ import { usePageProps } from "@/lib/hooks"
 import * as classes from "./index.css"
 
 const Dashboard = () => {
+	const { t } = useTranslation()
 	const { settings, auth: { user } } = usePageProps()
 
 	return (
@@ -21,8 +23,8 @@ const Dashboard = () => {
 			<Stack gap="xl">
 				<Group justify="space-between" align="flex-end">
 					<div>
-						<Title order={ 1 }>Welcome back, { user?.person?.name }</Title>
-						<Text size="lg" color="dimmed">{ settings.company_name } Command Center</Text>
+						<Title order={ 1 }>{ t("views.dashboard.welcome", { name: user?.person?.name }) }</Title>
+						<Text size="lg" color="dimmed">{ t("views.dashboard.command_center", { company: settings.company_name }) }</Text>
 					</div>
 					<Group>
 						<Button
@@ -31,7 +33,7 @@ const Dashboard = () => {
 							variant="filled"
 							leftSection={ <PlusIcon /> }
 						>
-							New Client
+							{ t("views.dashboard.actions.new_client") }
 						</Button>
 						<Button
 							component={ Link }
@@ -39,7 +41,7 @@ const Dashboard = () => {
 							variant="filled"
 							leftSection={ <PlusIcon /> }
 						>
-							New Employee
+							{ t("views.dashboard.actions.new_employee") }
 						</Button>
 					</Group>
 				</Group>
@@ -50,17 +52,17 @@ const Dashboard = () => {
 							<Card.Section p="md">
 								<Group>
 									<HomeIcon size={ 24 } />
-									<Title order={ 3 }>Clients Overview</Title>
+									<Title order={ 3 }>{ t("views.dashboard.clients.title") }</Title>
 								</Group>
 							</Card.Section>
 							<Stack gap="md" p="md">
 								<div>
-									<Text size="xl" fw={ 700 }>24 Active Clients</Text>
-									<Text color="dimmed">3 pending proposals</Text>
+									<Text size="xl" fw={ 700 }>{ t("views.dashboard.clients.active_count", { count: 24 }) }</Text>
+									<Text color="dimmed">{ t("views.dashboard.clients.pending_count", { count: 3 }) }</Text>
 								</div>
 								<Group>
-									<Link href={ Routes.clients() }>View All Clients</Link>
-									<Link href={ Routes.newClient() }>Add New Client</Link>
+									<Link href={ Routes.clients() }>{ t("views.dashboard.clients.view_all") }</Link>
+									<Link href={ Routes.newClient() }>{ t("views.dashboard.clients.add_new") }</Link>
 								</Group>
 							</Stack>
 						</Card>
@@ -71,17 +73,17 @@ const Dashboard = () => {
 							<Card.Section p="md">
 								<Group>
 									<PeopleIcon size={ 24 } />
-									<Title order={ 3 }>Team Overview</Title>
+									<Title order={ 3 }>{ t("views.dashboard.team.title") }</Title>
 								</Group>
 							</Card.Section>
 							<Stack gap="md" p="md">
 								<Box>
-									<Text size="xl" fw={ 700 }>12 Team Members</Text>
-									<Text color="dimmed">2 on leave</Text>
+									<Text size="xl" fw={ 700 }>{ t("views.dashboard.team.member_count", { count: 12 }) }</Text>
+									<Text color="dimmed">{ t("views.dashboard.team.on_leave", { count: 2 }) }</Text>
 								</Box>
 								<Group>
-									<Link href={ Routes.employees() }>View All Employees</Link>
-									<Link href={ Routes.newEmployee() }>Add New Employee</Link>
+									<Link href={ Routes.employees() }>{ t("views.dashboard.team.view_all") }</Link>
+									<Link href={ Routes.newEmployee() }>{ t("views.dashboard.team.add_new") }</Link>
 								</Group>
 							</Stack>
 						</Card>
@@ -92,19 +94,19 @@ const Dashboard = () => {
 							<Card.Section p="md">
 								<Group>
 									<CalendarIcon size={ 24 } />
-									<Title order={ 3 }>Today's Schedule</Title>
+									<Title order={ 3 }>{ t("views.dashboard.schedule.title") }</Title>
 								</Group>
 							</Card.Section>
 							<Stack gap="xs" p="md">
-								<Text size="lg" fw={ 600 }>Upcoming Appointments</Text>
+								<Text size="lg" fw={ 600 }>{ t("views.dashboard.schedule.upcoming") }</Text>
 								<Stack gap="xs">
-									<Text>9:00 AM - Team Meeting</Text>
-									<Text>11:30 AM - Client Check-in</Text>
-									<Text>2:00 PM - Employee Training</Text>
+									<Text>{ t("views.dashboard.schedule.events.team_meeting") }</Text>
+									<Text>{ t("views.dashboard.schedule.events.client_checkin") }</Text>
+									<Text>{ t("views.dashboard.schedule.events.training") }</Text>
 								</Stack>
 								<Group mt="md">
-									<Link href={ Routes.timesheets() }>View Schedule</Link>
-									<Link href={ Routes.newTimesheet() }>Add Event</Link>
+									<Link href={ Routes.timesheets() }>{ t("views.dashboard.schedule.view") }</Link>
+									<Link href={ Routes.newTimesheet() }>{ t("views.dashboard.schedule.add") }</Link>
 								</Group>
 							</Stack>
 						</Card>
@@ -115,16 +117,16 @@ const Dashboard = () => {
 							<Card.Section p="md">
 								<Group>
 									<PeopleIcon size={ 24 } />
-									<Title order={ 3 }>Recent Activity</Title>
+									<Title order={ 3 }>{ t("views.dashboard.activity.title") }</Title>
 								</Group>
 							</Card.Section>
 							<Stack gap="xs" p="md">
-								<Text size="lg" fw={ 600 }>Latest Updates</Text>
+								<Text size="lg" fw={ 600 }>{ t("views.dashboard.activity.latest") }</Text>
 								<Stack gap="xs">
-									<Text>New client onboarded - Acme Corp</Text>
-									<Text>Project milestone completed - Tech Solutions</Text>
-									<Text>New employee joined - Sarah Smith</Text>
-									<Text>Updated company policies</Text>
+									<Text>{ t("views.dashboard.activity.updates.new_client") }</Text>
+									<Text>{ t("views.dashboard.activity.updates.milestone") }</Text>
+									<Text>{ t("views.dashboard.activity.updates.new_employee") }</Text>
+									<Text>{ t("views.dashboard.activity.updates.policies") }</Text>
 								</Stack>
 							</Stack>
 						</Card>
@@ -135,16 +137,16 @@ const Dashboard = () => {
 							<Card.Section p="md">
 								<Group>
 									<ClockIcon size={ 24 } />
-									<Title order={ 3 }>Time Tracking</Title>
+									<Title order={ 3 }>{ t("views.dashboard.time.title") }</Title>
 								</Group>
 							</Card.Section>
 							<Stack gap="md" p="md">
 								<div>
-									<Text size="xl" fw={ 700 }>168 Hours</Text>
-									<Text color="dimmed">Total hours tracked this week</Text>
-									<Text color="blue">15 timesheets pending approval</Text>
+									<Text size="xl" fw={ 700 }>{ t("views.dashboard.time.total_hours", { count: 168 }) }</Text>
+									<Text color="dimmed">{ t("views.dashboard.time.total_hours_week") }</Text>
+									<Text color="blue">{ t("views.dashboard.time.pending_timesheets", { count: 15 }) }</Text>
 								</div>
-								<Link href={ Routes.timesheets() }>View Timesheets</Link>
+								<Link href={ Routes.timesheets() }>{ t("views.dashboard.time.view") }</Link>
 							</Stack>
 						</Card>
 					</Grid.Col>

@@ -204,11 +204,26 @@ user.permission?("clients", "view", context)
 - Type assertions as last resort
 - Auto-generated types for serializers
 
-#### Internationalization
-- next-i18next for frontend translations
+#### Internationalization (i18n)
+- Using react-i18next for frontend translations
 - Translation files from i18n-js gem
 - Translations in Rails locales (yml)
 - Full i18n support (numbers, dates, currency, RTL)
+- Translation organization:
+  - Model-specific translations in `config/locales/[model]/frontend.en.yml`
+  - Other frontend translations in `config/locales/frontend.en.yml`
+  - Frontend key structure:
+    - `views.[feature].[page].[key]` (e.g., `views.clients.index.title`)
+    - Common elements are shared within their feature namespace (e.g., `views.devise.shared.email`)
+- Common notice templates in `en.yml` under `templates.controllers.notices`
+  - Reusable patterns for CRUD operations
+  - Uses `%{model}` interpolation
+  - Can be extended in model-specific locale files
+- Controller notice messages use standard templates:
+  - Created: `t("templates.controllers.notices.created", model: "Model Name")`
+  - Updated: `t("templates.controllers.notices.updated", model: "Model Name")`
+  - Destroyed: `t("templates.controllers.notices.destroyed", model: "Model Name")`
+  - Status Updated: `t("templates.controllers.notices.status_updated", model: "Model Name")`
 
 #### Testing
 - Unit: Vitest + React Testing Library

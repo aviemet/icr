@@ -69,7 +69,7 @@ class PermissionsController < ApplicationController
 
   def create
     if group.save
-      redirect_to permissions_path, notice: t(".success")
+      redirect_to permissions_path, notice: t("templates.controllers.notices.created", model: "Permission group")
     else
       render inertia: "Permissions/New", props: {
         group: group.as_json(methods: [:errors]),
@@ -80,7 +80,7 @@ class PermissionsController < ApplicationController
 
   def update
     if group.update(group_params)
-      redirect_to permissions_path, notice: t(".success")
+      redirect_to permissions_path, notice: t("templates.controllers.notices.updated", model: "Permission group")
     else
       render inertia: "Permissions/Edit", props: {
         group: group.as_json(
@@ -98,6 +98,6 @@ class PermissionsController < ApplicationController
 
   def destroy
     group.destroy
-    redirect_to permissions_path, notice: t(".success")
+    redirect_to permissions_path, notice: t("templates.controllers.notices.destroyed", model: "Permission group")
   end
 end

@@ -1,21 +1,14 @@
 en:
-  employees:
-    notices:
-      created: "Employee was successfully created."
-      updated: "Employee was successfully updated."
-      destroyed: "Employee was successfully destroyed."
-    
-    activerecord:
-      errors:
-        models:
-          employee:
-            attributes:
-            
-          employees_manager:
-            attributes:
-              manager:
-                must_have_privileges: "must have management privileges"
-              base:
-                no_self_management: "employee cannot manage themselves"
-              manager_id:
-                manager_uniqueness: "already manages this employee"
+  activerecord:
+    errors:
+      models:
+        employee:
+          attributes: {}
+        employees_manager:
+          attributes:
+            manager:
+              must_have_privileges: Must have management privileges
+            base:
+              no_self_management: Employee cannot manage themselves
+            manager_id:
+              manager_uniqueness: Already manages this employee

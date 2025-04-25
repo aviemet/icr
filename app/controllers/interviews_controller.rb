@@ -55,7 +55,7 @@ class InterviewsController < ApplicationController
     authorize Employee::Interview.new
 
     if employee_interview.save
-      redirect_to employee_interview, notice: "Interview was successfully created."
+      redirect_to employee_interview, notice: t("templates.controllers.notices.created", model: "Interview")
     else
       redirect_to new_employee_interview_path, inertia: { errors: employee_interview.errors }
     end
@@ -67,7 +67,7 @@ class InterviewsController < ApplicationController
     authorize employee_interview
 
     if employee_interview.update(employee_interview_params)
-      redirect_to employee_interview, notice: "Interview was successfully updated."
+      redirect_to employee_interview, notice: t("templates.controllers.notices.updated", model: "Interview")
     else
       redirect_to edit_employee_interview_path, inertia: { errors: employee_interview.errors }
     end
@@ -78,6 +78,6 @@ class InterviewsController < ApplicationController
     authorize employee_interview
 
     employee_interview.destroy!
-    redirect_to employee_interviews_url, notice: "Interview was successfully destroyed."
+    redirect_to employee_interviews_url, notice: t("templates.controllers.notices.destroyed", model: "Interview")
   end
 end

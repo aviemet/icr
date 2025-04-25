@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import { Title, Page, Section } from "@/components"
 import EmployeesForm from "@/features/Employees/Form"
 import { Routes } from "@/lib"
@@ -7,11 +9,12 @@ interface EditEmployeeProps {
 }
 
 const EditEmployee = ({ employee }: EditEmployeeProps) => {
-	const title = "Edit Employee"
+	const { t } = useTranslation()
+	const title = t("views.employees.edit.title")
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: "Employees", href: Routes.employees() },
+			{ title: t("views.employees.index.title"), href: Routes.employees() },
 			{ title: title, href: Routes.employee(employee.slug) },
 			{ title },
 		] }>

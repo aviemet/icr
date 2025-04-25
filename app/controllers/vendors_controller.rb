@@ -51,7 +51,7 @@ class VendorsController < ApplicationController
   def create
     authorize Vendor.new
     if vendor.save
-      redirect_to vendor, notice: "Vendor was successfully created."
+      redirect_to vendor, notice: t("templates.controllers.notices.created", model: "Vendor")
     else
       redirect_to new_vendor_path, inertia: { errors: vendor.errors }
     end
@@ -62,7 +62,7 @@ class VendorsController < ApplicationController
   def update
     authorize vendor
     if vendor.update(vendor_params)
-      redirect_to vendor, notice: "Vendor was successfully updated."
+      redirect_to vendor, notice: t("templates.controllers.notices.updated", model: "Vendor")
     else
       redirect_to edit_vendor_path, inertia: { errors: vendor.errors }
     end
@@ -72,7 +72,7 @@ class VendorsController < ApplicationController
   def destroy
     authorize vendor
     vendor.destroy!
-    redirect_to vendors_url, notice: "Vendor was successfully destroyed."
+    redirect_to vendors_url, notice: t("templates.controllers.notices.destroyed", model: "Vendor")
   end
 
 end

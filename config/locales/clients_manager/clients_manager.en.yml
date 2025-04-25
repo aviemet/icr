@@ -5,4 +5,4 @@ en:
         clients_manager:
           attributes:
             manager_id:
-              already_manages: already manages 
+              already_manages: Already manages 

@@ -1,0 +1,28 @@
+en:
+  views:
+    clients:
+      index:
+        title: Clients
+      new:
+        title: New Client
+      edit:
+        title: Edit %{name}
+        action: Edit
+      show:
+        title: Client
+        edit: Edit Client
+        tabs:
+          details: Details
+          contacts: Contact Details
+          documents: Documents
+        details:
+          placeholder: Some kind of useful dashboard, maybe important or commonly needed information and a picture. Maybe some stats and/or charts computed from other data. Could even be just a list of useful links for the client, curated by the agency.
+        contacts:
+          phones: Phone Numbers
+          emails: Emails
+          addresses: Addresses
+        documents:
+          title: Documents
+      schedule:
+        title: "%{name}'s Schedule"
+        new_shift: New Shift

@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import { Badge, Group, Title, Menu, Page, Section, Tabs } from "@/components"
 import { Routes } from "@/lib"
 
@@ -9,19 +11,21 @@ export interface ShowEmployeeProps {
 	employee: Schema.EmployeesShow
 }
 
-const tabsList = [
-	{ id: "details", label: "Details", component: Details },
-	{ id: "contacts", label: "Contact Details", component: Contacts },
-	{ id: "documents", label: "Documents", component: Documents },
-]
-
 const ShowEmployee = ({ employee }: ShowEmployeeProps) => {
-	const title = employee?.person?.name || "Employee"
+	const { t } = useTranslation()
+
+	const tabsList = [
+		{ id: "details", label: t("views.employees.show.tabs.details"), component: Details },
+		{ id: "contacts", label: t("views.employees.show.tabs.contacts"), component: Contacts },
+		{ id: "documents", label: t("views.employees.show.tabs.documents"), component: Documents },
+	]
+
+	const title = employee?.person?.name || t("views.employees.show.title")
 	const status = employee?.status
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: "Employees", href: Routes.employees() },
+			{ title: t("views.employees.index.title"), href: Routes.employees() },
 			{ title, href: Routes.employee(employee.slug) },
 		] }>
 			<Section fullHeight>
@@ -38,10 +42,10 @@ const ShowEmployee = ({ employee }: ShowEmployeeProps) => {
 							</Menu.Target>
 							<Menu.Dropdown>
 								<Menu.Link href={ Routes.editEmployee(employee.slug) }>
-									Edit Employee
+									{ t("views.employees.show.edit") }
 								</Menu.Link>
 								<Menu.Link href={ Routes.statusEmployee(employee.slug) }>
-									Change Status
+									{ t("views.employees.show.change_status") }
 								</Menu.Link>
 							</Menu.Dropdown>
 						</Menu>

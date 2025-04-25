@@ -9,16 +9,9 @@
       }
     },
     "clients": {
-      "notices": {
-        "created": "Client was successfully created.",
-        "destroyed": "Client was successfully destroyed.",
-        "updated": "Client was successfully updated."
-      }
-    },
-    "clients_manager": {
-      "attributes": {
-        "manager_id": {
-          "already_manages": "already manages this client"
+      "manager": {
+        "errors": {
+          "already_manages": "Already manages this client"
         }
       }
     },
@@ -228,35 +221,6 @@
         "send_instructions": "You will receive an email with instructions for how to unlock your account in a few minutes.",
         "send_paranoid_instructions": "If your account exists, you will receive an email with instructions for how to unlock it in a few minutes.",
         "unlocked": "Your account has been unlocked successfully. Please sign in to continue."
-      }
-    },
-    "employees": {
-      "activerecord": {
-        "errors": {
-          "models": {
-            "employee": {
-              "attributes": null
-            },
-            "employees_manager": {
-              "attributes": {
-                "base": {
-                  "no_self_management": "employee cannot manage themselves"
-                },
-                "manager": {
-                  "must_have_privileges": "must have management privileges"
-                },
-                "manager_id": {
-                  "manager_uniqueness": "already manages this employee"
-                }
-              }
-            }
-          }
-        }
-      },
-      "notices": {
-        "created": "Employee was successfully created.",
-        "destroyed": "Employee was successfully destroyed.",
-        "updated": "Employee was successfully updated."
       }
     },
     "flash": {
@@ -485,15 +449,238 @@
         }
       }
     },
-    "permissions": {
-      "create": {
-        "success": "Permission group was successfully created."
+    "permission": {
+      "views": {
+        "edit": {
+          "title": "Edit Permission Group"
+        },
+        "form": {
+          "add_assignment": "Add Assignment",
+          "add_permission": "Add Permission",
+          "assignments": "Assignments",
+          "basic_info": "Basic Information",
+          "conditions": {
+            "owner_only": "Owner Only",
+            "time_restricted": "Time Restricted"
+          },
+          "effects": {
+            "allow": "Allow",
+            "deny": "Deny"
+          },
+          "permissions": "Permissions"
+        },
+        "index": {
+          "new": "New Permission Group",
+          "title": "Permission Groups"
+        },
+        "new": {
+          "title": "New Permission Group"
+        }
+      }
+    },
+    "pundit": {
+      "not_authorized": "You are not authorized to access this page."
+    },
+    "settings": {
+      "errors": {
+        "update_failed": "Updating settings failed. Please notify your site administrator."
       },
-      "destroy": {
-        "success": "Permission group was successfully deleted."
+      "notices": {
+        "updated": "Settings have been updated successfully."
+      }
+    },
+    "support": {
+      "array": {
+        "last_word_connector": ", and ",
+        "two_words_connector": " and ",
+        "words_connector": ", "
+      }
+    },
+    "templates": {
+      "controllers": {
+        "notices": {
+          "created": "%{model} was successfully created.",
+          "destroyed": "%{model} was successfully destroyed.",
+          "status_updated": "%{model} status updated successfully",
+          "updated": "%{model} was successfully updated."
+        }
+      }
+    },
+    "time": {
+      "am": "AM",
+      "formats": {
+        "default": "%a, %d %b %Y %H:%M:%S %z",
+        "devise": {
+          "mailer": {
+            "invitation_instructions": {
+              "accept_until_format": "%B %d, %Y %I:%M %p"
+            }
+          }
+        },
+        "long": "%B %d, %Y %H:%M",
+        "short": "%d %b %H:%M",
+        "us": "%m/%d/%Y %I:%M %p"
+      },
+      "pm": "PM"
+    },
+    "users": null,
+    "views": {
+      "clients": {
+        "edit": {
+          "action": "Edit",
+          "title": "Edit %{name}"
+        },
+        "index": {
+          "title": "Clients"
+        },
+        "new": {
+          "title": "New Client"
+        },
+        "schedule": {
+          "new_shift": "New Shift",
+          "title": "%{name}'s Schedule"
+        },
+        "show": {
+          "contacts": {
+            "addresses": "Addresses",
+            "emails": "Emails",
+            "phones": "Phone Numbers"
+          },
+          "details": {
+            "placeholder": "Some kind of useful dashboard, maybe important or commonly needed information and a picture. Maybe some stats and/or charts computed from other data. Could even be just a list of useful links for the client, curated by the agency."
+          },
+          "documents": {
+            "title": "Documents"
+          },
+          "edit": "Edit Client",
+          "tabs": {
+            "contacts": "Contact Details",
+            "details": "Details",
+            "documents": "Documents"
+          },
+          "title": "Client"
+        }
+      },
+      "dashboard": {
+        "actions": {
+          "new_client": "New Client",
+          "new_employee": "New Employee"
+        },
+        "activity": {
+          "latest": "Latest Updates",
+          "title": "Recent Activity",
+          "updates": {
+            "milestone": "Project milestone completed - Tech Solutions",
+            "new_client": "New client onboarded - Acme Corp",
+            "new_employee": "New employee joined - Sarah Smith",
+            "policies": "Updated company policies"
+          }
+        },
+        "clients": {
+          "active_count": "%{count} Active Clients",
+          "add_new": "Add New Client",
+          "pending_count": "%{count} pending proposals",
+          "title": "Clients Overview",
+          "view_all": "View All Clients"
+        },
+        "command_center": "%{company} Command Center",
+        "schedule": {
+          "add": "Add Event",
+          "events": {
+            "client_checkin": "11:30 AM - Client Check-in",
+            "team_meeting": "9:00 AM - Team Meeting",
+            "training": "2:00 PM - Employee Training"
+          },
+          "title": "Today's Schedule",
+          "upcoming": "Upcoming Appointments",
+          "view": "View Schedule"
+        },
+        "team": {
+          "add_new": "Add New Employee",
+          "member_count": "%{count} Team Members",
+          "on_leave": "%{count} on leave",
+          "title": "Team Overview",
+          "view_all": "View All Employees"
+        },
+        "time": {
+          "pending_timesheets": "%{count} timesheets pending approval",
+          "title": "Time Tracking",
+          "total_hours": "%{count} Hours",
+          "total_hours_week": "Total hours tracked this week",
+          "view": "View Timesheets"
+        },
+        "welcome": "Welcome back, %{name}"
+      },
+      "devise": {
+        "login": {
+          "email": "Email",
+          "password": "Password",
+          "register": "Register",
+          "remember_me": "Remember Me",
+          "reset_password": "Reset Password",
+          "submit": "Log In"
+        },
+        "register": {
+          "confirm_password": "Confirm Password",
+          "email": "Email",
+          "errors": {
+            "passwords_must_match": "Passwords must match"
+          },
+          "login_instead": "Log In Instead",
+          "password": "Password",
+          "submit": "Sign Up",
+          "title": "Sign Up"
+        }
       },
       "edit": {
         "title": "Edit Permission Group"
+      },
+      "employees": {
+        "edit": {
+          "title": "Edit Employee"
+        },
+        "index": {
+          "new": "New Employee",
+          "title": "Employees"
+        },
+        "new": {
+          "title": "New Employee"
+        },
+        "schedule": {
+          "title": "%{name}'s Schedule"
+        },
+        "show": {
+          "change_status": "Change Status",
+          "contacts": {
+            "addresses": "Addresses",
+            "emails": "Emails",
+            "phones": "Phone Numbers"
+          },
+          "details": {
+            "placeholder": "Some kind of useful dashboard, maybe important or commonly needed information and a picture. Maybe some stats and/or charts computed from other data. Could even be just a list of useful links for the employee, curated by the agency."
+          },
+          "documents": {
+            "title": "Documents"
+          },
+          "edit": "Edit Employee",
+          "tabs": {
+            "contacts": "Contact Details",
+            "details": "Details",
+            "documents": "Documents"
+          },
+          "title": "Employee"
+        },
+        "status": {
+          "change_for": "Change Status for %{name}",
+          "label": "Status Change",
+          "title": "Change Employee Status",
+          "transitions": {
+            "begin_onboarding": "Begin Onboarding",
+            "close_application": "Close Application",
+            "process_termination": "Process Termination",
+            "record_resignation": "Record Resignation"
+          }
+        }
       },
       "form": {
         "add_assignment": "Add Assignment",
@@ -517,52 +704,6 @@
       "new": {
         "title": "New Permission Group"
       },
-      "update": {
-        "success": "Permission group was successfully updated."
-      }
-    },
-    "pundit": {
-      "not_authorized": "You are not authorized to access this page."
-    },
-    "settings": {
-      "errors": {
-        "update_failed": "Updating settings failed. Please notify your site administrator."
-      },
-      "notices": {
-        "updated": "Settings have been updated successfully."
-      }
-    },
-    "support": {
-      "array": {
-        "last_word_connector": ", and ",
-        "two_words_connector": " and ",
-        "words_connector": ", "
-      }
-    },
-    "time": {
-      "am": "AM",
-      "formats": {
-        "default": "%a, %d %b %Y %H:%M:%S %z",
-        "devise": {
-          "mailer": {
-            "invitation_instructions": {
-              "accept_until_format": "%B %d, %Y %I:%M %p"
-            }
-          }
-        },
-        "long": "%B %d, %Y %H:%M",
-        "short": "%d %b %H:%M",
-        "us": "%m/%d/%Y %I:%M %p"
-      },
-      "pm": "PM"
-    },
-    "users": {
-      "notices": {
-        "destroyed": "User was successfully destroyed.",
-        "updated": "User was successfully updated."
-      }
-    },
-    "views": {
       "pagination": {
         "first": "&laquo; First",
         "last": "Last &raquo;",
