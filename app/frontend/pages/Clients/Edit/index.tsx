@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import { Title, Page, Section } from "@/components"
 import ClientsForm from "@/features/Clients/Form"
 import { Routes } from "@/lib"
@@ -7,13 +9,14 @@ interface EditClientProps {
 }
 
 const EditClient = ({ client }: EditClientProps) => {
-	const title = `Edit ${client.name}`
+	const { t } = useTranslation()
+	const title = t("views.clients.edit.title", { name: client.name })
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: "Clients", href: Routes.clients() },
+			{ title: t("views.clients.index.title"), href: Routes.clients() },
 			{ title: client.name, href: Routes.client(client.id) },
-			{ title: "Edit" },
+			{ title: t("views.clients.edit.action") },
 		] }>
 			<Section>
 				<Title>{ title }</Title>

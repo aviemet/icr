@@ -1,0 +1,246 @@
+{
+  "it": {
+    "date": {
+      "abbr_day_names": [
+        "dom",
+        "lun",
+        "mar",
+        "mer",
+        "gio",
+        "ven",
+        "sab"
+      ],
+      "abbr_month_names": [
+        null,
+        "gen",
+        "feb",
+        "mar",
+        "apr",
+        "mag",
+        "giu",
+        "lug",
+        "ago",
+        "set",
+        "ott",
+        "nov",
+        "dic"
+      ],
+      "day_names": [
+        "domenica",
+        "lunedì",
+        "martedì",
+        "mercoledì",
+        "giovedì",
+        "venerdì",
+        "sabato"
+      ],
+      "formats": {
+        "default": "%d/%m/%Y",
+        "long": "%d %B %Y",
+        "short": "%d %b"
+      },
+      "month_names": [
+        null,
+        "gennaio",
+        "febbraio",
+        "marzo",
+        "aprile",
+        "maggio",
+        "giugno",
+        "luglio",
+        "agosto",
+        "settembre",
+        "ottobre",
+        "novembre",
+        "dicembre"
+      ],
+      "order": [
+        "day",
+        "month",
+        "year"
+      ]
+    },
+    "devise": {
+      "failure": {
+        "invited": "Hai un invito in sospeso, accettalo per completare la creazione del tuo account."
+      },
+      "invitations": {
+        "edit": {
+          "header": "Imposta la tua password",
+          "submit_button": "Imposta la password"
+        },
+        "invitation_removed": "Il tuo invito è stato rimosso.",
+        "invitation_token_invalid": "Il token di invito fornito non è valido!",
+        "new": {
+          "header": "Inoltra l'invito",
+          "submit_button": "Inoltra un invito"
+        },
+        "no_invitations_remaining": "Non sono più disponibili inviti.",
+        "send_instructions": "Un'email di invito è stata inoltrata a %{email}.",
+        "updated": "La tua password è stata impostata correttamente. Ora sei connesso.",
+        "updated_not_active": "La tua password è stata impostata correttamente."
+      },
+      "mailer": {
+        "invitation_instructions": {
+          "accept": "Accetta l'invito",
+          "accept_until": "L'invito sarà valido fino a %{due_date}.",
+          "hello": "Buongiorno %{email}",
+          "ignore": "Se non si desidera accettare l'invito si prega di ignorare la presente email.<br />L'account non sarà creato finché non verrà impostata la password (v. link sotto).",
+          "someone_invited_you": "Qualcuno ti ha invitato a %{url}, accetta tramite il link qua sotto.",
+          "subject": "Istruzioni per l'invito"
+        }
+      }
+    },
+    "ice_cube": {
+      "array": {
+        "last_word_connector": " e ",
+        "two_words_connector": " e ",
+        "words_connector": ", "
+      },
+      "at_hours_of_the_day": {
+        "one": "alla %{segments} ora del giorno",
+        "other": "alla %{segments} ora del giorno"
+      },
+      "at_seconds_of_minute": {
+        "one": "al %{segments} secondo",
+        "other": "al %{segments} secondo"
+      },
+      "date": {
+        "day_names": [
+          "domenica",
+          "lunedì",
+          "martedì",
+          "mercoledì",
+          "giovedì",
+          "venerdì",
+          "sabato"
+        ],
+        "formats": {
+          "default": "%-d. %B %Y"
+        },
+        "month_names": [
+          null,
+          "gennaio",
+          "febbraio",
+          "marzo",
+          "aprile",
+          "maggio",
+          "giugno",
+          "luglio",
+          "agosto",
+          "settembre",
+          "ottobre",
+          "novembre",
+          "dicembre"
+        ]
+      },
+      "days_of_month": {
+        "one": "%{segments} giorno del mese",
+        "other": "%{segments} giorni del mese"
+      },
+      "days_of_week": "%{segments} %{day}",
+      "days_of_year": {
+        "one": "%{segments} giorno dell'anno",
+        "other": "%{segments} giorni dell'anno"
+      },
+      "days_on": [
+        "di domenica",
+        "di lunedì",
+        "di martedì",
+        "di mercoledì",
+        "di giovedì",
+        "di venerdì",
+        "di sabato"
+      ],
+      "each_day": {
+        "one": "Ogni giorno",
+        "other": "Ogni %{count} giorni"
+      },
+      "each_hour": {
+        "one": "Ogni ora",
+        "other": "Ogni %{count} ore"
+      },
+      "each_minute": {
+        "one": "Ogni minuto",
+        "other": "Ogni %{count} minuti"
+      },
+      "each_month": {
+        "one": "Ogni mese",
+        "other": "Ogni %{count} mesi"
+      },
+      "each_second": {
+        "one": "ogni secondo",
+        "other": "Ogni %{count} secondi"
+      },
+      "each_week": {
+        "one": "Ogni settimana",
+        "other": "Ogni %{count} settimane"
+      },
+      "each_year": {
+        "one": "Ogni anno",
+        "other": "Ogni %{count} anni"
+      },
+      "in": "a %{target}",
+      "integer": {
+        "literal_ordinals": {
+          "-1": "ultimo",
+          "-2": "penultimo"
+        },
+        "negative": "%{ordinal}. e ultimo",
+        "ordinal": "%{number}%{ordinal}",
+        "ordinals": {
+          "default": "."
+        }
+      },
+      "not": "tranne %{target}",
+      "not_on": "tranne %{target}",
+      "on": "il %{sentence}",
+      "on_days": "%{days}",
+      "on_minutes_of_hour": {
+        "one": "al %{segments} minuto dell'ora",
+        "other": "al %{segments} minuto dell'ora"
+      },
+      "on_seconds_of_minute": {
+        "one": "al %{segments} secondo del minuto",
+        "other": "al %{segments} secondo del minuto"
+      },
+      "on_weekdays": "nei giorni feriali",
+      "on_weekends": "nel fine settimana",
+      "pieces_connector": " / ",
+      "string": {
+        "format": {
+          "count": "%{rest} %{current}",
+          "day": "%{rest} %{current}",
+          "day_of_month": "%{rest} %{current}",
+          "day_of_week": "%{rest} %{current}",
+          "day_of_year": "%{rest} %{current}",
+          "default": "%{rest} %{current}",
+          "hour_of_day": "%{rest} %{current}",
+          "minute_of_hour": "%{rest} %{current}",
+          "until": "%{rest} %{current}"
+        }
+      },
+      "times": {
+        "one": "%{count} volta",
+        "other": "%{count} volte"
+      },
+      "until": "fino al %{date}"
+    },
+    "time": {
+      "am": "alle",
+      "formats": {
+        "default": "%a, %d %b %Y %H:%M:%S %z",
+        "devise": {
+          "mailer": {
+            "invitation_instructions": {
+              "accept_until_format": "%B %d, %Y %I:%M %p"
+            }
+          }
+        },
+        "long": "%B %d, %Y %H:%M",
+        "short": "%d %b %H:%M"
+      },
+      "pm": "pm"
+    }
+  }
+}

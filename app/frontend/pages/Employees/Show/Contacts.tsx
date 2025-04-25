@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import {
 	Title,
 	Box,
@@ -13,10 +15,12 @@ import { type ShowEmployeeProps } from "."
 interface EmployeeContactsProps extends ShowEmployeeProps {}
 
 const Contacts = ({ employee }: EmployeeContactsProps) => {
+	const { t } = useTranslation()
+
 	return (
 		<>
 			<Section mb="md">
-				<Title order={ 3 }>Phone Numbers</Title>
+				<Title order={ 3 }>{ t("views.employees.show.contacts.phones") }</Title>
 				{ employee.person.contact.phones.map(phone => (
 					<Box key={ phone.id }>
 						{ phone?.name && <Text>{ phone.name }</Text> }
@@ -31,7 +35,7 @@ const Contacts = ({ employee }: EmployeeContactsProps) => {
 			</Section>
 
 			<Section mb="md">
-				<Title order={ 3 }>Emails</Title>
+				<Title order={ 3 }>{ t("views.employees.show.contacts.emails") }</Title>
 				{ employee.person.contact.emails.map(email => (
 					<Box key={ email.id }>
 						{ email?.name && <Text>{ email.name }</Text> }
@@ -46,7 +50,7 @@ const Contacts = ({ employee }: EmployeeContactsProps) => {
 			</Section>
 
 			<Section mb="md">
-				<Title order={ 3 }>Addresses</Title>
+				<Title order={ 3 }>{ t("views.employees.show.contacts.addresses") }</Title>
 				{ employee.person.contact.addresses.map(address => (
 					<Box key={ address.id }>
 						<Group gap="lg">

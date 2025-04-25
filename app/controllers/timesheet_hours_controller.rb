@@ -1,9 +1,9 @@
 class TimesheetHoursController < ApplicationController
   include Searchable
-  
+
   expose :timesheet_hours, -> { search(TimesheetHour.new.includes_associated) }
   expose :timesheet_hour, scope: ->{ TimesheetHour.new.includes_associated }
-  
+
   sortable_fields %w()
 
   strong_params :timesheet_hour, fetch: :timesheet_hour
@@ -12,7 +12,7 @@ class TimesheetHoursController < ApplicationController
     authorize timesheet_hours
 
     paginated_timesheet_hours = paginate(timesheet_hours, :timesheet_hours)
-    
+
     render inertia: "TimesheetHours/Index", props: {
       timesheet_hours: -> { paginated_timesheet_hours.render(:index) },
       pagination: -> { {
@@ -46,7 +46,7 @@ class TimesheetHoursController < ApplicationController
   def create
     authorize TimesheetHour.new
     if timesheet_hour.save
-      redirect_to timesheet_hour, notice: "Timesheet hour was successfully created."
+      redirect_to timesheet_hour, notice: t("templates.controllers.notices.created", model: "Timesheet hour")
     else
       redirect_to new_timesheet_hour_path, inertia: { errors: timesheet_hour.errors }
     end
@@ -55,7 +55,7 @@ class TimesheetHoursController < ApplicationController
   def update
     authorize timesheet_hour
     if timesheet_hour.update(timesheet_hour_params)
-      redirect_to timesheet_hour, notice: "Timesheet hour was successfully updated."
+      redirect_to timesheet_hour, notice: t("templates.controllers.notices.updated", model: "Timesheet hour")
     else
       redirect_to edit_timesheet_hour_path, inertia: { errors: timesheet_hour.errors }
     end
@@ -64,6 +64,6 @@ class TimesheetHoursController < ApplicationController
   def destroy
     authorize timesheet_hour
     timesheet_hour.destroy!
-    redirect_to timesheet_hours_url, notice: "Timesheet hour was successfully destroyed."
+    redirect_to timesheet_hours_url, notice: t("templates.controllers.notices.destroyed", model: "Timesheet hour")
   end
 end

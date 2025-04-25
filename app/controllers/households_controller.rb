@@ -51,7 +51,7 @@ class HouseholdsController < ApplicationController
   def create
     authorize Household.new
     if household.save
-      redirect_to household, notice: "Household was successfully created."
+      redirect_to household, notice: t("templates.controllers.notices.created", model: "Household")
     else
       redirect_to new_household_path, inertia: { errors: household.errors }
     end
@@ -62,7 +62,7 @@ class HouseholdsController < ApplicationController
   def update
     authorize household
     if household.update(household_params)
-      redirect_to household, notice: "Household was successfully updated."
+      redirect_to household, notice: t("templates.controllers.notices.updated", model: "Household")
     else
       redirect_to edit_household_path, inertia: { errors: household.errors }
     end
@@ -72,6 +72,6 @@ class HouseholdsController < ApplicationController
   def destroy
     authorize household
     household.destroy!
-    redirect_to households_url, notice: "Household was successfully destroyed."
+    redirect_to households_url, notice: t("templates.controllers.notices.destroyed", model: "Household")
   end
 end

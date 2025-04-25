@@ -1,10 +1,14 @@
+import { useTranslation } from "react-i18next"
+
 import { type ShowEmployeeProps } from "."
 
 interface EmployeeDocumentsProps extends ShowEmployeeProps {}
 
 const Documents = ({ employee }: EmployeeDocumentsProps) => {
+	const { t } = useTranslation()
+
 	return (
-		<div>Documents</div>
+		<div>{ t("views.employees.show.documents.title") }</div>
 	)
 }
 

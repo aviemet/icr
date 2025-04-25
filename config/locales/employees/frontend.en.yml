@@ -1,0 +1,37 @@
+en:
+  views:
+    employees:
+      index:
+        title: Employees
+        new: New Employee
+      show:
+        title: Employee
+        edit: Edit Employee
+        change_status: Change Status
+        tabs:
+          details: Details
+          contacts: Contact Details
+          documents: Documents
+        details:
+          placeholder: Some kind of useful dashboard, maybe important or commonly needed information and a picture. Maybe some stats and/or charts computed from other data. Could even be just a list of useful links for the employee, curated by the agency.
+        contacts:
+          phones: Phone Numbers
+          emails: Emails
+          addresses: Addresses
+        documents:
+          title: Documents
+      new:
+        title: New Employee
+      edit:
+        title: Edit Employee
+      status:
+        title: Change Employee Status
+        change_for: Change Status for %{name}
+        label: Status Change
+        transitions:
+          begin_onboarding: Begin Onboarding
+          close_application: Close Application
+          record_resignation: Record Resignation
+          process_termination: Process Termination
+      schedule:
+        title: "%{name}'s Schedule"

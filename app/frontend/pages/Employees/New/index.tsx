@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import { Title, Page, Section } from "@/components"
 import EmployeeForm from "@/features/Employees/Form"
 import { Routes } from "@/lib"
@@ -7,11 +9,11 @@ interface INewEmployeeProps {
 }
 
 const NewEmployee = ({ ...data }: INewEmployeeProps) => {
-	const title = "New Employee"
+	const { t } = useTranslation()
+	const title = t("views.employees.new.title")
 
 	return (
 		<Page title={ title }>
-
 			<Section>
 				<Title>{ title }</Title>
 
@@ -20,7 +22,6 @@ const NewEmployee = ({ ...data }: INewEmployeeProps) => {
 					{ ...data }
 				/>
 			</Section>
-
 		</Page>
 	)
 }

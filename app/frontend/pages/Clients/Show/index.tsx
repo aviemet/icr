@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import { Group, Title, Menu, Page, Section, Tabs } from "@/components"
 import { Routes } from "@/lib"
 
@@ -5,22 +7,20 @@ import Contacts from "./Contacts"
 import Details from "./Details"
 import Documents from "./Documents"
 
-const tabsList = [
-	{ id: "details", label: "Details", component: Details },
-	{ id: "contacts", label: "Contact Details", component: Contacts },
-	{ id: "documents", label: "Documents", component: Documents },
-]
-
-export interface ShowClientProps {
-	client: Schema.ClientsShow
-}
-
 const ShowClient = ({ client }: ShowClientProps) => {
-	const title = client?.person?.name || "Client"
+	const { t } = useTranslation()
+
+	const tabsList = [
+		{ id: "details", label: t("views.clients.show.tabs.details"), component: Details },
+		{ id: "contacts", label: t("views.clients.show.tabs.contacts"), component: Contacts },
+		{ id: "documents", label: t("views.clients.show.tabs.documents"), component: Documents },
+	]
+
+	const title = client?.person?.name || t("views.clients.show.title")
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: "Clients", href: Routes.clients() },
+			{ title: t("views.clients.index.title"), href: Routes.clients() },
 			{ title, href: Routes.client(client.slug) },
 		] }>
 			<Section fullHeight>
@@ -32,7 +32,7 @@ const ShowClient = ({ client }: ShowClientProps) => {
 						<Menu.Target />
 						<Menu.Dropdown>
 							<Menu.Link href={ Routes.editClient(client.slug) }>
-								Edit Client
+								{ t("views.clients.show.edit") }
 							</Menu.Link>
 						</Menu.Dropdown>
 					</Menu>
@@ -61,6 +61,10 @@ const ShowClient = ({ client }: ShowClientProps) => {
 
 		</Page>
 	)
+}
+
+export interface ShowClientProps {
+	client: Schema.ClientsShow
 }
 
 export default ShowClient

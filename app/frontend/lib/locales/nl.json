@@ -1,0 +1,207 @@
+{
+  "nl": {
+    "date": {
+      "abbr_day_names": [
+        "zo",
+        "ma",
+        "di",
+        "wo",
+        "do",
+        "vr",
+        "za"
+      ],
+      "abbr_month_names": [
+        null,
+        "jan",
+        "feb",
+        "mrt",
+        "apr",
+        "mei",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "okt",
+        "nov",
+        "dec"
+      ],
+      "day_names": [
+        "zondag",
+        "maandag",
+        "dinsdag",
+        "woensdag",
+        "donderdag",
+        "vrijdag",
+        "zaterdag"
+      ],
+      "month_names": [
+        null,
+        "januari",
+        "februari",
+        "maart",
+        "april",
+        "mei",
+        "juni",
+        "juli",
+        "augustus",
+        "september",
+        "oktober",
+        "november",
+        "december"
+      ]
+    },
+    "devise": {
+      "failure": {
+        "invited": "U bent reeds uitgenodigd, accepteer de uitnodiging die u heeft ontvangen per mail om uw account te accepteren."
+      },
+      "invitations": {
+        "edit": {
+          "header": "Stel Uw wachtwoord in",
+          "submit_button": "Stel mijn wachtwoord in"
+        },
+        "invitation_removed": "Uw uitnodiging is verwijderd.",
+        "invitation_token_invalid": "De uitnodigingscode is ongeldig!",
+        "new": {
+          "header": "Verstuur uitnodiging",
+          "submit_button": "Verstuur een uitnodiging"
+        },
+        "no_invitations_remaining": "Geen uitnodigingen over.",
+        "send_instructions": "Een uitnodigingsmail aan %{email} is verstuurd.",
+        "updated": "Uw wachtwoord is ingesteld. U bent nu ingelogd.",
+        "updated_not_active": "Uw wachtwoord is ingesteld."
+      },
+      "mailer": {
+        "invitation_instructions": {
+          "accept": "Accepteer uitnodiging",
+          "accept_until": "Deze uitnodoging vervalt per %{due_date}.",
+          "hello": "Beste %{email}",
+          "ignore": "Indien U de uitnodiging niet wenst te accepteren, negeer dan alstublieft deze email.<br />\nUw account wordt niet aangemaakt indien U niet via bovenstaande link uw wachtwoord aanmaakt.",
+          "someone_invited_you": "Iemand heeft U uitgenodigd voor %{url}, U kunt de uitnodiging accepteren via onderstaande link.",
+          "subject": "Instructies voor uitnodigingen"
+        }
+      }
+    },
+    "ice_cube": {
+      "array": {
+        "last_word_connector": " en ",
+        "two_words_connector": " en ",
+        "words_connector": ", "
+      },
+      "at_hours_of_the_day": {
+        "one": "op het %{segments} uur",
+        "other": "op de %{segments} uren van de dag"
+      },
+      "at_seconds_of_minute": {
+        "one": "op de %{segments} seconde",
+        "other": "op de %{segments} seconden"
+      },
+      "date": {
+        "formats": {
+          "default": "%-d %B %Y"
+        }
+      },
+      "days_of_month": {
+        "one": "%{segments} dag van de maand",
+        "other": "%{segments} dagen van de maand"
+      },
+      "days_of_week": "%{segments} %{day}",
+      "days_of_year": {
+        "one": "%{segments} dag van het jaar",
+        "other": "%{segments} dagen van het jaar"
+      },
+      "days_on": [
+        "zondagen",
+        "maandagen",
+        "dinsdagen",
+        "woensdagen",
+        "donderdagen",
+        "vrijdagen",
+        "zaterdagen"
+      ],
+      "each_day": {
+        "one": "Dagelijks",
+        "other": "Elke %{count} dagen"
+      },
+      "each_hour": {
+        "one": "Elk uur",
+        "other": "Elke %{count} uren"
+      },
+      "each_minute": {
+        "one": "Elke minuut",
+        "other": "Elke %{count} minuten"
+      },
+      "each_month": {
+        "one": "Maandelijks",
+        "other": "Elke %{count} maanden"
+      },
+      "each_second": {
+        "one": "Elke seconde",
+        "other": "Elke %{count} seconden"
+      },
+      "each_week": {
+        "one": "Wekelijks",
+        "other": "Elke %{count} weken"
+      },
+      "each_year": {
+        "one": "Jaarlijks",
+        "other": "Elke %{count} jaren"
+      },
+      "in": "in %{target}",
+      "integer": {
+        "literal_ordinals": {
+          "-1": "laatste",
+          "-2": "voorlaatste"
+        },
+        "negative": "%{ordinal} laatste",
+        "ordinal": "%{number}%{ordinal}",
+        "ordinals": {
+          "default": "e"
+        }
+      },
+      "not": "niet %{target}",
+      "not_on": "niet op %{target}",
+      "on": "op de  %{sentence}",
+      "on_days": "op %{days}",
+      "on_minutes_of_hour": {
+        "one": "om de %{segments} minuut van het uur",
+        "other": "op de %{segments} minuten van het uur"
+      },
+      "on_seconds_of_minute": {
+        "one": "op de %{segments} seconde van de minuut",
+        "other": "op de %{segments} seconden van de minuut"
+      },
+      "on_weekdays": "op weekdagen",
+      "on_weekends": "in het weekend",
+      "pieces_connector": " / ",
+      "string": {
+        "format": {
+          "count": "%{rest} %{current}",
+          "day": "%{rest} %{current}",
+          "day_of_month": "%{rest} %{current}",
+          "day_of_week": "%{rest} %{current}",
+          "day_of_year": "%{rest} %{current}",
+          "default": "%{rest} %{current}",
+          "hour_of_day": "%{rest} %{current}",
+          "minute_of_hour": "%{rest} %{current}",
+          "until": "%{rest} %{current}"
+        }
+      },
+      "times": {
+        "one": "%{count} keer",
+        "other": "%{count} keer"
+      },
+      "until": "tot %{date}"
+    },
+    "time": {
+      "formats": {
+        "devise": {
+          "mailer": {
+            "invitation_instructions": {
+              "accept_until_format": "%a %d %b %Y %H:%M:%S %Z"
+            }
+          }
+        }
+      }
+    }
+  }
+}

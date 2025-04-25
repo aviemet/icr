@@ -74,7 +74,7 @@ class ClientsController < ApplicationController
     authorize Client.new
 
     if client.save
-      redirect_to client_path(client), notice: t("clients.notices.created")
+      redirect_to client_path(client), notice: t("templates.controllers.notices.created", model: "Client")
     else
       redirect_to new_client_path, inertia: { errors: client.errors }
     end
@@ -86,7 +86,7 @@ class ClientsController < ApplicationController
     authorize client
 
     if client.update(client_params)
-      redirect_to client, notice: t("clients.notices.updated")
+      redirect_to client, notice: t("templates.controllers.notices.updated", model: "Client")
     else
       redirect_to edit_client_path(client), inertia: { errors: client.errors }
     end
@@ -97,6 +97,6 @@ class ClientsController < ApplicationController
     authorize client
 
     client.destroy!
-    redirect_to clients_url, notice: t("clients.notices.destroyed")
+    redirect_to clients_url, notice: t("templates.controllers.notices.destroyed", model: "Client")
   end
 end

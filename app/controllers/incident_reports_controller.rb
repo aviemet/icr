@@ -51,7 +51,7 @@ class IncidentReportsController < ApplicationController
   def create
     authorize IncidentReport.new
     if incident_report.save
-      redirect_to incident_report, notice: "Incident report was successfully created."
+      redirect_to incident_report, notice: t("templates.controllers.notices.created", model: "Incident report")
     else
       redirect_to new_incident_report_path, inertia: { errors: incident_report.errors }
     end
@@ -62,7 +62,7 @@ class IncidentReportsController < ApplicationController
   def update
     authorize incident_report
     if incident_report.update(incident_report_params)
-      redirect_to incident_report, notice: "Incident report was successfully updated."
+      redirect_to incident_report, notice: t("templates.controllers.notices.updated", model: "Incident report")
     else
       redirect_to edit_incident_report_path, inertia: { errors: incident_report.errors }
     end
@@ -72,6 +72,6 @@ class IncidentReportsController < ApplicationController
   def destroy
     authorize incident_report
     incident_report.destroy!
-    redirect_to incident_reports_url, notice: "Incident report was successfully destroyed."
+    redirect_to incident_reports_url, notice: t("templates.controllers.notices.destroyed", model: "Incident report")
   end
 end

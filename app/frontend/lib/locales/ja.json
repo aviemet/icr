@@ -1,0 +1,203 @@
+{
+  "ja": {
+    "date": {
+      "abbr_day_names": [
+        "日",
+        "月",
+        "火",
+        "水",
+        "木",
+        "金",
+        "土"
+      ],
+      "abbr_month_names": [
+        null,
+        "1月",
+        "2月",
+        "3月",
+        "4月",
+        "5月",
+        "6月",
+        "7月",
+        "8月",
+        "9月",
+        "10月",
+        "11月",
+        "12月"
+      ],
+      "day_names": [
+        "日曜",
+        "月曜",
+        "火曜",
+        "水曜",
+        "木曜",
+        "金曜",
+        "土曜"
+      ],
+      "month_names": [
+        null,
+        "1月",
+        "2月",
+        "3月",
+        "4月",
+        "5月",
+        "6月",
+        "7月",
+        "8月",
+        "9月",
+        "10月",
+        "11月",
+        "12月"
+      ]
+    },
+    "devise": {
+      "failure": {
+        "invited": "アカウントを作成するには、保留中の招待を承認してください。"
+      },
+      "invitations": {
+        "edit": {
+          "header": "パスワードを設定する",
+          "submit_button": "パスワードを設定する"
+        },
+        "invitation_removed": "招待を取り消しました。",
+        "invitation_token_invalid": "招待コードが不正です。",
+        "new": {
+          "header": "招待する",
+          "submit_button": "招待メールを送る"
+        },
+        "no_invitations_remaining": "これ以上招待できません。",
+        "send_instructions": "招待メールが%{email}に送信されました。",
+        "updated": "パスワードが設定されました。お使いのアカウントでログインできます。",
+        "updated_not_active": "パスワードが設定されました。"
+      },
+      "mailer": {
+        "invitation_instructions": {
+          "accept": "招待を承認する",
+          "accept_until": "この招待は%{due_date}まで有効です。",
+          "hello": "こんにちは、%{email}さん",
+          "ignore": "招待を承認しない場合は、このメールを無視してください。<br />あなたのアカウントは上記のリンク先にアクセスしパスワードを設定するまでは作成されません。",
+          "someone_invited_you": "%{url}に招待されました。以下のリンクから承認できます。",
+          "subject": "招待を承認するには"
+        }
+      }
+    },
+    "ice_cube": {
+      "array": {
+        "last_word_connector": "、",
+        "two_words_connector": "、",
+        "words_connector": "、"
+      },
+      "at_hours_of_the_day": {
+        "one": "%{segments}時",
+        "other": "%{segments}時"
+      },
+      "date": {
+        "formats": {
+          "default": "%Y年%m月%d日"
+        }
+      },
+      "days_of_month": {
+        "one": "%{segments}日",
+        "other": "%{segments}日"
+      },
+      "days_of_week": "%{segments}%{day}",
+      "days_of_year": {
+        "one": "%{segments}日",
+        "other": "%{segments}日"
+      },
+      "days_on": [
+        "日曜",
+        "月曜",
+        "火曜",
+        "水曜",
+        "木曜",
+        "金曜",
+        "土曜"
+      ],
+      "each_day": {
+        "one": "毎日",
+        "other": "%{count}日ごと"
+      },
+      "each_hour": {
+        "one": "毎時間",
+        "other": "%{count}時間ごと"
+      },
+      "each_minute": {
+        "one": "毎分",
+        "other": "%{count}分ごと"
+      },
+      "each_month": {
+        "one": "毎月",
+        "other": "%{count}ヶ月ごと"
+      },
+      "each_second": {
+        "one": "毎秒",
+        "other": "%{count}秒ごと"
+      },
+      "each_week": {
+        "one": "毎週",
+        "other": "%{count}週間ごと"
+      },
+      "each_year": {
+        "one": "毎年",
+        "other": "%{count}年ごと"
+      },
+      "in": "%{target}",
+      "integer": {
+        "literal_ordinals": {
+          "-1": "最終",
+          "-2": "最後から2番目の"
+        },
+        "negative": "最終%{ordinal}",
+        "ordinal": "%{ordinal}%{number}",
+        "ordinals": {
+          "default": ""
+        }
+      },
+      "not": "%{target}以外",
+      "not_on": "%{target}以外",
+      "on": "%{sentence}",
+      "on_days": "%{days}",
+      "on_minutes_of_hour": {
+        "one": "%{segments}分",
+        "other": "%{segments}分"
+      },
+      "on_seconds_of_minute": {
+        "one": "%{segments}秒",
+        "other": "%{segments}秒"
+      },
+      "on_weekdays": "平日",
+      "on_weekends": "週末",
+      "pieces_connector": " / ",
+      "string": {
+        "format": {
+          "count": "%{rest}%{current}",
+          "day": "%{rest}%{current}",
+          "day_of_month": "%{rest}%{current}",
+          "day_of_week": "%{rest}%{current}",
+          "day_of_year": "%{rest}%{current}",
+          "default": "%{rest}%{current}",
+          "hour_of_day": "%{rest}%{current}",
+          "minute_of_hour": "%{rest}%{current}",
+          "until": "%{current}%{rest}"
+        }
+      },
+      "times": {
+        "one": "%{count}回",
+        "other": "%{count}回"
+      },
+      "until": "%{date}まで"
+    },
+    "time": {
+      "formats": {
+        "devise": {
+          "mailer": {
+            "invitation_instructions": {
+              "accept_until_format": "%Y年%m月%d日%H時%M分"
+            }
+          }
+        }
+      }
+    }
+  }
+}

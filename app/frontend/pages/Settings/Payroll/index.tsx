@@ -11,12 +11,12 @@ export type PayrollSettingsFormData = {
 	settings: Schema.Setting
 }
 
-export interface CalendarSettingsProps {
+export interface PayrollSettingsProps {
 	settings: Schema.Setting
 	shift_types: Schema.Category[]
 }
 
-const CalendarSettings = ({ settings, shift_types }: CalendarSettingsProps) => {
+const PayrollSettings = ({ settings, shift_types }: PayrollSettingsProps) => {
 	return (
 		<>
 			<Form<PayrollSettingsFormData>
@@ -49,4 +49,4 @@ const CalendarSettings = ({ settings, shift_types }: CalendarSettingsProps) => {
 	)
 }
 
-export default withLayout(CalendarSettings, "settings")
+export default withLayout(PayrollSettings, "settings")

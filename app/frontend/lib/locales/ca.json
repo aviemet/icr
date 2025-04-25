@@ -1,0 +1,46 @@
+{
+  "ca": {
+    "devise": {
+      "failure": {
+        "invited": "Tens una invitació pendent, accepta-la per acabar de crear el teu compte."
+      },
+      "invitations": {
+        "edit": {
+          "header": "Establir contrasenya",
+          "submit_button": "Guardar la meva contrasenya"
+        },
+        "invitation_removed": "S'ha retirat la seva invitació",
+        "invitation_token_invalid": "La invitació no es vàlida!",
+        "new": {
+          "header": "Enviar Invitació",
+          "submit_button": "Envia una invitació"
+        },
+        "no_invitations_remaining": "No queden invitacions",
+        "send_instructions": "S'ha enviat una invitació a %{email}.",
+        "updated": "S'ha configurat la seva contrasenya i s'ha ingressat al sistema",
+        "updated_not_active": "La seva contrasenya s'ha configurat correctament."
+      },
+      "mailer": {
+        "invitation_instructions": {
+          "accept": "Aceptar la invitació",
+          "accept_until": "Aquesta invitació expirarà en %{due_date}.",
+          "hello": "Hola %{email}",
+          "ignore": "Si no li interessa aquesta invitació, simplement ignori aquest correu. No es crearà el teu compte fins que accedeixis a l'anterior enllaç i creïs una contrasenya",
+          "someone_invited_you": "Has estat invitat a %{url}, pots acceptar-ho seguint el següent enllaç",
+          "subject": "Instruccions de la invitació"
+        }
+      }
+    },
+    "time": {
+      "formats": {
+        "devise": {
+          "mailer": {
+            "invitation_instructions": {
+              "accept_until_format": "%d de %B de %Y, %H:%M"
+            }
+          }
+        }
+      }
+    }
+  }
+}

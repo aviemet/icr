@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import { Grid, Title, Link } from "@/components"
 import { Field, Form, TextInput, Submit } from "@/components/Form"
 import { AuthPaperLayout } from "@/features"
@@ -8,6 +10,7 @@ type TPasswordsNewFormData = {
 }
 
 const PasswordsNew = () => {
+	const { t } = useTranslation()
 	const defaultData: TPasswordsNewFormData = {
 		email: "",
 	}
@@ -15,7 +18,7 @@ const PasswordsNew = () => {
 	return (
 		<AuthPaperLayout bottomLinks={ [
 			<Link href={ Routes.newUserSession() } key="login">
-				Log In
+				{ t("frontend.pages.devise.shared.login") }
 			</Link>,
 		] }>
 			<Form model="user" data={ defaultData } to={ Routes.newUserPassword() }>
@@ -23,19 +26,24 @@ const PasswordsNew = () => {
 
 					<Grid.Col>
 						<div>
-							<Title>Reset Password</Title>
+							<Title>{ t("frontend.pages.devise.passwords.new.title") }</Title>
 						</div>
 					</Grid.Col>
 
 					<Grid.Col>
 						<Field>
-							<TextInput name="email" placeholder="Email" autoFocus autoComplete="Email" />
+							<TextInput
+								name="email"
+								placeholder={ t("frontend.pages.devise.shared.email") }
+								autoFocus
+								autoComplete="Email"
+							/>
 						</Field>
 					</Grid.Col>
 
 					<Grid.Col>
 						<Field>
-							<Submit>Send Reset Instructions</Submit>
+							<Submit>{ t("frontend.pages.devise.passwords.new.submit") }</Submit>
 						</Field>
 					</Grid.Col>
 

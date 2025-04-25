@@ -1,0 +1,204 @@
+{
+  "sv": {
+    "date": {
+      "abbr_day_names": [
+        "Sön",
+        "Mån",
+        "Tis",
+        "Ons",
+        "Tor",
+        "Fre",
+        "Lör"
+      ],
+      "abbr_month_names": [
+        null,
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "Maj",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Dec"
+      ],
+      "day_names": [
+        "Söndag",
+        "Måndag",
+        "Tisdag",
+        "Onsdag",
+        "Torsdag",
+        "Fredag",
+        "Lördag"
+      ],
+      "formats": {
+        "default": "%Y-%m-%d",
+        "long": "%e %B %Y",
+        "short": "%e %b"
+      },
+      "month_names": [
+        null,
+        "Januari",
+        "Februari",
+        "Mars",
+        "April",
+        "Maj",
+        "Juni",
+        "Juli",
+        "Augusti",
+        "September",
+        "Oktober",
+        "November",
+        "December"
+      ],
+      "order": [
+        "day",
+        "month",
+        "year"
+      ]
+    },
+    "ice_cube": {
+      "array": {
+        "last_word_connector": " och ",
+        "two_words_connector": " och ",
+        "words_connector": ", "
+      },
+      "at_hours_of_the_day": {
+        "one": "i %{segments} timme på dygnet",
+        "other": "i %{segments} timme på dygnet"
+      },
+      "date": {
+        "day_names": [
+          "söndag",
+          "måndag",
+          "tisdag",
+          "onsdag",
+          "torsdag",
+          "fredag",
+          "lördag"
+        ],
+        "formats": {
+          "default": "%-d %B %Y"
+        },
+        "month_names": [
+          null,
+          "januari",
+          "februari",
+          "mars",
+          "april",
+          "maj",
+          "juni",
+          "juli",
+          "augusti",
+          "september",
+          "oktober",
+          "november",
+          "december"
+        ]
+      },
+      "days_of_month": {
+        "one": "%{segments} dagen i månaden",
+        "other": "%{segments} dagen i månaden"
+      },
+      "days_of_week": "%{segments} %{day}",
+      "days_of_year": {
+        "one": "%{segments} dagen på året",
+        "other": "%{segments} dagen på året"
+      },
+      "days_on": [
+        "söndagar",
+        "måndagar",
+        "tisdagar",
+        "onsdagar",
+        "torsdagar",
+        "fredagar",
+        "lördagar"
+      ],
+      "each_day": {
+        "one": "Varje dag",
+        "other": "Varje %{count} dag"
+      },
+      "each_hour": {
+        "one": "Varje timme",
+        "other": "Varje %{count} timme"
+      },
+      "each_minute": {
+        "one": "Varje minut",
+        "other": "Varje %{count} minut"
+      },
+      "each_month": {
+        "one": "Varje månad",
+        "other": "Varje %{count} månad"
+      },
+      "each_second": {
+        "one": "Varje sekund",
+        "other": "Varje %{count} sekund"
+      },
+      "each_week": {
+        "one": "Varje vecka",
+        "other": "Varje %{count} vecka"
+      },
+      "each_year": {
+        "one": "Varje år",
+        "other": "Varje %{count} år"
+      },
+      "in": "efter %{target}",
+      "integer": {
+        "literal_ordinals": {
+          "-1": "sista",
+          "-2": "nästsista"
+        },
+        "negative": "%{ordinal} från slutet",
+        "ordinal": "%{number}%{ordinal}",
+        "ordinals": {
+          "default": ""
+        }
+      },
+      "not": "inte %{target}",
+      "not_on": "inte i %{target}",
+      "on": "i %{sentence}",
+      "on_days": "på %{days}",
+      "on_minutes_of_hour": {
+        "one": "i %{segments} minuten av timmen",
+        "other": "i %{segments} minuter av timmen"
+      },
+      "on_seconds_of_minute": {
+        "one": "på %{segments} sekunden av minuten",
+        "other": "på %{segments} sekunden av minuten"
+      },
+      "on_weekdays": "på vardagar",
+      "on_weekends": "på helger",
+      "pieces_connector": " / ",
+      "string": {
+        "format": {
+          "count": "%{rest} %{current}",
+          "day": "%{rest} %{current}",
+          "day_of_month": "%{rest} %{current}",
+          "day_of_week": "%{rest} %{current}",
+          "day_of_year": "%{rest} %{current}",
+          "default": "%{rest} %{current}",
+          "hour_of_day": "%{rest} %{current}",
+          "minute_of_hour": "%{rest} %{current}",
+          "until": "%{rest} %{current}"
+        }
+      },
+      "times": {
+        "one": "%{count} gång",
+        "other": "%{count} gånger"
+      },
+      "until": "tills %{date}"
+    },
+    "time": {
+      "am": "",
+      "formats": {
+        "default": "%a, %e %b %Y %H:%M:%S %z",
+        "long": "%e %B %Y %H:%M",
+        "short": "%e %b %H:%M"
+      },
+      "pm": ""
+    }
+  }
+}

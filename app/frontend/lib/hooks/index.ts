@@ -7,5 +7,6 @@ export { default as usePageProps } from "./usePageProps"
 export { default as useInit } from "./useInit"
 export { default as useAuth } from "./useAuth"
 export { default as useCurrency, type UseCurrencyOptions } from "./useCurrency"
+export { usePermissions } from "./usePermissions"
 
 export * from "@mantine/hooks"

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import { type UseFormProps } from "use-inertia-form"
 
 import { Box, Grid, Title, Link } from "@/components"
@@ -14,6 +15,8 @@ type TRegisterFormData = {
 }
 
 const Register = () => {
+	const { t } = useTranslation()
+
 	const handleFormChange = ({ data }: UseFormProps<TRegisterFormData>) => {
 		// console.log({ data })
 	}
@@ -29,7 +32,7 @@ const Register = () => {
 
 	const handleSubmit = ({ data, setError, errors, transform }: UseFormProps<TRegisterFormData>) => {
 		if(data.user.password !== data.user.password_confirmation) {
-			setError("user.password_confirmation", "Passwords must match")
+			setError("user.password_confirmation", t("views.devise.register.errors.passwords_must_match"))
 			return false
 		}
 	}
@@ -41,7 +44,7 @@ const Register = () => {
 	return (
 		<AuthPaperLayout bottomLinks={ [
 			<Link href={ Routes.newUserSession() } key="login">
-				Log In Instead
+				{ t("views.devise.register.login_instead") }
 			</Link>,
 		] }>
 			<Form
@@ -61,7 +64,7 @@ const Register = () => {
 
 					<Grid.Col>
 						<Box>
-							<Title>Sign Up</Title>
+							<Title>{ t("views.devise.register.title") }</Title>
 						</Box>
 					</Grid.Col>
 
@@ -69,7 +72,7 @@ const Register = () => {
 						<Field>
 							<TextInput
 								name="email"
-								placeholder="Email"
+								placeholder={ t("views.devise.register.email") }
 								autoFocus
 								autoComplete="Email"
 								required
@@ -82,7 +85,7 @@ const Register = () => {
 						<Field>
 							<PasswordInput
 								name="password"
-								placeholder="Password"
+								placeholder={ t("views.devise.register.password") }
 								autoComplete="new-password"
 								required
 								onChange={ handlePasswordChange }
@@ -94,7 +97,7 @@ const Register = () => {
 						<Field>
 							<PasswordInput
 								name="password_confirmation"
-								placeholder="Confirm Password"
+								placeholder={ t("views.devise.register.confirm_password") }
 								autoComplete="new-password"
 								required
 								onChange={ handlePasswordChange }
@@ -104,7 +107,7 @@ const Register = () => {
 
 					<Grid.Col>
 						<Field mb={ 16 }>
-							<Submit className="large">Sign Up</Submit>
+							<Submit className="large">{ t("views.devise.register.submit") }</Submit>
 						</Field>
 					</Grid.Col>
 

@@ -51,7 +51,7 @@ class TrainingsController < ApplicationController
   def create
     authorize Employee::Training.new
     if training.save
-      redirect_to training, notice: "Training was successfully created."
+      redirect_to training, notice: t("templates.controllers.notices.created", model: "Training")
     else
       redirect_to new_training_path, inertia: { errors: training.errors }
     end
@@ -62,7 +62,7 @@ class TrainingsController < ApplicationController
   def update
     authorize training
     if training.update(training_params)
-      redirect_to training, notice: "Training was successfully updated."
+      redirect_to training, notice: t("templates.controllers.notices.updated", model: "Training")
     else
       redirect_to edit_training_path(training), inertia: { errors: training.errors }
     end
@@ -72,6 +72,6 @@ class TrainingsController < ApplicationController
   def destroy
     authorize training
     training.destroy!
-    redirect_to trainings_url, notice: "Training was successfully destroyed."
+    redirect_to trainings_url, notice: t("templates.controllers.notices.destroyed", model: "Training")
   end
 end

@@ -1,0 +1,26 @@
+{
+  "no": {
+    "devise": {
+      "invitations": {
+        "edit": {
+          "header": "Sett ditt passord",
+          "submit_button": "Sett mitt passord"
+        },
+        "invitation_removed": "Din invitasjon ble fjernet.",
+        "invitation_token_invalid": "Autentiseringskoden er ikke gyldig!",
+        "new": {
+          "header": "Send invitasjon",
+          "submit_button": "Send en invitasjon"
+        },
+        "no_invitations_remaining": "Ingen gjenværende invitasjoner.",
+        "send_instructions": "En epost med invitasjon er sent til %{email}.",
+        "updated": "Passordet ble oppdatert suksessfullt. Du er nå logget inn."
+      },
+      "mailer": {
+        "invitation_instructions": {
+          "subject": "Invitasjonsinstruksjoner"
+        }
+      }
+    }
+  }
+}

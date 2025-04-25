@@ -70,9 +70,13 @@ class EmployeesController < ApplicationController
 
   # @route GET /employees/:slug/status (status_employee)
   def status
-    render inertia: "Employees/Status", props: {
-      employee: employee.render(:show)
-    }
+    authorize employee
+
+    if employee.update(employee_params)
+      redirect_to employee_path(employee), notice: t("templates.controllers.notices.status_updated", model: "Employee")
+    else
+      redirect_to employee_path(employee), inertia: { errors: employee.errors }
+    end
   end
 
   # @route PUT /employees/:slug/status (status_employee)
@@ -91,7 +95,7 @@ class EmployeesController < ApplicationController
   def create
     authorize Employee.new
     if employee.save
-      redirect_to employee, notice: t("employees.notices.created")
+      redirect_to employee_path(employee), notice: t("templates.controllers.notices.created", model: "Employee")
     else
       redirect_to new_employee_path, inertia: { errors: employee.errors }
     end
@@ -101,10 +105,11 @@ class EmployeesController < ApplicationController
   # @route PUT /employees/:slug (employee)
   def update
     authorize employee
+
     if employee.update(employee_params)
-      redirect_to employee, notice: t("employees.notices.created")
+      redirect_to employee, notice: t("templates.controllers.notices.updated", model: "Employee")
     else
-      redirect_to edit_employee_path, inertia: { errors: employee.errors }
+      redirect_to edit_employee_path(employee), inertia: { errors: employee.errors }
     end
   end
 
@@ -112,11 +117,8 @@ class EmployeesController < ApplicationController
   def destroy
     authorize employee
 
-    if employee.destroy
-      redirect_to employees_url, notice: t("employees.notices.destroyed")
-    else
-      redirect_to employees_url, alert: employee.errors.full_messages.join(", ")
-    end
+    employee.destroy!
+    redirect_to employees_url, notice: t("templates.controllers.notices.destroyed", model: "Employee")
   end
 
   private

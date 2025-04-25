@@ -75,3 +75,11 @@ en:
 
   pundit:
     not_authorized: "You are not authorized to access this page."
+
+  templates:
+    controllers:
+      notices:
+        created: "%{model} was successfully created."
+        updated: "%{model} was successfully updated."
+        destroyed: "%{model} was successfully destroyed."
+        status_updated: "%{model} status updated successfully"

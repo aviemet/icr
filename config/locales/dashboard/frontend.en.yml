@@ -1,0 +1,43 @@
+en:
+  views:
+    dashboard:
+      welcome: Welcome back, %{name}
+      command_center: "%{company} Command Center"
+      actions:
+        new_client: New Client
+        new_employee: New Employee
+      clients:
+        title: Clients Overview
+        active_count: "%{count} Active Clients"
+        pending_count: "%{count} pending proposals"
+        view_all: View All Clients
+        add_new: Add New Client
+      team:
+        title: Team Overview
+        member_count: "%{count} Team Members"
+        on_leave: "%{count} on leave"
+        view_all: View All Employees
+        add_new: Add New Employee
+      schedule:
+        title: Today's Schedule
+        upcoming: Upcoming Appointments
+        events:
+          team_meeting: 9:00 AM - Team Meeting
+          client_checkin: 11:30 AM - Client Check-in
+          training: 2:00 PM - Employee Training
+        view: View Schedule
+        add: Add Event
+      activity:
+        title: Recent Activity
+        latest: Latest Updates
+        updates:
+          new_client: New client onboarded - Acme Corp
+          milestone: Project milestone completed - Tech Solutions
+          new_employee: New employee joined - Sarah Smith
+          policies: Updated company policies
+      time:
+        title: Time Tracking
+        total_hours: "%{count} Hours"
+        total_hours_week: Total hours tracked this week
+        pending_timesheets: "%{count} timesheets pending approval"
+        view: View Timesheets

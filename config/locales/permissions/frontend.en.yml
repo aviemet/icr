@@ -1,0 +1,28 @@
+en:
+  views:
+    permissions:
+      index:
+        title: Permission Groups
+        new: New Permission Group
+        table:
+          name: Name
+          description: Description
+          precedence: Precedence
+          assignments: Assignments
+          actions: Actions
+      new:
+        title: New Permission Group
+      edit:
+        title: Edit Permission Group
+      form:
+        basic_info: Basic Information
+        permissions: Permissions
+        assignments: Assignments
+        add_permission: Add Permission
+        add_assignment: Add Assignment
+        conditions:
+          owner_only: Owner Only
+          time_restricted: Time Restricted
+        effects:
+          allow: Allow
+          deny: Deny

@@ -1,0 +1,259 @@
+{
+  "ru": {
+    "date": {
+      "abbr_day_names": [
+        "Вс",
+        "Пн",
+        "Вт",
+        "Ср",
+        "Чт",
+        "Пт",
+        "Сб"
+      ],
+      "abbr_month_names": [
+        null,
+        "Янв.",
+        "Февр.",
+        "Марта",
+        "Апр.",
+        "Мая",
+        "Июня",
+        "Июля",
+        "Авг.",
+        "Сент.",
+        "Окт.",
+        "Нояб.",
+        "Дек."
+      ],
+      "day_names": [
+        "Воскресенье",
+        "Понедельник",
+        "Вторник",
+        "Среда",
+        "Четверг",
+        "Пятница",
+        "Суббота"
+      ],
+      "formats": {
+        "default": "%d.%m.%Y",
+        "long": "%d %B %Y",
+        "short": "%d %b"
+      },
+      "month_names": [
+        null,
+        "Января",
+        "Февраля",
+        "Марта",
+        "Апреля",
+        "Мая",
+        "Июня",
+        "Июля",
+        "Августа",
+        "Сентября",
+        "Октября",
+        "Ноября",
+        "Декабря"
+      ],
+      "order": [
+        "day",
+        "month",
+        "year"
+      ]
+    },
+    "devise": {
+      "failure": {
+        "invited": "У вас есть непринятое приглашение, подтвердите его чтобы продолжить создание аккаунта."
+      },
+      "invitations": {
+        "edit": {
+          "header": "Создание пароля",
+          "submit_button": "Сохранить"
+        },
+        "invitation_removed": "Выше приглашение было удалено.",
+        "invitation_token_invalid": "Неверный токен приглашения.",
+        "new": {
+          "header": "Отправить приглашение",
+          "submit_button": "Отправить приглашение"
+        },
+        "no_invitations_remaining": "Приглашений нет",
+        "send_instructions": "Письмо с приглашением было отправлено на %{email}.",
+        "updated": "Ваш пароль успешно сохранен. Вы вошли в систему."
+      },
+      "mailer": {
+        "invitation_instructions": {
+          "accept": "Создать аккаунт",
+          "hello": "Здравствуйте, %{email}",
+          "ignore": "Если вы не хотите создавать аккаунт, проигнорируйте это письмо. <br /> Учетная запись не будет создана, пока вы не пройдете по ссылке и не установите пароль.",
+          "someone_invited_you": "Это письмо - приглашение стать пользователем сайта %{url}, вы можете создать аккаунт, кликнув по ссылке ниже.",
+          "subject": "Инструкции по созданию учетной записи"
+        }
+      }
+    },
+    "ice_cube": {
+      "array": {
+        "last_word_connector": " и ",
+        "two_words_connector": " и ",
+        "words_connector": ", "
+      },
+      "at_hours_of_the_day": {
+        "few": "в %{segments} часы дня",
+        "many": "в %{segments} часы дня",
+        "one": "в %{segments} час дня",
+        "other": "в %{segments} часы дня"
+      },
+      "date": {
+        "day_names": [
+          "воскресенье",
+          "понедельник",
+          "вторник",
+          "среда",
+          "четверг",
+          "пятница",
+          "суббота"
+        ],
+        "formats": {
+          "default": "%-d %B %Y"
+        },
+        "month_names": [
+          null,
+          "январь",
+          "февраль",
+          "март",
+          "апрель",
+          "май",
+          "июнь",
+          "июль",
+          "август",
+          "сентябрь",
+          "октябрь",
+          "ноябрь",
+          "декабрь"
+        ]
+      },
+      "days_of_month": {
+        "few": "%{segments} день месяца",
+        "many": "%{segments} день месяца",
+        "one": "%{segments} день месяца",
+        "other": "%{segments} день месяца"
+      },
+      "days_of_week": "%{segments} %{day}",
+      "days_of_year": {
+        "few": "%{segments} день года",
+        "many": "%{segments} день года",
+        "one": "%{segments} день года",
+        "other": "%{segments} день года"
+      },
+      "days_on": [
+        "воскресеньям",
+        "понедельникам",
+        "вторникам",
+        "средам",
+        "четвергам",
+        "пятницам",
+        "субботам"
+      ],
+      "each_day": {
+        "few": "Каждые %{count} дня",
+        "many": "Каждые %{count} дней",
+        "one": "Ежедневно",
+        "other": "Каждые %{count} дня"
+      },
+      "each_hour": {
+        "few": "Каждые %{count} часа",
+        "many": "Каждые %{count} часов",
+        "one": "Каждый час",
+        "other": "Каждые %{count} часа"
+      },
+      "each_minute": {
+        "few": "Каждые %{count} минуты",
+        "many": "Каждые %{count} минут",
+        "one": "Ежеминутно",
+        "other": "Каждые %{count} минуты"
+      },
+      "each_month": {
+        "few": "Каждые %{count} месяца",
+        "many": "Каждые %{count} месяцев",
+        "one": "Ежемесячно",
+        "other": "Каждые %{count} месяца"
+      },
+      "each_second": {
+        "few": "Каждые %{count} секунды",
+        "many": "Каждые %{count} секунд",
+        "one": "Ежесекундно",
+        "other": "Каждые %{count} секунды"
+      },
+      "each_week": {
+        "few": "Каждые %{count} недели",
+        "many": "Каждые %{count} недель",
+        "one": "Еженедельно",
+        "other": "Каждые %{count} недели"
+      },
+      "each_year": {
+        "few": "Каждые %{count} года",
+        "many": "Каждые %{count} лет",
+        "one": "Ежегодно",
+        "other": "Каждые %{count} года"
+      },
+      "in": "через %{target}",
+      "integer": {
+        "literal_ordinals": {
+          "-1": "последний",
+          "-2": "предпоследний"
+        },
+        "negative": "%{ordinal} с конца",
+        "ordinal": "%{number}%{ordinal}",
+        "ordinals": {
+          "default": ""
+        }
+      },
+      "not": "не %{target}",
+      "not_on": "не в %{target}",
+      "on": "в %{sentence}",
+      "on_days": "по %{days}",
+      "on_minutes_of_hour": {
+        "few": "в %{segments} минуты часа",
+        "many": "в %{segments} минуты часа",
+        "one": "в %{segments} минуту часа",
+        "other": "в %{segments} минуты часа"
+      },
+      "on_seconds_of_minute": {
+        "few": "на %{segments} секунде минуты",
+        "many": "на %{segments} секунде минуты",
+        "one": "на %{segments} секунде минуты",
+        "other": "на %{segments} секунде минуты"
+      },
+      "on_weekdays": "по будням",
+      "on_weekends": "на выходных",
+      "pieces_connector": " / ",
+      "string": {
+        "format": {
+          "count": "%{rest} %{current}",
+          "day": "%{rest} %{current}",
+          "day_of_month": "%{rest} %{current}",
+          "day_of_week": "%{rest} %{current}",
+          "day_of_year": "%{rest} %{current}",
+          "default": "%{rest} %{current}",
+          "hour_of_day": "%{rest} %{current}",
+          "minute_of_hour": "%{rest} %{current}",
+          "until": "%{rest} %{current}"
+        }
+      },
+      "times": {
+        "few": "%{count} раза",
+        "many": "%{count} раз",
+        "one": "%{count} раз",
+        "other": "%{count} раза"
+      },
+      "until": "до %{date}"
+    },
+    "time": {
+      "am": "утра",
+      "formats": {
+        "default": "%a, %d %b %Y, %H:%M:%S %z",
+        "long": "%d %B %Y, %H:%M",
+        "short": "%d %b, %H:%M"
+      },
+      "pm": "вечера"
+    }
+  }
+}

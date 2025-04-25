@@ -1,0 +1,46 @@
+{
+  "da": {
+    "devise": {
+      "failure": {
+        "invited": "Du har allerede en ventende invitation, som du bedes acceptere for at oprette en konto."
+      },
+      "invitations": {
+        "edit": {
+          "header": "Vælg din adgangskode",
+          "submit_button": "Gem adgangskode"
+        },
+        "invitation_removed": "Din invitation er blevet fjernet.",
+        "invitation_token_invalid": "Den angivne invitationsnøgle er ikke gyldig.",
+        "new": {
+          "header": "Send en invitation",
+          "submit_button": "Send mail"
+        },
+        "no_invitations_remaining": "Ikke flere invitationer tilbage",
+        "send_instructions": "Der er sendt en invitationsmail til %{email}.",
+        "updated": "Din adgangskode er gemt, og du er nu logget ind.",
+        "updated_not_active": "Din adgangskode er gemt, og du kan nu logge ind på din konto."
+      },
+      "mailer": {
+        "invitation_instructions": {
+          "accept": "Accepter invitation",
+          "accept_until": "Invitation gælder indtil %{due_date}.",
+          "hello": "Hej %{email}",
+          "ignore": "Hvis du ikke vil tage imod invitationen om at oprette en konto, kan du blot ignorere denne mail.<br />\nDer vil ikke blive oprettet nogen konto, medmindre du følger linket herover og derefter opretter en adgangskode.",
+          "someone_invited_you": "Du er blevet inviteret til at oprette en konto på %{url}, og du kan gøre det via linket herunder.",
+          "subject": "Invitation til at oprette en konto"
+        }
+      }
+    },
+    "time": {
+      "formats": {
+        "devise": {
+          "mailer": {
+            "invitation_instructions": {
+              "accept_until_format": "%e. %B %Y kl. %H.%M"
+            }
+          }
+        }
+      }
+    }
+  }
+}

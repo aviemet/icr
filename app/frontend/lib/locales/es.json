@@ -1,0 +1,213 @@
+{
+  "es": {
+    "date": {
+      "abbr_day_names": [
+        "Dom",
+        "Lun",
+        "Mar",
+        "Mie",
+        "Jue",
+        "Vie",
+        "Sab"
+      ],
+      "abbr_month_names": [
+        null,
+        "Ene",
+        "Feb",
+        "Mar",
+        "Abr",
+        "May",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dic"
+      ],
+      "day_names": [
+        "Domingo",
+        "Lunes",
+        "Martes",
+        "Miércoles",
+        "Jueves",
+        "Viernes",
+        "Sábado"
+      ],
+      "month_names": [
+        null,
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre"
+      ]
+    },
+    "devise": {
+      "failure": {
+        "invited": "Tienes una invitación pendiente, acéptala para acabar de crear tu cuenta."
+      },
+      "invitations": {
+        "edit": {
+          "header": "Establecer contraseña",
+          "submit_button": "Guardar mi contraseña"
+        },
+        "invitation_removed": "Se ha retirado su invitación",
+        "invitation_token_invalid": "¡La invitación no es válida!",
+        "new": {
+          "header": "Enviar Invitación",
+          "submit_button": "Envía una invitación"
+        },
+        "no_invitations_remaining": "No quedan invitaciones",
+        "send_instructions": "Se ha enviado una invitación a %{email}.",
+        "updated": "Se ha configurado su contraseña y ha ingresado al sistema",
+        "updated_not_active": "Su contraseña se ha configurado correctamente."
+      },
+      "mailer": {
+        "invitation_instructions": {
+          "accept": "Aceptar la invitación",
+          "accept_until": "Esta invitación expirará en %{due_date}.",
+          "hello": "Hola %{email}",
+          "ignore": "Si no le interesa esta invitación, simplemente ignore este correo. No se creará tu cuenta hasta que accedas al enlace anterior y crees una contraseña.",
+          "someone_invited_you": "Has sido invitado a %{url}, puedes aceptarlo siguiendo el siguiente enlace",
+          "subject": "Instrucciones de la invitación"
+        }
+      }
+    },
+    "ice_cube": {
+      "array": {
+        "last_word_connector": " y ",
+        "two_words_connector": " y ",
+        "words_connector": ", "
+      },
+      "at_hours_of_the_day": {
+        "one": "en la hora %{segments}",
+        "other": "en las horas %{segments}"
+      },
+      "at_seconds_of_minute": {
+        "one": "en el segundo %{segments}",
+        "other": "en los segundos %{segments}"
+      },
+      "date": {
+        "formats": {
+          "default": "%-d de %B de %Y"
+        }
+      },
+      "days_of_month": {
+        "one": "el día %{segments} del mes",
+        "other": "los días %{segments} del mes"
+      },
+      "days_of_week": "%{segments} %{day}",
+      "days_of_year": {
+        "one": "el día %{segments}",
+        "other": "los días %{segments}"
+      },
+      "days_on": [
+        "los domingos",
+        "los lunes",
+        "los martes",
+        "los miércoles",
+        "los jueves",
+        "los viernes",
+        "los sábados"
+      ],
+      "each_day": {
+        "one": "Diariamente",
+        "other": "Cada %{count} días"
+      },
+      "each_hour": {
+        "one": "Cada hora",
+        "other": "Cada %{count} horas"
+      },
+      "each_minute": {
+        "one": "Cada minuto",
+        "other": "Cada %{count} minutos"
+      },
+      "each_month": {
+        "one": "Mensualmente",
+        "other": "Cada %{count} meses"
+      },
+      "each_second": {
+        "one": "Cada segundo",
+        "other": "Cada %{count} segundos"
+      },
+      "each_week": {
+        "one": "Semanalmente",
+        "other": "Cada %{count} semanas"
+      },
+      "each_year": {
+        "one": "Anualmente",
+        "other": "Cada %{count} años"
+      },
+      "in": "en %{target}",
+      "integer": {
+        "literal_ordinals": {
+          "-1": "el último",
+          "-2": "el penúltimo"
+        },
+        "negative": "%{ordinal} por la cola",
+        "ordinal": "%{number}%{ordinal}",
+        "ordinals": {
+          "1": "º",
+          "11": "º",
+          "12": "º",
+          "13": "º",
+          "2": "º",
+          "3": "º",
+          "default": "º"
+        }
+      },
+      "not": "excepto %{target}",
+      "not_on": "excepto el %{target}",
+      "on": "en %{sentence}",
+      "on_days": "%{days}",
+      "on_minutes_of_hour": {
+        "one": "en el minuto %{segments}",
+        "other": "en los minutos %{segments}"
+      },
+      "on_seconds_of_minute": {
+        "one": "en el segundo %{segments} del minuto",
+        "other": "en los segundos %{segments} del minuto"
+      },
+      "on_weekdays": "en días laborables",
+      "on_weekends": "en fin de semana",
+      "pieces_connector": ", ",
+      "string": {
+        "format": {
+          "count": "%{rest} %{current}",
+          "day": "%{rest} %{current}",
+          "day_of_month": "%{rest} %{current}",
+          "day_of_week": "%{rest} %{current}",
+          "day_of_year": "%{rest} %{current}",
+          "default": "%{rest} %{current}",
+          "hour_of_day": "%{rest} %{current}",
+          "minute_of_hour": "%{rest} %{current}",
+          "until": "%{rest} %{current}"
+        }
+      },
+      "times": {
+        "one": "%{count} vez",
+        "other": "%{count} veces"
+      },
+      "until": "hasta el %{date}"
+    },
+    "time": {
+      "formats": {
+        "devise": {
+          "mailer": {
+            "invitation_instructions": {
+              "accept_until_format": "%d de %B de %Y, %H:%M"
+            }
+          }
+        }
+      }
+    }
+  }
+}

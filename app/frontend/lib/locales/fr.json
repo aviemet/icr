@@ -1,0 +1,247 @@
+{
+  "fr": {
+    "date": {
+      "abbr_day_names": [
+        "Dim",
+        "Lun",
+        "Mar",
+        "Mer",
+        "Jeu",
+        "Ven",
+        "Sam"
+      ],
+      "abbr_month_names": [
+        null,
+        "Jan",
+        "Fév",
+        "Mar",
+        "Avr",
+        "Mai",
+        "Jun",
+        "Jul",
+        "Aou",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Déc"
+      ],
+      "day_names": [
+        "dimanche",
+        "lundi",
+        "mardi",
+        "mercredi",
+        "jeudi",
+        "vendredi",
+        "samedi"
+      ],
+      "formats": {
+        "default": "%d-%m-%Y",
+        "long": "%d %B %Y",
+        "short": "%d %b"
+      },
+      "month_names": [
+        null,
+        "janvier",
+        "février",
+        "mars",
+        "avril",
+        "mai",
+        "juin",
+        "juillet",
+        "août",
+        "septembre",
+        "octobre",
+        "novembre",
+        "décembre"
+      ],
+      "order": [
+        "year",
+        "month",
+        "day"
+      ]
+    },
+    "devise": {
+      "failure": {
+        "invited": "Vous avez une invitation en attente, acceptez-la pour terminer la création de votre compte."
+      },
+      "invitations": {
+        "edit": {
+          "header": "Définissez votre mot de passe",
+          "submit_button": "Définir mon mot de passe"
+        },
+        "invitation_removed": "Votre invitation a été supprimée.",
+        "invitation_token_invalid": "Le jeton d'invitation fourni n'est pas valide !",
+        "new": {
+          "header": "Nouvel utilisateur",
+          "submit_button": "Envoyer"
+        },
+        "no_invitations_remaining": "Il n'y a plus d'invitations restantes.",
+        "send_instructions": "Un e-mail d'invitation a été envoyé à %{email}.",
+        "updated": "Votre mot de passe a été défini avec succès. Vous êtes maintenant connecté.",
+        "updated_not_active": "Votre mot de passe a été défini avec succès."
+      },
+      "mailer": {
+        "invitation_instructions": {
+          "accept": "Accepter l'invitation",
+          "accept_until": "Cette invitation sera valable jusqu'au %{due_date}.",
+          "hello": "Bonjour %{email}",
+          "ignore": "Si vous ne souhaitez pas accepter cette invitation, veuillez ignorer cet e-mail. Votre compte ne sera pas créé tant que vous n'aurez pas cliqué sur le lien ci-dessous et défini votre mot de passe.",
+          "someone_invited_you": "Vous avez été invité à rejoindre %{url}, vous pouvez accepter cette invitation via le lien ci-dessous.",
+          "subject": "Vous avez reçu une invitation"
+        }
+      }
+    },
+    "ice_cube": {
+      "array": {
+        "last_word_connector": ", et ",
+        "two_words_connector": " et ",
+        "words_connector": ", "
+      },
+      "at_hours_of_the_day": {
+        "one": "à %{segments}h",
+        "other": "aux %{segments} heures de la journée"
+      },
+      "at_seconds_of_minute": {
+        "one": "à la %{segments} seconde",
+        "other": "aux %{segments} secondes"
+      },
+      "date": {
+        "day_names": [
+          "dimanche",
+          "lundi",
+          "mardi",
+          "mercredi",
+          "jeudi",
+          "vendredi",
+          "samedi"
+        ],
+        "formats": {
+          "default": "%d %B %Y"
+        },
+        "month_names": [
+          null,
+          "janvier",
+          "février",
+          "mars",
+          "avril",
+          "mai",
+          "juin",
+          "juillet",
+          "août",
+          "septembre",
+          "octobre",
+          "novembre",
+          "décembre"
+        ]
+      },
+      "days_of_month": {
+        "one": "%{segments} jours du mois",
+        "other": "%{segments} jours du mois"
+      },
+      "days_of_week": "%{segments} %{day}",
+      "days_of_year": {
+        "one": "%{segments} jours de l'année",
+        "other": "%{segments} jours de l'année"
+      },
+      "days_on": [
+        "dimanches",
+        "lundis",
+        "mardis",
+        "mercredis",
+        "jeudis",
+        "vendredis",
+        "samedis"
+      ],
+      "each_day": {
+        "one": "Quotidien",
+        "other": "Tous les %{count} jours"
+      },
+      "each_hour": {
+        "one": "Toutes les heures",
+        "other": "Toutes les %{count} heures"
+      },
+      "each_minute": {
+        "one": "Toutes les minutes",
+        "other": "Toutes les %{count} minutes"
+      },
+      "each_month": {
+        "one": "Mensuel",
+        "other": "Tous les %{count} mois"
+      },
+      "each_second": {
+        "one": "Toutes les secondes",
+        "other": "Toutes les %{count} secondes"
+      },
+      "each_week": {
+        "one": "Hebdomadaire",
+        "other": "Toutes les %{count} semaines"
+      },
+      "each_year": {
+        "one": "Annuel",
+        "other": "Tous les %{count} ans"
+      },
+      "in": "en %{target}",
+      "integer": {
+        "literal_ordinals": {
+          "-1": "derniers",
+          "-2": "avant-derniers"
+        },
+        "negative": "%{ordinal} depuis la fin",
+        "ordinal": "%{number}%{ordinal}",
+        "ordinals": {
+          "1": "°",
+          "default": "°"
+        }
+      },
+      "not": "pas %{target}",
+      "not_on": "pas durant %{target}",
+      "on": "les %{sentence}",
+      "on_days": "les %{days}",
+      "on_minutes_of_hour": {
+        "one": "à la %{segments} minute de l'heure",
+        "other": "aux %{segments} minutes de l'heure"
+      },
+      "on_seconds_of_minute": {
+        "one": "à la %{segments} seconde de la minute",
+        "other": "aux %{segments} secondes de la minute"
+      },
+      "on_weekdays": "pendant les jours ouvrés",
+      "on_weekends": "pendant les weekends",
+      "pieces_connector": " / ",
+      "string": {
+        "format": {
+          "count": "%{rest} %{current}",
+          "day": "%{rest} %{current}",
+          "day_of_month": "%{rest} %{current}",
+          "day_of_week": "%{rest} %{current}",
+          "day_of_year": "%{rest} %{current}",
+          "default": "%{rest} %{current}",
+          "hour_of_day": "%{rest} %{current}",
+          "minute_of_hour": "%{rest} %{current}",
+          "until": "%{rest} %{current}"
+        }
+      },
+      "times": {
+        "one": "%{count} fois",
+        "other": "%{count} fois"
+      },
+      "until": "jusqu'au %{date}"
+    },
+    "time": {
+      "am": "am",
+      "formats": {
+        "default": "%a, %d %b %Y %H:%M:%S %z",
+        "devise": {
+          "mailer": {
+            "invitation_instructions": {
+              "accept_until_format": "%d %B %Y à %H:%M"
+            }
+          }
+        },
+        "long": "%d %B %Y %H:%M",
+        "short": "%d %b %H:%M"
+      },
+      "pm": "pm"
+    }
+  }
+}

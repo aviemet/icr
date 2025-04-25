@@ -51,7 +51,7 @@ class DoctorsController < ApplicationController
   def create
     authorize Doctor.new
     if doctor.save
-      redirect_to doctor, notice: "Doctor was successfully created."
+      redirect_to doctor, notice: t("templates.controllers.notices.created", model: "Doctor")
     else
       redirect_to new_doctor_path, inertia: { errors: doctor.errors }
     end
@@ -62,7 +62,7 @@ class DoctorsController < ApplicationController
   def update
     authorize doctor
     if doctor.update(doctor_params)
-      redirect_to doctor, notice: "Doctor was successfully updated."
+      redirect_to doctor, notice: t("templates.controllers.notices.updated", model: "Doctor")
     else
       redirect_to edit_doctor_path, inertia: { errors: doctor.errors }
     end
@@ -72,6 +72,6 @@ class DoctorsController < ApplicationController
   def destroy
     authorize doctor
     doctor.destroy!
-    redirect_to doctors_url, notice: "Doctor was successfully destroyed."
+    redirect_to doctors_url, notice: t("templates.controllers.notices.destroyed", model: "Doctor")
   end
 end

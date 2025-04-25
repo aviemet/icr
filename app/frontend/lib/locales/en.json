@@ -1,0 +1,696 @@
+{
+  "en": {
+    "application": {
+      "invalid_authenticity_token_notice": "The page expired, please try again."
+    },
+    "categories": {
+      "validations": {
+        "uniqueness": "Category already exists for that category type"
+      }
+    },
+    "clients": {
+      "manager": {
+        "errors": {
+          "already_manages": "Already manages this client"
+        }
+      }
+    },
+    "date": {
+      "abbr_day_names": [
+        "Sun",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat"
+      ],
+      "abbr_month_names": [
+        null,
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ],
+      "day_names": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ],
+      "formats": {
+        "default": "%Y-%m-%d",
+        "long": "%B %d, %Y",
+        "short": "%b %d"
+      },
+      "month_names": [
+        null,
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ],
+      "order": [
+        "year",
+        "month",
+        "day"
+      ]
+    },
+    "datetime": {
+      "distance_in_words": {
+        "about_x_hours": {
+          "one": "about 1 hour",
+          "other": "about %{count} hours"
+        },
+        "about_x_months": {
+          "one": "about 1 month",
+          "other": "about %{count} months"
+        },
+        "about_x_years": {
+          "one": "about 1 year",
+          "other": "about %{count} years"
+        },
+        "almost_x_years": {
+          "one": "almost 1 year",
+          "other": "almost %{count} years"
+        },
+        "half_a_minute": "half a minute",
+        "less_than_x_minutes": {
+          "one": "less than a minute",
+          "other": "less than %{count} minutes"
+        },
+        "less_than_x_seconds": {
+          "one": "less than 1 second",
+          "other": "less than %{count} seconds"
+        },
+        "over_x_years": {
+          "one": "over 1 year",
+          "other": "over %{count} years"
+        },
+        "x_days": {
+          "one": "1 day",
+          "other": "%{count} days"
+        },
+        "x_minutes": {
+          "one": "1 minute",
+          "other": "%{count} minutes"
+        },
+        "x_months": {
+          "one": "1 month",
+          "other": "%{count} months"
+        },
+        "x_seconds": {
+          "one": "1 second",
+          "other": "%{count} seconds"
+        }
+      },
+      "prompts": {
+        "day": "Day",
+        "hour": "Hour",
+        "minute": "Minute",
+        "month": "Month",
+        "second": "Seconds",
+        "year": "Year"
+      }
+    },
+    "devise": {
+      "confirmations": {
+        "confirmed": "Your email address has been successfully confirmed.",
+        "send_instructions": "You will receive an email with instructions for how to confirm your email address in a few minutes.",
+        "send_paranoid_instructions": "If your email address exists in our database, you will receive an email with instructions for how to confirm your email address in a few minutes."
+      },
+      "failure": {
+        "already_authenticated": "You are already signed in.",
+        "inactive": "Your account is not activated yet.",
+        "invalid": "Invalid %{authentication_keys} or password.",
+        "invited": "You have a pending invitation, accept it to finish creating your account.",
+        "last_attempt": "You have one more attempt before your account is locked.",
+        "locked": "Your account is locked.",
+        "not_found_in_database": "Invalid %{authentication_keys} or password.",
+        "timeout": "Your session expired. Please sign in again to continue.",
+        "unauthenticated": "You need to sign in or sign up before continuing.",
+        "unconfirmed": "You have to confirm your email address before continuing."
+      },
+      "invitations": {
+        "edit": {
+          "header": "Set your password",
+          "submit_button": "Set my password"
+        },
+        "invitation_removed": "Your invitation was removed.",
+        "invitation_token_invalid": "The invitation token provided is not valid!",
+        "new": {
+          "header": "Send invitation",
+          "submit_button": "Send an invitation"
+        },
+        "no_invitations_remaining": "No invitations remaining",
+        "send_instructions": "An invitation email has been sent to %{email}.",
+        "updated": "Your password was set successfully. You are now signed in.",
+        "updated_not_active": "Your password was set successfully."
+      },
+      "mailer": {
+        "confirmation_instructions": {
+          "subject": "Confirmation instructions"
+        },
+        "email_changed": {
+          "subject": "Email Changed"
+        },
+        "invitation_instructions": {
+          "accept": "Accept invitation",
+          "accept_until": "This invitation will be due in %{due_date}.",
+          "hello": "Hello %{email}",
+          "ignore": "If you don't want to accept the invitation, please ignore this email. Your account won't be created until you access the link above and set your password.",
+          "someone_invited_you": "Someone has invited you to %{url}, you can accept it through the link below.",
+          "subject": "Invitation instructions"
+        },
+        "password_change": {
+          "subject": "Password Changed"
+        },
+        "reset_password_instructions": {
+          "subject": "Reset password instructions"
+        },
+        "unlock_instructions": {
+          "subject": "Unlock instructions"
+        }
+      },
+      "omniauth_callbacks": {
+        "failure": "Could not authenticate you from %{kind} because \"%{reason}\".",
+        "success": "Successfully authenticated from %{kind} account."
+      },
+      "passwords": {
+        "no_token": "You can't access this page without coming from a password reset email. If you do come from a password reset email, please make sure you used the full URL provided.",
+        "send_instructions": "You will receive an email with instructions on how to reset your password in a few minutes.",
+        "send_paranoid_instructions": "If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.",
+        "updated": "Your password has been changed successfully. You are now signed in.",
+        "updated_not_active": "Your password has been changed successfully."
+      },
+      "registrations": {
+        "destroyed": "Bye! Your account has been successfully cancelled. We hope to see you again soon.",
+        "signed_up": "Welcome! You have signed up successfully.",
+        "signed_up_but_inactive": "You have signed up successfully. However, we could not sign you in because your account is not yet activated.",
+        "signed_up_but_locked": "You have signed up successfully. However, we could not sign you in because your account is locked.",
+        "signed_up_but_unconfirmed": "A message with a confirmation link has been sent to your email address. Please follow the link to activate your account.",
+        "update_needs_confirmation": "You updated your account successfully, but we need to verify your new email address. Please check your email and follow the confirmation link to confirm your new email address.",
+        "updated": "Your account has been updated successfully.",
+        "updated_but_not_signed_in": "Your account has been updated successfully, but since your password was changed, you need to sign in again."
+      },
+      "sessions": {
+        "already_signed_out": "Signed out successfully.",
+        "signed_in": "Signed in successfully.",
+        "signed_out": "Signed out successfully."
+      },
+      "unlocks": {
+        "send_instructions": "You will receive an email with instructions for how to unlock your account in a few minutes.",
+        "send_paranoid_instructions": "If your account exists, you will receive an email with instructions for how to unlock it in a few minutes.",
+        "unlocked": "Your account has been unlocked successfully. Please sign in to continue."
+      }
+    },
+    "flash": {
+      "actions": {
+        "create": {
+          "notice": "%{resource_name} was successfully created."
+        },
+        "destroy": {
+          "alert": "%{resource_name} could not be destroyed.",
+          "notice": "%{resource_name} was successfully destroyed."
+        },
+        "update": {
+          "notice": "%{resource_name} was successfully updated."
+        }
+      }
+    },
+    "helpers": {
+      "page_entries_info": {
+        "entry": {
+          "one": "entry",
+          "other": "entries",
+          "zero": "entries"
+        },
+        "more_pages": {
+          "display_entries": "Displaying %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> of <b>%{total}</b> in total"
+        },
+        "one_page": {
+          "display_entries": {
+            "one": "Displaying <b>1</b> %{entry_name}",
+            "other": "Displaying <b>all %{count}</b> %{entry_name}",
+            "zero": "No %{entry_name} found"
+          }
+        }
+      },
+      "select": {
+        "prompt": "Please select"
+      },
+      "submit": {
+        "create": "Create %{model}",
+        "submit": "Save %{model}",
+        "update": "Update %{model}"
+      }
+    },
+    "ice_cube": {
+      "array": {
+        "last_word_connector": ", and ",
+        "two_words_connector": " and ",
+        "words_connector": ", "
+      },
+      "at_hours_of_the_day": {
+        "one": "on the %{segments} hour of the day",
+        "other": "on the %{segments} hours of the day"
+      },
+      "at_seconds_of_minute": {
+        "one": "at the %{segments} second",
+        "other": "at the %{segments} seconds"
+      },
+      "date": {
+        "formats": {
+          "default": "%B %-d, %Y"
+        }
+      },
+      "days_of_month": {
+        "one": "%{segments} day of the month",
+        "other": "%{segments} days of the month"
+      },
+      "days_of_week": "%{segments} %{day}",
+      "days_of_year": {
+        "one": "%{segments} day of the year",
+        "other": "%{segments} days of the year"
+      },
+      "days_on": [
+        "Sundays",
+        "Mondays",
+        "Tuesdays",
+        "Wednesdays",
+        "Thursdays",
+        "Fridays",
+        "Saturdays"
+      ],
+      "each_day": {
+        "one": "Daily",
+        "other": "Every %{count} days"
+      },
+      "each_hour": {
+        "one": "Hourly",
+        "other": "Every %{count} hours"
+      },
+      "each_minute": {
+        "one": "Minutely",
+        "other": "Every %{count} minutes"
+      },
+      "each_month": {
+        "one": "Monthly",
+        "other": "Every %{count} months"
+      },
+      "each_second": {
+        "one": "Secondly",
+        "other": "Every %{count} seconds"
+      },
+      "each_week": {
+        "one": "Weekly",
+        "other": "Every %{count} weeks"
+      },
+      "each_year": {
+        "one": "Yearly",
+        "other": "Every %{count} years"
+      },
+      "in": "in %{target}",
+      "integer": {
+        "literal_ordinals": {
+          "-1": "last",
+          "-2": "2nd to last"
+        },
+        "negative": "%{ordinal} to last",
+        "ordinal": "%{number}%{ordinal}",
+        "ordinals": {
+          "1": "st",
+          "11": "th",
+          "12": "th",
+          "13": "th",
+          "2": "nd",
+          "3": "rd",
+          "default": "th"
+        }
+      },
+      "not": "not %{target}",
+      "not_on": "not on %{target}",
+      "on": "on the %{sentence}",
+      "on_days": "on %{days}",
+      "on_minutes_of_hour": {
+        "one": "on the %{segments} minute of the hour",
+        "other": "on the %{segments} minutes of the hour"
+      },
+      "on_seconds_of_minute": {
+        "one": "on the %{segments} second of the minute",
+        "other": "on the %{segments} seconds of the minute"
+      },
+      "on_weekdays": "on Weekdays",
+      "on_weekends": "on Weekends",
+      "pieces_connector": " / ",
+      "string": {
+        "format": {
+          "count": "%{rest} %{current}",
+          "day": "%{rest} %{current}",
+          "day_of_month": "%{rest} %{current}",
+          "day_of_week": "%{rest} %{current}",
+          "day_of_year": "%{rest} %{current}",
+          "default": "%{rest} %{current}",
+          "hour_of_day": "%{rest} %{current}",
+          "minute_of_hour": "%{rest} %{current}",
+          "until": "%{rest} %{current}"
+        }
+      },
+      "times": {
+        "one": "%{count} time",
+        "other": "%{count} times"
+      },
+      "until": "until %{date}"
+    },
+    "number": {
+      "currency": {
+        "format": {
+          "delimiter": ",",
+          "format": "%u%n",
+          "negative_format": "-%u%n",
+          "precision": 2,
+          "separator": ".",
+          "significant": false,
+          "strip_insignificant_zeros": false,
+          "unit": "$"
+        }
+      },
+      "format": {
+        "delimiter": ",",
+        "precision": 3,
+        "round_mode": "default",
+        "separator": ".",
+        "significant": false,
+        "strip_insignificant_zeros": false
+      },
+      "human": {
+        "decimal_units": {
+          "format": "%n %u",
+          "units": {
+            "billion": "Billion",
+            "million": "Million",
+            "quadrillion": "Quadrillion",
+            "thousand": "Thousand",
+            "trillion": "Trillion",
+            "unit": ""
+          }
+        },
+        "format": {
+          "delimiter": "",
+          "precision": 3,
+          "significant": true,
+          "strip_insignificant_zeros": true
+        },
+        "storage_units": {
+          "format": "%n %u",
+          "units": {
+            "byte": {
+              "one": "Byte",
+              "other": "Bytes"
+            },
+            "eb": "EB",
+            "gb": "GB",
+            "kb": "KB",
+            "mb": "MB",
+            "pb": "PB",
+            "tb": "TB",
+            "zb": "ZB"
+          }
+        }
+      },
+      "percentage": {
+        "format": {
+          "delimiter": "",
+          "format": "%n%"
+        }
+      },
+      "precision": {
+        "format": {
+          "delimiter": ""
+        }
+      }
+    },
+    "pundit": {
+      "not_authorized": "You are not authorized to access this page."
+    },
+    "settings": {
+      "errors": {
+        "update_failed": "Updating settings failed. Please notify your site administrator."
+      },
+      "notices": {
+        "updated": "Settings have been updated successfully."
+      }
+    },
+    "support": {
+      "array": {
+        "last_word_connector": ", and ",
+        "two_words_connector": " and ",
+        "words_connector": ", "
+      }
+    },
+    "templates": {
+      "controllers": {
+        "notices": {
+          "created": "%{model} was successfully created.",
+          "destroyed": "%{model} was successfully destroyed.",
+          "status_updated": "%{model} status updated successfully",
+          "updated": "%{model} was successfully updated."
+        }
+      }
+    },
+    "time": {
+      "am": "AM",
+      "formats": {
+        "default": "%a, %d %b %Y %H:%M:%S %z",
+        "devise": {
+          "mailer": {
+            "invitation_instructions": {
+              "accept_until_format": "%B %d, %Y %I:%M %p"
+            }
+          }
+        },
+        "long": "%B %d, %Y %H:%M",
+        "short": "%d %b %H:%M",
+        "us": "%m/%d/%Y %I:%M %p"
+      },
+      "pm": "PM"
+    },
+    "users": null,
+    "views": {
+      "clients": {
+        "edit": {
+          "action": "Edit",
+          "title": "Edit %{name}"
+        },
+        "index": {
+          "title": "Clients"
+        },
+        "new": {
+          "title": "New Client"
+        },
+        "schedule": {
+          "new_shift": "New Shift",
+          "title": "%{name}'s Schedule"
+        },
+        "show": {
+          "contacts": {
+            "addresses": "Addresses",
+            "emails": "Emails",
+            "phones": "Phone Numbers"
+          },
+          "details": {
+            "placeholder": "Some kind of useful dashboard, maybe important or commonly needed information and a picture. Maybe some stats and/or charts computed from other data. Could even be just a list of useful links for the client, curated by the agency."
+          },
+          "documents": {
+            "title": "Documents"
+          },
+          "edit": "Edit Client",
+          "tabs": {
+            "contacts": "Contact Details",
+            "details": "Details",
+            "documents": "Documents"
+          },
+          "title": "Client"
+        }
+      },
+      "dashboard": {
+        "actions": {
+          "new_client": "New Client",
+          "new_employee": "New Employee"
+        },
+        "activity": {
+          "latest": "Latest Updates",
+          "title": "Recent Activity",
+          "updates": {
+            "milestone": "Project milestone completed - Tech Solutions",
+            "new_client": "New client onboarded - Acme Corp",
+            "new_employee": "New employee joined - Sarah Smith",
+            "policies": "Updated company policies"
+          }
+        },
+        "clients": {
+          "active_count": "%{count} Active Clients",
+          "add_new": "Add New Client",
+          "pending_count": "%{count} pending proposals",
+          "title": "Clients Overview",
+          "view_all": "View All Clients"
+        },
+        "command_center": "%{company} Command Center",
+        "schedule": {
+          "add": "Add Event",
+          "events": {
+            "client_checkin": "11:30 AM - Client Check-in",
+            "team_meeting": "9:00 AM - Team Meeting",
+            "training": "2:00 PM - Employee Training"
+          },
+          "title": "Today's Schedule",
+          "upcoming": "Upcoming Appointments",
+          "view": "View Schedule"
+        },
+        "team": {
+          "add_new": "Add New Employee",
+          "member_count": "%{count} Team Members",
+          "on_leave": "%{count} on leave",
+          "title": "Team Overview",
+          "view_all": "View All Employees"
+        },
+        "time": {
+          "pending_timesheets": "%{count} timesheets pending approval",
+          "title": "Time Tracking",
+          "total_hours": "%{count} Hours",
+          "total_hours_week": "Total hours tracked this week",
+          "view": "View Timesheets"
+        },
+        "welcome": "Welcome back, %{name}"
+      },
+      "devise": {
+        "login": {
+          "email": "Email",
+          "password": "Password",
+          "register": "Register",
+          "remember_me": "Remember Me",
+          "reset_password": "Reset Password",
+          "submit": "Log In"
+        },
+        "register": {
+          "confirm_password": "Confirm Password",
+          "email": "Email",
+          "errors": {
+            "passwords_must_match": "Passwords must match"
+          },
+          "login_instead": "Log In Instead",
+          "password": "Password",
+          "submit": "Sign Up",
+          "title": "Sign Up"
+        }
+      },
+      "employees": {
+        "edit": {
+          "title": "Edit Employee"
+        },
+        "index": {
+          "new": "New Employee",
+          "title": "Employees"
+        },
+        "new": {
+          "title": "New Employee"
+        },
+        "schedule": {
+          "title": "%{name}'s Schedule"
+        },
+        "show": {
+          "change_status": "Change Status",
+          "contacts": {
+            "addresses": "Addresses",
+            "emails": "Emails",
+            "phones": "Phone Numbers"
+          },
+          "details": {
+            "placeholder": "Some kind of useful dashboard, maybe important or commonly needed information and a picture. Maybe some stats and/or charts computed from other data. Could even be just a list of useful links for the employee, curated by the agency."
+          },
+          "documents": {
+            "title": "Documents"
+          },
+          "edit": "Edit Employee",
+          "tabs": {
+            "contacts": "Contact Details",
+            "details": "Details",
+            "documents": "Documents"
+          },
+          "title": "Employee"
+        },
+        "status": {
+          "change_for": "Change Status for %{name}",
+          "label": "Status Change",
+          "title": "Change Employee Status",
+          "transitions": {
+            "begin_onboarding": "Begin Onboarding",
+            "close_application": "Close Application",
+            "process_termination": "Process Termination",
+            "record_resignation": "Record Resignation"
+          }
+        }
+      },
+      "pagination": {
+        "first": "&laquo; First",
+        "last": "Last &raquo;",
+        "next": "Next &rsaquo;",
+        "previous": "&lsaquo; Prev",
+        "truncate": "&hellip;"
+      },
+      "permissions": {
+        "edit": {
+          "title": "Edit Permission Group"
+        },
+        "form": {
+          "add_assignment": "Add Assignment",
+          "add_permission": "Add Permission",
+          "assignments": "Assignments",
+          "basic_info": "Basic Information",
+          "conditions": {
+            "owner_only": "Owner Only",
+            "time_restricted": "Time Restricted"
+          },
+          "effects": {
+            "allow": "Allow",
+            "deny": "Deny"
+          },
+          "permissions": "Permissions"
+        },
+        "index": {
+          "new": "New Permission Group",
+          "table": {
+            "actions": "Actions",
+            "assignments": "Assignments",
+            "description": "Description",
+            "name": "Name",
+            "precedence": "Precedence"
+          },
+          "title": "Permission Groups"
+        },
+        "new": {
+          "title": "New Permission Group"
+        }
+      }
+    }
+  }
+}

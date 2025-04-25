@@ -3,6 +3,12 @@
 ## Project Overview
 This is a single-instance Rails application designed to run for a single company. There is no multi-tenancy support, and company details are managed through a singleton settings model.
 
+### Model Organization
+- Employee-related models are namespaced under `Employee::`
+  - `Employee::JobTitle`: Manages job titles and their associations
+  - Models use explicit class names in associations (e.g., `class_name: "Employee::JobTitle"`)
+  - Serializers follow the same namespace pattern (e.g., `Employee::JobTitleSerializer`)
+
 ## Project Milestones
 
 ### Phase 1: Core Authentication and Authorization
@@ -162,3 +168,78 @@ user.permission?("clients", "view", context)
 - Timesheets will be generated per pay period
 - System will maintain audit trail of all changes
 - Approval workflow will be multi-step
+
+### Frontend Architecture
+#### Component Structure
+- Frontend code organized in `/app/frontend`:
+  - `/components`: Reusable, general-purpose components
+  - `/features`: Feature-specific components
+  - `/layouts`: Layout components
+  - `/lib`: Non-React code and utilities
+  - `/pages`: Top-level Inertia pages (entry points for routes)
+  - `/queries`: Async react-query methods
+  - `/types`: Global types and interfaces
+
+#### UI & Styling
+- Mantine component library
+- CSS modules with Linaria
+  - Files use `.css.ts` extension
+  - Imports as `import * as classes from './file.css'`
+  - Class composition with `clsx`
+- Dark/light theme support via Mantine theme system
+
+#### Form Implementation
+- Built on `use-inertia-form` v4.6.0
+- Form component wraps Inertia form with Mantine UI
+- Supports nested data through `NestedObject` type
+- Rails-compatible form attributes by default
+- Custom inputs use `useInertiaInput` hook
+- Form state includes processing, errors, validation, and dirty tracking
+- All components strictly typed with `BaseFormInputProps<T>` interface
+
+#### State Management
+- Server state: Inertia.js
+- Client-only state: zustand
+- Form state: use-inertia-form
+
+#### Type System
+- Strict TypeScript throughout
+- No use of `any`, `unknown`, or type casting with `as`
+- Prefer existing type definitions and interfaces
+- Use generics, Records, and Mapped types before inline types
+- Type assertions as last resort
+- Auto-generated types for serializers
+
+#### Internationalization (i18n)
+- Using react-i18next for frontend translations
+- Translation files from i18n-js gem
+- Translations in Rails locales (yml)
+- Full i18n support (numbers, dates, currency, RTL)
+- Translation organization:
+  - Model-specific translations in `config/locales/[model]/frontend.en.yml`
+  - Other frontend translations in `config/locales/frontend.en.yml`
+  - Frontend key structure:
+    - `views.[feature].[page].[key]` (e.g., `views.clients.index.title`)
+    - Common elements are shared within their feature namespace (e.g., `views.devise.shared.email`)
+- Common notice templates in `en.yml` under `templates.controllers.notices`
+  - Reusable patterns for CRUD operations
+  - Uses `%{model}` interpolation
+  - Can be extended in model-specific locale files
+- Controller notice messages use standard templates:
+  - Created: `t("templates.controllers.notices.created", model: "Model Name")`
+  - Updated: `t("templates.controllers.notices.updated", model: "Model Name")`
+  - Destroyed: `t("templates.controllers.notices.destroyed", model: "Model Name")`
+  - Status Updated: `t("templates.controllers.notices.status_updated", model: "Model Name")`
+
+#### Testing
+- Unit: Vitest + React Testing Library
+- E2E: Playwright (no mocks, uses test environment)
+- Test files mirror source structure in `/app/frontend/tests`
+
+#### Performance
+- Component code splitting
+- Route-based lazy loading
+- Image optimization
+- Proper useEffect cleanup
+- Memoized expensive computations
+- Minimal global state

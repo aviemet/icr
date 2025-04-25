@@ -1,5 +1,6 @@
 import { Select } from "@mantine/core"
 import { useState, useMemo } from "react"
+import { useTranslation } from "react-i18next"
 
 import { Title, Page, Section, Grid } from "@/components"
 import {
@@ -15,6 +16,7 @@ interface StatusProps {
 }
 
 const Status = ({ employee }: StatusProps) => {
+	const { t } = useTranslation()
 	const [selectedTransition, setSelectedTransition] = useState<string>(() => {
 		if(employee.status === "applicant") return "begin_onboarding"
 		return ""
@@ -28,35 +30,35 @@ const Status = ({ employee }: StatusProps) => {
 		switch(employee.status) {
 			case "applicant":
 				return [
-					{ value: "begin_onboarding", label: "Begin Onboarding" },
-					{ value: "close_application", label: "Close Application" },
+					{ value: "begin_onboarding", label: t("views.employees.status.transitions.begin_onboarding") },
+					{ value: "close_application", label: t("views.employees.status.transitions.close_application") },
 				]
 			case "employed":
 				return [
-					{ value: "record_resignation", label: "Record Resignation" },
-					{ value: "process_termination", label: "Process Termination" },
+					{ value: "record_resignation", label: t("views.employees.status.transitions.record_resignation") },
+					{ value: "process_termination", label: t("views.employees.status.transitions.process_termination") },
 				]
 			default:
 				return []
 		}
-	}, [employee.status])
+	}, [employee.status, t])
 
 	return (
 		<Page
-			title="Change Employee Status"
+			title={ t("views.employees.status.title") }
 			breadcrumbs={ [
-				{ title: "Employees", href: Routes.employees() },
+				{ title: t("views.employees.index.title"), href: Routes.employees() },
 				{ title: employee.person.name, href: Routes.employee(employee.slug) },
-				{ title: "Change Status" },
+				{ title: t("views.employees.show.change_status") },
 			] }
 		>
 			<Section>
-				<Title>Change Status for { employee.person.name }</Title>
+				<Title>{ t("views.employees.status.change_for", { name: employee.person.name }) }</Title>
 
 				<Grid mt="xl">
 					<Grid.Col span={ { base: 12, sm: 6, md: 4 } }>
 						<Select
-							label="Status Change"
+							label={ t("views.employees.status.label") }
 							value={ selectedTransition }
 							onChange={ handleTransitionChange }
 							data={ availableTransitions }

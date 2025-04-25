@@ -51,7 +51,7 @@ class TimesheetsController < ApplicationController
   def create
     authorize Timesheet.new
     if timesheet.save
-      redirect_to timesheet, notice: "Timesheet was successfully created."
+      redirect_to timesheet, notice: t("templates.controllers.notices.created", model: "Timesheet")
     else
       redirect_to new_timesheet_path, inertia: { errors: timesheet.errors }
     end
@@ -62,7 +62,7 @@ class TimesheetsController < ApplicationController
   def update
     authorize timesheet
     if timesheet.update(timesheet_params)
-      redirect_to timesheet, notice: "Timesheet was successfully updated."
+      redirect_to timesheet, notice: t("templates.controllers.notices.updated", model: "Timesheet")
     else
       redirect_to edit_timesheet_path, inertia: { errors: timesheet.errors }
     end
@@ -72,6 +72,6 @@ class TimesheetsController < ApplicationController
   def destroy
     authorize timesheet
     timesheet.destroy!
-    redirect_to timesheets_url, notice: "Timesheet was successfully destroyed."
+    redirect_to timesheets_url, notice: t("templates.controllers.notices.destroyed", model: "Timesheet")
   end
 end

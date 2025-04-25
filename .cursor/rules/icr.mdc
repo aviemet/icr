@@ -3,10 +3,20 @@ description:
 globs: 
 alwaysApply: true
 ---
-# IMPORTANT:
+# REQUIRED FOR EVERY INTERACTION:
 
-# Always read icr.mdx before writing any code.
-
-# After adding a major feature or completing a milestone, update icr.mdx.
-
-# After discerning new project conventions, note them in icr.mdx.
+1. Read .cursor/icr.mdx at the start of each interaction
+2. Before ending ANY response, if you've learned ANYTHING about:
+   - Project structure
+   - Code patterns
+   - Implementation details
+   - Conventions
+   - Dependencies
+   - Configuration
+   You MUST update .cursor/icr.mdx with this information
+3. When updating .cursor/icr.mdx:
+   - Only add new information not already documented
+   - Place information in the appropriate section
+   - If no appropriate section exists, create one
+   - Include specific details (versions, patterns, types) rather than general descriptions
+4. After updating .cursor/icr.mdx, explicitly note in your response what new information was added

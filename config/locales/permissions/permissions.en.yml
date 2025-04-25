@@ -1,0 +1,23 @@
+en:
+  activerecord:
+    models:
+      permission/group: Permission Group
+      permission/assignment: Permission Assignment
+    attributes:
+      permission/group:
+        name: Name
+        description: Description
+        precedence: Precedence
+        permissions: Permissions
+      permission/assignment:
+        starts_at: Starts At
+        ends_at: Ends At
+        conditions: Conditions
+    errors:
+      models:
+        permission/group:
+          attributes:
+            permissions:
+              invalid_format: Must include resource, action, and effect (allow/deny)
+              invalid_conditions: Must be a valid conditions hash
+              invalid_time_restriction: Must include start and end times

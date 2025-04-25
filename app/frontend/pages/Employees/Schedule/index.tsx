@@ -1,4 +1,5 @@
 import { useMemo } from "react"
+import { useTranslation } from "react-i18next"
 
 import {
 	Box,
@@ -18,6 +19,7 @@ interface ScheduleResources {
 }
 
 const Schedule = ({ employee, schedules }: ScheduleProps) => {
+	const { t } = useTranslation()
 	// const formatEventTitle = useEventTitleFormatter()
 
 	// const { data } = useGetEmployeeSchedules({
@@ -51,7 +53,7 @@ const Schedule = ({ employee, schedules }: ScheduleProps) => {
 
 	return (
 		<>
-			<h1>{ employee.name }</h1>
+			<h1>{ t("views.employees.schedule.title", { name: employee.name }) }</h1>
 
 			<Box style={ { width: "100%", height: "100%" } }>
 				{ /* <Calendar

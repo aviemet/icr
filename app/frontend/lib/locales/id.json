@@ -1,0 +1,208 @@
+{
+  "id": {
+    "date": {
+      "abbr_day_names": [
+        "Min",
+        "Sen",
+        "Sel",
+        "Rab",
+        "Kam",
+        "Jum",
+        "Sab"
+      ],
+      "abbr_month_names": [
+        null,
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "Mei",
+        "Jun",
+        "Jul",
+        "Agu",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Des"
+      ],
+      "day_names": [
+        "Minggu",
+        "Senin",
+        "Selasa",
+        "Rabu",
+        "Kamis",
+        "Jumat",
+        "Sabtu"
+      ],
+      "month_names": [
+        null,
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember"
+      ]
+    },
+    "devise": {
+      "failure": {
+        "invited": "Anda memiliki undangan yang tertunda, harap terima undangan tersebut untuk menyelesaikan pembuatan akun Anda."
+      },
+      "invitations": {
+        "edit": {
+          "header": "Atur kata sandi Anda",
+          "submit_button": "Atur kata sandi"
+        },
+        "invitation_removed": "Undangan Anda telah dihapus.",
+        "invitation_token_invalid": "Token undangan yang diberikan tidak valid!",
+        "new": {
+          "header": "Kirim Undangan",
+          "submit_button": "Kirim undangan"
+        },
+        "no_invitations_remaining": "Tidak ada undangan tersisa.",
+        "send_instructions": "Email undangan telah dikirim ke %{email}.",
+        "updated": "Kata sandi Anda telah berhasil diatur. Anda sudah masuk.",
+        "updated_not_active": "Kata sandi Anda telah berhasil diatur."
+      },
+      "mailer": {
+        "invitation_instructions": {
+          "accept": "Terima Undangan",
+          "accept_until": "Undangan ini akan berakhir pada %{due_date}.",
+          "hello": "Halo %{email}",
+          "ignore": "Jika Anda tidak ingin menerima undangan ini, silakan abaikan email ini. Akun Anda tidak akan dibuat sampai Anda mengakses tautan di atas dan mengatur kata sandi Anda.",
+          "someone_invited_you": "Seseorang telah mengundang Anda ke %{url}. Anda dapat menerima undangan ini melalui tautan di bawah ini.",
+          "subject": "Instruksi Undangan"
+        }
+      }
+    },
+    "ice_cube": {
+      "array": {
+        "last_word_connector": " dan ",
+        "two_words_connector": " dan ",
+        "words_connector": ", "
+      },
+      "at_hours_of_the_day": {
+        "one": "pada jam %{segments} dalam satu hari",
+        "other": "pada jam %{segments} dalam satu hari"
+      },
+      "at_seconds_of_minute": {
+        "one": "pada %{segments} detik",
+        "other": "pada %{segments} detik"
+      },
+      "date": {
+        "formats": {
+          "default": "%e %B %Y"
+        }
+      },
+      "days_of_month": {
+        "one": "hari ke %{segments} dalam satu bulan",
+        "other": "hari ke %{segments} dalam satu bulan"
+      },
+      "days_of_week": "%{segments} %{day}",
+      "days_of_year": {
+        "one": "hari ke %{segments} dalam satu tahun",
+        "other": "hari ke %{segments} dalam satu tahun"
+      },
+      "days_on": [
+        "Hari minggu",
+        "Hari senin",
+        "Hari selasa",
+        "Hari rabu",
+        "Hari kamis",
+        "Hari jumat",
+        "Hari sabtu"
+      ],
+      "each_day": {
+        "one": "Setiap hari",
+        "other": "Setiap %{count} hari"
+      },
+      "each_hour": {
+        "one": "Setiap jam",
+        "other": "Setiap %{count} jam"
+      },
+      "each_minute": {
+        "one": "Setiap menit",
+        "other": "Setiap %{count} menit"
+      },
+      "each_month": {
+        "one": "Setiap bulan",
+        "other": "Setiap %{count} bulan"
+      },
+      "each_second": {
+        "one": "Setiap detik",
+        "other": "Setiap %{count} detik"
+      },
+      "each_week": {
+        "one": "Setiap minggu",
+        "other": "Setiap %{count} minggu"
+      },
+      "each_year": {
+        "one": "Setiap tahun",
+        "other": "Setiap %{count} tahun"
+      },
+      "in": "pada %{target}",
+      "integer": {
+        "literal_ordinals": {
+          "-1": "terakhir",
+          "-2": "kedua sampai terakhir",
+          "1": "pertama"
+        },
+        "negative": "%{ordinal} sampai akhir",
+        "ordinal": "%{number}%{ordinal}",
+        "ordinals": {
+          "default": null
+        }
+      },
+      "not": "kecuali %{target}",
+      "not_on": "kecuali %{target}",
+      "on": "pada %{sentence}",
+      "on_days": "pada %{days}",
+      "on_minutes_of_hour": {
+        "one": "pada menit ke %{segments} dalam satu jam",
+        "other": "pada menit ke %{segments} dalam satu jam"
+      },
+      "on_seconds_of_minute": {
+        "one": "pada detik ke %{segments} dalam satu menit",
+        "other": "pada detik ke %{segments} dalam satu menit"
+      },
+      "on_weekdays": "pada hari kerja",
+      "on_weekends": "pada akhir pekan",
+      "pieces_connector": " / ",
+      "string": {
+        "format": {
+          "count": "%{rest} %{current}",
+          "day": "%{rest} %{current}",
+          "day_of_month": "%{rest} %{current}",
+          "day_of_week": "%{rest} %{current}",
+          "day_of_year": "%{rest} %{current}",
+          "default": "%{rest} %{current}",
+          "hour_of_day": "%{rest} %{current}",
+          "minute_of_hour": "%{rest} %{current}",
+          "until": "%{rest} %{current}"
+        }
+      },
+      "times": {
+        "one": "%{count} kali",
+        "other": "%{count} kali"
+      },
+      "until": "sampai %{date}"
+    },
+    "time": {
+      "formats": {
+        "devise": {
+          "mailer": {
+            "invitation_instructions": {
+              "accept_until_format": "%d %B %Y %H:%M:%S"
+            }
+          }
+        }
+      }
+    }
+  }
+}

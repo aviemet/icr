@@ -49,7 +49,7 @@ class ShiftTemplatesController < ApplicationController
   def create
     authorize ShiftTemplate.new
     if shift_template.save
-      redirect_to shift_template, notice: "Shift template was successfully created."
+      redirect_to shift_template, notice: t("templates.controllers.notices.created", model: "Shift template")
     else
       redirect_to new_shift_template_path, inertia: { errors: shift_template.errors }
     end
@@ -60,7 +60,7 @@ class ShiftTemplatesController < ApplicationController
   def update
     authorize shift_template
     if shift_template.update(shift_template_params)
-      redirect_to shift_template, notice: "Shift template was successfully updated."
+      redirect_to shift_template, notice: t("templates.controllers.notices.updated", model: "Shift template")
     else
       redirect_to edit_shift_template_path, inertia: { errors: shift_template.errors }
     end
@@ -70,6 +70,6 @@ class ShiftTemplatesController < ApplicationController
   def destroy
     authorize shift_template
     shift_template.destroy!
-    redirect_to shift_templates_url, notice: "Shift template was successfully destroyed."
+    redirect_to shift_templates_url, notice: t("templates.controllers.notices.destroyed", model: "Shift template")
   end
 end

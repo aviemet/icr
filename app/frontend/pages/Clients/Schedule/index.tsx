@@ -1,5 +1,6 @@
 import { modals } from "@mantine/modals"
 import { useCallback, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import {
 	Box,
@@ -30,6 +31,7 @@ interface ScheduleResources {
 }
 
 const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
+	const { t } = useTranslation()
 	const formatEventTitle = useEventTitleFormatter()
 	const location = useLocation()
 	const userTimezone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone, [])
@@ -86,7 +88,7 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 
 	const handleSlotSelect = (date: Date) => {
 		modals.open({
-			title: "New Shift",
+			title: t("views.clients.schedule.new_shift"),
 			children: <NewShiftForm client={ client } selectedDate={ date } />,
 		})
 	}
@@ -94,7 +96,7 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 	return (
 		<>
 			<Group justify="space-between">
-				<h1>{ client?.person?.name }</h1>
+				<h1>{ t("views.clients.schedule.title", { name: client?.person?.name }) }</h1>
 				<Box></Box>
 			</Group>
 

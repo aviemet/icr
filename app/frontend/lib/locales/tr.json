@@ -1,0 +1,34 @@
+{
+  "tr": {
+    "devise": {
+      "failure": {
+        "invited": "Hesap oluşturmak için bekleyen davetiyenizi kabul edin"
+      },
+      "invitations": {
+        "edit": {
+          "header": "Şifre oluştur",
+          "submit_button": "Şifremi oluştur"
+        },
+        "invitation_removed": "Davetiyeniz silindi",
+        "invitation_token_invalid": "Davetiye tokenı geçerli değil!",
+        "new": {
+          "header": "Davetiye gönderildi",
+          "submit_button": "Davetiye gönder"
+        },
+        "no_invitations_remaining": "Davetiye kalmadı",
+        "send_instructions": "%{email} adresine davetiye maili gönderildi.",
+        "updated": "Şifreniz başarıyla oluşturuldu ve giriş yaptınız",
+        "updated_not_active": "Şifreniz başarıyla oluşturuldu."
+      },
+      "mailer": {
+        "invitation_instructions": {
+          "accept": "Daveti kabul et",
+          "hello": "Merhaba %{email}",
+          "ignore": "Daveti kabul etmek istemiyorsanız bu maili yoksayabilirsiniz.<br />Aşağıdaki linke tıklayıp şifrenizi oluşturmadan hesabınız oluşturulmayacaktır.",
+          "someone_invited_you": "%{url} adresine davet edildiniz. Kabul etmek için aşağıdaki linke tıklayınız.",
+          "subject": "Davetiye adımları"
+        }
+      }
+    }
+  }
+}
