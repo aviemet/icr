@@ -28,6 +28,8 @@ i18n
 		debug: true,
 		interpolation: {
 			escapeValue: false, // React already escapes values
+			prefix: "%{",
+			suffix: "}",
 		},
 	})
 

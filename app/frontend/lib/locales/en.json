@@ -449,35 +449,6 @@
         }
       }
     },
-    "permission": {
-      "views": {
-        "edit": {
-          "title": "Edit Permission Group"
-        },
-        "form": {
-          "add_assignment": "Add Assignment",
-          "add_permission": "Add Permission",
-          "assignments": "Assignments",
-          "basic_info": "Basic Information",
-          "conditions": {
-            "owner_only": "Owner Only",
-            "time_restricted": "Time Restricted"
-          },
-          "effects": {
-            "allow": "Allow",
-            "deny": "Deny"
-          },
-          "permissions": "Permissions"
-        },
-        "index": {
-          "new": "New Permission Group",
-          "title": "Permission Groups"
-        },
-        "new": {
-          "title": "New Permission Group"
-        }
-      }
-    },
     "pundit": {
       "not_authorized": "You are not authorized to access this page."
     },
@@ -632,9 +603,6 @@
           "title": "Sign Up"
         }
       },
-      "edit": {
-        "title": "Edit Permission Group"
-      },
       "employees": {
         "edit": {
           "title": "Edit Employee"
@@ -682,34 +650,46 @@
           }
         }
       },
-      "form": {
-        "add_assignment": "Add Assignment",
-        "add_permission": "Add Permission",
-        "assignments": "Assignments",
-        "basic_info": "Basic Information",
-        "conditions": {
-          "owner_only": "Owner Only",
-          "time_restricted": "Time Restricted"
-        },
-        "effects": {
-          "allow": "Allow",
-          "deny": "Deny"
-        },
-        "permissions": "Permissions"
-      },
-      "index": {
-        "new": "New Permission Group",
-        "title": "Permission Groups"
-      },
-      "new": {
-        "title": "New Permission Group"
-      },
       "pagination": {
         "first": "&laquo; First",
         "last": "Last &raquo;",
         "next": "Next &rsaquo;",
         "previous": "&lsaquo; Prev",
         "truncate": "&hellip;"
+      },
+      "permissions": {
+        "edit": {
+          "title": "Edit Permission Group"
+        },
+        "form": {
+          "add_assignment": "Add Assignment",
+          "add_permission": "Add Permission",
+          "assignments": "Assignments",
+          "basic_info": "Basic Information",
+          "conditions": {
+            "owner_only": "Owner Only",
+            "time_restricted": "Time Restricted"
+          },
+          "effects": {
+            "allow": "Allow",
+            "deny": "Deny"
+          },
+          "permissions": "Permissions"
+        },
+        "index": {
+          "new": "New Permission Group",
+          "table": {
+            "actions": "Actions",
+            "assignments": "Assignments",
+            "description": "Description",
+            "name": "Name",
+            "precedence": "Precedence"
+          },
+          "title": "Permission Groups"
+        },
+        "new": {
+          "title": "New Permission Group"
+        }
       }
     }
   }

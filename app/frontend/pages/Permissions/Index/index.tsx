@@ -33,10 +33,10 @@ const Index = ({ groups }: Props) => {
 			<Grid.Col>
 				<Card>
 					<Card.Section inheritPadding py="xs">
-						<Title>{ t("permissions.index.title") }</Title>
-						{ can("create", "permission_groups") && (
+						<Title>{ t("views.permissions.index.title") }</Title>
+						{ can("create", "views.permission_groups") && (
 							<Link href="/permissions/new">
-								<Button>{ t("permissions.index.new") }</Button>
+								<Button>{ t("views.permissions.index.new") }</Button>
 							</Link>
 						) }
 					</Card.Section>
@@ -45,11 +45,11 @@ const Index = ({ groups }: Props) => {
 						<Table>
 							<Table.Head>
 								<Table.Row>
-									<Table.HeadCell>{ t("activerecord.attributes.permission/group.name") }</Table.HeadCell>
-									<Table.HeadCell>{ t("activerecord.attributes.permission/group.description") }</Table.HeadCell>
-									<Table.HeadCell>{ t("activerecord.attributes.permission/group.precedence") }</Table.HeadCell>
-									<Table.HeadCell>Assignments</Table.HeadCell>
-									<Table.HeadCell>Actions</Table.HeadCell>
+									<Table.HeadCell>{ t("views.permissions.index.table.name") }</Table.HeadCell>
+									<Table.HeadCell>{ t("views.permissions.index.table.description") }</Table.HeadCell>
+									<Table.HeadCell>{ t("views.permissions.index.table.precedence") }</Table.HeadCell>
+									<Table.HeadCell>{ t("views.permissions.index.table.assignments") }</Table.HeadCell>
+									<Table.HeadCell>{ t("views.permissions.index.table.actions") }</Table.HeadCell>
 								</Table.Row>
 							</Table.Head>
 

@@ -23,8 +23,8 @@ const Dashboard = () => {
 			<Stack gap="xl">
 				<Group justify="space-between" align="flex-end">
 					<div>
-						<Title order={ 1 }>{ t("views.dashboard.welcome", { name: user?.person?.name }) }</Title>
-						<Text size="lg" color="dimmed">{ t("views.dashboard.command_center", { company: settings.company_name }) }</Text>
+						<Title order={ 1 }>{ t("views.dashboard.welcome", { name: user?.person?.name ?? "" }) }</Title>
+						<Text size="lg" c="dimmed">{ t("views.dashboard.command_center", { company: settings.company_name }) }</Text>
 					</div>
 					<Group>
 						<Button

@@ -21,25 +21,3 @@ en:
               invalid_format: Must include resource, action, and effect (allow/deny)
               invalid_conditions: Must be a valid conditions hash
               invalid_time_restriction: Must include start and end times
-
-  permission:
-    views:
-      index:
-        title: Permission Groups
-        new: New Permission Group
-      new:
-        title: New Permission Group
-      edit:
-        title: Edit Permission Group
-      form:
-        basic_info: Basic Information
-        permissions: Permissions
-        assignments: Assignments
-        add_permission: Add Permission
-        add_assignment: Add Assignment
-        conditions:
-          owner_only: Owner Only
-          time_restricted: Time Restricted
-        effects:
-          allow: Allow
-          deny: Deny 
