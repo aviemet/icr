@@ -15,18 +15,20 @@ data:
 
   # Locale files or `Dir.glob` patterns where translations are read from:
   read:
-    ## Default:
-    # - config/locales/%{locale}.yml
-    ## More files:
-    # - config/locales/**/*.%{locale}.yml
+    - config/locales/**/*.%{locale}.yml
 
   # Locale files to write new keys to, based on a list of key pattern => file rules. Matched from top to bottom:
   # `i18n-tasks normalize -p` will force move the keys according to these rules
   write:
-    ## For example, write devise and simple form keys to their respective files:
-    # - ['{devise, simple_form}.*', 'config/locales/\1.%{locale}.yml']
-    ## Catch-all default:
-    # - config/locales/%{locale}.yml
+    - ['{devise,simple_form}.*', 'config/locales/\1.%{locale}.yml']
+    - ['permissions.*', 'config/locales/permissions/permissions.%{locale}.yml']
+    - ['clients_manager.*', 'config/locales/clients_manager/clients_manager.%{locale}.yml']
+    - ['clients.*', 'config/locales/clients/clients.%{locale}.yml']
+    - ['employees.*', 'config/locales/employees/employees.%{locale}.yml']
+    - ['settings.*', 'config/locales/settings/settings.%{locale}.yml']
+    - ['users.*', 'config/locales/users/users.%{locale}.yml']
+    - ['categories.*', 'config/locales/categories/categories.%{locale}.yml']
+    - ['*', 'config/locales/%{locale}.yml']
 
   # External locale data (e.g. gems).
   # This data is not considered unused and is never written to.
@@ -53,8 +55,8 @@ data:
 # Find translate calls
 search:
   ## Paths or `Find.find` patterns to search in:
-  # paths:
-  #  - app/
+  paths:
+    - app/
 
   ## Root directories for relative keys resolution.
   # relative_roots:

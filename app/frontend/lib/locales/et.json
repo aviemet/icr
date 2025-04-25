@@ -1,0 +1,33 @@
+{
+  "et": {
+    "devise": {
+      "failure": {
+        "invited": "Sul on kutse ootel - aktsepteeri, et konto loomine lõpule viia."
+      },
+      "invitations": {
+        "edit": {
+          "header": "Salasõna sättimine",
+          "submit_button": "Säti mu salasõna"
+        },
+        "invitation_removed": "Sinu kutse eemaldati.",
+        "invitation_token_invalid": "Antud kutse ei ole kehtiv!",
+        "new": {
+          "header": "Kutse saatmine",
+          "submit_button": "Saada kutse"
+        },
+        "no_invitations_remaining": "Kutseid pole rohkem järgi.",
+        "send_instructions": "Kutse on saadetud emailile %{email}.",
+        "updated": "Sinu salasõna on edukalt sätitud. Oled nüüd sisse logitud."
+      },
+      "mailer": {
+        "invitation_instructions": {
+          "accept": "Võta kutse vastu",
+          "hello": "Tere, %{email}",
+          "ignore": "Kui Sa ei soovi kutset vastu võtta, siis lihtsalt ignoreeri seda emaili.<br />Sinu kontot ei looda enne, kui oled ülalolevat linki külastanud ja oma salasõna määranud.",
+          "someone_invited_you": "Keegi kutsus Sind aadressile %{url}. Kutse saad vastu võtta allolevalt lingilt.",
+          "subject": "Kutse juhised"
+        }
+      }
+    }
+  }
+}

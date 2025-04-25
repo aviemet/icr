@@ -6,6 +6,8 @@ import BareAuthLayout from "./AuthLayout"
 import BarePublicLayout from "./PublicLayout"
 import BareSettingsLayout from "./SettingsLayout"
 
+import "@/lib/i18n"
+
 export const LAYOUTS = {
 	"auth": "auth",
 	"app": "app",
