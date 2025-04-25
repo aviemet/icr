@@ -26,23 +26,31 @@
 #  fk_rails_...  (category_id => categories.id)
 #  fk_rails_...  (contact_id => contacts.id)
 #
-require "rails_helper"
-require "models/shared/contact_method"
+class Contact::Address < ApplicationRecord
+  self.table_name = "addresses"
 
-RSpec.describe Address do
-  describe "Validations" do
-    it "is valid with valid attributes" do
-      expect(build(:address)).to be_valid
-    end
+  include PgSearchable
+  pg_search_config(
+    against: [:name, :address, :address_2, :city, :region, :postal, :notes, :country],
+  )
 
-    it "is invalid with missing attributes" do
-      %i(address).each do |attr|
-        expect(build(:address, attr => nil)).not_to be_valid
-      end
-    end
-  end
+  include Categorizable
 
-  describe "Associations" do
-    it_behaves_like "contact_method"
+  resourcify
+
+  enum :country, ISO3166::Country.codes
+
+  before_destroy :nullify_primary_address
+
+  belongs_to :contact
+
+  validates :address, presence: true
+
+  private
+
+  def nullify_primary_address
+    return unless contact.primary_address == self
+
+    contact.update!(primary_address: nil)
   end
 end

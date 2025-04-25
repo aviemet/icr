@@ -31,9 +31,9 @@ class Contact < ApplicationRecord
   has_many :phones, dependent: :destroy, after_add: :calculate_primary_phone
   has_many :websites, dependent: :destroy
 
-  belongs_to :primary_address, class_name: "Address", optional: true
-  belongs_to :primary_email, class_name: "Email", optional: true
-  belongs_to :primary_phone, class_name: "Phone", optional: true
+  belongs_to :primary_address, class_name: "Contact::Address", optional: true
+  belongs_to :primary_email, class_name: "Contact::Email", optional: true
+  belongs_to :primary_phone, class_name: "Contact::Phone", optional: true
 
   belongs_to :contactable, polymorphic: true
 

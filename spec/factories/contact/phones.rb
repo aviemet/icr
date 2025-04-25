@@ -23,11 +23,13 @@
 #  fk_rails_...  (contact_id => contacts.id)
 #
 FactoryBot.define do
-  factory :phone do
+  factory :phone, class: "Contact::Phone" do
     number { Faker::PhoneNumber.phone_number }
 
     contact
 
-    category factory: [:category, :phone]
+    after(:build) do |phone|
+      phone.category ||= create(:category, categorizable_type: "Contact::Phone")
+    end
   end
 end

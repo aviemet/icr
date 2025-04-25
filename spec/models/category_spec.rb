@@ -41,10 +41,10 @@ RSpec.describe Category do
 
     it "enforces uniquess of :name across :categorizable_type" do
       name = "Example"
-      create(:category, { name:, categorizable_type: "Address" })
+      create(:category, { name:, categorizable_type: "Contact::Address" })
 
-      expect(build(:category, { name:, categorizable_type: "Address" })).not_to be_valid
-      expect(build(:category, { name:, categorizable_type: "Email" })).to be_valid
+      expect(build(:category, { name:, categorizable_type: "Contact::Address" })).not_to be_valid
+      expect(build(:category, { name:, categorizable_type: "Contact::Email" })).to be_valid
     end
 
     it { is_expected.to validate_uniqueness_of(:name).scoped_to(:categorizable_type).with_message(I18n.t("categories.validations.uniqueness")) }

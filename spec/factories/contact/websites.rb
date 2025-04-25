@@ -20,13 +20,15 @@
 #  fk_rails_...  (category_id => categories.id)
 #  fk_rails_...  (contact_id => contacts.id)
 #
-class Website < ApplicationRecord
-  include Categorizable
+FactoryBot.define do
+  factory :website, class: "Contact::Website" do
+    name { Faker::Company.bs.titleize }
+    url { Faker::Internet.domain_name }
 
-  tracked
-  resourcify
+    contact
 
-  belongs_to :contact
-
-  validates :url, presence: true
+    after(:build) do |website|
+      website.category ||= create(:category, categorizable_type: "Contact::Website")
+    end
+  end
 end

@@ -1,12 +1,11 @@
 # == Schema Information
 #
-# Table name: phones
+# Table name: emails
 #
 #  id          :uuid             not null, primary key
-#  extension   :string
+#  email       :string           not null
 #  name        :string
 #  notes       :text
-#  number      :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  category_id :uuid             not null
@@ -14,30 +13,32 @@
 #
 # Indexes
 #
-#  index_phones_on_category_id  (category_id)
-#  index_phones_on_contact_id   (contact_id)
+#  index_emails_on_category_id  (category_id)
+#  index_emails_on_contact_id   (contact_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (category_id => categories.id)
 #  fk_rails_...  (contact_id => contacts.id)
 #
-class Phone < ApplicationRecord
+class Contact::Email < ApplicationRecord
+  self.table_name = "emails"
+
   include Categorizable
 
   resourcify
 
-  before_destroy :nullify_primary_phone
+  before_destroy :nullify_primary_email
 
   belongs_to :contact
 
-  validates :number, presence: true
+  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   private
 
-  def nullify_primary_phone
-    return unless contact.primary_phone == self
+  def nullify_primary_email
+    return unless contact.primary_email == self
 
-    contact.update!(primary_phone: nil)
+    contact.update!(primary_email: nil)
   end
 end

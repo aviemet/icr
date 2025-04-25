@@ -1,12 +1,16 @@
 # == Schema Information
 #
-# Table name: phones
+# Table name: addresses
 #
 #  id          :uuid             not null, primary key
-#  extension   :string
+#  address     :string           not null
+#  address_2   :string
+#  city        :string
+#  country     :integer
 #  name        :string
 #  notes       :text
-#  number      :string           not null
+#  postal      :string
+#  region      :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  category_id :uuid             not null
@@ -14,8 +18,8 @@
 #
 # Indexes
 #
-#  index_phones_on_category_id  (category_id)
-#  index_phones_on_contact_id   (contact_id)
+#  index_addresses_on_category_id  (category_id)
+#  index_addresses_on_contact_id   (contact_id)
 #
 # Foreign Keys
 #
@@ -25,15 +29,15 @@
 require "rails_helper"
 require "models/shared/contact_method"
 
-RSpec.describe Phone do
+RSpec.describe Contact::Address do
   describe "Validations" do
     it "is valid with valid attributes" do
-      expect(build(:phone)).to be_valid
+      expect(build(:address)).to be_valid
     end
 
     it "is invalid with missing attributes" do
-      %i(number).each do |attr|
-        expect(build(:phone, attr => nil)).not_to be_valid
+      %i(address).each do |attr|
+        expect(build(:address, attr => nil)).not_to be_valid
       end
     end
   end

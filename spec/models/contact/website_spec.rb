@@ -1,11 +1,10 @@
 # == Schema Information
 #
-# Table name: emails
+# Table name: websites
 #
 #  id          :uuid             not null, primary key
-#  email       :string           not null
 #  name        :string
-#  notes       :text
+#  url         :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  category_id :uuid             not null
@@ -13,8 +12,8 @@
 #
 # Indexes
 #
-#  index_emails_on_category_id  (category_id)
-#  index_emails_on_contact_id   (contact_id)
+#  index_websites_on_category_id  (category_id)
+#  index_websites_on_contact_id   (contact_id)
 #
 # Foreign Keys
 #
@@ -22,17 +21,16 @@
 #  fk_rails_...  (contact_id => contacts.id)
 #
 require "rails_helper"
-require "models/shared/contact_method"
 
-RSpec.describe Email do
+RSpec.describe Contact::Website do
   describe "Validations" do
     it "is valid with valid attributes" do
-      expect(build(:email)).to be_valid
+      expect(build(:website)).to be_valid
     end
 
     it "is invalid with missing attributes" do
-      %i(email).each do |attr|
-        expect(build(:email, attr => nil)).not_to be_valid
+      %i(url).each do |attr|
+        expect(build(:website, attr => nil)).not_to be_valid
       end
     end
   end

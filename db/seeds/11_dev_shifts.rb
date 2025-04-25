@@ -10,9 +10,9 @@ if Rails.env.development?
       5.times do |i|
         employee = FactoryBot.create(:employee)
         employee.assign_job_title(attendant_job)
-        FactoryBot.create(:address, contact: employee.contact, category: Category.type(:address).sample)
-        FactoryBot.create(:email, contact: employee.contact, category: Category.type(:email).sample)
-        FactoryBot.create(:phone, contact: employee.contact, category: Category.type(:phone).sample)
+        FactoryBot.create(:address, contact: employee.contact, category: Category.type("Contact::Address").sample)
+        FactoryBot.create(:email, contact: employee.contact, category: Category.type("Contact::Email").sample)
+        FactoryBot.create(:phone, contact: employee.contact, category: Category.type("Contact::Phone").sample)
 
         client = Client.first
         start = Time.current.beginning_of_month + (i * shift_length).hours

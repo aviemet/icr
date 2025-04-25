@@ -33,9 +33,9 @@ if Rails.env.development?
   if Client.count == 0
     3.times do
       client = FactoryBot.create :client
-      FactoryBot.create(:address, contact: client.contact, category: Category.type("Address").find_by(name: "Personal"))
-      FactoryBot.create(:email, contact: client.contact, category: Category.type("Email").find_by(name: "Personal"))
-      FactoryBot.create(:phone, contact: client.contact, category: Category.type("Phone").find_by(name: "Home"))
+      FactoryBot.create(:address, contact: client.contact, category: Category.type("Contact::Address").find_by(name: "Personal"))
+      FactoryBot.create(:email, contact: client.contact, category: Category.type("Contact::Email").find_by(name: "Personal"))
+      FactoryBot.create(:phone, contact: client.contact, category: Category.type("Contact::Phone").find_by(name: "Home"))
     end
 
     h = Household.create({ name: "Test Household" })
@@ -67,8 +67,8 @@ if Rails.env.development?
 
       facilitator.assign_job_title(Employee::JobTitle.find_by(slug: "facilitator"))
 
-      FactoryBot.create(:address, contact: facilitator.person.contact, category: Category.type(:address).sample)
-      FactoryBot.create(:phone, contact: facilitator.person.contact, category: Category.type(:phone).sample)
+      FactoryBot.create(:address, contact: facilitator.person.contact, category: Category.type("Contact::Address").sample)
+      FactoryBot.create(:phone, contact: facilitator.person.contact, category: Category.type("Contact::Phone").sample)
 
       director_user = User.create({
         email: "director@gmail.com",
@@ -84,8 +84,8 @@ if Rails.env.development?
 
       director.assign_job_title(Employee::JobTitle.find_by(slug: "director"))
 
-      FactoryBot.create(:address, contact: director.person.contact, category: Category.type(:address).sample)
-      FactoryBot.create(:phone, contact: director.person.contact, category: Category.type(:phone).sample)
+      FactoryBot.create(:address, contact: director.person.contact, category: Category.type("Contact::Address").sample)
+      FactoryBot.create(:phone, contact: director.person.contact, category: Category.type("Contact::Phone").sample)
     end
   end
 

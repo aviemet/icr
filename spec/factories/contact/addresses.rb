@@ -26,29 +26,21 @@
 #  fk_rails_...  (category_id => categories.id)
 #  fk_rails_...  (contact_id => contacts.id)
 #
-class Address < ApplicationRecord
-  include PgSearchable
-  pg_search_config(
-    against: [:name, :address, :address_2, :city, :region, :postal, :notes, :country],
-  )
+FactoryBot.define do
+  factory :address, class: "Contact::Address" do
+    name { Faker::Address.community }
+    address { Faker::Address.street_address }
+    address_2 { Faker::Address.secondary_address }
+    city { Faker::Address.city }
+    region { Faker::Address.state }
+    country { "US" }
+    postal { Faker::Address.zip_code }
+    notes { Faker::Lorem.sentence }
 
-  include Categorizable
+    contact
 
-  resourcify
-
-  enum :country, ISO3166::Country.codes
-
-  before_destroy :nullify_primary_address
-
-  belongs_to :contact
-
-  validates :address, presence: true
-
-  private
-
-  def nullify_primary_address
-    return unless contact.primary_address == self
-
-    contact.update!(primary_address: nil)
+    after(:build) do |address|
+      address.category ||= create(:category, categorizable_type: "Contact::Address")
+    end
   end
 end

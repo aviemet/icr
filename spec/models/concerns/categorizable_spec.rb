@@ -7,14 +7,6 @@ RSpec.describe Categorizable do
     it{ is_expected.to belong_to(:category).optional }
   end
 
-  describe Address do
-    it_behaves_like "a categorizable entity"
-  end
-
-  describe Email do
-    it_behaves_like "a categorizable entity"
-  end
-
   describe Identification do
     it_behaves_like "a categorizable entity"
   end
@@ -23,15 +15,23 @@ RSpec.describe Categorizable do
     it_behaves_like "a categorizable entity"
   end
 
-  describe Phone do
-    it_behaves_like "a categorizable entity"
-  end
-
   describe Vendor do
     it_behaves_like "a categorizable entity"
   end
 
-  describe Website do
+  describe Contact::Address do
+    it_behaves_like "a categorizable entity"
+  end
+
+  describe Contact::Email do
+    it_behaves_like "a categorizable entity"
+  end
+
+  describe Contact::Phone do
+    it_behaves_like "a categorizable entity"
+  end
+
+  describe Contact::Website do
     it_behaves_like "a categorizable entity"
   end
 end

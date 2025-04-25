@@ -65,10 +65,10 @@ incident_report_types = {
 
 if Category.count == 0
   {
-    Email: ["Work", "Personal", "Other"],
-    Address: ["Work", "Personal", "Other"],
-    Phone: ["Home", "Mobile", "Office", "Other"],
-    Website: ["Personal", "Business", "Vendor", "Other"],
+    "Contact::Email": ["Work", "Personal", "Other"],
+    "Contact::Address": ["Work", "Personal", "Other"],
+    "Contact::Phone": ["Home", "Mobile", "Office", "Other"],
+    "Contact::Website": ["Personal", "Business", "Vendor", "Other"],
     Vendor: [
       "Day Program",
       "Medical Supply",
