@@ -3,6 +3,12 @@
 ## Project Overview
 This is a single-instance Rails application designed to run for a single company. There is no multi-tenancy support, and company details are managed through a singleton settings model.
 
+### Model Organization
+- Employee-related models are namespaced under `Employee::`
+  - `Employee::JobTitle`: Manages job titles and their associations
+  - Models use explicit class names in associations (e.g., `class_name: "Employee::JobTitle"`)
+  - Serializers follow the same namespace pattern (e.g., `Employee::JobTitleSerializer`)
+
 ## Project Milestones
 
 ### Phase 1: Core Authentication and Authorization

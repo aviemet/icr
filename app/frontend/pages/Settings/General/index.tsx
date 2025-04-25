@@ -8,8 +8,6 @@ import {
 } from "@/features/Dropdowns"
 import { Routes, withLayout } from "@/lib"
 
-import ShiftTitleFormatInput from "./ShiftTitleFormatInput"
-
 export type GeneralSettingsFormData = {
 	settings: Schema.Setting
 }

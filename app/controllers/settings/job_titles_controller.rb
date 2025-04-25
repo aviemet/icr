@@ -1,8 +1,8 @@
 class Settings::JobTitlesController < ApplicationController
   include Searchable
 
-  expose :job_titles, -> { search(JobTitle.includes_associated) }
-  expose :job_title, id: ->{ params[:slug] }, scope: ->{ JobTitle.includes_associated }, find_by: :slug
+  expose :job_titles, -> { search(Employee::JobTitle.includes_associated) }
+  expose :job_title, -> { Employee::JobTitle.includes_associated.find_by!(slug: params[:slug]) }
 
   sortable_fields %w[name]
 
@@ -35,10 +35,10 @@ class Settings::JobTitlesController < ApplicationController
 
   # @route GET /settings/job_titles/new (new_settings_job_title)
   def new
-    authorize JobTitle.new
+    authorize Employee::JobTitle.new
 
     render inertia: "Settings/JobTitles/New", props: {
-      job_title: JobTitle.new.render(:form_data)
+      job_title: Employee::JobTitle.new.render(:form_data)
     }
   end
 
@@ -53,7 +53,7 @@ class Settings::JobTitlesController < ApplicationController
 
   # @route POST /settings/job_titles (settings_job_titles)
   def create
-    authorize JobTitle.new
+    authorize Employee::JobTitle.new
 
     if job_title.save
       redirect_to settings_job_title_path(job_title.slug), notice: "Job title created"

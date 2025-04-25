@@ -3,6 +3,7 @@ import clsx from "clsx"
 import { useState } from "react"
 
 import { Box, Paper } from "@/components"
+import { Routes } from "@/lib"
 import { useLocation } from "@/lib/hooks"
 
 import SettingsNavLink from "./SettingsNavLink"
@@ -14,11 +15,11 @@ interface SettingsLayoutProps {
 }
 
 const links = [
-	{ label: "General", href: "/settings/general" },
-	{ label: "Calendar", href: "/settings/calendar" },
-	{ label: "People", href: "/settings/people" },
-	{ label: "Job Titles", href: "/settings/job_titles" },
-	{ label: "Payroll", href: "/settings/payroll" },
+	{ label: "General", href: Routes.settingsGeneral() },
+	{ label: "Calendar", href: Routes.settingsCalendar() },
+	{ label: "People", href: Routes.settingsPeople() },
+	{ label: "Job Titles", href: Routes.settingsJobTitles() },
+	{ label: "Payroll", href: Routes.settingsPayroll() },
 ]
 
 const linkIndex = (path: string) => links.findIndex(link => link.href === path || path.startsWith(link.href))

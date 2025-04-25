@@ -1,10 +1,10 @@
 import { css } from "@linaria/core"
 
-import { vars, theme } from "@/lib/theme"
+import { vars } from "@/lib/theme"
 
 export const settingsLayout = css`
 	position: relative;
-	border-radius: ${vars.radius.md};
+	border-radius: ${ vars.radius.md };
 	padding: 5px;
 
 	.control {
@@ -27,8 +27,8 @@ export const settingsLayout = css`
 	}
 
 	.indicator {
-		background-color: ${vars.colors.primaryColors.filled};
-		border-radius: ${vars.radius.md};
+		background-color: ${ vars.colors.primaryColors.filled };
+		border-radius: ${ vars.radius.md };
 	}
 `
 
