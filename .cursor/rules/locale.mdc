@@ -1,0 +1,6 @@
+---
+description: 
+globs: *.yml
+alwaysApply: false
+---
+When generating i18n strings for locale files, always nest them in the folder for their respective model

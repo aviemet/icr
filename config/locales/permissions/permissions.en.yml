@@ -1,0 +1,50 @@
+en:
+  activerecord:
+    models:
+      permission/group: Permission Group
+      permission/assignment: Permission Assignment
+    attributes:
+      permission/group:
+        name: Name
+        description: Description
+        precedence: Precedence
+        permissions: Permissions
+      permission/assignment:
+        starts_at: Starts At
+        ends_at: Ends At
+        conditions: Conditions
+    errors:
+      models:
+        permission/group:
+          attributes:
+            permissions:
+              invalid_format: must include resource, action, and effect (allow/deny)
+              invalid_conditions: must be a valid conditions hash
+              invalid_time_restriction: time restrictions must include start and end times
+
+  permissions:
+    index:
+      title: Permission Groups
+      new: New Permission Group
+    new:
+      title: New Permission Group
+    edit:
+      title: Edit Permission Group
+    create:
+      success: Permission group was successfully created.
+    update:
+      success: Permission group was successfully updated.
+    destroy:
+      success: Permission group was successfully deleted.
+    form:
+      basic_info: Basic Information
+      permissions: Permissions
+      assignments: Assignments
+      add_permission: Add Permission
+      add_assignment: Add Assignment
+      conditions:
+        owner_only: Owner Only
+        time_restricted: Time Restricted
+      effects:
+        allow: Allow
+        deny: Deny 

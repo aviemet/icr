@@ -36,9 +36,12 @@ module Permission
     has_many :job_titles, through: :assignments,
       source: :permissionable, source_type: "Employee::JobTitle"
 
+    accepts_nested_attributes_for :assignments, allow_destroy: true, reject_if: :all_blank
+
     validates :name, presence: true, uniqueness: true
     validates :description, presence: true
     validates :precedence, presence: true, numericality: { only_integer: true }
+    validate :validate_permissions_format
 
     before_validation :ensure_permissions
 
@@ -99,6 +102,37 @@ module Permission
 
     def ensure_permissions
       self.permissions ||= []
+    end
+
+    def validate_permissions_format
+      return if permissions.blank?
+
+      permissions_array.each do |permission|
+        unless permission.is_a?(Hash) &&
+            permission["resource"].present? &&
+            permission["action"].present? &&
+            ["allow", "deny"].include?(permission["effect"])
+          errors.add(:permissions, :invalid_format)
+          break
+        end
+
+        next if permission["conditions"].blank?
+
+        unless permission["conditions"].is_a?(Hash)
+          errors.add(:permissions, :invalid_conditions)
+          break
+        end
+
+        next if permission["conditions"]["time_restricted"].blank?
+
+        time_restricted = permission["conditions"]["time_restricted"]
+        next if time_restricted.is_a?(Hash) &&
+          time_restricted["start_time"].present? &&
+          time_restricted["end_time"].present?
+
+        errors.add(:permissions, :invalid_time_restriction)
+        break
+      end
     end
 
     def evaluate_conditions(conditions, context)

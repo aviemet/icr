@@ -162,3 +162,63 @@ user.permission?("clients", "view", context)
 - Timesheets will be generated per pay period
 - System will maintain audit trail of all changes
 - Approval workflow will be multi-step
+
+### Frontend Architecture
+#### Component Structure
+- Frontend code organized in `/app/frontend`:
+  - `/components`: Reusable, general-purpose components
+  - `/features`: Feature-specific components
+  - `/layouts`: Layout components
+  - `/lib`: Non-React code and utilities
+  - `/pages`: Top-level Inertia pages (entry points for routes)
+  - `/queries`: Async react-query methods
+  - `/types`: Global types and interfaces
+
+#### UI & Styling
+- Mantine component library
+- CSS modules with Linaria
+  - Files use `.css.ts` extension
+  - Imports as `import * as classes from './file.css'`
+  - Class composition with `clsx`
+- Dark/light theme support via Mantine theme system
+
+#### Form Implementation
+- Built on `use-inertia-form` v4.6.0
+- Form component wraps Inertia form with Mantine UI
+- Supports nested data through `NestedObject` type
+- Rails-compatible form attributes by default
+- Custom inputs use `useInertiaInput` hook
+- Form state includes processing, errors, validation, and dirty tracking
+- All components strictly typed with `BaseFormInputProps<T>` interface
+
+#### State Management
+- Server state: Inertia.js
+- Client-only state: zustand
+- Form state: use-inertia-form
+
+#### Type System
+- Strict TypeScript throughout
+- No use of `any`, `unknown`, or type casting with `as`
+- Prefer existing type definitions and interfaces
+- Use generics, Records, and Mapped types before inline types
+- Type assertions as last resort
+- Auto-generated types for serializers
+
+#### Internationalization
+- next-i18next for frontend translations
+- Translation files from i18n-js gem
+- Translations in Rails locales (yml)
+- Full i18n support (numbers, dates, currency, RTL)
+
+#### Testing
+- Unit: Vitest + React Testing Library
+- E2E: Playwright (no mocks, uses test environment)
+- Test files mirror source structure in `/app/frontend/tests`
+
+#### Performance
+- Component code splitting
+- Route-based lazy loading
+- Image optimization
+- Proper useEffect cleanup
+- Memoized expensive computations
+- Minimal global state
