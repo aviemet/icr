@@ -690,6 +690,60 @@
         "new": {
           "title": "New Permission Group"
         }
+      },
+      "timesheets": {
+        "filters": {
+          "apply": "Apply Filters",
+          "date_from": "From",
+          "date_to": "To",
+          "select_date": "Select date",
+          "select_status": "Select status",
+          "status": "Status"
+        },
+        "index": {
+          "current_period": "Current Pay Period",
+          "title": "Timesheets"
+        },
+        "list": {
+          "actions": "Actions",
+          "overtime_hours": "Overtime Hours",
+          "period": "Pay Period",
+          "regular_hours": "Regular Hours",
+          "status": "Status",
+          "total_hours": "Total Hours"
+        },
+        "show": {
+          "approve": "Approve",
+          "companion": "Companion",
+          "employee": "Employee",
+          "reject": "Reject",
+          "title": "Timesheet Details",
+          "week_one": "Week One",
+          "week_two": "Week Two"
+        },
+        "stats": {
+          "overtime_hours": "Overtime Hours",
+          "regular_hours": "Regular Hours",
+          "remaining_shifts": "Remaining Shifts",
+          "this_period": "This Pay Period",
+          "this_week": "This Week",
+          "total_hours": "Total Hours"
+        },
+        "status": {
+          "approved": "Approved",
+          "draft": "Draft",
+          "rejected": "Rejected",
+          "submitted": "Submitted"
+        },
+        "weekly": {
+          "date": "Date",
+          "hours": "Hours",
+          "overtime": "Overtime",
+          "shift": "Shift",
+          "sick": "Sick",
+          "total": "Total",
+          "vacation": "Vacation"
+        }
       }
     }
   }

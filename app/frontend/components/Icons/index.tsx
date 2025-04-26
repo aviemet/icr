@@ -13,6 +13,7 @@ export {
 	TbCircleDot as CircleDotIcon,
 	TbSquarePlus as ReplenishIcon,
 	TbMoonStars as MoonIcon,
+	TbEye as ViewIcon,
 } from "react-icons/tb"
 
 export {

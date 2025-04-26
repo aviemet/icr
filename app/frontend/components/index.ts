@@ -39,6 +39,7 @@ export {
 	List, type ListProps,
 	Paper, type PaperProps,
 	Popover, type PopoverProps,
+	RingProgress,
 	SimpleGrid, type SimpleGridProps,
 	Slider, type SliderProps,
 	Skeleton, type SkeletonProps,

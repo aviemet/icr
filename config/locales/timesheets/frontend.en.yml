@@ -1,0 +1,54 @@
+en:
+  views:
+    timesheets:
+      index:
+        title: "Timesheets"
+        current_period: "Current Pay Period"
+
+      show:
+        title: "Timesheet Details"
+        employee: "Employee"
+        companion: "Companion"
+        approve: "Approve"
+        reject: "Reject"
+        week_one: "Week One"
+        week_two: "Week Two"
+
+      list:
+        period: "Pay Period"
+        status: "Status"
+        total_hours: "Total Hours"
+        regular_hours: "Regular Hours"
+        overtime_hours: "Overtime Hours"
+        actions: "Actions"
+
+      weekly:
+        date: "Date"
+        shift: "Shift"
+        hours: "Hours"
+        overtime: "Overtime"
+        vacation: "Vacation"
+        sick: "Sick"
+        total: "Total"
+
+      status:
+        draft: "Draft"
+        submitted: "Submitted"
+        approved: "Approved"
+        rejected: "Rejected"
+
+      stats:
+        total_hours: "Total Hours"
+        regular_hours: "Regular Hours"
+        overtime_hours: "Overtime Hours"
+        remaining_shifts: "Remaining Shifts"
+        this_period: "This Pay Period"
+        this_week: "This Week"
+
+      filters:
+        date_from: "From"
+        date_to: "To"
+        status: "Status"
+        select_date: "Select date"
+        select_status: "Select status"
+        apply: "Apply Filters"

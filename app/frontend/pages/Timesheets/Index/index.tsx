@@ -1,29 +1,37 @@
-import { NewIcon } from "@/components/Icons"
-import { IndexPageTemplate } from "@/features"
-import TimesheetsTable from "@/features/TimeSheets/Table"
-import { Routes } from "@/lib"
+import { useTranslation } from "react-i18next"
 
+import { Container, Group, Paper, Stack, Text, Title } from "@/components"
 
-interface TimesheetIndexProps {
-	timesheets: Schema.TimesheetsIndex[]
-	pagination: Schema.Pagination
-}
+import { TimesheetFilters } from "./TimesheetFilters"
+import { TimesheetList } from "./TimesheetList"
+import { TimesheetStats } from "./TimesheetStats"
 
-const TimesheetsIndex = ({ timesheets, pagination }: TimesheetIndexProps) => {
+export default function TimesheetsIndex() {
+	const { t } = useTranslation()
+
 	return (
-		<IndexPageTemplate
-			title="Timesheets"
-			model="timesheets"
-			rows={ timesheets }
-			pagination={ pagination }
-			deleteRoute={ Routes.timesheets() }
-			menuOptions={ [
-				{ label: "New Timesheet", href: Routes.newTimesheet(), icon: <NewIcon /> },
-			] }
-		>
-			<TimesheetsTable />
-		</IndexPageTemplate>
+		<Container size="xl">
+			<Stack>
+				<Group>
+					<Title order={ 2 }>{ t("views.timesheets.index.title") }</Title>
+				</Group>
+
+				<Paper p="md" radius="sm" withBorder>
+					<TimesheetStats />
+				</Paper>
+
+				<Paper p="md" radius="sm" withBorder>
+					<Stack>
+						<Group>
+							<Text size="lg">
+								{ t("views.timesheets.index.current_period") }
+							</Text>
+						</Group>
+						<TimesheetFilters />
+						<TimesheetList />
+					</Stack>
+				</Paper>
+			</Stack>
+		</Container>
 	)
 }
-
-export default TimesheetsIndex

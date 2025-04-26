@@ -143,6 +143,37 @@ Permission::Assignment.create!(
 user.permission?("clients", "view", context)
 ```
 
+### Payroll Settings
+The payroll settings system manages pay periods and overtime calculations:
+
+#### Pay Period Configuration
+- **Period Types**:
+  - Weekly
+  - Bi-weekly
+  - Semi-monthly
+  - Monthly
+- **Period Settings**:
+  - Weekly/Bi-weekly: Configurable day of week (Monday-Sunday)
+  - Monthly: Configurable date (1st, 5th, 15th, 20th, or last day)
+  - Semi-monthly: Two configurable dates per month
+
+#### Overtime Rules
+- **Standard Thresholds**:
+  - Weekly hours (default: 40)
+  - Daily hours (default: 8)
+- **Exemption System**:
+  - Configurable rules for overtime-exempt shifts
+  - Criteria based on:
+    - Shift category (Sleep, Standby, Regular)
+    - Start/end times
+    - Shift duration
+
+#### Pay Rate Management
+- Tracks employee pay rates over time
+- Supports both hourly and salary periods
+- Includes currency information
+- Maintains historical records with effective dates
+
 ## Technical Decisions
 ### Authentication & Authorization
 - Using Devise for authentication
@@ -169,9 +200,21 @@ user.permission?("clients", "view", context)
 - System will maintain audit trail of all changes
 - Approval workflow will be multi-step
 
-### Frontend Architecture
-#### Component Structure
-- Frontend code organized in `/app/frontend`:
+### Frontend Components
+#### UI Framework
+- Using Mantine v7+
+  - Always use latest component API and prop names
+  - Refer to Mantine documentation for current component structure
+
+#### Icons
+- Icons are centrally exported from `@/components/Icons`
+- Icons are renamed on export for semantic usage (e.g., `TbDashboard as DashboardIcon`)
+- Global icon configuration via `IconProvider` with defaults:
+  - className: "react-icon"
+  - size: "1rem"
+
+#### Component Organization
+- Frontend code is organized in `/app/frontend/`
   - `/components`: Reusable, general-purpose components
   - `/features`: Feature-specific components
   - `/layouts`: Layout components
@@ -243,3 +286,32 @@ user.permission?("clients", "view", context)
 - Proper useEffect cleanup
 - Memoized expensive computations
 - Minimal global state
+
+## Payroll Periods
+
+### Semi-Monthly Periods
+- When configured with last day of month setting (`payroll_period_date_2 = -1`):
+  - First period: 1st to 14th of the month
+  - Second period: 15th to last day of month
+- With regular settings:
+  - Periods are defined by `payroll_period_date` and `payroll_period_date_2`
+  - First period starts on `payroll_period_date`
+  - Second period starts on `payroll_period_date_2`
+  - Each period ends the day before the next period starts
+
+### Bi-Weekly Periods
+- Uses a reference date of January 3rd, 2024 for calculating period boundaries
+- Periods are two weeks long (14 days)
+- Start day of week is configurable via `payroll_period_day`
+
+### Weekly Periods
+- Start day of week is configurable via `payroll_period_day`
+- Periods run for 7 days from the start day
+
+### Monthly Periods
+- Can be configured with a specific start date or last day of month
+- When using last day of month (`payroll_period_date = -1`):
+  - Period runs from last day of previous month to second-to-last day of current month
+- With regular settings:
+  - Period starts on `payroll_period_date`
+  - Ends on day before start date of next month
