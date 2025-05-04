@@ -58,7 +58,7 @@ class ClientsController < ApplicationController
   def schedule
     schedules = client
       .calendar_events
-      .includes([:recurring_patterns, shift: [employee: [:person, :job_title, :calendar_customization]]])
+      .includes([:recurring_patterns, :event_participants, shift: [employee: [:person, :job_title, :calendar_customization]]])
       .between(*DateRangeCalculator.new(params).call)
 
     render inertia: "Clients/Schedule", props: {

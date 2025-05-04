@@ -21,7 +21,7 @@ const ShowEmployee = ({ employee }: ShowEmployeeProps) => {
 	]
 
 	const title = employee?.person?.name || t("views.employees.show.title")
-	const status = employee?.status
+	const employeeStatus = employee?.status
 
 	return (
 		<Page title={ title } breadcrumbs={ [
@@ -33,7 +33,7 @@ const ShowEmployee = ({ employee }: ShowEmployeeProps) => {
 				<Group justify="space-between" align="flex-start">
 					<Group align="center" gap="sm">
 						<Title>{ title }</Title>
-						{ status && <Badge>{ status.charAt(0).toUpperCase() + status.slice(1) }</Badge> }
+						{ employeeStatus === "applicant" && <Badge>{ employeeStatus.charAt(0).toUpperCase() + employeeStatus.slice(1) }</Badge> }
 					</Group>
 
 					<Group>

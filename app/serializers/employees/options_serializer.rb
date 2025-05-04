@@ -11,4 +11,6 @@ class Employees::OptionsSerializer < ApplicationSerializer
     :active_at,
     :inactive_at,
   )
+
+  belongs_to :person, serializer: PersonSerializer
 end
