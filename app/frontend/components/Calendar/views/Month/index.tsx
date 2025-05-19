@@ -51,9 +51,7 @@ const MonthViewComponent = <
 		return chunk(localizer.visibleDays(date, VIEWS.month), weekdays.length)
 	}, [date, localizer, weekdays.length])
 
-	/**
-	 *
-	 */
+	// Add background click handler option
 	const handleClickBackground = (e: React.MouseEvent<HTMLDivElement>) => {
 		const target = e.target as HTMLElement
 		const cell = target.closest<HTMLDivElement>(`.${classes.dateCellBackground}`)
@@ -77,7 +75,11 @@ const MonthViewComponent = <
 				<DaysHeading weekdays={ weekdays } />
 
 				<div className={ clsx(classes.daysContainer) }>
+
+					{ /* Iterate over the weeks in the month to create rows */ }
 					{ weeks.map((week, index) => {
+
+						// Iterate over the days in the week for displaying events in date cells
 						const { backgroundCells, headingCells, contentCells, totalCells } = week.reduce((acc, day, weekDayIndex) => {
 							const dayMapKey = day.toISOString()
 							/**
@@ -188,14 +190,16 @@ const MonthViewComponent = <
 								)
 							}
 
-							return acc
+							return acc // reducer iteration return value
 						}, {
 							backgroundCells: [] as React.ReactNode[],
 							headingCells: [] as React.ReactNode[],
 							contentCells: [] as React.ReactNode[],
 							totalCells: [] as React.ReactNode[],
-						})
+						}) // Ends reducer
 
+						// week map iteration return value
+						// Uses the values built in the reducer to build week rows using 3 (possibly 4) layers
 						return (
 							<div className={ clsx(classes.row) } key={ `week_${index}` } style={ {
 								"--min-rows": numEventsRows,
@@ -204,16 +208,20 @@ const MonthViewComponent = <
 									className={ clsx(classes.rowLayerContainer, classes.backgroundLayer) }
 									onClick={ handleClickBackground }
 								>
+									{ /* Visual layer providing structure and background color to the weeks */ }
 									{ backgroundCells }
 								</div>
 								<div className={ clsx(classes.rowLayerContainer, classes.headingLayer) }>
+									{ /* Taking up one grid row of the calendar week to display the date cell date */ }
 									{ headingCells }
 								</div>
 								<div className={ clsx(classes.rowLayerContainer, classes.contentLayer) }>
+									{ /* CSS-grid container for displaying the events for the week */ }
 									{ contentCells }
 								</div>
 								{ showDailyTotals && (
 									<div className={ clsx(classes.rowLayerContainer, classes.footerLayer) }>
+										{ /* Optional footer to display the total hours of events in the day */ }
 										{ totalCells }
 									</div>
 								) }

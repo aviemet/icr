@@ -96,10 +96,10 @@ export abstract class BaseDisplayStrategy<
 
 		while(
 			this.config.localizer.isBefore(currentStart, finalEnd) &&
-      this.config.localizer.startOf(currentStart, "day").getTime() < // Use < to handle exact midnight end
+      this.config.localizer.startOf(currentStart, "day").getTime() <
       this.config.localizer.startOf(finalEnd, "day").getTime()
 		) {
-			const dayEnd = this.config.localizer.endOf(currentStart, "day")
+			const dayEnd = this.config.localizer.add(this.config.localizer.startOf(currentStart, "day"), 1, "day")
 			// Clamp the segment end to the actual final end time
 			const segmentEnd = this.config.localizer.isBefore(dayEnd, finalEnd) ? dayEnd : finalEnd
 
