@@ -20,15 +20,18 @@ data:
   # Locale files to write new keys to, based on a list of key pattern => file rules. Matched from top to bottom:
   # `i18n-tasks normalize -p` will force move the keys according to these rules
   write:
-    - ['{devise,simple_form}.*', 'config/locales/\1.%{locale}.yml']
-    - ['permissions.*', 'config/locales/permissions/permissions.%{locale}.yml']
-    - ['clients_manager.*', 'config/locales/clients_manager/clients_manager.%{locale}.yml']
-    - ['clients.*', 'config/locales/clients/clients.%{locale}.yml']
-    - ['employees.*', 'config/locales/employees/employees.%{locale}.yml']
-    - ['settings.*', 'config/locales/settings/settings.%{locale}.yml']
-    - ['users.*', 'config/locales/users/users.%{locale}.yml']
-    - ['categories.*', 'config/locales/categories/categories.%{locale}.yml']
-    - ['*', 'config/locales/%{locale}.yml']
+    - ["{devise,simple_form}.*", 'config/locales/\1.%{locale}.yml']
+    - ["permissions.*", "config/locales/permissions/permissions.%{locale}.yml"]
+    - [
+        "clients_manager.*",
+        "config/locales/clients_manager/clients_manager.%{locale}.yml",
+      ]
+    - ["clients.*", "config/locales/clients/clients.%{locale}.yml"]
+    - ["employees.*", "config/locales/employees/employees.%{locale}.yml"]
+    - ["settings.*", "config/locales/settings/settings.%{locale}.yml"]
+    - ["users.*", "config/locales/users/users.%{locale}.yml"]
+    - ["categories.*", "config/locales/categories/categories.%{locale}.yml"]
+    - ["*", "config/locales/%{locale}.yml"]
 
   # External locale data (e.g. gems).
   # This data is not considered unused and is never written to.
@@ -77,10 +80,7 @@ search:
   ##   *.jpg *.jpeg *.png *.gif *.svg *.ico *.eot *.otf *.ttf *.woff *.woff2 *.pdf *.css *.sass *.scss *.less
   ##   *.yml *.json *.zip *.tar.gz *.swf *.flv *.mp3 *.wav *.flac *.webm *.mp4 *.ogg *.opus *.webp *.map *.xlsx
   exclude:
-    - app/assets/images
-    - app/assets/fonts
-    - app/assets/videos
-    - app/assets/builds
+    - app/assets/*
 
   ## Alternatively, the only files or `File.fnmatch patterns` to search in `paths`:
   ## If specified, this settings takes priority over `exclude`, but `exclude` still applies.
@@ -105,7 +105,6 @@ search:
   ## Multiple scanners can be used. Their results are merged.
   ## The options specified above are passed down to each scanner. Per-scanner options can be specified as well.
   ## See this example of a custom scanner: https://github.com/glebm/i18n-tasks/wiki/A-custom-scanner-example
-
 ## Translation Services
 # translation:
 #   # Google Translate
