@@ -9,7 +9,7 @@ Bundler.require(*Rails.groups)
 module Icr
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.1
+    config.load_defaults 7.2
     config.exceptions_app = self.routes
 
     # Configuration for the application, engines, and railties goes here.
@@ -19,8 +19,7 @@ module Icr
 
     config.time_zone = "Pacific Time (US & Canada)"
 
-    config.autoload_paths += %W[#{config.root}/lib #{config.root}/app/schemas]
-    config.eager_load_paths += %W[#{config.root}/app/schemas]
+    config.autoload_paths += %W[#{config.root}/lib]
 
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
