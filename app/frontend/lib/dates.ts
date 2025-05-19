@@ -10,3 +10,7 @@ export const ensureDate = (value: unknown): Date => {
 
 	return new Date()
 }
+
+export const isDate = (value: unknown): value is Date => {
+	return value instanceof Date
+}

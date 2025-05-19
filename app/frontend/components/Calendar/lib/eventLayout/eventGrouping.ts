@@ -1,7 +1,7 @@
 import { EventResources, BaseCalendarEvent } from "@/components/Calendar"
 import { SortedArray } from "@/lib/Collections/SortedArray"
 
-import { VIEW_NAMES } from "../../Views"
+import { VIEW_NAMES } from "../../views"
 import { EventDisplayDetails, BaseDisplayStrategy, BaseDisplayProperties } from "../displayStrategies"
 import { CalendarLocalizer } from "../localizers"
 

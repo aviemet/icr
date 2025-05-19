@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import { VIEW_NAMES } from "@/components/Calendar/Views"
+import { VIEW_NAMES } from "@/components/Calendar/views"
 
 import { CalendarMessages, defaultMessages } from "../messages"
 

@@ -8,7 +8,7 @@ import {
 	Group,
 } from "@/components"
 import { BaseCalendarEvent } from "@/components/Calendar"
-import { NAVIGATION_ACTION, VIEW_NAMES } from "@/components/Calendar/Views"
+import { NAVIGATION_ACTION, VIEW_NAMES } from "@/components/Calendar/views"
 import EventPopoverContent from "@/features/Clients/EventPopoverContent"
 import { ensureViewName } from "@/lib"
 import { ensureDate } from "@/lib/dates"

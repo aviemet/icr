@@ -2,7 +2,7 @@ import React, { createContext as ReactCreateContext, useContext as ReactUseConte
 
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 
-import { VIEW_NAMES, NAVIGATION_ACTION } from "./Views"
+import { VIEW_NAMES, NAVIGATION_ACTION } from "./views"
 
 export interface Resource {
 	id: string | number

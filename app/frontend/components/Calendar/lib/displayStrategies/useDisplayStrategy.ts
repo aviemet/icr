@@ -1,7 +1,7 @@
 import { useMemo } from "react"
 
 import { EventResources, useCalendarContext } from "../.."
-import { VIEW_NAMES } from "../../Views"
+import { VIEW_NAMES } from "../../views"
 
 import {
 	displayStrategyFactories,

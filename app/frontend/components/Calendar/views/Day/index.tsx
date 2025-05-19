@@ -3,7 +3,7 @@ import { useMemo } from "react"
 
 import { useCalendarContext, Resource, EventResources } from "@/components/Calendar"
 import TimeGrid, { TimeGridHeading } from "@/components/Calendar/components/TimeGrid"
-import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS, ViewStaticMethodProps } from "@/components/Calendar/Views"
+import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS, ViewStaticMethodProps } from "@/components/Calendar/views"
 
 import * as classes from "./DayView.css"
 

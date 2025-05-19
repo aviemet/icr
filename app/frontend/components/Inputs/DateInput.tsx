@@ -1,14 +1,19 @@
-import { DatePickerInput, type DatePickerInputProps } from "@mantine/dates"
+import {
+	DatePickerInput,
+	type DatePickerInputProps,
+	type DatesRangeValue,
+} from "@mantine/dates"
+import dayjs from "dayjs"
 import { useEffect, useState, forwardRef } from "react"
 
 import { CalendarIcon } from "@/components/Icons"
 import { isUnset } from "@/lib"
+import { isDate } from "@/lib/dates"
 
 import InputWrapper from "./InputWrapper"
 import Label from "./Label"
 
 import { type DateInputValue, type BaseInputProps } from "."
-
 
 export interface DateInputProps
 	extends
@@ -39,31 +44,41 @@ const DateInputComponent = forwardRef<HTMLButtonElement, DateInputProps>((
 ) => {
 	const inputId = id || name
 
-	const [localValue, setLocalValue] = useState<DateInputValue>(value)
+	const [localValue, setLocalValue] = useState<DateInputValue>(() => {
+		if(isUnset(value)) return undefined
+		if(isDate(value)) return dayjs(value).format(valueFormat)
+		if(Array.isArray(value)) {
+			const formattedValues = (value as Array<unknown>).map((v) => {
+				if(isDate(v)) return dayjs(v).format(valueFormat)
+				if(typeof v === "string") return v
+				return ""
+			})
+			return formattedValues as string[]
+		}
+		return value
+	})
 	const [datePickerType, setDatePickerType] = useState(type)
 
 	const handleChange = (changeValue: DateInputValue | undefined) => {
 		setLocalValue(changeValue)
-
 		onChange?.(changeValue)
 	}
 
-	// Allow a Date input's type to change
 	useEffect(() => {
 		if(datePickerType === type) return
 
-		// DatesRangeValue and Date[] are the Array type options
 		if(type === "range") {
 			if(Array.isArray(localValue)) {
-				// An array of length 2 indicates it's already a range of dates
 				if(localValue.length !== 2) {
-					setLocalValue([localValue[0], null])
+					setLocalValue([localValue[0], ""] as DatesRangeValue)
 				}
+			} else if(localValue) {
+				setLocalValue([localValue, ""] as DatesRangeValue)
 			} else {
-				setLocalValue(localValue ? [localValue] : null)
+				setLocalValue(undefined)
 			}
 		} else {
-			setLocalValue(Array.isArray(localValue) ? localValue[0] : null)
+			setLocalValue(Array.isArray(localValue) ? localValue[0] : undefined)
 		}
 
 		setDatePickerType(type)
@@ -78,7 +93,7 @@ const DateInputComponent = forwardRef<HTMLButtonElement, DateInputProps>((
 				ref={ ref }
 				id={ inputId }
 				name={ name }
-				value={ isUnset(localValue) ? undefined : localValue }
+				value={ localValue }
 				type={ datePickerType }
 				onChange={ handleChange }
 				valueFormat={ valueFormat }

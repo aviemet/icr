@@ -13,8 +13,8 @@ import * as classes from "./Calendar.css"
 import { ErrorBoundary } from "../ErrorBoundary"
 import EventDetailsPopover from "./components/EventDetailsPopover"
 import { useEventPopover } from "./components/EventDetailsPopover/useEventPopover"
-import { StrategyNameMap } from "./lib/displayStrategies"
-import { viewComponents, VIEWS, VIEW_NAMES, NAVIGATION_ACTION } from "./Views"
+import { StrategyNameMap, ViewStrategyName } from "./lib/displayStrategies"
+import { viewComponents, VIEWS, VIEW_NAMES, NAVIGATION_ACTION } from "./views"
 
 export interface CalendarProps<TEventResources extends EventResources = EventResources> {
 	defaultDate?: Date
@@ -170,7 +170,10 @@ const Calendar = <TEventResources extends EventResources>({
 					<div className={ clsx(classes.calendar) }>
 						<div className={ clsx(classes.calendarInnerContainer) }>
 							<ErrorBoundary>
-								<ViewComponent displayStrategy={ localDisplayStrategies[currentView] } onSelectSlot={ handleSelectSlot }/>
+								<ViewComponent
+									displayStrategy={ localDisplayStrategies[currentView] as ViewStrategyName<typeof currentView> }
+									onSelectSlot={ handleSelectSlot }
+								/>
 							</ErrorBoundary>
 						</div>
 

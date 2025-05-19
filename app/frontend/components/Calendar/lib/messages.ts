@@ -1,4 +1,4 @@
-import { VIEW_NAMES } from "../Views"
+import { VIEW_NAMES } from "../views"
 
 export interface CalendarMessages {
 	views: Record<VIEW_NAMES, string>

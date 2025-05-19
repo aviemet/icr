@@ -1,6 +1,6 @@
 import dayjs from "dayjs"
 
-import { VIEW_NAMES, VIEWS } from "@/components/Calendar/Views"
+import { VIEW_NAMES, VIEWS } from "@/components/Calendar/views"
 
 import { formatter } from "./index"
 

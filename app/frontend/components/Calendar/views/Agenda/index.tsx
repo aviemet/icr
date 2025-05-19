@@ -3,7 +3,7 @@ import clsx from "clsx"
 import { useMemo } from "react"
 
 import { EventResources, BaseCalendarEvent } from "@/components/Calendar"
-import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/components/Calendar/Views"
+import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/components/Calendar/views"
 
 import * as classes from "./AgendaView.css"
 import { DayHeader } from "./components/DayHeader"

@@ -1,5 +1,4 @@
 import { Calendar, CalendarProps } from "./Calendar"
-// import { VIEWS } from "./Views"
 
 import { EventResources } from "."
 

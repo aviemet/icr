@@ -1,11 +1,13 @@
 import { StrategyConfig } from "./BaseDisplayStrategy"
-import { VIEW_NAMES } from "../../Views"
-import { AgendaStackStrategy } from "../../Views/Agenda/displayStrategies/stack"
-import { DayOverlapStrategy } from "../../Views/Day/displayStrategies/overlap"
-import { MonthSpanStrategy } from "../../Views/Month/displayStrategies/span"
-import { MonthSplitStrategy } from "../../Views/Month/displayStrategies/split"
-import { MonthStackStrategy } from "../../Views/Month/displayStrategies/stack"
-import { WeekOverlapStrategy } from "../../Views/Week/displayStrategies/overlap"
+import { VIEW_NAMES } from "../../views"
+import { AgendaStackStrategy } from "../../views/Agenda/displayStrategies/stack"
+import { DayOverlapStrategy } from "../../views/Day/displayStrategies/overlap"
+import {
+	MonthSpanStrategy,
+	MonthSplitStrategy,
+	MonthStackStrategy,
+} from "../../views/Month/displayStrategies"
+import { WeekOverlapStrategy } from "../../views/Week/displayStrategies/overlap"
 
 export * from "./types"
 export * from "./BaseDisplayStrategy"

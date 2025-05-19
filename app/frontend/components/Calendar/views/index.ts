@@ -5,7 +5,7 @@ import { AgendaView } from "./Agenda"
 import { DayView } from "./Day"
 import { MonthView } from "./Month"
 import { WeekView } from "./Week"
-import { AllViewStrategyNames } from "../lib/displayStrategies"
+import { ViewStrategyName, DisplayStrategyFactories } from "../lib/displayStrategies"
 import { BaseDisplayProperties } from "../lib/displayStrategies/types"
 
 export const VIEWS = {
@@ -29,10 +29,10 @@ export type ViewTitleBuilder<TEventResources extends EventResources> = (
 	displayProperties: BaseDisplayProperties
 ) => string
 
-export interface BaseViewProps<TEventResources extends EventResources = EventResources> {
+export interface BaseViewProps<TEventResources extends EventResources = EventResources, V extends VIEW_NAMES = VIEW_NAMES> {
 	className?: string
 	style?: React.CSSProperties
-	displayStrategy: AllViewStrategyNames
+	displayStrategy: V extends keyof DisplayStrategyFactories ? ViewStrategyName<V> : never
 	onSelectSlot?: (date: Date) => void
 	titleBuilder?: ViewTitleBuilder<TEventResources>
 }
@@ -47,14 +47,14 @@ export interface ViewStaticMethodProps<TEventResources extends EventResources = 
 	resourcesById: Map<string | number, Resource>
 }
 
-export type ViewComponent<TEventResources extends EventResources, Props extends BaseViewProps<TEventResources> = BaseViewProps<TEventResources>> = React.ComponentType<Props> & {
+export type ViewComponent<TEventResources extends EventResources, V extends VIEW_NAMES> = React.ComponentType<BaseViewProps<TEventResources, V>> & {
 	range: (date: Date, props: ViewStaticMethodProps<TEventResources>) => DateRange
 	navigate: (date: Date, action: NAVIGATION_ACTION, props: ViewStaticMethodProps<TEventResources>) => Date
 	title: (date: Date, props: ViewStaticMethodProps<TEventResources>) => string
 }
 
-export function validateViewComponent<TEventResources extends EventResources, Props extends BaseViewProps<TEventResources>>(
-	component: ViewComponent<TEventResources, Props>
+export function validateViewComponent<TEventResources extends EventResources, V extends VIEW_NAMES>(
+	component: ViewComponent<TEventResources, V>
 ) {
 	if(typeof component.range !== "function")
 		throw new Error("View component must implement static range method")
@@ -64,15 +64,15 @@ export function validateViewComponent<TEventResources extends EventResources, Pr
 		throw new Error("View component must implement static title method")
 }
 
-export function createViewComponent<TEventResources extends EventResources, Props extends BaseViewProps<TEventResources> = BaseViewProps<TEventResources>>(
-	component: React.ComponentType<Props>,
+export function createViewComponent<TEventResources extends EventResources, V extends VIEW_NAMES>(
+	component: React.ComponentType<BaseViewProps<TEventResources, V>>,
 	staticProps: {
 		range: (date: Date, props: ViewStaticMethodProps<TEventResources>) => DateRange
 		navigate: (date: Date, action: NAVIGATION_ACTION, props: ViewStaticMethodProps<TEventResources>) => Date
 		title: (date: Date, props: ViewStaticMethodProps<TEventResources>) => string
 	}
-): ViewComponent<TEventResources, Props> {
-	const viewComponent = component as ViewComponent<TEventResources, Props>
+): ViewComponent<TEventResources, V> {
+	const viewComponent = component as ViewComponent<TEventResources, V>
 	viewComponent.range = staticProps.range
 	viewComponent.navigate = staticProps.navigate
 	viewComponent.title = staticProps.title

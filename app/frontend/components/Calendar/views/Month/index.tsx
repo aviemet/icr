@@ -9,7 +9,7 @@ import {
 	createViewComponent,
 	NAVIGATION,
 	VIEWS,
-} from "@/components/Calendar/Views"
+} from "@/components/Calendar/views"
 
 import DailyTotals from "./components/DailyTotals"
 import { DaysHeading } from "./components/DaysHeading"

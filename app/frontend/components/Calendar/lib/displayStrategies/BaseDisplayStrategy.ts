@@ -6,7 +6,7 @@ import { SortedArray } from "@/lib/Collections/SortedArray"
 import { CalendarLocalizer } from "../localizers"
 import { BaseDisplayProperties, EventDisplayDetails } from "./types"
 import { TimeGridHeading } from "../../components/TimeGrid"
-import { VIEW_NAMES } from "../../Views"
+import { VIEW_NAMES } from "../../views"
 
 export interface StrategyConfig {
 	localizer: CalendarLocalizer

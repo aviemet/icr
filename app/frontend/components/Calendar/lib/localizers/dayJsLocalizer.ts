@@ -9,7 +9,7 @@ import utc from "dayjs/plugin/utc"
 import weekdayPlugin from "dayjs/plugin/weekday"
 
 import { CalendarLocalizer, CalendarLocalizerFactory, TIME_UNIT } from "@/components/Calendar/lib/localizers"
-import { VIEW_NAMES } from "@/components/Calendar/Views"
+import { VIEW_NAMES } from "@/components/Calendar/views"
 
 import { defaultMessages } from "../messages"
 

@@ -6,7 +6,7 @@ import { forwardRef, useMemo } from "react"
 import { Box, Button, Group, Menu, Paper } from "@/components"
 import { FloatingIndicator } from "@/components/Button/FloatingIndicator"
 import { useCalendarContext } from "@/components/Calendar"
-import { NAVIGATION, VIEW_NAMES, viewComponents, VIEWS } from "@/components/Calendar/Views"
+import { NAVIGATION, VIEW_NAMES, viewComponents, VIEWS } from "@/components/Calendar/views"
 import { PreviousIcon, NextIcon, DownArrowIcon } from "@/components/Icons"
 import { useAnimateWidth } from "@/lib/hooks/useAnimateWidth"
 
