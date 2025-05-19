@@ -7,7 +7,7 @@ import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS, ViewStaticMethod
 
 import * as classes from "./DayView.css"
 
-interface DayViewProps<TEventResources extends EventResources> extends BaseViewProps<TEventResources> {
+interface DayViewProps<TEventResources extends EventResources> extends BaseViewProps<TEventResources, "day"> {
 	className?: string
 	style?: React.CSSProperties
 }
@@ -55,7 +55,7 @@ const DayViewComponent = <TEventResources extends EventResources>({
 	)
 }
 
-export const DayView = createViewComponent<EventResources, DayViewProps<EventResources>>(DayViewComponent, {
+export const DayView = createViewComponent<EventResources, "day">(DayViewComponent, {
 	range: (date, { localizer }: ViewStaticMethodProps<EventResources>) => {
 		const start = localizer.startOf(date, "day")
 		const end = localizer.endOf(date, "day")

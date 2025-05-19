@@ -82,9 +82,24 @@ export function createViewComponent<TEventResources extends EventResources, V ex
 	return viewComponent
 }
 
+export type ViewComponentsMap<TEventResources extends EventResources> = {
+	[VIEWS.month]: ViewComponent<TEventResources, "month">
+	[VIEWS.week]: ViewComponent<TEventResources, "week">
+	[VIEWS.day]: ViewComponent<TEventResources, "day">
+	[VIEWS.agenda]: ViewComponent<TEventResources, "agenda">
+}
+
 export const viewComponents = {
 	[VIEWS.month]: MonthView,
 	[VIEWS.week]: WeekView,
 	[VIEWS.day]: DayView,
 	[VIEWS.agenda]: AgendaView,
 } as const
+
+export type ViewComponents = typeof viewComponents
+
+export function getViewComponent<TEventResources extends EventResources, V extends VIEW_NAMES>(
+	view: V
+): ViewComponent<TEventResources, V> {
+	return viewComponents[view] as unknown as ViewComponent<TEventResources, V>
+}

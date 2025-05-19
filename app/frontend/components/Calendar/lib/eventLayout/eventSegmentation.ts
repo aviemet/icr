@@ -21,7 +21,7 @@ export const splitAtWeekBorders = <TEventResources extends EventResources>(
 ): BaseCalendarEvent<TEventResources>[] => {
 	const events: BaseCalendarEvent<TEventResources>[] = []
 	let currentStart = event.start
-	let currentEnd = localizer.adjustMidnightTime(event.end)
+	let currentEnd = event.end
 
 	while(
 		localizer.startOf(currentStart, "week").getTime() !==
@@ -63,7 +63,7 @@ export const splitAtDayBoundaries = <TEventResources extends EventResources>(
 ): { event: BaseCalendarEvent<TEventResources>, displayStart: Date, displayEnd: Date }[] => {
 	const events: { event: BaseCalendarEvent<TEventResources>, displayStart: Date, displayEnd: Date }[] = []
 	let currentStart = event.start
-	let currentEnd = localizer.adjustMidnightTime(event.end)
+	let currentEnd = event.end
 
 	while(localizer.startOf(currentStart, "day").getTime() !==
 		   localizer.startOf(currentEnd, "day").getTime()) {

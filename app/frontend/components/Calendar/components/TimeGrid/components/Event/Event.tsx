@@ -25,6 +25,8 @@ const Event = <TEventResources extends EventResources>({
 	className,
 	style,
 	onEventClick,
+	startTime,
+	timeIncrement,
 	...props
 }: EventProps<TEventResources>) => {
 	const { getContrastingColor } = useStore()

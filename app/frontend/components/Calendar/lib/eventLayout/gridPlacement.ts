@@ -8,11 +8,8 @@ export const calculateGridPlacement = <TEventResources extends EventResources = 
 	event: BaseCalendarEvent<TEventResources>,
 	localizer: CalendarLocalizer
 ) => {
-	const start = event.start
-	const end = localizer.adjustMidnightTime(event.end)
-
-	const startDay = localizer.dayOfWeek(start)
-	const endDay = localizer.dayOfWeek(end)
+	const startDay = localizer.dayOfWeek(event.start)
+	const endDay = localizer.dayOfWeek(event.end)
 
 	const columnStart = startDay + 1
 	const columnSpan = (endDay < startDay ? endDay + 7 : endDay) - startDay + 1

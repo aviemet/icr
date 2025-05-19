@@ -25,10 +25,7 @@ export class MonthStackStrategy<TEventResources extends EventResources>
 	 */
 	protected shouldSpanDays(segment: { start: Date, end: Date }): boolean {
 		const startDay = this.config.localizer.startOf(segment.start, "day")
-		const endDay = this.config.localizer.startOf(
-			this.config.localizer.adjustMidnightTime(segment.end),
-			"day"
-		)
+		const endDay = this.config.localizer.startOf(segment.end, "day")
 
 		const daysDiff = Math.floor((endDay.getTime() - startDay.getTime()) / (1000 * 60 * 60 * 24))
 

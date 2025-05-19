@@ -60,10 +60,7 @@ export abstract class BaseDisplayStrategy<
    */
 	protected spansMultipleDays(event: BaseCalendarEvent<TEventResources>): boolean {
 		const startDay = this.config.localizer.startOf(event.start, "day")
-		const endDay = this.config.localizer.startOf(
-			this.config.localizer.adjustMidnightTime(event.end),
-			"day"
-		)
+		const endDay = this.config.localizer.startOf(event.end, "day")
 		return startDay.getTime() !== endDay.getTime()
 	}
 
@@ -85,7 +82,7 @@ export abstract class BaseDisplayStrategy<
 	}> {
 		const segments: Array<{ event: BaseCalendarEvent<TEventResources>, displayStart: Date, displayEnd: Date }> = []
 		let currentStart = event.start
-		const finalEnd = this.config.localizer.adjustMidnightTime(event.end)
+		const finalEnd = event.end
 
 		// Short circuit if event is all day
 		if(event.allDay) {
@@ -137,7 +134,7 @@ export abstract class BaseDisplayStrategy<
 
 		const segments: BaseCalendarEvent<TEventResources>[] = []
 		let currentStart = event.start
-		const finalEnd = localizer.adjustMidnightTime(event.end)
+		const finalEnd = event.end
 
 		// Ensure we don't get stuck in an infinite loop if start >= end
 		if(!localizer.isBefore(currentStart, finalEnd)) {
@@ -180,7 +177,7 @@ export abstract class BaseDisplayStrategy<
 		event: BaseCalendarEvent<TEventResources>
 	) {
 		const start = event.start
-		const end = this.config.localizer.adjustMidnightTime(event.end)
+		const end = event.end
 
 		const startDay = this.config.localizer.dayOfWeek(start)
 		const endDay = this.config.localizer.dayOfWeek(end)
@@ -224,9 +221,7 @@ export abstract class BaseDisplayStrategy<
 		const viewStartOfDay = this.config.localizer.startOf(start, "day")
 
 		const startMinutesRaw = this.config.localizer.duration(viewStartOfDay, start)
-
-		const endAdjusted = this.config.localizer.adjustMidnightTime(end)
-		const endMinutesRaw = this.config.localizer.duration(viewStartOfDay, endAdjusted)
+		const endMinutesRaw = this.config.localizer.duration(viewStartOfDay, end)
 
 		const startMinutes = startMinutesRaw
 		const endMinutes = endMinutesRaw

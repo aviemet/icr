@@ -14,7 +14,7 @@ import { ErrorBoundary } from "../ErrorBoundary"
 import EventDetailsPopover from "./components/EventDetailsPopover"
 import { useEventPopover } from "./components/EventDetailsPopover/useEventPopover"
 import { StrategyNameMap, ViewStrategyName } from "./lib/displayStrategies"
-import { viewComponents, VIEWS, VIEW_NAMES, NAVIGATION_ACTION } from "./views"
+import { getViewComponent, VIEWS, VIEW_NAMES, NAVIGATION_ACTION } from "./views"
 
 export interface CalendarProps<TEventResources extends EventResources = EventResources> {
 	defaultDate?: Date
@@ -101,7 +101,10 @@ const Calendar = <TEventResources extends EventResources>({
 		setMinHeight(`calc(100% - ${height}px)`)
 	}, [])
 
-	const ViewComponent = useMemo(() => viewComponents[currentView], [currentView])
+	/**
+	 * Dynamically load the currently chosen calendar view type
+	 */
+	const ViewComponent = useMemo(() => getViewComponent<TEventResources, typeof currentView>(currentView), [currentView])
 
 	const handleViewChange = useCallback((view: VIEW_NAMES) => {
 		setCurrentView(view)
@@ -111,7 +114,7 @@ const Calendar = <TEventResources extends EventResources>({
 	const handleDateChange = useCallback((action: NAVIGATION_ACTION, newDate?: Date) => {
 		if(!localLocalizer) return undefined
 
-		const nextDate = (ViewComponent as any).navigate(
+		const nextDate = ViewComponent.navigate(
 			newDate || date,
 			action,
 			{

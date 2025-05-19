@@ -18,15 +18,13 @@ import * as classes from "./MonthView.css"
 import { useDynamicHoverStyles } from "./useDynamicHoverStyles"
 import {
 	useDisplayStrategy,
-	ViewStrategyName,
 	GridDisplayProperties,
 } from "../../lib/displayStrategies"
 import { ShowMore } from "./components/Event/ShowMore"
 import { CalendarTransitionContainer } from "../../lib/CalendarTransitionContainer"
 
-interface MonthViewProps<TEventResources extends EventResources> extends BaseViewProps<TEventResources> {
+interface MonthViewProps<TEventResources extends EventResources> extends BaseViewProps<TEventResources, "month"> {
 	showDailyTotals?: boolean
-	displayStrategy: ViewStrategyName<"month">
 }
 
 const MonthViewComponent = <
@@ -228,7 +226,7 @@ const MonthViewComponent = <
 	)
 }
 
-export const MonthView = createViewComponent(MonthViewComponent, {
+export const MonthView = createViewComponent<EventResources, "month">(MonthViewComponent, {
 	range: (date, { localizer }) => {
 		let start = localizer.firstVisibleDay(date, VIEWS.month)
 		let end = localizer.lastVisibleDay(date, VIEWS.month)

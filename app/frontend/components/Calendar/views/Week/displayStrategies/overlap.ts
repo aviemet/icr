@@ -40,7 +40,7 @@ export class WeekOverlapStrategy<TEventResources extends EventResources>
 
 			return weekSegments.map((segment, index) => {
 				const segmentStartDay = localizer.startOf(segment.start, "day")
-				const segmentEndDay = localizer.startOf(localizer.adjustMidnightTime(segment.end), "day")
+				const segmentEndDay = localizer.startOf(segment.end, "day")
 
 				// Find the column indices for start and end
 				const startColumnIndex = columnHeadings.findIndex(heading =>

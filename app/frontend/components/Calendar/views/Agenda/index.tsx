@@ -7,13 +7,12 @@ import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/compone
 
 import * as classes from "./AgendaView.css"
 import { DayHeader } from "./components/DayHeader"
-import { AgendaDisplayProperties, ViewStrategyName, useDisplayStrategy } from "../../lib/displayStrategies"
+import { AgendaDisplayProperties, useDisplayStrategy } from "../../lib/displayStrategies"
 
 
-interface AgendaViewProps<TEventResources extends EventResources> extends BaseViewProps<TEventResources> {
+interface AgendaViewProps<TEventResources extends EventResources> extends BaseViewProps<TEventResources, "agenda"> {
 	className?: string
 	style?: React.CSSProperties
-	displayStrategy: ViewStrategyName<"agenda">
 	titleBuilder?: (event: BaseCalendarEvent<TEventResources>, displayProperties: AgendaDisplayProperties) => string
 }
 
@@ -129,7 +128,7 @@ const AgendaViewComponent = <TEventResources extends EventResources>({
 	)
 }
 
-export const AgendaView = createViewComponent(AgendaViewComponent, {
+export const AgendaView = createViewComponent<EventResources, "agenda">(AgendaViewComponent, {
 	range: (date, { localizer }) => {
 		// Show a month's worth of events by default
 		const start = localizer.startOf(date, "month")

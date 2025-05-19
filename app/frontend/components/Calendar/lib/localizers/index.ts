@@ -28,12 +28,6 @@ export interface CalendarLocalizerMethods {
 	 * Returns the difference between 2 events in minutes
 	 */
 	duration: (start: Date, end: Date) => number
-	/**
-	 * Subtracts 1 millisecond if the time is midnight.
-	 * Ensures reading the date for an event ending at midnight returns the starting day
-	 * rather than the next day, which would cause the event to flow to the next date cell
-	 */
-	adjustMidnightTime: (date: Date) => Date
 	format: (date: Date, format: string) => string
 	messages: CalendarMessages
 }
@@ -53,7 +47,6 @@ export class CalendarLocalizer {
 	endOf: CalendarLocalizerMethods["endOf"]
 	dateWithinRange: CalendarLocalizerMethods["dateWithinRange"]
 	duration: CalendarLocalizerMethods["duration"]
-	adjustMidnightTime: CalendarLocalizerMethods["adjustMidnightTime"]
 	format: CalendarLocalizerMethods["format"]
 	messages: CalendarLocalizerMethods["messages"]
 
@@ -74,7 +67,6 @@ export class CalendarLocalizer {
 		this.endOf = fns.endOf
 		this.dateWithinRange = fns.dateWithinRange
 		this.duration = fns.duration
-		this.adjustMidnightTime = fns.adjustMidnightTime
 	}
 }
 

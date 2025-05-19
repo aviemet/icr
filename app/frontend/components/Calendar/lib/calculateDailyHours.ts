@@ -13,7 +13,7 @@ export function calculateDailyHours<TEventResources extends EventResources = Eve
 	const dailyTotals = new Map<string, number>()
 
 	events.forEach(event => {
-		const eventEnd = localizer.adjustMidnightTime(event.end)
+		const eventEnd = event.end
 		let currentDate = localizer.startOf(event.start, "day")
 		const endDate = localizer.startOf(eventEnd, "day")
 
