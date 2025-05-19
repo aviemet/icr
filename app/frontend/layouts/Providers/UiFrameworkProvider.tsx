@@ -1,5 +1,4 @@
 import { MantineProvider, createTheme, type CSSVariablesResolver } from "@mantine/core"
-import { type CSSVariables } from "@mantine/core/lib/core/MantineProvider/convert-css-variables/css-variables-object-to-string"
 import { ModalsProvider } from "@mantine/modals"
 import { Notifications } from "@mantine/notifications"
 import { ContextMenuProvider } from "mantine-contextmenu"
@@ -11,6 +10,14 @@ import { useInit } from "@/lib/hooks"
 import useStore from "@/lib/store"
 import { theme as themeObject, vars } from "@/lib/theme"
 
+import "./reset.css"
+import "@mantine/core/styles.css"
+import "@mantine/tiptap/styles.css"
+import "@mantine/dates/styles.css"
+import "@mantine/notifications/styles.css"
+import "mantine-contextmenu/styles.layer.css"
+import "./global.css"
+
 const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 	/**
 	 * Primary color customization
@@ -21,9 +28,9 @@ const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 
 	const cssVariablesResolver = useMemo((): CSSVariablesResolver => {
 		return (resolverTheme) => {
-			const variables: CSSVariables = {}
-			const dark: CSSVariables = {}
-			const light: CSSVariables = {}
+			const variables: Record<string, string> = {}
+			const dark: Record<string, string> = {}
+			const light: Record<string, string> = {}
 
 			Object.entries(vars.colors[primaryColor]).forEach(([key, val]) => {
 				if(key.match(/[0-9]/)) {
