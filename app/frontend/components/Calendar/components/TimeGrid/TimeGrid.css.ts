@@ -110,11 +110,11 @@ export const timeSlot = css`
   }
 
   &::after {
-    content: "";
+    /* content: ""; */
     position: absolute;
     top: 50%;
     left: 0;
-    right: -0.5rem;
+    right: 0;
     border-top: 1px dotted light-dark(${ vars.colors.dark[8] }, ${ vars.colors.gray[6] });
   }
 `

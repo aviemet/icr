@@ -6,6 +6,7 @@ import useStickySentinel from "@/lib/hooks/useStickySentinel"
 import { EventResources, useCalendarContext } from "../../"
 import { EventNode } from "./components/Event"
 import TimeColumn from "./components/TimeColumn"
+import { TimeIndicator } from "./components/TimeIndicator"
 import * as classes from "./TimeGrid.css"
 import { CalendarTransitionContainer } from "../../lib/CalendarTransitionContainer"
 import {
@@ -73,6 +74,7 @@ const TimeGrid = <
 	const rowsPerDay = (24 * 60) / timeIncrement
 
 	const animationContainerRef = useRef<HTMLDivElement>(null)
+	const contentAreaRef = useRef<HTMLDivElement>(null)
 
 	// Separate all-day events from standard events to be
 	// rendered in different sections
@@ -122,7 +124,8 @@ const TimeGrid = <
 				"--rows-per-day": rowsPerDay,
 				"--column-count": columnHeadings.length,
 				...style,
-			} as React.CSSProperties }>
+			} as React.CSSProperties }
+		>
 
 			{ /* Column Headers */ }
 			<div ref={ headerRef } className={ clsx(classes.headerArea, {
@@ -162,10 +165,12 @@ const TimeGrid = <
 				{ /* Render standard timed events */ }
 				<CalendarTransitionContainer containerRef={ animationContainerRef }>
 					<div
+						ref={ contentAreaRef }
 						className={ clsx(classes.contentArea) }
 						style={ { "--rows-per-day": rowsPerDay } as React.CSSProperties }
 					>
 						<div className={ clsx(classes.gridLines) } />
+						<TimeIndicator containerRef={ contentAreaRef } />
 						<div className={ clsx(classes.eventsContainer) }>
 							{ standardEvents }
 						</div>

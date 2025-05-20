@@ -35,7 +35,8 @@ const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>((
 	const handlePickDate = (d: DateValue) => {
 		close()
 		if(!d) return
-		handleDateChange(NAVIGATION.date, d)
+		const dateObj = typeof d === "string" ? new Date(d) : d
+		handleDateChange(NAVIGATION.date, dateObj)
 	}
 
 	const label = useMemo(() => {

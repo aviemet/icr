@@ -27,9 +27,13 @@ interface MonthViewProps<TEventResources extends EventResources> extends BaseVie
 	showDailyTotals?: boolean
 }
 
-const MonthViewComponent = <
-	TEventResources extends EventResources
->({ className, style, displayStrategy, showDailyTotals = true, onSelectSlot }: MonthViewProps<TEventResources>) => {
+const MonthViewComponent = <TEventResources extends EventResources>({
+	className,
+	style,
+	displayStrategy,
+	showDailyTotals = true,
+	onSelectSlot,
+}: MonthViewProps<TEventResources>) => {
 	const { date, localizer, events, maxEvents } = useCalendarContext<TEventResources>()
 
 	const eventsByDay = useDisplayStrategy<TEventResources, "month", GridDisplayProperties>(
