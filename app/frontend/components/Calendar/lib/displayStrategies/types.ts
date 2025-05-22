@@ -15,6 +15,8 @@ export interface GridDisplayProperties extends BaseDisplayProperties {
 export interface TimeGridDisplayProperties extends GridDisplayProperties {
 	rowStart: number
 	rowEnd: number
+	overlapCount?: number
+	overlapOrder?: number
 }
 
 export interface AgendaDisplayProperties extends BaseDisplayProperties {

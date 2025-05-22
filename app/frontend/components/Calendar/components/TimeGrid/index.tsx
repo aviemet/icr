@@ -92,8 +92,8 @@ const TimeGrid = <
 			const columnEvents = eventsByColumn?.get(key)
 			if(!columnEvents) return
 
-			columnEvents.forEach(({ event, displayProperties }) => {
-				const eventNode = (
+			columnEvents.forEach(({ event, displayProperties }, index) => {
+				const eventNode = (displayProperties: TimeGridDisplayProperties) => (
 					<EventNode<TEventResources>
 						key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
 						event={ event }
@@ -105,9 +105,9 @@ const TimeGrid = <
 				)
 
 				if(event.allDay) {
-					result.allDayEvents.push(eventNode)
+					result.allDayEvents.push(eventNode(displayProperties))
 				} else {
-					result.standardEvents.push(eventNode)
+					result.standardEvents.push(eventNode(displayProperties))
 				}
 			})
 		})
@@ -170,7 +170,9 @@ const TimeGrid = <
 						style={ { "--rows-per-day": rowsPerDay } as React.CSSProperties }
 					>
 						<div className={ clsx(classes.gridLines) } />
+
 						<TimeIndicator containerRef={ contentAreaRef } />
+
 						<div className={ clsx(classes.eventsContainer) }>
 							{ standardEvents }
 						</div>

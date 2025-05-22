@@ -4,7 +4,7 @@ import { EventResources, BaseCalendarEvent } from "@/components/Calendar"
 import { SortedArray } from "@/lib/Collections/SortedArray"
 
 import { CalendarLocalizer } from "../localizers"
-import { BaseDisplayProperties, EventDisplayDetails } from "./types"
+import { BaseDisplayProperties, EventDisplayDetails, TimeGridDisplayProperties } from "./types"
 import { TimeGridHeading } from "../../components/TimeGrid"
 import { VIEW_NAMES } from "../../views"
 
@@ -18,7 +18,7 @@ export interface StrategyConfig {
 
 export abstract class BaseDisplayStrategy<
 	TEventResources extends EventResources,
-	P extends BaseDisplayProperties
+	P extends TimeGridDisplayProperties = TimeGridDisplayProperties
 > {
 	protected config: StrategyConfig
 
@@ -279,6 +279,31 @@ export abstract class BaseDisplayStrategy<
 					groupedEvents.set(key, new SortedArray<EventDisplayDetails<TEventResources, P>>(this.compare.bind(this)))
 				}
 				groupedEvents.get(key)!.push(processedEvent)
+			})
+		})
+
+		// Calculate overlaps for each column
+		groupedEvents.forEach((columnEvents, key) => {
+			const events = Array.from(columnEvents)
+			events.forEach((detail: EventDisplayDetails<TEventResources, P>, index: number) => {
+				let overlapCount = 1
+				let overlapOrder = 0
+
+				events.forEach((otherDetail: EventDisplayDetails<TEventResources, P>, otherIndex: number) => {
+					if(index === otherIndex) return
+
+					const { displayProperties: otherProps } = otherDetail
+					if(
+						this.config.localizer.isBefore(detail.displayProperties.displayStart, otherProps.displayEnd) &&
+						this.config.localizer.isAfter(detail.displayProperties.displayEnd, otherProps.displayStart)
+					) {
+						overlapCount++
+						if(otherIndex < index) overlapOrder++
+					}
+				})
+
+				detail.displayProperties.overlapCount = overlapCount
+				detail.displayProperties.overlapOrder = overlapOrder
 			})
 		})
 
