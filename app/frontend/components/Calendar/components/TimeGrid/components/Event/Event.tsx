@@ -57,6 +57,7 @@ const Event = <TEventResources extends EventResources>({
 					resources: event.resources,
 				})
 				: event.title }
+			<h1>{ displayProperties.overlap || 0 }</h1>
 		</CalendarEvent>
 	)
 }

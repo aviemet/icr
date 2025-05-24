@@ -102,7 +102,7 @@ export class DayOverlapStrategy<TEventResources extends EventResources>
 
 	/**
 	 * Compares two event details for sorting.
-	 * Day overlap strategy: sort by duration then start time.
+	 * Day overlap strategy: sort by start time first, then duration.
 	 */
 	compare(a: EventDisplayDetails<TEventResources, TimeGridDisplayProperties>, b: EventDisplayDetails<TEventResources, TimeGridDisplayProperties>): number {
 		// All-day events should always be at the top
@@ -112,11 +112,13 @@ export class DayOverlapStrategy<TEventResources extends EventResources>
 			return a.displayProperties.displayStart.valueOf() - b.displayProperties.displayStart.valueOf()
 		}
 
+		// Regular events sorted by start time first
+		const startDiff = a.displayProperties.displayStart.valueOf() - b.displayProperties.displayStart.valueOf()
+		if(startDiff !== 0) return startDiff
+
+		// If start times are equal, longer duration first
 		const durationA = a.displayProperties.displayEnd.valueOf() - a.displayProperties.displayStart.valueOf()
 		const durationB = b.displayProperties.displayEnd.valueOf() - b.displayProperties.displayStart.valueOf()
-		const durationDiff = durationB - durationA
-		if(durationDiff !== 0) return durationDiff
-
-		return a.displayProperties.displayStart.valueOf() - b.displayProperties.displayStart.valueOf()
+		return durationB - durationA
 	}
 }

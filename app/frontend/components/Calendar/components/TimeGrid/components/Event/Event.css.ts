@@ -19,8 +19,6 @@ export const eventWrapper = css`
   font-size: ${ vars.fontSizes.xs };
   grid-column: var(--column-start) / span var(--column-span);
   grid-row: var(--row-start) / span var(--row-span);
-  width: calc(100% / var(--overlap-count));
-  left: calc(100% / var(--overlap-count));
 `
 
 export const allDayEvent = css``

@@ -1,0 +1,4208 @@
+[
+	{
+			"key": "2025-05-25T07:00:00.000Z",
+			"value": {
+					"items": [
+							{
+									"event": {
+											"id": "c13dfa1c-9146-47e2-b4e1-daa4df0ba242",
+											"title": "All Day Event #2",
+											"start": "2025-05-25T07:00:00.000Z",
+											"end": "2025-05-26T06:59:59.999Z",
+											"allDay": true,
+											"resources": {
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-25T07:00:00.000Z",
+											"displayEnd": "2025-05-26T06:59:59.999Z",
+											"columnStart": 1,
+											"columnSpan": 1,
+											"rowStart": 1,
+											"rowEnd": 2,
+											"className": "filled"
+									}
+							},
+							{
+									"event": {
+											"id": "5bb90894-fed2-4a0a-ab84-01aad8f7f857",
+											"title": "implement B2C e-tailers",
+											"start": "2025-05-25T07:00:00.000Z",
+											"end": "2025-05-25T16:00:00.000Z",
+											"allDay": false,
+											"color": "#5e97ef",
+											"resources": {
+													"employee": {
+															"id": "2604aa9e-5f6c-4d7d-b3e4-6ef71bcbad92",
+															"name": "Tad Cassin",
+															"inactive_at": null,
+															"color": "#5e97ef",
+															"status": "applicant",
+															"person": {
+																	"id": "d7afc1a6-7483-4ca5-bb86-a92eec2f7c99",
+																	"slug": "tad-cassin",
+																	"updated_at": "2025-05-21T10:08:51.938-07:00",
+																	"created_at": "2025-05-21T10:08:51.938-07:00",
+																	"first_name": "Tad",
+																	"middle_name": "Considine",
+																	"last_name": "Cassin",
+																	"nick_name": "TG",
+																	"user_id": null,
+																	"agency_role": "Employee",
+																	"name": "Tad Cassin",
+																	"login_enabled": false
+															},
+															"job_title": {
+																	"id": "e169debd-b72a-4d90-aa54-499632515292",
+																	"slug": "attendant",
+																	"name": "Attendant",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:51.952-07:00",
+															"created_at": "2025-05-21T10:08:51.952-07:00",
+															"full_name": "Tad Cassin",
+															"first_name": "Tad",
+															"last_name": "Cassin",
+															"color_mappings": {},
+															"slug": "tad-cassin",
+															"number": "AXXNRHVS",
+															"person_id": "d7afc1a6-7483-4ca5-bb86-a92eec2f7c99",
+															"active_at": "2025-05-10"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-25T07:00:00.000Z",
+											"displayEnd": "2025-05-25T16:00:00.000Z",
+											"columnStart": 1,
+											"columnSpan": 1,
+											"rowStart": 1,
+											"rowEnd": 10,
+											"className": "filled",
+											"overlap": 2
+									}
+							},
+							{
+									"event": {
+											"id": "f9f0b532-af0b-4438-8eee-c16dfb3e35b9",
+											"title": "engage turn-key e-commerce",
+											"start": "2025-05-25T16:00:00.000Z",
+											"end": "2025-05-26T01:00:00.000Z",
+											"allDay": false,
+											"color": "#0cd325",
+											"resources": {
+													"employee": {
+															"id": "45a5a1ec-9417-4ce1-9ed0-33c0b2a53811",
+															"name": "Tanja Funk",
+															"inactive_at": null,
+															"color": "#0cd325",
+															"status": "employed",
+															"person": {
+																	"id": "4b9d1a9b-de31-4153-abda-fc2b3c4b39a4",
+																	"slug": "tanja-funk",
+																	"updated_at": "2025-05-21T10:08:48.271-07:00",
+																	"created_at": "2025-05-21T10:08:48.048-07:00",
+																	"first_name": "Tanja",
+																	"middle_name": "Lubowitz",
+																	"last_name": "Funk",
+																	"nick_name": "YH",
+																	"user_id": "3c573c51-1ef6-4a93-8d6b-c5ca13a33c6c",
+																	"agency_role": "Employee",
+																	"name": "Tanja Funk",
+																	"login_enabled": true
+															},
+															"job_title": {
+																	"id": "3eddaeff-8665-4cc8-b7ae-3ae7fa5008e3",
+																	"slug": "facilitator",
+																	"name": "Facilitator",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:48.303-07:00",
+															"created_at": "2025-05-21T10:08:48.303-07:00",
+															"full_name": "Tanja Funk",
+															"first_name": "Tanja",
+															"last_name": "Funk",
+															"color_mappings": {},
+															"slug": "tanja-funk",
+															"number": "NTVTPWDK",
+															"person_id": "4b9d1a9b-de31-4153-abda-fc2b3c4b39a4",
+															"active_at": "2025-05-04"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-25T16:00:00.000Z",
+											"displayEnd": "2025-05-26T01:00:00.000Z",
+											"columnStart": 1,
+											"columnSpan": 1,
+											"rowStart": 10,
+											"rowEnd": 19,
+											"className": "filled",
+											"overlap": 2
+									}
+							},
+							{
+									"event": {
+											"id": "07c67bd6-926a-4a5b-94d6-efffe921acf9",
+											"title": "maximize leading-edge ROI",
+											"start": "2025-05-26T01:00:00.000Z",
+											"end": "2025-05-26T10:00:00.000Z",
+											"allDay": false,
+											"color": "#362948",
+											"resources": {
+													"employee": {
+															"id": "bc901050-4d12-4096-9ebd-f20dfa39e8ad",
+															"name": "Imogene Bogisich",
+															"inactive_at": null,
+															"color": "#362948",
+															"status": "applicant",
+															"person": {
+																	"id": "de86f9fb-c139-44b3-b203-d3c5b67e0586",
+																	"slug": "imogene-bogisich",
+																	"updated_at": "2025-05-21T10:08:48.581-07:00",
+																	"created_at": "2025-05-21T10:08:48.364-07:00",
+																	"first_name": "Imogene",
+																	"middle_name": "Bode",
+																	"last_name": "Bogisich",
+																	"nick_name": "UN",
+																	"user_id": "699d33f7-68e8-4cd6-be91-56326ba2811e",
+																	"agency_role": "Employee",
+																	"name": "Imogene Bogisich",
+																	"login_enabled": true
+															},
+															"job_title": {
+																	"id": "a2d8645c-9b74-4469-9d8a-8a7c0ca8bcf9",
+																	"slug": "director",
+																	"name": "Director",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:48.599-07:00",
+															"created_at": "2025-05-21T10:08:48.599-07:00",
+															"full_name": "Imogene Bogisich",
+															"first_name": "Imogene",
+															"last_name": "Bogisich",
+															"color_mappings": {},
+															"slug": "imogene-bogisich",
+															"number": "WKRPSSTI",
+															"person_id": "de86f9fb-c139-44b3-b203-d3c5b67e0586",
+															"active_at": "2025-04-29"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-26T01:00:00.000Z",
+											"displayEnd": "2025-05-26T07:00:00.000Z",
+											"columnStart": 1,
+											"columnSpan": 1,
+											"rowStart": 19,
+											"rowEnd": 25,
+											"className": "filled continues-on",
+											"overlap": 2
+									}
+							}
+					],
+					"isSorted": true
+			}
+	},
+	{
+			"key": "2025-05-26T07:00:00.000Z",
+			"value": {
+					"items": [
+							{
+									"event": {
+											"id": "07c67bd6-926a-4a5b-94d6-efffe921acf9",
+											"title": "maximize leading-edge ROI",
+											"start": "2025-05-26T01:00:00.000Z",
+											"end": "2025-05-26T10:00:00.000Z",
+											"allDay": false,
+											"color": "#362948",
+											"resources": {
+													"employee": {
+															"id": "bc901050-4d12-4096-9ebd-f20dfa39e8ad",
+															"name": "Imogene Bogisich",
+															"inactive_at": null,
+															"color": "#362948",
+															"status": "applicant",
+															"person": {
+																	"id": "de86f9fb-c139-44b3-b203-d3c5b67e0586",
+																	"slug": "imogene-bogisich",
+																	"updated_at": "2025-05-21T10:08:48.581-07:00",
+																	"created_at": "2025-05-21T10:08:48.364-07:00",
+																	"first_name": "Imogene",
+																	"middle_name": "Bode",
+																	"last_name": "Bogisich",
+																	"nick_name": "UN",
+																	"user_id": "699d33f7-68e8-4cd6-be91-56326ba2811e",
+																	"agency_role": "Employee",
+																	"name": "Imogene Bogisich",
+																	"login_enabled": true
+															},
+															"job_title": {
+																	"id": "a2d8645c-9b74-4469-9d8a-8a7c0ca8bcf9",
+																	"slug": "director",
+																	"name": "Director",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:48.599-07:00",
+															"created_at": "2025-05-21T10:08:48.599-07:00",
+															"full_name": "Imogene Bogisich",
+															"first_name": "Imogene",
+															"last_name": "Bogisich",
+															"color_mappings": {},
+															"slug": "imogene-bogisich",
+															"number": "WKRPSSTI",
+															"person_id": "de86f9fb-c139-44b3-b203-d3c5b67e0586",
+															"active_at": "2025-04-29"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-26T07:00:00.000Z",
+											"displayEnd": "2025-05-26T10:00:00.000Z",
+											"columnStart": 2,
+											"columnSpan": 1,
+											"rowStart": 1,
+											"rowEnd": 4,
+											"className": "filled continued-from",
+											"overlap": 0
+									}
+							},
+							{
+									"event": {
+											"id": "06f9eb8a-d045-498e-bf11-5a45c5185d6f",
+											"title": "morph cross-platform e-business",
+											"start": "2025-05-26T10:00:00.000Z",
+											"end": "2025-05-26T19:00:00.000Z",
+											"allDay": false,
+											"color": "#d978df",
+											"resources": {
+													"employee": {
+															"id": "7f3b2fc7-1ca8-4962-ae8a-9731b6ad4975",
+															"name": "Elisa Cronin",
+															"inactive_at": null,
+															"color": "#d978df",
+															"status": "applicant",
+															"person": {
+																	"id": "f7b93e67-54de-4c07-a70f-b411d7a6354f",
+																	"slug": "elisa-cronin",
+																	"updated_at": "2025-05-21T10:08:48.677-07:00",
+																	"created_at": "2025-05-21T10:08:48.677-07:00",
+																	"first_name": "Elisa",
+																	"middle_name": "Goldner",
+																	"last_name": "Cronin",
+																	"nick_name": "AW",
+																	"user_id": null,
+																	"agency_role": "Employee",
+																	"name": "Elisa Cronin",
+																	"login_enabled": false
+															},
+															"job_title": {
+																	"id": "e169debd-b72a-4d90-aa54-499632515292",
+																	"slug": "attendant",
+																	"name": "Attendant",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:48.710-07:00",
+															"created_at": "2025-05-21T10:08:48.710-07:00",
+															"full_name": "Elisa Cronin",
+															"first_name": "Elisa",
+															"last_name": "Cronin",
+															"color_mappings": {},
+															"slug": "elisa-cronin",
+															"number": "XXOKATYD",
+															"person_id": "f7b93e67-54de-4c07-a70f-b411d7a6354f",
+															"active_at": "2025-04-25"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-26T10:00:00.000Z",
+											"displayEnd": "2025-05-26T19:00:00.000Z",
+											"columnStart": 2,
+											"columnSpan": 1,
+											"rowStart": 4,
+											"rowEnd": 13,
+											"className": "filled",
+											"overlap": 0
+									}
+							},
+							{
+									"event": {
+											"id": "02aefd0e-8e01-4215-9e8e-98dd5d873a4b",
+											"title": "scale efficient action-items",
+											"start": "2025-05-26T19:00:00.000Z",
+											"end": "2025-05-27T04:00:00.000Z",
+											"allDay": false,
+											"color": "#8ad52f",
+											"resources": {
+													"employee": {
+															"id": "6b07138f-18eb-427f-b8f1-0ceb73e8befe",
+															"name": "Lupe Little",
+															"inactive_at": null,
+															"color": "#8ad52f",
+															"status": "applicant",
+															"person": {
+																	"id": "e078087c-6db2-418d-a972-0a800cae51ec",
+																	"slug": "lupe-little",
+																	"updated_at": "2025-05-21T10:08:49.986-07:00",
+																	"created_at": "2025-05-21T10:08:49.986-07:00",
+																	"first_name": "Lupe",
+																	"middle_name": "Pacocha",
+																	"last_name": "Little",
+																	"nick_name": "VE",
+																	"user_id": null,
+																	"agency_role": "Employee",
+																	"name": "Lupe Little",
+																	"login_enabled": false
+															},
+															"job_title": {
+																	"id": "e169debd-b72a-4d90-aa54-499632515292",
+																	"slug": "attendant",
+																	"name": "Attendant",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:50.012-07:00",
+															"created_at": "2025-05-21T10:08:50.012-07:00",
+															"full_name": "Lupe Little",
+															"first_name": "Lupe",
+															"last_name": "Little",
+															"color_mappings": {},
+															"slug": "lupe-little",
+															"number": "ZCPEFTEN",
+															"person_id": "e078087c-6db2-418d-a972-0a800cae51ec",
+															"active_at": "2025-05-09"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-26T19:00:00.000Z",
+											"displayEnd": "2025-05-27T04:00:00.000Z",
+											"columnStart": 2,
+											"columnSpan": 1,
+											"rowStart": 13,
+											"rowEnd": 22,
+											"className": "filled",
+											"overlap": 0
+									}
+							},
+							{
+									"event": {
+											"id": "867c34af-d0ea-4dad-9b77-49cf6ca3cb76",
+											"title": "extend strategic infomediaries",
+											"start": "2025-05-27T04:00:00.000Z",
+											"end": "2025-05-27T13:00:00.000Z",
+											"allDay": false,
+											"color": "#5e97ef",
+											"resources": {
+													"employee": {
+															"id": "2604aa9e-5f6c-4d7d-b3e4-6ef71bcbad92",
+															"name": "Tad Cassin",
+															"inactive_at": null,
+															"color": "#5e97ef",
+															"status": "applicant",
+															"person": {
+																	"id": "d7afc1a6-7483-4ca5-bb86-a92eec2f7c99",
+																	"slug": "tad-cassin",
+																	"updated_at": "2025-05-21T10:08:51.938-07:00",
+																	"created_at": "2025-05-21T10:08:51.938-07:00",
+																	"first_name": "Tad",
+																	"middle_name": "Considine",
+																	"last_name": "Cassin",
+																	"nick_name": "TG",
+																	"user_id": null,
+																	"agency_role": "Employee",
+																	"name": "Tad Cassin",
+																	"login_enabled": false
+															},
+															"job_title": {
+																	"id": "e169debd-b72a-4d90-aa54-499632515292",
+																	"slug": "attendant",
+																	"name": "Attendant",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:51.952-07:00",
+															"created_at": "2025-05-21T10:08:51.952-07:00",
+															"full_name": "Tad Cassin",
+															"first_name": "Tad",
+															"last_name": "Cassin",
+															"color_mappings": {},
+															"slug": "tad-cassin",
+															"number": "AXXNRHVS",
+															"person_id": "d7afc1a6-7483-4ca5-bb86-a92eec2f7c99",
+															"active_at": "2025-05-10"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-27T04:00:00.000Z",
+											"displayEnd": "2025-05-27T07:00:00.000Z",
+											"columnStart": 2,
+											"columnSpan": 1,
+											"rowStart": 22,
+											"rowEnd": 25,
+											"className": "filled continues-on",
+											"overlap": 0
+									}
+							}
+					],
+					"isSorted": true
+			}
+	},
+	{
+			"key": "2025-05-27T07:00:00.000Z",
+			"value": {
+					"items": [
+							{
+									"event": {
+											"id": "867c34af-d0ea-4dad-9b77-49cf6ca3cb76",
+											"title": "extend strategic infomediaries",
+											"start": "2025-05-27T04:00:00.000Z",
+											"end": "2025-05-27T13:00:00.000Z",
+											"allDay": false,
+											"color": "#5e97ef",
+											"resources": {
+													"employee": {
+															"id": "2604aa9e-5f6c-4d7d-b3e4-6ef71bcbad92",
+															"name": "Tad Cassin",
+															"inactive_at": null,
+															"color": "#5e97ef",
+															"status": "applicant",
+															"person": {
+																	"id": "d7afc1a6-7483-4ca5-bb86-a92eec2f7c99",
+																	"slug": "tad-cassin",
+																	"updated_at": "2025-05-21T10:08:51.938-07:00",
+																	"created_at": "2025-05-21T10:08:51.938-07:00",
+																	"first_name": "Tad",
+																	"middle_name": "Considine",
+																	"last_name": "Cassin",
+																	"nick_name": "TG",
+																	"user_id": null,
+																	"agency_role": "Employee",
+																	"name": "Tad Cassin",
+																	"login_enabled": false
+															},
+															"job_title": {
+																	"id": "e169debd-b72a-4d90-aa54-499632515292",
+																	"slug": "attendant",
+																	"name": "Attendant",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:51.952-07:00",
+															"created_at": "2025-05-21T10:08:51.952-07:00",
+															"full_name": "Tad Cassin",
+															"first_name": "Tad",
+															"last_name": "Cassin",
+															"color_mappings": {},
+															"slug": "tad-cassin",
+															"number": "AXXNRHVS",
+															"person_id": "d7afc1a6-7483-4ca5-bb86-a92eec2f7c99",
+															"active_at": "2025-05-10"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-27T07:00:00.000Z",
+											"displayEnd": "2025-05-27T13:00:00.000Z",
+											"columnStart": 3,
+											"columnSpan": 1,
+											"rowStart": 1,
+											"rowEnd": 7,
+											"className": "filled continued-from",
+											"overlap": 0
+									}
+							},
+							{
+									"event": {
+											"id": "7cc88f5a-6c23-4975-963c-d308685f7a52",
+											"title": "recontextualize robust metrics",
+											"start": "2025-05-27T11:00:00.000Z",
+											"end": "2025-05-27T22:00:00.000Z",
+											"allDay": false,
+											"color": "#d978df",
+											"resources": {
+													"employee": {
+															"id": "7f3b2fc7-1ca8-4962-ae8a-9731b6ad4975",
+															"name": "Elisa Cronin",
+															"inactive_at": null,
+															"color": "#d978df",
+															"status": "applicant",
+															"person": {
+																	"id": "f7b93e67-54de-4c07-a70f-b411d7a6354f",
+																	"slug": "elisa-cronin",
+																	"updated_at": "2025-05-21T10:08:48.677-07:00",
+																	"created_at": "2025-05-21T10:08:48.677-07:00",
+																	"first_name": "Elisa",
+																	"middle_name": "Goldner",
+																	"last_name": "Cronin",
+																	"nick_name": "AW",
+																	"user_id": null,
+																	"agency_role": "Employee",
+																	"name": "Elisa Cronin",
+																	"login_enabled": false
+															},
+															"job_title": {
+																	"id": "e169debd-b72a-4d90-aa54-499632515292",
+																	"slug": "attendant",
+																	"name": "Attendant",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:48.710-07:00",
+															"created_at": "2025-05-21T10:08:48.710-07:00",
+															"full_name": "Elisa Cronin",
+															"first_name": "Elisa",
+															"last_name": "Cronin",
+															"color_mappings": {},
+															"slug": "elisa-cronin",
+															"number": "XXOKATYD",
+															"person_id": "f7b93e67-54de-4c07-a70f-b411d7a6354f",
+															"active_at": "2025-04-25"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-27T11:00:00.000Z",
+											"displayEnd": "2025-05-27T22:00:00.000Z",
+											"columnStart": 3,
+											"columnSpan": 1,
+											"rowStart": 5,
+											"rowEnd": 16,
+											"className": "filled",
+											"overlap": 2
+									}
+							},
+							{
+									"event": {
+											"id": "1236be04-7da9-44dd-9f05-ed8c234ab5fd",
+											"title": "reinvent revolutionary functionalities",
+											"start": "2025-05-27T13:00:00.000Z",
+											"end": "2025-05-27T22:00:00.000Z",
+											"allDay": false,
+											"color": "#0cd325",
+											"resources": {
+													"employee": {
+															"id": "45a5a1ec-9417-4ce1-9ed0-33c0b2a53811",
+															"name": "Tanja Funk",
+															"inactive_at": null,
+															"color": "#0cd325",
+															"status": "employed",
+															"person": {
+																	"id": "4b9d1a9b-de31-4153-abda-fc2b3c4b39a4",
+																	"slug": "tanja-funk",
+																	"updated_at": "2025-05-21T10:08:48.271-07:00",
+																	"created_at": "2025-05-21T10:08:48.048-07:00",
+																	"first_name": "Tanja",
+																	"middle_name": "Lubowitz",
+																	"last_name": "Funk",
+																	"nick_name": "YH",
+																	"user_id": "3c573c51-1ef6-4a93-8d6b-c5ca13a33c6c",
+																	"agency_role": "Employee",
+																	"name": "Tanja Funk",
+																	"login_enabled": true
+															},
+															"job_title": {
+																	"id": "3eddaeff-8665-4cc8-b7ae-3ae7fa5008e3",
+																	"slug": "facilitator",
+																	"name": "Facilitator",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:48.303-07:00",
+															"created_at": "2025-05-21T10:08:48.303-07:00",
+															"full_name": "Tanja Funk",
+															"first_name": "Tanja",
+															"last_name": "Funk",
+															"color_mappings": {},
+															"slug": "tanja-funk",
+															"number": "NTVTPWDK",
+															"person_id": "4b9d1a9b-de31-4153-abda-fc2b3c4b39a4",
+															"active_at": "2025-05-04"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-27T13:00:00.000Z",
+											"displayEnd": "2025-05-27T22:00:00.000Z",
+											"columnStart": 3,
+											"columnSpan": 1,
+											"rowStart": 7,
+											"rowEnd": 16,
+											"className": "filled",
+											"overlap": 1
+									}
+							},
+							{
+									"event": {
+											"id": "665037c4-7410-417d-b3f1-6e843b0efcba",
+											"title": "extend bleeding-edge models",
+											"start": "2025-05-27T22:00:00.000Z",
+											"end": "2025-05-28T07:00:00.000Z",
+											"allDay": false,
+											"color": "#362948",
+											"resources": {
+													"employee": {
+															"id": "bc901050-4d12-4096-9ebd-f20dfa39e8ad",
+															"name": "Imogene Bogisich",
+															"inactive_at": null,
+															"color": "#362948",
+															"status": "applicant",
+															"person": {
+																	"id": "de86f9fb-c139-44b3-b203-d3c5b67e0586",
+																	"slug": "imogene-bogisich",
+																	"updated_at": "2025-05-21T10:08:48.581-07:00",
+																	"created_at": "2025-05-21T10:08:48.364-07:00",
+																	"first_name": "Imogene",
+																	"middle_name": "Bode",
+																	"last_name": "Bogisich",
+																	"nick_name": "UN",
+																	"user_id": "699d33f7-68e8-4cd6-be91-56326ba2811e",
+																	"agency_role": "Employee",
+																	"name": "Imogene Bogisich",
+																	"login_enabled": true
+															},
+															"job_title": {
+																	"id": "a2d8645c-9b74-4469-9d8a-8a7c0ca8bcf9",
+																	"slug": "director",
+																	"name": "Director",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:48.599-07:00",
+															"created_at": "2025-05-21T10:08:48.599-07:00",
+															"full_name": "Imogene Bogisich",
+															"first_name": "Imogene",
+															"last_name": "Bogisich",
+															"color_mappings": {},
+															"slug": "imogene-bogisich",
+															"number": "WKRPSSTI",
+															"person_id": "de86f9fb-c139-44b3-b203-d3c5b67e0586",
+															"active_at": "2025-04-29"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-27T22:00:00.000Z",
+											"displayEnd": "2025-05-28T07:00:00.000Z",
+											"columnStart": 3,
+											"columnSpan": 1,
+											"rowStart": 16,
+											"rowEnd": 25,
+											"className": "filled",
+											"overlap": 0
+									}
+							}
+					],
+					"isSorted": true
+			}
+	},
+	{
+			"key": "2025-05-28T07:00:00.000Z",
+			"value": {
+					"items": [
+							{
+									"event": {
+											"id": "eca1ea6c-e9e9-4166-b7a7-3fcb5c4fa783",
+											"title": "cultivate efficient markets",
+											"start": "2025-05-28T07:00:00.000Z",
+											"end": "2025-05-28T16:00:00.000Z",
+											"allDay": false,
+											"color": "#d978df",
+											"resources": {
+													"employee": {
+															"id": "7f3b2fc7-1ca8-4962-ae8a-9731b6ad4975",
+															"name": "Elisa Cronin",
+															"inactive_at": null,
+															"color": "#d978df",
+															"status": "applicant",
+															"person": {
+																	"id": "f7b93e67-54de-4c07-a70f-b411d7a6354f",
+																	"slug": "elisa-cronin",
+																	"updated_at": "2025-05-21T10:08:48.677-07:00",
+																	"created_at": "2025-05-21T10:08:48.677-07:00",
+																	"first_name": "Elisa",
+																	"middle_name": "Goldner",
+																	"last_name": "Cronin",
+																	"nick_name": "AW",
+																	"user_id": null,
+																	"agency_role": "Employee",
+																	"name": "Elisa Cronin",
+																	"login_enabled": false
+															},
+															"job_title": {
+																	"id": "e169debd-b72a-4d90-aa54-499632515292",
+																	"slug": "attendant",
+																	"name": "Attendant",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:48.710-07:00",
+															"created_at": "2025-05-21T10:08:48.710-07:00",
+															"full_name": "Elisa Cronin",
+															"first_name": "Elisa",
+															"last_name": "Cronin",
+															"color_mappings": {},
+															"slug": "elisa-cronin",
+															"number": "XXOKATYD",
+															"person_id": "f7b93e67-54de-4c07-a70f-b411d7a6354f",
+															"active_at": "2025-04-25"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-28T07:00:00.000Z",
+											"displayEnd": "2025-05-28T16:00:00.000Z",
+											"columnStart": 4,
+											"columnSpan": 1,
+											"rowStart": 1,
+											"rowEnd": 10,
+											"className": "filled",
+											"overlap": 0
+									}
+							},
+							{
+									"event": {
+											"id": "bc3f27ed-d9e6-4c8e-98eb-ba346ee0fecc",
+											"title": "deploy sexy convergence",
+											"start": "2025-05-28T16:00:00.000Z",
+											"end": "2025-05-29T01:00:00.000Z",
+											"allDay": false,
+											"color": "#8ad52f",
+											"resources": {
+													"employee": {
+															"id": "6b07138f-18eb-427f-b8f1-0ceb73e8befe",
+															"name": "Lupe Little",
+															"inactive_at": null,
+															"color": "#8ad52f",
+															"status": "applicant",
+															"person": {
+																	"id": "e078087c-6db2-418d-a972-0a800cae51ec",
+																	"slug": "lupe-little",
+																	"updated_at": "2025-05-21T10:08:49.986-07:00",
+																	"created_at": "2025-05-21T10:08:49.986-07:00",
+																	"first_name": "Lupe",
+																	"middle_name": "Pacocha",
+																	"last_name": "Little",
+																	"nick_name": "VE",
+																	"user_id": null,
+																	"agency_role": "Employee",
+																	"name": "Lupe Little",
+																	"login_enabled": false
+															},
+															"job_title": {
+																	"id": "e169debd-b72a-4d90-aa54-499632515292",
+																	"slug": "attendant",
+																	"name": "Attendant",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:50.012-07:00",
+															"created_at": "2025-05-21T10:08:50.012-07:00",
+															"full_name": "Lupe Little",
+															"first_name": "Lupe",
+															"last_name": "Little",
+															"color_mappings": {},
+															"slug": "lupe-little",
+															"number": "ZCPEFTEN",
+															"person_id": "e078087c-6db2-418d-a972-0a800cae51ec",
+															"active_at": "2025-05-09"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-28T16:00:00.000Z",
+											"displayEnd": "2025-05-29T01:00:00.000Z",
+											"columnStart": 4,
+											"columnSpan": 1,
+											"rowStart": 10,
+											"rowEnd": 19,
+											"className": "filled",
+											"overlap": 0
+									}
+							},
+							{
+									"event": {
+											"id": "b5ab2d92-4b3f-418e-84be-aefd8dc2a5a3",
+											"title": "benchmark back-end users",
+											"start": "2025-05-29T01:00:00.000Z",
+											"end": "2025-05-29T10:00:00.000Z",
+											"allDay": false,
+											"color": "#5e97ef",
+											"resources": {
+													"employee": {
+															"id": "2604aa9e-5f6c-4d7d-b3e4-6ef71bcbad92",
+															"name": "Tad Cassin",
+															"inactive_at": null,
+															"color": "#5e97ef",
+															"status": "applicant",
+															"person": {
+																	"id": "d7afc1a6-7483-4ca5-bb86-a92eec2f7c99",
+																	"slug": "tad-cassin",
+																	"updated_at": "2025-05-21T10:08:51.938-07:00",
+																	"created_at": "2025-05-21T10:08:51.938-07:00",
+																	"first_name": "Tad",
+																	"middle_name": "Considine",
+																	"last_name": "Cassin",
+																	"nick_name": "TG",
+																	"user_id": null,
+																	"agency_role": "Employee",
+																	"name": "Tad Cassin",
+																	"login_enabled": false
+															},
+															"job_title": {
+																	"id": "e169debd-b72a-4d90-aa54-499632515292",
+																	"slug": "attendant",
+																	"name": "Attendant",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:51.952-07:00",
+															"created_at": "2025-05-21T10:08:51.952-07:00",
+															"full_name": "Tad Cassin",
+															"first_name": "Tad",
+															"last_name": "Cassin",
+															"color_mappings": {},
+															"slug": "tad-cassin",
+															"number": "AXXNRHVS",
+															"person_id": "d7afc1a6-7483-4ca5-bb86-a92eec2f7c99",
+															"active_at": "2025-05-10"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-29T01:00:00.000Z",
+											"displayEnd": "2025-05-29T07:00:00.000Z",
+											"columnStart": 4,
+											"columnSpan": 1,
+											"rowStart": 19,
+											"rowEnd": 25,
+											"className": "filled continues-on",
+											"overlap": 0
+									}
+							}
+					],
+					"isSorted": true
+			}
+	},
+	{
+			"key": "2025-05-29T07:00:00.000Z",
+			"value": {
+					"items": [
+							{
+									"event": {
+											"id": "360b2b49-9000-47b7-a3ed-da4106b66f15",
+											"title": "All Day Event #3",
+											"start": "2025-05-29T07:00:00.000Z",
+											"end": "2025-05-30T06:59:59.999Z",
+											"allDay": true,
+											"resources": {
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-29T07:00:00.000Z",
+											"displayEnd": "2025-05-30T06:59:59.999Z",
+											"columnStart": 5,
+											"columnSpan": 1,
+											"rowStart": 1,
+											"rowEnd": 2,
+											"className": "filled"
+									}
+							},
+							{
+									"event": {
+											"id": "b5ab2d92-4b3f-418e-84be-aefd8dc2a5a3",
+											"title": "benchmark back-end users",
+											"start": "2025-05-29T01:00:00.000Z",
+											"end": "2025-05-29T10:00:00.000Z",
+											"allDay": false,
+											"color": "#5e97ef",
+											"resources": {
+													"employee": {
+															"id": "2604aa9e-5f6c-4d7d-b3e4-6ef71bcbad92",
+															"name": "Tad Cassin",
+															"inactive_at": null,
+															"color": "#5e97ef",
+															"status": "applicant",
+															"person": {
+																	"id": "d7afc1a6-7483-4ca5-bb86-a92eec2f7c99",
+																	"slug": "tad-cassin",
+																	"updated_at": "2025-05-21T10:08:51.938-07:00",
+																	"created_at": "2025-05-21T10:08:51.938-07:00",
+																	"first_name": "Tad",
+																	"middle_name": "Considine",
+																	"last_name": "Cassin",
+																	"nick_name": "TG",
+																	"user_id": null,
+																	"agency_role": "Employee",
+																	"name": "Tad Cassin",
+																	"login_enabled": false
+															},
+															"job_title": {
+																	"id": "e169debd-b72a-4d90-aa54-499632515292",
+																	"slug": "attendant",
+																	"name": "Attendant",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:51.952-07:00",
+															"created_at": "2025-05-21T10:08:51.952-07:00",
+															"full_name": "Tad Cassin",
+															"first_name": "Tad",
+															"last_name": "Cassin",
+															"color_mappings": {},
+															"slug": "tad-cassin",
+															"number": "AXXNRHVS",
+															"person_id": "d7afc1a6-7483-4ca5-bb86-a92eec2f7c99",
+															"active_at": "2025-05-10"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-29T07:00:00.000Z",
+											"displayEnd": "2025-05-29T10:00:00.000Z",
+											"columnStart": 5,
+											"columnSpan": 1,
+											"rowStart": 1,
+											"rowEnd": 4,
+											"className": "filled continued-from",
+											"overlap": 2
+									}
+							},
+							{
+									"event": {
+											"id": "73aa104b-0bc7-4643-82fe-022d0f20567a",
+											"title": "mesh 24/7 channels",
+											"start": "2025-05-29T10:00:00.000Z",
+											"end": "2025-05-29T19:00:00.000Z",
+											"allDay": false,
+											"color": "#0cd325",
+											"resources": {
+													"employee": {
+															"id": "45a5a1ec-9417-4ce1-9ed0-33c0b2a53811",
+															"name": "Tanja Funk",
+															"inactive_at": null,
+															"color": "#0cd325",
+															"status": "employed",
+															"person": {
+																	"id": "4b9d1a9b-de31-4153-abda-fc2b3c4b39a4",
+																	"slug": "tanja-funk",
+																	"updated_at": "2025-05-21T10:08:48.271-07:00",
+																	"created_at": "2025-05-21T10:08:48.048-07:00",
+																	"first_name": "Tanja",
+																	"middle_name": "Lubowitz",
+																	"last_name": "Funk",
+																	"nick_name": "YH",
+																	"user_id": "3c573c51-1ef6-4a93-8d6b-c5ca13a33c6c",
+																	"agency_role": "Employee",
+																	"name": "Tanja Funk",
+																	"login_enabled": true
+															},
+															"job_title": {
+																	"id": "3eddaeff-8665-4cc8-b7ae-3ae7fa5008e3",
+																	"slug": "facilitator",
+																	"name": "Facilitator",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:48.303-07:00",
+															"created_at": "2025-05-21T10:08:48.303-07:00",
+															"full_name": "Tanja Funk",
+															"first_name": "Tanja",
+															"last_name": "Funk",
+															"color_mappings": {},
+															"slug": "tanja-funk",
+															"number": "NTVTPWDK",
+															"person_id": "4b9d1a9b-de31-4153-abda-fc2b3c4b39a4",
+															"active_at": "2025-05-04"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-29T10:00:00.000Z",
+											"displayEnd": "2025-05-29T19:00:00.000Z",
+											"columnStart": 5,
+											"columnSpan": 1,
+											"rowStart": 4,
+											"rowEnd": 13,
+											"className": "filled",
+											"overlap": 2
+									}
+							},
+							{
+									"event": {
+											"id": "1e0b8467-2ef5-4ac8-8035-c6f1bd0e02dc",
+											"title": "strategize sexy networks",
+											"start": "2025-05-29T19:00:00.000Z",
+											"end": "2025-05-30T04:00:00.000Z",
+											"allDay": false,
+											"color": "#362948",
+											"resources": {
+													"employee": {
+															"id": "bc901050-4d12-4096-9ebd-f20dfa39e8ad",
+															"name": "Imogene Bogisich",
+															"inactive_at": null,
+															"color": "#362948",
+															"status": "applicant",
+															"person": {
+																	"id": "de86f9fb-c139-44b3-b203-d3c5b67e0586",
+																	"slug": "imogene-bogisich",
+																	"updated_at": "2025-05-21T10:08:48.581-07:00",
+																	"created_at": "2025-05-21T10:08:48.364-07:00",
+																	"first_name": "Imogene",
+																	"middle_name": "Bode",
+																	"last_name": "Bogisich",
+																	"nick_name": "UN",
+																	"user_id": "699d33f7-68e8-4cd6-be91-56326ba2811e",
+																	"agency_role": "Employee",
+																	"name": "Imogene Bogisich",
+																	"login_enabled": true
+															},
+															"job_title": {
+																	"id": "a2d8645c-9b74-4469-9d8a-8a7c0ca8bcf9",
+																	"slug": "director",
+																	"name": "Director",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:48.599-07:00",
+															"created_at": "2025-05-21T10:08:48.599-07:00",
+															"full_name": "Imogene Bogisich",
+															"first_name": "Imogene",
+															"last_name": "Bogisich",
+															"color_mappings": {},
+															"slug": "imogene-bogisich",
+															"number": "WKRPSSTI",
+															"person_id": "de86f9fb-c139-44b3-b203-d3c5b67e0586",
+															"active_at": "2025-04-29"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-29T19:00:00.000Z",
+											"displayEnd": "2025-05-30T04:00:00.000Z",
+											"columnStart": 5,
+											"columnSpan": 1,
+											"rowStart": 13,
+											"rowEnd": 22,
+											"className": "filled",
+											"overlap": 2
+									}
+							},
+							{
+									"event": {
+											"id": "35f3309e-076a-4230-89a8-d00233ac59e2",
+											"title": "scale B2B deliverables",
+											"start": "2025-05-30T04:00:00.000Z",
+											"end": "2025-05-30T13:00:00.000Z",
+											"allDay": false,
+											"color": "#d978df",
+											"resources": {
+													"employee": {
+															"id": "7f3b2fc7-1ca8-4962-ae8a-9731b6ad4975",
+															"name": "Elisa Cronin",
+															"inactive_at": null,
+															"color": "#d978df",
+															"status": "applicant",
+															"person": {
+																	"id": "f7b93e67-54de-4c07-a70f-b411d7a6354f",
+																	"slug": "elisa-cronin",
+																	"updated_at": "2025-05-21T10:08:48.677-07:00",
+																	"created_at": "2025-05-21T10:08:48.677-07:00",
+																	"first_name": "Elisa",
+																	"middle_name": "Goldner",
+																	"last_name": "Cronin",
+																	"nick_name": "AW",
+																	"user_id": null,
+																	"agency_role": "Employee",
+																	"name": "Elisa Cronin",
+																	"login_enabled": false
+															},
+															"job_title": {
+																	"id": "e169debd-b72a-4d90-aa54-499632515292",
+																	"slug": "attendant",
+																	"name": "Attendant",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:48.710-07:00",
+															"created_at": "2025-05-21T10:08:48.710-07:00",
+															"full_name": "Elisa Cronin",
+															"first_name": "Elisa",
+															"last_name": "Cronin",
+															"color_mappings": {},
+															"slug": "elisa-cronin",
+															"number": "XXOKATYD",
+															"person_id": "f7b93e67-54de-4c07-a70f-b411d7a6354f",
+															"active_at": "2025-04-25"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-30T04:00:00.000Z",
+											"displayEnd": "2025-05-30T07:00:00.000Z",
+											"columnStart": 5,
+											"columnSpan": 1,
+											"rowStart": 22,
+											"rowEnd": 25,
+											"className": "filled continues-on",
+											"overlap": 2
+									}
+							}
+					],
+					"isSorted": true
+			}
+	},
+	{
+			"key": "2025-05-30T07:00:00.000Z",
+			"value": {
+					"items": [
+							{
+									"event": {
+											"id": "35f3309e-076a-4230-89a8-d00233ac59e2",
+											"title": "scale B2B deliverables",
+											"start": "2025-05-30T04:00:00.000Z",
+											"end": "2025-05-30T13:00:00.000Z",
+											"allDay": false,
+											"color": "#d978df",
+											"resources": {
+													"employee": {
+															"id": "7f3b2fc7-1ca8-4962-ae8a-9731b6ad4975",
+															"name": "Elisa Cronin",
+															"inactive_at": null,
+															"color": "#d978df",
+															"status": "applicant",
+															"person": {
+																	"id": "f7b93e67-54de-4c07-a70f-b411d7a6354f",
+																	"slug": "elisa-cronin",
+																	"updated_at": "2025-05-21T10:08:48.677-07:00",
+																	"created_at": "2025-05-21T10:08:48.677-07:00",
+																	"first_name": "Elisa",
+																	"middle_name": "Goldner",
+																	"last_name": "Cronin",
+																	"nick_name": "AW",
+																	"user_id": null,
+																	"agency_role": "Employee",
+																	"name": "Elisa Cronin",
+																	"login_enabled": false
+															},
+															"job_title": {
+																	"id": "e169debd-b72a-4d90-aa54-499632515292",
+																	"slug": "attendant",
+																	"name": "Attendant",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:48.710-07:00",
+															"created_at": "2025-05-21T10:08:48.710-07:00",
+															"full_name": "Elisa Cronin",
+															"first_name": "Elisa",
+															"last_name": "Cronin",
+															"color_mappings": {},
+															"slug": "elisa-cronin",
+															"number": "XXOKATYD",
+															"person_id": "f7b93e67-54de-4c07-a70f-b411d7a6354f",
+															"active_at": "2025-04-25"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-30T07:00:00.000Z",
+											"displayEnd": "2025-05-30T13:00:00.000Z",
+											"columnStart": 6,
+											"columnSpan": 1,
+											"rowStart": 1,
+											"rowEnd": 7,
+											"className": "filled continued-from",
+											"overlap": 0
+									}
+							},
+							{
+									"event": {
+											"id": "b89c6121-3115-4055-a9cd-502915626f3f",
+											"title": "architect cross-media mindshare",
+											"start": "2025-05-30T13:00:00.000Z",
+											"end": "2025-05-30T22:00:00.000Z",
+											"allDay": false,
+											"color": "#8ad52f",
+											"resources": {
+													"employee": {
+															"id": "6b07138f-18eb-427f-b8f1-0ceb73e8befe",
+															"name": "Lupe Little",
+															"inactive_at": null,
+															"color": "#8ad52f",
+															"status": "applicant",
+															"person": {
+																	"id": "e078087c-6db2-418d-a972-0a800cae51ec",
+																	"slug": "lupe-little",
+																	"updated_at": "2025-05-21T10:08:49.986-07:00",
+																	"created_at": "2025-05-21T10:08:49.986-07:00",
+																	"first_name": "Lupe",
+																	"middle_name": "Pacocha",
+																	"last_name": "Little",
+																	"nick_name": "VE",
+																	"user_id": null,
+																	"agency_role": "Employee",
+																	"name": "Lupe Little",
+																	"login_enabled": false
+															},
+															"job_title": {
+																	"id": "e169debd-b72a-4d90-aa54-499632515292",
+																	"slug": "attendant",
+																	"name": "Attendant",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:50.012-07:00",
+															"created_at": "2025-05-21T10:08:50.012-07:00",
+															"full_name": "Lupe Little",
+															"first_name": "Lupe",
+															"last_name": "Little",
+															"color_mappings": {},
+															"slug": "lupe-little",
+															"number": "ZCPEFTEN",
+															"person_id": "e078087c-6db2-418d-a972-0a800cae51ec",
+															"active_at": "2025-05-09"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-30T13:00:00.000Z",
+											"displayEnd": "2025-05-30T22:00:00.000Z",
+											"columnStart": 6,
+											"columnSpan": 1,
+											"rowStart": 7,
+											"rowEnd": 16,
+											"className": "filled",
+											"overlap": 0
+									}
+							},
+							{
+									"event": {
+											"id": "6885de09-1228-4e86-bbd6-4dbea9eca90a",
+											"title": "syndicate cross-media architectures",
+											"start": "2025-05-30T22:00:00.000Z",
+											"end": "2025-05-31T07:00:00.000Z",
+											"allDay": false,
+											"color": "#5e97ef",
+											"resources": {
+													"employee": {
+															"id": "2604aa9e-5f6c-4d7d-b3e4-6ef71bcbad92",
+															"name": "Tad Cassin",
+															"inactive_at": null,
+															"color": "#5e97ef",
+															"status": "applicant",
+															"person": {
+																	"id": "d7afc1a6-7483-4ca5-bb86-a92eec2f7c99",
+																	"slug": "tad-cassin",
+																	"updated_at": "2025-05-21T10:08:51.938-07:00",
+																	"created_at": "2025-05-21T10:08:51.938-07:00",
+																	"first_name": "Tad",
+																	"middle_name": "Considine",
+																	"last_name": "Cassin",
+																	"nick_name": "TG",
+																	"user_id": null,
+																	"agency_role": "Employee",
+																	"name": "Tad Cassin",
+																	"login_enabled": false
+															},
+															"job_title": {
+																	"id": "e169debd-b72a-4d90-aa54-499632515292",
+																	"slug": "attendant",
+																	"name": "Attendant",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:51.952-07:00",
+															"created_at": "2025-05-21T10:08:51.952-07:00",
+															"full_name": "Tad Cassin",
+															"first_name": "Tad",
+															"last_name": "Cassin",
+															"color_mappings": {},
+															"slug": "tad-cassin",
+															"number": "AXXNRHVS",
+															"person_id": "d7afc1a6-7483-4ca5-bb86-a92eec2f7c99",
+															"active_at": "2025-05-10"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-30T22:00:00.000Z",
+											"displayEnd": "2025-05-31T07:00:00.000Z",
+											"columnStart": 6,
+											"columnSpan": 1,
+											"rowStart": 16,
+											"rowEnd": 25,
+											"className": "filled",
+											"overlap": 0
+									}
+							},
+							{
+									"event": {
+											"id": "72f40060-dd23-45fc-b60f-2e4d65063897",
+											"title": "evolve one-to-one web-readiness",
+											"start": "2025-05-31T05:00:00.000Z",
+											"end": "2025-05-31T17:00:00.000Z",
+											"allDay": false,
+											"color": "#d978df",
+											"resources": {
+													"employee": {
+															"id": "7f3b2fc7-1ca8-4962-ae8a-9731b6ad4975",
+															"name": "Elisa Cronin",
+															"inactive_at": null,
+															"color": "#d978df",
+															"status": "applicant",
+															"person": {
+																	"id": "f7b93e67-54de-4c07-a70f-b411d7a6354f",
+																	"slug": "elisa-cronin",
+																	"updated_at": "2025-05-21T10:08:48.677-07:00",
+																	"created_at": "2025-05-21T10:08:48.677-07:00",
+																	"first_name": "Elisa",
+																	"middle_name": "Goldner",
+																	"last_name": "Cronin",
+																	"nick_name": "AW",
+																	"user_id": null,
+																	"agency_role": "Employee",
+																	"name": "Elisa Cronin",
+																	"login_enabled": false
+															},
+															"job_title": {
+																	"id": "e169debd-b72a-4d90-aa54-499632515292",
+																	"slug": "attendant",
+																	"name": "Attendant",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:48.710-07:00",
+															"created_at": "2025-05-21T10:08:48.710-07:00",
+															"full_name": "Elisa Cronin",
+															"first_name": "Elisa",
+															"last_name": "Cronin",
+															"color_mappings": {},
+															"slug": "elisa-cronin",
+															"number": "XXOKATYD",
+															"person_id": "f7b93e67-54de-4c07-a70f-b411d7a6354f",
+															"active_at": "2025-04-25"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-31T05:00:00.000Z",
+											"displayEnd": "2025-05-31T07:00:00.000Z",
+											"columnStart": 6,
+											"columnSpan": 1,
+											"rowStart": 23,
+											"rowEnd": 25,
+											"className": "filled continues-on",
+											"overlap": 2
+									}
+							}
+					],
+					"isSorted": true
+			}
+	},
+	{
+			"key": "2025-05-31T07:00:00.000Z",
+			"value": {
+					"items": [
+							{
+									"event": {
+											"id": "72f40060-dd23-45fc-b60f-2e4d65063897",
+											"title": "evolve one-to-one web-readiness",
+											"start": "2025-05-31T05:00:00.000Z",
+											"end": "2025-05-31T17:00:00.000Z",
+											"allDay": false,
+											"color": "#d978df",
+											"resources": {
+													"employee": {
+															"id": "7f3b2fc7-1ca8-4962-ae8a-9731b6ad4975",
+															"name": "Elisa Cronin",
+															"inactive_at": null,
+															"color": "#d978df",
+															"status": "applicant",
+															"person": {
+																	"id": "f7b93e67-54de-4c07-a70f-b411d7a6354f",
+																	"slug": "elisa-cronin",
+																	"updated_at": "2025-05-21T10:08:48.677-07:00",
+																	"created_at": "2025-05-21T10:08:48.677-07:00",
+																	"first_name": "Elisa",
+																	"middle_name": "Goldner",
+																	"last_name": "Cronin",
+																	"nick_name": "AW",
+																	"user_id": null,
+																	"agency_role": "Employee",
+																	"name": "Elisa Cronin",
+																	"login_enabled": false
+															},
+															"job_title": {
+																	"id": "e169debd-b72a-4d90-aa54-499632515292",
+																	"slug": "attendant",
+																	"name": "Attendant",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:48.710-07:00",
+															"created_at": "2025-05-21T10:08:48.710-07:00",
+															"full_name": "Elisa Cronin",
+															"first_name": "Elisa",
+															"last_name": "Cronin",
+															"color_mappings": {},
+															"slug": "elisa-cronin",
+															"number": "XXOKATYD",
+															"person_id": "f7b93e67-54de-4c07-a70f-b411d7a6354f",
+															"active_at": "2025-04-25"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-31T07:00:00.000Z",
+											"displayEnd": "2025-05-31T17:00:00.000Z",
+											"columnStart": 7,
+											"columnSpan": 1,
+											"rowStart": 1,
+											"rowEnd": 11,
+											"className": "filled continued-from",
+											"overlap": 0
+									}
+							},
+							{
+									"event": {
+											"id": "52300670-6368-433c-935b-5ff915c2d268",
+											"title": "enhance e-business paradigms",
+											"start": "2025-05-31T07:00:00.000Z",
+											"end": "2025-05-31T16:00:00.000Z",
+											"allDay": false,
+											"color": "#0cd325",
+											"resources": {
+													"employee": {
+															"id": "45a5a1ec-9417-4ce1-9ed0-33c0b2a53811",
+															"name": "Tanja Funk",
+															"inactive_at": null,
+															"color": "#0cd325",
+															"status": "employed",
+															"person": {
+																	"id": "4b9d1a9b-de31-4153-abda-fc2b3c4b39a4",
+																	"slug": "tanja-funk",
+																	"updated_at": "2025-05-21T10:08:48.271-07:00",
+																	"created_at": "2025-05-21T10:08:48.048-07:00",
+																	"first_name": "Tanja",
+																	"middle_name": "Lubowitz",
+																	"last_name": "Funk",
+																	"nick_name": "YH",
+																	"user_id": "3c573c51-1ef6-4a93-8d6b-c5ca13a33c6c",
+																	"agency_role": "Employee",
+																	"name": "Tanja Funk",
+																	"login_enabled": true
+															},
+															"job_title": {
+																	"id": "3eddaeff-8665-4cc8-b7ae-3ae7fa5008e3",
+																	"slug": "facilitator",
+																	"name": "Facilitator",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:48.303-07:00",
+															"created_at": "2025-05-21T10:08:48.303-07:00",
+															"full_name": "Tanja Funk",
+															"first_name": "Tanja",
+															"last_name": "Funk",
+															"color_mappings": {},
+															"slug": "tanja-funk",
+															"number": "NTVTPWDK",
+															"person_id": "4b9d1a9b-de31-4153-abda-fc2b3c4b39a4",
+															"active_at": "2025-05-04"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-31T07:00:00.000Z",
+											"displayEnd": "2025-05-31T16:00:00.000Z",
+											"columnStart": 7,
+											"columnSpan": 1,
+											"rowStart": 1,
+											"rowEnd": 10,
+											"className": "filled",
+											"overlap": 2
+									}
+							},
+							{
+									"event": {
+											"id": "b792e688-1fdd-4b31-a1bc-9a15def85540",
+											"title": "brand vertical web-readiness",
+											"start": "2025-05-31T16:00:00.000Z",
+											"end": "2025-06-01T01:00:00.000Z",
+											"allDay": false,
+											"color": "#362948",
+											"resources": {
+													"employee": {
+															"id": "bc901050-4d12-4096-9ebd-f20dfa39e8ad",
+															"name": "Imogene Bogisich",
+															"inactive_at": null,
+															"color": "#362948",
+															"status": "applicant",
+															"person": {
+																	"id": "de86f9fb-c139-44b3-b203-d3c5b67e0586",
+																	"slug": "imogene-bogisich",
+																	"updated_at": "2025-05-21T10:08:48.581-07:00",
+																	"created_at": "2025-05-21T10:08:48.364-07:00",
+																	"first_name": "Imogene",
+																	"middle_name": "Bode",
+																	"last_name": "Bogisich",
+																	"nick_name": "UN",
+																	"user_id": "699d33f7-68e8-4cd6-be91-56326ba2811e",
+																	"agency_role": "Employee",
+																	"name": "Imogene Bogisich",
+																	"login_enabled": true
+															},
+															"job_title": {
+																	"id": "a2d8645c-9b74-4469-9d8a-8a7c0ca8bcf9",
+																	"slug": "director",
+																	"name": "Director",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:48.599-07:00",
+															"created_at": "2025-05-21T10:08:48.599-07:00",
+															"full_name": "Imogene Bogisich",
+															"first_name": "Imogene",
+															"last_name": "Bogisich",
+															"color_mappings": {},
+															"slug": "imogene-bogisich",
+															"number": "WKRPSSTI",
+															"person_id": "de86f9fb-c139-44b3-b203-d3c5b67e0586",
+															"active_at": "2025-04-29"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-05-31T16:00:00.000Z",
+											"displayEnd": "2025-06-01T01:00:00.000Z",
+											"columnStart": 7,
+											"columnSpan": 1,
+											"rowStart": 10,
+											"rowEnd": 19,
+											"className": "filled",
+											"overlap": 2
+									}
+							},
+							{
+									"event": {
+											"id": "4d619ebf-e7fe-4bf0-a5a1-0e8e3e2ecde5",
+											"title": "architect sticky applications",
+											"start": "2025-06-01T01:00:00.000Z",
+											"end": "2025-06-01T10:00:00.000Z",
+											"allDay": false,
+											"color": "#d978df",
+											"resources": {
+													"employee": {
+															"id": "7f3b2fc7-1ca8-4962-ae8a-9731b6ad4975",
+															"name": "Elisa Cronin",
+															"inactive_at": null,
+															"color": "#d978df",
+															"status": "applicant",
+															"person": {
+																	"id": "f7b93e67-54de-4c07-a70f-b411d7a6354f",
+																	"slug": "elisa-cronin",
+																	"updated_at": "2025-05-21T10:08:48.677-07:00",
+																	"created_at": "2025-05-21T10:08:48.677-07:00",
+																	"first_name": "Elisa",
+																	"middle_name": "Goldner",
+																	"last_name": "Cronin",
+																	"nick_name": "AW",
+																	"user_id": null,
+																	"agency_role": "Employee",
+																	"name": "Elisa Cronin",
+																	"login_enabled": false
+															},
+															"job_title": {
+																	"id": "e169debd-b72a-4d90-aa54-499632515292",
+																	"slug": "attendant",
+																	"name": "Attendant",
+																	"description": null
+															},
+															"updated_at": "2025-05-21T10:08:48.710-07:00",
+															"created_at": "2025-05-21T10:08:48.710-07:00",
+															"full_name": "Elisa Cronin",
+															"first_name": "Elisa",
+															"last_name": "Cronin",
+															"color_mappings": {},
+															"slug": "elisa-cronin",
+															"number": "XXOKATYD",
+															"person_id": "f7b93e67-54de-4c07-a70f-b411d7a6354f",
+															"active_at": "2025-04-25"
+													},
+													"client": {
+															"id": "32f6928d-27d1-4b30-b610-38d2a1cee490",
+															"name": "Lorelei Hickle",
+															"inactive_at": null,
+															"color": "#5c6f93",
+															"person": {
+																	"id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																	"slug": "lorelei-hickle",
+																	"updated_at": "2025-05-21T17:08:47.652Z",
+																	"created_at": "2025-05-21T17:08:47.652Z",
+																	"contact": {
+																			"id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																			"notes": null,
+																			"emails": [
+																					{
+																							"id": "2d0a0cea-10b6-4dd2-8357-c1706f5e063a",
+																							"name": null,
+																							"email": "sharonda.dare@daniel-runte.example",
+																							"notes": null,
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67",
+																							"category_id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																							"category": {
+																									"id": "a397b597-1bf7-42f9-bc0f-750f4f22ddf0",
+																									"slug": "contact-email-personal",
+																									"name": "Personal",
+																									"description": null
+																							}
+																					}
+																			],
+																			"phones": [
+																					{
+																							"id": "f63facd3-8083-4362-9506-2fed9efad73e",
+																							"name": null,
+																							"number": "(177) 217-1411",
+																							"extension": null,
+																							"category": {
+																									"id": "63d55d41-893d-49de-87d9-c48e2caa29d2",
+																									"slug": "contact-phone-home",
+																									"name": "Home",
+																									"description": null
+																							}
+																					}
+																			],
+																			"contactable_type": "Person",
+																			"contactable_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+																			"primary_address_id": null,
+																			"primary_phone_id": null,
+																			"primary_email_id": null,
+																			"updated_at": "2025-05-21T17:08:47.654Z",
+																			"created_at": "2025-05-21T17:08:47.654Z",
+																			"addresses": [
+																					{
+																							"id": "d2d6c5b7-73e1-4a13-af39-c8b554c318ee",
+																							"name": "Autumn Square",
+																							"category_id": "91601f33-f082-4b10-becc-4b964b77788d",
+																							"category": {
+																									"id": "91601f33-f082-4b10-becc-4b964b77788d",
+																									"slug": "contact-address-personal",
+																									"name": "Personal",
+																									"description": null
+																							},
+																							"address": "9714 Buck Forks",
+																							"address_2": "Suite 620",
+																							"city": "North Marcelenefurt",
+																							"region": "Rhode Island",
+																							"country": "US",
+																							"postal": "36370",
+																							"notes": "Sint voluptas molestias non.",
+																							"contact_id": "ac498107-381c-44fe-93b9-26cf5bc56a67"
+																					}
+																			]
+																	},
+																	"first_name": "Lorelei",
+																	"middle_name": "Reichert",
+																	"last_name": "Hickle",
+																	"nick_name": "QD",
+																	"user_id": null,
+																	"agency_role": "Client",
+																	"name": "Lorelei Hickle",
+																	"login_enabled": false
+															},
+															"updated_at": "2025-05-21T17:08:47.674Z",
+															"created_at": "2025-05-21T17:08:47.669Z",
+															"full_name": "Lorelei Hickle",
+															"first_name": "Lorelei",
+															"last_name": "Hickle",
+															"color_mappings": {},
+															"slug": "lorelei-hickle",
+															"person_id": "e9c5b5ab-df6b-4515-bac7-787d7bbce9a1",
+															"number": "UPBOTSNW",
+															"active_at": "2025-05-21"
+													}
+											}
+									},
+									"displayProperties": {
+											"displayStart": "2025-06-01T01:00:00.000Z",
+											"displayEnd": "2025-06-01T07:00:00.000Z",
+											"columnStart": 7,
+											"columnSpan": 1,
+											"rowStart": 19,
+											"rowEnd": 25,
+											"className": "filled continues-on",
+											"overlap": 0
+									}
+							}
+					],
+					"isSorted": true
+			}
+	}
+]

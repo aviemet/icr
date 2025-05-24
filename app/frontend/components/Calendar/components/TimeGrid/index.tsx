@@ -1,6 +1,7 @@
 import clsx from "clsx"
 import { useMemo, useRef } from "react"
 
+import { assignEventOverlaps } from "@/components/Calendar/lib/assignEventOverlaps"
 import useStickySentinel from "@/lib/hooks/useStickySentinel"
 
 import { EventResources, useCalendarContext } from "../../"
@@ -92,6 +93,10 @@ const TimeGrid = <
 			const columnEvents = eventsByColumn?.get(key)
 			if(!columnEvents) return
 
+			// Start overlapping event detection
+			const overlapCounts = assignEventOverlaps(columnEvents)
+
+			// Build the list of events per column
 			columnEvents.forEach(({ event, displayProperties }, index) => {
 				const eventNode = (displayProperties: TimeGridDisplayProperties) => (
 					<EventNode<TEventResources>
@@ -107,6 +112,7 @@ const TimeGrid = <
 				if(event.allDay) {
 					result.allDayEvents.push(eventNode(displayProperties))
 				} else {
+					displayProperties.overlap = overlapCounts.get(index) ?? 0
 					result.standardEvents.push(eventNode(displayProperties))
 				}
 			})

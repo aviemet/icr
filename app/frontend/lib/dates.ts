@@ -1,5 +1,7 @@
 import dayjs from "dayjs"
 
+import { CalendarLocalizer, dayJsLocalizer } from "@/components/Calendar/lib/localizers"
+
 export const ensureDate = (value: unknown): Date => {
 	if(value instanceof Date) return dayjs(value).toDate()
 
@@ -13,4 +15,13 @@ export const ensureDate = (value: unknown): Date => {
 
 export const isDate = (value: unknown): value is Date => {
 	return value instanceof Date
+}
+
+type Duration = {
+	start: Date
+	end: Date
+}
+
+export const eventsOverlap = (eventA: Duration, eventB: Duration, localizer: CalendarLocalizer = dayJsLocalizer(dayjs)) => {
+	return localizer.isBefore(eventA.start, eventB.end) && localizer.isAfter(eventA.end, eventB.start)
 }

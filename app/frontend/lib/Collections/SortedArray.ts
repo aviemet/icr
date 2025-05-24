@@ -101,6 +101,10 @@ export class SortedArray<T> implements Iterable<T> {
 		return this.items[index]
 	}
 
+	has(index: number) {
+		return index >= 0 && index < this.items.length
+	}
+
 	delete(index: number) {
 		if(index < 0 || index >= this.items.length) {
 			throw new Error(`Index out of bounds: ${index}`)
