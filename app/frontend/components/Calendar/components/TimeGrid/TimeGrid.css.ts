@@ -151,3 +151,7 @@ export const timeGridEvent = css`
   grid-column: var(--column-start) / span var(--column-span);
   grid-row: var(--row-start) / span var(--row-span);
 `
+
+export const overlappingContainer = css`
+  display: grid;
+`

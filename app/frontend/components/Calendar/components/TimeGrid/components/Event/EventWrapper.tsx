@@ -29,6 +29,7 @@ const EventWrapper = <TEventResources extends EventResources, P extends TimeGrid
 				"--row-start": displayProperties.rowStart,
 				"--row-span": displayProperties.rowEnd - displayProperties.rowStart,
 				"--overlap-count": displayProperties.overlap || 0,
+				"--has-same-start": displayProperties.hasSameStart || false,
 				...style,
 			} as React.CSSProperties }
 		>

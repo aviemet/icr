@@ -77,8 +77,7 @@ const TimeGrid = <
 	const animationContainerRef = useRef<HTMLDivElement>(null)
 	const contentAreaRef = useRef<HTMLDivElement>(null)
 
-	// Separate all-day events from standard events to be
-	// rendered in different sections
+	// Separate all-day events from standard events to be rendered in different sections
 	const { allDayEvents, standardEvents } = useMemo(() => {
 		const result = {
 			allDayEvents: [] as React.ReactNode[],
@@ -112,7 +111,14 @@ const TimeGrid = <
 				if(event.allDay) {
 					result.allDayEvents.push(eventNode(displayProperties))
 				} else {
-					displayProperties.overlap = overlapCounts.get(index) ?? 0
+					// Inject overlap values to timed events
+					const overlapData = overlapCounts.get(index)
+					displayProperties.overlap = overlapData?.overlapCount ?? 0
+
+					if(overlapData?.sameStartCount && overlapData?.sameStartCount > 0) {
+						displayProperties.hasSameStart = overlapData.sameStartCount
+					}
+
 					result.standardEvents.push(eventNode(displayProperties))
 				}
 			})

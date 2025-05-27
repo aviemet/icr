@@ -6,6 +6,7 @@ export interface BaseDisplayProperties {
 	allDay?: boolean
 	className?: string
 	overlap?: number
+	hasSameStart?: number
 }
 
 export interface GridDisplayProperties extends BaseDisplayProperties {

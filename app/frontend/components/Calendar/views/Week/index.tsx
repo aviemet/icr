@@ -12,7 +12,7 @@ interface WeekViewProps<TEventResources extends EventResources> extends BaseView
 	style?: React.CSSProperties
 }
 
-const WeekViewComponent = <TEventResources extends EventResources>({ className, style }: WeekViewProps<TEventResources>) => {
+const WeekViewComponent = <TEventResources extends EventResources>({ className, style, displayStrategy }: WeekViewProps<TEventResources>) => {
 	const { date, localizer } = useCalendarContext<TEventResources>()
 
 	const columnHeadings = useMemo(() => {
@@ -23,6 +23,8 @@ const WeekViewComponent = <TEventResources extends EventResources>({ className, 
 		}))
 	}, [date, localizer])
 
+	const strategyClasses = (classes as Record<string, string>)[displayStrategy] || undefined
+
 	return (
 		<div className={ clsx(classes.weekView, className) } style={ style }>
 			<TimeGrid<TEventResources>
@@ -30,6 +32,7 @@ const WeekViewComponent = <TEventResources extends EventResources>({ className, 
 				columnHeadings={ columnHeadings }
 				startTime={ localizer.startOf(date, "day") }
 				endTime={ localizer.endOf(date, "day") }
+				className={ clsx(strategyClasses) }
 			/>
 		</div>
 	)

@@ -68,6 +68,10 @@ export class SortedArray<T> implements Iterable<T> {
 
 	// Array-like methods
 
+	get length() {
+		return this.items.length
+	}
+
 	push(item: T) {
 		this.items.push(item)
 		this.isSorted = false
@@ -124,10 +128,6 @@ export class SortedArray<T> implements Iterable<T> {
 		this.sort()
 
 		return this.items.map(callback)
-	}
-
-	get length() {
-		return this.items.length
 	}
 
 	filter(predicate: (value: T, index: number, array: T[]) => boolean) {
