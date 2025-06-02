@@ -10,11 +10,10 @@ import TimeColumn from "./components/TimeColumn"
 import { TimeIndicator } from "./components/TimeIndicator"
 import * as classes from "./TimeGrid.css"
 import { CalendarTransitionContainer } from "../../lib/CalendarTransitionContainer"
+import { useDisplayStrategy, ViewStrategyName } from "../../lib/displayStrategies"
 import {
-	useDisplayStrategy,
-	ViewStrategyName,
 	TimeGridDisplayProperties,
-} from "../../lib/displayStrategies"
+} from "../../lib/displayStrategies/types"
 
 export interface TimeGridHeading {
 	date: Date
@@ -81,10 +80,10 @@ const TimeGrid = <
 	const { allDayEvents, standardEvents } = useMemo(() => {
 		const result = {
 			allDayEvents: [] as React.ReactNode[],
-			standardEvents: [] as React.ReactNode[],
+			standardEvents: Array(columnHeadings.length).fill(null).map(() => [] as React.ReactNode[]),
 		}
 
-		columnHeadings.forEach((heading) => {
+		columnHeadings.forEach((heading, columnIndex) => {
 			const key = groupByResource && heading.resourceId !== undefined
 				? String(heading.resourceId)
 				: localizer.startOf(heading.date, "day").toISOString()
@@ -111,15 +110,12 @@ const TimeGrid = <
 				if(event.allDay) {
 					result.allDayEvents.push(eventNode(displayProperties))
 				} else {
-					// Inject overlap values to timed events
+					// Inject slotIndex and groupSize for timed events
 					const overlapData = overlapCounts.get(index)
-					displayProperties.overlap = overlapData?.overlapCount ?? 0
+					displayProperties.slotIndex = overlapData?.slotIndex ?? 0
+					displayProperties.groupSize = overlapData?.groupSize ?? 1
 
-					if(overlapData?.sameStartCount && overlapData?.sameStartCount > 0) {
-						displayProperties.hasSameStart = overlapData.sameStartCount
-					}
-
-					result.standardEvents.push(eventNode(displayProperties))
+					result.standardEvents[columnIndex].push(eventNode(displayProperties))
 				}
 			})
 		})
@@ -186,7 +182,26 @@ const TimeGrid = <
 						<TimeIndicator containerRef={ contentAreaRef } />
 
 						<div className={ clsx(classes.eventsContainer) }>
-							{ standardEvents }
+							{ columnHeadings.map((heading, columnIndex) => {
+								const key = groupByResource && heading.resourceId !== undefined
+									? String(heading.resourceId)
+									: localizer.startOf(heading.date, "day").toISOString()
+
+								const columnEvents = eventsByColumn?.get(key)
+								if(!columnEvents) return null
+
+								return (
+									<div
+										key={ key }
+										className={ clsx(classes.dayColumn) }
+										style={ {
+											gridColumn: columnIndex + 1,
+										} }
+									>
+										{ standardEvents[columnIndex] }
+									</div>
+								)
+							}) }
 						</div>
 					</div>
 				</CalendarTransitionContainer>

@@ -1,6 +1,9 @@
 import { css } from "@linaria/core"
 
+import { eventWrapper } from "./components/Event/Event.css"
+
 import { rem, vars } from "@/lib"
+
 
 const rowHeight = rem(60)
 const timeGridWidth = rem(50)
@@ -145,6 +148,16 @@ export const eventsContainer = css`
   grid-template-columns: repeat(var(--column-count, 7), 1fr);
   grid-template-rows: repeat(var(--rows-per-day, 48), ${ rowHeight });
 `
+
+export const dayColumn = css`
+  position: relative;
+  height: 100%;
+  grid-row: 1 / -1;
+
+  & .${ eventWrapper } {
+    position: absolute;
+  }
+ `
 
 export const timeGridEvent = css`
   width: calc(100% - ${ rem(8) });

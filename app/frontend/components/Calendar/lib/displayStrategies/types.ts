@@ -7,6 +7,9 @@ export interface BaseDisplayProperties {
 	className?: string
 	overlap?: number
 	hasSameStart?: number
+	index?: number
+	slotIndex?: number
+	groupSize?: number
 }
 
 export interface GridDisplayProperties extends BaseDisplayProperties {

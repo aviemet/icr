@@ -3,11 +3,11 @@ import { SortedArray } from "@/lib/Collections/SortedArray"
 
 import { EventResources } from ".."
 
-// Calculates overlap positions for timed events in a calendar column
+// Assigns slotIndex and groupSize for each event in a column
 export function assignEventOverlaps<TEventResources extends EventResources>(
 	columnEvents: SortedArray<EventDisplayDetails<TEventResources, TimeGridDisplayProperties>>
 ) {
-	const overlapData = new Map<number, { overlapCount: number, sameStartCount: number }>()
+	const overlapData = new Map<number, { slotIndex: number, groupSize: number }>()
 
 	// Build a simple array of event indices from the SortedArray object
 	const timedEventIndices: number[] = []
@@ -15,46 +15,41 @@ export function assignEventOverlaps<TEventResources extends EventResources>(
 		if(!eventObj?.event?.allDay) timedEventIndices.push(eventIndex)
 	})
 
-	timedEventIndices.forEach((timedEventIndex) => {
-		const { displayStart: currStart, displayEnd: currEnd } = columnEvents.get(timedEventIndex).displayProperties
+	// Sweep line algorithm
+	let group: number[] = []
+	let groupEnd: Date | null = null
 
-		// Track which overlap slots are already taken by other events
-		const overlappingSlots = new Set<number>()
-		let hasOverlap = false
-		let sameStartCount = 1
+	for(let i = 0; i < timedEventIndices.length; i++) {
+		const eventIndex = timedEventIndices[i]
+		const { displayStart, displayEnd } = columnEvents.get(eventIndex).displayProperties
 
-		timedEventIndices.forEach((innerTimedEventIndex) => {
-			if(timedEventIndex === innerTimedEventIndex) return
-
-			const { displayStart: otherStart, displayEnd: otherEnd } = columnEvents.get(innerTimedEventIndex).displayProperties
-
-			// Check if events overlap in time
-			if(currStart < otherEnd && currEnd > otherStart) {
-				hasOverlap = true
-
-				if(overlapData.has(innerTimedEventIndex)) {
-					overlappingSlots.add(overlapData.get(innerTimedEventIndex)!.overlapCount)
-				}
-			}
-
-			// Track events which start at the same time
-			if(currStart.getTime() === otherStart.getTime()) {
-				sameStartCount++
-			}
-		})
-
-		let overlapCount = 0
-		if(hasOverlap) {
-			overlapCount = 1
-			while(overlappingSlots.has(overlapCount)) overlapCount++
+		if(group.length === 0) {
+			group.push(eventIndex)
+			groupEnd = displayEnd
+			continue
 		}
 
-		overlapData.set(timedEventIndex, {
-			overlapCount,
-			sameStartCount: sameStartCount === 1 ? 0 : sameStartCount,
+		// If this event starts before the current group's end, it's overlapping
+		if(displayStart < groupEnd!) {
+			group.push(eventIndex)
+			// Extend the group end if this event ends later
+			if(displayEnd > groupEnd!) groupEnd = displayEnd
+		} else {
+			// Finalize the current group
+			group.forEach((idx, slotIndex) => {
+				overlapData.set(idx, { slotIndex, groupSize: group.length })
+			})
+			// Start a new group
+			group = [eventIndex]
+			groupEnd = displayEnd
+		}
+	}
+	// Finalize the last group
+	if(group.length > 0) {
+		group.forEach((idx, slotIndex) => {
+			overlapData.set(idx, { slotIndex, groupSize: group.length })
 		})
-
-	})
+	}
 
 	return overlapData
 }

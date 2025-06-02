@@ -25,6 +25,7 @@ export const EventNode = <TEventResources extends EventResources>({
 }: EventNodeProps<TEventResources>) => {
 	const { localizer } = useCalendarContext()
 
+
 	return (
 		<EventWrapper<TEventResources>
 			key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }

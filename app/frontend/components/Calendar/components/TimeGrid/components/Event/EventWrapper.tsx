@@ -12,11 +12,39 @@ interface EventWrapperProps<TEventResources extends EventResources, P extends Ti
 	displayProperties: P
 }
 
+function calculateWidth(groupSize: number) {
+	if(groupSize <= 1) return "calc(100% - 2px)"
+	return `calc(${100 / groupSize}% - 2px)`
+}
+
+function calculateLeft(groupSize: number, slotIndex: number) {
+	if(groupSize <= 1) return "0"
+	return `calc(${(100 / groupSize) * slotIndex}%)`
+}
+
 const EventWrapper = <TEventResources extends EventResources, P extends TimeGridDisplayProperties = TimeGridDisplayProperties>({
 	children,
+	event,
 	style,
 	displayProperties,
 }: EventWrapperProps<TEventResources, P>) => {
+	const groupSize = displayProperties.groupSize || 1
+	const slotIndex = displayProperties.slotIndex || 0
+
+	const cssVars = event.allDay
+		? {
+			"--column-start": displayProperties.columnStart,
+			"--column-span": displayProperties.columnSpan,
+			"--row-start": displayProperties.rowStart,
+			"--row-span": displayProperties.rowEnd - displayProperties.rowStart,
+		}
+		: {
+			top: `calc(${(displayProperties.rowStart - 1) * 100}% / var(--rows-per-day))`,
+			height: `calc((${(displayProperties.rowEnd - displayProperties.rowStart) * 100}% / var(--rows-per-day)) - 1px)`,
+			width: calculateWidth(groupSize),
+			left: calculateLeft(groupSize, slotIndex),
+		}
+
 	return (
 		<div
 			className={ clsx(
@@ -24,14 +52,9 @@ const EventWrapper = <TEventResources extends EventResources, P extends TimeGrid
 				displayProperties.className
 			) }
 			style={ {
-				"--column-start": displayProperties.columnStart,
-				"--column-span": displayProperties.columnSpan,
-				"--row-start": displayProperties.rowStart,
-				"--row-span": displayProperties.rowEnd - displayProperties.rowStart,
-				"--overlap-count": displayProperties.overlap || 0,
-				"--has-same-start": displayProperties.hasSameStart || false,
+				...cssVars,
 				...style,
-			} as React.CSSProperties }
+			} as unknown as React.CSSProperties }
 		>
 			{ children }
 		</div>

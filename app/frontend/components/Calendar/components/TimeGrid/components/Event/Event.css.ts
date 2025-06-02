@@ -14,6 +14,7 @@ export const eventWrapper = css`
           var(--event-color) 85%,
           white
         );
+
   overflow: hidden;
   margin: 1px;
   font-size: ${ vars.fontSizes.xs };
@@ -31,6 +32,9 @@ export const timeGridEvent = css`
   cursor: pointer;
   height: calc(100% - 2px);
   transition: background-color 200ms ease-in-out;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   &:hover {
     filter: brightness(0.9);
