@@ -222,6 +222,9 @@ The payroll settings system manages pay periods and overtime calculations:
   - `/pages`: Top-level Inertia pages (entry points for routes)
   - `/queries`: Async react-query methods
   - `/types`: Global types and interfaces
+- Components using `forwardRef` with generics define `forwardRef` directly in the component definition, not on the export
+  - Pattern: `const Component = forwardRef(<T extends Constraint>(props, ref) => { ... })`
+  - Avoids type casting and maintains proper generic type inference
 
 #### UI & Styling
 - Mantine component library

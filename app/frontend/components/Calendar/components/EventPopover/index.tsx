@@ -1,25 +1,27 @@
 import { Paper } from "@mantine/core"
 import clsx from "clsx"
-import React, { forwardRef, useState } from "react"
+import React, { useState } from "react"
 
 import { EventResources, BaseCalendarEvent } from "@/components/Calendar"
 import { vars } from "@/lib"
 import { useInit } from "@/lib/hooks"
 
-import { DefaultPopoverContent } from "./DefaultPopoverContent"
+import { EventDetails } from "./content/EventDetails"
 import * as classes from "./EventPopover.css"
 
-interface EventDetailsPopoverProps<TEventResources extends EventResources> {
+interface EventPopoverProps<TEventResources extends EventResources> {
 	event: BaseCalendarEvent<TEventResources>
 	position: { top: number, left: number }
 	children?: (event: BaseCalendarEvent<TEventResources>) => React.ReactNode
+	ref?: React.Ref<HTMLDivElement>
 }
 
-function EventDetailsPopover<TEventResources extends EventResources>(
-	props: EventDetailsPopoverProps<TEventResources>,
-	ref: React.ForwardedRef<HTMLDivElement | null>
-) {
-	const { event, position, children } = props
+export function EventPopover<TEventResources extends EventResources>({
+	event,
+	position,
+	children,
+	ref,
+}: EventPopoverProps<TEventResources>) {
 	const [isEntering, setIsEntering] = useState(true)
 
 	useInit(() => {
@@ -49,12 +51,8 @@ function EventDetailsPopover<TEventResources extends EventResources>(
 				style={ { borderTop: `4px solid ${color}` } }
 				shadow="sm"
 			>
-				{ children ? children(event) : <DefaultPopoverContent event={ event } /> }
+				{ children ? children(event) : <EventDetails event={ event } /> }
 			</Paper>
 		</div>
 	)
 }
-
-export default forwardRef(EventDetailsPopover) as <TEventResources extends EventResources>(
-	props: EventDetailsPopoverProps<TEventResources> & { ref?: React.ForwardedRef<HTMLDivElement | null> }
-) => JSX.Element

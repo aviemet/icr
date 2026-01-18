@@ -1,5 +1,5 @@
-import { useClickOutside, useDisclosure } from "@mantine/hooks"
-import { useCallback, useLayoutEffect, useState } from "react"
+import { useDisclosure } from "@mantine/hooks"
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 
 import { EventResources, BaseCalendarEvent } from "@/components/Calendar"
 
@@ -12,7 +12,7 @@ interface UseEventPopoverReturn<TEventResources extends EventResources> {
 	popoverOpen: boolean
 	selectedEvent: BaseCalendarEvent<TEventResources> | null
 	popoverPosition: PopoverPosition | null
-	popoverRef: React.RefObject<HTMLDivElement | null>
+	popoverRef: React.RefObject<HTMLDivElement>
 	handleEventClick: (event: BaseCalendarEvent<TEventResources>, element: HTMLElement) => void
 }
 
@@ -22,7 +22,29 @@ const useEventPopover = <TEventResources extends EventResources>(): UseEventPopo
 	const [clickedElement, setClickedElement] = useState<HTMLElement | null>(null)
 
 	const [opened, { close, open }] = useDisclosure(false)
-	const popoverRef = useClickOutside<HTMLDivElement>(close)
+	const popoverRef = useRef<HTMLDivElement>(null)
+
+	useEffect(() => {
+		if(!opened) return
+
+		const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+			if(
+				popoverRef.current &&
+				event.target instanceof Node &&
+				!popoverRef.current.contains(event.target)
+			) {
+				close()
+			}
+		}
+
+		document.addEventListener("mousedown", handleClickOutside)
+		document.addEventListener("touchstart", handleClickOutside)
+
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside)
+			document.removeEventListener("touchstart", handleClickOutside)
+		}
+	}, [opened, close])
 
 	const closePopover = useCallback(() => {
 		close()

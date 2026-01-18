@@ -11,7 +11,7 @@ import { usePageProps } from "@/lib/hooks"
 
 import * as classes from "./Calendar.css"
 import { ErrorBoundary } from "../ErrorBoundary"
-import EventDetailsPopover from "./components/EventPopover"
+import { EventPopover } from "./components/EventPopover"
 import { useEventPopover } from "./components/EventPopover/useEventPopover"
 import { StrategyNameMap } from "./lib/displayStrategies"
 import { VIEWS, VIEW_NAMES, NAVIGATION_ACTION, viewComponents } from "./views"
@@ -165,38 +165,34 @@ const Calendar = <TEventResources extends EventResources>({
 
 	return (
 		<Box className={ clsx(classes.calendarOuterContainer) } style={ { minHeight } }>
-			<ErrorBoundary>
-				<CalendarProvider<TEventResources> value={ calendarProviderState }>
-					<Toolbar ref={ toolbarRef } views={ views } view={ currentView } />
+			<CalendarProvider<TEventResources> value={ calendarProviderState }>
+				<Toolbar ref={ toolbarRef } views={ views } view={ currentView } />
 
-					<div className={ clsx(classes.calendar) }>
-						<div className={ clsx(classes.calendarInnerContainer) }>
-							<ErrorBoundary>
-								<ViewComponent
-									displayStrategy={ localDisplayStrategies[currentView] }
-									onSelectSlot={ handleSelectSlot }
-								/>
-							</ErrorBoundary>
-						</div>
-
-						{ /* Overlay - Rendered when popover is open */ }
-						{ popoverOpen && <Overlay opacity={ 0 } /> }
+				<div className={ clsx(classes.calendar) }>
+					<div className={ clsx(classes.calendarInnerContainer) }>
+						<ViewComponent
+							displayStrategy={ localDisplayStrategies[currentView] }
+							onSelectSlot={ handleSelectSlot }
+						/>
 					</div>
 
+					{ /* Overlay - Rendered when popover is open */ }
+					{ popoverOpen && <Overlay opacity={ 0 } /> }
+				</div>
 
-					{ /* Event Details Popover */ }
-					{ popoverOpen && selectedEvent && popoverPosition && localLocalizer && (
-						<EventDetailsPopover<TEventResources>
-							ref={ popoverRef }
-							event={ selectedEvent }
-							position={ popoverPosition }
-						>
-							{ eventPopoverContent && ((event) => eventPopoverContent(event, localLocalizer)) }
-						</EventDetailsPopover>
-					) }
 
-				</CalendarProvider>
-			</ErrorBoundary>
+				{ /* Event Details Popover */ }
+				{ popoverOpen && selectedEvent && popoverPosition && localLocalizer && (
+					<EventPopover<TEventResources>
+						ref={ popoverRef }
+						event={ selectedEvent }
+						position={ popoverPosition }
+					>
+						{ eventPopoverContent && ((event) => eventPopoverContent(event, localLocalizer)) }
+					</EventPopover>
+				) }
+
+			</CalendarProvider>
 		</Box>
 	)
 }

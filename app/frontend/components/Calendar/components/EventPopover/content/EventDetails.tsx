@@ -4,13 +4,13 @@ import clsx from "clsx"
 import { useCalendarContext, EventResources, BaseCalendarEvent } from "@/components/Calendar"
 import { vars } from "@/lib"
 
-import * as classes from "./EventPopover.css"
+import * as classes from "../EventPopover.css"
 
-interface DefaultPopoverContentProps<TEventResources extends EventResources> {
+interface EventDetailsProps<TEventResources extends EventResources> {
 	event: BaseCalendarEvent<TEventResources>
 }
 
-const DefaultPopoverContent = <TEventResources extends EventResources>({ event }: DefaultPopoverContentProps<TEventResources>) => {
+const EventDetails = <TEventResources extends EventResources>({ event }: EventDetailsProps<TEventResources>) => {
 	const { localizer } = useCalendarContext<TEventResources>()
 	const color = event.color || vars.colors.primaryColors.filled
 
@@ -55,4 +55,4 @@ const DefaultPopoverContent = <TEventResources extends EventResources>({ event }
 	)
 }
 
-export { DefaultPopoverContent }
+export { EventDetails }
