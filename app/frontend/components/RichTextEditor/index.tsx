@@ -4,9 +4,10 @@ import SubScript from "@tiptap/extension-subscript"
 import Superscript from "@tiptap/extension-superscript"
 import TextAlign from "@tiptap/extension-text-align"
 import Underline from "@tiptap/extension-underline"
-import { useEditor, BubbleMenu, FloatingMenu } from "@tiptap/react"
+import { useEditor } from "@tiptap/react"
+import { BubbleMenu, FloatingMenu } from "@tiptap/react/menus"
 import StarterKit from "@tiptap/starter-kit"
-import React, { forwardRef } from "react"
+import { forwardRef } from "react"
 
 import { DEFAULT_LABELS } from "./tiptapLabels"
 

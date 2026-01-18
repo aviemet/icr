@@ -252,6 +252,7 @@ The payroll settings system manages pay periods and overtime calculations:
 - Use generics, Records, and Mapped types before inline types
 - Type assertions as last resort
 - Auto-generated types for serializers
+- TypeScript configuration uses `moduleResolution: "bundler"` to support subpath exports (e.g., `@tiptap/react/menus`)
 
 #### Internationalization (i18n)
 - Using react-i18next for frontend translations
@@ -286,6 +287,12 @@ The payroll settings system manages pay periods and overtime calculations:
 - Proper useEffect cleanup
 - Memoized expensive computations
 - Minimal global state
+
+#### TipTap Integration
+- Using TipTap v3.14.0 for rich text editing
+- Menu components (`BubbleMenu`, `FloatingMenu`) must be imported from `@tiptap/react/menus`, not `@tiptap/react`
+- Core editor hooks (`useEditor`) imported from `@tiptap/react`
+- Mantine TipTap integration via `@mantine/tiptap` v8.3.10
 
 ## Payroll Periods
 

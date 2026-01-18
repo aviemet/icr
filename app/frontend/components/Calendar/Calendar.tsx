@@ -11,10 +11,10 @@ import { usePageProps } from "@/lib/hooks"
 
 import * as classes from "./Calendar.css"
 import { ErrorBoundary } from "../ErrorBoundary"
-import EventDetailsPopover from "./components/EventDetailsPopover"
-import { useEventPopover } from "./components/EventDetailsPopover/useEventPopover"
-import { StrategyNameMap, ViewStrategyName } from "./lib/displayStrategies"
-import { getViewComponent, VIEWS, VIEW_NAMES, NAVIGATION_ACTION } from "./views"
+import EventDetailsPopover from "./components/EventPopover"
+import { useEventPopover } from "./components/EventPopover/useEventPopover"
+import { StrategyNameMap } from "./lib/displayStrategies"
+import { VIEWS, VIEW_NAMES, NAVIGATION_ACTION, viewComponents } from "./views"
 
 export interface CalendarProps<TEventResources extends EventResources = EventResources> {
 	defaultDate?: Date
@@ -104,7 +104,8 @@ const Calendar = <TEventResources extends EventResources>({
 	/**
 	 * Dynamically load the currently chosen calendar view type
 	 */
-	const ViewComponent = useMemo(() => getViewComponent<TEventResources, typeof currentView>(currentView), [currentView])
+	// const ViewComponent = useMemo(() => getViewComponent<TEventResources, typeof currentView>(currentView), [currentView])
+	const ViewComponent = viewComponents[currentView]
 
 	const handleViewChange = useCallback((view: VIEW_NAMES) => {
 		setCurrentView(view)
@@ -141,7 +142,7 @@ const Calendar = <TEventResources extends EventResources>({
 	const calendarProviderState = useMemo<CalendarContext<TEventResources>>(() => ({
 		date,
 		events,
-		localizer: localLocalizer as CalendarLocalizer,
+		localizer: localLocalizer,
 		handleViewChange,
 		handleDateChange,
 		onEventClick: handleEventClick,
@@ -162,8 +163,6 @@ const Calendar = <TEventResources extends EventResources>({
 		prevDateRef,
 	])
 
-	if(!localLocalizer) return <></>
-
 	return (
 		<Box className={ clsx(classes.calendarOuterContainer) } style={ { minHeight } }>
 			<ErrorBoundary>
@@ -174,7 +173,7 @@ const Calendar = <TEventResources extends EventResources>({
 						<div className={ clsx(classes.calendarInnerContainer) }>
 							<ErrorBoundary>
 								<ViewComponent
-									displayStrategy={ localDisplayStrategies[currentView] as ViewStrategyName<typeof currentView> }
+									displayStrategy={ localDisplayStrategies[currentView] }
 									onSelectSlot={ handleSelectSlot }
 								/>
 							</ErrorBoundary>

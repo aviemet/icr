@@ -1,12 +1,13 @@
 import { Paper } from "@mantine/core"
 import clsx from "clsx"
-import React, { forwardRef, useEffect, useState } from "react"
+import React, { forwardRef, useState } from "react"
 
 import { EventResources, BaseCalendarEvent } from "@/components/Calendar"
 import { vars } from "@/lib"
+import { useInit } from "@/lib/hooks"
 
 import { DefaultPopoverContent } from "./DefaultPopoverContent"
-import * as classes from "./EventDetailsPopover.css"
+import * as classes from "./EventPopover.css"
 
 interface EventDetailsPopoverProps<TEventResources extends EventResources> {
 	event: BaseCalendarEvent<TEventResources>
@@ -21,14 +22,15 @@ function EventDetailsPopover<TEventResources extends EventResources>(
 	const { event, position, children } = props
 	const [isEntering, setIsEntering] = useState(true)
 
-	useEffect(() => {
-		setIsEntering(true)
-		const timer = setTimeout(() => {
-			setIsEntering(false)
-		}, 10)
+	useInit(() => {
+		if(isEntering) {
+			const timer = setTimeout(() => {
+				setIsEntering(false)
+			}, 10)
 
-		return () => clearTimeout(timer)
-	}, [])
+			return () => clearTimeout(timer)
+		}
+	})
 
 	const color = event.color || vars.colors.primaryColors.filled
 

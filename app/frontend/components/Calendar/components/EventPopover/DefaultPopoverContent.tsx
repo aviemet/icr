@@ -4,7 +4,7 @@ import clsx from "clsx"
 import { useCalendarContext, EventResources, BaseCalendarEvent } from "@/components/Calendar"
 import { vars } from "@/lib"
 
-import * as classes from "./EventDetailsPopover.css"
+import * as classes from "./EventPopover.css"
 
 interface DefaultPopoverContentProps<TEventResources extends EventResources> {
 	event: BaseCalendarEvent<TEventResources>

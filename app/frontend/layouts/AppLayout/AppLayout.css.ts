@@ -8,6 +8,7 @@ import { vars, theme } from "@/lib/theme"
 export const wrapper = css`
 	overflow: auto;
 	height: calc(100vh - ${ theme.other.footer.height }px);
+	padding: ${vars.spacing.xs};
 `
 
 /**

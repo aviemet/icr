@@ -2,7 +2,7 @@ import { FloatingIndicator, Portal } from "@mantine/core"
 import clsx from "clsx"
 import { useState } from "react"
 
-import { Box, Paper } from "@/components"
+import { Box, Paper, Container } from "@/components"
 import { Routes } from "@/lib"
 import { useLocation } from "@/lib/hooks"
 
@@ -43,38 +43,40 @@ const SettingsLayout = ({ children }: SettingsLayoutProps) => {
 	return (
 		<AppLayout>
 			<Portal target="#above-content-portal">
-				<Paper
-					ref={ setRootRef }
-					withBorder
-					component="nav"
-					shadow="xs"
-					p="sm"
-					m="sm"
-					className={ clsx(classes.settingsLayout) }
-				>
-					{ links.map((link, index) => (
-						<SettingsNavLink
-							ref={ setControlRef(index) }
-							key={ link.label }
-							href={ link.href }
-							onClick={ () => handleNavLinkClick(index) }
-							className={ clsx("control") }
-							mod={ { active: active === index } }
-						>
-							{ link.label }
-						</SettingsNavLink>
-					)) }
+				<Container>
+					<Paper
+						ref={ setRootRef }
+						withBorder
+						component="nav"
+						shadow="xs"
+						className={ clsx(classes.settingsLayout) }
+					>
+						{ links.map((link, index) => (
+							<SettingsNavLink
+								ref={ setControlRef(index) }
+								key={ link.label }
+								href={ link.href }
+								onClick={ () => handleNavLinkClick(index) }
+								className={ clsx("control") }
+								mod={ { active: active === index } }
+							>
+								{ link.label }
+							</SettingsNavLink>
+						)) }
 
-					<FloatingIndicator
-						target={ controlsRefs[active] }
-						parent={ rootRef }
-						className={ clsx("indicator") }
-					/>
+						<FloatingIndicator
+							target={ controlsRefs[active] }
+							parent={ rootRef }
+							className={ clsx("indicator") }
+						/>
 
-				</Paper>
+					</Paper>
+				</Container>
 			</Portal>
 			<Box>
-				{ children }
+				<Container>
+					{ children }
+				</Container>
 			</Box>
 		</AppLayout>
 	)

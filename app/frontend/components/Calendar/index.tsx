@@ -14,7 +14,7 @@ export type EventResources = Record<string, object>
 export interface BaseCalendarEvent<TEventResources extends EventResources = EventResources> {
 	id: string | number
 	title: string
-	titleBuilder?: CalendarEventTitleCallback<TEventResources>
+	titleBuilder?: CalendarEventTitleCallback
 	start: Date
 	end: Date
 	allDay?: boolean

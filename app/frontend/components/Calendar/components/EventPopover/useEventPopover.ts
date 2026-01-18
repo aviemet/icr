@@ -78,6 +78,8 @@ const useEventPopover = <TEventResources extends EventResources>(): UseEventPopo
 		}
 	}, [closePopover])
 
+	const pagePadding = 28
+
 	// Adjust popover position if near viewport edges
 	useLayoutEffect(() => {
 		if(opened && popoverRef.current && popoverPosition && clickedElement) {
@@ -119,16 +121,16 @@ const useEventPopover = <TEventResources extends EventResources>(): UseEventPopo
 			let left = eventRect.left + (eventRect.width / 2) - (popoverRect.width / 2) + scrollLeft
 
 			// Ensure horizontal bounds
-			if(left < scrollLeft + 10) {
-				left = scrollLeft + 10
+			if(left < scrollLeft + pagePadding) {
+				left = scrollLeft + pagePadding
 			}
-			if(left + popoverRect.width > viewportWidth + scrollLeft - 10) {
-				left = viewportWidth + scrollLeft - popoverRect.width - 10
+			if(left + popoverRect.width > viewportWidth + scrollLeft - pagePadding) {
+				left = viewportWidth + scrollLeft - popoverRect.width - pagePadding
 			}
 
 			// Update position if calculated values differ from current state
 			if(popoverPosition.top !== top || popoverPosition.left !== left) {
-				setPopoverPosition({ top, left })
+				setPopoverPosition(() => ({ top, left }))
 			}
 		}
 	}, [opened, popoverPosition, popoverRef, clickedElement])
