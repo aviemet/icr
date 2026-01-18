@@ -4,7 +4,7 @@ import { MonthStackStrategy } from "./stack"
 
 export { MonthSpanStrategy, MonthSplitStrategy, MonthStackStrategy }
 
-const monthDisplayStrategies = {
+export const monthDisplayStrategies = {
 	span: MonthSpanStrategy,
 	split: MonthSplitStrategy,
 	stack: MonthStackStrategy,
