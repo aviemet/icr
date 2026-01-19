@@ -12,6 +12,7 @@ import * as classes from "./EventPopover.css"
 interface EventPopoverProps<TEventResources extends EventResources> {
 	event: BaseCalendarEvent<TEventResources>
 	position: { top: number, left: number }
+	className: string
 	children?: (event: BaseCalendarEvent<TEventResources>) => React.ReactNode
 	ref?: React.Ref<HTMLDivElement>
 }
@@ -19,19 +20,20 @@ interface EventPopoverProps<TEventResources extends EventResources> {
 export function EventPopover<TEventResources extends EventResources>({
 	event,
 	position,
+	className,
 	children,
 	ref,
 }: EventPopoverProps<TEventResources>) {
 	const [isEntering, setIsEntering] = useState(true)
 
 	useInit(() => {
-		if(isEntering) {
-			const timer = setTimeout(() => {
-				setIsEntering(false)
-			}, 10)
+		if(!isEntering) return
 
-			return () => clearTimeout(timer)
-		}
+		const timer = setTimeout(() => {
+			setIsEntering(false)
+		}, 10)
+
+		return () => clearTimeout(timer)
 	})
 
 	const color = event.color || vars.colors.primaryColors.filled
@@ -39,7 +41,7 @@ export function EventPopover<TEventResources extends EventResources>({
 	return (
 		<div
 			ref={ ref }
-			className={ clsx(classes.container) }
+			className={ clsx(className, classes.container) }
 			data-entering={ isEntering || undefined }
 			style={ {
 				top: `${position.top}px`,

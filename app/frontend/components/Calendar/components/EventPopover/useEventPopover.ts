@@ -8,17 +8,19 @@ interface PopoverPosition {
 	left: number
 }
 
+const defaultPopoverPosition = { top: 0, left: 0 }
+
 interface UseEventPopoverReturn<TEventResources extends EventResources> {
 	popoverOpen: boolean
 	selectedEvent: BaseCalendarEvent<TEventResources> | null
-	popoverPosition: PopoverPosition | null
+	popoverPosition: PopoverPosition
 	popoverRef: React.RefObject<HTMLDivElement>
 	handleEventClick: (event: BaseCalendarEvent<TEventResources>, element: HTMLElement) => void
 }
 
 const useEventPopover = <TEventResources extends EventResources>(): UseEventPopoverReturn<TEventResources> => {
 	const [selectedEvent, setSelectedEvent] = useState<BaseCalendarEvent<TEventResources> | null>(null)
-	const [popoverPosition, setPopoverPosition] = useState<PopoverPosition | null>(null)
+	const [popoverPosition, setPopoverPosition] = useState<PopoverPosition>(defaultPopoverPosition)
 	const [clickedElement, setClickedElement] = useState<HTMLElement | null>(null)
 
 	const [opened, { close, open }] = useDisclosure(false)
@@ -49,7 +51,7 @@ const useEventPopover = <TEventResources extends EventResources>(): UseEventPopo
 	const closePopover = useCallback(() => {
 		close()
 		setSelectedEvent(null)
-		setPopoverPosition(null)
+		// setPopoverPosition(defaultPopoverPosition)
 		setClickedElement(null)
 	}, [close])
 
@@ -104,7 +106,7 @@ const useEventPopover = <TEventResources extends EventResources>(): UseEventPopo
 
 	// Adjust popover position if near viewport edges
 	useLayoutEffect(() => {
-		if(opened && popoverRef.current && popoverPosition && clickedElement) {
+		if(opened && popoverRef.current && clickedElement) {
 			const popoverRect = popoverRef.current.getBoundingClientRect()
 			const viewportWidth = window.innerWidth
 			const viewportHeight = window.innerHeight
