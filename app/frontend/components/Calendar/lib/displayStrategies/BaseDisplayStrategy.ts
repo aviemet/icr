@@ -4,7 +4,7 @@ import { EventResources, BaseCalendarEvent } from "@/components/Calendar"
 import { SortedArray } from "@/lib/Collections/SortedArray"
 
 import { CalendarLocalizer } from "../localizers"
-import { EventDisplayDetails, TimeGridDisplayProperties } from "./types"
+import { EventDisplayDetails, TimeGridDisplayProperties, BaseDisplayProperties } from "./types"
 import { TimeGridHeading } from "../../components/TimeGrid"
 import { VIEW_NAMES } from "../../views"
 
@@ -18,7 +18,7 @@ export interface StrategyConfig {
 
 export abstract class BaseDisplayStrategy<
 	TEventResources extends EventResources,
-	P extends TimeGridDisplayProperties = TimeGridDisplayProperties
+	P extends BaseDisplayProperties = TimeGridDisplayProperties
 > {
 	protected config: StrategyConfig
 

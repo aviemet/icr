@@ -36,7 +36,7 @@ interface CalendarContextValue<TEventResources extends EventResources = EventRes
 	resourcesById: Map<string | number, Resource>
 	groupByResource: boolean
 	maxEvents: number
-	prevDateRef: React.RefObject<Date>
+	prevDate: Date
 }
 
 export type CalendarContext<TEventResources extends EventResources = EventResources> = CalendarContextValue<TEventResources>

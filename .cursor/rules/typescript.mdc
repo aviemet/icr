@@ -5,6 +5,19 @@ alwaysApply: false
 ---
 You are an expert in TypeScript, Node.js, Vite, Vitest, Inertia.js, React, Mantine, TanStack Query, CSS, HTML, UI and UX.
 
+### TypeScript Usage
+
+- Use TypeScript for all javascript code; prefer interfaces over types.
+- Write concise, technical TypeScript code with accurate examples.
+- Avoid enums; use maps instead.
+- Use functional components with TypeScript interfaces.
+- Apply generics to functions, actions, and slices where type flexibility is needed.
+- Utilize TypeScript utility types (Partial, Pick, Omit) for cleaner and reusable code.
+- Prefer interface over type for defining object structures, especially when extending.
+- Use mapped types for creating variations of existing types dynamically.
+- DO NOT USE `any`, ever! If a specific type definition can't be derived, use `unknown`, but only as a last resort.
+- DO NOT USE typecasting to bypass type warnings! Types should be derived from usage, not overridden. The only accepatable use of `as` is when defining lists using `as const`
+
 ## Code Style and Structure
 
 - Use functional and declarative programming patterns; avoid classes.
@@ -19,19 +32,6 @@ You are an expert in TypeScript, Node.js, Vite, Vitest, Inertia.js, React, Manti
   - /app/frontend/Pages for all top-level Inertia pages. These components are the entry point for each route from the server.
   - /app/frontend/queries for all async react-query methods, following the convention and type definitions in /app/frontend/queries/index.ts.
   - /app/frontend/types for any globally used types or interfaces, or any custom types used in serializers. (Do no modify anything in types/serializers as it is all auto generated)
-
-  ### TypeScript Usage
-
-  - Use TypeScript for all javascript code; prefer interfaces over types.
-  - Write concise, technical TypeScript code with accurate examples.
-  - Avoid enums; use maps instead.
-  - Use functional components with TypeScript interfaces.
-  - Apply generics to functions, actions, and slices where type flexibility is needed.
-  - Utilize TypeScript utility types (Partial, Pick, Omit) for cleaner and reusable code.
-  - Prefer interface over type for defining object structures, especially when extending.
-  - Use mapped types for creating variations of existing types dynamically.
-  - DO NOT USE `any`, ever! If a specific type definition can't be derived, use `unknown`, but only as a last resort.
-  - DO NOT USE typecasting to bypass type warnings! Types should be derived from usage, not overridden. The only accepatable use of `as` is when defining lists using `as const`
 
   ### React Component Architecture
 
@@ -50,6 +50,7 @@ You are an expert in TypeScript, Node.js, Vite, Vitest, Inertia.js, React, Manti
   - Implement proper key props in lists (avoid using index as key).
   
   ### Variable and Function Naming Patterns
+
   - Prefix event handlers with 'handle': handleClick, handleSubmit
   - Prefix boolean variables with verbs: isLoading, hasError, canSubmit
   - Prefix custom hooks with 'use': useAuth, useForm
@@ -106,7 +107,7 @@ You are an expert in TypeScript, Node.js, Vite, Vitest, Inertia.js, React, Manti
 - Follow a logical heading hierarchy.
 - Make all interactive elements accessible.
 - Provide clear and accessible error feedback.
- 
+
 ## Internationalization (i18n)
 
 - Use next-i18next to load translations in components.
@@ -135,4 +136,3 @@ You are an expert in TypeScript, Node.js, Vite, Vitest, Inertia.js, React, Manti
 - Minimize 'useEffect', and 'setState'.
 - Wrap client components in Suspense with fallback.
 - Optimize images: use WebP format, include size data, implement lazy loading.
-

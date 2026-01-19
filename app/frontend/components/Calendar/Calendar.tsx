@@ -10,11 +10,14 @@ import { hasUniqueValues } from "@/lib/collections"
 import { usePageProps } from "@/lib/hooks"
 
 import * as classes from "./Calendar.css"
-import { ErrorBoundary } from "../ErrorBoundary"
 import { EventPopover } from "./components/EventPopover"
 import { useEventPopover } from "./components/EventPopover/useEventPopover"
-import { StrategyNameMap } from "./lib/displayStrategies"
+import { ViewStrategyName } from "./lib/displayStrategies"
 import { VIEWS, VIEW_NAMES, NAVIGATION_ACTION, viewComponents } from "./views"
+
+type DisplayStrategyMap = {
+	[K in VIEW_NAMES]: ViewStrategyName<K>
+}
 
 export interface CalendarProps<TEventResources extends EventResources = EventResources> {
 	defaultDate?: Date
@@ -22,7 +25,7 @@ export interface CalendarProps<TEventResources extends EventResources = EventRes
 	events: BaseCalendarEvent<TEventResources>[]
 	localizer?: CalendarLocalizer
 	views?: readonly VIEW_NAMES[]
-	displayStrategies?: Partial<StrategyNameMap>
+	displayStrategies?: Partial<DisplayStrategyMap>
 	onNavigate?: (newDate: Date, action: NAVIGATION_ACTION, view: VIEW_NAMES) => void
 	onViewChange?: (view: VIEW_NAMES) => void
 	eventPopoverContent?: (event: BaseCalendarEvent<TEventResources>, localizer: CalendarLocalizer) => React.ReactNode
@@ -50,7 +53,7 @@ const Calendar = <TEventResources extends EventResources>({
 	const localLocalizer = useDefaultLocalizer(localizer)
 
 	const [date, setDate] = useState<Date>(defaultDate || new Date())
-	const prevDateRef = useRef<Date>(date) // Track previous date for animation direction
+	const [prevDate, setPrevDate] = useState<Date>(date)
 	const [currentView, setCurrentView] = useState<VIEW_NAMES>(defaultView)
 
 	const {
@@ -66,12 +69,13 @@ const Calendar = <TEventResources extends EventResources>({
 	 */
 	const { settings: { calendar_layout_style } } = usePageProps()
 
-	const localDisplayStrategies = useMemo(() => Object.assign({
-		month: calendar_layout_style ?? "overlap",
+	const localDisplayStrategies = useMemo((): DisplayStrategyMap => ({
+		month: calendar_layout_style ?? "split",
 		week: "overlap",
 		day: "overlap",
-		agenda: "stack",
-	}, displayStrategies), [calendar_layout_style, displayStrategies])
+		agenda: "overlap",
+		...displayStrategies,
+	}), [calendar_layout_style, displayStrategies])
 
 	/**
 	 * Collect resources for building headings
@@ -127,7 +131,7 @@ const Calendar = <TEventResources extends EventResources>({
 			}
 		)
 
-		prevDateRef.current = date
+		setPrevDate(date)
 		setDate(nextDate)
 
 		onNavigate?.(nextDate, action, currentView)
@@ -149,7 +153,7 @@ const Calendar = <TEventResources extends EventResources>({
 		resourcesById,
 		groupByResource,
 		maxEvents,
-		prevDateRef,
+		prevDate,
 	}), [
 		date,
 		events,
@@ -160,7 +164,7 @@ const Calendar = <TEventResources extends EventResources>({
 		resourcesById,
 		groupByResource,
 		maxEvents,
-		prevDateRef,
+		prevDate,
 	])
 
 	return (

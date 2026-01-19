@@ -5,7 +5,7 @@ import { AgendaView } from "./Agenda"
 import { DayView } from "./Day"
 import { MonthView } from "./Month"
 import { WeekView } from "./Week"
-import { ViewStrategyName, DisplayStrategyFactories } from "../lib/displayStrategies"
+import { ViewStrategyName, DisplayStrategyClasses } from "../lib/displayStrategies"
 import { BaseDisplayProperties } from "../lib/displayStrategies/types"
 
 export const VIEWS = {
@@ -32,7 +32,7 @@ export type ViewTitleBuilder<TEventResources extends EventResources> = (
 export interface BaseViewProps<TEventResources extends EventResources = EventResources, V extends VIEW_NAMES = VIEW_NAMES> {
 	className?: string
 	style?: React.CSSProperties
-	displayStrategy: V extends keyof DisplayStrategyFactories ? ViewStrategyName<V> : never
+	displayStrategy: V extends keyof DisplayStrategyClasses ? ViewStrategyName<V> : never
 	onSelectSlot?: (date: Date) => void
 	titleBuilder?: ViewTitleBuilder<TEventResources>
 }
