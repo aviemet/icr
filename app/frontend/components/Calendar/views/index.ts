@@ -33,7 +33,6 @@ export interface BaseViewProps<TEventResources extends EventResources = EventRes
 	className?: string
 	style?: React.CSSProperties
 	displayStrategy: V extends keyof DisplayStrategyClasses ? ViewStrategyName<V> : never
-	onSelectSlot?: (date: Date) => void
 	titleBuilder?: ViewTitleBuilder<TEventResources>
 }
 

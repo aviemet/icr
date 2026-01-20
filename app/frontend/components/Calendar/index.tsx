@@ -26,13 +26,17 @@ export interface BaseCalendarEvent<TEventResources extends EventResources = Even
 
 export type CalendarEventTitleCallback<TEventResources extends EventResources = EventResources> = (event: Pick<BaseCalendarEvent<TEventResources>, "start" | "end" | "allDay" | "title" | "resources" | "resourceId">) => string
 
+export type CalendarClickTarget<TEventResources extends EventResources = EventResources> =
+	| { type: "event", event: BaseCalendarEvent<TEventResources>, element: HTMLElement }
+	| { type: "background", date: Date, time?: Date, resourceId?: string | number, element: HTMLElement }
+
 interface CalendarContextValue<TEventResources extends EventResources = EventResources> {
 	date: Date
 	events: BaseCalendarEvent<TEventResources>[]
 	localizer: CalendarLocalizer
 	handleViewChange: (view: VIEW_NAMES) => void
 	handleDateChange: (action: NAVIGATION_ACTION, newDate?: Date) => void
-	onEventClick: (event: BaseCalendarEvent<TEventResources>, element: HTMLElement) => void
+	onClick: (target: CalendarClickTarget<TEventResources>) => void
 	resourcesById: Map<string | number, Resource>
 	groupByResource: boolean
 	maxEvents: number

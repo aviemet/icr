@@ -1,7 +1,7 @@
 import { useDisclosure } from "@mantine/hooks"
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 
-import { EventResources, BaseCalendarEvent } from "@/components/Calendar"
+import { EventResources, CalendarClickTarget } from "@/components/Calendar"
 
 interface PopoverPosition {
 	top: number
@@ -10,16 +10,17 @@ interface PopoverPosition {
 
 const defaultPopoverPosition = { top: 0, left: 0 }
 
-interface UseEventPopoverReturn<TEventResources extends EventResources> {
+interface UseCalendarPopoverReturn<TEventResources extends EventResources> {
 	popoverOpen: boolean
-	selectedEvent: BaseCalendarEvent<TEventResources> | null
+	target: CalendarClickTarget<TEventResources> | null
 	popoverPosition: PopoverPosition
 	popoverRef: React.RefObject<HTMLDivElement>
-	handleEventClick: (event: BaseCalendarEvent<TEventResources>, element: HTMLElement) => void
+	handleClick: (target: CalendarClickTarget<TEventResources>) => void
+	close: () => void
 }
 
-const useEventPopover = <TEventResources extends EventResources>(): UseEventPopoverReturn<TEventResources> => {
-	const [selectedEvent, setSelectedEvent] = useState<BaseCalendarEvent<TEventResources> | null>(null)
+const useCalendarPopover = <TEventResources extends EventResources>(): UseCalendarPopoverReturn<TEventResources> => {
+	const [target, setTarget] = useState<CalendarClickTarget<TEventResources> | null>(null)
 	const [popoverPosition, setPopoverPosition] = useState<PopoverPosition>(defaultPopoverPosition)
 	const [clickedElement, setClickedElement] = useState<HTMLElement | null>(null)
 
@@ -50,45 +51,36 @@ const useEventPopover = <TEventResources extends EventResources>(): UseEventPopo
 
 	const closePopover = useCallback(() => {
 		close()
-		setSelectedEvent(null)
-		// setPopoverPosition(defaultPopoverPosition)
+		setTarget(null)
 		setClickedElement(null)
 	}, [close])
 
-	const openPopover = useCallback((event: BaseCalendarEvent<TEventResources>, position: PopoverPosition) => {
-		setSelectedEvent(event)
+	const openPopover = useCallback((newTarget: CalendarClickTarget<TEventResources>, position: PopoverPosition) => {
+		setTarget(newTarget)
 		setPopoverPosition(position)
 		open()
 	}, [open])
 
-	const handleEventClick = useCallback((event: BaseCalendarEvent<TEventResources>, element: HTMLElement) => {
-		const rect = element.getBoundingClientRect()
+	const handleClick = useCallback((newTarget: CalendarClickTarget<TEventResources>) => {
+		const rect = newTarget.element.getBoundingClientRect()
 		const scrollTop = window.scrollY || document.documentElement.scrollTop
 		const scrollLeft = window.scrollX || document.documentElement.scrollLeft
 
-		// Check if the clicked element is inside a TimeGrid
-		const isTimeGrid = element.closest('[data-calendar-view="time-grid"]') !== null
+		const isTimeGrid = newTarget.element.closest('[data-calendar-view="time-grid"]') !== null
 
-		// Default position is bottom
 		let topPosition = rect.bottom + scrollTop
 
 		if(isTimeGrid) {
-			// For TimeGrid, position above the element initially
-			// We don't know the popover height yet, so we use rect.top.
-			// The useLayoutEffect will adjust it precisely later.
 			topPosition = rect.top + scrollTop
 		}
 
-		setClickedElement(element)
-		openPopover(event, {
-			// Use the calculated initial top position
+		setClickedElement(newTarget.element)
+		openPopover(newTarget, {
 			top: topPosition,
-			// Keep initial left calculation simple, layout effect centers it
 			left: rect.left + scrollLeft,
 		})
 	}, [openPopover])
 
-	// Close popover with escape key
 	useLayoutEffect(() => {
 		const handleEscKey = (e: KeyboardEvent) => {
 			if(e.key === "Escape") {
@@ -104,7 +96,6 @@ const useEventPopover = <TEventResources extends EventResources>(): UseEventPopo
 
 	const pagePadding = 28
 
-	// Adjust popover position if near viewport edges
 	useLayoutEffect(() => {
 		if(opened && popoverRef.current && clickedElement) {
 			const popoverRect = popoverRef.current.getBoundingClientRect()
@@ -113,38 +104,31 @@ const useEventPopover = <TEventResources extends EventResources>(): UseEventPopo
 			const scrollTop = window.scrollY || document.documentElement.scrollTop
 			const scrollLeft = window.scrollX || document.documentElement.scrollLeft
 
-			const eventRect = clickedElement.getBoundingClientRect()
+			const elementRect = clickedElement.getBoundingClientRect()
 			const isTimeGrid = clickedElement.closest('[data-calendar-view="time-grid"]') !== null
 
-			// Define potential positions
-			const topAlignTop = eventRect.top + scrollTop // Align popover top to event top
-			const bottomAlignBottom = eventRect.bottom + scrollTop + 5 // Align popover top below event bottom (gap)
-			const topAlignBottom = eventRect.top + scrollTop - popoverRect.height - 5 // Align popover bottom above event top (gap)
+			const topAlignTop = elementRect.top + scrollTop
+			const bottomAlignBottom = elementRect.bottom + scrollTop + 5
+			const topAlignBottom = elementRect.top + scrollTop - popoverRect.height - 5
 
 			let top: number
 
 			if(isTimeGrid) {
-				// Prefer top-to-top alignment for TimeGrid
 				if(topAlignTop + popoverRect.height <= viewportHeight + scrollTop) {
 					top = topAlignTop
 				} else {
-					// Fallback: position below event if top-to-top doesn't fit
 					top = bottomAlignBottom
 				}
 			} else {
-				// Prefer positioning below event for Month/Other views
 				if(bottomAlignBottom + popoverRect.height <= viewportHeight + scrollTop) {
 					top = bottomAlignBottom
 				} else {
-					// Fallback: position above event if below doesn't fit
 					top = topAlignBottom
 				}
 			}
 
-			// Center horizontally on the event
-			let left = eventRect.left + (eventRect.width / 2) - (popoverRect.width / 2) + scrollLeft
+			let left = elementRect.left + (elementRect.width / 2) - (popoverRect.width / 2) + scrollLeft
 
-			// Ensure horizontal bounds
 			if(left < scrollLeft + pagePadding) {
 				left = scrollLeft + pagePadding
 			}
@@ -152,7 +136,6 @@ const useEventPopover = <TEventResources extends EventResources>(): UseEventPopo
 				left = viewportWidth + scrollLeft - popoverRect.width - pagePadding
 			}
 
-			// Update position if calculated values differ from current state
 			if(popoverPosition.top !== top || popoverPosition.left !== left) {
 				setPopoverPosition(() => ({ top, left }))
 			}
@@ -161,12 +144,13 @@ const useEventPopover = <TEventResources extends EventResources>(): UseEventPopo
 
 	return {
 		popoverOpen: opened,
-		selectedEvent,
+		target,
 		popoverPosition,
 		popoverRef,
-		handleEventClick,
+		handleClick,
+		close: closePopover,
 	}
 }
 
-export { useEventPopover }
-export type { UseEventPopoverReturn }
+export { useCalendarPopover }
+export type { UseCalendarPopoverReturn }

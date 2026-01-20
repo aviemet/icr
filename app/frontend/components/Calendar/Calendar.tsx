@@ -2,7 +2,7 @@ import { Box, Overlay } from "@mantine/core"
 import clsx from "clsx"
 import { useMemo, useState, useCallback, useRef, useLayoutEffect } from "react"
 
-import { CalendarProvider, CalendarContext, EventResources, BaseCalendarEvent, Resource } from "@/components/Calendar"
+import { CalendarProvider, CalendarContext, EventResources, BaseCalendarEvent, Resource, CalendarClickTarget } from "@/components/Calendar"
 import Toolbar from "@/components/Calendar/components/Toolbar"
 import { CalendarLocalizer, useDefaultLocalizer } from "@/components/Calendar/lib/localizers"
 import { invariant } from "@/lib"
@@ -10,8 +10,8 @@ import { hasUniqueValues } from "@/lib/collections"
 import { usePageProps } from "@/lib/hooks"
 
 import * as classes from "./Calendar.css"
-import { EventPopover } from "./components/EventPopover"
-import { useEventPopover } from "./components/EventPopover/useEventPopover"
+import { CalendarPopover, PopoverContentMap } from "./components/CalendarPopover"
+import { useCalendarPopover } from "./components/CalendarPopover/useCalendarPopover"
 import { ViewStrategyName } from "./lib/displayStrategies"
 import { VIEWS, VIEW_NAMES, NAVIGATION_ACTION, viewComponents } from "./views"
 
@@ -28,8 +28,8 @@ export interface CalendarProps<TEventResources extends EventResources = EventRes
 	displayStrategies?: Partial<DisplayStrategyMap>
 	onNavigate?: (newDate: Date, action: NAVIGATION_ACTION, view: VIEW_NAMES) => void
 	onViewChange?: (view: VIEW_NAMES) => void
-	eventPopoverContent?: (event: BaseCalendarEvent<TEventResources>, localizer: CalendarLocalizer) => React.ReactNode
-	onSelectSlot?: (date: Date) => void
+	popoverContent?: Partial<PopoverContentMap<TEventResources>>
+	onClick?: (target: CalendarClickTarget<TEventResources>) => boolean | void
 	resources?: Resource[]
 	groupByResource?: boolean
 	maxEvents?: number
@@ -44,8 +44,8 @@ export function Calendar<TEventResources extends EventResources>({
 	displayStrategies = {},
 	onNavigate,
 	onViewChange,
-	eventPopoverContent,
-	onSelectSlot,
+	popoverContent,
+	onClick,
 	resources = [],
 	groupByResource = false,
 	maxEvents = Infinity,
@@ -58,11 +58,11 @@ export function Calendar<TEventResources extends EventResources>({
 
 	const {
 		popoverOpen,
-		selectedEvent,
+		target,
 		popoverPosition,
 		popoverRef,
-		handleEventClick,
-	} = useEventPopover<TEventResources>()
+		handleClick: handlePopoverClick,
+	} = useCalendarPopover<TEventResources>()
 
 	/**
 	 * Read and build display strategy preferences object from settings
@@ -138,9 +138,27 @@ export function Calendar<TEventResources extends EventResources>({
 		return nextDate
 	}, [CalendarViewComponent, date, events, localLocalizer, onNavigate, currentView, resourcesById])
 
-	const handleSelectSlot = useCallback((date: Date) => {
-		onSelectSlot?.(date)
-	}, [onSelectSlot])
+	const handleClick = useCallback((clickTarget: CalendarClickTarget<TEventResources>) => {
+		const wasHandled = onClick?.(clickTarget)
+		if(wasHandled) {
+			return
+		}
+
+		if(clickTarget.type === "background") {
+			if(popoverContent?.background) {
+				handlePopoverClick(clickTarget)
+				return
+			}
+			return
+		}
+
+		if(clickTarget.type === "event") {
+			if(popoverContent?.event || !popoverContent) {
+				handlePopoverClick(clickTarget)
+				return
+			}
+		}
+	}, [onClick, popoverContent, handlePopoverClick])
 
 	const calendarProviderState = useMemo<CalendarContext<TEventResources>>(() => ({
 		date,
@@ -148,7 +166,7 @@ export function Calendar<TEventResources extends EventResources>({
 		localizer: localLocalizer,
 		handleViewChange,
 		handleDateChange,
-		onEventClick: handleEventClick,
+		onClick: handleClick,
 		resourcesById,
 		groupByResource,
 		maxEvents,
@@ -159,7 +177,7 @@ export function Calendar<TEventResources extends EventResources>({
 		localLocalizer,
 		handleViewChange,
 		handleDateChange,
-		handleEventClick,
+		handleClick,
 		resourcesById,
 		groupByResource,
 		maxEvents,
@@ -175,7 +193,6 @@ export function Calendar<TEventResources extends EventResources>({
 					<div className={ clsx(classes.calendarInnerContainer) }>
 						<CalendarViewComponent
 							displayStrategy={ localDisplayStrategies[currentView] }
-							onSelectSlot={ handleSelectSlot }
 						/>
 					</div>
 
@@ -184,16 +201,16 @@ export function Calendar<TEventResources extends EventResources>({
 				</div>
 
 
-				{ /* Event Details Popover */ }
-				{ popoverOpen && selectedEvent && (
-					<EventPopover<TEventResources>
-						ref={ popoverRef }
+				{ /* Calendar Popover */ }
+				{ popoverOpen && target && (
+					<CalendarPopover<TEventResources>
 						className={ clsx(classes.eventPopover) }
-						event={ selectedEvent }
+						target={ target }
 						position={ popoverPosition }
-					>
-						{ eventPopoverContent && ((event) => eventPopoverContent(event, localLocalizer)) }
-					</EventPopover>
+						popoverContent={ popoverContent }
+						localizer={ localLocalizer }
+						popoverRef={ popoverRef }
+					/>
 				) }
 
 			</CalendarProvider>

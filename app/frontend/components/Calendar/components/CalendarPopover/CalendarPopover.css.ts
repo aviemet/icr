@@ -8,7 +8,6 @@ export const container = css`
 	transform-origin: top left;
 	opacity: 1;
 
-	/* Add a subtle scale animation when the popover appears */
 	&[data-entering] {
 		opacity: 0;
 		transform: scale(0.95);

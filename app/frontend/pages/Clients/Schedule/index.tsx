@@ -1,4 +1,3 @@
-import { modals } from "@mantine/modals"
 import { useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -86,13 +85,6 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 		}) || []
 	}, [client, data, formatEventTitle])
 
-	const handleSlotSelect = (date: Date) => {
-		modals.open({
-			title: t("views.clients.schedule.new_shift"),
-			children: <NewShiftForm client={ client } selectedDate={ date } />,
-		})
-	}
-
 	return (
 		<>
 			<Group justify="space-between">
@@ -106,8 +98,10 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 				events={ processedSchedules }
 				onNavigate={ handleNavigate }
 				onViewChange={ handleViewChange }
-				onSelectSlot={ handleSlotSelect }
-				eventPopoverContent={ (event, localizer) => <EventPopoverContent event={ event } localizer={ localizer } /> }
+				popoverContent={ {
+					event: (event, localizer) => <EventPopoverContent event={ event } localizer={ localizer } />,
+					background: (context) => <NewShiftForm client={ client } selectedDate={ context.date } />,
+				} }
 			/>
 		</>
 	)

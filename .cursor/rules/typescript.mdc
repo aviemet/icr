@@ -5,9 +5,14 @@ alwaysApply: false
 ---
 You are an expert in TypeScript, Node.js, Vite, Vitest, Inertia.js, React, Mantine, TanStack Query, CSS, HTML, UI and UX.
 
+## Typecasting
+
+Using the keyword `as` is explicitly forbidden (the sole exception being `as const` when appropriate). Any issue with typescript types should be addressed upstream. Never, ever, ever, ever, EVER try to get around the constraints of typescript by using `as`. A type issue can always be elegently represented without bypassing the entire point of typescript.
+
 ### TypeScript Usage
 
 - Use TypeScript for all javascript code; prefer interfaces over types.
+- DO NOT USE `any`, ever! If a specific type definition can't be derived, use `unknown`, but only as a last resort.
 - Write concise, technical TypeScript code with accurate examples.
 - Avoid enums; use maps instead.
 - Use functional components with TypeScript interfaces.
@@ -15,8 +20,6 @@ You are an expert in TypeScript, Node.js, Vite, Vitest, Inertia.js, React, Manti
 - Utilize TypeScript utility types (Partial, Pick, Omit) for cleaner and reusable code.
 - Prefer interface over type for defining object structures, especially when extending.
 - Use mapped types for creating variations of existing types dynamically.
-- DO NOT USE `any`, ever! If a specific type definition can't be derived, use `unknown`, but only as a last resort.
-- DO NOT USE typecasting to bypass type warnings! Types should be derived from usage, not overridden. The only accepatable use of `as` is when defining lists using `as const`
 
 ## Code Style and Structure
 
@@ -25,21 +28,24 @@ You are an expert in TypeScript, Node.js, Vite, Vitest, Inertia.js, React, Manti
 - Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).
 - Consider edge cases and error scenarios, for simple edge cases, use the "return early" pattern to avoid nesting.
 - Properly structure files, all frontend code goes in /app/frontend
-  - /app/frontend/Components for all general purpose, highly reusable components.
-  - /app/frontend/Features for all feature specific components.
-  - /app/frontend/Layouts for all layout components.
+  - /app/frontend/components for all general purpose, highly reusable components.
+  - /app/frontend/features for all feature specific components.
+  - /app/frontend/layouts for all layout components.
   - /app/frontend/lib for all non-react code.
-  - /app/frontend/Pages for all top-level Inertia pages. These components are the entry point for each route from the server.
+  - /app/frontend/pages for all top-level Inertia pages. These components are the entry point for each route from the server.
   - /app/frontend/queries for all async react-query methods, following the convention and type definitions in /app/frontend/queries/index.ts.
   - /app/frontend/types for any globally used types or interfaces, or any custom types used in serializers. (Do no modify anything in types/serializers as it is all auto generated)
+- Avoid default exports.
 
   ### React Component Architecture
 
   - Use functional components with TypeScript interfaces.
-  - Define components using `const`.
+  - Define components using `export function`.
   - Extract reusable logic into custom hooks.
   - Implement proper component composition.
   - Implement proper cleanup in useEffect hooks.
+  - Use React 19 new features:
+    - Pass `ref` as a normal prop, and always refactor `forwardRef` to use normal props when you encounter it
 
   ### React Performance Optimization
 

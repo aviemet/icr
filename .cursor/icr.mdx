@@ -194,6 +194,13 @@ The payroll settings system manages pay periods and overtime calculations:
 - Calendar must support multiple view strategies
 - Events must handle timezone conversions properly
 - Recurring events must follow RFC 5545 (iCalendar) specification
+- Calendar uses a unified `onClick` handler that accepts a `CalendarClickTarget` discriminated union
+  - Target types: `event` and `background`
+  - Calendar component accepts `onClick?: (target: CalendarClickTarget) => boolean | void` prop
+  - Popover content configured via `popoverContent` prop object with `event` and `background` keys
+  - Default popover behavior is used unless `onClick` returns `true`
+  - EventPopover renamed to CalendarPopover to reflect generic nature
+  - `CalendarPopover` receives `popoverRef: React.RefObject<HTMLDivElement>` as a prop (not `forwardRef`) to avoid type assertions and keep typing strict
 
 ### Timesheet System
 - Timesheets will be generated per pay period
