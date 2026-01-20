@@ -8,6 +8,7 @@ class Employees::OptionsSerializer < ApplicationSerializer
   attributes(
     :slug,
     :number,
+    :color,
     :active_at,
     :inactive_at,
   )

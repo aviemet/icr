@@ -62,6 +62,7 @@ const DraftNewShiftPopoverContent = ({ client, selectedDate }: DraftNewShiftPopo
 			if(selectedEmployee) {
 				patchDraftEvent(draftId, {
 					resources: { employee: selectedEmployee as unknown as Schema.ShiftsClient["employee"], client },
+					color: selectedEmployee.color || undefined,
 				})
 			}
 		}
