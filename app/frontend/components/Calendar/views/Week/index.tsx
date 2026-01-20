@@ -13,7 +13,7 @@ interface WeekViewProps<TEventResources extends EventResources> extends BaseView
 }
 
 const WeekViewComponent = <TEventResources extends EventResources>({ className, style, displayStrategy }: WeekViewProps<TEventResources>) => {
-	const { date, localizer } = useCalendarContext<TEventResources>()
+	const { date, localizer } = useCalendarContext()
 
 	const columnHeadings = useMemo(() => {
 		const days = localizer.visibleDays(date, VIEWS.week)

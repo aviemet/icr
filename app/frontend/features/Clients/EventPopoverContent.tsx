@@ -1,25 +1,27 @@
 import clsx from "clsx"
 
 import { Box, Group, Link, Stack, Text, Title } from "@/components"
-import { BaseCalendarEvent, EventResources } from "@/components/Calendar"
+import { BaseCalendarEvent } from "@/components/Calendar"
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 import { Routes } from "@/lib"
 
 import * as classes from "./EventPopoverContent.css"
 
-interface ScheduleResources extends EventResources {
-	employee: Schema.ShiftsClient["employee"]
-	client: Schema.ClientsShow
+interface EventPopoverContentProps {
+	event: BaseCalendarEvent
+	localizer: CalendarLocalizer
 }
 
-interface EventPopoverContentProps {
-	event: BaseCalendarEvent<ScheduleResources>
-	localizer: CalendarLocalizer
+function isEmployeeResource(value: unknown): value is Schema.ShiftsClient["employee"] {
+	if(typeof value !== "object" || value === null) return false
+	if(!("slug" in value) || !("name" in value)) return false
+
+	return typeof value.slug === "string" && typeof value.name === "string"
 }
 
 const EventPopoverContent = ({ event, localizer }: EventPopoverContentProps) => {
 	const color = event.color || "#000000"
-	const employee = event.resources?.employee
+	const employee = isEmployeeResource(event.resources?.employee) ? event.resources?.employee : undefined
 
 	return (
 		<Stack gap="xs">

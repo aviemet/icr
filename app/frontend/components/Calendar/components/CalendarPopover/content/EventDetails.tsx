@@ -11,7 +11,7 @@ interface EventDetailsProps<TEventResources extends EventResources> {
 }
 
 const EventDetails = <TEventResources extends EventResources>({ event }: EventDetailsProps<TEventResources>) => {
-	const { localizer } = useCalendarContext<TEventResources>()
+	const { localizer } = useCalendarContext()
 	const color = event.color || vars.colors.primaryColors.filled
 
 	return (

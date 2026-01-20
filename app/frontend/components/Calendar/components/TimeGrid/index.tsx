@@ -1,10 +1,10 @@
 import clsx from "clsx"
-import { useMemo, useRef } from "react"
+import { useCallback, useMemo, useRef } from "react"
 
 import { assignEventOverlaps } from "@/components/Calendar/lib/assignEventOverlaps"
 import useStickySentinel from "@/lib/hooks/useStickySentinel"
 
-import { EventResources, useCalendarContext } from "../../"
+import { BaseCalendarEvent, EventResources, useCalendarContext } from "../../"
 import { EventNode } from "./components/Event"
 import TimeColumn from "./components/TimeColumn"
 import { TimeIndicator } from "./components/TimeIndicator"
@@ -53,7 +53,11 @@ const TimeGrid = <
 	timeIncrement = 60,
 	displayStrategy = "overlap",
 }: TimeGridProps<TEventResources, V>) => {
-	const { localizer, onEventClick, groupByResource } = useCalendarContext<TEventResources>()
+	const { localizer, onClick, groupByResource } = useCalendarContext()
+
+	const onEventClick = useCallback((event: BaseCalendarEvent<TEventResources>, element: HTMLElement) => {
+		onClick({ type: "event", event, element })
+	}, [onClick])
 
 	const [headerRef, isStuck] = useStickySentinel<HTMLDivElement>()
 

@@ -20,7 +20,7 @@ const DayViewComponent = <TEventResources extends EventResources>({
 	className,
 	style,
 }: DayViewProps<TEventResources>) => {
-	const { date, localizer, resourcesById, groupByResource } = useCalendarContext<TEventResources>()
+	const { date, localizer, resourcesById, groupByResource } = useCalendarContext()
 
 	const columnHeadings = useMemo<DayViewTimeGridHeading[]>(() => {
 		if(groupByResource && resourcesById.size > 0) {

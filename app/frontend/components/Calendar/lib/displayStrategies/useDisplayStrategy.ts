@@ -20,7 +20,7 @@ export const useDisplayStrategy = <
 	strategyName: ViewStrategyName<V>,
 	viewConfig?: Partial<StrategyConfig>
 ) => {
-	const { date, localizer, events, groupByResource } = useCalendarContext<TEventResources>()
+	const { date, localizer, events, groupByResource } = useCalendarContext()
 
 	return useMemo(() => {
 		const strategiesForView = displayStrategyClasses[view]

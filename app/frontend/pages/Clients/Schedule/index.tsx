@@ -1,12 +1,15 @@
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { type UseFormProps } from "use-inertia-form"
 
 import {
 	Box,
 	Calendar,
 	Group,
 } from "@/components"
-import { BaseCalendarEvent } from "@/components/Calendar"
+import { BaseCalendarEvent, useCalendarContext } from "@/components/Calendar"
+import { type PopoverContentMap } from "@/components/Calendar/components/CalendarPopover"
+import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 import { NAVIGATION_ACTION, VIEW_NAMES } from "@/components/Calendar/views"
 import EventPopoverContent from "@/features/Clients/EventPopoverContent"
 import { ensureViewName } from "@/lib"
@@ -15,8 +18,9 @@ import { datetime } from "@/lib/formatters"
 import { useLocation } from "@/lib/hooks"
 import { useEventTitleFormatter } from "@/lib/hooks/useEventTitleFormatter"
 import { useGetClientSchedules } from "@/queries/clients"
+import { useGetEmployeesAsOptions } from "@/queries/employees"
 
-import NewShiftForm from "./NewShiftForm"
+import NewShiftForm, { type NewShiftData } from "./NewShiftForm"
 
 interface ScheduleProps {
 	client: Schema.ClientsShow
@@ -27,6 +31,68 @@ interface ScheduleResources {
 	[key: string]: object
 	employee: Schema.ShiftsClient["employee"]
 	client: Schema.ClientsShow
+}
+
+interface DraftNewShiftPopoverContentProps {
+	client: Schema.ClientsShow
+	selectedDate: Date
+}
+
+const DraftNewShiftPopoverContent = ({ client, selectedDate }: DraftNewShiftPopoverContentProps) => {
+	const { upsertDraftEvent, patchDraftEvent, removeDraftEvent } = useCalendarContext()
+	const draftIdRef = useRef<string>(crypto.randomUUID())
+	const { data: employees = [] } = useGetEmployeesAsOptions({ enabled: true })
+
+	const handleFormChange = useCallback((form: UseFormProps<NewShiftData>) => {
+		const startsAt = form.data.calendar_event?.starts_at
+		const endsAt = form.data.calendar_event?.ends_at
+		const employeeId = form.data.calendar_event?.shift?.employee_id
+
+		const draftId = draftIdRef.current
+
+		if(startsAt instanceof Date) {
+			patchDraftEvent(draftId, { start: startsAt })
+		}
+		if(endsAt instanceof Date) {
+			patchDraftEvent(draftId, { end: endsAt })
+		}
+
+		if(typeof employeeId === "string" && employeeId.length > 0) {
+			const selectedEmployee = employees.find(employee => String(employee.id) === employeeId)
+			if(selectedEmployee) {
+				patchDraftEvent(draftId, {
+					title: selectedEmployee.person.name,
+				})
+			}
+		}
+	}, [employees, patchDraftEvent])
+
+	useEffect(() => {
+		const draftId = draftIdRef.current
+
+		upsertDraftEvent({
+			id: draftId,
+			title: "New shift",
+			start: selectedDate,
+			end: selectedDate,
+			allDay: false,
+		})
+
+		return () => {
+			removeDraftEvent(draftId)
+		}
+	}, [removeDraftEvent, selectedDate, upsertDraftEvent])
+
+	return (
+		<NewShiftForm
+			client={ client }
+			selectedDate={ selectedDate }
+			onChange={ handleFormChange }
+			onSuccess={ () => {
+				removeDraftEvent(draftIdRef.current)
+			} }
+		/>
+	)
 }
 
 const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
@@ -92,16 +158,16 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 				<Box></Box>
 			</Group>
 
-			<Calendar<ScheduleResources>
+			<Calendar
 				defaultDate={ calendarDate }
 				defaultView={ calendarView }
 				events={ processedSchedules }
 				onNavigate={ handleNavigate }
 				onViewChange={ handleViewChange }
 				popoverContent={ {
-					event: (event, localizer) => <EventPopoverContent event={ event } localizer={ localizer } />,
-					background: (context) => <NewShiftForm client={ client } selectedDate={ context.date } />,
-				} }
+					event: (event: BaseCalendarEvent, localizer: CalendarLocalizer) => <EventPopoverContent event={ event } localizer={ localizer } />,
+					background: (context) => <DraftNewShiftPopoverContent client={ client } selectedDate={ context.date } />,
+				} satisfies Partial<PopoverContentMap> }
 			/>
 		</>
 	)

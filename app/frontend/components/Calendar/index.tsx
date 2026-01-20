@@ -26,41 +26,43 @@ export interface BaseCalendarEvent<TEventResources extends EventResources = Even
 
 export type CalendarEventTitleCallback<TEventResources extends EventResources = EventResources> = (event: Pick<BaseCalendarEvent<TEventResources>, "start" | "end" | "allDay" | "title" | "resources" | "resourceId">) => string
 
-export type CalendarClickTarget<TEventResources extends EventResources = EventResources> =
-	| { type: "event", event: BaseCalendarEvent<TEventResources>, element: HTMLElement }
+export type CalendarClickTarget =
+	| { type: "event", event: BaseCalendarEvent, element: HTMLElement }
 	| { type: "background", date: Date, time?: Date, resourceId?: string | number, element: HTMLElement }
 
-interface CalendarContextValue<TEventResources extends EventResources = EventResources> {
+interface CalendarContextValue {
 	date: Date
-	events: BaseCalendarEvent<TEventResources>[]
+	events: BaseCalendarEvent[]
+	draftEvents: BaseCalendarEvent[]
+	upsertDraftEvent: (event: BaseCalendarEvent) => void
+	patchDraftEvent: (id: BaseCalendarEvent["id"], patch: Partial<BaseCalendarEvent>) => void
+	removeDraftEvent: (id: BaseCalendarEvent["id"]) => void
 	localizer: CalendarLocalizer
 	handleViewChange: (view: VIEW_NAMES) => void
 	handleDateChange: (action: NAVIGATION_ACTION, newDate?: Date) => void
-	onClick: (target: CalendarClickTarget<TEventResources>) => void
+	onClick: (target: CalendarClickTarget) => void
 	resourcesById: Map<string | number, Resource>
 	groupByResource: boolean
 	maxEvents: number
 	prevDate: Date
 }
 
-export type CalendarContext<TEventResources extends EventResources = EventResources> = CalendarContextValue<TEventResources>
+export type CalendarContext = CalendarContextValue
 
-const ContextObject = ReactCreateContext<CalendarContextValue<any> | undefined>(undefined)
+const ContextObject = ReactCreateContext<CalendarContextValue | undefined>(undefined)
 
-export const useCalendarContext = <TEventResources extends EventResources = EventResources>(): CalendarContextValue<TEventResources> => {
+export const useCalendarContext = (): CalendarContextValue => {
 	const context = ReactUseContext(ContextObject)
 	if(context === undefined) {
 		throw new Error("useCalendarContext must be used within a CalendarProvider")
 	}
-	return context as CalendarContextValue<TEventResources>
+	return context
 }
 
-export const CalendarProvider = <TEventResources extends EventResources>(
-	props: React.PropsWithChildren<{ value: CalendarContextValue<TEventResources> }>
+export const CalendarProvider = (
+	props: React.PropsWithChildren<{ value: CalendarContextValue }>
 ): JSX.Element => {
 	return <ContextObject.Provider value={ props.value }>{ props.children }</ContextObject.Provider>
 }
-
-// export { Calendar } from "./Calendar"
 
 export { DefaultCalendar as Calendar } from "./DefaultCalendar"

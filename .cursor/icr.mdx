@@ -201,6 +201,8 @@ The payroll settings system manages pay periods and overtime calculations:
   - Default popover behavior is used unless `onClick` returns `true`
   - EventPopover renamed to CalendarPopover to reflect generic nature
   - `CalendarPopover` receives `popoverRef: React.RefObject<HTMLDivElement>` as a prop (not `forwardRef`) to avoid type assertions and keep typing strict
+  - Draft events: Calendar maintains an internal draft-events store and merges draft events into `events` before view strategies run. Draft events can be created/updated/removed via `useCalendarContext` methods (`upsertDraftEvent`, `patchDraftEvent`, `removeDraftEvent`).
+  - Inputs rendered inside the calendar popover should avoid portal-based dropdowns/popovers (e.g. pass `popoverProps={{ withinPortal: false }}` to date/time pickers) so calendar click-outside logic does not close the popover on selection
 
 ### Timesheet System
 - Timesheets will be generated per pay period

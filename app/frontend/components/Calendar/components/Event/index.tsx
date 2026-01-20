@@ -23,7 +23,7 @@ const CalendarEvent = <TEventResources extends EventResources>({
 	displayProperties,
 	...props
 }: EventProps<TEventResources>) => {
-	const { onClick: onClickFromContext } = useCalendarContext<TEventResources>()
+	const { onClick: onClickFromContext } = useCalendarContext()
 
 	const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
 		if(onClick) {

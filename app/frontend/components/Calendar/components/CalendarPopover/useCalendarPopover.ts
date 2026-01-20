@@ -1,7 +1,7 @@
 import { useDisclosure } from "@mantine/hooks"
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 
-import { EventResources, CalendarClickTarget } from "@/components/Calendar"
+import { CalendarClickTarget } from "@/components/Calendar"
 
 interface PopoverPosition {
 	top: number
@@ -10,17 +10,17 @@ interface PopoverPosition {
 
 const defaultPopoverPosition = { top: 0, left: 0 }
 
-interface UseCalendarPopoverReturn<TEventResources extends EventResources> {
+interface UseCalendarPopoverReturn {
 	popoverOpen: boolean
-	target: CalendarClickTarget<TEventResources> | null
+	target: CalendarClickTarget | null
 	popoverPosition: PopoverPosition
 	popoverRef: React.RefObject<HTMLDivElement>
-	handleClick: (target: CalendarClickTarget<TEventResources>) => void
+	handleClick: (target: CalendarClickTarget) => void
 	close: () => void
 }
 
-const useCalendarPopover = <TEventResources extends EventResources>(): UseCalendarPopoverReturn<TEventResources> => {
-	const [target, setTarget] = useState<CalendarClickTarget<TEventResources> | null>(null)
+const useCalendarPopover = (): UseCalendarPopoverReturn => {
+	const [target, setTarget] = useState<CalendarClickTarget | null>(null)
 	const [popoverPosition, setPopoverPosition] = useState<PopoverPosition>(defaultPopoverPosition)
 	const [clickedElement, setClickedElement] = useState<HTMLElement | null>(null)
 
@@ -55,13 +55,13 @@ const useCalendarPopover = <TEventResources extends EventResources>(): UseCalend
 		setClickedElement(null)
 	}, [close])
 
-	const openPopover = useCallback((newTarget: CalendarClickTarget<TEventResources>, position: PopoverPosition) => {
+	const openPopover = useCallback((newTarget: CalendarClickTarget, position: PopoverPosition) => {
 		setTarget(newTarget)
 		setPopoverPosition(position)
 		open()
 	}, [open])
 
-	const handleClick = useCallback((newTarget: CalendarClickTarget<TEventResources>) => {
+	const handleClick = useCallback((newTarget: CalendarClickTarget) => {
 		const rect = newTarget.element.getBoundingClientRect()
 		const scrollTop = window.scrollY || document.documentElement.scrollTop
 		const scrollLeft = window.scrollX || document.documentElement.scrollLeft
