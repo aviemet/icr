@@ -33,7 +33,7 @@ const MonthViewComponent = <TEventResources extends EventResources>({
 	displayStrategy,
 	showDailyTotals = true,
 }: MonthViewProps<TEventResources>) => {
-	const { date, localizer, events, maxEvents, onClick } = useCalendarContext()
+	const { date, localizer, events, maxEvents, onClick, getEventTitle } = useCalendarContext()
 
 	const eventsByDay = useDisplayStrategy<TEventResources, "month", GridDisplayProperties>(
 		VIEWS.month,
@@ -146,15 +146,7 @@ const MonthViewComponent = <TEventResources extends EventResources>({
 												localizer={ localizer }
 												className={ clsx(displayProperties.className) }
 											>
-												{ event.titleBuilder
-													? event.titleBuilder({
-														start: displayProperties.displayStart,
-														end: displayProperties.displayEnd,
-														allDay: event.allDay,
-														title: event.title,
-														resources: event.resources,
-													})
-													: event.title }
+												{ getEventTitle(event, displayProperties) }
 											</MonthEvent>
 										</EventWrapper>
 									)

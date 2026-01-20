@@ -2,6 +2,7 @@ import React, { createContext as ReactCreateContext, useContext as ReactUseConte
 
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 
+import { BaseDisplayProperties } from "./lib/displayStrategies"
 import { VIEW_NAMES, NAVIGATION_ACTION } from "./views"
 
 export interface Resource {
@@ -45,6 +46,11 @@ interface CalendarContextValue {
 	groupByResource: boolean
 	maxEvents: number
 	prevDate: Date
+	defaultTitleBuilder?: CalendarEventTitleCallback
+	getEventTitle: <TEventResources extends EventResources>(
+		event: BaseCalendarEvent<TEventResources>,
+		displayProperties: BaseDisplayProperties
+	) => string
 }
 
 export type CalendarContext = CalendarContextValue

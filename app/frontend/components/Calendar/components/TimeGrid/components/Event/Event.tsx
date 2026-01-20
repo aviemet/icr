@@ -1,6 +1,6 @@
 import clsx from "clsx"
 
-import { EventResources, BaseCalendarEvent } from "@/components/Calendar"
+import { EventResources, BaseCalendarEvent, useCalendarContext } from "@/components/Calendar"
 import { TimeGridDisplayProperties } from "@/components/Calendar/lib/displayStrategies"
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 import useStore from "@/lib/store"
@@ -30,6 +30,7 @@ const Event = <TEventResources extends EventResources>({
 	...props
 }: EventProps<TEventResources>) => {
 	const { getContrastingColor } = useStore()
+	const { getEventTitle } = useCalendarContext()
 	const eventColor = event.color || "var(--mantine-primary-color-filled)"
 	const contrastingColor = getContrastingColor(eventColor)
 
@@ -48,15 +49,7 @@ const Event = <TEventResources extends EventResources>({
 			onClick={ onEventClick }
 			{ ...props }
 		>
-			{ event.titleBuilder
-				? event.titleBuilder({
-					start: displayProperties.displayStart,
-					end: displayProperties.displayEnd,
-					allDay: event.allDay,
-					title: event.title,
-					resources: event.resources,
-				})
-				: event.title }
+			{ getEventTitle(event, displayProperties) }
 			<h1>{ displayProperties.overlap || 0 }</h1>
 		</CalendarEvent>
 	)

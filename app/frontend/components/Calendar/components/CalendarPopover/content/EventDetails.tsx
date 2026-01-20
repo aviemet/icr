@@ -11,8 +11,14 @@ interface EventDetailsProps<TEventResources extends EventResources> {
 }
 
 const EventDetails = <TEventResources extends EventResources>({ event }: EventDetailsProps<TEventResources>) => {
-	const { localizer } = useCalendarContext()
+	const { localizer, getEventTitle } = useCalendarContext()
 	const color = event.color || vars.colors.primaryColors.filled
+
+	const displayProperties = {
+		displayStart: event.start,
+		displayEnd: event.end,
+		allDay: event.allDay,
+	}
 
 	return (
 		<Stack gap="xs">
@@ -23,16 +29,7 @@ const EventDetails = <TEventResources extends EventResources>({ event }: EventDe
 						style={ { backgroundColor: color } }
 					/>
 					<Title order={ 4 }>
-						{ event.titleBuilder
-							? event.titleBuilder({
-								start: event.start,
-								end: event.end,
-								allDay: event.allDay,
-								title: event.title,
-								resources: event.resources,
-							})
-							: event.title
-						}
+						{ getEventTitle(event, displayProperties) }
 					</Title>
 				</Group>
 			</Group>

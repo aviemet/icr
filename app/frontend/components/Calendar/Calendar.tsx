@@ -2,7 +2,15 @@ import { Box, Overlay } from "@mantine/core"
 import clsx from "clsx"
 import { useMemo, useState, useCallback, useRef, useLayoutEffect } from "react"
 
-import { CalendarProvider, CalendarContext, BaseCalendarEvent, Resource, CalendarClickTarget } from "@/components/Calendar"
+import {
+	CalendarProvider,
+	CalendarContext,
+	BaseCalendarEvent,
+	Resource,
+	CalendarClickTarget,
+	CalendarEventTitleCallback,
+	EventResources,
+} from "@/components/Calendar"
 import Toolbar from "@/components/Calendar/components/Toolbar"
 import { CalendarLocalizer, useDefaultLocalizer } from "@/components/Calendar/lib/localizers"
 import { invariant } from "@/lib"
@@ -12,7 +20,7 @@ import { usePageProps } from "@/lib/hooks"
 import * as classes from "./Calendar.css"
 import { CalendarPopover, PopoverContentMap } from "./components/CalendarPopover"
 import { useCalendarPopover } from "./components/CalendarPopover/useCalendarPopover"
-import { ViewStrategyName } from "./lib/displayStrategies"
+import { ViewStrategyName, BaseDisplayProperties } from "./lib/displayStrategies"
 import { useDraftEvents } from "./lib/draftEvents/useDraftEvents"
 import { VIEWS, VIEW_NAMES, NAVIGATION_ACTION, viewComponents } from "./views"
 
@@ -34,6 +42,7 @@ export interface CalendarProps {
 	resources?: Resource[]
 	groupByResource?: boolean
 	maxEvents?: number
+	defaultTitleBuilder?: CalendarEventTitleCallback
 }
 
 export function Calendar({
@@ -50,6 +59,7 @@ export function Calendar({
 	resources = [],
 	groupByResource = false,
 	maxEvents = Infinity,
+	defaultTitleBuilder,
 }: CalendarProps) {
 	const localLocalizer = useDefaultLocalizer(localizer)
 
@@ -173,6 +183,26 @@ export function Calendar({
 		}
 	}, [onClick, popoverContent, handlePopoverClick])
 
+	const getEventTitle = useCallback(<TEventResources extends EventResources>(
+		event: BaseCalendarEvent<TEventResources>,
+		displayProperties: BaseDisplayProperties
+	): string => {
+		const titleBuilder = event.titleBuilder || defaultTitleBuilder
+
+		if(titleBuilder) {
+			return titleBuilder({
+				start: displayProperties.displayStart ?? event.start,
+				end: displayProperties.displayEnd ?? event.end,
+				allDay: event.allDay,
+				title: event.title,
+				resources: event.resources,
+				resourceId: event.resourceId,
+			})
+		}
+
+		return event.title
+	}, [defaultTitleBuilder])
+
 	const calendarProviderState = useMemo<CalendarContext>(() => ({
 		date,
 		events: effectiveEvents,
@@ -188,6 +218,8 @@ export function Calendar({
 		groupByResource,
 		maxEvents,
 		prevDate,
+		defaultTitleBuilder,
+		getEventTitle,
 	}), [
 		date,
 		effectiveEvents,
@@ -203,6 +235,8 @@ export function Calendar({
 		groupByResource,
 		maxEvents,
 		prevDate,
+		defaultTitleBuilder,
+		getEventTitle,
 	])
 
 	return (

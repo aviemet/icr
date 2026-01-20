@@ -61,11 +61,11 @@ const DraftNewShiftPopoverContent = ({ client, selectedDate }: DraftNewShiftPopo
 			const selectedEmployee = employees.find(employee => String(employee.id) === employeeId)
 			if(selectedEmployee) {
 				patchDraftEvent(draftId, {
-					title: selectedEmployee.person.name,
+					resources: { employee: selectedEmployee as unknown as Schema.ShiftsClient["employee"], client },
 				})
 			}
 		}
-	}, [employees, patchDraftEvent])
+	}, [client, employees, patchDraftEvent])
 
 	useEffect(() => {
 		const draftId = draftIdRef.current
@@ -76,12 +76,13 @@ const DraftNewShiftPopoverContent = ({ client, selectedDate }: DraftNewShiftPopo
 			start: selectedDate,
 			end: selectedDate,
 			allDay: false,
+			resources: { client },
 		})
 
 		return () => {
 			removeDraftEvent(draftId)
 		}
-	}, [removeDraftEvent, selectedDate, upsertDraftEvent])
+	}, [client, removeDraftEvent, selectedDate, upsertDraftEvent])
 
 	return (
 		<NewShiftForm
@@ -141,7 +142,6 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 			return {
 				id: schedule.id,
 				title: schedule.name ?? "",
-				titleBuilder: (event) => formatEventTitle(event, employee),
 				start,
 				end,
 				allDay: schedule.all_day,
@@ -149,7 +149,7 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 				resources: { employee, client },
 			} satisfies BaseCalendarEvent<ScheduleResources>
 		}) || []
-	}, [client, data, formatEventTitle])
+	}, [client, data])
 
 	return (
 		<>
@@ -164,6 +164,7 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 				events={ processedSchedules }
 				onNavigate={ handleNavigate }
 				onViewChange={ handleViewChange }
+				defaultTitleBuilder={ (event: BaseCalendarEvent<ScheduleResources>) => formatEventTitle(event, event.resources?.employee) }
 				popoverContent={ {
 					event: (event: BaseCalendarEvent, localizer: CalendarLocalizer) => <EventPopoverContent event={ event } localizer={ localizer } />,
 					background: (context) => <DraftNewShiftPopoverContent client={ client } selectedDate={ context.date } />,

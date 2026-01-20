@@ -2,7 +2,7 @@ import { Box, Text } from "@mantine/core"
 import clsx from "clsx"
 import { useMemo } from "react"
 
-import { EventResources, BaseCalendarEvent } from "@/components/Calendar"
+import { EventResources, BaseCalendarEvent, useCalendarContext } from "@/components/Calendar"
 import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/components/Calendar/views"
 
 import * as classes from "./AgendaView.css"
@@ -22,6 +22,7 @@ const AgendaViewComponent = <TEventResources extends EventResources>({
 	displayStrategy,
 	titleBuilder,
 }: AgendaViewProps<TEventResources>) => {
+	const { getEventTitle } = useCalendarContext()
 	const eventsByDay = useDisplayStrategy<TEventResources, "agenda", AgendaDisplayProperties>(
 		VIEWS.agenda,
 		displayStrategy
@@ -42,16 +43,7 @@ const AgendaViewComponent = <TEventResources extends EventResources>({
 	const renderEvent = (event: BaseCalendarEvent<TEventResources>, displayProperties: AgendaDisplayProperties) => {
 		const title = titleBuilder
 			? titleBuilder(event, displayProperties)
-			: event.titleBuilder
-				? event.titleBuilder({
-					start: displayProperties.displayStart,
-					end: displayProperties.displayEnd,
-					allDay: event.allDay,
-					title: event.title,
-					resources: event.resources,
-					resourceId: event.resourceId,
-				})
-				: event.title
+			: getEventTitle(event, displayProperties)
 
 		return (
 			<Box
