@@ -8,9 +8,8 @@ import { FormEmployeesDropdown } from "@/features/Dropdowns"
 import { Routes } from "@/lib"
 
 type NewShiftData = {
-	calendar_event: PartialDeep<Schema.CalendarEventsFormData> & {
+	calendar_event: Omit<PartialDeep<Schema.CalendarEventsFormData>, "event_participants"> & {
 		shift: PartialDeep<Schema.Shift>
-	} & {
 		event_participants: PartialDeep<Schema.EventParticipantsFormData>[]
 	}
 }

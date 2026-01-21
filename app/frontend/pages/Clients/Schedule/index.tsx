@@ -49,22 +49,25 @@ const DraftNewShiftPopoverContent = ({ client, selectedDate }: DraftNewShiftPopo
 		const employeeId = form.data.calendar_event?.shift?.employee_id
 
 		const draftId = draftIdRef.current
+		const patch: Partial<BaseCalendarEvent<ScheduleResources>> = {}
 
 		if(startsAt instanceof Date) {
-			patchDraftEvent(draftId, { start: startsAt })
+			patch.start = startsAt
 		}
 		if(endsAt instanceof Date) {
-			patchDraftEvent(draftId, { end: endsAt })
+			patch.end = endsAt
 		}
 
 		if(typeof employeeId === "string" && employeeId.length > 0) {
 			const selectedEmployee = employees.find(employee => String(employee.id) === employeeId)
 			if(selectedEmployee) {
-				patchDraftEvent(draftId, {
-					resources: { employee: selectedEmployee as unknown as Schema.ShiftsClient["employee"], client },
-					color: selectedEmployee.color || undefined,
-				})
+				patch.resources = { employee: selectedEmployee as unknown as Schema.ShiftsClient["employee"], client }
+				patch.color = selectedEmployee.color || undefined
 			}
+		}
+
+		if(Object.keys(patch).length > 0) {
+			patchDraftEvent(draftId, patch)
 		}
 	}, [client, employees, patchDraftEvent])
 

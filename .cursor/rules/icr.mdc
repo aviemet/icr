@@ -8,6 +8,6 @@ alwaysApply: true
 1. Read .cursor/icr.mdx at the start of each interaction
 2. Before ending ANY response, if you've learned anything useful about project-specific architectural details that are NOT immediately obvious from reading the code, you MUST update .cursor/icr.mdx with this information
 3. When updating .cursor/icr.mdx:
-   - ONLY document project-specific architectural decisions, custom patterns, and *non-obvious* implementation details
+   - Only document reusable, cross-cutting patterns; skip single-file or one-off implementation notes that are obvious from code
    - Only add new information not already documented
    - Place information in the appropriate section, if no appropriate section exists, create one
