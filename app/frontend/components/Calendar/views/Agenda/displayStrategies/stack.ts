@@ -17,7 +17,7 @@ import {
 export class AgendaStackStrategy<TEventResources extends EventResources>
 	extends BaseDisplayStrategy<TEventResources, AgendaDisplayProperties> {
 
-	processEvent(event: BaseCalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, AgendaDisplayProperties>[] {
+	processEvent(event: BaseCalendarEvent<EventResources>): EventDisplayDetails<TEventResources, AgendaDisplayProperties>[] {
 		const displayProperties: AgendaDisplayProperties = {
 			displayStart: event.start,
 			displayEnd: event.end,

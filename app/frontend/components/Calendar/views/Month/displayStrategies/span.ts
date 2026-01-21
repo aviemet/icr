@@ -17,9 +17,9 @@ import {
  */
 export class MonthSpanStrategy<TEventResources extends EventResources>
 	extends BaseDisplayStrategy<TEventResources, GridDisplayProperties> {
-	processEvent(event: BaseCalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, GridDisplayProperties>[] {
+	processEvent(event: BaseCalendarEvent<EventResources>): EventDisplayDetails<TEventResources, GridDisplayProperties>[] {
 		// 1. Split by week boundaries if necessary
-		const weekSegments: BaseCalendarEvent<TEventResources>[] = this.spansWeekBorder(event)
+		const weekSegments: BaseCalendarEvent<EventResources>[] = this.spansWeekBorder(event)
 			? this.splitAtWeekBoundaries(event)
 			: [{ ...event }] // Use a shallow copy
 

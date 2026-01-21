@@ -23,7 +23,7 @@ import {
 export class WeekOverlapStrategy<TEventResources extends EventResources>
 	extends BaseDisplayStrategy<TEventResources, TimeGridDisplayProperties> {
 
-	processEvent(event: BaseCalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, TimeGridDisplayProperties>[] {
+	processEvent(event: BaseCalendarEvent<EventResources>): EventDisplayDetails<TEventResources, TimeGridDisplayProperties>[] {
 		const { columnHeadings, localizer } = this.config
 		if(!columnHeadings || columnHeadings.length === 0) {
 			// eslint-disable-next-line no-console
@@ -34,7 +34,7 @@ export class WeekOverlapStrategy<TEventResources extends EventResources>
 		// Handle all-day events differently
 		if(event.allDay) {
 			// Split at week boundaries if necessary
-			const weekSegments: BaseCalendarEvent<TEventResources>[] = this.spansWeekBorder(event)
+			const weekSegments: BaseCalendarEvent<EventResources>[] = this.spansWeekBorder(event)
 				? this.splitAtWeekBoundaries(event)
 				: [{ ...event }]
 

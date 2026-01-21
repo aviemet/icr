@@ -33,7 +33,7 @@ export abstract class BaseDisplayStrategy<
    * Process an event and return display details with the specific shape P.
    * The implementation MUST return objects conforming to P.
    */
-	abstract processEvent(event: BaseCalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, P>[]
+	abstract processEvent(event: BaseCalendarEvent<EventResources>): EventDisplayDetails<TEventResources, P>[]
 
 	/**
    * Compare two events. It receives details containing properties of shape P.
@@ -58,7 +58,7 @@ export abstract class BaseDisplayStrategy<
 	/**
    * Check if an event spans multiple days based on the localizer.
    */
-	protected spansMultipleDays(event: BaseCalendarEvent<TEventResources>): boolean {
+	protected spansMultipleDays(event: BaseCalendarEvent<EventResources>): boolean {
 		const startDay = this.config.localizer.startOf(event.start, "day")
 		const endDay = this.config.localizer.startOf(event.end, "day")
 		return startDay.getTime() !== endDay.getTime()
@@ -67,7 +67,7 @@ export abstract class BaseDisplayStrategy<
 	/**
    * Check if an event spans week boundaries based on the localizer.
    */
-	protected spansWeekBorder(event: BaseCalendarEvent<TEventResources>): boolean {
+	protected spansWeekBorder(event: BaseCalendarEvent<EventResources>): boolean {
 		return !this.config.localizer.dateWithinRange("week", event.end, event.start)
 	}
 
@@ -75,12 +75,12 @@ export abstract class BaseDisplayStrategy<
    * Split an event at day boundaries according to the localizer.
    * Returns segments with adjusted displayStart/displayEnd times.
    */
-	protected splitAtDayBoundaries(event: BaseCalendarEvent<TEventResources>): Array<{
-		event: BaseCalendarEvent<TEventResources>
+	protected splitAtDayBoundaries(event: BaseCalendarEvent<EventResources>): Array<{
+		event: BaseCalendarEvent<EventResources>
 		displayStart: Date
 		displayEnd: Date
 	}> {
-		const segments: Array<{ event: BaseCalendarEvent<TEventResources>, displayStart: Date, displayEnd: Date }> = []
+		const segments: Array<{ event: BaseCalendarEvent<EventResources>, displayStart: Date, displayEnd: Date }> = []
 		let currentStart = event.start
 		const finalEnd = event.end
 
@@ -129,10 +129,10 @@ export abstract class BaseDisplayStrategy<
    * Split an event at week boundaries according to the localizer.
    * Returns segments with adjusted displayStart/displayEnd times.
    */
-	protected splitAtWeekBoundaries(event: BaseCalendarEvent<TEventResources>): BaseCalendarEvent<TEventResources>[] {
+	protected splitAtWeekBoundaries(event: BaseCalendarEvent<EventResources>): BaseCalendarEvent<EventResources>[] {
 		const { localizer } = this.config
 
-		const segments: BaseCalendarEvent<TEventResources>[] = []
+		const segments: BaseCalendarEvent<EventResources>[] = []
 		let currentStart = event.start
 		const finalEnd = event.end
 
@@ -174,7 +174,7 @@ export abstract class BaseDisplayStrategy<
 	 * Calculates the grid column placement for an event in a calendar view
 	 */
 	protected calculateMonthGridPlacement(
-		event: BaseCalendarEvent<TEventResources>
+		event: BaseCalendarEvent<EventResources>
 	) {
 		const start = event.start
 		const end = event.end
@@ -253,7 +253,7 @@ export abstract class BaseDisplayStrategy<
 	 */
 	public groupAndFilterEvents(
 		view: VIEW_NAMES,
-		events: BaseCalendarEvent<TEventResources>[],
+		events: BaseCalendarEvent<EventResources>[],
 		date: Date,
 		groupByResource?: boolean
 	): Map<string, SortedArray<EventDisplayDetails<TEventResources, P>>> {

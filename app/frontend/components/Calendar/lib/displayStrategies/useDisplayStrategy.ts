@@ -24,7 +24,8 @@ export const useDisplayStrategy = <
 
 	return useMemo(() => {
 		const strategiesForView = displayStrategyClasses[view]
-		const StrategyClassConstructor = strategiesForView[strategyName] as StrategyConstructor<TEventResources>
+		// Type cast needed: displayStrategyClasses uses 'as const', so TypeScript can't infer the generic relationship
+		const StrategyClassConstructor = strategiesForView[strategyName] as StrategyConstructor<TEventResources, P>
 
 		const strategyInstance = new StrategyClassConstructor({
 			localizer,

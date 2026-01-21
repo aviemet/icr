@@ -9,11 +9,11 @@ export { Event } from "./Event"
 export { EventWrapper } from "./EventWrapper"
 
 interface EventNodeProps<TEventResources extends EventResources> {
-	event: BaseCalendarEvent<TEventResources>
+	event: BaseCalendarEvent<EventResources>
 	displayProperties: TimeGridDisplayProperties
 	startTime: Date
 	timeIncrement: number
-	onEventClick?: (event: BaseCalendarEvent<TEventResources>, element: HTMLElement) => void
+	onEventClick?: (event: BaseCalendarEvent<EventResources>, element: HTMLElement) => void
 }
 
 export const EventNode = <TEventResources extends EventResources>({
@@ -27,12 +27,12 @@ export const EventNode = <TEventResources extends EventResources>({
 
 
 	return (
-		<EventWrapper<TEventResources>
+		<EventWrapper
 			key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
 			event={ event }
 			displayProperties={ displayProperties }
 		>
-			<Event<TEventResources>
+			<Event
 				key={ event.id }
 				event={ event }
 				localizer={ localizer }

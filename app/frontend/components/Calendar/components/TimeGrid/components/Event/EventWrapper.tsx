@@ -5,8 +5,8 @@ import { TimeGridDisplayProperties } from "@/components/Calendar/lib/displayStra
 
 import * as classes from "./Event.css"
 
-interface EventWrapperProps<TEventResources extends EventResources, P extends TimeGridDisplayProperties = TimeGridDisplayProperties> {
-	event: BaseCalendarEvent<TEventResources>
+interface EventWrapperProps<P extends TimeGridDisplayProperties = TimeGridDisplayProperties> {
+	event: BaseCalendarEvent<EventResources>
 	children: React.ReactNode
 	style?: React.CSSProperties
 	displayProperties: P
@@ -22,12 +22,12 @@ function calculateLeft(groupSize: number, slotIndex: number) {
 	return `calc(${(100 / groupSize) * slotIndex}%)`
 }
 
-const EventWrapper = <TEventResources extends EventResources, P extends TimeGridDisplayProperties = TimeGridDisplayProperties>({
+const EventWrapper = <P extends TimeGridDisplayProperties = TimeGridDisplayProperties>({
 	children,
 	event,
 	style,
 	displayProperties,
-}: EventWrapperProps<TEventResources, P>) => {
+}: EventWrapperProps<P>) => {
 	const groupSize = displayProperties.groupSize || 1
 	const slotIndex = displayProperties.slotIndex || 0
 

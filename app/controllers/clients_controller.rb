@@ -56,6 +56,8 @@ class ClientsController < ApplicationController
 
   # @route GET /clients/:slug/schedule (schedule_client)
   def schedule
+    authorize client
+
     schedules = client
       .calendar_events
       .includes([:recurring_patterns, :event_participants, shift: [employee: [:person, :job_title, :calendar_customization]]])

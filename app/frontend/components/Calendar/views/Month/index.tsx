@@ -133,13 +133,13 @@ const MonthViewComponent = <TEventResources extends EventResources>({
 									}
 
 									const eventComponent = (
-										<EventWrapper<TEventResources>
+										<EventWrapper
 											key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
 											displayProperties={ displayProperties }
 											event={ event }
 											setHoverId={ setHoverId }
 										>
-											<MonthEvent<TEventResources>
+											<MonthEvent
 												key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
 												event={ event }
 												displayProperties={ displayProperties }

@@ -24,14 +24,14 @@ export class MonthSplitStrategy<TEventResources extends EventResources>
 	 * Processes an event, splitting it by week and day boundaries.
 	 * Returns an array of display details, one for each day the event appears on.
 	 */
-	processEvent(event: BaseCalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, GridDisplayProperties>[] {
-		const weekSegments: BaseCalendarEvent<TEventResources>[] = this.spansWeekBorder(event)
+	processEvent(event: BaseCalendarEvent<EventResources>): EventDisplayDetails<TEventResources, GridDisplayProperties>[] {
+		const weekSegments: BaseCalendarEvent<EventResources>[] = this.spansWeekBorder(event)
 			? this.splitAtWeekBoundaries(event)
 			: [{ ...event }]
 
-		type DaySegment = { event: BaseCalendarEvent<TEventResources>, displayStart: Date, displayEnd: Date };
+		type DaySegment = { event: BaseCalendarEvent<EventResources>, displayStart: Date, displayEnd: Date };
 
-		const daySegments: DaySegment[] = weekSegments.flatMap((weekSegment: BaseCalendarEvent<TEventResources>) =>
+		const daySegments: DaySegment[] = weekSegments.flatMap((weekSegment: BaseCalendarEvent<EventResources>) =>
 			this.splitAtDayBoundaries(weekSegment)
 		)
 

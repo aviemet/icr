@@ -1,8 +1,6 @@
 import { Calendar, CalendarProps } from "./Calendar"
 
-import { EventResources } from "."
-
-const DefaultCalendar = <TEventResources extends EventResources>(props: CalendarProps<TEventResources>) => {
+const DefaultCalendar = (props: CalendarProps) => {
 	// const {
 	// 	defaultDate,
 	// 	defaultView = VIEWS.month,
@@ -13,7 +11,7 @@ const DefaultCalendar = <TEventResources extends EventResources>(props: Calendar
 	// 	onNavigate,
 	// 	onViewChange,
 	// 	eventPopoverContent,
-	// 	onSelectSlot,
+	// 	onClick,
 	// 	resources = [],
 	// 	groupByResource = false,
 	// 	maxEvents = Infinity,

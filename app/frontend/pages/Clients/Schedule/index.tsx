@@ -7,7 +7,7 @@ import {
 	Calendar,
 	Group,
 } from "@/components"
-import { BaseCalendarEvent, useCalendarContext } from "@/components/Calendar"
+import { BaseCalendarEvent, EventResources, useCalendarContext } from "@/components/Calendar"
 import { type PopoverContentMap } from "@/components/Calendar/components/CalendarPopover"
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 import { NAVIGATION_ACTION, VIEW_NAMES } from "@/components/Calendar/views"
@@ -31,6 +31,10 @@ interface ScheduleResources {
 	[key: string]: object
 	employee: Schema.ShiftsClient["employee"]
 	client: Schema.ClientsShow
+}
+
+function isScheduleResources(resources: EventResources | undefined): resources is ScheduleResources {
+	return resources !== undefined && "employee" in resources && "client" in resources
 }
 
 interface DraftNewShiftPopoverContentProps {
@@ -168,7 +172,10 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 				events={ processedSchedules }
 				onNavigate={ handleNavigate }
 				onViewChange={ handleViewChange }
-				defaultTitleBuilder={ (event: BaseCalendarEvent<ScheduleResources>) => formatEventTitle(event, event.resources?.employee) }
+				defaultTitleBuilder={ (event) => {
+					const employee = isScheduleResources(event.resources) ? event.resources.employee : undefined
+					return formatEventTitle(event, employee)
+				} }
 				popoverContent={ {
 					event: (event: BaseCalendarEvent, localizer: CalendarLocalizer) => <EventPopoverContent event={ event } localizer={ localizer } />,
 					background: (context) => <DraftNewShiftPopoverContent client={ client } selectedDate={ context.date } />,

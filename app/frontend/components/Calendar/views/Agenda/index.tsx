@@ -13,7 +13,7 @@ import { AgendaDisplayProperties, useDisplayStrategy } from "../../lib/displaySt
 interface AgendaViewProps<TEventResources extends EventResources> extends BaseViewProps<TEventResources, "agenda"> {
 	className?: string
 	style?: React.CSSProperties
-	titleBuilder?: (event: BaseCalendarEvent<TEventResources>, displayProperties: AgendaDisplayProperties) => string
+	titleBuilder?: (event: BaseCalendarEvent<EventResources>, displayProperties: AgendaDisplayProperties) => string
 }
 
 const AgendaViewComponent = <TEventResources extends EventResources>({
@@ -40,7 +40,7 @@ const AgendaViewComponent = <TEventResources extends EventResources>({
 		)
 	}
 
-	const renderEvent = (event: BaseCalendarEvent<TEventResources>, displayProperties: AgendaDisplayProperties) => {
+	const renderEvent = (event: BaseCalendarEvent<EventResources>, displayProperties: AgendaDisplayProperties) => {
 		const title = titleBuilder
 			? titleBuilder(event, displayProperties)
 			: getEventTitle(event, displayProperties)

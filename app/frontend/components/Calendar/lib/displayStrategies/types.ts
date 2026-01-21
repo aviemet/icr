@@ -36,7 +36,7 @@ export interface EventDisplayDetails<
 	TEventResources extends EventResources,
 	P extends BaseDisplayProperties
 > {
-	event: BaseCalendarEvent<TEventResources>
+	event: BaseCalendarEvent<EventResources>
 	displayProperties: P
 	compare: CompareFunction<TEventResources, P>
 }

@@ -1,5 +1,6 @@
 import { EventResources } from "../.."
 import { StrategyConfig, BaseDisplayStrategy } from "./BaseDisplayStrategy"
+import { BaseDisplayProperties } from "./types"
 import { agendaDisplayStrategies } from "../../views/Agenda/displayStrategies"
 import { dayDisplayStrategies } from "../../views/Day/displayStrategies"
 import { monthDisplayStrategies } from "../../views/Month/displayStrategies"
@@ -20,4 +21,7 @@ export type DisplayStrategyClasses = typeof displayStrategyClasses
 
 export type ViewStrategyName<V extends keyof DisplayStrategyClasses> = keyof DisplayStrategyClasses[V]
 
-export type StrategyConstructor<TEventResources extends EventResources> = new (config: StrategyConfig) => BaseDisplayStrategy<TEventResources>
+export type StrategyConstructor<
+	TEventResources extends EventResources,
+	P extends BaseDisplayProperties = BaseDisplayProperties
+> = new (config: StrategyConfig) => BaseDisplayStrategy<TEventResources, P>

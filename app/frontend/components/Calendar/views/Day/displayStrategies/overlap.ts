@@ -18,7 +18,7 @@ import {
 export class DayOverlapStrategy<TEventResources extends EventResources>
 	extends BaseDisplayStrategy<TEventResources, TimeGridDisplayProperties> {
 
-	processEvent(event: BaseCalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, TimeGridDisplayProperties>[] {
+	processEvent(event: BaseCalendarEvent<EventResources>): EventDisplayDetails<TEventResources, TimeGridDisplayProperties>[] {
 		const { columnHeadings, localizer } = this.config
 		if(!columnHeadings || columnHeadings.length === 0) {
 			// eslint-disable-next-line no-console

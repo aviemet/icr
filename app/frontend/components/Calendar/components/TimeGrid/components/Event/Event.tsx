@@ -8,18 +8,18 @@ import useStore from "@/lib/store"
 import * as classes from "./Event.css"
 import { CalendarEvent } from "../../../Event"
 
-interface EventProps<TEventResources extends EventResources> {
-	event: BaseCalendarEvent<TEventResources>
+interface EventProps {
+	event: BaseCalendarEvent<EventResources>
 	displayProperties: TimeGridDisplayProperties
 	localizer: CalendarLocalizer
 	startTime: Date
 	timeIncrement: number
 	className?: string
 	style?: React.CSSProperties
-	onEventClick?: (event: BaseCalendarEvent<TEventResources>, element: HTMLElement) => void
+	onEventClick?: (event: BaseCalendarEvent<EventResources>, element: HTMLElement) => void
 }
 
-const Event = <TEventResources extends EventResources>({
+const Event = ({
 	event,
 	displayProperties,
 	className,
@@ -28,7 +28,7 @@ const Event = <TEventResources extends EventResources>({
 	startTime,
 	timeIncrement,
 	...props
-}: EventProps<TEventResources>) => {
+}: EventProps) => {
 	const { getContrastingColor } = useStore()
 	const { getEventTitle } = useCalendarContext()
 	const eventColor = event.color || "var(--mantine-primary-color-filled)"

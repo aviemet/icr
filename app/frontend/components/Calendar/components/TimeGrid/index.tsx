@@ -55,7 +55,7 @@ const TimeGrid = <
 }: TimeGridProps<TEventResources, V>) => {
 	const { localizer, onClick, groupByResource } = useCalendarContext()
 
-	const onEventClick = useCallback((event: BaseCalendarEvent<TEventResources>, element: HTMLElement) => {
+	const onEventClick = useCallback((event: BaseCalendarEvent<EventResources>, element: HTMLElement) => {
 		onClick({ type: "event", event, element })
 	}, [onClick])
 
