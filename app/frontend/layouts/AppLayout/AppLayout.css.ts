@@ -1,6 +1,6 @@
 import { css } from "@linaria/core"
 
-import { vars, theme } from "@/lib/theme"
+import { vars, theme } from "@/lib/css"
 
 /**
  * AppShell
@@ -8,7 +8,7 @@ import { vars, theme } from "@/lib/theme"
 export const wrapper = css`
 	overflow: auto;
 	height: calc(100vh - ${ theme.other.footer.height }px);
-	padding: ${vars.spacing.xs};
+	padding: ${ vars.spacing.xs };
 `
 
 /**

@@ -1,6 +1,6 @@
 import { css } from "@linaria/core"
 
-import { vars } from "@/lib/theme"
+import { vars } from "@/lib/css"
 
 export const globals = css`
 	:global() {

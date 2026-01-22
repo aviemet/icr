@@ -1,6 +1,6 @@
 import { css } from "@linaria/core"
 
-import { vars } from "@/lib"
+import { vars } from "@/lib/css"
 
 export const event = css`
   font-size: ${ vars.fontSizes.xs };
