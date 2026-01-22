@@ -31,7 +31,7 @@ RSpec.describe Localization, type: :controller do
 
   describe "timezone handling" do
     it "uses user timezone" do
-      user = create(:user, time_zone: "Pacific Time (US & Canada)")
+      user = create(:user, time_zone: "America/Los_Angeles")
       sign_in user
 
       get :index

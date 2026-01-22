@@ -84,6 +84,9 @@ This is a single-instance Rails application designed to run for a single company
 - Single-tenant application
 - Company settings use singleton pattern
 
+### Controller Concerns
+- Concerns that store config used in instance methods (e.g. Searchable’s sortable fields, advanced search methods) use `class_attribute` so includers get per-class config visible to instances. Avoid module-level instance variables in `included` blocks; those are class ivars and are not available in instance methods.
+
 ### Development Guidelines
 - No multi-tenancy support
 - Changes must be atomic and focused

@@ -1,5 +1,5 @@
 class ClientPolicy < ApplicationPolicy
-  class Scope < Scope
+  class Scope < ApplicationPolicy::Scope
     def resolve
       # Admins can see all clients
       return scope.all if user.has_role?(:admin)

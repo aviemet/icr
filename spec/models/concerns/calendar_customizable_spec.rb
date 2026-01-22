@@ -21,7 +21,7 @@ RSpec.describe CalendarCustomizable do
         record = create(customizable)
         expect {
           record.set_color("employees", 1, "#00FF00")
-        }.to change(CalendarCustomization, :count).by(1)
+        }.to change(Calendar::Customization, :count).by(1)
 
         expect(record.color_for("employees", 1)).to eq("#00FF00")
       end
@@ -61,7 +61,7 @@ RSpec.describe CalendarCustomizable do
         record = create(customizable)
         expect {
           record.remove_color("employees", 1)
-        }.not_to change(CalendarCustomization, :count)
+        }.not_to change(Calendar::Customization, :count)
       end
     end
   end

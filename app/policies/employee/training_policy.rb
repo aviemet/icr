@@ -1,5 +1,5 @@
 class Employee::TrainingPolicy < ApplicationPolicy
-  class Scope < Scope
+  class Scope < ApplicationPolicy::Scope
     def resolve
       # Admins can see all trainings
       return scope.all if user.has_role?(:admin)

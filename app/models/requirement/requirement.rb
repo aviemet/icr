@@ -30,7 +30,7 @@ module Requirement
     has_many :trainings,
              through: :requirement_items,
              source: :fulfillable,
-             source_type: "Training"
+             source_type: "Employee::Training"
     # Add has_many for other fulfillable types (e.g., :credentials) here as needed
 
     validates :name, presence: true

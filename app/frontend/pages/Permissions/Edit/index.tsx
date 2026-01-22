@@ -1,6 +1,8 @@
-import { Title, Page, Section } from "@/Components"
+import { Title, Page, Section } from "@/components"
 import { Routes } from "@/lib"
+
 import PermissionsForm from "../Form"
+
 
 interface EditPermissionProps {
 	permission: Schema.PermissionsEdit
@@ -17,9 +19,9 @@ const EditPermission = ({ permission }: EditPermissionProps) => {
 		] }>
 			<Section>
 				<Title>{ title }</Title>
-				
+
 				<PermissionsForm
-					method='put'
+					method="put"
 					to={ Routes.permission() }
 					permission={ permission }
 				/>

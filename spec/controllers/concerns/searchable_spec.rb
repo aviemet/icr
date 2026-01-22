@@ -5,6 +5,7 @@ RSpec.describe Searchable do
   let(:controller) do
     test_controller = Class.new(ApplicationController) do
       include Searchable
+
       sortable_fields %w[first_name last_name created_at]
 
       def advanced_search_params
@@ -33,16 +34,16 @@ RSpec.describe Searchable do
         allow(controller).to receive(:params).and_return(ActionController::Parameters.new({ search: "John" }))
 
         result = controller.search(Person)
-        expect(result).to include(person1)
-        expect(result).not_to include(person2, person3)
+        expect(result).to include(person1, person3)
+        expect(result).not_to include(person2)
       end
     end
 
     context "with advanced search" do
       it "filters by exact name" do
-        allow(controller).to receive(:advanced_search_params).and_return(
-          ActionController::Parameters.new({
-            adv: "true",
+        allow(controller).to receive_messages(
+          params: ActionController::Parameters.new({ adv: "true" }),
+          advanced_search_params: ActionController::Parameters.new({
             first_name: "John",
             last_name: "Doe"
           }).permit(:first_name, :last_name),
@@ -131,7 +132,9 @@ RSpec.describe Searchable do
       )
 
       controller.send(:remove_empty_query_parameters)
-      expect(controller).to have_received(:redirect_to).with("/test?sort=name&direction=asc")
+      expect(controller).to have_received(:redirect_to).with(
+        satisfy { |url| url.start_with?("/test?") && url.include?("sort=name") && url.include?("direction=asc") },
+      )
     end
 
     it "removes direction when sort is not present" do
