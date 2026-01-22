@@ -17,8 +17,18 @@
 #
 #  fk_rails_...  (employee_id => employees.id)
 #
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe Employee::Interview, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+RSpec.describe Employee::Interview do
+  describe "Validations" do
+    it "is valid with valid attributes" do
+      expect(build(:interview)).to be_valid
+    end
+  end
+
+  describe "Associations" do
+    it { is_expected.to belong_to(:employee) }
+    it { is_expected.to have_many(:interview_participants).class_name("Employee::InterviewParticipant").dependent(:destroy) }
+    it { is_expected.to have_many(:interviewers).through(:interview_participants).source(:person) }
+  end
 end

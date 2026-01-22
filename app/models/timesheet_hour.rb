@@ -29,5 +29,13 @@ class TimesheetHour < ApplicationRecord
   tracked
   resourcify
 
+  belongs_to :timesheet
+  belongs_to :employee
+
+  validates :started_at, presence: true
+  validates :ended_at, presence: true
+  validates :hours, presence: true
+  validates :started_at, uniqueness: { scope: [:timesheet_id, :employee_id] }
+
   scope :includes_associated, -> { includes([]) }
 end

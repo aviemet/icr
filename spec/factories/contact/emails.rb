@@ -28,7 +28,10 @@ FactoryBot.define do
     contact
 
     after(:build) do |email|
-      email.category ||= create(:category, categorizable_type: "Contact::Email")
+      email.category ||= Category.find_or_create_by!(
+        categorizable_type: "Contact::Email",
+        name: "Personal",
+      )
     end
   end
 end

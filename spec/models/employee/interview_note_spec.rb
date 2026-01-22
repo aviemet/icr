@@ -20,8 +20,17 @@
 #  fk_rails_...  (employee_id => employees.id)
 #  fk_rails_...  (interview_id => employees.id)
 #
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe Employee::InterviewNote, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+RSpec.describe Employee::InterviewNote do
+  describe "Validations" do
+    it "is valid with valid attributes" do
+      expect(build(:interview_note)).to be_valid
+    end
+  end
+
+  describe "Associations" do
+    it { is_expected.to belong_to(:employee) }
+    it { is_expected.to belong_to(:interview).class_name("Employee::Interview") }
+  end
 end

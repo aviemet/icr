@@ -19,9 +19,7 @@
 #
 FactoryBot.define do
   factory :interview, class: "Employee::Interview" do
-    starts_at { 1.day.from_now }
-    ends_at { starts_at + 1.hour }
-    status { :scheduled }
+    scheduled_at { 1.day.from_now }
 
     employee
   end

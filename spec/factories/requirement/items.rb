@@ -20,8 +20,8 @@
 #  fk_rails_...  (requirement_id => requirements.id)
 #
 FactoryBot.define do
-  factory :requirement_item, class: 'Requirement::Item' do
-    requirement { nil }
-    fulfillable { nil }
+  factory :requirement_item, class: "Requirement::Item" do
+    requirement
+    fulfillable { association :training }
   end
 end

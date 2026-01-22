@@ -21,9 +21,7 @@
 #
 FactoryBot.define do
   factory :interview_participant, class: "Employee::InterviewParticipant" do
-    role { :interviewer }
-
     interview
-    user
+    person
   end
 end

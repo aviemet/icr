@@ -20,11 +20,10 @@
 #  fk_rails_...  (requirement_type_id => requirement_types.id)
 #
 FactoryBot.define do
-  factory :requirement_requirement, class: 'Requirement::Requirement' do
-    name { "MyString" }
-    description { "MyText" }
-    requirement_type { nil }
-    scope_type { "MyString" }
-    scope_id { 1 }
+  factory :requirement_requirement, class: "Requirement::Requirement", aliases: [:requirement] do
+    name { Faker::Company.buzzword.titleize }
+    description { Faker::Lorem.paragraph }
+    requirement_type
+    scope { association :job_title }
   end
 end

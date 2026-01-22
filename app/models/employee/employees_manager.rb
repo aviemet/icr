@@ -50,6 +50,8 @@ class Employee::EmployeesManager < ApplicationRecord
   private
 
   def not_self_managed
+    return if manager_id.blank? || employee_id.blank?
+
     if manager_id == employee_id
       errors.add(:base, :no_self_management)
     end

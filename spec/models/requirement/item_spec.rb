@@ -19,8 +19,27 @@
 #
 #  fk_rails_...  (requirement_id => requirements.id)
 #
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe Requirement::Item, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+RSpec.describe Requirement::Item do
+  describe "Validations" do
+    it "is valid with valid attributes" do
+      expect(build(:requirement_item)).to be_valid
+    end
+
+    it "is invalid when a fulfillable is duplicated for the same requirement" do
+      requirement = create(:requirement)
+      training = create(:training)
+      create(:requirement_item, requirement: requirement, fulfillable: training)
+
+      duplicate = build(:requirement_item, requirement: requirement, fulfillable: training)
+      expect(duplicate).not_to be_valid
+      expect(duplicate.errors[:fulfillable_id]).to be_present
+    end
+  end
+
+  describe "Associations" do
+    it { is_expected.to belong_to(:requirement).class_name("Requirement::Requirement") }
+    it { is_expected.to belong_to(:fulfillable) }
+  end
 end
