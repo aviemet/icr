@@ -1,7 +1,8 @@
 import { DatePicker, DateValue, MonthPicker } from "@mantine/dates"
 import { useDisclosure } from "@mantine/hooks"
 import clsx from "clsx"
-import { forwardRef, useMemo } from "react"
+import dayjs from "dayjs"
+import { forwardRef } from "react"
 
 import { Box, Button, Group, Menu, Paper } from "@/components"
 import { FloatingIndicator } from "@/components/Button/FloatingIndicator"
@@ -11,7 +12,6 @@ import { PreviousIcon, NextIcon, DownArrowIcon } from "@/components/Icons"
 import { useAnimateWidth } from "@/lib/hooks/useAnimateWidth"
 
 import * as classes from "./Toolbar.css"
-
 
 interface ToolbarProps {
 	views?: readonly VIEW_NAMES[]
@@ -35,20 +35,9 @@ const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>((
 	const handlePickDate = (d: DateValue) => {
 		close()
 		if(!d) return
-		const dateObj = typeof d === "string" ? new Date(d) : d
-		handleDateChange(NAVIGATION.date, dateObj)
+		const dateObj = dayjs(d)
+		handleDateChange(NAVIGATION.date, dateObj.toDate())
 	}
-
-	const label = useMemo(() => {
-		const ViewComponent = viewComponents[view]
-		return ViewComponent.title(date, {
-			date,
-			today: new Date(),
-			localizer,
-			events: [],
-			resourcesById,
-		})
-	}, [date, localizer, view, resourcesById])
 
 	const buttonStyles = {
 		py: 0,
@@ -109,14 +98,20 @@ const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>((
 								{ ...buttonStyles }
 							>
 								<span >
-									{ label }
+									{ viewComponents[view].title(date, {
+										date,
+										today: new Date(),
+										localizer,
+										events: [],
+										resourcesById,
+									}) }
 								</span>
 							</Button>
 						</Menu.Target>
 
 						<Menu.Dropdown>{ view === VIEWS.month
-							? <MonthPicker onChange={ handlePickDate } />
-							: <DatePicker onChange={ handlePickDate } />
+							? <MonthPicker value={ date } onChange={ handlePickDate } />
+							: <DatePicker value={ date } onChange={ handlePickDate } firstDayOfWeek={ 0 } />
 						}</Menu.Dropdown>
 					</Menu>
 				</div>

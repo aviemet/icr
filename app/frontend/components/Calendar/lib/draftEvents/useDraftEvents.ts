@@ -2,51 +2,29 @@ import { useCallback, useMemo, useState } from "react"
 
 type Identifiable = { id: string | number }
 
-function upsertById<TItem extends Identifiable>(items: readonly TItem[], nextItem: TItem): TItem[] {
-	let hasChanged = false
-	const nextItems: TItem[] = []
+function upsertById<TItem extends Identifiable>(items: TItem[], upsertItem: TItem) {
+	let didUpdate = false
 
-	for(const item of items) {
-		if(item.id === nextItem.id) {
-			if(item !== nextItem) hasChanged = true
-			nextItems.push(nextItem)
-		} else {
-			nextItems.push(item)
-		}
-	}
+	const nextItems = items.map((item) => {
+		if(item.id !== upsertItem.id) return item
 
-	if(!items.some(item => item.id === nextItem.id)) {
-		nextItems.push(nextItem)
-		hasChanged = true
-	}
+		didUpdate = true
 
-	return hasChanged ? nextItems : [...items]
-}
-
-function patchById<TItem extends Identifiable>(items: readonly TItem[], id: TItem["id"], patch: Partial<TItem>): TItem[] {
-	let didFind = false
-	let hasChanged = false
-
-	const nextItems = items.map(item => {
-		if(item.id !== id) return item
-		didFind = true
-
-		for(const [key, value] of Object.entries(patch)) {
-			const typedKey = key as keyof TItem
-			if(item[typedKey] !== value) {
-				hasChanged = true
-				break
-			}
-		}
-
-		return hasChanged ? { ...item, ...patch } : item
+		return { ...item, upsertItem }
 	})
 
-	if(!didFind) return [...items]
-	return hasChanged ? nextItems : [...items]
+	if(!didUpdate) {
+		nextItems.push(upsertItem)
+	}
+
+	return nextItems
 }
 
-function removeById<TItem extends Identifiable>(items: readonly TItem[], id: TItem["id"]): TItem[] {
+function patchById<TItem extends Identifiable>(items: TItem[], id: TItem["id"], patch: Partial<TItem>) {
+	return items.map(item => (item.id !== id) ? item : { ...item, ...patch })
+}
+
+function removeById<TItem extends Identifiable>(items: TItem[], id: TItem["id"]) {
 	const nextItems = items.filter(item => item.id !== id)
 	return nextItems.length === items.length ? [...items] : nextItems
 }

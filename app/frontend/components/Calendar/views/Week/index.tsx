@@ -56,5 +56,8 @@ export const WeekView = createViewComponent(WeekViewComponent, {
 				return date
 		}
 	},
-	title: (date, { localizer }) => localizer.format(date, localizer.messages.formats.weekTitle),
+	title: (date, { localizer }) => {
+		const beginningOfWeek = localizer.firstVisibleDay(date, VIEWS.week)
+		return localizer.format(beginningOfWeek, localizer.messages.formats.weekTitle)
+	},
 })

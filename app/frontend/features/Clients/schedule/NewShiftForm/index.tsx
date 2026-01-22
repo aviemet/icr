@@ -7,7 +7,7 @@ import { DateTimeInput, Form, Submit, FormConsumer } from "@/components/Form"
 import { FormEmployeesDropdown } from "@/features/Dropdowns"
 import { Routes } from "@/lib"
 
-type NewShiftData = {
+export type NewShiftData = {
 	calendar_event: Omit<PartialDeep<Schema.CalendarEventsFormData>, "event_participants"> & {
 		shift: PartialDeep<Schema.Shift>
 		event_participants: PartialDeep<Schema.EventParticipantsFormData>[]
@@ -21,7 +21,6 @@ interface NewClientShiftFormProps {
 	onError?: (form: UseFormProps<NewShiftData>) => void
 	onChange?: (form: UseFormProps<NewShiftData>) => void
 }
-
 
 const NewShiftForm = ({ client, selectedDate, onSuccess, onError, onChange }: NewClientShiftFormProps) => {
 	const initialData: NewShiftData = {
@@ -90,5 +89,3 @@ const NewShiftForm = ({ client, selectedDate, onSuccess, onError, onChange }: Ne
 }
 
 export default NewShiftForm
-
-export type { NewShiftData }

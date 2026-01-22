@@ -82,7 +82,7 @@ export function Calendar({
 		removeDraftEvent,
 	} = useDraftEvents<BaseCalendarEvent>()
 
-	const effectiveEvents = useMemo(() => {
+	const combinedEvents = useMemo(() => {
 		if(draftEvents.length === 0) return events
 		return [...events, ...draftEvents]
 	}, [events, draftEvents])
@@ -148,7 +148,7 @@ export function Calendar({
 				date: date,
 				today: new Date(),
 				localizer: localLocalizer,
-				events: effectiveEvents,
+				events: combinedEvents,
 				resourcesById: resourcesById,
 			}
 		)
@@ -159,7 +159,7 @@ export function Calendar({
 		onNavigate?.(nextDate, action, currentView)
 
 		return nextDate
-	}, [CalendarViewComponent, date, effectiveEvents, localLocalizer, onNavigate, currentView, resourcesById])
+	}, [CalendarViewComponent, date, combinedEvents, localLocalizer, onNavigate, currentView, resourcesById])
 
 	const handleClick = useCallback((clickTarget: CalendarClickTarget) => {
 		const wasHandled = onClick?.(clickTarget)
@@ -205,7 +205,7 @@ export function Calendar({
 
 	const calendarProviderState = useMemo<CalendarContext>(() => ({
 		date,
-		events: effectiveEvents,
+		events: combinedEvents,
 		draftEvents,
 		upsertDraftEvent,
 		patchDraftEvent,
@@ -222,7 +222,7 @@ export function Calendar({
 		getEventTitle,
 	}), [
 		date,
-		effectiveEvents,
+		combinedEvents,
 		draftEvents,
 		upsertDraftEvent,
 		patchDraftEvent,
