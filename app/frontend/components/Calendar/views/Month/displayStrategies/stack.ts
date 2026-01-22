@@ -36,12 +36,12 @@ export class MonthStackStrategy<TEventResources extends EventResources>
 	 * Helper to determine if an event needs splitting at week boundaries.
 	 * Based on original logic: only splits if it crosses a week border AND should span days.
 	 */
-	protected shouldSplitAtWeekBoundary(event: BaseCalendarEvent<TEventResources>): boolean {
+	protected shouldSplitAtWeekBoundary(event: BaseCalendarEvent<EventResources>): boolean {
 		return this.spansWeekBorder(event) && this.shouldSpanDays(event)
 	}
 
-	processEvent(event: BaseCalendarEvent<TEventResources>): EventDisplayDetails<TEventResources, GridDisplayProperties>[] {
-		const weekSegments: BaseCalendarEvent<TEventResources>[] = this.shouldSplitAtWeekBoundary(event)
+	processEvent(event: BaseCalendarEvent<EventResources>): EventDisplayDetails<TEventResources, GridDisplayProperties>[] {
+		const weekSegments: BaseCalendarEvent<EventResources>[] = this.shouldSplitAtWeekBoundary(event)
 			? this.splitAtWeekBoundaries(event)
 			: [{ ...event }]
 

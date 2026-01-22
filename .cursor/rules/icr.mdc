@@ -6,17 +6,8 @@ alwaysApply: true
 # REQUIRED FOR EVERY INTERACTION:
 
 1. Read .cursor/icr.mdx at the start of each interaction
-2. Before ending ANY response, if you've learned ANYTHING about:
-   - Project structure
-   - Code patterns
-   - Implementation details
-   - Conventions
-   - Dependencies
-   - Configuration
-   You MUST update .cursor/icr.mdx with this information
+2. Before ending ANY response, if you've learned anything useful about project-specific architectural details that are NOT immediately obvious from reading the code, you MUST update .cursor/icr.mdx with this information
 3. When updating .cursor/icr.mdx:
+   - Only document reusable, cross-cutting patterns; skip single-file or one-off implementation notes that are obvious from code
    - Only add new information not already documented
-   - Place information in the appropriate section
-   - If no appropriate section exists, create one
-   - Include specific details (versions, patterns, types) rather than general descriptions
-4. After updating .cursor/icr.mdx, explicitly note in your response what new information was added
+   - Place information in the appropriate section, if no appropriate section exists, create one

@@ -17,4 +17,3 @@ export const animationContainer = css`
 	min-height: 0;
 	width: 100%;
 `
-

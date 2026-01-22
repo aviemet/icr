@@ -4,42 +4,36 @@ import { EventResources, useCalendarContext } from "../.."
 import { VIEW_NAMES } from "../../views"
 
 import {
-	displayStrategyFactories,
-	ViewStrategyName,
-	BaseDisplayStrategy,
 	StrategyConfig,
 	BaseDisplayProperties,
-	DisplayStrategyFactories,
+	displayStrategyClasses,
+	ViewStrategyName,
+	StrategyConstructor,
 } from "."
 
 export const useDisplayStrategy = <
 	TEventResources extends EventResources,
-	V extends keyof DisplayStrategyFactories,
+	V extends VIEW_NAMES,
 	P extends BaseDisplayProperties
 >(
 	view: V,
 	strategyName: ViewStrategyName<V>,
 	viewConfig?: Partial<StrategyConfig>
 ) => {
-	const { date, localizer, events, groupByResource } = useCalendarContext<TEventResources>()
+	const { date, localizer, events, groupByResource } = useCalendarContext()
 
 	return useMemo(() => {
-		const currentView = view
-		const strategiesForView: DisplayStrategyFactories[typeof currentView] = displayStrategyFactories[currentView]
+		const strategiesForView = displayStrategyClasses[view]
+		// Type cast needed: displayStrategyClasses uses 'as const', so TypeScript can't infer the generic relationship
+		const StrategyClassConstructor = strategiesForView[strategyName] as StrategyConstructor<TEventResources, P>
 
-		if(!strategiesForView || !strategiesForView.hasOwnProperty(strategyName)) {
-			throw new Error(`Invalid strategy factory for view="${currentView}", name="${String(strategyName)}"`)
-		}
-
-		const strategyFactory = strategiesForView[strategyName] as (config: StrategyConfig) => BaseDisplayStrategy<TEventResources, P>
-
-		const strategyInstance = strategyFactory({
+		const strategyInstance = new StrategyClassConstructor({
 			localizer,
 			...(viewConfig || {}),
 		})
 
 		return strategyInstance.groupAndFilterEvents(
-			currentView as VIEW_NAMES,
+			view,
 			events,
 			date,
 			groupByResource

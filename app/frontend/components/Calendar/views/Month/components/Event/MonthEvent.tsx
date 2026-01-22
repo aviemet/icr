@@ -1,14 +1,13 @@
 import clsx from "clsx"
 
-import { EventResources } from "@/components/Calendar"
 import { CalendarEvent, EventProps } from "@/components/Calendar/components/Event"
 
 import * as classes from "./Event.css"
 
-const MonthEvent = <TEventResources extends EventResources>({
+const MonthEvent = ({
 	className,
 	...props
-}: EventProps<TEventResources>) => {
+}: EventProps) => {
 	return (
 		<CalendarEvent
 			className={ clsx(classes.monthEvent, className) }

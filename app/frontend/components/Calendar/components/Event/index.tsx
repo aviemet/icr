@@ -7,29 +7,29 @@ import { BaseDisplayProperties } from "../../lib/displayStrategies"
 import { CalendarLocalizer } from "../../lib/localizers"
 
 
-export interface EventProps<TEventResources extends EventResources> extends
+export interface EventProps extends
 	Omit<HTMLAttributes<HTMLDivElement>, "onClick"> {
-	event: BaseCalendarEvent<TEventResources>
-	onClick?: (event: BaseCalendarEvent<TEventResources>, element: HTMLElement) => void
+	event: BaseCalendarEvent<EventResources>
+	onClick?: (event: BaseCalendarEvent<EventResources>, element: HTMLElement) => void
 	localizer: CalendarLocalizer
 	displayProperties: BaseDisplayProperties
 }
 
-const CalendarEvent = <TEventResources extends EventResources>({
+const CalendarEvent = ({
 	children,
 	className,
 	event,
 	onClick,
 	displayProperties,
 	...props
-}: EventProps<TEventResources>) => {
-	const { onEventClick } = useCalendarContext<TEventResources>()
+}: EventProps) => {
+	const { onClick: onClickFromContext } = useCalendarContext()
 
 	const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
 		if(onClick) {
 			onClick(event, e.currentTarget)
-		} else if(onEventClick) {
-			onEventClick(event, e.currentTarget)
+		} else if(onClickFromContext) {
+			onClickFromContext({ type: "event", event, element: e.currentTarget })
 		}
 	}
 

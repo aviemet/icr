@@ -32,9 +32,8 @@ const MonthViewComponent = <TEventResources extends EventResources>({
 	style,
 	displayStrategy,
 	showDailyTotals = true,
-	onSelectSlot,
 }: MonthViewProps<TEventResources>) => {
-	const { date, localizer, events, maxEvents } = useCalendarContext<TEventResources>()
+	const { date, localizer, events, maxEvents, onClick, getEventTitle } = useCalendarContext()
 
 	const eventsByDay = useDisplayStrategy<TEventResources, "month", GridDisplayProperties>(
 		VIEWS.month,
@@ -55,14 +54,14 @@ const MonthViewComponent = <TEventResources extends EventResources>({
 		return chunk(localizer.visibleDays(date, VIEWS.month), weekdays.length)
 	}, [date, localizer, weekdays.length])
 
-	// Add background click handler option
 	const handleClickBackground = (e: React.MouseEvent<HTMLDivElement>) => {
-		const target = e.target as HTMLElement
-		const cell = target.closest<HTMLDivElement>(`.${classes.dateCellBackground}`)
+		if(!(e.target instanceof HTMLElement)) return
 
-		if(cell && cell.dataset.date && onSelectSlot) {
+		const cell = e.target.closest<HTMLDivElement>(`.${classes.dateCellBackground}`)
+
+		if(cell && cell.dataset.date && onClick) {
 			const clickedDate = new Date(cell.dataset.date)
-			onSelectSlot(clickedDate)
+			onClick({ type: "background", date: clickedDate, element: cell })
 		}
 	}
 
@@ -134,28 +133,20 @@ const MonthViewComponent = <TEventResources extends EventResources>({
 									}
 
 									const eventComponent = (
-										<EventWrapper<TEventResources>
+										<EventWrapper
 											key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
 											displayProperties={ displayProperties }
 											event={ event }
 											setHoverId={ setHoverId }
 										>
-											<MonthEvent<TEventResources>
+											<MonthEvent
 												key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
 												event={ event }
 												displayProperties={ displayProperties }
 												localizer={ localizer }
 												className={ clsx(displayProperties.className) }
 											>
-												{ event.titleBuilder
-													? event.titleBuilder({
-														start: displayProperties.displayStart,
-														end: displayProperties.displayEnd,
-														allDay: event.allDay,
-														title: event.title,
-														resources: event.resources,
-													})
-													: event.title }
+												{ getEventTitle(event, displayProperties) }
 											</MonthEvent>
 										</EventWrapper>
 									)

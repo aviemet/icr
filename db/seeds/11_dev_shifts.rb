@@ -1,5 +1,6 @@
 if Rails.env.development?
 
+  # Add some employees for the first client and a couple months worth of shifts
   if Client.first.calendar_events.empty?
 
     attendant_job = Employee::JobTitle.find_by(slug: "attendant")
@@ -37,6 +38,7 @@ if Rails.env.development?
 
   end
 
+  # Add a couple months worth of shifts for the second client
   if Client.second.calendar_events.empty?
 
     ActiveRecord::Base.transaction do
@@ -60,6 +62,22 @@ if Rails.env.development?
         },)
 
         client.calendar_events << shift.calendar_event
+
+        # Add some overlapping events
+        next unless w % 10 == 0
+
+        overlap_start = start_time + [*-2..2].sample.hours
+        overlap_end = shift.calendar_event.ends_at + [*-2..2].sample.hours
+
+        overlap_shift = FactoryBot.create(:shift, {
+          employee: Employee.find_by(id: Employee.pluck(:id)[(w + 2) % 5]),
+          calendar_event: FactoryBot.create(:calendar_event, {
+            starts_at: overlap_start,
+            ends_at: overlap_end,
+          },)
+        },)
+
+        client.calendar_events << overlap_shift.calendar_event
       end
     end
 

@@ -4,11 +4,10 @@ import { vars } from "@/lib"
 
 export const container = css`
 	position: absolute;
-	z-index: 1000;
+	z-index: 250;
 	transform-origin: top left;
 	opacity: 1;
 
-	/* Add a subtle scale animation when the popover appears */
 	&[data-entering] {
 		opacity: 0;
 		transform: scale(0.95);

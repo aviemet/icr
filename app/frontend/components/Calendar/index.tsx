@@ -2,6 +2,7 @@ import React, { createContext as ReactCreateContext, useContext as ReactUseConte
 
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 
+import { BaseDisplayProperties } from "./lib/displayStrategies"
 import { VIEW_NAMES, NAVIGATION_ACTION } from "./views"
 
 export interface Resource {
@@ -14,7 +15,7 @@ export type EventResources = Record<string, object>
 export interface BaseCalendarEvent<TEventResources extends EventResources = EventResources> {
 	id: string | number
 	title: string
-	titleBuilder?: CalendarEventTitleCallback<TEventResources>
+	titleBuilder?: CalendarEventTitleCallback
 	start: Date
 	end: Date
 	allDay?: boolean
@@ -26,37 +27,48 @@ export interface BaseCalendarEvent<TEventResources extends EventResources = Even
 
 export type CalendarEventTitleCallback<TEventResources extends EventResources = EventResources> = (event: Pick<BaseCalendarEvent<TEventResources>, "start" | "end" | "allDay" | "title" | "resources" | "resourceId">) => string
 
-interface CalendarContextValue<TEventResources extends EventResources = EventResources> {
+export type CalendarClickTarget =
+	| { type: "event", event: BaseCalendarEvent, element: HTMLElement }
+	| { type: "background", date: Date, time?: Date, resourceId?: string | number, element: HTMLElement }
+
+interface CalendarContextValue {
 	date: Date
-	events: BaseCalendarEvent<TEventResources>[]
+	events: BaseCalendarEvent[]
+	draftEvents: BaseCalendarEvent[]
+	upsertDraftEvent: (event: BaseCalendarEvent) => void
+	patchDraftEvent: (id: BaseCalendarEvent["id"], patch: Partial<BaseCalendarEvent>) => void
+	removeDraftEvent: (id: BaseCalendarEvent["id"]) => void
 	localizer: CalendarLocalizer
 	handleViewChange: (view: VIEW_NAMES) => void
 	handleDateChange: (action: NAVIGATION_ACTION, newDate?: Date) => void
-	onEventClick: (event: BaseCalendarEvent<TEventResources>, element: HTMLElement) => void
+	onClick: (target: CalendarClickTarget) => void
 	resourcesById: Map<string | number, Resource>
 	groupByResource: boolean
 	maxEvents: number
-	prevDateRef: React.RefObject<Date>
+	prevDate: Date
+	defaultTitleBuilder?: CalendarEventTitleCallback
+	getEventTitle: <TEventResources extends EventResources>(
+		event: BaseCalendarEvent<TEventResources>,
+		displayProperties: BaseDisplayProperties
+	) => string
 }
 
-export type CalendarContext<TEventResources extends EventResources = EventResources> = CalendarContextValue<TEventResources>
+export type CalendarContext = CalendarContextValue
 
-const ContextObject = ReactCreateContext<CalendarContextValue<any> | undefined>(undefined)
+const ContextObject = ReactCreateContext<CalendarContextValue | undefined>(undefined)
 
-export const useCalendarContext = <TEventResources extends EventResources = EventResources>(): CalendarContextValue<TEventResources> => {
+export const useCalendarContext = (): CalendarContextValue => {
 	const context = ReactUseContext(ContextObject)
 	if(context === undefined) {
 		throw new Error("useCalendarContext must be used within a CalendarProvider")
 	}
-	return context as CalendarContextValue<TEventResources>
+	return context
 }
 
-export const CalendarProvider = <TEventResources extends EventResources>(
-	props: React.PropsWithChildren<{ value: CalendarContextValue<TEventResources> }>
+export const CalendarProvider = (
+	props: React.PropsWithChildren<{ value: CalendarContextValue }>
 ): JSX.Element => {
 	return <ContextObject.Provider value={ props.value }>{ props.children }</ContextObject.Provider>
 }
-
-// export { Calendar } from "./Calendar"
 
 export { DefaultCalendar as Calendar } from "./DefaultCalendar"

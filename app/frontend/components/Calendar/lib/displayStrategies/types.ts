@@ -5,6 +5,11 @@ export interface BaseDisplayProperties {
 	displayEnd: Date
 	allDay?: boolean
 	className?: string
+	overlap?: number
+	hasSameStart?: number
+	index?: number
+	slotIndex?: number
+	groupSize?: number
 }
 
 export interface GridDisplayProperties extends BaseDisplayProperties {
@@ -31,7 +36,7 @@ export interface EventDisplayDetails<
 	TEventResources extends EventResources,
 	P extends BaseDisplayProperties
 > {
-	event: BaseCalendarEvent<TEventResources>
+	event: BaseCalendarEvent<EventResources>
 	displayProperties: P
 	compare: CompareFunction<TEventResources, P>
 }

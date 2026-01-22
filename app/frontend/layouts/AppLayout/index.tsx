@@ -50,7 +50,7 @@ const AppLayout = ({ children }: LayoutProps) => {
 			<Footer />
 			<AppShell.Main className={ clsx(classes.main) }>
 				<div id="above-content-portal"></div>
-				<Box className={ clsx(classes.wrapper) } p="xs">
+				<Box className={ clsx(classes.wrapper) }>
 					{ children }
 				</Box>
 			</AppShell.Main>

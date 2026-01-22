@@ -194,6 +194,15 @@ The payroll settings system manages pay periods and overtime calculations:
 - Calendar must support multiple view strategies
 - Events must handle timezone conversions properly
 - Recurring events must follow RFC 5545 (iCalendar) specification
+- Calendar uses a unified `onClick` handler that accepts a `CalendarClickTarget` discriminated union
+  - Target types: `event` and `background`
+  - Calendar component accepts `onClick?: (target: CalendarClickTarget) => boolean | void` prop
+  - Popover content configured via `popoverContent` prop object with `event` and `background` keys
+  - Default popover behavior is used unless `onClick` returns `true`
+  - EventPopover renamed to CalendarPopover to reflect generic nature
+  - `CalendarPopover` receives `popoverRef: React.RefObject<HTMLDivElement>` as a prop (not `forwardRef`) to avoid type assertions and keep typing strict
+  - Draft events: Calendar maintains an internal draft-events store and merges draft events into `events` before view strategies run. Draft events can be created/updated/removed via `useCalendarContext` methods (`upsertDraftEvent`, `patchDraftEvent`, `removeDraftEvent`).
+  - Inputs rendered inside the calendar popover should avoid portal-based dropdowns/popovers (e.g. pass `popoverProps={{ withinPortal: false }}` to date/time pickers) so calendar click-outside logic does not close the popover on selection
 
 ### Timesheet System
 - Timesheets will be generated per pay period
@@ -222,6 +231,9 @@ The payroll settings system manages pay periods and overtime calculations:
   - `/pages`: Top-level Inertia pages (entry points for routes)
   - `/queries`: Async react-query methods
   - `/types`: Global types and interfaces
+- Components using `forwardRef` with generics define `forwardRef` directly in the component definition, not on the export
+  - Pattern: `const Component = forwardRef(<T extends Constraint>(props, ref) => { ... })`
+  - Avoids type casting and maintains proper generic type inference
 
 #### UI & Styling
 - Mantine component library
@@ -252,6 +264,7 @@ The payroll settings system manages pay periods and overtime calculations:
 - Use generics, Records, and Mapped types before inline types
 - Type assertions as last resort
 - Auto-generated types for serializers
+- TypeScript configuration uses `moduleResolution: "bundler"` to support subpath exports (e.g., `@tiptap/react/menus`)
 
 #### Internationalization (i18n)
 - Using react-i18next for frontend translations
@@ -286,6 +299,12 @@ The payroll settings system manages pay periods and overtime calculations:
 - Proper useEffect cleanup
 - Memoized expensive computations
 - Minimal global state
+
+#### TipTap Integration
+- Using TipTap v3.14.0 for rich text editing
+- Menu components (`BubbleMenu`, `FloatingMenu`) must be imported from `@tiptap/react/menus`, not `@tiptap/react`
+- Core editor hooks (`useEditor`) imported from `@tiptap/react`
+- Mantine TipTap integration via `@mantine/tiptap` v8.3.10
 
 ## Payroll Periods
 

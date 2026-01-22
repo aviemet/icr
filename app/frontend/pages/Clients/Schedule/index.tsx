@@ -1,4 +1,3 @@
-import { modals } from "@mantine/modals"
 import { useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -7,17 +6,18 @@ import {
 	Calendar,
 	Group,
 } from "@/components"
-import { BaseCalendarEvent } from "@/components/Calendar"
+import { BaseCalendarEvent, EventResources } from "@/components/Calendar"
+import { type PopoverContentMap } from "@/components/Calendar/components/CalendarPopover"
+import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 import { NAVIGATION_ACTION, VIEW_NAMES } from "@/components/Calendar/views"
 import EventPopoverContent from "@/features/Clients/EventPopoverContent"
+import { NewShiftCalendarPopover } from "@/features/Clients/schedule/NewShiftCalendarPopover"
 import { ensureViewName } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
 import { useLocation } from "@/lib/hooks"
 import { useEventTitleFormatter } from "@/lib/hooks/useEventTitleFormatter"
 import { useGetClientSchedules } from "@/queries/clients"
-
-import NewShiftForm from "./NewShiftForm"
 
 interface ScheduleProps {
 	client: Schema.ClientsShow
@@ -28,6 +28,10 @@ interface ScheduleResources {
 	[key: string]: object
 	employee: Schema.ShiftsClient["employee"]
 	client: Schema.ClientsShow
+}
+
+function isScheduleResources(resources: EventResources | undefined): resources is ScheduleResources {
+	return resources !== undefined && "employee" in resources && "client" in resources
 }
 
 const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
@@ -76,7 +80,6 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 			return {
 				id: schedule.id,
 				title: schedule.name ?? "",
-				titleBuilder: (event) => formatEventTitle(event, employee),
 				start,
 				end,
 				allDay: schedule.all_day,
@@ -84,14 +87,7 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 				resources: { employee, client },
 			} satisfies BaseCalendarEvent<ScheduleResources>
 		}) || []
-	}, [client, data, formatEventTitle])
-
-	const handleSlotSelect = (date: Date) => {
-		modals.open({
-			title: t("views.clients.schedule.new_shift"),
-			children: <NewShiftForm client={ client } selectedDate={ date } />,
-		})
-	}
+	}, [client, data])
 
 	return (
 		<>
@@ -100,14 +96,20 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 				<Box></Box>
 			</Group>
 
-			<Calendar<ScheduleResources>
+			<Calendar
 				defaultDate={ calendarDate }
 				defaultView={ calendarView }
 				events={ processedSchedules }
 				onNavigate={ handleNavigate }
 				onViewChange={ handleViewChange }
-				onSelectSlot={ handleSlotSelect }
-				eventPopoverContent={ (event, localizer) => <EventPopoverContent event={ event } localizer={ localizer } /> }
+				defaultTitleBuilder={ (event) => {
+					const employee = isScheduleResources(event.resources) ? event.resources.employee : undefined
+					return formatEventTitle(event, employee)
+				} }
+				popoverContent={ {
+					event: (event: BaseCalendarEvent, localizer: CalendarLocalizer) => <EventPopoverContent event={ event } localizer={ localizer } />,
+					background: (context) => <NewShiftCalendarPopover client={ client } selectedDate={ context.date } />,
+				} satisfies Partial<PopoverContentMap> }
 			/>
 		</>
 	)

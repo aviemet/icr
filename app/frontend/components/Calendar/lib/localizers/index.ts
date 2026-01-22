@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react"
+import dayjs from "dayjs"
+import { useMemo } from "react"
 
 import { VIEW_NAMES } from "@/components/Calendar/views"
 
 import { CalendarMessages, defaultMessages } from "../messages"
+import { dayJsLocalizer } from "./dayJsLocalizer"
 
 export { dayJsLocalizer } from "./dayJsLocalizer"
 
@@ -70,24 +72,14 @@ export class CalendarLocalizer {
 	}
 }
 
-/**
- * Lazy loads default dayjs localizer if none is provided
- */
-export const useDefaultLocalizer = (localizer: CalendarLocalizer | undefined) => {
-	const [localLocalizer, setLocalLocalizer] = useState<CalendarLocalizer | undefined>(localizer)
-
-	useEffect(() => {
-		if(!localLocalizer && !localizer) {
-			const loadLocalizer = async() => {
-				const dayjsModule = await import("dayjs")
-				const { dayJsLocalizer } = await import("@/components/Calendar/lib/localizers")
-				setLocalLocalizer(dayJsLocalizer(dayjsModule.default))
-			}
-			loadLocalizer()
-		} else if(localizer && !localLocalizer) {
-			setLocalLocalizer(localizer)
+export const useDefaultLocalizer = (localizer?: CalendarLocalizer): CalendarLocalizer => {
+	const resolvedLocalizer = useMemo(() => {
+		if(localizer) {
+			return localizer
 		}
-	}, [localizer, localLocalizer])
 
-	return localLocalizer
+		return dayJsLocalizer(dayjs)
+	}, [localizer])
+
+	return resolvedLocalizer
 }

@@ -11,11 +11,11 @@ import useStore from "@/lib/store"
 
 import * as classes from "./Event.css"
 
-interface EventWrapperProps<TEventResources extends EventResources, P extends GridDisplayProperties = GridDisplayProperties> extends PropsWithChildren {
+interface EventWrapperProps<P extends GridDisplayProperties = GridDisplayProperties> extends PropsWithChildren {
 	style?: CSSProperties
-	event: BaseCalendarEvent<TEventResources>
+	event: BaseCalendarEvent<EventResources>
 	displayProperties: P
-	contextMenuOptions?: (event: BaseCalendarEvent<TEventResources>) => ContextMenuItemOptions[]
+	contextMenuOptions?: (event: BaseCalendarEvent<EventResources>) => ContextMenuItemOptions[]
 	setHoverId: React.Dispatch<React.SetStateAction<string>>
 }
 
@@ -24,14 +24,14 @@ interface EventWrapperProps<TEventResources extends EventResources, P extends Gr
  * Internal only, used solely to position the event on the calendar view.
  * Event component is passed as children, which can be customized.
  */
-const EventWrapper = <TEventResources extends EventResources, P extends GridDisplayProperties = GridDisplayProperties>({
+const EventWrapper = <P extends GridDisplayProperties = GridDisplayProperties>({
 	children,
 	style,
 	event,
 	displayProperties,
 	contextMenuOptions,
 	setHoverId,
-}: EventWrapperProps<TEventResources, P>) => {
+}: EventWrapperProps<P>) => {
 	const [animationParent] = useAutoAnimate()
 
 	const { getContrastingColor } = useStore()

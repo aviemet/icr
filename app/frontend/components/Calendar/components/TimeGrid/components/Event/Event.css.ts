@@ -14,12 +14,12 @@ export const eventWrapper = css`
           var(--event-color) 85%,
           white
         );
+
   overflow: hidden;
   margin: 1px;
   font-size: ${ vars.fontSizes.xs };
   grid-column: var(--column-start) / span var(--column-span);
   grid-row: var(--row-start) / span var(--row-span);
-  z-index: 1;
 `
 
 export const allDayEvent = css``
@@ -32,6 +32,9 @@ export const timeGridEvent = css`
   cursor: pointer;
   height: calc(100% - 2px);
   transition: background-color 200ms ease-in-out;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   &:hover {
     filter: brightness(0.9);
@@ -39,23 +42,23 @@ export const timeGridEvent = css`
   }
 
   &.${ allDayEvent } {
-  padding: 2px 4px 0 8px;
-  overflow: hidden;
-  white-space: nowrap;
-  grid-column: var(--column-start) / span var(--column-span);
-  position: relative;
+    padding: 2px 4px 0 8px;
+    overflow: hidden;
+    white-space: nowrap;
+    grid-column: var(--column-start) / span var(--column-span);
+    position: relative;
 
-  &.continues-from {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    margin-left: 0;
-  }
+    &.continues-from {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      margin-left: 0;
+    }
 
-  &.continues-to {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    margin-right: 0;
-  }
+    &.continues-to {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      margin-right: 0;
+    }
   }
 `
 

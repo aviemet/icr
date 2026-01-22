@@ -1,7 +1,7 @@
 namespace :annotate do
   desc "Annotate models and fixtures with database schema"
   task :models => [:environment] do
-    system("rails annotate_models")
+    system("bundle exec annotaterb models")
   end
 
   desc "Annotate controllers with route information"

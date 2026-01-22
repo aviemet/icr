@@ -59,6 +59,22 @@ class ClientPolicy < ApplicationPolicy
     end
   end
 
+  def schedule?
+    return true if user.has_role?(:admin)
+    return false unless user.person
+
+    case user.person.agency_role
+    when "Employee"
+      return true if user.person.employee.job_title.has_role?(:show, Client)
+
+      current_attendant?
+    when "Client"
+      user.has_role?(:show, :client) && record.id == user.person.client.id
+    else
+      false
+    end
+  end
+
   def new?
     return true if user.has_role?(:admin)
     return false unless user.person&.employee?

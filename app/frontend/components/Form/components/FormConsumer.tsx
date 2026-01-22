@@ -9,10 +9,8 @@ interface FormComponentProps<TForm = any> {
 function FormConsumer <TForm>({ children, onChange }: FormComponentProps<TForm>) {
 	const form = useForm<TForm>()
 
-	useEffect(() => {
-		if(!onChange) return
-		onChange(form)
-	}, [form.data, form, onChange])
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	useEffect(() => { onChange?.(form) }, [form.data])
 
 	return (
 		<>{ children && children(form) }</>

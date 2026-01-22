@@ -12,8 +12,8 @@ interface WeekViewProps<TEventResources extends EventResources> extends BaseView
 	style?: React.CSSProperties
 }
 
-const WeekViewComponent = <TEventResources extends EventResources>({ className, style }: WeekViewProps<TEventResources>) => {
-	const { date, localizer } = useCalendarContext<TEventResources>()
+const WeekViewComponent = <TEventResources extends EventResources>({ className, style, displayStrategy }: WeekViewProps<TEventResources>) => {
+	const { date, localizer } = useCalendarContext()
 
 	const columnHeadings = useMemo(() => {
 		const days = localizer.visibleDays(date, VIEWS.week)
@@ -23,6 +23,8 @@ const WeekViewComponent = <TEventResources extends EventResources>({ className, 
 		}))
 	}, [date, localizer])
 
+	const strategyClasses = (classes as Record<string, string>)[displayStrategy] || undefined
+
 	return (
 		<div className={ clsx(classes.weekView, className) } style={ style }>
 			<TimeGrid<TEventResources>
@@ -30,6 +32,7 @@ const WeekViewComponent = <TEventResources extends EventResources>({ className, 
 				columnHeadings={ columnHeadings }
 				startTime={ localizer.startOf(date, "day") }
 				endTime={ localizer.endOf(date, "day") }
+				className={ clsx(strategyClasses) }
 			/>
 		</div>
 	)
@@ -53,5 +56,8 @@ export const WeekView = createViewComponent(WeekViewComponent, {
 				return date
 		}
 	},
-	title: (date, { localizer }) => localizer.format(date, localizer.messages.formats.weekTitle),
+	title: (date, { localizer }) => {
+		const beginningOfWeek = localizer.firstVisibleDay(date, VIEWS.week)
+		return localizer.format(beginningOfWeek, localizer.messages.formats.weekTitle)
+	},
 })

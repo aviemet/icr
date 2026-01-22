@@ -38,6 +38,10 @@ export const popoverOverlay = css`
 	z-index: 100;
 `
 
+export const eventPopover = css`
+	
+`
+
 export const allDayEvent = css`
 	background-color: ${ vars.colors.blue[6] };
 	color: ${ vars.colors.white };

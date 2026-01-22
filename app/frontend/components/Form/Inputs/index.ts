@@ -32,5 +32,4 @@ export interface BaseFormInputProps<T, TForm extends NestedObject = NestedObject
 	onChange?: (value: T, form: UseFormProps<TForm>) => void
 	onBlur?: (value: T, form: UseFormProps<TForm>) => void
 	onFocus?: (value: T, form: UseFormProps<TForm>) => void
-	wrapperProps?: Record<string, any>
 }

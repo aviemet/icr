@@ -1,16 +1,17 @@
 import { useResizeObserver } from "@mantine/hooks"
 import { Variants } from "framer-motion"
-import { RefObject } from "react"
+import { RefObject, useMemo } from "react"
 
 import { useCalendarContext } from "@/components/Calendar"
 import { ensureDate } from "@/lib/dates"
+import { mergeRefs } from "@/lib/mergeRefs"
 
 interface UseCalendarTransitionOptions<T extends HTMLElement = HTMLDivElement> {
 	containerRef?: RefObject<T>
 }
 
 export interface UseCalendarTransitionResult<T extends HTMLElement = HTMLDivElement> {
-	containerRef: RefObject<T>
+	containerRef: RefObject<T | null> | ((instance: T | null) => void)
 	direction: number
 	variants: Variants
 }
@@ -18,13 +19,17 @@ export interface UseCalendarTransitionResult<T extends HTMLElement = HTMLDivElem
 export function useCalendarTransition<T extends HTMLElement = HTMLDivElement>(
 	options: UseCalendarTransitionOptions<T> = {}
 ): UseCalendarTransitionResult<T> {
-	const { date, localizer, prevDateRef } = useCalendarContext()
-	const [internalRef, containerRect] = useResizeObserver()
+	const { date, localizer, prevDate } = useCalendarContext()
+	const [internalRef, containerRect] = useResizeObserver<T>()
 
-	const containerRef = options.containerRef || (internalRef as RefObject<T>)
+	const containerRef = useMemo(
+		() => options.containerRef ? mergeRefs([internalRef, options.containerRef]) : internalRef,
+		[internalRef, options.containerRef]
+	)
+
 	const rect = options.containerRef ? options.containerRef.current?.getBoundingClientRect() : containerRect
 
-	const direction = localizer.isBefore(date, ensureDate(prevDateRef.current)) ? - 1 : 1
+	const direction = localizer.isBefore(date, ensureDate(prevDate)) ? - 1 : 1
 
 	const variants: Variants = {
 		enter: (direction: number) => ({

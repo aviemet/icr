@@ -25,7 +25,7 @@
 export class SortedArray<T> implements Iterable<T> {
 	private items: T[] = []
 	private compareFn: (a: T, b: T) => number
-	private isDirty = false
+	private isSorted = false
 
 	/**
 	 * Creates a default comparison function for basic comparable types.
@@ -52,24 +52,11 @@ export class SortedArray<T> implements Iterable<T> {
 		this.compareFn = compareFn
 	}
 
-	private sort(): void {
-		if(!this.isDirty) return
+	private sort() {
+		if(this.isSorted) return
 
 		this.items.sort(this.compareFn)
-		this.isDirty = false
-	}
-
-	push(item: T): number {
-		this.items.push(item)
-		this.isDirty = true
-
-		return this.items.length
-	}
-
-	get(index: number): T {
-		this.sort()
-
-		return this.items[index]
+		this.isSorted = true
 	}
 
 	// Make the class iterable
@@ -81,29 +68,81 @@ export class SortedArray<T> implements Iterable<T> {
 
 	// Array-like methods
 
-	map<U>(callback: (value: T, index: number, array: T[]) => U): U[] {
+	get length() {
+		return this.items.length
+	}
+
+	push(item: T) {
+		this.items.push(item)
+		this.isSorted = false
+
+		return this.items.length
+	}
+
+	pop() {
+		this.sort()
+
+		return this.items.pop()
+	}
+
+	shift() {
+		this.sort()
+
+		return this.items.shift()
+	}
+
+	get(index: number) {
+		this.sort()
+
+		return this.items[index]
+	}
+
+	set(index: number, item: T) {
+		this.isSorted = false
+
+		this.items[index] = item
+
+		return this.items[index]
+	}
+
+	has(index: number) {
+		return index >= 0 && index < this.items.length
+	}
+
+	delete(index: number) {
+		if(index < 0 || index >= this.items.length) {
+			throw new Error(`Index out of bounds: ${index}`)
+		}
+
+		if(index === 0) return this.shift()
+		if(index === this.items.length - 1) return this.pop()
+
+		this.isSorted = false
+
+		const deletedItem = this.items[index]
+		this.items.splice(index, 1)
+		return deletedItem
+	}
+
+	map<U>(callback: (value: T, index: number, array: T[]) => U) {
 		this.sort()
 
 		return this.items.map(callback)
 	}
 
-	get length(): number {
-		return this.items.length
-	}
-
-	filter(predicate: (value: T, index: number, array: T[]) => boolean): T[] {
+	filter(predicate: (value: T, index: number, array: T[]) => boolean) {
 		this.sort()
 
 		return this.items.filter(predicate)
 	}
 
-	forEach(callback: (value: T, index: number, array: T[]) => void): void {
+	forEach(callback: (value: T, index: number, array: T[]) => void) {
 		this.sort()
 
 		this.items.forEach(callback)
 	}
 
-	reduce<U>(callback: (accumulator: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U {
+	reduce<U>(callback: (accumulator: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U) {
 		this.sort()
 
 		return this.items.reduce(callback, initialValue)

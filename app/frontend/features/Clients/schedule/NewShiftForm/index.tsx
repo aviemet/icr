@@ -3,14 +3,13 @@ import { type PartialDeep } from "type-fest"
 import { type UseFormProps } from "use-inertia-form"
 
 import { Grid } from "@/components"
-import { DateTimeInput, Form, Submit } from "@/components/Form"
+import { DateTimeInput, Form, Submit, FormConsumer } from "@/components/Form"
 import { FormEmployeesDropdown } from "@/features/Dropdowns"
 import { Routes } from "@/lib"
 
-type NewShiftData = {
-	calendar_event: PartialDeep<Schema.CalendarEventsFormData> & {
+export type NewShiftData = {
+	calendar_event: Omit<PartialDeep<Schema.CalendarEventsFormData>, "event_participants"> & {
 		shift: PartialDeep<Schema.Shift>
-	} & {
 		event_participants: PartialDeep<Schema.EventParticipantsFormData>[]
 	}
 }
@@ -20,10 +19,10 @@ interface NewClientShiftFormProps {
 	selectedDate: Date
 	onSuccess?: (form: UseFormProps<NewShiftData>) => void
 	onError?: (form: UseFormProps<NewShiftData>) => void
+	onChange?: (form: UseFormProps<NewShiftData>) => void
 }
 
-
-const NewShiftForm = ({ client, selectedDate, onSuccess, onError }: NewClientShiftFormProps) => {
+const NewShiftForm = ({ client, selectedDate, onSuccess, onError, onChange }: NewClientShiftFormProps) => {
 	const initialData: NewShiftData = {
 		calendar_event: {
 			starts_at: selectedDate,
@@ -59,6 +58,7 @@ const NewShiftForm = ({ client, selectedDate, onSuccess, onError }: NewClientShi
 			data={ initialData }
 			railsAttributes={ true }
 		>
+			<FormConsumer<NewShiftData> onChange={ onChange } />
 			<Grid>
 				<Grid.Col>
 					<FormEmployeesDropdown name="shift.employee_id" />
@@ -68,6 +68,7 @@ const NewShiftForm = ({ client, selectedDate, onSuccess, onError }: NewClientShi
 					<DateTimeInput
 						label="Start"
 						name="starts_at"
+						popoverProps={ { withinPortal: false } }
 					/>
 				</Grid.Col>
 
@@ -75,6 +76,7 @@ const NewShiftForm = ({ client, selectedDate, onSuccess, onError }: NewClientShi
 					<DateTimeInput
 						label="End"
 						name="ends_at"
+						popoverProps={ { withinPortal: false } }
 					/>
 				</Grid.Col>
 

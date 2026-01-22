@@ -25,6 +25,7 @@ const config = defineConfig({
 				plugins: [
 					"babel-plugin-macros", "babel-plugin-styled-components",
 				],
+				compact: false,
 			},
 		}),
 		wyw({
@@ -34,6 +35,7 @@ const config = defineConfig({
 					"@babel/preset-typescript",
 					"@babel/preset-react",
 				],
+				compact: false,
 			},
 		}),
 	],

@@ -1,4 +1,3 @@
-import { fixupPluginRules } from "@eslint/compat"
 import json from "@eslint/json"
 import stylistic from "@stylistic/eslint-plugin"
 import tsParser from "@typescript-eslint/parser"
@@ -21,6 +20,23 @@ const ignores = [
 ]
 
 export default [
+	{
+		files: ["**/*.mjs"],
+		languageOptions: {
+			parser: tsParser,
+			parserOptions: {
+				ecmaVersion: "latest",
+				sourceType: "module",
+			},
+		},
+		settings: {
+			"import/resolver": {
+				typescript: {
+					project: "./tsconfig.json",
+				},
+			},
+		},
+	},
 	importPlugin.flatConfigs.recommended,
 	importPlugin.flatConfigs.typescript,
 	// Typescript/Javascript files
@@ -46,14 +62,16 @@ export default [
 				version: "detect",
 			},
 			"import/resolver": {
-				typescript: {},
+				typescript: {
+					project: "./tsconfig.json",
+				},
 			},
 			"jsx-a11y": {
 				polymorphicPropName: "component",
 			},
 		},
 		plugins: {
-			"react-hooks": fixupPluginRules(reactHooksPlugin),
+			"react-hooks": reactHooksPlugin,
 			"jsx-a11y": jsxA11yPlugin,
 			"@stylistic": stylistic,
 		},
@@ -65,6 +83,10 @@ export default [
 				ArrayExpression: 1,
 				ignoredNodes: [
 					"TSTypeParameterInstantiation",
+					"TemplateLiteral",
+					"TemplateElement",
+					"JSXExpressionContainer > TemplateLiteral",
+					"JSXExpressionContainer > TemplateElement",
 				],
 			}],
 			"@stylistic/brace-style": ["error", "1tbs", {
@@ -170,10 +192,11 @@ export default [
 			// "import/no-default-export": "error",
 			"import/newline-after-import": "error",
 			"import/consistent-type-specifier-style": ["error", "prefer-inline"],
+			"import/no-named-as-default": "off",
 			"semi": ["error", "never"],
 			"@stylistic/quotes": ["error", "double", {
 				avoidEscape: true,
-				allowTemplateLiterals: true,
+				allowTemplateLiterals: "always",
 			}],
 			"@stylistic/jsx-quotes": ["error", "prefer-double"],
 			...reactHooksPlugin.configs.recommended.rules,

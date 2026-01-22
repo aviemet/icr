@@ -32,6 +32,7 @@ const EmployeesDropdownInput = ({
 		label={ label }
 		name={ name }
 		options={ options }
+		comboboxProps={ { withinPortal: false } }
 		onDropdownOpen={ () => {
 			if(isEmpty(data) || isStale) refetch()
 		} }
