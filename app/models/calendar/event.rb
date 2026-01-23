@@ -84,7 +84,7 @@ class Calendar::Event < ApplicationRecord
     end
   end
 
-  def has_name_or_shift # rubocop:disable Naming/PredicateName
+  def has_name_or_shift # rubocop:disable Naming/PredicatePrefix
     return unless name.blank? && shift.blank?
 
     errors.add(:name, "Event must have a title when it's not an employee shift")

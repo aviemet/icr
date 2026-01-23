@@ -512,6 +512,14 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_24_203322) do
     t.index ["slug"], name: "index_job_titles_on_slug", unique: true
   end
 
+  create_table "job_titles_roles", id: false, force: :cascade do |t|
+    t.uuid "job_title_id"
+    t.uuid "role_id"
+    t.index ["job_title_id", "role_id"], name: "index_job_titles_roles_on_job_title_id_and_role_id"
+    t.index ["job_title_id"], name: "index_job_titles_roles_on_job_title_id"
+    t.index ["role_id"], name: "index_job_titles_roles_on_role_id"
+  end
+
   create_table "medications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "generic_name"
