@@ -36,8 +36,26 @@ FactoryBot.define do
     agency_notified_at { 1.day.ago }
     location { Faker::Address.city }
 
-    reported_by factory: :employee
-    reported_to factory: :employee
+    transient do
+      reported_by_employee { nil }
+      reported_to_employee { nil }
+    end
+
+    after(:build) do |incident_report, evaluator|
+      if evaluator.reported_by_employee
+        incident_report.reported_by_id = evaluator.reported_by_employee.person_id
+      elsif incident_report.reported_by_id.blank?
+        reported_by_employee = create(:employee, :employed)
+        incident_report.reported_by_id = reported_by_employee.person_id
+      end
+
+      if evaluator.reported_to_employee
+        incident_report.reported_to_id = evaluator.reported_to_employee.person_id
+      elsif incident_report.reported_to_id.blank?
+        reported_to_employee = create(:employee, :employed)
+        incident_report.reported_to_id = reported_to_employee.person_id
+      end
+    end
 
     client
     category factory: %i[category incident_report]

@@ -70,7 +70,7 @@ class Employee::EmployeesJobTitle < ApplicationRecord
   end
 
   def ensure_single_active_title
-    return if ends_at.present?
+    return if ends_at.present? || employee.blank?
 
     if employee.employees_job_titles.where(ends_at: nil).where.not(id: id).exists?
       errors.add(:base, "Employee already has an active job title")

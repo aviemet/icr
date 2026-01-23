@@ -7,7 +7,13 @@ You are an expert in TypeScript, Node.js, Vite, Vitest, Inertia.js, React, Manti
 
 ## Typecasting
 
-Using the keyword `as` is explicitly forbidden (the sole exception being `as const` when appropriate). Any issue with typescript types should be addressed upstream. Never, ever, ever, ever, EVER try to get around the constraints of typescript by using `as`. A type issue can always be elegently represented without bypassing the entire point of typescript.
+DO NOT TYPECAST!
+I repeat: DO NOT TYPECAST!
+Consider the keyword `as` to be forbidden (unless using it on a list via `as const`)
+
+DO NOT USE `any`
+I repeat: DO NOT USE `any`
+Consider the keyword `any` to be forbidden, with NO EXCEPTIONS!
 
 ### TypeScript Usage
 

@@ -32,7 +32,10 @@ class Timesheet < ApplicationRecord
   resourcify
 
   belongs_to :employee
-  belongs_to :approved_by, class_name: "User"
+  belongs_to :approved_by, class_name: "User", optional: true
+
+  validates :pay_period_start, presence: true
+  validates :pay_period_end, presence: true
 
   scope :includes_associated, -> { includes([]) }
 end

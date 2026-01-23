@@ -1,7 +1,7 @@
 import { css } from "@linaria/core"
 import { rem } from "@mantine/core"
 
-import { vars, theme } from "@/lib/theme"
+import { vars, theme } from "@/lib/css"
 
 export const wrapper = css`
 	overflow: auto;
@@ -22,28 +22,28 @@ export const table = css`
 	}
 
 	thead {
-		box-shadow: ${vars.shadows.xs};
+		box-shadow: ${ vars.shadows.xs };
 		position: sticky;
 		top: 0;
 		z-index: 1;
 
-		${vars.lightSelector} {
-			background-color: ${vars.colors.gray[1]};
+		${ vars.lightSelector } {
+			background-color: ${ vars.colors.gray[1] };
 
 			th:hover {
-				background-color: ${vars.colors.gray[1]};
+				background-color: ${ vars.colors.gray[1] };
 			}
 		}
-		${vars.darkSelector} {
-			background-color: ${vars.colors.dark[7]};
+		${ vars.darkSelector } {
+			background-color: ${ vars.colors.dark[7] };
 		}
 	}
 
 	th, td {
-		padding: ${rem(6)};
+		padding: ${ rem(6) };
 
 		.mantine-Button-root {
-			padding: ${vars.spacing.xxs};
+			padding: ${ vars.spacing.xxs };
 		}
 
 		&.table-column-fit {
@@ -59,29 +59,29 @@ export const table = css`
 			white-space: nowrap;
 
 			a {
-				${vars.lightSelector} {
-					color: ${vars.colors.black};
+				${ vars.lightSelector } {
+					color: ${ vars.colors.black };
 				}
-				${vars.darkSelector} {
-					color: ${vars.colors.white};
+				${ vars.darkSelector } {
+					color: ${ vars.colors.white };
 				}
 			}
 
 
 			&:before {
 				border-top: 0;
-				top: calc(50% - (${theme.other.table.sortButtonHeight}px + 2px));
-				border-bottom-width: ${theme.other.table.sortButtonWidth}px;
+				top: calc(50% - (${ theme.other.table.sortButtonHeight }px + 2px));
+				border-bottom-width: ${ theme.other.table.sortButtonWidth }px;
 			}
 
 			&:after {
 				border-bottom: 0;
-				bottom: calc(50% - (${theme.other.table.sortButtonHeight}px + 2px));
-				border-top-width: ${theme.other.table.sortButtonWidth}px;
+				bottom: calc(50% - (${ theme.other.table.sortButtonHeight }px + 2px));
+				border-top-width: ${ theme.other.table.sortButtonWidth }px;
 			}
 
 			&.asc:before, &.desc:after {
-				border-color: ${vars.colors.gray[7]};
+				border-color: ${ vars.colors.gray[7] };
 			}
 		}
 
@@ -92,7 +92,7 @@ export const table = css`
 	}
 
 	/* On small screens, collapse tables into "cards" */
-	@media(max-width: ${vars.breakpoints.sm}) {
+	@media(max-width: ${ vars.breakpoints.sm }) {
 		thead {
 			display: none;
 		}
@@ -103,10 +103,10 @@ export const table = css`
 				display: flex;
 				flex-direction: column;
 				margin-bottom: 10px;
-				background-color: ${vars.colors.dark[7]};
-				border-radius: ${rem(4)};
-				padding: ${rem(6)};
-				border-bottom: 1px solid ${vars.colors.primaryColors.filled};
+				background-color: ${ vars.colors.dark[7] };
+				border-radius: ${ rem(4) };
+				padding: ${ rem(6) };
+				border-bottom: 1px solid ${ vars.colors.primaryColors.filled };
 			}
 
 			td {
@@ -147,8 +147,8 @@ export const searchInput = css`
 	input {
 		border-top-right-radius: 0;
 		border-bottom-right-radius: 0;
-		border-top-left-radius: ${vars.radius.sm};
-		border-bottom-left-radius: ${vars.radius.sm};
+		border-top-left-radius: ${ vars.radius.sm };
+		border-bottom-left-radius: ${ vars.radius.sm };
 	}
 `
 

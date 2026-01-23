@@ -22,9 +22,9 @@
 #
 FactoryBot.define do
   factory :interview_note, class: "Employee::InterviewNote" do
-    content { Faker::Lorem.paragraph }
+    note { Faker::Lorem.paragraph }
 
+    employee
     interview
-    association :author, factory: :user
   end
 end

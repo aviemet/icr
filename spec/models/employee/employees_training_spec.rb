@@ -23,6 +23,25 @@
 #
 require "rails_helper"
 
-RSpec.describe Employee::EmployeesTraining, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+RSpec.describe Employee::EmployeesTraining do
+  describe "Validations" do
+    it "is valid with valid attributes" do
+      expect(build(:employees_training)).to be_valid
+    end
+
+    it "is invalid when an employee has duplicate training records" do
+      employee = create(:employee)
+      training = create(:training)
+      create(:employees_training, employee: employee, training: training)
+
+      duplicate = build(:employees_training, employee: employee, training: training)
+      expect(duplicate).not_to be_valid
+      expect(duplicate.errors[:training_id]).to be_present
+    end
+  end
+
+  describe "Associations" do
+    it { is_expected.to belong_to(:employee) }
+    it { is_expected.to belong_to(:training) }
+  end
 end

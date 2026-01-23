@@ -1,12 +1,16 @@
 require "rails_helper"
 
 RSpec.describe ScheduleUpcomingShiftsJob, type: :job do
+  before do
+    ActiveJob::Base.queue_adapter = :test
+  end
+
   describe "#perform" do
     it "schedules jobs for active recurring templates" do
       template1 = create(:shift_template, :recurring, frequency: :weekly)
       template2 = create(:shift_template, :recurring, frequency: :monthly)
       # Inactive template that should be skipped
-      create(:shift_template, :inactive, frequency: :weekly)
+      create(:shift_template, :inactive, :recurring, frequency: :weekly)
 
       expect {
         described_class.new.perform
@@ -19,7 +23,8 @@ RSpec.describe ScheduleUpcomingShiftsJob, type: :job do
     it "skips templates past their end date" do
       create(:shift_template, :recurring,
         frequency: :weekly,
-        end_date: 2.days.from_now,)
+        start_date: 1.month.ago,
+        end_date: 1.day.ago,)
 
       expect {
         described_class.new.perform

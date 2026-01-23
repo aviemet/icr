@@ -17,6 +17,29 @@ class Setting < RailsSettings::Base
 
   cache_prefix { "v1" }
 
+  # Override RequestCache-dependent methods in test environment to avoid CurrentAttributes
+  # initialization issues when classes reload (e.g., with rspec-watcher). Since we use
+  # :null_store in tests, request-level caching isn't needed anyway, so we bypass
+  # RequestCache entirely and fetch directly from cache_storage (which queries the DB).
+  if Rails.env.test?
+    def self._all_settings
+      cache_storage.fetch(cache_key, expires_in: 1.week) do
+        vars = unscoped.select("var, value")
+        result = {}
+        vars.each { |record| result[record.var] = record.value }
+        result.with_indifferent_access
+      end
+    end
+
+    def self.clear_cache
+      cache_storage.delete(cache_key)
+    end
+
+    def clear_cache
+      self.class.clear_cache
+    end
+  end
+
   PAY_PERIOD_TYPES = {
     weekly: "weekly",
     bi_weekly: "bi_weekly",
@@ -90,4 +113,8 @@ class Setting < RailsSettings::Base
     inclusion: { in: layout_styles }
   }
   field :calendar_split_events_show_original_times, type: :boolean, default: false
+  field :first_day_of_week, type: :integer, default: 0, validates: {
+    presence: true,
+    inclusion: { in: (0..6).to_a }
+  }
 end

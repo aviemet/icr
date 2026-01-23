@@ -21,8 +21,23 @@
 #  fk_rails_...  (approved_by_id => users.id)
 #  fk_rails_...  (employee_id => employees.id)
 #
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe Timesheet, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+RSpec.describe Timesheet do
+  describe "Validations" do
+    it "is valid with valid attributes" do
+      expect(build(:timesheet)).to be_valid
+    end
+
+    it "is invalid with missing attributes" do
+      %i(pay_period_start pay_period_end).each do |attr|
+        expect(build(:timesheet, attr => nil)).not_to be_valid
+      end
+    end
+  end
+
+  describe "Associations" do
+    it { is_expected.to belong_to(:employee) }
+    it { is_expected.to belong_to(:approved_by).class_name("User").optional }
+  end
 end

@@ -22,8 +22,8 @@ class Employee::JobTitle < ApplicationRecord
   include PgSearchable
   pg_search_config(against: [:name, :description])
 
-  rolify
   resourcify
+  rolify role_join_table_name: :job_titles_roles
 
   has_many :employees_job_titles,
     class_name: "Employee::EmployeesJobTitle",
@@ -35,7 +35,7 @@ class Employee::JobTitle < ApplicationRecord
   }, class_name: "Employee::EmployeesJobTitle", dependent: nil, inverse_of: :job_title
   has_many :active_employees, through: :active_employees_job_titles, source: :employee
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true
 
   scope :includes_associated, -> { includes([:active_employees]) }
   scope :with_active_employees, -> { joins(:active_employees_job_titles).distinct }

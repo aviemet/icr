@@ -1,16 +1,17 @@
-import { Group, Title, Menu, Page, Section } from '@/Components'
-import { Routes } from '@/lib'
+import { Group, Title, Menu, Page, Section } from "@/components"
+import { Routes } from "@/lib"
+
 
 interface ShowPermissionProps {
 	permission: Schema.PermissionsShow
 }
 
 const ShowPermission = ({ permission }: ShowPermissionProps) => {
-	const title =  'Permission'
+	const title = "Permission"
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: 'Permission', href: Routes.permissions() },
+			{ title: "Permission", href: Routes.permissions() },
 			{ title, href: window.location.href },
 		] }>
 			<Section>

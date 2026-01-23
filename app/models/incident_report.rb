@@ -38,8 +38,8 @@ class IncidentReport < ApplicationRecord
   resourcify
 
   belongs_to :client
-  belongs_to :reported_by, class_name: "Employee"
-  belongs_to :reported_to, class_name: "Employee"
+  belongs_to :reported_by, class_name: "Employee", primary_key: :person_id, foreign_key: :reported_by_id
+  belongs_to :reported_to, class_name: "Employee", primary_key: :person_id, foreign_key: :reported_to_id
 
   scope :includes_associated, -> { includes([:reported_by, :client, :reported_to]) }
 end

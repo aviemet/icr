@@ -9,9 +9,8 @@
 #  updated_at  :datetime         not null
 #
 FactoryBot.define do
-  factory :requirement_type, class: 'Requirement::Type' do
-    name { "MyString" }
-    description { "MyText" }
-    code { "MyString" }
+  factory :requirement_type, class: "Requirement::Type" do
+    name { Faker::Company.buzzword.titleize }
+    description { Faker::Lorem.paragraph }
   end
 end

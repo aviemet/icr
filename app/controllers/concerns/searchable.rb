@@ -5,6 +5,7 @@ module Searchable
 
   included do
     class_attribute :internal_sortable_fields
+    class_attribute :internal_advanced_search_methods
 
     before_action :remove_empty_query_parameters
 
@@ -24,7 +25,7 @@ module Searchable
       )
     end
 
-    @advanced_search_methods = {
+    self.internal_advanced_search_methods = {
       default: ->(model, key, value) { model.where("#{model.table_name}.#{key} ILIKE ?", "%#{value}%") },
       id: ->(model, key, value) { model.joins(key.to_sym).where("#{key.pluralize}.id = ?", value[:id]) },
       created_at: ->(model, _key, value) do
@@ -47,7 +48,7 @@ module Searchable
           model.where("#{model.table_name}.created_at >= :start_date AND #{model.table_name}.created_at <= :end_date", {
             start_date: start_date,
             end_date: end_date,
-          },)
+          })
         end
 
       end,
@@ -102,12 +103,13 @@ module Searchable
   # Filters ActiveRecord relation by advanced search params
   ##
   def advanced_search(model)
-    return model unless defined?(advanced_search_params) == "method" && params[:adv] = "true"
+    return model unless defined?(advanced_search_params) == "method" && params[:adv] == "true"
 
     advanced_search_params.each do |key, value|
-      apply_search = @advanced_search_methods[key.to_sym] ||
-        (nested_key_with_id?(advanced_search_params[key]) && @advanced_search_methods[:id]) ||
-        @advanced_search_methods[:default]
+      methods = internal_advanced_search_methods || {}
+      apply_search = methods[key.to_sym] ||
+        (nested_key_with_id?(advanced_search_params[key]) && methods[:id]) ||
+        methods[:default]
       next unless apply_search
 
       model = apply_search.call(model, key, value)
@@ -188,7 +190,7 @@ module Searchable
     return unless request.query_parameters.keys.length > non_empty_params.keys.length
 
     # Rebuild the URL without empty query parameters
-    new_url = "#{request.path}#{non_empty_params.empty? ? '' : '?'}#{non_empty_params.to_param}"
+    new_url = "#{request.path}#{'?' unless non_empty_params.empty?}#{non_empty_params.to_param}"
     redirect_to new_url
   end
 end

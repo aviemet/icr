@@ -29,6 +29,8 @@
 FactoryBot.define do
   factory :employees_job_title, class: "Employee::EmployeesJobTitle" do
     starts_at { 6.months.ago }
+    application_type { :new_hire }
+    offer_status { :accepted }
 
     employee
     job_title

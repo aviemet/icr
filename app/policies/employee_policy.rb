@@ -1,6 +1,5 @@
 class EmployeePolicy < ApplicationPolicy
-
-  class Scope < Scope
+  class Scope < ApplicationPolicy::Scope
     def resolve
       # Admins can see all employees
       return scope.all if user.has_role?(:admin)

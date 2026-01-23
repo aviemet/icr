@@ -27,7 +27,7 @@ FactoryBot.define do
     starts_at { "08:00:00" }
     ends_at { "16:30:00" }
 
-    employee { nil }
+    employee
     shift_template
   end
 end

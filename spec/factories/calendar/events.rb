@@ -33,8 +33,8 @@ FactoryBot.define do
   sequence :end_time do |n|
     now = Time.current
     start_time = now.advance(hours: (n * 2) % 24)
-    end_time = start_time.advance(hours: 2)
-    end_time.change(hour: ((n * 2) + 10) % 24)
+    start_time = start_time.change(hour: ((n * 2) + 8) % 24)
+    start_time.advance(hours: 2)
   end
 
   factory :calendar_event, class: "Calendar::Event" do

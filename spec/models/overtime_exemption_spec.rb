@@ -92,14 +92,14 @@ RSpec.describe OvertimeExemption, type: :model do
         expect(daytime_exemption.matches?(shift)).to be true
       end
 
-      it "does not match shift crossing into evening" do
+      it "matches shift starting within daytime hours even if it extends into evening" do
         shift = build_shift(
           category: "regular",
           start_time: "13:00",
           end_time: "21:00",
           duration_hours: 8,
         )
-        expect(daytime_exemption.matches?(shift)).to be false
+        expect(daytime_exemption.matches?(shift)).to be true
       end
     end
 
@@ -160,8 +160,8 @@ RSpec.describe OvertimeExemption, type: :model do
     start_time = Time.zone.parse(attributes[:start_time])
     end_time = Time.zone.parse(attributes[:end_time])
 
-    instance_double(
-      Shift,
+    double(
+      "Shift",
       category: attributes[:category],
       start_time: start_time,
       end_time: end_time,

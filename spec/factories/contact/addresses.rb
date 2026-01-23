@@ -40,7 +40,10 @@ FactoryBot.define do
     contact
 
     after(:build) do |address|
-      address.category ||= create(:category, categorizable_type: "Contact::Address")
+      address.category ||= Category.find_or_create_by!(
+        categorizable_type: "Contact::Address",
+        name: "Personal",
+      )
     end
   end
 end

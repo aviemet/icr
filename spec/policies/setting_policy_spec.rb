@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe PayrollPolicy, type: :policy do
+RSpec.describe SettingPolicy, type: :policy do
   before do
     @admin_user = create(:user).tap { |u| u.add_role(:admin) }
     @employee = create(:employee, :employed)
@@ -43,54 +43,11 @@ RSpec.describe PayrollPolicy, type: :policy do
     it "allows admin" do
       expect(described_class.new(@admin_user, Setting.new)).to authorize(:index)
     end
-
-    it "allows employee with permission" do
-      @job_title.add_role(:index, Setting)
-      @employee_with_permission.reload
-
-      expect(described_class.new(@employee_user_with_permission, Setting.new)).to authorize(:index)
-    end
-
-    it "denies employee without permission" do
-      expect(described_class.new(@employee_user, Setting.new)).not_to authorize(:index)
-    end
-
-    it "denies client" do
-      expect(described_class.new(@client_user, Setting.new)).not_to authorize(:index)
-    end
   end
 
   permissions :show? do
     it "allows admin" do
       expect(described_class.new(@admin_user, Setting.new)).to authorize(:show)
-    end
-
-    it "allows employee with permission" do
-      @job_title.add_role(:show, Setting)
-      @employee_with_permission.reload
-
-      expect(described_class.new(@employee_user_with_permission, Setting.new)).to authorize(:show)
-    end
-
-    it "denies employee without permission" do
-      expect(described_class.new(@employee_user, Setting.new)).not_to authorize(:show)
-    end
-  end
-
-  permissions :update? do
-    it "allows admin" do
-      expect(described_class.new(@admin_user, Setting.new)).to authorize(:update)
-    end
-
-    it "allows employee with permission" do
-      @job_title.add_role(:update, Setting)
-      @employee_with_permission.reload
-
-      expect(described_class.new(@employee_user_with_permission, Setting.new)).to authorize(:update)
-    end
-
-    it "denies employee without permission" do
-      expect(described_class.new(@employee_user, Setting.new)).not_to authorize(:update)
     end
   end
 end

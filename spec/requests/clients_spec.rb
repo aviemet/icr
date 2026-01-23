@@ -203,7 +203,7 @@ RSpec.describe "/clients", :inertia do
       expect(response).to have_http_status(:ok)
       expect_inertia.to render_component "Clients/Schedule"
 
-      schedule_ids = inertia.props[:schedules].map { |s| s[:id] }
+      schedule_ids = inertia.props[:schedules].map { |s| s[:id] } # rubocop:disable Rails/Pluck
       expect(schedule_ids).to include(in_range_event.id)
       expect(schedule_ids).not_to include(out_of_range_event.id)
     end

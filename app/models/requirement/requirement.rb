@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: requirement_requirements
+# Table name: requirements
 #
 #  id                  :uuid             not null, primary key
 #  description         :text
@@ -13,7 +13,7 @@
 #
 # Indexes
 #
-#  index_requirement_requirements_on_requirement_type_id  (requirement_type_id)
+#  index_requirements_on_requirement_type_id  (requirement_type_id)
 #
 # Foreign Keys
 #
@@ -21,6 +21,8 @@
 #
 module Requirement
   class Requirement < ApplicationRecord
+    self.table_name = "requirements"
+
     belongs_to :requirement_type, class_name: "Requirement::Type"
     belongs_to :scope, polymorphic: true, optional: true
 
@@ -30,7 +32,7 @@ module Requirement
     has_many :trainings,
              through: :requirement_items,
              source: :fulfillable,
-             source_type: "Training"
+             source_type: "Employee::Training"
     # Add has_many for other fulfillable types (e.g., :credentials) here as needed
 
     validates :name, presence: true

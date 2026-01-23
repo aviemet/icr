@@ -26,10 +26,10 @@
 #  fk_rails_...  (primary_phone_id => phones.id)
 #
 class Contact < ApplicationRecord
-  has_many :addresses, dependent: :destroy, after_add: :calculate_primary_address
-  has_many :emails, dependent: :destroy, after_add: :calculate_primary_email
-  has_many :phones, dependent: :destroy, after_add: :calculate_primary_phone
-  has_many :websites, dependent: :destroy
+  has_many :addresses, class_name: "Contact::Address", dependent: :destroy, after_add: :calculate_primary_address
+  has_many :emails, class_name: "Contact::Email", dependent: :destroy, after_add: :calculate_primary_email
+  has_many :phones, class_name: "Contact::Phone", dependent: :destroy, after_add: :calculate_primary_phone
+  has_many :websites, class_name: "Contact::Website", dependent: :destroy
 
   belongs_to :primary_address, class_name: "Contact::Address", optional: true
   belongs_to :primary_email, class_name: "Contact::Email", optional: true

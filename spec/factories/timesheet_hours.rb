@@ -24,6 +24,11 @@
 #
 FactoryBot.define do
   factory :timesheet_hour do
-    
+    started_at { Time.current.beginning_of_day }
+    ended_at { Time.current.beginning_of_day + 8.hours }
+    hours { 8.0 }
+
+    timesheet
+    employee
   end
 end

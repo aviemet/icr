@@ -25,7 +25,6 @@ FactoryBot.define do
   factory :pay_rate, class: "Employee::PayRate" do
     period { :hourly }
     rate { Faker::Commerce.price(range: 18..50.0) }
-    period { 0 }
 
     trait :historical do
       starts_at { 2.years.ago }

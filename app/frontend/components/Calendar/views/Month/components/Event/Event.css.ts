@@ -2,7 +2,7 @@ import { css } from "@linaria/core"
 
 import { eventHeight } from "../../MonthView.css"
 
-import { vars } from "@/lib"
+import { vars } from "@/lib/css"
 
 const triangleWidth = 3
 

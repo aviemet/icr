@@ -28,7 +28,7 @@ const TimeInput = forwardRef<HTMLInputElement, TimeInputProps>((
 		wrapperProps,
 		required = false,
 		value,
-		picker = false,
+		picker = true,
 		...props
 	},
 	ref

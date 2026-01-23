@@ -2,7 +2,7 @@ import { css } from "@linaria/core"
 
 import { eventWrapper } from "./components/Event/Event.css"
 
-import { rem, vars } from "@/lib"
+import { rem, vars } from "@/lib/css"
 
 
 const rowHeight = rem(60)
