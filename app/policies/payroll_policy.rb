@@ -1,18 +1,42 @@
 class PayrollPolicy < ApplicationPolicy
-
   class Scope < ApplicationPolicy::Scope
+    def resolve
+      return scope.all if user.has_role?(:admin)
+
+      case user.person&.agency_role
+      when "Employee"
+        if user.person.employee&.job_title&.has_role?(:index, Setting)
+          scope.all
+        else
+          scope.none
+        end
+      when "Client"
+        scope.none
+      else
+        scope.none
+      end
+    end
   end
 
   def index?
-    standard_auth(:index)
+    return true if user.has_role?(:admin)
+    return false unless user.person&.employee?
+
+    user.person.employee.job_title&.has_role?(:index, Setting) || false
   end
 
   def show?
-    standard_auth(:show)
+    return true if user.has_role?(:admin)
+    return false unless user.person&.employee?
+
+    user.person.employee.job_title&.has_role?(:show, Setting) || false
   end
 
   def create?
-    standard_auth(:create)
+    return true if user.has_role?(:admin)
+    return false unless user.person&.employee?
+
+    user.person.employee.job_title&.has_role?(:create, Setting) || false
   end
 
   def new?
@@ -20,7 +44,10 @@ class PayrollPolicy < ApplicationPolicy
   end
 
   def edit?
-    standard_auth(:update)
+    return true if user.has_role?(:admin)
+    return false unless user.person&.employee?
+
+    user.person.employee.job_title&.has_role?(:update, Setting) || false
   end
 
   def update?
@@ -28,6 +55,9 @@ class PayrollPolicy < ApplicationPolicy
   end
 
   def destroy?
-    standard_auth(:destroy)
+    return true if user.has_role?(:admin)
+    return false unless user.person&.employee?
+
+    user.person.employee.job_title&.has_role?(:destroy, Setting) || false
   end
 end

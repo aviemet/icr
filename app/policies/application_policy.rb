@@ -21,7 +21,7 @@ class ApplicationPolicy
     @record = record
     @person = @user.person
     @employee = @person&.employee
-    @job_title = @employee&.job_title&.includes(:roles)
+    @job_title = @employee&.job_title
     @client = @person&.client
   end
 

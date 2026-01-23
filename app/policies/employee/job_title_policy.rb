@@ -7,8 +7,10 @@ class Employee::JobTitlePolicy < ApplicationPolicy
       when "Employee"
         if user.person.employee&.job_title&.has_role?(:index, Employee::JobTitle)
           scope.all
-        else
+        elsif user.person.employee&.job_title
           scope.where(id: user.person.employee.job_title.id)
+        else
+          scope.none
         end
       when "Client"
         scope.none

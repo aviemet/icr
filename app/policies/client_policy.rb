@@ -16,7 +16,7 @@ class ClientPolicy < ApplicationPolicy
             .distinct
         end
       when "Client"
-        if user.has_role?(:index, :client)
+        if user.roles.exists?(name: "index", resource_type: "Client", resource_id: nil)
           scope.where(id: user.person.client.id)
         else
           scope.none
@@ -33,11 +33,11 @@ class ClientPolicy < ApplicationPolicy
 
     case user.person.agency_role
     when "Employee"
-      return true if user.person.employee.job_title.has_role?(:index, Client)
+      return true if user.person.employee&.job_title&.has_role?(:index, Client)
 
       user.person.employee.clients_attendants.current.exists?
     when "Client"
-      user.has_role?(:index, :client)
+      user_has_client_role?(:index)
     else
       false
     end
@@ -49,11 +49,11 @@ class ClientPolicy < ApplicationPolicy
 
     case user.person.agency_role
     when "Employee"
-      return true if user.person.employee.job_title.has_role?(:show, Client)
+      return true if user.person.employee&.job_title&.has_role?(:show, Client)
 
       current_attendant?
     when "Client"
-      user.has_role?(:show, :client) && record.id == user.person.client.id
+      user_has_client_role?(:show) && record.id == user.person.client.id
     else
       false
     end
@@ -65,11 +65,11 @@ class ClientPolicy < ApplicationPolicy
 
     case user.person.agency_role
     when "Employee"
-      return true if user.person.employee.job_title.has_role?(:show, Client)
+      return true if user.person.employee&.job_title&.has_role?(:show, Client)
 
       current_attendant?
     when "Client"
-      user.has_role?(:show, :client) && record.id == user.person.client.id
+      user_has_client_role?(:show) && record.id == user.person.client.id
     else
       false
     end
@@ -79,7 +79,7 @@ class ClientPolicy < ApplicationPolicy
     return true if user.has_role?(:admin)
     return false unless user.person&.employee?
 
-    user.person.employee.job_title.has_role?(:create, Client)
+    user.person.employee&.job_title&.has_role?(:create, Client) || false
   end
 
   def edit?
@@ -88,11 +88,11 @@ class ClientPolicy < ApplicationPolicy
 
     case user.person.agency_role
     when "Employee"
-      return true if user.person.employee.job_title.has_role?(:update, Client)
+      return true if user.person.employee&.job_title&.has_role?(:update, Client)
 
       current_attendant?
     when "Client"
-      user.has_role?(:update, :client) && record.id == user.person.client.id
+      user_has_client_role?(:update) && record.id == user.person.client.id
     else
       false
     end
@@ -110,7 +110,7 @@ class ClientPolicy < ApplicationPolicy
     return true if user.has_role?(:admin)
     return false unless user.person&.employee?
 
-    user.person.employee.job_title.has_role?(:destroy, Client)
+    user.person.employee&.job_title&.has_role?(:destroy, Client) || false
   end
 
   private
@@ -123,5 +123,9 @@ class ClientPolicy < ApplicationPolicy
         Time.current,
         Time.current
       ])
+  end
+
+  def user_has_client_role?(role_name)
+    user.roles.exists?(name: role_name.to_s, resource_type: "Client", resource_id: nil)
   end
 end

@@ -10,8 +10,8 @@ class Employee::TrainingPolicy < ApplicationPolicy
           scope.all
         else
           # Return trainings assigned to the employee
-          scope.joins(:employee_trainings)
-            .where(employee_trainings: { employee_id: user.person.employee.id })
+          scope.joins(:employees_trainings)
+            .where(employees_trainings: { employee_id: user.person.employee.id })
             .distinct
         end
       when "Client"

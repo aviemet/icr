@@ -22,8 +22,12 @@
 #  fk_rails_...  (parent_id => categories.id)
 #
 FactoryBot.define do
+  sequence :category_name do |n|
+    "#{Faker::Commerce.department} #{n}"
+  end
+
   factory :category do
-    name { Faker::Commerce.department }
+    name { generate(:category_name) }
     description { Faker::Lorem.paragraph }
 
     categorizable_type { Category::CATEGORIZABLE_TYPES.sample }

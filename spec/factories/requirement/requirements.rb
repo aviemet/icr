@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: requirement_requirements
+# Table name: requirements
 #
 #  id                  :uuid             not null, primary key
 #  description         :text
@@ -13,7 +13,7 @@
 #
 # Indexes
 #
-#  index_requirement_requirements_on_requirement_type_id  (requirement_type_id)
+#  index_requirements_on_requirement_type_id  (requirement_type_id)
 #
 # Foreign Keys
 #
