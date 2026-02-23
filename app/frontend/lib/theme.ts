@@ -39,6 +39,13 @@ const themeObject: Partial<CustomMantineTheme> = {
 		xl: "calc(1.25rem * var(--mantine-scale))",
 	},
 	components: {
+		Card: {
+			styles: (theme: MantineTheme) => ({
+				root: {
+					backgroundColor: `light-dark(${theme.colors.gray[1]}, ${theme.colors.dark[6]})`,
+				},
+			}),
+		},
 		Modal: {
 			defaultProps: {
 				centered: true,
