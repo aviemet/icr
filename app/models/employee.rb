@@ -36,9 +36,11 @@ class Employee < ApplicationRecord
   include Employee::StateMachine
 
   extend FriendlyId
+
   friendly_id :slug_candidates, use: [:slugged, :history]
 
   include PgSearchable
+
   pg_search_config(
     against: [:active_at, :inactive_at, :number, :status],
     associated_against: {

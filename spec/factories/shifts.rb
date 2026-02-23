@@ -21,6 +21,12 @@
 FactoryBot.define do
   factory :shift do
     employee
-    calendar_event
+    calendar_event { association :calendar_event }
+
+    after(:build) do |shift|
+      next unless shift.calendar_event
+
+      shift.calendar_event.category_id = Category.type("Calendar::Event").find_or_create_by!(name: "Shift") { |c| c.system = true }.id
+    end
   end
 end

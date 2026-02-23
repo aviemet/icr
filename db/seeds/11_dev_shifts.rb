@@ -1,6 +1,5 @@
 if Rails.env.development?
 
-  # Add some employees for the first client and a couple months worth of shifts
   if Client.first.calendar_events.empty?
 
     attendant_job = Employee::JobTitle.find_by(slug: "attendant")
@@ -26,8 +25,8 @@ if Rails.env.development?
             calendar_event: FactoryBot.create(:calendar_event, {
               starts_at: start,
               ends_at: start + shift_length.hours,
-            },)
-          },)
+            })
+          })
 
           client.calendar_events << shift.calendar_event
 
@@ -58,8 +57,8 @@ if Rails.env.development?
           calendar_event: FactoryBot.create(:calendar_event, {
             starts_at: start_time,
             ends_at: start_time + shift_length.hours,
-          },)
-        },)
+          })
+        })
 
         client.calendar_events << shift.calendar_event
 
@@ -74,8 +73,8 @@ if Rails.env.development?
           calendar_event: FactoryBot.create(:calendar_event, {
             starts_at: overlap_start,
             ends_at: overlap_end,
-          },)
-        },)
+          })
+        })
 
         client.calendar_events << overlap_shift.calendar_event
       end

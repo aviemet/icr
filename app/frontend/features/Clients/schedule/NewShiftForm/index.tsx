@@ -3,7 +3,7 @@ import { type PartialDeep } from "type-fest"
 import { type UseFormProps } from "use-inertia-form"
 
 import { Grid } from "@/components"
-import { DateTimeInput, Form, Submit, FormConsumer } from "@/components/Form"
+import { DateTimeInput, Form, Submit, FormConsumer, Select } from "@/components/Form"
 import { FormEmployeesDropdown } from "@/features/Dropdowns"
 import { Routes } from "@/lib"
 
@@ -60,6 +60,7 @@ const NewShiftForm = ({ client, selectedDate, onSuccess, onError, onChange }: Ne
 		>
 			<FormConsumer<NewShiftData> onChange={ onChange } />
 			<Grid>
+
 				<Grid.Col>
 					<FormEmployeesDropdown name="shift.employee_id" />
 				</Grid.Col>

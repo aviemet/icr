@@ -4,6 +4,7 @@ class CreateCategories < ActiveRecord::Migration[7.0]
       t.string :name, null: false
       t.text :description
       t.string :categorizable_type, null: false
+      t.boolean :system, null: false, default: false
 
       t.index [:name, :categorizable_type], unique: true
 

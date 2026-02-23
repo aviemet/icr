@@ -32,7 +32,7 @@ const themeObject: Partial<CustomMantineTheme> = {
 	fontFamily: "Roboto, sans-serif",
 	fontSizes: {
 		xxs: "calc(0.6rem * var(--mantine-scale))",
-		xs: "calc(0.75rem * var(--mantine-scale))",
+		xs: "calc(0.7rem * var(--mantine-scale))",
 		sm: "calc(0.875rem * var(--mantine-scale))",
 		md: "calc(1rem * var(--mantine-scale))",
 		lg: "calc(1.125rem * var(--mantine-scale))",

@@ -63,50 +63,53 @@ incident_report_types = {
   ]
 }
 
-if Category.count == 0
-  {
-    "Contact::Email": ["Work", "Personal", "Other"],
-    "Contact::Address": ["Work", "Personal", "Other"],
-    "Contact::Phone": ["Home", "Mobile", "Office", "Other"],
-    "Contact::Website": ["Personal", "Business", "Vendor", "Other"],
-    Vendor: [
-      "Day Program",
-      "Medical Supply",
-      "Mental Health",
-      "Residential Services",
-      "Long Term Care Facility",
-      "Crisis Services",
-      "Other",
-    ],
-    IncidentReport: incident_report_types.keys,
-    Identification: [
-      "Drivers License",
-      "Passport",
-      "State ID",
-      "Birth Certificate",
-      "Social Security Card",
-      "Other",
-    ],
-    Shift: [
-      "Regular",
-      "On-Call",
-      "No Service",
-      "Holiday",
-      "Vacation",
-      "Sick",
-      "Other",
-    ],
-    "Calendar::Event": [
-      "Shift",
-      "Day Program",
-      "Private Time",
-      "Other",
-    ],
-  }.each do |type, categories|
+model_category_types = {
+  "Contact::Email": ["Work", "Personal", "Other"],
+  "Contact::Address": ["Work", "Personal", "Other"],
+  "Contact::Phone": ["Home", "Mobile", "Office", "Other"],
+  "Contact::Website": ["Personal", "Business", "Vendor", "Other"],
+  Vendor: [
+    "Day Program",
+    "Medical Supply",
+    "Mental Health",
+    "Residential Services",
+    "Long Term Care Facility",
+    "Crisis Services",
+    "Other",
+  ],
+  IncidentReport: incident_report_types.keys,
+  Identification: [
+    "Drivers License",
+    "Passport",
+    "State ID",
+    "Birth Certificate",
+    "Social Security Card",
+    "Other",
+  ],
+  Shift: [
+    "Regular",
+    "On-Call",
+    "No Service",
+    "Holiday",
+    "Vacation",
+    "Sick",
+    "Other",
+  ],
+  "Calendar::Event": [
+    "Shift",
+    "Day Program",
+    "Private Time",
+    "Other",
+  ],
+}
+
+if Category.none?
+  model_category_types.each do |type, categories|
     categories.each do |category|
       Category.create!({
         name: category,
         categorizable_type: type,
+        system: true,
       })
     end
   end
@@ -117,7 +120,8 @@ if Category.count == 0
       Category.create({
         parent:,
         categorizable_type: parent.categorizable_type,
-        name: subcategory
+        name: subcategory,
+        system: true,
       })
     end
   end
