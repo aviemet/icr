@@ -1,7 +1,7 @@
+---
 en:
   settings:
-    notices:
-      updated: "Settings have been updated successfully."
-
     errors:
-      update_failed: "Updating settings failed. Please notify your site administrator."
+      update_failed: Updating settings failed. Please notify your site administrator.
+    notices:
+      updated: Settings have been updated successfully.

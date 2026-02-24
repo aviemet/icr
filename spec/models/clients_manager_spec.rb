@@ -64,8 +64,10 @@ RSpec.describe ClientsManager do
           starts_at: Time.current,
           ends_at: nil,)
 
-        expect(duplicate).not_to be_valid
-        expect(duplicate.errors[:manager_id]).to include("Already manages")
+        I18n.with_locale(:en) do
+          expect(duplicate).not_to be_valid
+          expect(duplicate.errors[:manager_id]).to include("Already manages")
+        end
       end
 
       it "allows new relationship if previous one is ended" do

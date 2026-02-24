@@ -6,7 +6,7 @@ class TimesheetsController < ApplicationController
 
   sortable_fields %w(employee.name pay_period_start pay_period_end approved_at)
 
-  strong_params :timesheet, fetch: :timesheet
+  strong_params :timesheet, permit: [:pay_period_start, :pay_period_end, :employee_id, :approved_at, :approved_by_id]
 
   # @route GET /timesheets (timesheets)
   def index
@@ -50,6 +50,7 @@ class TimesheetsController < ApplicationController
   # @route POST /timesheets (timesheets)
   def create
     authorize Timesheet.new
+    timesheet.assign_attributes(timesheet_params)
     if timesheet.save
       redirect_to timesheet, notice: t("templates.controllers.notices.created", model: "Timesheet")
     else
@@ -64,7 +65,7 @@ class TimesheetsController < ApplicationController
     if timesheet.update(timesheet_params)
       redirect_to timesheet, notice: t("templates.controllers.notices.updated", model: "Timesheet")
     else
-      redirect_to edit_timesheet_path, inertia: { errors: timesheet.errors }
+      redirect_to edit_timesheet_path(timesheet), inertia: { errors: timesheet.errors }
     end
   end
 

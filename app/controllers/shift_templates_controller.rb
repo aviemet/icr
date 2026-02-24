@@ -24,6 +24,7 @@ class ShiftTemplatesController < ApplicationController
   # @route GET /shift_templates/:id (shift_template)
   def show
     authorize shift_template
+
     render inertia: "ShiftTemplates/Show", props: {
       shift_template: -> { shift_template.render(:show) }
     }
@@ -32,6 +33,7 @@ class ShiftTemplatesController < ApplicationController
   # @route GET /shift_templates/new (new_shift_template)
   def new
     authorize ShiftTemplate.new
+
     render inertia: "ShiftTemplates/New", props: {
       shift_template: ShiftTemplate.new.render(:form_data)
     }
@@ -40,6 +42,7 @@ class ShiftTemplatesController < ApplicationController
   # @route GET /shift_templates/:id/edit (edit_shift_template)
   def edit
     authorize shift_template
+
     render inertia: "ShiftTemplates/Edit", props: {
       shift_template: shift_template.render(:edit)
     }
@@ -48,6 +51,9 @@ class ShiftTemplatesController < ApplicationController
   # @route POST /shift_templates (shift_templates)
   def create
     authorize ShiftTemplate.new
+
+    shift_template.assign_attributes(shift_template_params)
+
     if shift_template.save
       redirect_to shift_template, notice: t("templates.controllers.notices.created", model: "Shift template")
     else
@@ -59,6 +65,7 @@ class ShiftTemplatesController < ApplicationController
   # @route PUT /shift_templates/:id (shift_template)
   def update
     authorize shift_template
+
     if shift_template.update(shift_template_params)
       redirect_to shift_template, notice: t("templates.controllers.notices.updated", model: "Shift template")
     else
@@ -69,6 +76,7 @@ class ShiftTemplatesController < ApplicationController
   # @route DELETE /shift_templates/:id (shift_template)
   def destroy
     authorize shift_template
+
     shift_template.destroy!
     redirect_to shift_templates_url, notice: t("templates.controllers.notices.destroyed", model: "Shift template")
   end

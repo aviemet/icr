@@ -94,6 +94,7 @@ class EmployeesController < ApplicationController
   # @route POST /employees (employees)
   def create
     authorize Employee.new
+    employee.assign_attributes(employee_params)
     if employee.save
       redirect_to employee_path(employee), notice: t("templates.controllers.notices.created", model: "Employee")
     else

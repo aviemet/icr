@@ -21,7 +21,7 @@ RSpec.describe Authentication, type: :controller do
       user = create(:user)
       sign_in user
       get :index
-      expect(response).to have_http_content_type(:text)
+      expect(response.media_type).to eq("text/plain")
       expect(response.body).to eq("OK")
     end
   end

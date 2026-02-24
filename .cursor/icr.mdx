@@ -301,6 +301,7 @@ The payroll settings system manages pay periods and overtime calculations:
 - Unit: Vitest + React Testing Library
 - E2E: Playwright (no mocks, uses test environment)
 - Test files mirror source structure in `/app/frontend/tests`
+- When a spec asserts on a translated validation/error message string, run the validation and assertions inside `I18n.with_locale(:en)` so the expected message is stable regardless of test order or default locale
 
 #### Performance
 - Component code splitting

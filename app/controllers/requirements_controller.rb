@@ -1,8 +1,8 @@
 class RequirementsController < ApplicationController
   include Searchable
 
-  expose :requirements, -> { search(Requirement::Requirement.new.includes_associated) }
-  expose :requirement, scope: ->{ Requirement::Requirement.new.includes_associated }
+  expose :requirements, -> { search(Requirement::Requirement.includes_associated) }
+  expose :requirement, scope: ->{ Requirement::Requirement.includes_associated }
 
   sortable_fields %w(name description requirement_type_id scope_type scope_id)
 
@@ -50,8 +50,9 @@ class RequirementsController < ApplicationController
   # @route POST /requirements (requirements)
   def create
     authorize Requirement::Requirement.new
+    requirement.assign_attributes(requirement_params)
     if requirement.save
-      redirect_to requirement, notice: t("templates.controllers.notices.created", model: "Requirement")
+      redirect_to requirement_url(requirement), notice: t("templates.controllers.notices.created", model: "Requirement")
     else
       redirect_to new_requirement_path, inertia: { errors: requirement.errors }
     end
@@ -62,9 +63,9 @@ class RequirementsController < ApplicationController
   def update
     authorize requirement
     if requirement.update(requirement_params)
-      redirect_to requirement, notice: t("templates.controllers.notices.updated", model: "Requirement")
+      redirect_to requirement_url(requirement), notice: t("templates.controllers.notices.updated", model: "Requirement")
     else
-      redirect_to edit_requirement_path, inertia: { errors: requirement.errors }
+      redirect_to edit_requirement_path(requirement), inertia: { errors: requirement.errors }
     end
   end
 

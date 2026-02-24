@@ -27,9 +27,11 @@ class Person < ApplicationRecord
   include Contactable
 
   extend FriendlyId
+
   friendly_id :name, use: [:slugged, :history]
 
   include PgSearchable
+
   pg_search_config(
     against: [:first_name, :middle_name, :last_name, :nick_name],
     associated_against: {
@@ -56,7 +58,7 @@ class Person < ApplicationRecord
   scope :includes_associated, -> { includes([:user, :client, :employee, :doctor, :contact]) }
 
   def name(include_middle_name: false)
-    "#{first_name}#{include_middle_name ? " #{middle_name}" : ''} #{last_name}"
+    "#{first_name}#{" #{middle_name}" if include_middle_name} #{last_name}"
   end
 
   def agency_role

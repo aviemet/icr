@@ -1,30 +1,28 @@
 require "rails_helper"
+require_relative "../../support/devise"
 
 RSpec.describe "Searchable", type: :request do
-  # Example using Users controller
   describe "search functionality" do
-    before do
-      create(:user, email: "test1@example.com")
-      create(:user, email: "test2@example.com")
-      create(:user, email: "other@example.com")
-    end
+    login_user(:admin)
 
     it "performs basic search" do
-      sign_in create(:user)
-      get users_path, params: { search: "test" }
+      category = create(:category, :vendor)
+      create(:vendor, name: "Acme Supplies", category: category)
+      create(:vendor, name: "Acme Parts", category: category)
+      create(:vendor, name: "Other Vendor", category: category)
+
+      get vendors_path, params: { search: "Acme" }
 
       expect(response).to be_successful
-      expect(response.body).to include("test1@example.com")
-      expect(response.body).to include("test2@example.com")
-      expect(response.body).not_to include("other@example.com")
+      expect(response.body).to include("Acme Supplies")
+      expect(response.body).to include("Acme Parts")
+      expect(response.body).not_to include("Other Vendor")
     end
 
     it "handles sorting" do
-      sign_in create(:user)
-      get users_path, params: { sort: "email", direction: "desc" }
+      get vendors_path, params: { sort: "name", direction: "desc" }
 
       expect(response).to be_successful
-      # Add expectations based on your sorting implementation
     end
   end
 end

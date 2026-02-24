@@ -1,14 +1,13 @@
+---
 en:
   activerecord:
     errors:
       models:
-        employee:
-          attributes: {}
         employees_manager:
           attributes:
-            manager:
-              must_have_privileges: Must have management privileges
             base:
               no_self_management: Employee cannot manage themselves
+            manager:
+              must_have_privileges: Must have management privileges
             manager_id:
               manager_uniqueness: Already manages this employee

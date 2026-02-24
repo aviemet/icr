@@ -50,6 +50,7 @@ class VendorsController < ApplicationController
   # @route POST /vendors (vendors)
   def create
     authorize Vendor.new
+    vendor.assign_attributes(vendor_params)
     if vendor.save
       redirect_to vendor, notice: t("templates.controllers.notices.created", model: "Vendor")
     else
@@ -64,7 +65,7 @@ class VendorsController < ApplicationController
     if vendor.update(vendor_params)
       redirect_to vendor, notice: t("templates.controllers.notices.updated", model: "Vendor")
     else
-      redirect_to edit_vendor_path, inertia: { errors: vendor.errors }
+      redirect_to edit_vendor_path(vendor), inertia: { errors: vendor.errors }
     end
   end
 

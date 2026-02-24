@@ -22,7 +22,7 @@ class Role < ApplicationRecord
     optional: true
 
   validates :resource_type,
-    inclusion: { in: Rolify.resource_types },
+    inclusion: { in: -> { Rolify.resource_types + ["Setting"] } },
     allow_nil: true
 
   scopify

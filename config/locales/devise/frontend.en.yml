@@ -1,19 +1,30 @@
+---
 en:
+  frontend:
+    pages:
+      devise:
+        passwords:
+          new:
+            submit: Send reset password instructions
+            title: Forgot your password?
+        shared:
+          email: Email
+          login: Log in
   views:
     devise:
       login:
-        reset_password: Reset Password
+        email: Email
+        password: Password
         register: Register
-        email: Email
-        password: Password
-        submit: Log In
         remember_me: Remember Me
+        reset_password: Reset Password
+        submit: Log In
       register:
-        title: Sign Up
-        email: Email
-        password: Password
         confirm_password: Confirm Password
-        submit: Sign Up
-        login_instead: Log In Instead
+        email: Email
         errors:
           passwords_must_match: Passwords must match
+        login_instead: Log In Instead
+        password: Password
+        submit: Sign Up
+        title: Sign Up

@@ -95,6 +95,8 @@ class ClientsController < ApplicationController
   def create
     authorize Client.new
 
+    client.assign_attributes(client_params)
+
     if client.save
       redirect_to client_path(client), notice: t("templates.controllers.notices.created", model: "Client")
     else
