@@ -13,7 +13,11 @@ class Api::ClientsController < ApplicationController
       .includes([:person])
       .find_by(slug: params[:slug])
       .calendar_events
-      .includes([:recurring_patterns, shift: [employee: [:person, :job_title, :calendar_customization]]])
+      .includes([
+        :recurring_patterns,
+        :event_participants,
+        shift: { employee: [:person, :job_title, :calendar_customization] },
+      ])
       .between(*DateRangeCalculator.new(params).call)
 
     render json: schedules.render(:client)

@@ -58,13 +58,33 @@ class ClientsController < ApplicationController
   def schedule
     authorize client
 
+    client_for_show = Client.includes(
+      :calendar_customization,
+      person: [
+        :employee,
+        :client,
+        { contact: { addresses: :category, emails: :category, phones: :category } },
+      ],
+    ).find(client.id)
+
     schedules = client
       .calendar_events
-      .includes([:recurring_patterns, :event_participants, shift: [employee: [:person, :job_title, :calendar_customization]]])
+      .includes([
+        :recurring_patterns,
+        :event_participants,
+        shift: {
+          employee: [
+            :person,
+            :job_title,
+            :calendar_customization,
+            { person: { contact: { addresses: :category, emails: :category, phones: :category } } },
+          ],
+        },
+      ])
       .between(*DateRangeCalculator.new(params).call)
 
     render inertia: "Clients/Schedule", props: {
-      client: -> { client.render(:show) },
+      client: -> { client_for_show.render(:show) },
       schedules: lambda {
         schedules.render(:client)
       },

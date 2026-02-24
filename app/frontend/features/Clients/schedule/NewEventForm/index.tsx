@@ -73,7 +73,6 @@ export function NewEventForm({ client, selectedDate, onSuccess, onError, onChang
 				<Grid.Col>
 					<FormCategoriesDropdown
 						label="Event Type"
-						name="category_id"
 						categoryType="Calendar::Event"
 						valueKey="slug"
 						defaultValue={ CALENDAR_EVENT_SHIFT_SLUG }

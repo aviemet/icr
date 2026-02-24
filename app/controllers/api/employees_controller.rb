@@ -3,7 +3,7 @@ class Api::EmployeesController < Api::ApiController
 
   # @route GET /api/options/employees (api_employees_options)
   def options
-    render json: employees.render(:options)
+    render json: employees.includes([person: [:user, :client]]).render(:options)
   end
 
   def schedule
