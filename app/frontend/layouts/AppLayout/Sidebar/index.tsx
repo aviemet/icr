@@ -81,7 +81,7 @@ const Sidebar = () => {
 							/>
 						</MenuLink>
 						<MenuLink
-							label="Timesheets"
+							label="Payroll"
 							href={ Routes.timesheets() }
 							leftSection={ <ClockIcon /> }
 							active={ matchesAtPosition(paths, [0, "timesheets"]) }

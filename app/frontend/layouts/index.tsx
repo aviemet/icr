@@ -1,4 +1,5 @@
 import { Flash } from "@/components"
+import SpotlightComponent from "@/features/Spotlight"
 import Providers from "@/layouts/Providers"
 
 import BareAppLayout from "./AppLayout"
@@ -41,6 +42,7 @@ export const AuthLayout = ({ children }: LayoutProps) => {
 export const AppLayout = ({ children }: LayoutProps) => {
 	return (
 		<LayoutWrapper>
+			<SpotlightComponent />
 			<BareAppLayout>
 				{ children }
 			</BareAppLayout>
@@ -51,6 +53,7 @@ export const AppLayout = ({ children }: LayoutProps) => {
 export const SettingsLayout = ({ children }: LayoutProps) => {
 	return (
 		<LayoutWrapper>
+			<SpotlightComponent />
 			<BareSettingsLayout>
 				{ children }
 			</BareSettingsLayout>

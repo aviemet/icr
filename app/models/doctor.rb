@@ -27,7 +27,12 @@ class Doctor < ApplicationRecord
 
   include PgSearchable
 
-  pg_search_config(against: [:first_name, :last_name, :notes])
+  pg_search_config(
+    against: [],
+    associated_against: {
+      person: [:first_name, :last_name]
+    },
+  )
 
   resourcify
 

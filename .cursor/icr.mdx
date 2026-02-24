@@ -224,6 +224,12 @@ The payroll settings system manages pay periods and overtime calculations:
   - Always use latest component API and prop names
   - Refer to Mantine documentation for current component structure
 
+#### Spotlight (command palette)
+- Global command palette implemented with `@mantine/spotlight` v8+
+- `Spotlight` component is rendered once in `SpotlightProvider` inside the shared `Providers` tree so it is available on all pages
+- Spotlight actions currently mirror main sidebar navigation targets and are permission-gated using the shared `permissions` Inertia prop
+- Default keyboard shortcut (`mod + K`) is used to open spotlight
+
 #### Icons
 - Icons are centrally exported from `@/components/Icons`
 - Icons are renamed on export for semantic usage (e.g., `TbDashboard as DashboardIcon`)

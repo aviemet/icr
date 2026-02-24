@@ -39,6 +39,9 @@ export const monthEvent = css`
   }
 
   & > span {
+    display: inline-block;
+    width: 100%;
+    white-space: nowrap;
     overflow: hidden;
   }
 

@@ -22,5 +22,17 @@
 require "rails_helper"
 
 RSpec.describe EventDetail, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "associations" do
+    it { is_expected.to belong_to(:calendar_event).class_name("Calendar::Event") }
+  end
+
+  describe "factory" do
+    it "builds a valid record" do
+      expect(build(:event_detail)).to be_valid
+    end
+
+    it "creates a valid record" do
+      expect(create(:event_detail)).to be_persisted
+    end
+  end
 end

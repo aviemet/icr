@@ -7,11 +7,11 @@ import "@mantine/tiptap/styles.css"
 import { AppShell } from "@/components"
 import useStore from "@/lib/store"
 
+import * as classes from "./AppLayout.css"
 import Footer from "./Footer"
 import Sidebar from "./Sidebar"
 import Topbar from "./Topbar"
 import { LayoutProps } from "../index"
-import * as classes from "./AppLayout.css"
 
 const AppLayout = ({ children }: LayoutProps) => {
 	const theme = useMantineTheme()

@@ -44,6 +44,7 @@ export function NewEventForm({ client, selectedDate, onSuccess, onError, onChang
 	}
 
 	const handleChange = (form: UseFormProps<NewEventData>) => {
+		console.log({ data: form.data })
 		onChange?.(form)
 	}
 

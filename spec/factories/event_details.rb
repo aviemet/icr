@@ -21,6 +21,7 @@
 #
 FactoryBot.define do
   factory :event_detail do
-
+    address_id { create(:address, contact: create(:contact, :for_person)).id }
+    calendar_event { association :calendar_event }
   end
 end

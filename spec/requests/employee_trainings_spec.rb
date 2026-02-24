@@ -1,7 +1,13 @@
 require "rails_helper"
+require_relative "../support/devise"
 
 RSpec.describe "EmployeeTrainings", type: :request do
+  login_user(:admin)
+
   describe "GET /index" do
-    pending "add some examples (or delete) #{__FILE__}"
+    it "renders a successful response" do
+      get trainings_url
+      expect(response).to be_successful
+    end
   end
 end

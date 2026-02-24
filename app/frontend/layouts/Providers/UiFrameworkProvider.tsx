@@ -16,6 +16,7 @@ import "@mantine/tiptap/styles.css"
 import "@mantine/dates/styles.css"
 import "@mantine/notifications/styles.css"
 import "mantine-contextmenu/styles.layer.css"
+import "@mantine/spotlight/styles.css"
 import "./global.css"
 
 const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
