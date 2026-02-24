@@ -11,7 +11,7 @@ import { type PopoverContentMap } from "@/components/Calendar/components/Calenda
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 import { NAVIGATION_ACTION, VIEW_NAMES } from "@/components/Calendar/views"
 import EventPopoverContent from "@/features/Clients/EventPopoverContent"
-import { NewShiftCalendarPopover } from "@/features/Clients/schedule/NewShiftCalendarPopover"
+import { NewEventCalendarPopover } from "@/features/Clients/schedule/NewEventCalendarPopover"
 import { ensureViewName } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
@@ -108,7 +108,7 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 				} }
 				popoverContent={ {
 					event: (event: BaseCalendarEvent, localizer: CalendarLocalizer) => <EventPopoverContent event={ event } localizer={ localizer } />,
-					background: (context) => <NewShiftCalendarPopover client={ client } selectedDate={ context.date } />,
+					background: (context) => <NewEventCalendarPopover client={ client } selectedDate={ context.date } />,
 				} satisfies Partial<PopoverContentMap> }
 			/>
 		</>

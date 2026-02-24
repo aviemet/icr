@@ -3,28 +3,32 @@ import { type PartialDeep } from "type-fest"
 import { type UseFormProps } from "use-inertia-form"
 
 import { Grid } from "@/components"
-import { DateTimeInput, Form, Submit, FormConsumer, Select } from "@/components/Form"
-import { FormEmployeesDropdown } from "@/features/Dropdowns"
+import { DateTimeInput, Form, Submit, FormConsumer } from "@/components/Form"
+import { FormCategoriesDropdown, FormEmployeesDropdown } from "@/features/Dropdowns"
 import { Routes } from "@/lib"
 
-export type NewShiftData = {
+const CALENDAR_EVENT_SHIFT_SLUG = "calendar-event-shift"
+
+export type NewEventData = {
 	calendar_event: Omit<PartialDeep<Schema.CalendarEventsFormData>, "event_participants"> & {
+		category_id?: string
 		shift: PartialDeep<Schema.Shift>
 		event_participants: PartialDeep<Schema.EventParticipantsFormData>[]
 	}
 }
 
-interface NewClientShiftFormProps {
+interface NewClientEventFormProps {
 	client: Schema.ClientsPersisted
 	selectedDate: Date
-	onSuccess?: (form: UseFormProps<NewShiftData>) => void
-	onError?: (form: UseFormProps<NewShiftData>) => void
-	onChange?: (form: UseFormProps<NewShiftData>) => void
+	onSuccess?: (form: UseFormProps<NewEventData>) => void
+	onError?: (form: UseFormProps<NewEventData>) => void
+	onChange?: (form: UseFormProps<NewEventData>) => void
 }
 
-const NewShiftForm = ({ client, selectedDate, onSuccess, onError, onChange }: NewClientShiftFormProps) => {
-	const initialData: NewShiftData = {
+export function NewEventForm({ client, selectedDate, onSuccess, onError, onChange }: NewClientEventFormProps) {
+	const initialData: NewEventData = {
 		calendar_event: {
+			category_id: CALENDAR_EVENT_SHIFT_SLUG,
 			starts_at: selectedDate,
 			ends_at: dayjs(selectedDate).add(8, "hours").toDate(),
 			shift: {
@@ -39,11 +43,15 @@ const NewShiftForm = ({ client, selectedDate, onSuccess, onError, onChange }: Ne
 		},
 	}
 
-	const handleSuccess = (form: UseFormProps<NewShiftData>) => {
+	const handleChange = (form: UseFormProps<NewEventData>) => {
+		onChange?.(form)
+	}
+
+	const handleSuccess = (form: UseFormProps<NewEventData>) => {
 		onSuccess?.(form)
 	}
 
-	const handleError = (form: UseFormProps<NewShiftData>) => {
+	const handleError = (form: UseFormProps<NewEventData>) => {
 		onError?.(form)
 	}
 
@@ -58,8 +66,20 @@ const NewShiftForm = ({ client, selectedDate, onSuccess, onError, onChange }: Ne
 			data={ initialData }
 			railsAttributes={ true }
 		>
-			<FormConsumer<NewShiftData> onChange={ onChange } />
+			<FormConsumer<NewEventData> onChange={ handleChange } />
+
 			<Grid>
+
+				<Grid.Col>
+					<FormCategoriesDropdown
+						label="Event Type"
+						name="category_id"
+						categoryType="Calendar::Event"
+						valueKey="slug"
+						defaultValue={ CALENDAR_EVENT_SHIFT_SLUG }
+						comboboxProps={ { withinPortal: false } }
+					/>
+				</Grid.Col>
 
 				<Grid.Col>
 					<FormEmployeesDropdown name="shift.employee_id" />
@@ -88,5 +108,3 @@ const NewShiftForm = ({ client, selectedDate, onSuccess, onError, onChange }: Ne
 		</Form>
 	)
 }
-
-export default NewShiftForm

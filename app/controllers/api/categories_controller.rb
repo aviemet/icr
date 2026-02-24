@@ -1,12 +1,12 @@
 class Api::CategoriesController < Api::ApiController
   expose :categories, -> {
     if params[:category_type]
-      Categories.where(categorizable_type: params[:category_type])
+      Category.where(categorizable_type: params[:category_type])
     else
-      Categories
+      Category
     end
   }
-  expose :category, id: ->{ params[:slug] }, scope: ->{ Categories }, find_by: :slug
+  expose :category, id: ->{ params[:slug] }, scope: ->{ Category }, find_by: :slug
 
   strong_params :category, permit: [:name, :categorizable_type, :description]
 
@@ -20,7 +20,7 @@ class Api::CategoriesController < Api::ApiController
 
   # @route GET /api/options/categories/:category_type (api_category_options)
   def options
-    render json: categories.render(view: :options)
+    render json: categories.render(:options)
   end
 
   # @route POST /api/categories (api_categories)

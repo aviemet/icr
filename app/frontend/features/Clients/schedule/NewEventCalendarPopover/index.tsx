@@ -3,8 +3,9 @@ import { useCallback, useEffect, useRef } from "react"
 import { type UseFormProps } from "use-inertia-form"
 
 import { BaseCalendarEvent, useCalendarContext } from "@/components/Calendar"
-import NewShiftForm, { type NewShiftData } from "@/features/Clients/schedule/NewShiftForm"
+import { NewEventForm, type NewEventData } from "@/features/Clients/schedule/NewEventForm"
 import { useGetEmployeesAsOptions } from "@/queries/employees"
+
 
 interface ScheduleResources {
 	[key: string]: object
@@ -12,17 +13,17 @@ interface ScheduleResources {
 	client: Schema.ClientsShow
 }
 
-interface NewShiftCalendarPopoverProps {
+interface NewEventCalendarPopoverProps {
 	client: Schema.ClientsShow
 	selectedDate: Date
 }
 
-export function NewShiftCalendarPopover({ client, selectedDate }: NewShiftCalendarPopoverProps) {
+export function NewEventCalendarPopover({ client, selectedDate }: NewEventCalendarPopoverProps) {
 	const { upsertDraftEvent, patchDraftEvent, removeDraftEvent } = useCalendarContext()
 	const draftIdRef = useRef<string>(crypto.randomUUID())
 	const { data: employees = [] } = useGetEmployeesAsOptions({ enabled: true })
 
-	const handleFormChange = useCallback((form: UseFormProps<NewShiftData>) => {
+	const handleFormChange = useCallback((form: UseFormProps<NewEventData>) => {
 		const startsAt = form.data.calendar_event?.starts_at
 		const endsAt = form.data.calendar_event?.ends_at
 		const employeeId = form.data.calendar_event?.shift?.employee_id
@@ -70,7 +71,7 @@ export function NewShiftCalendarPopover({ client, selectedDate }: NewShiftCalend
 	}, [client, removeDraftEvent, selectedDate, upsertDraftEvent])
 
 	return (
-		<NewShiftForm
+		<NewEventForm
 			client={ client }
 			selectedDate={ selectedDate }
 			onChange={ handleFormChange }

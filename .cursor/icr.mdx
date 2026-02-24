@@ -273,6 +273,7 @@ The payroll settings system manages pay periods and overtime calculations:
 - Use generics, Records, and Mapped types before inline types
 - Type assertions as last resort
 - Auto-generated types for serializers
+- Ruby constants can be exported to TypeScript types via `rails types:generate` (e.g. `Category::CATEGORIZABLE_TYPES` → `app/frontend/types/CategoryType.ts`); add a subtask in `lib/tasks/types.rake` to keep a single source of truth
 - TypeScript configuration uses `moduleResolution: "bundler"` to support subpath exports (e.g., `@tiptap/react/menus`)
 
 #### Internationalization (i18n)
