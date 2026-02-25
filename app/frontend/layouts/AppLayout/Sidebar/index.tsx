@@ -8,7 +8,7 @@ import {
 	Text,
 	Divider,
 } from "@/components"
-import { ClientIcon, ClockIcon, DashboardIcon, EmployeeIcon, SettingsIcon } from "@/components/Icons"
+import { ClientIcon, ClockIcon, DashboardIcon, EmployeeIcon, HelpingIcon, SettingsIcon } from "@/components/Icons"
 import IconProvider from "@/layouts/Providers/IconProvider"
 import { matchesAtPosition, Routes } from "@/lib"
 import { useLocation, usePageProps } from "@/lib/hooks"
@@ -76,6 +76,10 @@ const Sidebar = () => {
 							active={ matchesAtPosition(paths, [0, "employees"]) }
 						>
 							<MenuLink
+								label="Documents"
+								href={ Routes.requirements() }
+							/>
+							<MenuLink
 								label="Training"
 								href={ Routes.trainings() }
 							/>
@@ -85,6 +89,12 @@ const Sidebar = () => {
 							href={ Routes.timesheets() }
 							leftSection={ <ClockIcon /> }
 							active={ matchesAtPosition(paths, [0, "timesheets"]) }
+						/>
+						<MenuLink
+							label="Vendors"
+							href={ Routes.vendors() }
+							leftSection={ <HelpingIcon /> }
+							active={ matchesAtPosition(paths, [0, "vendors"]) }
 						/>
 					</ul>
 				</AppShell.Section>

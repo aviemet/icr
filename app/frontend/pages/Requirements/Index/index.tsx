@@ -1,29 +1,29 @@
 import { NewIcon } from "@/components/Icons"
 import { IndexPageTemplate } from "@/features"
-import RequirementRequirementsTable from "@/features/Requirements/Table"
+import RequirementsTable from "@/features/Requirements/Table"
 import { Routes } from "@/lib"
 
 
-interface RequirementRequirementIndexProps {
-	requirement_requirements: Schema.RequirementRequirementsIndex[]
+interface RequirementIndexProps {
+	requirements: Schema.RequirementsIndex[]
 	pagination: Schema.Pagination
 }
 
-const RequirementRequirementsIndex = ({ requirement_requirements, pagination }: RequirementRequirementIndexProps) => {
+const RequirementsIndex = ({ requirements, pagination }: RequirementIndexProps) => {
 	return (
 		<IndexPageTemplate
-			title="RequirementRequirements"
-			model="requirement_requirements"
-			rows={ requirement_requirements }
+			title="Requirements"
+			model="requirements"
+			rows={ requirements }
 			pagination={ pagination }
-			deleteRoute={ Routes.requirementRequirements() }
+			deleteRoute={ Routes.requirements() }
 			menuOptions={ [
-				{ label: "New Requirement", href: Routes.newRequirementRequirement(), icon: <NewIcon /> },
+				{ label: "New Requirement", href: Routes.newRequirement(), icon: <NewIcon /> },
 			] }
 		>
-			<RequirementRequirementsTable />
+			<RequirementsTable />
 		</IndexPageTemplate>
 	)
 }
 
-export default RequirementRequirementsIndex
+export default RequirementsIndex

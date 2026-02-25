@@ -99,7 +99,6 @@ export {
 } from "react-icons/lia"
 
 export {
-	// PiPersonSimpleCircle as ClientIcon,
 } from "react-icons/pi"
 
 export {

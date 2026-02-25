@@ -19,8 +19,14 @@
 #
 #  fk_rails_...  (requirement_type_id => requirement_types.id)
 #
-class Requirement::RequirementSerializer < ApplicationSerializer
+class Requirement::RequirementSerializer < ::ApplicationSerializer
   object_as :requirement
 
-  attributes(:name, :description, :requirement_type_id, :scope_type, :scope_id)
+  attributes(
+    :name,
+    :description,
+    :requirement_type_id,
+    :scope_type,
+    :scope_id,
+  )
 end

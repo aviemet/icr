@@ -1,3 +1,3 @@
 class Requirement::Requirements::PersistedSerializer < Requirement::RequirementSerializer
-  include Persisted
+  include ::Persisted
 end

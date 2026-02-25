@@ -14,7 +14,7 @@ class RequirementsController < ApplicationController
 
     paginated_requirements = paginate(requirements, :requirements)
 
-    render inertia: "Requirement/Requirements/Index", props: {
+    render inertia: "Requirements/Index", props: {
       requirements: -> { paginated_requirements.render(:index) },
       pagination: -> { {
         count: requirements.size,
@@ -26,7 +26,7 @@ class RequirementsController < ApplicationController
   # @route GET /requirements/:id (requirement)
   def show
     authorize requirement
-    render inertia: "Requirement/Requirements/Show", props: {
+    render inertia: "Requirements/Show", props: {
       requirement: -> { requirement.render(:show) }
     }
   end
@@ -34,7 +34,7 @@ class RequirementsController < ApplicationController
   # @route GET /requirements/new (new_requirement)
   def new
     authorize Requirement::Requirement.new
-    render inertia: "Requirement/Requirements/New", props: {
+    render inertia: "Requirements/New", props: {
       requirement: Requirement::Requirement.new.render(:form_data)
     }
   end
@@ -42,7 +42,7 @@ class RequirementsController < ApplicationController
   # @route GET /requirements/:id/edit (edit_requirement)
   def edit
     authorize requirement
-    render inertia: "Requirement/Requirements/Edit", props: {
+    render inertia: "Requirements/Edit", props: {
       requirement: requirement.render(:edit)
     }
   end

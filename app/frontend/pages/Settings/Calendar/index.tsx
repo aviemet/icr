@@ -1,4 +1,4 @@
-import { Box, Grid } from "@/components"
+import { Box, Grid, Information, Label } from "@/components"
 import { Form, Submit, Switch } from "@/components/Form"
 import { Select } from "@/components/Form/Inputs"
 import { Routes, withLayout } from "@/lib"
@@ -13,6 +13,8 @@ interface CalendarSettingsProps {
 	settings: Schema.Setting
 }
 
+const splitEventsName = "calendar_split_events_show_original_times"
+
 const CalendarSettings = ({ settings }: CalendarSettingsProps) => {
 	return (
 		<Box>
@@ -25,7 +27,7 @@ const CalendarSettings = ({ settings }: CalendarSettingsProps) => {
 			>
 				<Grid>
 					<Grid.Col span={ { lg: 4, md: 6, xs: 12 } }>
-						<Select name="calendar_layout_style" options={ [
+						<Select name="calendar_layout_style" label="Event Display Strategy" options={ [
 							{ label: "Split", value: "split" },
 							{ label: "Stack", value: "stack" },
 							{ label: "Span", value: "span" },
@@ -33,7 +35,18 @@ const CalendarSettings = ({ settings }: CalendarSettingsProps) => {
 					</Grid.Col>
 
 					<Grid.Col span={ { lg: 4, md: 6, xs: 12 } }>
-						<Switch name="calendar_split_events_show_original_times" label="Show the full times for split events" />
+						<Box
+							display="flex"
+							style={ { alignItems: "center", gap: "0.25rem" } }
+						>
+							<Label htmlFor={ splitEventsName }>Show the full times for split events</Label>
+							<Information position="top">How to display the times in a multi-day event when it's been visually split</Information>
+						</Box>
+						<Switch
+							id={ splitEventsName }
+							name={ splitEventsName }
+							wrapperProps={ { style: { display: "inline-block" } } }
+						/>
 					</Grid.Col>
 
 					<Grid.Col>

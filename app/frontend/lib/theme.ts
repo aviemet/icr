@@ -46,6 +46,11 @@ const themeObject: Partial<CustomMantineTheme> = {
 				},
 			}),
 		},
+		Tooltip: {
+			defaultProps: (theme: MantineTheme) => ({
+				color: theme.primaryColor,
+			}),
+		},
 		Modal: {
 			defaultProps: {
 				centered: true,

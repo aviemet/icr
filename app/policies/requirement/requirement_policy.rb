@@ -5,7 +5,7 @@ class Requirement::RequirementPolicy < ApplicationPolicy
 
       case user.person&.agency_role
       when "Employee"
-        if user.person.employee&.job_title&.has_role?(:index, Requirement::Requirement)
+        if user.person.employee&.job_title&.has_role?(:index, Requirement)
           scope.all
         else
           scope.none

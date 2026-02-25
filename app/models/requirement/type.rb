@@ -11,6 +11,7 @@
 module Requirement
   class Type < ApplicationRecord
     include PgSearchable
+
     pg_search_config(against: [:name, :description])
 
     tracked
