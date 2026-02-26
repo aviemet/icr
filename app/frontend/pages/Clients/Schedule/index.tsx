@@ -3,16 +3,23 @@ import { useTranslation } from "react-i18next"
 
 import {
 	Box,
+	Button,
 	Calendar,
 	Group,
+	Page,
+	Title,
 } from "@/components"
+import { Breadcrumb } from "@/components/Breadcrumbs"
 import { BaseCalendarEvent, EventResources } from "@/components/Calendar"
 import { type PopoverContentMap } from "@/components/Calendar/components/CalendarPopover"
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 import { NAVIGATION_ACTION, VIEW_NAMES } from "@/components/Calendar/views"
+import { PlusIcon } from "@/components/Icons"
+import Modal, { useModalContext } from "@/components/Modal"
 import EventPopoverContent from "@/features/Clients/EventPopoverContent"
 import { NewEventCalendarPopover } from "@/features/Clients/schedule/NewEventCalendarPopover"
-import { ensureViewName } from "@/lib"
+import { NewEventForm } from "@/features/Clients/schedule/NewEventForm"
+import { ensureViewName, Routes } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
 import { useLocation } from "@/lib/hooks"
@@ -30,8 +37,19 @@ interface ScheduleResources {
 	client: Schema.ClientsShow
 }
 
+
 function isScheduleResources(resources: EventResources | undefined): resources is ScheduleResources {
 	return resources !== undefined && "employee" in resources && "client" in resources
+}
+
+function NewEventModalContent({ client }: { client: Schema.ClientsShow }) {
+	const { close } = useModalContext()
+	return (
+		<NewEventForm
+			client={ client }
+			onSuccess={ () => close() }
+		/>
+	)
 }
 
 const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
@@ -89,11 +107,28 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 		}) || []
 	}, [client, data])
 
+	const breadcrumbs: Breadcrumb[] = [
+		{ title: "Clients", href: Routes.clients() },
+		{ title: client.full_name, href: Routes.client(client.slug) },
+		{ title: "Schedule" },
+	]
+
 	return (
-		<>
+		<Page title={ `${client.full_name} Schedule` } breadcrumbs={ breadcrumbs }>
 			<Group justify="space-between">
-				<h1>{ t("views.clients.schedule.title", { name: client?.person?.name }) }</h1>
-				<Box></Box>
+				<Title>{ t("views.clients.schedule.title", { name: client?.person?.name }) }</Title>
+				<Box>
+					<Modal
+						trigger={
+							<Button leftSection={ <PlusIcon /> }>
+								New Event
+							</Button>
+						}
+						title="New Event"
+					>
+						<NewEventModalContent client={ client } />
+					</Modal>
+				</Box>
 			</Group>
 
 			<Calendar
@@ -111,7 +146,7 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 					background: (context) => <NewEventCalendarPopover client={ client } selectedDate={ context.date } />,
 				} satisfies Partial<PopoverContentMap> }
 			/>
-		</>
+		</Page>
 	)
 }
 

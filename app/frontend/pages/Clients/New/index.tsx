@@ -12,8 +12,13 @@ const NewClient = ({ ...data }: NewClientProps) => {
 	const { t } = useTranslation()
 	const title = t("views.clients.new.title")
 
+	const breadcrumbs = [
+		{ title: "Clients", href: Routes.clients() },
+		{ title: "New" },
+	]
+
 	return (
-		<Page title={ title }>
+		<Page title={ title } breadcrumbs={ breadcrumbs }>
 			<Section>
 				<Title>{ title }</Title>
 

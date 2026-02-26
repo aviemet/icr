@@ -45,6 +45,13 @@ class Api::CalendarEventsController < Api::ApiController
   private
 
   def resolve_category_slug
+    slug = params.dig(:calendar_event, :category_slug)
+    if slug.present?
+      params[:calendar_event][:category_id] = Category.type("Calendar::Event").find_by!(slug: slug).id
+      params[:calendar_event].delete(:category_slug)
+      return
+    end
+
     id_or_slug = params.dig(:calendar_event, :category_id)
     return if id_or_slug.blank?
 

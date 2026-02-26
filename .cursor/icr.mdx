@@ -96,6 +96,7 @@ This is a single-instance Rails application designed to run for a single company
 ### Development Guidelines
 - No multi-tenancy support
 - Changes must be atomic and focused
+- When checking HTTP response status, use explicit status code equality only (e.g. `res.status === 201`). Never use range or inequality checks (e.g. `res.status >= 200`, `res.status < 300`).
 - TypeScript is used for all JavaScript code
   - Start with most restrictive type definitions
   - Avoid `any`, `unknown`, and type casting with `as`
@@ -266,6 +267,7 @@ The payroll settings system manages pay periods and overtime calculations:
 - Custom inputs use `useInertiaInput` hook
 - Form state includes processing, errors, validation, and dirty tracking
 - All components strictly typed with `BaseFormInputProps<T>` interface
+- Optional `submitWith` prop: pass a function `(context: { data, setError }) => void | Promise<void>` to submit via a custom path (e.g. React Query mutation); when set, `to` is optional and default submit is suppressed
 
 #### State Management
 - Server state: Inertia.js

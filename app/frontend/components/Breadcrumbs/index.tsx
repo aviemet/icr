@@ -18,7 +18,7 @@ export const breadcrumbLinks = (links:Breadcrumb[]) => links.map((link, i) => li
 )
 
 interface BreadcrumbsProps extends Omit<MantineBreadcrumbsProps, "children"> {
-	crumbs?:Breadcrumb[]
+	crumbs?: Breadcrumb[]
 	children?: React.ReactNode
 }
 

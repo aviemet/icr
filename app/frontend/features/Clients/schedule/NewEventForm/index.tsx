@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import { useState } from "react"
 import { type PartialDeep } from "type-fest"
@@ -6,8 +7,10 @@ import { type UseFormProps } from "use-inertia-form"
 import { Grid } from "@/components"
 import { DateTimeInput, Form, Submit, FormConsumer, TextInput } from "@/components/Form"
 import { FormCategoriesDropdown, FormEmployeesDropdown } from "@/features/Dropdowns"
-import { categorySlug, isSystemCategorySlug, Routes, isNonEmptyString } from "@/lib"
+import { categorySlug, isSystemCategorySlug, isNonEmptyString } from "@/lib"
 import { type SystemCategorySlugsFor } from "@/lib/categories"
+import { nearestHalfHour } from "@/lib/dates"
+import { useCreateCalendarEvent } from "@/queries/calendarEvents"
 
 const CALENDAR_EVENT_SHIFT = categorySlug("Calendar::Event", "Shift")
 const CALENDAR_EVENT_OTHER = categorySlug("Calendar::Event", "Other")
@@ -22,14 +25,26 @@ export type NewEventData = {
 
 interface NewClientEventFormProps {
 	client: Schema.ClientsPersisted
-	selectedDate: Date
+	selectedDate?: Date
 	onSuccess?: (form: UseFormProps<NewEventData>) => void
 	onError?: (form: UseFormProps<NewEventData>) => void
 	onChange?: (form: UseFormProps<NewEventData>) => void
 }
 
-export function NewEventForm({ client, selectedDate, onSuccess, onError, onChange }: NewClientEventFormProps) {
+export function NewEventForm({
+	client,
+	selectedDate = nearestHalfHour(),
+	onSuccess,
+	onError,
+	onChange,
+}: NewClientEventFormProps) {
 	const [eventType, setEventType] = useState<SystemCategorySlugsFor<"Calendar::Event">>(CALENDAR_EVENT_SHIFT)
+	const queryClient = useQueryClient()
+	const createEvent = useCreateCalendarEvent({
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: [`clients/${client.slug}/schedule`] })
+		},
+	})
 
 	const initialData: NewEventData = {
 		calendar_event: {
@@ -66,13 +81,12 @@ export function NewEventForm({ client, selectedDate, onSuccess, onError, onChang
 	}
 
 	return (
-		<Form
-			async
+		<Form<NewEventData>
 			remember={ false }
 			model="calendar_event"
 			onSuccess={ handleSuccess }
 			onError={ handleError }
-			to={ Routes.apiCalendarEvents() }
+			submitWith={ ({ data }) => createEvent.mutateAsync(data).then(() => undefined) }
 			data={ initialData }
 			railsAttributes={ true }
 		>
@@ -121,7 +135,7 @@ export function NewEventForm({ client, selectedDate, onSuccess, onError, onChang
 				</Grid.Col>
 
 				<Grid.Col>
-					<Submit>Save Shift</Submit>
+					<Submit loading={ createEvent.isPending }>Save Shift</Submit>
 				</Grid.Col>
 			</Grid>
 		</Form>

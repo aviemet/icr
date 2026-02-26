@@ -4,7 +4,7 @@ import React from "react"
 
 import { createContext } from "@/lib/hooks"
 
-export type TriggerComponent =  React.ReactElement<{ onClick: () => void }>
+export type TriggerComponent = React.ReactElement<{ onClick: () => void }>
 
 type ModalDisclosureVariables = {
 	opened: boolean

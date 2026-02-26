@@ -1,4 +1,4 @@
-import { cloneDeep, unset } from "lodash-es"
+import { cloneDeep, isPlainObject, unset } from "lodash-es"
 
 export { default as NestedObject } from "./Collections/NestedObject"
 export { default as NestedURLSearchParams } from "./Collections/NestedURLSearchParams"
@@ -47,4 +47,42 @@ export const hasUniqueValues = <T extends Record<K, PropertyKey>, K extends keyo
 	}
 
 	return true
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return isPlainObject(value) && !Array.isArray(value)
+}
+
+export const renameObjectWithAttributes = <T>(data: T, str = "_attributes"): T => {
+	if(typeof data !== "object" || data === null) return data
+
+	const clone = structuredClone(data)
+	for(const value of Object.values(clone)) {
+		if(isRecord(value)) {
+			recursiveAppendString(value, str)
+		}
+	}
+	return clone
+}
+
+function recursiveAppendString(data: Record<string, unknown>, str: string): void {
+	Object.entries(data).forEach(([key, value]) => {
+		if(isRecord(value)) {
+			renameKey(data, key, `${key}${str}`)
+			recursiveAppendString(value, str)
+		} else if(Array.isArray(value)) {
+			renameKey(data, key, `${key}${str}`)
+		}
+	})
+}
+
+function renameKey(
+	obj: Record<string, unknown>,
+	oldKey: string,
+	newKey: string
+): void {
+	if(oldKey !== newKey) {
+		obj[newKey] = obj[oldKey]
+		delete obj[oldKey]
+	}
 }
