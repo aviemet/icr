@@ -317,6 +317,9 @@ The payroll settings system manages pay periods and overtime calculations:
   - If no tests for the feature being worked on exist, create them.
 - Do not write tests that only re-assert literal constants from the source (e.g. asserting that an exported constant object has the same keys/values as in the file). Such tests duplicate the implementation, add maintenance without catching real bugs, and have no independent notion of correctness. Prefer testing behavior, branches, and contracts; skip tests for pure static data exports
 
+#### Serializers
+- Smoke spec (`spec/serializers/serializers_smoke_spec.rb`) discovers serializers via `ApplicationSerializer.descendants` and `BaseSerializer.descendants`, infers model from serializer name, and asserts each serializer renders without error. Objects are resolved at example run time: `model_class.first`, then `FactoryBot.create(factory_name)`, then `model_class.new`. If no object can be resolved the example does nothing (no skip). Serializers that use `identifier :slug` (e.g. Employee) require persisted records so slug is set (FriendlyId); the smoke spec uses create for that. Identification model exposes `id_type` (DB column); serializers must use `:id_type`, not `:type`.
+
 #### Performance
 - Component code splitting
 - Route-based lazy loading

@@ -28,7 +28,7 @@ class IdentificationSerializer < ApplicationSerializer
   attributes(
     :identificationable_type,
     :identificationable_id,
-    :type,
+    :id_type,
     :number,
     :notes,
     :issued_at,
