@@ -1,4 +1,5 @@
 import { DateTimePicker, DateTimePickerProps } from "@mantine/dates"
+import dayjs from "dayjs"
 import { forwardRef } from "react"
 
 import { isUnset } from "@/lib"
@@ -15,7 +16,7 @@ export interface DateTimeProps
 	Omit<BaseInputProps, "disableAutofill"> {
 	name?: string
 	id?: string
-	value?: string
+	value?: string | Date
 	onChange?: (value: string | null) => void
 	error?: string | string[]
 }
@@ -46,7 +47,7 @@ const DateTime = forwardRef<HTMLButtonElement, DateTimeProps>((
 				ref={ ref }
 				id={ inputId }
 				name={ name }
-				value={ isUnset(value) ? null : value }
+				value={ isUnset(value) ? null : dayjs(value).toISOString() }
 				radius={ radius }
 				valueFormat={ valueFormat }
 				leftSection={ <CalendarIcon /> }

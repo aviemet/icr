@@ -35,7 +35,7 @@ describe("Calendar Event Mutations", () => {
 		}
 
 		it("should create a calendar event", async() => {
-			const mockResponse = { data: { id: "123", ...mockCalendarData }, statusText: "OK" }
+			const mockResponse = { data: { id: "123", ...mockCalendarData }, status: 201, statusText: "OK" }
 			vi.mocked(axios.post).mockResolvedValueOnce(mockResponse)
 
 			const { result } = renderHook(
@@ -81,7 +81,7 @@ describe("Calendar Event Mutations", () => {
 		}
 
 		it("should update a calendar event", async() => {
-			const mockResponse = { data: { id: eventId, ...mockCalendarData }, statusText: "OK" }
+			const mockResponse = { data: { id: eventId, ...mockCalendarData }, status: 200, statusText: "OK" }
 			vi.mocked(axios.patch).mockResolvedValueOnce(mockResponse)
 
 			const { result } = renderHook(
@@ -101,7 +101,7 @@ describe("Calendar Event Mutations", () => {
 		})
 
 		it("should invalidate queries on successful update", async() => {
-			const mockResponse = { data: { id: eventId, ...mockCalendarData }, statusText: "OK" }
+			const mockResponse = { data: { id: eventId, ...mockCalendarData }, status: 200, statusText: "OK" }
 			vi.mocked(axios.patch).mockResolvedValueOnce(mockResponse)
 
 			const onSuccess = vi.fn()

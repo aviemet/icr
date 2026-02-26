@@ -221,9 +221,10 @@ The payroll settings system manages pay periods and overtime calculations:
 
 ### Frontend Components
 #### UI Framework
-- Using Mantine v7+
+- Using Mantine v8+
   - Always use latest component API and prop names
   - Refer to Mantine documentation for current component structure
+  - Mantine v8 date/time inputs use string values only; shared input components (e.g. DateTimeInput) accept `string | Date` and normalize to string (Date → ISO) before passing to Mantine
 
 #### Spotlight (command palette)
 - Global command palette implemented with `@mantine/spotlight` v8+
@@ -310,6 +311,11 @@ The payroll settings system manages pay periods and overtime calculations:
 - E2E: Playwright (no mocks, uses test environment)
 - Test files mirror source structure in `/app/frontend/tests`
 - When a spec asserts on a translated validation/error message string, run the validation and assertions inside `I18n.with_locale(:en)` so the expected message is stable regardless of test order or default locale
+- Run tests when you make changes.
+  - Rails tests are in the rspec folder using standard naming Conventions
+  - JS/TS tests are in app/frontend/tests and follow the same folder structure as the files they're testing
+  - If no tests for the feature being worked on exist, create them.
+- Do not write tests that only re-assert literal constants from the source (e.g. asserting that an exported constant object has the same keys/values as in the file). Such tests duplicate the implementation, add maintenance without catching real bugs, and have no independent notion of correctness. Prefer testing behavior, branches, and contracts; skip tests for pure static data exports
 
 #### Performance
 - Component code splitting

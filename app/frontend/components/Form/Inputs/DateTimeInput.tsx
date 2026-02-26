@@ -2,7 +2,6 @@ import { forwardRef, type ForwardedRef } from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
 import DateTimeInput, { type DateTimeProps } from "@/components/Inputs/DateTimeInput"
-import { isUnset } from "@/lib"
 
 import InputWrapper from "../components/InputWrapper"
 
@@ -38,9 +37,11 @@ const DateTime = forwardRef(<TForm extends NestedObject = NestedObject>({
 		clearErrorsOnChange,
 	})
 
-	const handleChange = (date: Date | null) => {
-		const dateWithValidEmptyType = isUnset(date) ? "" : date
-
+	const handleChange = (value: string | null) => {
+		let dateWithValidEmptyType: Date | "" = ""
+		if(value !== null && value !== "") {
+			dateWithValidEmptyType = new Date(value)
+		}
 		setValue(dateWithValidEmptyType)
 
 		onChange?.(dateWithValidEmptyType, form)
