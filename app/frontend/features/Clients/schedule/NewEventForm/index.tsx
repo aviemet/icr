@@ -1,16 +1,17 @@
 import { useQueryClient } from "@tanstack/react-query"
 import dayjs from "dayjs"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { type PartialDeep } from "type-fest"
-import { type UseFormProps } from "use-inertia-form"
+import { type UseFormProps, useForm } from "use-inertia-form"
 
-import { Grid } from "@/components"
-import { DateTimeInput, Form, Submit, FormConsumer, TextInput } from "@/components/Form"
+import { Grid, Text } from "@/components"
+import { DateTimeInput, Form, Submit, FormConsumer, SplitDateTimeInput, TextInput } from "@/components/Form"
 import { FormCategoriesDropdown, FormEmployeesDropdown } from "@/features/Dropdowns"
 import { categorySlug, isSystemCategorySlug, isNonEmptyString } from "@/lib"
 import { type SystemCategorySlugsFor } from "@/lib/categories"
 import { nearestHalfHour } from "@/lib/dates"
 import { useCreateCalendarEvent } from "@/queries/calendarEvents"
+import { EventTotalHours } from "./EventTotalHours"
 
 const CALENDAR_EVENT_SHIFT = categorySlug("Calendar::Event", "Shift")
 const CALENDAR_EVENT_OTHER = categorySlug("Calendar::Event", "Other")
@@ -46,7 +47,7 @@ export function NewEventForm({
 		},
 	})
 
-	const initialData: NewEventData = {
+	const initialData = useMemo<NewEventData>(() => ({
 		calendar_event: {
 			category_slug: CALENDAR_EVENT_SHIFT,
 			starts_at: selectedDate,
@@ -61,7 +62,7 @@ export function NewEventForm({
 				},
 			],
 		},
-	}
+	}), [selectedDate, client.id])
 
 	const handleChange = (form: UseFormProps<NewEventData>) => {
 		const slug = form.data.calendar_event.category_slug
@@ -118,21 +119,27 @@ export function NewEventForm({
 					</Grid.Col>
 				}
 
-				<Grid.Col>
-					<DateTimeInput
-						label="Start"
-						name="starts_at"
-						popoverProps={ { withinPortal: false } }
-					/>
-				</Grid.Col>
+				<SplitDateTimeInput<NewEventData> model="calendar_event" name="starts_at">
+					<Grid.Col span={ 6 }>
+						<SplitDateTimeInput.Date label="Start date" />
+					</Grid.Col>
 
-				<Grid.Col>
-					<DateTimeInput
-						label="End"
-						name="ends_at"
-						popoverProps={ { withinPortal: false } }
-					/>
-				</Grid.Col>
+					<Grid.Col span={ 6 }>
+						<SplitDateTimeInput.Time label="Start time" />
+					</Grid.Col>
+				</SplitDateTimeInput>
+
+				<SplitDateTimeInput<NewEventData> model="calendar_event" name="ends_at">
+					<Grid.Col span={ 6 }>
+						<SplitDateTimeInput.Date label="End date" />
+					</Grid.Col>
+
+					<Grid.Col span={ 6 }>
+						<SplitDateTimeInput.Time label="End time" />
+					</Grid.Col>
+				</SplitDateTimeInput>
+
+				<EventTotalHours />
 
 				<Grid.Col>
 					<Submit loading={ createEvent.isPending }>Save Shift</Submit>

@@ -103,6 +103,7 @@ This is a single-instance Rails application designed to run for a single company
   - Prefer existing type definitions and interfaces
   - Use generics, Records, and Mapped types before inline types
   - Type assertions are a last resort
+- Nested ternaries are not allowed; use normal `if`/`else if`/`else` (or early returns) instead.
 
 ## Feature Documentation
 *Document completed features and their core functionality here*
@@ -316,9 +317,14 @@ The payroll settings system manages pay periods and overtime calculations:
   - JS/TS tests are in app/frontend/tests and follow the same folder structure as the files they're testing
   - If no tests for the feature being worked on exist, create them.
 - Do not write tests that only re-assert literal constants from the source (e.g. asserting that an exported constant object has the same keys/values as in the file). Such tests duplicate the implementation, add maintenance without catching real bugs, and have no independent notion of correctness. Prefer testing behavior, branches, and contracts; skip tests for pure static data exports
+- React component tests (Vitest + RTL): Use `render()` from `@testing-library/react`; assert on behavior with `screen` and `userEvent`. Jest-dom matchers (e.g. `toBeInTheDocument`) are enabled via `tests/helpers/setup.ts`. For components that need form context, render with `Form` from `use-inertia-form` (not the app's Form wrapper, to avoid pulling in Inputs/Inertia) and minimal initial data; use a helper component that calls `useInertiaInput` + `setValue` to simulate field updates and assert that siblings that read `useForm().data` update (e.g. duration display). For components that use Mantine, wrap with `MantineProvider` and in the test file add `beforeEach` to stub `window.matchMedia`; wrap Mantine `Grid.Col` children in `Grid` when testing.
+- **Testing (use-inertia-form):** Pass `remember={ false }` on the form (or on the `useForm` options) so form values are not persisted to localStorage; otherwise the library can retain state across unmount/remount in the same test file and tests may see stale values.
 
 #### Serializers
 - Smoke spec (`spec/serializers/serializers_smoke_spec.rb`) discovers serializers via `ApplicationSerializer.descendants` and `BaseSerializer.descendants`, infers model from serializer name, and asserts each serializer renders without error. Objects are resolved at example run time: `model_class.first`, then `FactoryBot.create(factory_name)`, then `model_class.new`. If no object can be resolved the example does nothing (no skip). Serializers that use `identifier :slug` (e.g. Employee) require persisted records so slug is set (FriendlyId); the smoke spec uses create for that. Identification model exposes `id_type` (DB column); serializers must use `:id_type`, not `:type`.
+
+#### Lib coverage
+- `spec/lib/` tests lib code for coverage: `locales_spec.rb` (formatted_timezone_list, formatted_currencies_list), `custom_failure_spec.rb` (Devise CustomFailure via request integration), `listeners/locale_file_listener_spec.rb` (start guard, callback, rescue; stub `described_class.at_exit` so at-exit blocks using doubles are not registered). Generators under `spec/lib/generators/` smoke-test that each generator runs without error in a temp destination_root; base classes are exercised by loading and asserting superclass/source_root.
 
 #### Performance
 - Component code splitting

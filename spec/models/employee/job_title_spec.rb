@@ -26,6 +26,26 @@ RSpec.describe Employee::JobTitle do
         expect(build(:job_title, attr => nil)).not_to be_valid
       end
     end
+
+    it "rejects assignment when ends_at is before starts_at" do
+      job_title = create(:job_title)
+      assignment = build(
+        :employees_job_title,
+        {
+          job_title: job_title,
+          starts_at: 1.day.from_now,
+          ends_at: Time.current,
+        },
+      )
+      expect(assignment).not_to be_valid
+      expect(assignment.errors[:ends_at]).to include("must be after starts_at")
+    end
+
+    it "allows assignment when ends_at is blank" do
+      job_title = create(:job_title)
+      assignment = build(:employees_job_title, job_title: job_title, ends_at: nil)
+      expect(assignment).to be_valid
+    end
   end
 
   describe "Associations" do

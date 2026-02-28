@@ -29,7 +29,7 @@ const TimeFormInput = forwardRef(<TForm extends NestedObject>(
 		clearErrorsOnChange,
 		...props
 	}: FormTimeInputProps<TForm>,
-	ref: ForwardedRef<HTMLInputElement>
+	ref: ForwardedRef<HTMLDivElement>
 ) => {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<string, TForm>({
 		name,
@@ -39,12 +39,9 @@ const TimeFormInput = forwardRef(<TForm extends NestedObject>(
 		clearErrorsOnChange,
 	})
 
-
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const value = e.target.value
-		setValue(value)
-
-		onChange?.(value, form)
+	const handleChange = (nextValue: string) => {
+		setValue(nextValue)
+		onChange?.(nextValue, form)
 	}
 
 	const handleBlur = () => {
@@ -67,6 +64,9 @@ const TimeFormInput = forwardRef(<TForm extends NestedObject>(
 				onChange={ handleChange }
 				onBlur={ handleBlur }
 				required={ required }
+				hoursInputLabel="Hours"
+				minutesInputLabel="Minutes"
+				amPmInputLabel="AM/PM"
 				error={ error }
 				wrapper={ false }
 				{ ...props }
