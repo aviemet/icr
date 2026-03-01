@@ -4,6 +4,13 @@ import React, { useCallback, useLayoutEffect, useMemo, useRef, type ReactNode } 
 
 import { renameObjectWithAttributes } from "@/lib/collections"
 
+import {
+	createInitialSyntheticSlotProps,
+	defaultNormalizeSubmitError,
+	runSubmitWithIntercept,
+	type NormalizeSubmitError,
+	type SubmitWith,
+} from "./customSubmit"
 import { FormFieldProvider, useFormFieldContext } from "./FormFieldContext"
 
 type InertiaFormProps = React.ComponentProps<typeof InertiaForm>
@@ -12,13 +19,20 @@ type HTMLInputType = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
 export interface FormProps extends Omit<InertiaFormProps, "children"> {
 	children: ReactNode | ((props: FormComponentSlotProps) => ReactNode)
 	initialData?: Record<string, unknown>
+	normalizeSubmitError?: NormalizeSubmitError
 	railsAttributes?: boolean
+	submitWith?: SubmitWith
 }
+
+const initialSyntheticSlotProps = createInitialSyntheticSlotProps()
 
 function Form({
 	children,
 	initialData,
+	normalizeSubmitError = defaultNormalizeSubmitError,
+	onBefore,
 	railsAttributes = true,
+	submitWith,
 	transform,
 	...props
 }: FormProps) {
@@ -73,6 +87,24 @@ function Form({
 		[handleFormChange]
 	)
 
+	const handleOnBefore = useCallback(
+		(visit: Parameters<NonNullable<InertiaFormProps["onBefore"]>>[0]) => {
+			onBefore?.(visit)
+
+			if(submitWith) {
+				runSubmitWithIntercept(
+					visit.data as Record<string, FormDataConvertible>,
+					submitWith,
+					setSlotProps,
+					normalizeSubmitError,
+					initialSyntheticSlotProps
+				)
+				return false
+			}
+		},
+		[submitWith, setSlotProps, normalizeSubmitError, onBefore]
+	)
+
 	const renderChildren = useCallback(
 		(slotProps: FormComponentSlotProps) => {
 			queueMicrotask(() => setSlotProps(slotProps))
@@ -83,7 +115,7 @@ function Form({
 
 	return (
 		<div ref={ wrapperRef } onInput={ handleInput } onChange={ handleInput }>
-			<InertiaForm { ...props } transform={ composedTransform }>{ renderChildren }</InertiaForm>
+			<InertiaForm { ...props } onBefore={ handleOnBefore } transform={ composedTransform }>{ renderChildren }</InertiaForm>
 		</div>
 	)
 }
