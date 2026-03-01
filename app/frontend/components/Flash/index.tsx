@@ -2,6 +2,8 @@ import { usePage } from "@inertiajs/react"
 import { showNotification } from "@mantine/notifications"
 import { useEffect } from "react"
 
+import { type SharedInertiaProps } from "@/lib/hooks/usePageProps"
+
 const shownMessageIds = new Set<string>()
 
 const Flash = () => {

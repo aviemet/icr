@@ -1,9 +1,9 @@
 import { Button } from "@mantine/core"
 
-import { useFormFieldContext } from "./FormFieldContext"
+import { useSlotProps } from "./formFieldUtils"
 
 export function Submit({ children }: { children: React.ReactNode }) {
-	const { slotProps } = useFormFieldContext()
+	const slotProps = useSlotProps()
 
 	return (
 		<Button type="submit" disabled={ slotProps?.processing }>

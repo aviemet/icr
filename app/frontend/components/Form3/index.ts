@@ -1,5 +1,5 @@
 export { Form } from "./Form"
 export { useFormFieldContext } from "./FormFieldContext"
-export { useFormField, nameToPath } from "./formFieldUtils"
+export { nameToPath, useFormField, useSlotProps } from "./formFieldUtils"
 export type { FormComponentSlotProps } from "@inertiajs/core"
 export { Submit } from "./Submit"

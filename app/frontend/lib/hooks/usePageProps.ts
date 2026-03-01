@@ -1,6 +1,8 @@
 import { PageProps, Errors, ErrorBag } from "@inertiajs/core"
 import { usePage } from "@inertiajs/react"
 
+import { type FlashMessage } from "@/types"
+
 export interface SharedInertiaProps extends PageProps {
 	auth: {
 		form_authenticity_token: string

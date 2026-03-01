@@ -11,7 +11,7 @@ RSpec.describe Tsx::Generators::ScaffoldGenerator do
     FileUtils.mkdir_p(File.join(dest, "app", "frontend", "pages"))
     FileUtils.mkdir_p(File.join(dest, "app", "frontend", "features"))
 
-    generator = described_class.new(["smoke_models"], {}, { destination_root: dest })
+    generator = described_class.new(["smoke_model"], {}, { destination_root: dest })
 
     expect { generator.invoke_all }.not_to raise_error
   ensure

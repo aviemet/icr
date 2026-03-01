@@ -11,7 +11,10 @@ const Ihss = () => {
 			<Grid.Col>
 				<Title order={ 3 }>IHSS</Title>
 			</Grid.Col>
-			<Grid.Col />
+
+			<Grid.Col>
+
+			</Grid.Col>
 		</>
 	)
 }

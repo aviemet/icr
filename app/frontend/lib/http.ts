@@ -99,3 +99,5 @@ export function assertStatus(response: ResponseLike, expected: ExpectedStatus): 
 		throw new HttpStatusError(`Expected status ${allowed.join(" or ")}, got ${status}`, status)
 	}
 }
+
+export type HTTPVerb = "post" | "put" | "get" | "patch" | "delete";

@@ -9,6 +9,10 @@ export function nameToPath(name: string) {
 
 type FormControl = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
 
+export function useSlotProps() {
+	return useFormFieldContext().slotProps
+}
+
 export function useFormField(path: string) {
 	const { subscribe, getValue, setValue } = useFormFieldContext()
 	const [value, setState] = useState(() => getValue(path))
