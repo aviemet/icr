@@ -86,3 +86,30 @@ function renameKey(
 		delete obj[oldKey]
 	}
 }
+
+export function flattenToPaths(
+	obj: Record<string, unknown>,
+	prefix = ""
+): [string, unknown][] {
+	const result: [string, unknown][] = []
+	for(const [key, value] of Object.entries(obj)) {
+		const path = prefix ? `${prefix}.${key}` : key
+		if(value !== null && typeof value === "object" && !(value instanceof Date)) {
+			if(Array.isArray(value)) {
+				value.forEach((item, index) => {
+					const indexPath = `${path}.${index}`
+					if(item !== null && typeof item === "object" && !(item instanceof Date) && !Array.isArray(item)) {
+						result.push(...flattenToPaths(item as Record<string, unknown>, indexPath))
+					} else {
+						result.push([indexPath, item])
+					}
+				})
+			} else {
+				result.push(...flattenToPaths(value as Record<string, unknown>, path))
+			}
+		} else {
+			result.push([path, value])
+		}
+	}
+	return result
+}

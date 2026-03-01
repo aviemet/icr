@@ -1,7 +1,8 @@
 import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
 
 import { Grid } from "@/components"
-import { Form, TextInput, Submit } from "@/components/Form"
+import { Form as Form3, Submit as Submit3 } from "@/components/Form3"
+import { Checkbox as Checkbox3, TextInput as TextInput3 } from "@/components/Inputs"
 
 import Ihss from "./Ihss"
 
@@ -18,38 +19,37 @@ export interface ClientFormProps {
 	client: Schema.ClientsFormData
 }
 
-const ClientForm = ({ method = "post", client, ...props }: ClientFormProps) => {
+const ClientForm = ({ method = "post", to, client, ...props }: ClientFormProps) => {
 	return (
-		<Form
-			model="client"
-			data={ { client } }
-			method={ method }
-			{ ...props }
-		>
-			<Grid>
+		<>
+			<Form3 action={ to } method={ method } initialData={ { client } }>
+				<Grid>
 
-				<Grid.Col span={ { xxs: 12, sm: 4 } }>
-					<TextInput name="person.first_name" label="First Name" />
-				</Grid.Col>
+					<Grid.Col span={ { xxs: 12, sm: 4 } }>
+						<TextInput3 name="client.person.first_name" label="First Name" />
+					</Grid.Col>
 
-				<Grid.Col span={ { xxs: 12, sm: 4 } }>
-					<TextInput name="person.middle_name" label="Middle Name" />
-				</Grid.Col>
+					<Grid.Col span={ { xxs: 12, sm: 4 } }>
+						<TextInput3 name="client.person.middle_name" label="Middle Name" />
+					</Grid.Col>
 
-				<Grid.Col span={ { xxs: 12, sm: 4 } }>
-					<TextInput name="person.last_name" label="Last Name" />
-				</Grid.Col>
+					<Grid.Col span={ { xxs: 12, sm: 4 } }>
+						<TextInput3 name="client.person.last_name" label="Last Name" />
+					</Grid.Col>
 
-				<Ihss />
+					<Grid.Col>
+						<Checkbox3 name="client.ihss" label="Client has IHSS hours" />
+					</Grid.Col>
+					<Ihss />
 
-				<Grid.Col>
-					<Submit>{ client.id ? "Update" : "Create" } Client</Submit>
-				</Grid.Col>
+					<Grid.Col>
+						<Submit3>{ client.id ? "Update" : "Create" } Client</Submit3>
+					</Grid.Col>
 
+				</Grid>
+			</Form3>
 
-			</Grid>
-
-		</Form>
+		</>
 	)
 }
 

@@ -2,6 +2,7 @@ import cx from "clsx"
 import { useTranslation } from "react-i18next"
 
 import { Box, Button, Card, Grid, Group, Link, Section, Stack, Text, Title } from "@/components"
+import { Form } from "@/components/Form3"
 import {
 	PlusIcon,
 	HomeIcon,
@@ -9,6 +10,7 @@ import {
 	CalendarIcon,
 	ClockIcon,
 } from "@/components/Icons"
+import { TextInput } from "@/components/Inputs"
 import { Routes } from "@/lib"
 import { usePageProps } from "@/lib/hooks"
 
@@ -20,6 +22,14 @@ const Dashboard = () => {
 
 	return (
 		<Section>
+			<Section>
+
+				{ /* <Form>
+					<TextInput name="hello" />
+				</Form> */ }
+
+
+			</Section>
 			<Stack gap="xl">
 				<Group justify="space-between" align="flex-end">
 					<div>

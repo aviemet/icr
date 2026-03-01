@@ -2,15 +2,16 @@ import { useQueryClient } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import { useMemo, useState } from "react"
 import { type PartialDeep } from "type-fest"
-import { type UseFormProps, useForm } from "use-inertia-form"
+import { type UseFormProps } from "use-inertia-form"
 
-import { Grid, Text } from "@/components"
-import { DateTimeInput, Form, Submit, FormConsumer, SplitDateTimeInput, TextInput } from "@/components/Form"
+import { Grid } from "@/components"
+import { Form, Submit, FormConsumer, SplitDateTimeInput, TextInput } from "@/components/Form"
 import { FormCategoriesDropdown, FormEmployeesDropdown } from "@/features/Dropdowns"
 import { categorySlug, isSystemCategorySlug, isNonEmptyString } from "@/lib"
 import { type SystemCategorySlugsFor } from "@/lib/categories"
 import { nearestHalfHour } from "@/lib/dates"
 import { useCreateCalendarEvent } from "@/queries/calendarEvents"
+
 import { EventTotalHours } from "./EventTotalHours"
 
 const CALENDAR_EVENT_SHIFT = categorySlug("Calendar::Event", "Shift")

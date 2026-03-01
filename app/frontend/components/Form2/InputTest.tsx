@@ -1,11 +1,11 @@
 import { TextInput, type TextInputProps as MantineTextInputProps } from "@mantine/core"
 import React, { forwardRef } from "react"
 
-import InputWrapper from "./InputWrapper"
-import Label from "./Label"
+import { useFormInputName } from "./FormContext"
 import { CrossIcon } from "../Icons"
-
-import { withInjectedProps, type BaseInputProps } from "."
+import { withInjectedProps, type BaseInputProps } from "../Inputs"
+import InputWrapper from "../Inputs/InputWrapper"
+import Label from "../Inputs/Label"
 
 
 export interface TextInputProps extends MantineTextInputProps, BaseInputProps {
@@ -21,7 +21,7 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputProps>((
 		wrapper,
 		wrapperProps,
 		clearable = false,
-		value,
+		value = "",
 		onChange,
 		readOnly,
 		disableAutofill = true,
@@ -29,6 +29,8 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputProps>((
 	},
 	ref,
 ) => {
+	const inputName = useFormInputName(name)
+
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		onChange?.(e)
 	}
@@ -42,7 +44,7 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputProps>((
 		handleChange(fakeEvent)
 	}
 
-	const inputId = id || name
+	const inputId = id || inputName
 
 	return (
 		<InputWrapper wrapper={ wrapper } wrapperProps={ wrapperProps }>
@@ -51,12 +53,12 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputProps>((
 			</Label> }
 			<TextInput
 				ref={ ref }
-				name={ name }
+				name={ inputName }
 				id={ inputId }
-				{ ...(value !== undefined && { value }) }
+				value={ value }
 				onChange={ handleChange }
 				required={ required }
-				rightSection={ !readOnly && clearable && value !== "" && value !== undefined && <CrossIcon onClick={ handleClear } /> }
+				rightSection={ !readOnly && clearable && value !== "" && <CrossIcon onClick={ handleClear } /> }
 				{ ...withInjectedProps(props, {
 					disableAutofill,
 				}) }
