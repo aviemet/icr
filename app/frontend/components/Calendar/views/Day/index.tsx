@@ -19,6 +19,7 @@ interface DayViewTimeGridHeading extends TimeGridHeading {
 const DayViewComponent = <TEventResources extends EventResources>({
 	className,
 	style,
+	displayStrategy,
 }: DayViewProps<TEventResources>) => {
 	const { date, localizer, resourcesById, groupByResource } = useCalendarContext()
 
@@ -49,7 +50,7 @@ const DayViewComponent = <TEventResources extends EventResources>({
 				columnHeadings={ columnHeadings }
 				startTime={ startTime }
 				endTime={ endTime }
-				displayStrategy="overlap"
+				displayStrategy={ displayStrategy }
 			/>
 		</div>
 	)

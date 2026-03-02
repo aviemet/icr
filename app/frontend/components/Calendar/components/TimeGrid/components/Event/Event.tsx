@@ -50,7 +50,6 @@ const Event = ({
 			{ ...props }
 		>
 			{ getEventTitle(event, displayProperties) }
-			<h1>{ displayProperties.overlap || 0 }</h1>
 		</CalendarEvent>
 	)
 }

@@ -15,7 +15,7 @@ export const eventWrapper = css`
           white
         );
 
-  overflow: hidden;
+  /* overflow: hidden; */
   margin: 1px;
   font-size: ${ vars.fontSizes.xs };
   grid-column: var(--column-start) / span var(--column-span);
@@ -29,12 +29,15 @@ export const timeGridEvent = css`
   color: var(--contrasting-color);
   padding: 4px 4px 4px 8px;
   border-radius: 4px;
+  border-color: light-dark(${ vars.colors.gray[2] }, ${ vars.colors.gray[9] });
+  border-width: 0.25px;
   cursor: pointer;
   height: calc(100% - 2px);
   transition: background-color 200ms ease-in-out;
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
+  box-shadow: ${ vars.shadows.sm };
 
   &:hover {
     filter: brightness(0.9);

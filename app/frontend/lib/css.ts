@@ -1,3 +1,2 @@
-export { vars } from "./theme"
+export { vars, theme } from "./theme"
 export { rem } from "./units"
-export { theme } from "./theme"

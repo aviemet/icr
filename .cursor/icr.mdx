@@ -93,6 +93,9 @@ This is a single-instance Rails application designed to run for a single company
 ### Controller Concerns
 - Concerns that store config used in instance methods (e.g. Searchable’s sortable fields, advanced search methods) use `class_attribute` so includers get per-class config visible to instances. Avoid module-level instance variables in `included` blocks; those are class ivars and are not available in instance methods.
 
+### Settings Controllers
+- Singleton `Setting` updates share the `/settings` update endpoint across multiple Inertia pages (e.g. General, Calendar); controllers use `redirect_back_or_to settings_path` so successful updates and validation failures return the user to the originating settings page while preserving Inertia error handling.
+
 ### Development Guidelines
 - No multi-tenancy support
 - Changes must be atomic and focused
@@ -207,6 +210,12 @@ The payroll settings system manages pay periods and overtime calculations:
 - Events must handle timezone conversions properly
 - Recurring events must follow RFC 5545 (iCalendar) specification
 - Calendar uses a unified `onClick` handler that accepts a `CalendarClickTarget` discriminated union
+- Display strategy selection (`calendar_layout_style`) now drives both month and time-grid (day/week) views:
+  - Month view maps `split`, `stack`, `span` to dedicated month strategies
+  - Day/Week time-grid views alias these names to their overlap strategy and receive the chosen strategy via `displayStrategy` so future per-strategy time-grid behaviors can be wired without changing the public API
+- Month view event rows use `MonthEvent` + `CalendarEvent` composition:
+  - `MonthEvent` applies layout sizing and indicator/continuation visuals (dots and triangles) via `MonthView.css` and `Event.css`
+  - `CalendarEvent` wraps children in a `div > span` structure that owns shared event typography and click handling
   - Target types: `event` and `background`
   - Calendar component accepts `onClick?: (target: CalendarClickTarget) => boolean | void` prop
   - Popover content configured via `popoverContent` prop object with `event` and `background` keys

@@ -57,6 +57,8 @@ export const monthEvent = css`
   }
 
   &.indicator {
+    display: flex;
+
     &:hover {
       background-color: light-dark(${ vars.colors.gray[2] }, ${ vars.colors.dark[6] });
     }
@@ -69,7 +71,11 @@ export const monthEvent = css`
       border-radius: 50%;
       background-color: var(--event-color);
       margin-right: 4px;
-      vertical-align: middle;
+      align-self: center;
+    }
+
+    span {
+      flex: 1;
     }
   }
 

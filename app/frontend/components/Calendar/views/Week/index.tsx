@@ -23,16 +23,14 @@ const WeekViewComponent = <TEventResources extends EventResources>({ className, 
 		}))
 	}, [date, localizer])
 
-	const strategyClasses = (classes as Record<string, string>)[displayStrategy] || undefined
-
 	return (
 		<div className={ clsx(classes.weekView, className) } style={ style }>
-			<TimeGrid<TEventResources>
+			<TimeGrid<TEventResources, typeof VIEWS.week>
 				view={ VIEWS.week }
 				columnHeadings={ columnHeadings }
 				startTime={ localizer.startOf(date, "day") }
 				endTime={ localizer.endOf(date, "day") }
-				className={ clsx(strategyClasses) }
+				displayStrategy={ displayStrategy }
 			/>
 		</div>
 	)
