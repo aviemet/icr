@@ -6,5 +6,6 @@ export {
 export { Form } from "./Form"
 export { useFormFieldContext } from "./FormFieldContext"
 export { nameToPath, useFormField, useSlotProps } from "./formFieldUtils"
-export type { FormComponentSlotProps } from "@inertiajs/core"
+export { DynamicFields, type DynamicFieldsProps } from "./DynamicFields"
+export { type FormComponentSlotProps } from "@inertiajs/core"
 export { Submit } from "./Submit"

@@ -61,6 +61,7 @@ export function getFormValueByName(form: HTMLFormElement, name: string) {
 
 export function setFormValue(form: HTMLFormElement, path: string, value: unknown) {
 	const field = form.elements.namedItem(path)
+
 	if(field === null) return
 	if(field instanceof RadioNodeList) return setRadioNodeListValue(field, value)
 	if(field instanceof HTMLInputElement) return setInputElementValue(field, value)

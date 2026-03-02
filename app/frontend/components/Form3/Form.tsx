@@ -89,9 +89,7 @@ function Form({
 
 	const handleOnBefore = useCallback(
 		(visit: Parameters<NonNullable<InertiaFormProps["onBefore"]>>[0]) => {
-			onBefore?.(visit)
-
-			if(submitWith) {
+			if(submitWith && onBefore?.(visit)) {
 				runSubmitWithIntercept(
 					visit.data as Record<string, FormDataConvertible>,
 					submitWith,
@@ -101,6 +99,8 @@ function Form({
 				)
 				return false
 			}
+
+			return onBefore?.(visit)
 		},
 		[submitWith, setSlotProps, normalizeSubmitError, onBefore]
 	)

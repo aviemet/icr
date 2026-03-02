@@ -103,6 +103,7 @@ This is a single-instance Rails application designed to run for a single company
   - Prefer existing type definitions and interfaces
   - Use generics, Records, and Mapped types before inline types
   - Type assertions are a last resort
+  - Do not explicitly annotate function return types when TypeScript can infer them; only add a return type when the intent is ambiguous or part of a public API.
 - Nested ternaries are not allowed; use normal `if`/`else if`/`else` (or early returns) instead.
 
 ## Feature Documentation

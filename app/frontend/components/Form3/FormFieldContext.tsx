@@ -1,4 +1,4 @@
-import { type FormComponentSlotProps } from "@inertiajs/core"
+import { type FormComponentSlotProps, formDataToObject } from "@inertiajs/core"
 import { isEqual, pick } from "lodash-es"
 import React, { useRef, useState } from "react"
 
@@ -16,6 +16,8 @@ export interface FormFieldContextValue {
 	subscribe: (path: string, callback: (value: unknown) => void) => () => void
 	getValue: (path: string) => unknown
 	setValue: (path: string, value: unknown) => void
+	getFormData: () => Record<string, unknown>
+	clearPathsStartingWith: (prefix: string) => void
 	registerForm: (form: HTMLFormElement | null) => void
 	applyInitialData: (data: Record<string, unknown>) => void
 	handleFormChange: (event: { target: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement }) => void
@@ -84,6 +86,21 @@ export function FormFieldProvider({ children }: { children: React.ReactNode }) {
 
 			applyInitialData(data: Record<string, unknown>) {
 				flattenToPaths(data).forEach(([path, val]) => apiImpl.setValue(path, val))
+			},
+
+			getFormData() {
+				const form = formRef.current
+
+				if(!form) return {}
+
+				return formDataToObject(new FormData(form)) as Record<string, unknown>
+			},
+
+			clearPathsStartingWith(prefix: string) {
+				const dotPrefix = prefix + "."
+				for(const path of Object.keys(storeRef.current)) {
+					if(path.startsWith(dotPrefix)) delete storeRef.current[path]
+				}
 			},
 
 			subscribe(path: string, callback: (value: unknown) => void) {
