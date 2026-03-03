@@ -2,7 +2,7 @@ class HouseholdsController < ApplicationController
   include Searchable
 
   expose :households, -> { search(Household.includes_associated) }
-  expose :household, scope: ->{ Household }, find: ->(id, scope){ scope.includes_associated.find(id) }
+  expose :household, id: ->{ params[:slug] }, scope: ->{ Household.includes_associated }, find_by: :slug
 
   sortable_fields %w(householdable_id householdable_type type number notes issued_at expires_at extra_fields)
 

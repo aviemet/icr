@@ -69,6 +69,10 @@ const Sidebar = () => {
 								active={ matchesAtPosition(paths, [0, "clients"]) }
 							>
 								<MenuLink
+									label="Households"
+									href={ Routes.households() }
+								/>
+								<MenuLink
 									label="Doctors"
 									href={ Routes.doctors() }
 								/>

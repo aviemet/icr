@@ -9,7 +9,7 @@ class Api::EmployeesController < Api::ApiController
   def schedule
     schedules = Employee
       .includes([:person])
-      .find_by(slug: params[:slug])
+      .find_by!(slug: params[:slug])
       .calendar_events
       .includes([:recurring_patterns, shift: [employee: [:person, :job_title, :calendar_customization]]])
       .between(*DateRangeCalculator.new(params).call)

@@ -11,7 +11,7 @@ class Api::ClientsController < ApplicationController
   def schedule
     schedules = Client
       .includes([:person])
-      .find_by(slug: params[:slug])
+      .find_by!(slug: params[:slug])
       .calendar_events
       .includes([
         :recurring_patterns,

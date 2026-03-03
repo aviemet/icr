@@ -1,5 +1,8 @@
 if Rails.env.development?
 
+  dev_password = "Complex1!"
+  test_timezone = "America/Los_Angeles"
+
   if Client.first.calendar_events.empty?
 
     attendant_job = Employee::JobTitle.find_by(slug: "attendant")
@@ -7,12 +10,16 @@ if Rails.env.development?
     ActiveRecord::Base.transaction do
       shift_length = 4
 
+      first_attendant = nil
+
       5.times do |i|
         employee = FactoryBot.create(:employee)
         employee.assign_job_title(attendant_job)
         FactoryBot.create(:address, contact: employee.contact, category: Category.type("Contact::Address").sample)
         FactoryBot.create(:email, contact: employee.contact, category: Category.type("Contact::Email").sample)
         FactoryBot.create(:phone, contact: employee.contact, category: Category.type("Contact::Phone").sample)
+
+        first_attendant = employee if i == 1
 
         client = Client.first
         start = Time.current.beginning_of_month + (i * shift_length).hours
@@ -33,6 +40,16 @@ if Rails.env.development?
           start += 1.day
         end
       end
+
+      # Test attendant User
+      User.create({
+        email: "attendant@gmail.com",
+        password: dev_password,
+        confirmed_at: Time.zone.now,
+        time_zone: test_timezone,
+        person: first_attendant.person
+      })
+
     end
 
   end

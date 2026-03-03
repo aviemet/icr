@@ -30,6 +30,7 @@ class Client < ApplicationRecord
   include Attachment::HasDocuments
 
   include PgSearchable
+
   pg_search_config(
     against: [:active_at, :inactive_at, :number],
     associated_against: {
@@ -38,6 +39,7 @@ class Client < ApplicationRecord
   )
 
   extend FriendlyId
+
   friendly_id :slug_candidates
 
   resourcify
