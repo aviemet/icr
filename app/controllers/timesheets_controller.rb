@@ -8,22 +8,16 @@ class TimesheetsController < ApplicationController
 
   strong_params :timesheet, permit: [:pay_period_start, :pay_period_end, :employee_id, :approved_at, :approved_by_id]
 
-  # @route GET /timesheets (timesheets)
+  # @route GET /payroll (timesheets)
   def index
-    authorize timesheets
-
-    paginated_timesheets = paginate(timesheets, :timesheets)
+    employees = policy_scope(Employee.includes_associated)
 
     render inertia: "Timesheets/Index", props: {
-      timesheets: -> { paginated_timesheets.render(:index) },
-      pagination: -> { {
-        count: timesheets.size,
-        **pagination_data(paginated_timesheets)
-      } },
+      employees: -> { employees.render(:index) }
     }
   end
 
-  # @route GET /timesheets/:id (timesheet)
+  # @route GET /payroll/:id (timesheet)
   def show
     authorize timesheet
     render inertia: "Timesheets/Show", props: {
@@ -31,7 +25,7 @@ class TimesheetsController < ApplicationController
     }
   end
 
-  # @route GET /timesheets/new (new_timesheet)
+  # @route GET /payroll/new (new_timesheet)
   def new
     authorize Timesheet.new
     render inertia: "Timesheets/New", props: {
@@ -39,7 +33,7 @@ class TimesheetsController < ApplicationController
     }
   end
 
-  # @route GET /timesheets/:id/edit (edit_timesheet)
+  # @route GET /payroll/:id/edit (edit_timesheet)
   def edit
     authorize timesheet
     render inertia: "Timesheets/Edit", props: {
@@ -47,7 +41,7 @@ class TimesheetsController < ApplicationController
     }
   end
 
-  # @route POST /timesheets (timesheets)
+  # @route POST /payroll (timesheets)
   def create
     authorize Timesheet.new
     timesheet.assign_attributes(timesheet_params)
@@ -58,8 +52,8 @@ class TimesheetsController < ApplicationController
     end
   end
 
-  # @route PATCH /timesheets/:id (timesheet)
-  # @route PUT /timesheets/:id (timesheet)
+  # @route PATCH /payroll/:id (timesheet)
+  # @route PUT /payroll/:id (timesheet)
   def update
     authorize timesheet
     if timesheet.update(timesheet_params)
@@ -69,7 +63,7 @@ class TimesheetsController < ApplicationController
     end
   end
 
-  # @route DELETE /timesheets/:id (timesheet)
+  # @route DELETE /payroll/:id (timesheet)
   def destroy
     authorize timesheet
     timesheet.destroy!

@@ -691,6 +691,27 @@
           "title": "New Permission Group"
         }
       },
+      "payroll": {
+        "index": {
+          "title": "Payroll",
+          "tabs": {
+            "employees": "Employees",
+            "pay_periods": "Pay periods"
+          },
+          "employees": {
+            "name": "Name",
+            "actions": "Actions",
+            "view_periods": "View pay periods"
+          },
+          "periods": {
+            "period": "Period",
+            "start": "Start",
+            "end": "End",
+            "actions": "Actions",
+            "view_employees": "View employees"
+          }
+        }
+      },
       "timesheets": {
         "filters": {
           "apply": "Apply Filters",

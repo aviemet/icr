@@ -23,6 +23,7 @@ class PermissionsController < ApplicationController
     ],
   ]
 
+  # @route GET /permissions (permissions)
   def index
     render inertia: "Permissions/Index", props: {
       groups: groups.as_json(
@@ -35,6 +36,7 @@ class PermissionsController < ApplicationController
     }
   end
 
+  # @route GET /permissions/:id (permission)
   def show
     render inertia: "Permissions/Show", props: {
       group: group.as_json(
@@ -47,6 +49,7 @@ class PermissionsController < ApplicationController
     }
   end
 
+  # @route GET /permissions/new (new_permission)
   def new
     render inertia: "Permissions/New", props: {
       group: group,
@@ -54,6 +57,7 @@ class PermissionsController < ApplicationController
     }
   end
 
+  # @route GET /permissions/:id/edit (edit_permission)
   def edit
     render inertia: "Permissions/Edit", props: {
       group: group.as_json(
@@ -67,6 +71,7 @@ class PermissionsController < ApplicationController
     }
   end
 
+  # @route POST /permissions (permissions)
   def create
     if group.save
       redirect_to permissions_path, notice: t("templates.controllers.notices.created", model: "Permission group")
@@ -78,6 +83,8 @@ class PermissionsController < ApplicationController
     end
   end
 
+  # @route PATCH /permissions/:id (permission)
+  # @route PUT /permissions/:id (permission)
   def update
     if group.update(group_params)
       redirect_to permissions_path, notice: t("templates.controllers.notices.updated", model: "Permission group")
@@ -96,6 +103,7 @@ class PermissionsController < ApplicationController
     end
   end
 
+  # @route DELETE /permissions/:id (permission)
   def destroy
     group.destroy
     redirect_to permissions_path, notice: t("templates.controllers.notices.destroyed", model: "Permission group")

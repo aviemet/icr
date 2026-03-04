@@ -83,7 +83,7 @@ Rails.application.routes.draw do
 
   resources :shift_templates
 
-  resources :timesheets
+  resources :timesheets, path: "payroll"
 
   resources :vendors, param: :slug
 
