@@ -100,9 +100,10 @@ const TimeGrid = <
 
 			// Build the list of events per column
 			columnEvents.forEach(({ event, displayProperties }, index) => {
+				const eventKey = `${event.id}-${displayProperties.displayStart.toISOString()}-${columnIndex}-${index}`
 				const eventNode = (displayProperties: TimeGridDisplayProperties) => (
 					<EventNode<TEventResources>
-						key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
+						key={ eventKey }
 						event={ event }
 						displayProperties={ displayProperties }
 						startTime={ localStartTime }

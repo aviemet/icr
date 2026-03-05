@@ -3,7 +3,7 @@ import { useForm } from "use-inertia-form"
 
 import { Grid, Text } from "@/components"
 
-import { type NewEventData } from "."
+import { type EventData } from "."
 
 function parseDateTime(value: Date | string | undefined): dayjs.Dayjs | null {
 	if(value === null || value === undefined || value === "") return null
@@ -13,7 +13,7 @@ function parseDateTime(value: Date | string | undefined): dayjs.Dayjs | null {
 }
 
 export function EventTotalHours() {
-	const { data } = useForm<NewEventData>()
+	const { data } = useForm<EventData>()
 	const startsAt = parseDateTime(data.calendar_event?.starts_at)
 	const endsAt = parseDateTime(data.calendar_event?.ends_at)
 
@@ -31,7 +31,7 @@ export function EventTotalHours() {
 
 	return (
 		<Grid.Col>
-			<Text size="sm" c="dimmed">Duration: { label }</Text>
+			<Text size="sm" c="dimmed" ta="right">Duration: { label }</Text>
 		</Grid.Col>
 	)
 }

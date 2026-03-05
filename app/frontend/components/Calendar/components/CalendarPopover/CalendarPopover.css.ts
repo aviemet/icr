@@ -7,6 +7,7 @@ export const container = css`
 	z-index: 250;
 	transform-origin: top left;
 	opacity: 1;
+	transition: top 0.2s ease-out, left 0.2s ease-out, opacity 0.15s ease-out, transform 0.15s ease-out, width 0.15s ease-out, height 0.15s ease-out;
 
 	&[data-entering] {
 		opacity: 0;

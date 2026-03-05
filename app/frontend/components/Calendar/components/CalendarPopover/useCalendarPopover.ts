@@ -98,6 +98,7 @@ const useCalendarPopover = (): UseCalendarPopoverReturn => {
 
 	const constrainToViewport = useCallback(() => {
 		if(!popoverRef.current || !clickedElement) return
+		if(!clickedElement.isConnected) return
 
 		const popoverRect = popoverRef.current.getBoundingClientRect()
 		const viewportWidth = window.innerWidth

@@ -11,7 +11,7 @@
 #
 # Indexes
 #
-#  index_shifts_on_calendar_event_id  (calendar_event_id)
+#  index_shifts_on_calendar_event_id  (calendar_event_id) UNIQUE
 #  index_shifts_on_employee_id        (employee_id)
 #  index_shifts_on_timesheet_id       (timesheet_id)
 #

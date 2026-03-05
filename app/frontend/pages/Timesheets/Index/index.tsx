@@ -19,13 +19,18 @@ import { formatter, Routes } from "@/lib"
 import EmployeesTable from "./EmployeesTable"
 import PayrollTableFooter from "./PayrollTableFooter"
 
+interface EmployeeHoursMap {
+	regular_hours?: number
+}
+
 interface TimesheetsIndexProps {
 	period_dates: [string, string]
 	employees: Schema.EmployeesPersisted[]
+	employee_hours: Record<string, EmployeeHoursMap>
 	pagination: Schema.Pagination
 }
 
-export default function TimesheetsIndex({ period_dates, employees, pagination }: TimesheetsIndexProps) {
+export default function TimesheetsIndex({ period_dates, employees, employee_hours, pagination }: TimesheetsIndexProps) {
 	const { t } = useTranslation()
 	const [activeTab, setActiveTab] = useState<string>("all")
 
@@ -134,7 +139,7 @@ export default function TimesheetsIndex({ period_dates, employees, pagination }:
 									</Button>
 								</Group>
 
-								<EmployeesTable employees={ employees } />
+								<EmployeesTable employees={ employees } employee_hours={ employee_hours } />
 							</Box>
 
 							<PayrollTableFooter employeeCount={ employees.length } />

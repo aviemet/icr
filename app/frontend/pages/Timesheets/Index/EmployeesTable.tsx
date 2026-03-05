@@ -1,12 +1,18 @@
 import { useTranslation } from "react-i18next"
 
 import { Avatar, Badge, Button, Group, Link, Menu, Table } from "@/components"
+import { formatter } from "@/lib"
+
+interface EmployeeHoursMap {
+	regular_hours?: number
+}
 
 interface EmployeesTableProps {
 	employees: Schema.EmployeesPersisted[]
+	employee_hours: Record<string, EmployeeHoursMap>
 }
 
-export default function EmployeesTable({ employees }: EmployeesTableProps) {
+export default function EmployeesTable({ employees, employee_hours }: EmployeesTableProps) {
 	const { t } = useTranslation()
 
 	return (
@@ -40,7 +46,12 @@ export default function EmployeesTable({ employees }: EmployeesTableProps) {
 								</Group>
 							</Link>
 						</Table.Cell>
-						<Table.Cell>{ t("views.timesheets.index.no_value") }</Table.Cell>
+						<Table.Cell>
+							{ (() => {
+								const hours = employee_hours[employee.id]?.regular_hours
+								return typeof hours === "number" ? formatter.number.decimal(hours, 2) : t("views.timesheets.index.no_value")
+							})() }
+						</Table.Cell>
 						<Table.Cell>{ t("views.timesheets.index.no_value") }</Table.Cell>
 						<Table.Cell>{ t("views.timesheets.index.no_value") }</Table.Cell>
 						<Table.Cell>{ t("views.timesheets.index.no_value") }</Table.Cell>

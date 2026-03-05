@@ -28,7 +28,6 @@ export const EventNode = <TEventResources extends EventResources>({
 
 	return (
 		<EventWrapper
-			key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
 			event={ event }
 			displayProperties={ displayProperties }
 		>

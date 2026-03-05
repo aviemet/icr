@@ -10,6 +10,11 @@ export const currency = (amount: number, currency = "USD") => {
 	return formatter.format(amount)
 }
 
+export const number = {
+	decimal: (value: number, fractionDigits = 1) =>
+		new Intl.NumberFormat("en-US", { minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits }).format(value),
+}
+
 export const datetime = {
 	// Date formatters
 	dateShort: (date: string | Date) => dayjs(ensureDate(date)).format("M/DD/YY"),

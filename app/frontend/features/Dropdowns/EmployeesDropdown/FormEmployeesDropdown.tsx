@@ -17,7 +17,7 @@ const EmployeesDropdownInput = ({
 	...props
 }: ItemsDropdownProps) => {
 	const { data, isStale, refetch } = useGetEmployeesAsOptions({
-		enabled: value !== undefined,
+		enabled: true,
 		initialData,
 	})
 

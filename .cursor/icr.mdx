@@ -4,10 +4,7 @@
 This is a single-instance Rails application designed to run for a single company. There is no multi-tenancy support, and company details are managed through a singleton settings model.
 
 ### Model Organization
-- Employee-related models are namespaced under `Employee::`
-  - `Employee::JobTitle`: Manages job titles and their associations
-  - Models use explicit class names in associations (e.g., `class_name: "Employee::JobTitle"`)
-  - Serializers follow the same namespace pattern (e.g., `Employee::JobTitleSerializer`)
+- Employee-related models live under the `Employee::` namespace and use explicit `class_name` in associations (required for the namespace to resolve). Serializers mirror the same namespace.
 
 ## Project Milestones
 
@@ -93,201 +90,77 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Company settings use singleton pattern
 
 ### Controller Concerns
-- Concerns that store config used in instance methods (e.g. Searchable’s sortable fields, advanced search methods) use `class_attribute` so includers get per-class config visible to instances. Avoid module-level instance variables in `included` blocks; those are class ivars and are not available in instance methods.
+- Config used in instance methods (e.g. sortable fields) must use `class_attribute` so each including class gets its own config. Module-level instance variables set in `included` are class ivars and are not visible in instance methods.
 
 ### Settings Controllers
-- Singleton `Setting` updates share the `/settings` update endpoint across multiple Inertia pages (e.g. General, Calendar); controllers use `redirect_back_or_to settings_path` so successful updates and validation failures return the user to the originating settings page while preserving Inertia error handling.
+- Singleton settings share one update endpoint across multiple Inertia pages. Use `redirect_back_or_to settings_path` so both success and validation errors return to the originating page without losing Inertia error handling.
 
 ### Development Guidelines
 - No multi-tenancy support
 - Changes must be atomic and focused
-- When checking HTTP response status, use explicit status code equality only (e.g. `res.status === 201`). Never use range or inequality checks (e.g. `res.status >= 200`, `res.status < 300`).
-- TypeScript is used for all JavaScript code
-  - Start with most restrictive type definitions
-  - Avoid `any`, `unknown`, and type casting with `as`
-  - Prefer existing type definitions and interfaces
-  - Use generics, Records, and Mapped types before inline types
-  - Type assertions are a last resort
-  - Do not explicitly annotate function return types when TypeScript can infer them; only add a return type when the intent is ambiguous or part of a public API.
-- Nested ternaries are not allowed; use normal `if`/`else if`/`else` (or early returns) instead.
+- When checking HTTP response status, use exact status equality (e.g. 201), not range checks.
+- TypeScript: strict types, prefer existing types and generics over inline types or assertions; only annotate return types when intent is ambiguous or for public API.
+- Nested ternaries are disallowed; use `if`/`else` or early returns.
 
 ## Feature Documentation
 *Document completed features and their core functionality here*
 
 ### Permission System
-The permission system provides fine-grained access control with support for complex conditions:
-
-#### Components
-- **Permission Groups**: Define sets of permissions with effects (allow/deny) and conditions
-- **Permission Assignments**: Link permission groups to users or job titles with optional time restrictions
-- **Permission Resolution**: Evaluates permissions based on precedence levels and conditions
-
-#### Key Features
-- **Precedence Levels**: Higher precedence permissions override lower ones
-- **Explicit Allow/Deny**: At each precedence level, deny takes priority over allow
-- **Conditional Access**: Supports conditions like:
-  - Owner-only access (user must own the record)
-  - Time-restricted access (only valid during specific time windows)
-  - Custom conditions (extensible for specific needs)
-
-#### Usage
-```ruby
-# Creating a permission group
-permission_group = Permission::Group.create!(
-  name: "Time-restricted View",
-  description: "Allow viewing during business hours",
-  permissions: [{
-    resource: "clients",
-    action: "view",
-    effect: "allow",
-    conditions: {
-      time_restricted: {
-        start_time: "09:00",
-        end_time: "17:00"
-      }
-    }
-  }]
-)
-
-# Assigning permissions
-Permission::Assignment.create!(
-  permissionable: user,
-  group: permission_group,
-  starts_at: Time.current
-)
-
-# Checking permissions
-user.permission?("clients", "view", context)
-```
+- Groups define permissions with effects (allow/deny) and conditions. Assignments link groups to users or job titles (optional time bounds). Resolution uses precedence and conditions.
+- Precedence: higher overrides lower. At each level, deny wins over allow.
+- Conditions: owner-only, time-restricted, or custom. Check with permission?(resource, action, context).
 
 ### Payroll Settings
-The payroll settings system manages pay periods and overtime calculations:
-
-#### Pay Period Configuration
-- **Period Types**:
-  - Weekly
-  - Bi-weekly
-  - Semi-monthly
-  - Monthly
-- **Period Settings**:
-  - Weekly/Bi-weekly: Configurable day of week (Monday-Sunday)
-  - Monthly: Configurable date (1st, 5th, 15th, 20th, or last day)
-  - Semi-monthly: Two configurable dates per month
-
-#### Overtime Rules
-- **Standard Thresholds**:
-  - Weekly hours (default: 40)
-  - Daily hours (default: 8)
-- **Exemption System**:
-  - Configurable rules for overtime-exempt shifts
-  - Criteria based on:
-    - Shift category (Sleep, Standby, Regular)
-    - Start/end times
-    - Shift duration
-
-#### Pay Rate Management
-- Tracks employee pay rates over time
-- Supports both hourly and salary periods
-- Includes currency information
-- Maintains historical records with effective dates
+- Period types: weekly, bi-weekly, semi-monthly, monthly; each with configurable start day(s) or dates. Monthly can use last day of month.
+- Overtime: configurable weekly/daily thresholds; exemption rules by shift category, time range, duration.
+- Pay rates: historical records with effective dates; hourly and salary; currency.
 
 ## Technical Decisions
 ### Authentication & Authorization
-- Using Devise for authentication
-- Using Pundit for authorization policies
-- Using Rolify for role management
-- Authorization enforced at both API and UI levels
-- Fine-grained permissions through custom permission system
-  - Supports complex conditions (time-based, owner-only)
-  - Hierarchical with precedence levels
-  - Polymorphic assignments (users, job titles)
+- Devise, Pundit, Rolify; authorization at API and UI. Custom permission system adds fine-grained rules with precedence, conditions (time-based, owner-only), and polymorphic assignments (users, job titles).
 
 ### Document Management
-- Documents will be stored using Active Storage
-- Version control will be maintained for important documents
-- Access control will be managed through Pundit policies
+- Active Storage; versioning for important documents; Pundit for access.
 
 ### Calendar System
-- Calendar must support multiple view strategies
-- Events must handle timezone conversions properly
-- Recurring events must follow RFC 5545 (iCalendar) specification
-- Calendar uses a unified `onClick` handler that accepts a `CalendarClickTarget` discriminated union
-- Display strategy selection (`calendar_layout_style`) now drives both month and time-grid (day/week) views:
-  - Month view maps `split`, `stack`, `span` to dedicated month strategies
-  - Day/Week time-grid views alias these names to their overlap strategy and receive the chosen strategy via `displayStrategy` so future per-strategy time-grid behaviors can be wired without changing the public API
-- Month view event rows use `MonthEvent` + `CalendarEvent` composition:
-  - `MonthEvent` applies layout sizing and indicator/continuation visuals (dots and triangles) via `MonthView.css` and `Event.css`
-  - `CalendarEvent` wraps children in a `div > span` structure that owns shared event typography and click handling
-  - Target types: `event` and `background`
-  - Calendar component accepts `onClick?: (target: CalendarClickTarget) => boolean | void` prop
-  - Popover content configured via `popoverContent` prop object with `event` and `background` keys
-  - Default popover behavior is used unless `onClick` returns `true`
-  - EventPopover renamed to CalendarPopover to reflect generic nature
-  - `CalendarPopover` receives `popoverRef: React.RefObject<HTMLDivElement>` as a prop (not `forwardRef`) to avoid type assertions and keep typing strict
-  - Draft events: Calendar maintains an internal draft-events store and merges draft events into `events` before view strategies run. Draft events can be created/updated/removed via `useCalendarContext` methods (`upsertDraftEvent`, `patchDraftEvent`, `removeDraftEvent`).
-  - Inputs rendered inside the calendar popover should avoid portal-based dropdowns/popovers (e.g. pass `popoverProps={{ withinPortal: false }}` to date/time pickers) so calendar click-outside logic does not close the popover on selection
+- Multiple view strategies; timezones must be handled correctly; recurring events follow RFC 5545 (iCalendar).
+- One display-setting drives both month and time-grid views (month strategies vs overlap for day/week), so per-strategy behavior can be added without changing the public API.
+- Gotcha: The popover closes on click-outside. Date/time pickers or other inputs inside the popover must not use a portal, or the popover will close when the user selects a value.
+- Client schedule: Events come from React Query; mutations must invalidate the schedule query so the calendar refetches. If invalidation is skipped, the UI can show stale or duplicate events.
+- Client schedule uniqueness: Participantable's calendar_events is has_many through event_participants; the join can return the same event multiple times. The association uses a distinct scope so the API returns each event once.
 
 ### Timesheet System
-- **Payroll index** (`/payroll`): List of employees only; historical view (e.g. `/payroll/historical`) deferred.
-- **PayPeriod**: Snapshot of an actual pay period (derived from settings via `Payroll::Period.period_dates`); unique on `(starts_at, ends_at)`; no overlapping periods.
-- **Timesheet**: Created before submittal; tracks approval status; belongs to PayPeriod and Employee; has many Shifts.
-- **Shift → Timesheet/PayPeriod**: On create, if shift falls within the active pay period (current date's period): find or create PayPeriod for that span; if PayPeriod was newly created, its `after_create` backfills timesheets from all shifts in range; otherwise find or create Timesheet for that employee and PayPeriod and set `shift.timesheet_id`.
-- **PayPeriod → Timesheets**: On create, `backfill_timesheets_from_shifts`: find shifts whose calendar_event overlaps the period, group by employee, create one Timesheet per employee, associate those shifts with the Timesheet.
-- Timesheets will be generated per pay period; audit trail and multi-step approval workflow as before.
+- Payroll index: employees only; historical view deferred.
+- PayPeriod: one per (starts_at, ends_at); no overlapping periods; derived from settings.
+- Timesheet: pre-submittal; tracks approval; belongs to PayPeriod and Employee; has many Shifts.
+- Shift create: if within current pay period, find or create that PayPeriod and a Timesheet for the employee; if the PayPeriod was just created, backfill timesheets for all shifts in that range.
+- PayPeriod create: backfill timesheets from shifts whose event overlaps the period (one Timesheet per employee).
 
 ### Frontend Components
 #### UI Framework
-- Using Mantine v8+
-  - Always use latest component API and prop names
-  - Refer to Mantine documentation for current component structure
-  - Mantine v8 date/time inputs use string values only; shared input components (e.g. DateTimeInput) accept `string | Date` and normalize to string (Date → ISO) before passing to Mantine
+- Mantine v8+; use current API from docs.
+- Gotcha: Mantine date/time inputs expect strings; shared inputs accept Date or string and normalize to ISO string before passing in.
 
 #### Spotlight (command palette)
-- Global command palette implemented with `@mantine/spotlight` v8+
-- `Spotlight` component is rendered once in `SpotlightProvider` inside the shared `Providers` tree so it is available on all pages
-- Spotlight actions currently mirror main sidebar navigation targets and are permission-gated using the shared `permissions` Inertia prop
-- Default keyboard shortcut (`mod + K`) is used to open spotlight
+- Single instance in the shared Providers tree; actions are permission-gated and mirror sidebar navigation.
 
 #### Icons
-- Icons are centrally exported from `@/components/Icons`
-- Icons are renamed on export for semantic usage (e.g., `TbDashboard as DashboardIcon`)
-- Global icon configuration via `IconProvider` with defaults:
-  - className: "react-icon"
-  - size: "1rem"
+- Single export from components/Icons; icons renamed for semantic use. IconProvider sets default size and class.
 
 #### Component Organization
-- Frontend code is organized in `/app/frontend/`
-  - `/components`: Reusable, general-purpose components
-  - `/features`: Feature-specific components
-  - `/layouts`: Layout components
-  - `/lib`: Non-React code and utilities
-  - `/pages`: Top-level Inertia pages (entry points for routes)
-  - `/queries`: Async react-query methods
-  - `/types`: Global types and interfaces
-- Components using `forwardRef` with generics define `forwardRef` directly in the component definition, not on the export
-  - Pattern: `const Component = forwardRef(<T extends Constraint>(props, ref) => { ... })`
-  - Avoids type casting and maintains proper generic type inference
+- Frontend: components, features, layouts, lib, pages, queries, types under app/frontend.
+- Gotcha: For components that use forwardRef with generics, define forwardRef on the component itself, not on the export; otherwise generic inference breaks and you end up with type assertions.
 
 #### Formatters
-- All formatting logic lives in [app/frontend/lib/formatters.ts](app/frontend/lib/formatters.ts). Do not define formatters inline in components or pages; add new formatters (e.g. date ranges, numbers, currency) to `formatters.ts` and use them via `formatter` or `formatter.datetime` from `@/lib`.
+- All formatting lives in formatters.ts; do not define formatters inline. Add new ones there and use via formatter / formatter.datetime / formatter.number from @/lib.
+
 
 #### UI & Styling
-- Mantine component library
-- CSS modules with Linaria
-  - Files use `.css.ts` extension
-  - Imports as `import * as classes from './file.css'`
-  - Class composition with `clsx`
-- Dark/light theme support via Mantine theme system
+- Mantine; Linaria with .css.ts; clsx for class composition; theme supports dark/light.
 
 #### Form Implementation
-- Built on `use-inertia-form` v4.6.0
-- Form component wraps Inertia form with Mantine UI
-- Supports nested data through `NestedObject` type
-- Rails-compatible form attributes by default
-- Custom inputs use `useInertiaInput` hook
-- Form state includes processing, errors, validation, and dirty tracking
-- All components strictly typed with `BaseFormInputProps<T>` interface
-- Optional `submitWith` prop: pass a function `(context: { data, setError }) => void | Promise<void>` to submit via a custom path (e.g. React Query mutation); when set, `to` is optional and default submit is suppressed
+- use-inertia-form v4.6.0; Form wraps Inertia + Mantine; nested data, Rails-style attributes; custom inputs via the form hook; strict typing.
+- Gotcha: To submit via a custom path (e.g. React Query), use the optional submit-with callback; when set, default submit is skipped and the normal destination is optional.
 
 #### State Management
 - Server state: Inertia.js
@@ -295,94 +168,42 @@ The payroll settings system manages pay periods and overtime calculations:
 - Form state: use-inertia-form
 
 #### Type System
-- Strict TypeScript throughout
-- No use of `any`, `unknown`, or type casting with `as`
-- Prefer existing type definitions and interfaces
-- Use generics, Records, and Mapped types before inline types
-- Type assertions as last resort
-- Auto-generated types for serializers
-- Ruby constants can be exported to TypeScript types via `rails types:generate` (e.g. `Category::CATEGORIZABLE_TYPES` → `app/frontend/types/CategoryType.ts`); add a subtask in `lib/tasks/types.rake` to keep a single source of truth
-- TypeScript configuration uses `moduleResolution: "bundler"` to support subpath exports (e.g., `@tiptap/react/menus`)
+- Strict TypeScript; prefer existing types and generics; no any/unknown or casting.
+- Ruby constants can be exported to TS via rails types:generate; add a subtask in types.rake so it stays in sync.
+- moduleResolution "bundler" is required for subpath exports (e.g. tiptap menus).
 
 #### Internationalization (i18n)
-- Using react-i18next for frontend translations
-- Translation files from i18n-js gem
-- Translations in Rails locales (yml)
-- Full i18n support (numbers, dates, currency, RTL)
-- Translation organization:
-  - Model-specific translations in `config/locales/[model]/frontend.en.yml`
-  - Other frontend translations in `config/locales/frontend.en.yml`
-  - Frontend key structure:
-    - `views.[feature].[page].[key]` (e.g., `views.clients.index.title`)
-    - Common elements are shared within their feature namespace (e.g., `views.devise.shared.email`)
-- Common notice templates in `en.yml` under `templates.controllers.notices`
-  - Reusable patterns for CRUD operations
-  - Uses `%{model}` interpolation
-  - Can be extended in model-specific locale files
-- Controller notice messages use standard templates:
-  - Created: `t("templates.controllers.notices.created", model: "Model Name")`
-  - Updated: `t("templates.controllers.notices.updated", model: "Model Name")`
-  - Destroyed: `t("templates.controllers.notices.destroyed", model: "Model Name")`
-  - Status Updated: `t("templates.controllers.notices.status_updated", model: "Model Name")`
+- react-i18next; locales from Rails (i18n-js). Model-specific frontend strings in config/locales/[model]/frontend.en.yml; rest in frontend.en.yml. Keys: views.[feature].[page].[key]. Controller notices use shared templates under templates.controllers.notices with %{model}; CRUD notices (created/updated/destroyed/status_updated) use these.
 
 #### Testing
-- Unit: Vitest + React Testing Library
-- E2E: Playwright (no mocks, uses test environment)
-- Test files mirror source structure in `/app/frontend/tests`
-- When a spec asserts on a translated validation/error message string, run the validation and assertions inside `I18n.with_locale(:en)` so the expected message is stable regardless of test order or default locale
-- Run tests when you make changes.
-  - Rails tests are in the rspec folder using standard naming Conventions
-  - JS/TS tests are in app/frontend/tests and follow the same folder structure as the files they're testing
-  - If no tests for the feature being worked on exist, create them.
-- Do not write tests that only re-assert literal constants from the source (e.g. asserting that an exported constant object has the same keys/values as in the file). Such tests duplicate the implementation, add maintenance without catching real bugs, and have no independent notion of correctness. Prefer testing behavior, branches, and contracts; skip tests for pure static data exports
-- React component tests (Vitest + RTL): Use `render()` from `@testing-library/react`; assert on behavior with `screen` and `userEvent`. Jest-dom matchers (e.g. `toBeInTheDocument`) are enabled via `tests/helpers/setup.ts`. For components that need form context, render with `Form` from `use-inertia-form` (not the app's Form wrapper, to avoid pulling in Inputs/Inertia) and minimal initial data; use a helper component that calls `useInertiaInput` + `setValue` to simulate field updates and assert that siblings that read `useForm().data` update (e.g. duration display). For components that use Mantine, wrap with `MantineProvider` and in the test file add `beforeEach` to stub `window.matchMedia`; wrap Mantine `Grid.Col` children in `Grid` when testing.
-- **Testing (use-inertia-form):** Pass `remember={ false }` on the form (or on the `useForm` options) so form values are not persisted to localStorage; otherwise the library can retain state across unmount/remount in the same test file and tests may see stale values.
+- Unit: Vitest + RTL; E2E: Playwright (no mocks). Tests mirror app/frontend under app/frontend/tests.
+- Gotcha: For assertions on translated strings, run validation and assertions inside I18n.with_locale(:en) so the expected message is stable.
+- Gotcha: Forms must use remember={ false } or the form library can persist state across unmount/remount and tests see stale values.
+- Gotcha: For form-context tests, use Form from use-inertia-form (not the app Form wrapper). For Mantine, wrap with MantineProvider, stub matchMedia in beforeEach, and wrap Grid.Col in Grid.
+- Do not test literal constants from the source; test behavior, branches, and contracts.
 
 #### Serializers
-- Smoke spec (`spec/serializers/serializers_smoke_spec.rb`) discovers serializers via `ApplicationSerializer.descendants` and `BaseSerializer.descendants`, infers model from serializer name, and asserts each serializer renders without error. Objects are resolved at example run time: `model_class.first`, then `FactoryBot.create(factory_name)`, then `model_class.new`. If no object can be resolved the example does nothing (no skip). Serializers that use `identifier :slug` (e.g. Employee) require persisted records so slug is set (FriendlyId); the smoke spec uses create for that. Identification model exposes `id_type` (DB column); serializers must use `:id_type`, not `:type`.
+- Smoke spec discovers serializers, infers model from name, renders each. Slug-identified models need persisted records so the smoke spec creates them. Gotcha: Identification uses the id_type column; serializers must use :id_type, not :type.
 
 #### Lib coverage
-- `spec/lib/` tests lib code for coverage: `locales_spec.rb` (formatted_timezone_list, formatted_currencies_list), `custom_failure_spec.rb` (Devise CustomFailure via request integration), `listeners/locale_file_listener_spec.rb` (start guard, callback, rescue; stub `described_class.at_exit` so at-exit blocks using doubles are not registered). Generators under `spec/lib/generators/` smoke-test that each generator runs without error in a temp destination_root; base classes are exercised by loading and asserting superclass/source_root.
+- spec/lib covers lib code; generator specs live under spec/lib/generators. Gotcha: In specs that register at-exit blocks with doubles, stub the class's at_exit so real at-exit is not registered.
 
 #### Performance
-- Component code splitting
-- Route-based lazy loading
-- Image optimization
-- Proper useEffect cleanup
-- Memoized expensive computations
-- Minimal global state
+- Code splitting, lazy loading, memoization, minimal global state.
 
 #### TipTap Integration
-- Using TipTap v3.14.0 for rich text editing
-- Menu components (`BubbleMenu`, `FloatingMenu`) must be imported from `@tiptap/react/menus`, not `@tiptap/react`
-- Core editor hooks (`useEditor`) imported from `@tiptap/react`
-- Mantine TipTap integration via `@mantine/tiptap` v8.3.10
+- TipTap v3.14.0; Mantine integration via @mantine/tiptap. Gotcha: Menu components (BubbleMenu, FloatingMenu) must be imported from the /menus subpath, not the main package.
 
 ## Payroll Periods
 
-### Semi-Monthly Periods
-- When configured with last day of month setting (`payroll_period_date_2 = -1`):
-  - First period: 1st to 14th of the month
-  - Second period: 15th to last day of month
-- With regular settings:
-  - Periods are defined by `payroll_period_date` and `payroll_period_date_2`
-  - First period starts on `payroll_period_date`
-  - Second period starts on `payroll_period_date_2`
-  - Each period ends the day before the next period starts
+### Semi-Monthly
+- With “last day of month” setting: first period 1st-14th, second 15th-last day. Otherwise two configurable dates; each period ends the day before the next starts.
 
-### Bi-Weekly Periods
-- Uses a reference date of January 3rd, 2024 for calculating period boundaries
-- Periods are two weeks long (14 days)
-- Start day of week is configurable via `payroll_period_day`
+### Bi-Weekly
+- Fixed reference date for boundaries; 14-day periods; configurable start day of week.
 
-### Weekly Periods
-- Start day of week is configurable via `payroll_period_day`
-- Periods run for 7 days from the start day
+### Weekly
+- Configurable start day of week; 7-day periods.
 
-### Monthly Periods
-- Can be configured with a specific start date or last day of month
-- When using last day of month (`payroll_period_date = -1`):
-  - Period runs from last day of previous month to second-to-last day of current month
-- With regular settings:
-  - Period starts on `payroll_period_date`
-  - Ends on day before start date of next month
+### Monthly
+- Configurable start date or “last day of month.” When last day: period is last day of prior month through second-to-last day of current month. Otherwise ends day before next period's start.

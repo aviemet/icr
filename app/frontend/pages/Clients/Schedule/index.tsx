@@ -17,8 +17,8 @@ import { NAVIGATION_ACTION, VIEW_NAMES } from "@/components/Calendar/views"
 import { PlusIcon } from "@/components/Icons"
 import Modal, { useModalContext } from "@/components/Modal"
 import EventPopoverContent from "@/features/Clients/EventPopoverContent"
-import { NewEventCalendarPopover } from "@/features/Clients/schedule/NewEventCalendarPopover"
-import { NewEventForm } from "@/features/Clients/schedule/NewEventForm"
+import { EventForm } from "@/features/Clients/schedule/EventForm"
+import { EventCalendarPopover } from "@/features/Clients/schedule/NewEventCalendarPopover"
 import { ensureViewName, Routes } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
@@ -45,7 +45,7 @@ function isScheduleResources(resources: EventResources | undefined): resources i
 function NewEventModalContent({ client }: { client: Schema.ClientsShow }) {
 	const { close } = useModalContext()
 	return (
-		<NewEventForm
+		<EventForm
 			client={ client }
 			onSuccess={ () => close() }
 		/>
@@ -103,8 +103,8 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 				allDay: schedule.all_day,
 				color: employee?.color,
 				resources: { employee, client },
-			} satisfies BaseCalendarEvent<ScheduleResources>
-		}) || []
+			}
+		}) ?? []
 	}, [client, data])
 
 	const breadcrumbs: Breadcrumb[] = [
@@ -143,7 +143,7 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 				} }
 				popoverContent={ {
 					event: (event: BaseCalendarEvent, localizer: CalendarLocalizer) => <EventPopoverContent event={ event } localizer={ localizer } />,
-					background: (context) => <NewEventCalendarPopover client={ client } selectedDate={ context.date } />,
+					background: (context) => <EventCalendarPopover client={ client } selectedDate={ context.date } />,
 				} satisfies Partial<PopoverContentMap> }
 			/>
 		</Page>

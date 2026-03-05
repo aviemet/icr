@@ -11,7 +11,7 @@
 #
 # Indexes
 #
-#  index_shifts_on_calendar_event_id  (calendar_event_id)
+#  index_shifts_on_calendar_event_id  (calendar_event_id) UNIQUE
 #  index_shifts_on_employee_id        (employee_id)
 #  index_shifts_on_timesheet_id       (timesheet_id)
 #
@@ -32,6 +32,8 @@ class Shift < ApplicationRecord
   belongs_to :employee
   belongs_to :calendar_event, class_name: "Calendar::Event"
   belongs_to :timesheet, optional: true
+
+  validates :calendar_event_id, uniqueness: true
 
   after_create :associate_with_timesheet_if_in_active_period
 

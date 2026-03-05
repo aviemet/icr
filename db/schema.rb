@@ -731,7 +731,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_24_203322) do
     t.uuid "employee_id", null: false
     t.uuid "timesheet_id"
     t.datetime "updated_at", null: false
-    t.index ["calendar_event_id"], name: "index_shifts_on_calendar_event_id"
+    t.index ["calendar_event_id"], name: "index_shifts_on_calendar_event_id", unique: true
     t.index ["employee_id"], name: "index_shifts_on_employee_id"
     t.index ["timesheet_id"], name: "index_shifts_on_timesheet_id"
   end

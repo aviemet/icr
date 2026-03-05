@@ -6,7 +6,7 @@ import { Routes, exclude, assertStatus, HTTP_STATUS } from "@/lib"
 
 import { ReactMutationFunction } from ".."
 
-type CalendarEventData = {
+export type CalendarEventData = {
 	calendar_event: Omit<PartialDeep<Schema.CalendarEventsFormData>, "event_participants"> & {
 		category_slug?: string
 		shift: PartialDeep<Schema.Shift>
@@ -42,7 +42,7 @@ export const useUpdateCalendarEvent: ReactMutationFunction<Schema.CalendarEvents
 	return useMutation({
 		mutationFn: async(data) => {
 			const res = await axios.patch(Routes.apiCalendarEvent(options.params.id), data)
-			assertStatus(res, HTTP_STATUS.OK)
+			assertStatus(res, [HTTP_STATUS.OK, HTTP_STATUS.CREATED])
 			return res.data
 		},
 		mutationKey: ["calendar_events", options.params.id],
@@ -50,6 +50,23 @@ export const useUpdateCalendarEvent: ReactMutationFunction<Schema.CalendarEvents
 		onSuccess: (data, variables) => {
 			queryClient.invalidateQueries({ queryKey: ["calendar_events"] })
 			options?.onSuccess?.(data, variables)
+		},
+	})
+}
+
+export const useDeleteCalendarEvent: ReactMutationFunction<void, void, { id: string }> = (options) => {
+	const queryClient = useQueryClient()
+
+	return useMutation({
+		mutationFn: async() => {
+			const res = await axios.delete(Routes.apiCalendarEvent(options.params.id))
+			assertStatus(res, HTTP_STATUS.NO_CONTENT)
+		},
+		mutationKey: ["calendar_events", "delete", options.params.id],
+		...exclude(options, "params"),
+		onSuccess: (_data, _variables) => {
+			queryClient.invalidateQueries({ queryKey: ["calendar_events"] })
+			options?.onSuccess?.()
 		},
 	})
 }

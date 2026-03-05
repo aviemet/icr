@@ -9,6 +9,6 @@ alwaysApply: true
 2. When working on payroll or timesheet workflow features (e.g. payroll index, pay periods, timesheet approval), read and follow the plan at .cursor/plans/payroll_workflow_redesign_80191109.plan.md and document progress in .cursor/icr.mdx (Feature Documentation or Phase 6/7 checklist).
 3. Before ending ANY response, if you've learned anything useful about project-specific architectural details that are NOT immediately obvious from reading the code, you MUST update .cursor/icr.mdx with this information
 4. When updating .cursor/icr.mdx:
-   - Only document reusable, cross-cutting patterns; skip single-file or one-off implementation notes that are obvious from code
+   - Document only (a) non-obvious quirks or gotchas, or (b) overarching design/architectural decisions. Do not document implementation details that are obvious from reading the code or that will change as features iterate (no variable names, field names, or step-by-step flow).
    - Only add new information not already documented
-   - Place information in the appropriate section, if no appropriate section exists, create one
+   - Place information in the appropriate section; if no appropriate section exists, create one
