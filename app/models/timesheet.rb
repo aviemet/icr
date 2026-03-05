@@ -32,7 +32,7 @@ class Timesheet < ApplicationRecord
   include PgSearchable
 
   pg_search_config(
-    against: [:pay_period_end, :pay_period_start, :approved_at],
+    against: [:approved_at],
     associated_against: { employee: [:name] },
   )
 
@@ -40,10 +40,19 @@ class Timesheet < ApplicationRecord
   resourcify
 
   belongs_to :employee
+  belongs_to :pay_period
+
   belongs_to :approved_by, class_name: "User", optional: true
 
-  validates :pay_period_start, presence: true
-  validates :pay_period_end, presence: true
+  has_many :shifts, dependent: :nullify
 
-  scope :includes_associated, -> { includes([]) }
+  scope :includes_associated, -> { includes(:pay_period, :employee) }
+
+  def pay_period_start
+    pay_period&.starts_at&.to_date
+  end
+
+  def pay_period_end
+    pay_period&.ends_at&.to_date
+  end
 end

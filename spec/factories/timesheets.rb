@@ -30,9 +30,7 @@
 #
 FactoryBot.define do
   factory :timesheet do
-    pay_period_start { Date.current.beginning_of_month }
-    pay_period_end { Date.current.end_of_month }
-
     employee
+    pay_period
   end
 end

@@ -558,6 +558,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_24_203322) do
     t.datetime "starts_at"
     t.integer "status"
     t.datetime "updated_at", null: false
+    t.index ["starts_at", "ends_at"], name: "index_pay_periods_on_starts_at_and_ends_at", unique: true
   end
 
   create_table "pay_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -728,9 +729,11 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_24_203322) do
     t.uuid "calendar_event_id", null: false
     t.datetime "created_at", null: false
     t.uuid "employee_id", null: false
+    t.uuid "timesheet_id"
     t.datetime "updated_at", null: false
     t.index ["calendar_event_id"], name: "index_shifts_on_calendar_event_id"
     t.index ["employee_id"], name: "index_shifts_on_employee_id"
+    t.index ["timesheet_id"], name: "index_shifts_on_timesheet_id"
   end
 
   create_table "timesheets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -900,6 +903,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_24_203322) do
   add_foreign_key "shift_templates", "users", column: "created_by_id"
   add_foreign_key "shifts", "calendar_events"
   add_foreign_key "shifts", "employees"
+  add_foreign_key "shifts", "timesheets"
   add_foreign_key "timesheets", "employees"
   add_foreign_key "timesheets", "pay_periods"
   add_foreign_key "timesheets", "users", column: "approved_by_id"

@@ -1,142 +1,71 @@
 ---
 name: Payroll workflow redesign
-overview: "Update the payroll workflow redesign plan to incorporate the recommended layout and UX: period-scoped approval queue as primary view with top bar (period context, progress, export), compact summary strip, status/exception filtering tabs, exception-driven table, director-oriented filters, and scale-ready design (search, pagination, bulk approval)."
+overview: "Payroll index is a list of employees; historical view (/payroll/historical) deferred. PayPeriod is a snapshot of a pay period (derived from settings, no overlapping). Timesheet is created before submittal and tracks approval status. Shift creation and PayPeriod creation drive Timesheet/PayPeriod association via model callbacks."
 todos: []
 isProject: false
 ---
 
-# Payroll workflow redesign — plan update (ChatGPT recommendations)
+# Payroll workflow redesign
 
-This update **merges** the existing plan at [.cursor/plans/payroll_workflow_redesign_80191109.plan.md](.cursor/plans/payroll_workflow_redesign_80191109.plan.md) with the ChatGPT recommendations. All existing sections (routes, PayrollController, policies, serializers, period identity, Timesheet = snapshot on approval) **remain in force**. The changes below add and refine **layout, UX, and scaling** only.
+## Payroll index and historical view
 
----
-
-## 1. Primary view: period-scoped approval queue
-
-**Recommendation:** The payroll index primary content is a **pay-period-scoped, filterable, exception-driven approval queue** with bulk actions and an export-readiness indicator. Period selection is **visible but secondary** (users mostly work on the current period; avoid making them hunt through archived periods).
-
-**Alignment with existing plan:**
-
-- Keep **two entry paths**: (1) **Approval queue** (default) = one period’s worth of employees/timecards; (2) **Past periods / by employee** = existing “Pay periods” tab and “Employees” tab for archive and by-employee navigation.
-- **Default view:** Current pay period’s approval queue (derived current period + any approved timesheets for that period). Period selector in the **top bar** switches which period is in scope (current + recent/past in dropdown).
-- **Employees tab** (existing): List employees → link to `/payroll/employees/:employee_id` (employee’s pay periods). Stays as secondary navigation.
-- **Pay periods tab** (existing): List past periods (from DB) → link to `/payroll/periods?pay_period_start=...&pay_period_end=...`. Stays for archive; optional “Past periods” in period dropdown can mirror this.
-
-So: **Section 5 (Frontend)** in the original plan is extended so the main payroll index screen is the approval queue for the **selected period** (default = current), with the new layout below; the existing Employees and Pay periods tabs remain as secondary entry points.
+- **`/payroll` (index):** A **list of employees** only. Each row links to that employee’s payroll detail (e.g. `/payroll/employees/:employee_id`). No period selector or approval queue on this page.
+- **Historical view:** A separate link (e.g. `/payroll/historical`) for looking backwards in time is planned but **not implemented yet**. No period-scoped list or archive on the main index for now.
 
 ---
 
-## 2. Top bar — period context (no charts)
+## PayPeriod and Timesheet model behavior
 
-Include in the payroll index (approval queue) view:
+### PayPeriod
 
-- **Title:** e.g. “Payroll Approval”.
-- **Period selector:** Dropdown to choose current period (default) or a past period (e.g. from distinct timesheet periods or from `Payroll::Period` for current/adjacent).
-- **Period type label:** e.g. “Bi-Weekly” (from `Setting.payroll_period_type` / locale).
-- **Approval progress:** e.g. “38 / 42 Approved” (counts for the selected period, scope-aware).
-- **Deadline indicator:** e.g. “Due in 2 days” (requires deadline source: setting, or derived from period end + config).
-- **Export Summary:** Button; **enabled only when** period is fully approved or an override applies (e.g. admin). No charts in the top bar.
+- **PayPeriod** is a snapshot of an actual pay period that happened in time.
+- Derived according to pay period settings (e.g. via `Payroll::Period.period_dates`); no overlapping periods (DB unique on `starts_at`, `ends_at`).
+- Allows settings to change later while preserving historical accuracy.
 
-**Backend:** Index (or dedicated endpoint) must return, for the selected period: period dates, period type, approval counts (approved / total), deadline if any, and an “export ready” (or override) flag for the Export button.
+### Timesheet
 
----
-
-## 3. Summary strip (compact, text only)
-
-Directly under the top bar, a **compact summary strip** — small stat blocks, **text only** (no bar graphs):
-
-- **Pending:** count of timecards not yet approved for the period.
-- **Flagged:** count of timecards with exceptions (see Exception-driven UX below).
-- **Overtime total:** total overtime hours for the period (e.g. from `Payroll::PeriodHoursSummary` or equivalent).
-- **PTO total:** total PTO hours for the period (source TBD: e.g. leave/absence or existing PTO tracking).
-
-**Backend:** Same index/endpoint can return these aggregates for the selected period and scope (e.g. “My Reports” vs “All Employees”).
+- **Timesheet** is created **before** submittal (not only at approval).
+- It tracks **approval status** and remains the record for the employee’s time in that pay period.
+- Belongs to **PayPeriod** and **Employee**; has many **Shifts** (shifts can reference a timesheet via `timesheet_id`).
 
 ---
 
-## 4. Filtering controls (critical)
+## Shift creation callback
 
-**Status tabs** (filter the approval queue table):
+**On creation of a Shift:**
 
-- **All**
-- **Needs Approval**
-- **Flagged**
-- **Approved**
+1. Determine whether the shift falls within the **active pay period** (the period containing `Date.current` from `Payroll::Period.period_dates(Date.current)`).
+2. **If the shift is before the active pay period:** Do nothing for now (TBD later).
+3. **If the shift is after the active pay period:** Just persist the shift; no Timesheet/PayPeriod association.
+4. **If the shift is within the active pay period:**
+   - Find or create the **PayPeriod** for that span (`starts_at`/`ends_at` from `Payroll::Period.period_dates(Date.current)`).
+   - If the PayPeriod was **newly created**, its `after_create` callback will create Timesheets and associate all shifts in range (including this one); nothing else to do in the Shift callback.
+   - If the PayPeriod **already existed**, find or create a **Timesheet** for this employee and this PayPeriod, then set this shift’s `timesheet_id` to that Timesheet.
 
-**Optional scope toggle** (role/permission-based):
-
-- **My Reports** (default for managers): only employees the current user manages (`managed_employees.current`).
-- **All Employees** (e.g. directors only): full list for the period.
-
-Implementation: tabs and scope drive query params or client state; backend filters the list by status (and by manager scope when “My Reports” is used). Existing plan’s policy (admin/super_admin see all; others permission/`managed_employees`) applies.
+Implemented as **`Shift`** `after_create :associate_with_timesheet_if_in_active_period` (or equivalent).
 
 ---
 
-## 5. Exception-driven UX
+## PayPeriod creation callback
 
-The table is an **exception queue**, not just a list. Exceptions to support (elevate and filter):
+**When a PayPeriod is created:**
 
-- Missing punches
-- Overlapping shifts
-- Overtime threshold breaches
-- PTO over-allocation
+1. Find all **Shifts** whose `calendar_event` overlaps the period (i.e. `calendar_events.starts_at <= pay_period.ends_at` and `calendar_events.ends_at >= pay_period.starts_at`).
+2. Group those shifts by **employee_id**.
+3. For each employee that has at least one shift in range, **create a Timesheet** for that employee and this PayPeriod.
+4. **Associate** each of those shifts with the corresponding Timesheet (set `shift.timesheet_id`).
 
-**UX:**
-
-- **Elevate** flagged rows visually (e.g. row styling or icon).
-- **Surface reason inline** (e.g. “Missing punch”, “Overtime > 40h”) in the row or exceptions column.
-- **Filterable** via the “Flagged” tab.
-
-**Backend:** Exceptions can be **computed** when building the current-period draft (from shifts/punches and rules) and/or stored on a timesheet/audit record; exact schema can be decided in implementation. Existing [EmployeesTable](app/frontend/pages/Timesheets/Index/EmployeesTable.tsx) already has an “Exceptions” column; wire it to real exception data and flag state.
+Implemented as **`PayPeriod`** `after_create :backfill_timesheets_from_shifts`.
 
 ---
 
-## 6. What directors need (no full redesign)
+## Future UX (when adding period-scoped or historical views)
 
-Directors care about: manager approval status, anomalies, overtime totals, clean export. Do **not** redesign the whole page; add:
+When implementing a period-scoped approval view or `/payroll/historical`, consider:
 
-- **Manager Approval Status** column (optional toggle): e.g. “Approved by [Manager]” or “Pending manager approval”.
-- **Filter by Manager:** Optional filter to restrict the list to employees under a selected manager.
-
-Use existing permission/role checks to show these only to users who have “see all” (e.g. director) permission.
-
----
-
-## 7. Scaling to large headcount (e.g. 1,000 employees)
-
-Design for scale even if initial deployment is smaller:
-
-- **Filtering and search:** Status tabs + optional “My Reports” and “Filter by Manager” are required; add **search** (e.g. by employee name) on the approval queue.
-- **Pagination or virtualization:** Approval queue list must support pagination (or virtualization) so the table is not one giant DOM list. Existing index already uses `paginate(employees, :employees)`; keep and enforce page size and “load more” or pagination UI.
-- **Bulk approval:** Allow selecting multiple rows and approving in one action (backend: batch approve endpoint; policy applies to each record).
-
-No change to the existing plan’s route or controller structure; ensure the period-scoped index (or period_employees) supports search, pagination, and bulk approve.
-
----
-
-## 8. One-line product summary
-
-**The payroll index page is:** a pay-period-scoped, filterable, exception-driven approval queue with bulk actions and an export-readiness indicator.
-
----
-
-## 9. What stays unchanged from the original plan
-
-- **Routes:** PayrollController#index, employee_periods, period_employees, current_period; TimesheetsController for show/edit/update and create-on-approve.
-- **Period identity:** Stored only as `(pay_period_start, pay_period_end)`; no period_key from current settings; past periods from DB only.
-- **Timesheet creation:** Only on approval; current period is derived until then.
-- **Policies:** Rolify admin/super_admin; everyone else via permission system and `managed_employees.current` where applicable.
-- **Employees tab and Pay periods tab:** Retained as secondary navigation (by employee, by past period).
-
----
-
-## 10. Suggested implementation order (add to plan)
-
-1. **Backend:** PayrollController#index (and any period-scoped endpoint) returns: period context (dates, type, approval counts, deadline, export-ready), summary strip (pending, flagged, overtime total, PTO total), and paginated, filterable list (status, scope, search). Add bulk approve endpoint.
-2. **Frontend:** Top bar (period selector, period type, progress, due, Export) and summary strip (text only).
-3. **Frontend:** Status tabs (All, Needs Approval, Flagged, Approved) and optional My Reports / All Employees; wire to backend filters.
-4. **Backend + frontend:** Exception detection (missing punch, overlap, overtime, PTO over-allocation); expose in API; show inline and use for Flagged tab and row styling.
-5. **Frontend:** Director-only: Manager Approval Status column (toggle) and Filter by Manager; permission-gate.
-6. **Frontend:** Search and pagination (or virtualization) on the queue table; bulk approval UI.
-
-This keeps the original plan as the source of truth for routes, policies, and data model, and adds the recommended layout, UX, and scaling details in one place.
+- Top bar: period context, approval progress, deadline, Export (enabled when complete or override).
+- Summary strip: Pending, Flagged, Overtime total, PTO total (text only, no charts).
+- Filtering: All / Needs Approval / Flagged / Approved; optional My Reports vs All Employees.
+- Exception-driven table: elevate flagged rows, show reason inline, filter by Flagged.
+- Directors: Manager Approval Status column (toggle), filter by Manager.
+- Scale: search, pagination or virtualization, bulk approval.

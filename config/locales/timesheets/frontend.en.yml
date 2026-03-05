@@ -3,16 +3,16 @@ en:
   views:
     timesheets:
       index:
-        title: "Timesheets"
+        employees:
+          actions: Actions
+          exceptions: Exceptions
+          name: Name
+          overtime: Overtime
+          pto: PTO
+          regular: Regular
+          sick: Sick
+          status: Status
         tabs:
           employees: Employees
           pay_periods: Pay Periods
-        employees:
-          name: Name
-          regular: Regular
-          overtime: Overtime
-          pto: PTO
-          sick: Sick
-          exceptions: Exceptions
-          status: Status
-          actions: Actions
+        title: Timesheets

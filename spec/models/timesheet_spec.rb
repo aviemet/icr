@@ -36,15 +36,46 @@ RSpec.describe Timesheet do
       expect(build(:timesheet)).to be_valid
     end
 
-    it "is invalid with missing attributes" do
-      %i(pay_period_start pay_period_end).each do |attr|
-        expect(build(:timesheet, attr => nil)).not_to be_valid
-      end
+    it "is invalid with missing pay_period" do
+      expect(build(:timesheet, pay_period: nil)).not_to be_valid
     end
   end
 
   describe "Associations" do
     it { is_expected.to belong_to(:employee) }
+    it { is_expected.to belong_to(:pay_period) }
     it { is_expected.to belong_to(:approved_by).class_name("User").optional }
+    it { is_expected.to have_many(:shifts).dependent(:nullify) }
+  end
+
+  describe "creation via PayPeriod and Shift callbacks" do
+    it "is created by PayPeriod backfill with correct pay_period and employee" do
+      employee = create(:employee)
+      period_start = 1.day.from_now.beginning_of_day
+      period_end = 14.days.from_now.end_of_day
+      event = create(:calendar_event, starts_at: period_start + 1.day, ends_at: period_start + 1.day + 2.hours)
+      create(:shift, employee: employee, calendar_event: event)
+
+      pay_period = PayPeriod.create!(starts_at: period_start, ends_at: period_end)
+
+      timesheet = described_class.find_by(employee: employee, pay_period: pay_period)
+      expect(timesheet).to be_present
+      expect(timesheet.pay_period_id).to eq(pay_period.id)
+      expect(timesheet.employee_id).to eq(employee.id)
+    end
+
+    it "receives shifts when created by PayPeriod backfill" do
+      employee = create(:employee)
+      period_start = 2.days.from_now.beginning_of_day
+      period_end = 16.days.from_now.end_of_day
+      event = create(:calendar_event, starts_at: period_start + 1.day, ends_at: period_start + 1.day + 2.hours)
+      shift = create(:shift, employee: employee, calendar_event: event)
+
+      pay_period = PayPeriod.create!(starts_at: period_start, ends_at: period_end)
+
+      timesheet = described_class.find_by(employee: employee, pay_period: pay_period)
+      expect(timesheet.shifts).to include(shift)
+      expect(shift.reload.timesheet_id).to eq(timesheet.id)
+    end
   end
 end

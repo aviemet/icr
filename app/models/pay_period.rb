@@ -12,6 +12,10 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
+# Indexes
+#
+#  index_pay_periods_on_starts_at_and_ends_at  (starts_at,ends_at) UNIQUE
+#
 class PayPeriod < ApplicationRecord
   include PgSearchable
 
@@ -22,5 +26,30 @@ class PayPeriod < ApplicationRecord
 
   has_many :timesheets, dependent: :nullify
 
-  scope :includes_associated, -> { includes([]) }
+  after_create :backfill_timesheets_from_shifts
+
+  scope :includes_associated, -> { includes(:timesheets) }
+
+  def self.shifts_overlapping_period(pay_period)
+    Shift.joins(:calendar_event).where(
+      "calendar_events.starts_at <= ? AND calendar_events.ends_at >= ?",
+      pay_period.ends_at,
+      pay_period.starts_at,
+    )
+  end
+
+  private
+
+  def backfill_timesheets_from_shifts
+    shifts_in_range = self.class.shifts_overlapping_period(self)
+
+    employee_ids = shifts_in_range.distinct.pluck(:employee_id)
+
+    employee_ids.each do |employee_id|
+      timesheet = timesheets.find_or_create_by!(employee_id: employee_id)
+      shifts_in_range
+        .where(employee_id: employee_id)
+        .update_all(timesheet_id: timesheet.id) # rubocop:disable Rails/SkipsModelValidations
+    end
+  end
 end

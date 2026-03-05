@@ -228,9 +228,12 @@ The payroll settings system manages pay periods and overtime calculations:
   - Inputs rendered inside the calendar popover should avoid portal-based dropdowns/popovers (e.g. pass `popoverProps={{ withinPortal: false }}` to date/time pickers) so calendar click-outside logic does not close the popover on selection
 
 ### Timesheet System
-- Timesheets will be generated per pay period
-- System will maintain audit trail of all changes
-- Approval workflow will be multi-step
+- **Payroll index** (`/payroll`): List of employees only; historical view (e.g. `/payroll/historical`) deferred.
+- **PayPeriod**: Snapshot of an actual pay period (derived from settings via `Payroll::Period.period_dates`); unique on `(starts_at, ends_at)`; no overlapping periods.
+- **Timesheet**: Created before submittal; tracks approval status; belongs to PayPeriod and Employee; has many Shifts.
+- **Shift → Timesheet/PayPeriod**: On create, if shift falls within the active pay period (current date's period): find or create PayPeriod for that span; if PayPeriod was newly created, its `after_create` backfills timesheets from all shifts in range; otherwise find or create Timesheet for that employee and PayPeriod and set `shift.timesheet_id`.
+- **PayPeriod → Timesheets**: On create, `backfill_timesheets_from_shifts`: find shifts whose calendar_event overlaps the period, group by employee, create one Timesheet per employee, associate those shifts with the Timesheet.
+- Timesheets will be generated per pay period; audit trail and multi-step approval workflow as before.
 
 ### Frontend Components
 #### UI Framework
