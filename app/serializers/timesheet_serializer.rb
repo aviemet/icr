@@ -30,10 +30,9 @@
 #
 class TimesheetSerializer < ApplicationSerializer
   attributes(
-    :pay_period_start,
-    :pay_period_end,
     :approved_at,
   )
 
   belongs_to :employee, serializer: EmployeeSerializer
+  belongs_to :pay_period, serializer: PayPeriodSerializer
 end

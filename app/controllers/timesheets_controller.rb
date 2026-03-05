@@ -6,9 +6,9 @@ class TimesheetsController < ApplicationController
 
   expose :employees, -> { search(Employee.includes_associated) }
 
-  sortable_fields %w(employee.name pay_period_start pay_period_end approved_at)
+  sortable_fields %w(employee.name approved_at)
 
-  strong_params :timesheet, permit: [:pay_period_start, :pay_period_end, :employee_id, :approved_at, :approved_by_id]
+  strong_params :timesheet, permit: [:pay_period_id, :employee_id, :approved_at, :approved_by_id]
 
   # @route GET /payroll (timesheets)
   def index

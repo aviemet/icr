@@ -6,22 +6,23 @@ RSpec.describe "/timesheets", type: :request do
 
   def valid_attributes
     employee = create(:employee)
+    pay_period = create(:pay_period)
     {
       timesheet: {
-        **attributes_for(:timesheet).except(:employee_id),
-        employee_id: employee.id
+        employee_id: employee.id,
+        pay_period_id: pay_period.id,
       }
     }
   end
 
   def invalid_attributes
     {
-      timesheet: { pay_period_start: nil, pay_period_end: nil }
+      timesheet: { pay_period_id: nil, employee_id: nil }
     }
   end
 
   def new_attributes
-    attributes_for(:timesheet)
+    { pay_period_id: create(:pay_period).id, employee_id: create(:employee).id }
   end
 
   describe "GET /index" do
@@ -87,10 +88,10 @@ RSpec.describe "/timesheets", type: :request do
     context "with valid parameters" do
       it "updates the requested timesheet" do
         timesheet = create(:timesheet)
-        patch timesheet_url(timesheet), params: { timesheet: new_attributes }
+        attributes = new_attributes
+        patch timesheet_url(timesheet), params: { timesheet: attributes }
         timesheet.reload
-        expect(timesheet.pay_period_start).to eq(new_attributes[:pay_period_start])
-        expect(timesheet.pay_period_end).to eq(new_attributes[:pay_period_end])
+        expect(timesheet.pay_period_id).to eq(attributes[:pay_period_id])
       end
 
       it "redirects to the timesheet" do

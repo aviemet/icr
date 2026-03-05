@@ -47,12 +47,4 @@ class Timesheet < ApplicationRecord
   has_many :shifts, dependent: :nullify
 
   scope :includes_associated, -> { includes(:pay_period, :employee) }
-
-  def pay_period_start
-    pay_period&.starts_at&.to_date
-  end
-
-  def pay_period_end
-    pay_period&.ends_at&.to_date
-  end
 end

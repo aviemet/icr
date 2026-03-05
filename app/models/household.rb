@@ -24,11 +24,13 @@ class Household < ApplicationRecord
 
   pg_search_config(against: [:name],
   associated_against: {
-    clients: [:name, person: [:first_name, :middle_name, :last_name]]
+    clients: [:number, :slug],
+    people: [:first_name, :middle_name, :last_name]
   },)
 
   has_many :households_clients, dependent: :nullify
   has_many :clients, through: :households_clients, dependent: :nullify
+  has_many :people, through: :clients, source: :person
 
   validates :name, presence: true
 end
