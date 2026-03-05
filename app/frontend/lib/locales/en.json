@@ -739,21 +739,48 @@
       },
       "timesheets": {
         "index": {
+          "approve_all_clean": "Approve All Clean",
+          "approve_selected": "Approve Selected",
+          "approved_count": "%{approved} / %{total} Approved",
+          "due_in_days": "Due in %{count} days",
           "employees": {
-            "actions": "Actions",
+            "actions": "Action",
+            "approve": "Approve",
+            "employee": "Employee",
             "exceptions": "Exceptions",
-            "name": "Name",
-            "overtime": "Overtime",
-            "pto": "PTO",
-            "regular": "Regular",
-            "sick": "Sick",
+            "ot_hours": "OT Hours",
+            "pto_sick": "PTO / Sick",
+            "regular_hours": "Regular Hours",
+            "review": "Review",
             "status": "Status"
           },
+          "exception_missing_punch": "Missing Punch",
+          "exception_overlapping": "Overlapping Shifts",
+          "export_summary": "Export Summary",
+          "footer_ot_hours": "OT: %{count} hrs",
+          "footer_selected": "%{count} Selected",
+          "footer_total_hours": "Total: %{count} hrs",
+          "no_value": "--",
+          "period_label": "Period: %{range} (%{type})",
+          "period_type_bi_weekly": "Bi-Weekly",
+          "period_type_monthly": "Monthly",
+          "period_type_semi_monthly": "Semi-Monthly",
+          "period_type_weekly": "Weekly",
+          "status_approved": "Approved",
+          "status_pending": "Pending",
+          "status_submitted": "Submitted",
+          "summary_flagged": "Flagged",
+          "summary_hours": "%{count} hrs",
+          "summary_overtime": "Overtime",
+          "summary_pending": "Pending",
+          "summary_pto": "PTO",
           "tabs": {
-            "employees": "Employees",
-            "pay_periods": "Pay Periods"
+            "all": "All",
+            "approved": "Approved",
+            "flagged": "Flagged",
+            "needs_approval": "Needs Approval"
           },
-          "title": "Timesheets"
+          "title": "Payroll Approval"
         }
       }
     }

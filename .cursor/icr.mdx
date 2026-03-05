@@ -268,6 +268,9 @@ The payroll settings system manages pay periods and overtime calculations:
   - Pattern: `const Component = forwardRef(<T extends Constraint>(props, ref) => { ... })`
   - Avoids type casting and maintains proper generic type inference
 
+#### Formatters
+- All formatting logic lives in [app/frontend/lib/formatters.ts](app/frontend/lib/formatters.ts). Do not define formatters inline in components or pages; add new formatters (e.g. date ranges, numbers, currency) to `formatters.ts` and use them via `formatter` or `formatter.datetime` from `@/lib`.
+
 #### UI & Styling
 - Mantine component library
 - CSS modules with Linaria

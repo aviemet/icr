@@ -48,4 +48,9 @@ export const datetime = {
 		const start = relativeTime === undefined ? dayjs() : dayjs(ensureDate(relativeTime))
 		return start.from(ensureDate(date), true)
 	},
+	range: (start: string | Date, end: string | Date) => {
+		const startStr = dayjs(ensureDate(start)).format("MMMM D")
+		const endStr = dayjs(ensureDate(end)).format("MMMM D")
+		return `${startStr} - ${endStr}`
+	},
 }

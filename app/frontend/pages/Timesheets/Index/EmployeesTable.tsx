@@ -1,11 +1,9 @@
 import { useTranslation } from "react-i18next"
 
-import { Link, Table } from "@/components"
-
-type TimecardStatus = "draft" | "submitted" | "approved" | "flagged"
+import { Avatar, Badge, Button, Group, Link, Menu, Table } from "@/components"
 
 interface EmployeesTableProps {
-	employees: Schema.Employee[]
+	employees: Schema.EmployeesPersisted[]
 }
 
 export default function EmployeesTable({ employees }: EmployeesTableProps) {
@@ -15,39 +13,63 @@ export default function EmployeesTable({ employees }: EmployeesTableProps) {
 		<Table>
 			<Table.Head>
 				<Table.Row>
-					<Table.HeadCell>{ t("views.timesheets.index.employees.name") }</Table.HeadCell>
-					<Table.HeadCell>{ t("views.timesheets.index.employees.regular") }</Table.HeadCell>
-					<Table.HeadCell>{ t("views.timesheets.index.employees.overtime") }</Table.HeadCell>
-					<Table.HeadCell>{ t("views.timesheets.index.employees.pto") }</Table.HeadCell>
-					<Table.HeadCell>{ t("views.timesheets.index.employees.sick") }</Table.HeadCell>
+					<Table.HeadCell>{ t("views.timesheets.index.employees.employee") }</Table.HeadCell>
+					<Table.HeadCell>{ t("views.timesheets.index.employees.regular_hours") }</Table.HeadCell>
+					<Table.HeadCell>{ t("views.timesheets.index.employees.ot_hours") }</Table.HeadCell>
+					<Table.HeadCell>{ t("views.timesheets.index.employees.pto_sick") }</Table.HeadCell>
 					<Table.HeadCell>{ t("views.timesheets.index.employees.exceptions") }</Table.HeadCell>
 					<Table.HeadCell>{ t("views.timesheets.index.employees.status") }</Table.HeadCell>
-					<Table.HeadCell className="actions">{ t("views.timesheets.index.employees.actions") }</Table.HeadCell>
+					<Table.HeadCell>{ t("views.timesheets.index.employees.actions") }</Table.HeadCell>
 				</Table.Row>
 			</Table.Head>
-
 			<Table.Body>
 				{ employees.map(employee => (
-					<Table.Row key={ employee.id }>
+					<Table.Row key={ employee.id } name={ employee.id }>
 						<Table.Cell>
 							<Link href={ `/payroll/employees/${employee.id}` }>
-								{ employee.full_name }
+								<Group gap="sm" wrap="nowrap" style={ { display: "inline-flex" } }>
+									<Avatar
+										src={ undefined }
+										radius="xl"
+										size="sm"
+										color={ employee.color ?? "gray" }
+									>
+										{ (employee.full_name ?? employee.name ?? "?").slice(0, 2).toUpperCase() }
+									</Avatar>
+									<span>{ employee.full_name ?? employee.name }</span>
+								</Group>
 							</Link>
 						</Table.Cell>
-
-						<Table.Cell></Table.Cell>
-
-						<Table.Cell></Table.Cell>
-
-						<Table.Cell> </Table.Cell>
-
-						<Table.Cell> </Table.Cell>
-
-						<Table.Cell> </Table.Cell>
-
-						<Table.Cell> </Table.Cell>
-
-						<Table.Cell> </Table.Cell>
+						<Table.Cell>{ t("views.timesheets.index.no_value") }</Table.Cell>
+						<Table.Cell>{ t("views.timesheets.index.no_value") }</Table.Cell>
+						<Table.Cell>{ t("views.timesheets.index.no_value") }</Table.Cell>
+						<Table.Cell>{ t("views.timesheets.index.no_value") }</Table.Cell>
+						<Table.Cell>
+							<Badge variant="light" color="yellow" size="sm">
+								{ t("views.timesheets.index.status_pending") }
+							</Badge>
+						</Table.Cell>
+						<Table.Cell>
+							<Group gap="xs" wrap="nowrap">
+								<Button
+									component={ Link }
+									href={ `/payroll/employees/${employee.id}` }
+									variant="light"
+									size="xs"
+								>
+									{ t("views.timesheets.index.employees.review") }
+								</Button>
+								<Menu position="bottom-end">
+									<Menu.Target />
+									<Menu.Dropdown>
+										<Menu.Item component={ Link } href={ `/payroll/employees/${employee.id}` }>
+											{ t("views.timesheets.index.employees.review") }
+										</Menu.Item>
+										<Menu.Item>{ t("views.timesheets.index.employees.approve") }</Menu.Item>
+									</Menu.Dropdown>
+								</Menu>
+							</Group>
+						</Table.Cell>
 					</Table.Row>
 				)) }
 			</Table.Body>
