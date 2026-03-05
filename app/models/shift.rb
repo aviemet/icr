@@ -31,5 +31,21 @@ class Shift < ApplicationRecord
 
   accepts_nested_attributes_for :calendar_event
 
+  delegate :starts_at, :ends_at, to: :calendar_event
+
+  def start_time
+    calendar_event&.starts_at
+  end
+
+  def end_time
+    calendar_event&.ends_at
+  end
+
+  def duration_hours
+    return 0 if start_time.blank? || end_time.blank?
+
+    (end_time - start_time) / 1.hour.to_f
+  end
+
   scope :includes_associated, -> { includes([]) }
 end

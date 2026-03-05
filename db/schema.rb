@@ -549,6 +549,17 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_24_203322) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "pay_periods", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "approved_at"
+    t.jsonb "config_snapshot"
+    t.datetime "created_at", null: false
+    t.datetime "ends_at"
+    t.integer "period_type"
+    t.datetime "starts_at"
+    t.integer "status"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "pay_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.uuid "employee_id", null: false
@@ -722,29 +733,22 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_24_203322) do
     t.index ["employee_id"], name: "index_shifts_on_employee_id"
   end
 
-  create_table "timesheet_hours", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.uuid "employee_id", null: false
-    t.datetime "ended_at", null: false
-    t.decimal "hours", precision: 4, scale: 2, null: false
-    t.datetime "started_at", null: false
-    t.uuid "timesheet_id", null: false
-    t.datetime "updated_at", null: false
-    t.index ["employee_id"], name: "index_timesheet_hours_on_employee_id"
-    t.index ["timesheet_id", "employee_id", "started_at"], name: "idx_timesheet_hours_unique_day", unique: true
-    t.index ["timesheet_id"], name: "index_timesheet_hours_on_timesheet_id"
-  end
-
   create_table "timesheets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.jsonb "approval_snapshot", default: {}, null: false
     t.date "approved_at"
     t.uuid "approved_by_id"
     t.datetime "created_at", null: false
     t.uuid "employee_id", null: false
-    t.date "pay_period_end", null: false
-    t.date "pay_period_start", null: false
+    t.uuid "pay_period_id", null: false
+    t.integer "status"
+    t.decimal "total_ot_hours"
+    t.decimal "total_pto_hours"
+    t.decimal "total_regular_hours"
+    t.decimal "total_sick_hours"
     t.datetime "updated_at", null: false
     t.index ["approved_by_id"], name: "index_timesheets_on_approved_by_id"
     t.index ["employee_id"], name: "index_timesheets_on_employee_id"
+    t.index ["pay_period_id"], name: "index_timesheets_on_pay_period_id"
   end
 
   create_table "trainings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -896,9 +900,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_24_203322) do
   add_foreign_key "shift_templates", "users", column: "created_by_id"
   add_foreign_key "shifts", "calendar_events"
   add_foreign_key "shifts", "employees"
-  add_foreign_key "timesheet_hours", "employees"
-  add_foreign_key "timesheet_hours", "timesheets"
   add_foreign_key "timesheets", "employees"
+  add_foreign_key "timesheets", "pay_periods"
   add_foreign_key "timesheets", "users", column: "approved_by_id"
   add_foreign_key "vendors", "categories"
   add_foreign_key "websites", "categories"

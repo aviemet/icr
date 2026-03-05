@@ -2,8 +2,10 @@ import { useTranslation } from "react-i18next"
 
 import { Link, Table } from "@/components"
 
+type TimecardStatus = "draft" | "submitted" | "approved" | "flagged"
+
 interface EmployeesTableProps {
-	employees: Schema.EmployeesIndex[]
+	employees: Schema.Employee[]
 }
 
 export default function EmployeesTable({ employees }: EmployeesTableProps) {
@@ -13,10 +15,17 @@ export default function EmployeesTable({ employees }: EmployeesTableProps) {
 		<Table>
 			<Table.Head>
 				<Table.Row>
-					<Table.HeadCell>{ t("views.payroll.index.employees.name") }</Table.HeadCell>
-					<Table.HeadCell className="actions">{ t("views.payroll.index.employees.actions") }</Table.HeadCell>
+					<Table.HeadCell>{ t("views.timesheets.index.employees.name") }</Table.HeadCell>
+					<Table.HeadCell>{ t("views.timesheets.index.employees.regular") }</Table.HeadCell>
+					<Table.HeadCell>{ t("views.timesheets.index.employees.overtime") }</Table.HeadCell>
+					<Table.HeadCell>{ t("views.timesheets.index.employees.pto") }</Table.HeadCell>
+					<Table.HeadCell>{ t("views.timesheets.index.employees.sick") }</Table.HeadCell>
+					<Table.HeadCell>{ t("views.timesheets.index.employees.exceptions") }</Table.HeadCell>
+					<Table.HeadCell>{ t("views.timesheets.index.employees.status") }</Table.HeadCell>
+					<Table.HeadCell className="actions">{ t("views.timesheets.index.employees.actions") }</Table.HeadCell>
 				</Table.Row>
 			</Table.Head>
+
 			<Table.Body>
 				{ employees.map(employee => (
 					<Table.Row key={ employee.id }>
@@ -25,9 +34,20 @@ export default function EmployeesTable({ employees }: EmployeesTableProps) {
 								{ employee.full_name }
 							</Link>
 						</Table.Cell>
-						<Table.Cell>
 
-						</Table.Cell>
+						<Table.Cell></Table.Cell>
+
+						<Table.Cell></Table.Cell>
+
+						<Table.Cell> </Table.Cell>
+
+						<Table.Cell> </Table.Cell>
+
+						<Table.Cell> </Table.Cell>
+
+						<Table.Cell> </Table.Cell>
+
+						<Table.Cell> </Table.Cell>
 					</Table.Row>
 				)) }
 			</Table.Body>

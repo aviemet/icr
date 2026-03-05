@@ -82,7 +82,7 @@ class EmployeesController < ApplicationController
   # @route PUT /employees/:slug/status (status_employee)
   def update_status
     if employee.update(employee_status_params)
-      redirect_to employee_path(employee), notice: "Employee status updated successfully"
+      redirect_to employee_path(employee), notice: t("templates.controllers.notices.status_updated", model: "Employee")
     else
       render inertia: "Employees/Status", props: {
         employee: employee.render(:show),

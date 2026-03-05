@@ -4,16 +4,23 @@ class TimesheetsController < ApplicationController
   expose :timesheets, -> { search(Timesheet.includes_associated) }
   expose :timesheet, scope: ->{ Timesheet.includes_associated }
 
+  expose :employees, -> { search(Employee.includes_associated) }
+
   sortable_fields %w(employee.name pay_period_start pay_period_end approved_at)
 
   strong_params :timesheet, permit: [:pay_period_start, :pay_period_end, :employee_id, :approved_at, :approved_by_id]
 
   # @route GET /payroll (timesheets)
   def index
-    employees = policy_scope(Employee.includes_associated)
+    paginated_employees = paginate(employees, :employees)
 
     render inertia: "Timesheets/Index", props: {
-      employees: -> { employees.render(:index) }
+      period_dates: -> { Payroll::Period.period_dates.map { |date| date.strftime("%FT%T%:z") } },
+      employees: -> { paginated_employees.render(:index) },
+      pagination: -> { {
+        count: employees.count,
+        **pagination_data(paginated_employees)
+      } },
     }
   end
 

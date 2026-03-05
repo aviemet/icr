@@ -1,5 +1,7 @@
 {
   "en": {
+    "active": "Active",
+    "admin": "Admin",
     "application": {
       "invalid_authenticity_token_notice": "The page expired, please try again."
     },
@@ -130,6 +132,10 @@
         "month": "Month",
         "second": "Seconds",
         "year": "Year"
+      },
+      "relative": {
+        "future": "in %{time}",
+        "past": "%{time} ago"
       }
     },
     "devise": {
@@ -223,6 +229,7 @@
         "unlocked": "Your account has been unlocked successfully. Please sign in to continue."
       }
     },
+    "ends_at": "Ends At",
     "flash": {
       "actions": {
         "create": {
@@ -234,6 +241,22 @@
         },
         "update": {
           "notice": "%{resource_name} was successfully updated."
+        }
+      }
+    },
+    "frontend": {
+      "pages": {
+        "devise": {
+          "passwords": {
+            "new": {
+              "submit": "Send reset password instructions",
+              "title": "Forgot your password?"
+            }
+          },
+          "shared": {
+            "email": "Email",
+            "login": "Log in"
+          }
         }
       }
     },
@@ -381,6 +404,7 @@
       },
       "until": "until %{date}"
     },
+    "member": "Member",
     "number": {
       "currency": {
         "format": {
@@ -449,9 +473,30 @@
         }
       }
     },
+    "permission_group": "Permission Group",
+    "permissions": {
+      "edit": {
+        "title": "Edit Permission Group"
+      },
+      "form": {
+        "add_permission": "Add Permission",
+        "assignments": "Assignments",
+        "basic_info": "Basic Information",
+        "conditions": {
+          "owner_only": "Owner Only",
+          "time_restricted": "Time Restricted"
+        },
+        "permissions": "Permissions"
+      },
+      "new": {
+        "title": "New Permission Group"
+      }
+    },
     "pundit": {
       "not_authorized": "You are not authorized to access this page."
     },
+    "role": "Role",
+    "save": "Save",
     "settings": {
       "errors": {
         "update_failed": "Updating settings failed. Please notify your site administrator."
@@ -460,6 +505,7 @@
         "updated": "Settings have been updated successfully."
       }
     },
+    "starts_at": "Starts At",
     "support": {
       "array": {
         "last_word_connector": ", and ",
@@ -691,79 +737,23 @@
           "title": "New Permission Group"
         }
       },
-      "payroll": {
+      "timesheets": {
         "index": {
-          "title": "Payroll",
+          "employees": {
+            "actions": "Actions",
+            "exceptions": "Exceptions",
+            "name": "Name",
+            "overtime": "Overtime",
+            "pto": "PTO",
+            "regular": "Regular",
+            "sick": "Sick",
+            "status": "Status"
+          },
           "tabs": {
             "employees": "Employees",
-            "pay_periods": "Pay periods"
+            "pay_periods": "Pay Periods"
           },
-          "employees": {
-            "name": "Name",
-            "actions": "Actions",
-            "view_periods": "View pay periods"
-          },
-          "periods": {
-            "period": "Period",
-            "start": "Start",
-            "end": "End",
-            "actions": "Actions",
-            "view_employees": "View employees"
-          }
-        }
-      },
-      "timesheets": {
-        "filters": {
-          "apply": "Apply Filters",
-          "date_from": "From",
-          "date_to": "To",
-          "select_date": "Select date",
-          "select_status": "Select status",
-          "status": "Status"
-        },
-        "index": {
-          "current_period": "Current Pay Period",
           "title": "Timesheets"
-        },
-        "list": {
-          "actions": "Actions",
-          "overtime_hours": "Overtime Hours",
-          "period": "Pay Period",
-          "regular_hours": "Regular Hours",
-          "status": "Status",
-          "total_hours": "Total Hours"
-        },
-        "show": {
-          "approve": "Approve",
-          "companion": "Companion",
-          "employee": "Employee",
-          "reject": "Reject",
-          "title": "Timesheet Details",
-          "week_one": "Week One",
-          "week_two": "Week Two"
-        },
-        "stats": {
-          "overtime_hours": "Overtime Hours",
-          "regular_hours": "Regular Hours",
-          "remaining_shifts": "Remaining Shifts",
-          "this_period": "This Pay Period",
-          "this_week": "This Week",
-          "total_hours": "Total Hours"
-        },
-        "status": {
-          "approved": "Approved",
-          "draft": "Draft",
-          "rejected": "Rejected",
-          "submitted": "Submitted"
-        },
-        "weekly": {
-          "date": "Date",
-          "hours": "Hours",
-          "overtime": "Overtime",
-          "shift": "Shift",
-          "sick": "Sick",
-          "total": "Total",
-          "vacation": "Vacation"
         }
       }
     }
