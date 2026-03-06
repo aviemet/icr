@@ -5,6 +5,7 @@ import { formatter } from "@/lib"
 
 interface EmployeeHoursMap {
 	regular_hours?: number
+	ot_hours?: number
 }
 
 interface EmployeesTableProps {
@@ -52,7 +53,12 @@ export default function EmployeesTable({ employees, employee_hours }: EmployeesT
 								return typeof hours === "number" ? formatter.number.decimal(hours, 2) : t("views.timesheets.index.no_value")
 							})() }
 						</Table.Cell>
-						<Table.Cell>{ t("views.timesheets.index.no_value") }</Table.Cell>
+						<Table.Cell>
+							{ (() => {
+								const hours = employee_hours[employee.id]?.ot_hours
+								return typeof hours === "number" ? formatter.number.decimal(hours, 2) : t("views.timesheets.index.no_value")
+							})() }
+						</Table.Cell>
 						<Table.Cell>{ t("views.timesheets.index.no_value") }</Table.Cell>
 						<Table.Cell>{ t("views.timesheets.index.no_value") }</Table.Cell>
 						<Table.Cell>

@@ -18,7 +18,7 @@ class TimesheetsController < ApplicationController
       starts_at: period_start.to_time.beginning_of_day,
       ends_at: period_end.to_time.end_of_day,
     )
-    employee_hours = hours_by_employee_for_period(pay_period, paginated_employees.pluck(:id))
+    employee_hours = Payroll::EmployeePeriodHours.call(pay_period, paginated_employees.pluck(:id))
 
     render inertia: "Timesheets/Index", props: {
       period_dates: -> { Payroll::Period.period_dates.map { |date| date.strftime("%FT%T%:z") } },
@@ -82,19 +82,5 @@ class TimesheetsController < ApplicationController
     authorize timesheet
     timesheet.destroy!
     redirect_to timesheets_url, notice: t("templates.controllers.notices.destroyed", model: "Timesheet")
-  end
-
-  private
-
-  def hours_by_employee_for_period(pay_period, employee_ids)
-    return {} if employee_ids.empty?
-
-    Timesheet
-      .where(pay_period_id: pay_period.id, employee_id: employee_ids)
-      .includes(shifts: :calendar_event)
-      .each_with_object({}) do |timesheet, hash|
-        total = timesheet.shifts.sum(&:duration_hours)
-        hash[timesheet.employee_id.to_s] = { regular_hours: total.round(2) }
-      end
   end
 end

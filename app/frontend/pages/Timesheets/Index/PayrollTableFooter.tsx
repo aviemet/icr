@@ -5,9 +5,11 @@ import { useTableContext } from "@/components/Table/TableContext"
 
 interface PayrollTableFooterProps {
 	employeeCount: number
+	totalRegularHours?: number
+	totalOtHours?: number
 }
 
-export default function PayrollTableFooter({ employeeCount }: PayrollTableFooterProps) {
+export default function PayrollTableFooter({ employeeCount, totalRegularHours = 0, totalOtHours = 0 }: PayrollTableFooterProps) {
 	const { t } = useTranslation()
 	const { tableState: { selected } } = useTableContext()
 	const selectedCount = selected.size
@@ -23,10 +25,10 @@ export default function PayrollTableFooter({ employeeCount }: PayrollTableFooter
 					</Text>
 				) }
 				<Text size="sm" c="dimmed">
-					{ t("views.timesheets.index.footer_total_hours", { count: 0 }) }
+					{ t("views.timesheets.index.footer_total_hours", { count: totalRegularHours }) }
 				</Text>
 				<Text size="sm" c="dimmed">
-					{ t("views.timesheets.index.footer_ot_hours", { count: 0 }) }
+					{ t("views.timesheets.index.footer_ot_hours", { count: totalOtHours }) }
 				</Text>
 			</Group>
 			<Group>

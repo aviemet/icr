@@ -10,4 +10,4 @@ There is no multi-tennancy.
 
 The Company details are stored in a singleton style settings model.
 
-Don't use magic quotes or em-dashes. Only use standard punctuation
+Use only standard ASCII punctuation. Never use curly/smart quotes (e.g. ' or ' for apostrophe; use '), em-dashes (use a hyphen), or other Unicode punctuation. This applies to all generated or edited text, including comments, docs, and commit messages.

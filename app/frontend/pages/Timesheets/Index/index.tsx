@@ -21,6 +21,7 @@ import PayrollTableFooter from "./PayrollTableFooter"
 
 interface EmployeeHoursMap {
 	regular_hours?: number
+	ot_hours?: number
 }
 
 interface TimesheetsIndexProps {
@@ -40,7 +41,7 @@ export default function TimesheetsIndex({ period_dates, employees, employee_hour
 	const totalCount = employees.length
 	const pendingCount = 0
 	const flaggedCount = 0
-	const overtimeHours = 0
+	const overtimeHours = Object.values(employee_hours).reduce((sum, h) => sum + (h.ot_hours ?? 0), 0)
 	const ptoHours = 0
 	const dueInDays = 2
 
@@ -142,7 +143,11 @@ export default function TimesheetsIndex({ period_dates, employees, employee_hour
 								<EmployeesTable employees={ employees } employee_hours={ employee_hours } />
 							</Box>
 
-							<PayrollTableFooter employeeCount={ employees.length } />
+							<PayrollTableFooter
+								employeeCount={ employees.length }
+								totalRegularHours={ Object.values(employee_hours).reduce((sum, h) => sum + (h.regular_hours ?? 0), 0) }
+								totalOtHours={ overtimeHours }
+							/>
 						</Stack>
 					</Table.TableProvider>
 				</Container>

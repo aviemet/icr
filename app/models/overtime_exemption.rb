@@ -36,7 +36,12 @@ class OvertimeExemption < ApplicationRecord
 
     case field
     when "category"
-      evaluate_equality(shift.category, value, operator)
+      category_slug = if shift.category.respond_to?(:slug)
+                        shift.category&.slug
+                      else
+                        shift.category
+                      end
+      evaluate_equality(category_slug, value, operator)
     when "start_time"
       evaluate_time(shift.start_time, value, operator)
     when "end_time"
