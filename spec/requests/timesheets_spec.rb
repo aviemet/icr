@@ -33,6 +33,14 @@ RSpec.describe "/timesheets", type: :request do
     end
   end
 
+  describe "GET /payroll/employees/:employee_id (employee_review)" do
+    it "renders a successful response" do
+      employee = create(:employee)
+      get payroll_employee_review_path(employee_id: employee.id)
+      expect(response).to have_http_status(:success)
+    end
+  end
+
   describe "GET /show" do
     it "renders a successful response" do
       timesheet = create(:timesheet)

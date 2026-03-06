@@ -14,6 +14,7 @@ export {
 	TbSquarePlus as ReplenishIcon,
 	TbMoonStars as MoonIcon,
 	TbEye as ViewIcon,
+	TbAlertTriangle as WarningTriangleIcon,
 } from "react-icons/tb"
 
 export {

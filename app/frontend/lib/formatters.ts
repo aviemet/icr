@@ -20,6 +20,7 @@ export const datetime = {
 	dateShort: (date: string | Date) => dayjs(ensureDate(date)).format("M/DD/YY"),
 	dateLong: (date: string | Date) => dayjs(ensureDate(date)).format("MM/DD/YYYY HH:mm:ss"),
 	dateEnglish: (date: string | Date) => dayjs(ensureDate(date)).format("MM/DD/YYYY"),
+	dateWithWeekday: (date: string | Date) => dayjs(ensureDate(date)).format("MMM D - dddd"),
 	dateUrl: (date: string | Date) => dayjs(ensureDate(date)).format("YYYY-MM-DD"),
 
 	// Time formatters

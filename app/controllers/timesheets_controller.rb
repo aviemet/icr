@@ -5,6 +5,7 @@ class TimesheetsController < ApplicationController
   expose :timesheet, scope: ->{ Timesheet.includes_associated }
 
   expose :employees, -> { search(Employee.includes_associated) }
+  expose :employee, id: -> { params[:employee_id] }, scope: -> { Employee.includes_associated }
 
   sortable_fields %w(employee.name approved_at)
 
@@ -28,6 +29,29 @@ class TimesheetsController < ApplicationController
         count: employees.count,
         **pagination_data(paginated_employees)
       } },
+    }
+  end
+
+  # @route GET /payroll/employees/:employee_id (payroll_employee_review)
+  def employee_review
+    period_start, period_end = Payroll::Period.period_dates
+    pay_period = PayPeriod.find_or_create_by!(
+      starts_at: period_start.to_time.beginning_of_day,
+      ends_at: period_end.to_time.end_of_day,
+    )
+    timesheet = Timesheet.find_by(employee_id: employee.id, pay_period_id: pay_period.id)
+    record_to_authorize = timesheet || Timesheet.new(employee_id: employee.id)
+    authorize record_to_authorize, :show?
+
+    shifts_scope = timesheet ? timesheet.shifts.includes(:calendar_event, :category) : Shift.none
+    employee_hours = Payroll::EmployeePeriodHours.call(pay_period, [employee.id])
+
+    render inertia: "Timesheets/EmployeeReview", props: {
+      employee: -> { employee.render(:index) },
+      period_dates: -> { Payroll::Period.period_dates.map { |d| d.strftime("%FT%T%:z") } },
+      timesheet: -> { timesheet&.render(:show) },
+      shifts: -> { shifts_scope.render(:review) },
+      employee_hours: -> { employee_hours[employee.id.to_s] || {} },
     }
   end
 
