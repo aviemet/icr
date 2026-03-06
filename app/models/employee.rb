@@ -106,6 +106,25 @@ class Employee < ApplicationRecord
   has_many :shifts, dependent: :destroy
   has_many :shift_events, through: :shifts, class_name: "Calendar::Event", source: :calendar_event, dependent: :destroy
 
+  def schedule_events_between(start_time, end_time)
+    all_events
+      .distinct
+      .includes([
+        :recurring_patterns,
+        :event_participants,
+        :clients,
+        shift: {
+          employee: [
+            :person,
+            :job_title,
+            :calendar_customization,
+            { person: { contact: { addresses: :category, emails: :category, phones: :category } } },
+          ],
+        },
+      ])
+      .between(start_time, end_time)
+  end
+
   #############
   # Pay Rates #
   #############

@@ -28,6 +28,8 @@ class EmployeeSerializer < ApplicationSerializer
   include PersonFields
   include ColorMappingFields
 
+  object_as :employee
+
   identifier :slug
 
   attributes(

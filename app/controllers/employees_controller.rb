@@ -55,10 +55,9 @@ class EmployeesController < ApplicationController
 
   # @route GET /employees/:slug/schedule (schedule_employee)
   def schedule
-    schedules = employee
-      .all_events
-      .includes([:recurring_patterns, :shift, :clients])
-      .between(range_start, range_end)
+    authorize employee
+
+    schedules = employee.schedule_events_between(*DateRangeCalculator.new(params).call)
 
     render inertia: "Employees/Schedule", props: {
       employee: -> { employee.render(:show) },
@@ -120,16 +119,6 @@ class EmployeesController < ApplicationController
 
     employee.destroy!
     redirect_to employees_url, notice: t("templates.controllers.notices.destroyed", model: "Employee")
-  end
-
-  private
-
-  def range_start
-    params[:start] || Time.current.beginning_of_month.prev_occurring(:sunday)
-  end
-
-  def range_end
-    params[:end] || Time.current.end_of_month.next_occurring(:saturday)
   end
 
 end

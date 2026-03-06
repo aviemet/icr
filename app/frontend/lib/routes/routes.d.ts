@@ -177,6 +177,18 @@ export const apiCurrencies: ((
 
 /**
  * Generates rails route to
+ * /api/employees/:slug/schedule(.:format)
+ * @param {any} slug
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiEmployeeSchedule: ((
+  slug: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
  * /api/options/employees(.:format)
  * @param {object | undefined} options
  * @returns {string} route path

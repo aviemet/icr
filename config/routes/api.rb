@@ -26,4 +26,8 @@ namespace :api do
   scope :clients do
     get ":slug/schedule" => "clients#schedule", param: :slug, as: "client_schedule"
   end
+
+  scope :employees do
+    get ":slug/schedule" => "employees#schedule", param: :slug, as: "employee_schedule"
+  end
 end

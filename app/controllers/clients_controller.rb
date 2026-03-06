@@ -67,21 +67,7 @@ class ClientsController < ApplicationController
       ],
     ).find(client.id)
 
-    schedules = client
-      .calendar_events
-      .includes([
-        :recurring_patterns,
-        :event_participants,
-        shift: {
-          employee: [
-            :person,
-            :job_title,
-            :calendar_customization,
-            { person: { contact: { addresses: :category, emails: :category, phones: :category } } },
-          ],
-        },
-      ])
-      .between(*DateRangeCalculator.new(params).call)
+    schedules = client.schedule_events_between(*DateRangeCalculator.new(params).call)
 
     render inertia: "Clients/Schedule", props: {
       client: -> { client_for_show.render(:show) },

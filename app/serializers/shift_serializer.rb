@@ -22,6 +22,8 @@
 #  fk_rails_...  (timesheet_id => timesheets.id)
 #
 class ShiftSerializer < ApplicationSerializer
+  object_as :shift, model: "Shift"
+
   attributes(
     :employee_id,
     :calendar_event_id,

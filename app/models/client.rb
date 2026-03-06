@@ -74,6 +74,23 @@ class Client < ApplicationRecord
 
   scope :includes_associated, -> { includes([:person, :calendar_customization]) }
 
+  def schedule_events_between(start_time, end_time)
+    calendar_events
+      .includes([
+        :recurring_patterns,
+        :event_participants,
+        shift: {
+          employee: [
+            :person,
+            :job_title,
+            :calendar_customization,
+            { person: { contact: { addresses: :category, emails: :category, phones: :category } } },
+          ],
+        },
+      ])
+      .between(start_time, end_time)
+  end
+
   after_create -> { self.update(active_at: Time.current) }
 
   def active?

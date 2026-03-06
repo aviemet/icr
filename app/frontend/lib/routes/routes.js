@@ -613,6 +613,15 @@ export const apiCurrencies = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,
 
 /**
  * Generates rails route to
+ * /api/employees/:slug/schedule(.:format)
+ * @param {any} slug
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiEmployeeSchedule = /*#__PURE__*/ __jsr.r({"slug":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"api"],[2,[7,"/"],[2,[6,"employees"],[2,[7,"/"],[2,[3,"slug"],[2,[7,"/"],[2,[6,"schedule"],[1,[2,[8,"."],[3,"format"]]]]]]]]]]]);
+
+/**
+ * Generates rails route to
  * /api/options/employees(.:format)
  * @param {object | undefined} options
  * @returns {string} route path

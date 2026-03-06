@@ -15,6 +15,7 @@ import * as classes from "./EventPopoverContent.css"
 interface EventPopoverContentProps {
 	event: BaseCalendarEvent
 	localizer: CalendarLocalizer
+	primaryResource?: "client" | "employee"
 }
 
 function isEmployeeResource(value: unknown): value is Schema.ShiftsClient["employee"] {
@@ -31,12 +32,22 @@ function isClientResource(value: unknown): value is Schema.ClientsPersisted {
 	return typeof (value as { id: unknown }).id === "string" && typeof (value as { slug: unknown }).slug === "string"
 }
 
-const EventPopoverContent = ({ event, localizer }: EventPopoverContentProps) => {
+const EventPopoverContent = ({ event, localizer, primaryResource = "employee" }: EventPopoverContentProps) => {
 	const [editing, setEditing] = useState(false)
+
 	const modals = useModals()
+
 	const color = event.color || "#000000"
+
 	const employee = isEmployeeResource(event.resources?.employee) ? event.resources?.employee : undefined
 	const client = isClientResource(event.resources?.client) ? event.resources.client : undefined
+
+	let primaryLink: { href: string, label: string } | null = null
+	if(primaryResource === "client" && client) {
+		primaryLink = { href: Routes.client(client.slug), label: client.full_name || client.name }
+	} else if(employee) {
+		primaryLink = { href: Routes.employee(employee.slug), label: employee.name }
+	}
 
 	const deleteEvent = useDeleteClientCalendarEvent({
 		params: { slug: client?.slug ?? "", id: String(event.id) },
@@ -76,8 +87,8 @@ const EventPopoverContent = ({ event, localizer }: EventPopoverContentProps) => 
 						style={ { backgroundColor: color } }
 					/>
 					<Title order={ 4 }>
-						{ employee && (
-							<Link href={ Routes.employee(employee.slug) }>{ employee.name }</Link>
+						{ primaryLink && (
+							<Link href={ primaryLink.href }>{ primaryLink.label }</Link>
 						) }
 					</Title>
 				</Group>
