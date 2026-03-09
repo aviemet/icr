@@ -19,12 +19,13 @@ export { useTableSectionContext, TableSectionContextProvider }
 interface TableState {
 	selectable: boolean
 	pagination?: Schema.Pagination
-	rows?: Record<string,any>[]
+	rows?: Record<string, any>[]
 	columns: { hideable: string, label: string }[]
 	selected: Set<string>
 	hideable: boolean
 	model?: string
 	searching: boolean
+	fallbackMessage?: string
 }
 
 interface TableContextValues {
@@ -36,7 +37,7 @@ interface TableContextProviderProps {
 	children: React.ReactNode
 	selectable?: boolean
 	pagination?: Schema.Pagination
-	rows?: Record<string,any>[]
+	rows?: Record<string, any>[]
 	hideable?: boolean
 
 	/** Name of the ActiveRecord model being tabularized.
@@ -44,6 +45,7 @@ interface TableContextProviderProps {
 	 * Also used as a key for User `table_preferences` to save hidden columns and pagination limit.
 	 **/
 	model?: string
+	fallbackMessage?: string
 }
 
 const [useTableContext, TableContextProvider] = createContext<TableContextValues>()
@@ -56,6 +58,7 @@ const TableProvider = ({
 	rows = [],
 	hideable = true,
 	model,
+	fallbackMessage,
 }: TableContextProviderProps) => {
 	const tableReducer = (tableState: TableState, newTableState: Partial<TableState>) => ({
 		...tableState,
@@ -71,6 +74,7 @@ const TableProvider = ({
 		hideable,
 		model,
 		searching: false,
+		fallbackMessage,
 	})
 
 	return (
@@ -84,7 +88,7 @@ const TableProvider = ({
 
 interface StatePreservingRowUpdaterProps {
 	children: React.ReactElement
-	rows?: Record<string,any>[]
+	rows?: Record<string, any>[]
 	pagination?: Schema.Pagination
 }
 

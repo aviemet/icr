@@ -137,6 +137,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Shift create: if within current pay period, find or create that PayPeriod and a Timesheet for the employee; if the PayPeriod was just created, backfill timesheets for all shifts in that range.
 - PayPeriod create: backfill timesheets from shifts whose event overlaps the period (one Timesheet per employee).
 - Payroll index hours: Payroll::EmployeePeriodHours computes per-employee regular_hours and ot_hours for a pay period. Uses Setting overtime_weekly_hours and overtime_daily_hours; splits shifts by day (including overnight); applies active OvertimeExemption rules to exclude exempt shift hours from OT; weekly OT and daily OT are summed. Overtime exemption category criteria use Shift.category (Shift's own category_id), not calendar event category.
+- Payroll approval UI: Approve actions (index row menu, footer bulk approve, employee review Approve button) are visible only during the approval window (current date within 3 days before period end through period end).
 
 ### Frontend Components
 #### UI Framework
@@ -152,6 +153,10 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 #### Component Organization
 - Frontend: components, features, layouts, lib, pages, queries, types under app/frontend.
 - Gotcha: For components that use forwardRef with generics, define forwardRef on the component itself, not on the export; otherwise generic inference breaks and you end up with type assertions.
+
+#### Links and navigation
+- Use the Link component with `as="button"` and `buttonProps` for button-styled navigation (not `Button component={Link}`); Link with as="button" renders an anchor styled as a button and uses Inertia routing.
+- Use the Routes object from @/lib for all hrefs; do not build URLs manually (e.g. use Routes.payrollEmployeeReview(employeeId), not `/payroll/employees/${id}`).
 
 #### Formatters
 - All formatting lives in formatters.ts; do not define formatters inline. Add new ones there and use via formatter / formatter.datetime / formatter.number from @/lib.

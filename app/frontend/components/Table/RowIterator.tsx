@@ -7,15 +7,15 @@ import Table from "."
 
 
 const RowIterator = ({ render }: { render: (obj: any) => JSX.Element }) => {
-	const { tableState: { selected, rows, columns, selectable } } = useTableContext()
+	const { tableState: { selected, rows, columns, selectable, fallbackMessage } } = useTableContext()
 
 	if(!rows || rows.length === 0) {
 		const colSpan = columns.length + (selectable ? 1 : 0)
 
 		return (
 			<Table.Row>
-				<Table.Cell colSpan={ colSpan } align="center">
-					Nothing to display
+				<Table.Cell colSpan={ Math.max(1, colSpan) } align="center">
+					{ fallbackMessage ?? "Nothing to display" }
 				</Table.Cell>
 			</Table.Row>
 		)

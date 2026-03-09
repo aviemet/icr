@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 
-import { Avatar, Badge, Button, Group, Link, Menu, Table } from "@/components"
-import { formatter } from "@/lib"
+import { Avatar, Badge, Group, Link, Menu, Table } from "@/components"
+import { formatter, Routes } from "@/lib"
 
 interface EmployeeHoursMap {
 	regular_hours?: number
@@ -11,9 +11,10 @@ interface EmployeeHoursMap {
 interface EmployeesTableProps {
 	employees: Schema.EmployeesPersisted[]
 	employee_hours: Record<string, EmployeeHoursMap>
+	approvalWindowOpen: boolean
 }
 
-export default function EmployeesTable({ employees, employee_hours }: EmployeesTableProps) {
+export default function EmployeesTable({ employees, employee_hours, approvalWindowOpen }: EmployeesTableProps) {
 	const { t } = useTranslation()
 
 	return (
@@ -33,7 +34,7 @@ export default function EmployeesTable({ employees, employee_hours }: EmployeesT
 				{ employees.map(employee => (
 					<Table.Row key={ employee.id } name={ employee.id }>
 						<Table.Cell>
-							<Link href={ `/payroll/employees/${employee.id}` }>
+							<Link href={ Routes.payrollEmployeeReview(employee.id) }>
 								<Group gap="sm" wrap="nowrap" style={ { display: "inline-flex" } }>
 									<Avatar
 										src={ undefined }
@@ -68,23 +69,21 @@ export default function EmployeesTable({ employees, employee_hours }: EmployeesT
 						</Table.Cell>
 						<Table.Cell>
 							<Group gap="xs" wrap="nowrap">
-								<Button
-									component={ Link }
-									href={ `/payroll/employees/${employee.id}` }
-									variant="light"
-									size="xs"
+								<Link
+									as="button"
+									href={ Routes.payrollEmployeeReview(employee.id) }
+									buttonProps={ { variant: "light", size: "xs" } }
 								>
 									{ t("views.timesheets.index.employees.review") }
-								</Button>
-								<Menu position="bottom-end">
-									<Menu.Target />
-									<Menu.Dropdown>
-										<Menu.Item component={ Link } href={ `/payroll/employees/${employee.id}` }>
-											{ t("views.timesheets.index.employees.review") }
-										</Menu.Item>
-										<Menu.Item>{ t("views.timesheets.index.employees.approve") }</Menu.Item>
-									</Menu.Dropdown>
-								</Menu>
+								</Link>
+								{ approvalWindowOpen && (
+									<Menu position="bottom-end">
+										<Menu.Target />
+										<Menu.Dropdown>
+											<Menu.Item>{ t("views.timesheets.index.employees.approve") }</Menu.Item>
+										</Menu.Dropdown>
+									</Menu>
+								) }
 							</Group>
 						</Table.Cell>
 					</Table.Row>

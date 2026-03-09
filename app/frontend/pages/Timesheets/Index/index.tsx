@@ -1,3 +1,4 @@
+import dayjs from "dayjs"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -19,6 +20,14 @@ import { formatter, Routes } from "@/lib"
 import EmployeesTable from "./EmployeesTable"
 import PayrollTableFooter from "./PayrollTableFooter"
 
+const APPROVAL_WINDOW_DAYS_BEFORE_END = 3
+
+function approvalWindowOpen(periodEnd: string): boolean {
+	const today = dayjs().startOf("day")
+	const windowStart = dayjs(periodEnd).subtract(APPROVAL_WINDOW_DAYS_BEFORE_END, "day").startOf("day")
+	return today.isSameOrAfter(windowStart)
+}
+
 interface EmployeeHoursMap {
 	regular_hours?: number
 	ot_hours?: number
@@ -37,13 +46,14 @@ export default function TimesheetsIndex({ period_dates, employees, employee_hour
 
 	const [periodStart, periodEnd] = period_dates
 	const periodRange = periodStart && periodEnd ? formatter.datetime.range(periodStart, periodEnd) : ""
+	const approvalWindow = periodEnd ? approvalWindowOpen(periodEnd) : false
 	const approvedCount = 0
 	const totalCount = employees.length
 	const pendingCount = 0
 	const flaggedCount = 0
 	const overtimeHours = Object.values(employee_hours).reduce((sum, h) => sum + (h.ot_hours ?? 0), 0)
 	const ptoHours = 0
-	const dueInDays = 2
+	const dueInDays = periodEnd ? dayjs(periodEnd).startOf("day").diff(dayjs().startOf("day"), "day") : 0
 
 	return (
 		<Page
@@ -78,11 +88,9 @@ export default function TimesheetsIndex({ period_dates, employees, employee_hour
 											total: totalCount,
 										}) }
 									</Text>
-									{ dueInDays !== undefined && dueInDays !== null && (
-										<Text size="sm" c="dimmed">
-											{ t("views.timesheets.index.due_in_days", { count: dueInDays }) }
-										</Text>
-									) }
+									<Text size="sm" c="dimmed">
+										{ t("views.timesheets.index.due_in_days", { count: dueInDays }) }
+									</Text>
 									<Button variant="filled">
 										{ t("views.timesheets.index.export_summary") }
 									</Button>
@@ -140,13 +148,18 @@ export default function TimesheetsIndex({ period_dates, employees, employee_hour
 									</Button>
 								</Group>
 
-								<EmployeesTable employees={ employees } employee_hours={ employee_hours } />
+								<EmployeesTable
+									employees={ employees }
+									employee_hours={ employee_hours }
+									approvalWindowOpen={ approvalWindow }
+								/>
 							</Box>
 
 							<PayrollTableFooter
 								employeeCount={ employees.length }
 								totalRegularHours={ Object.values(employee_hours).reduce((sum, h) => sum + (h.regular_hours ?? 0), 0) }
 								totalOtHours={ overtimeHours }
+								approvalWindowOpen={ approvalWindow }
 							/>
 						</Stack>
 					</Table.TableProvider>

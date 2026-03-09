@@ -12,6 +12,18 @@ isProject: false
 - **`/payroll` (index):** A **list of employees** only. Each row links to that employee’s payroll detail (e.g. `/payroll/employees/:employee_id`). No period selector or approval queue on this page.
 - **Historical view:** A separate link (e.g. `/payroll/historical`) for looking backwards in time is planned but **not implemented yet**. No period-scoped list or archive on the main index for now.
 
+## Approval window
+
+- **Approve** actions (index row menu, footer "Approve selected" / "Approve all clean", and employee review page "Approve" button) are shown only when the current date is within the **approval window**: from **3 days before the pay period end** through the end of the period. Before that, approval controls are hidden. Implemented on the frontend using `period_dates` from the server; no backend flag yet.
+- When the backend gains payroll deadline or "lock date" settings, visibility can be driven by that instead.
+
+## Index and employee review UX (current)
+
+- **Actions column:** One "Review" link (navigates to employee review). When approval window is open, a row menu (kebab) offers "Approve" only (no duplicate Review).
+- **Exception column (index):** Shows "--" until per-employee exception data is available from the API.
+- **Employee review page:** Approve button only when approval window open. Request changes and orphan action icons removed until endpoints exist. In/Out times in the review table are **read-only**; editing shift times is deferred (future: inline edit or link to shift/event edit).
+- **Review table Exception column:** Shows "--" for each shift until the API provides per-shift exception/flag data (e.g. overlapping, missing punch).
+
 ---
 
 ## PayPeriod and Timesheet model behavior
@@ -59,6 +71,11 @@ Implemented as **`PayPeriod`** `after_create :backfill_timesheets_from_shifts`.
 
 ---
 
+## Next steps (backend)
+
+- Add approval/update endpoints so Approve and "Approve selected" / "Approve all clean" submit to the server. Optionally add a `payroll_due_at` or `approval_window` flag to index/employee_review props so visibility can be server-driven.
+- Provide per-employee exception counts (or flags) for the index and per-shift exception reasons for the review table so the Exception column can show real data instead of "--".
+
 ## Future UX (when adding period-scoped or historical views)
 
 When implementing a period-scoped approval view or `/payroll/historical`, consider:
@@ -69,3 +86,4 @@ When implementing a period-scoped approval view or `/payroll/historical`, consid
 - Exception-driven table: elevate flagged rows, show reason inline, filter by Flagged.
 - Directors: Manager Approval Status column (toggle), filter by Manager.
 - Scale: search, pagination or virtualization, bulk approval.
+- In/Out times: allow editing (inline or via link to shift/event edit) when supported by the API.

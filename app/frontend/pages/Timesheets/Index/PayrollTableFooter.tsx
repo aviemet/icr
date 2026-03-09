@@ -7,9 +7,15 @@ interface PayrollTableFooterProps {
 	employeeCount: number
 	totalRegularHours?: number
 	totalOtHours?: number
+	approvalWindowOpen: boolean
 }
 
-export default function PayrollTableFooter({ employeeCount, totalRegularHours = 0, totalOtHours = 0 }: PayrollTableFooterProps) {
+export default function PayrollTableFooter({
+	employeeCount,
+	totalRegularHours = 0,
+	totalOtHours = 0,
+	approvalWindowOpen,
+}: PayrollTableFooterProps) {
 	const { t } = useTranslation()
 	const { tableState: { selected } } = useTableContext()
 	const selectedCount = selected.size
@@ -31,14 +37,16 @@ export default function PayrollTableFooter({ employeeCount, totalRegularHours = 
 					{ t("views.timesheets.index.footer_ot_hours", { count: totalOtHours }) }
 				</Text>
 			</Group>
-			<Group>
-				<Button variant="filled" disabled={ selectedCount === 0 }>
-					{ t("views.timesheets.index.approve_selected") }
-				</Button>
-				<Button variant="default">
-					{ t("views.timesheets.index.approve_all_clean") }
-				</Button>
-			</Group>
+			{ approvalWindowOpen && (
+				<Group>
+					<Button variant="filled" disabled={ selectedCount === 0 }>
+						{ t("views.timesheets.index.approve_selected") }
+					</Button>
+					<Button variant="default">
+						{ t("views.timesheets.index.approve_all_clean") }
+					</Button>
+				</Group>
+			) }
 		</Group>
 	)
 }

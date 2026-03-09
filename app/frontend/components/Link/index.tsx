@@ -4,6 +4,7 @@ import React, { forwardRef, useMemo } from "react"
 
 import ExternalLink from "./ExternalLink"
 import InertiaLink from "./InertiaLink"
+import { leftSection } from "../Calendar/components/Toolbar/Toolbar.css"
 
 
 export { default as NavLink, type NavLinkProps } from "./NavLink"
@@ -25,6 +26,7 @@ export interface LinkProps
 	disabled?: boolean
 	buttonProps?: ButtonProps
 	preserveScroll?: boolean
+	leftSection?: React.ReactNode
 }
 
 const externalPrefix = ["http", "www"]
