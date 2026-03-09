@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef } from "react"
+import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
 import ColorPickerInput, { type ColorPickerInputProps } from "@/components/Inputs/ColorPickerInput"
@@ -11,27 +11,26 @@ interface FormColorPickerInputProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<ColorPickerInputProps, InputConflicts>,
 	BaseFormInputProps<string, TForm> {
+	ref?: React.Ref<HTMLInputElement>
 	id?: string
 }
 
-const FormColorPickerInput = forwardRef(<TForm extends NestedObject = NestedObject>(
-	{
-		name,
-		model,
-		onChange,
-		onBlur,
-		onFocus,
-		id,
-		required,
-		field = true,
-		wrapperProps,
-		errorKey,
-		defaultValue,
-		clearErrorsOnChange,
-		...props
-	}: FormColorPickerInputProps<TForm>,
-	ref: ForwardedRef<HTMLInputElement>,
-) => {
+function FormColorPickerInput<TForm extends NestedObject = NestedObject>({
+	name,
+	model,
+	onChange,
+	onBlur,
+	onFocus,
+	id,
+	required,
+	field = true,
+	wrapperProps,
+	errorKey,
+	defaultValue,
+	clearErrorsOnChange,
+	ref,
+	...props
+}: FormColorPickerInputProps<TForm>) {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<string, TForm>({
 		name,
 		model,
@@ -70,6 +69,6 @@ const FormColorPickerInput = forwardRef(<TForm extends NestedObject = NestedObje
 			/>
 		</InputWrapper>
 	)
-})
+}
 
 export default FormColorPickerInput

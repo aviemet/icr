@@ -1,4 +1,4 @@
-import { forwardRef, type ForwardedRef } from "react"
+import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
 import NumberInput, { type NumberInputProps } from "@/components/Inputs/NumberInput"
@@ -11,26 +11,26 @@ import { type InputConflicts, type BaseFormInputProps } from "."
 interface FormNumberInputProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<NumberInputProps, InputConflicts>,
-	BaseFormInputProps<number, TForm> {}
+	BaseFormInputProps<number, TForm> {
+	ref?: React.Ref<HTMLInputElement>
+}
 
-const FormInput = forwardRef(<TForm extends NestedObject = NestedObject>(
-	{
-		name,
-		model,
-		onChange,
-		onBlur,
-		onFocus,
-		id,
-		required,
-		field = true,
-		wrapperProps,
-		errorKey,
-		defaultValue,
-		clearErrorsOnChange,
-		...props
-	}: FormNumberInputProps<TForm>,
-	ref: ForwardedRef<HTMLInputElement>
-) => {
+function FormInput<TForm extends NestedObject = NestedObject>({
+	name,
+	model,
+	onChange,
+	onBlur,
+	onFocus,
+	id,
+	required,
+	field = true,
+	wrapperProps,
+	errorKey,
+	defaultValue,
+	clearErrorsOnChange,
+	ref,
+	...props
+}: FormNumberInputProps<TForm>) {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<number, TForm>({
 		name,
 		model,
@@ -68,6 +68,6 @@ const FormInput = forwardRef(<TForm extends NestedObject = NestedObject>(
 			/>
 		</InputWrapper>
 	)
-})
+}
 
 export default FormInput

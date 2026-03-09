@@ -1,10 +1,11 @@
-import React, { forwardRef } from "react"
+import React from "react"
 import { InputProps } from "react-html-props"
 
-const TextInputComponent = forwardRef<HTMLInputElement, InputProps>((
-	{ name, id, ...props },
-	ref,
-) => {
+interface HiddenInputProps extends InputProps {
+	ref?: React.Ref<HTMLInputElement>
+}
+
+const TextInputComponent = ({ name, id, ref, ...props }: HiddenInputProps) => {
 	const inputId = id || name
 
 	return (
@@ -16,6 +17,6 @@ const TextInputComponent = forwardRef<HTMLInputElement, InputProps>((
 			{ ...props }
 		/>
 	)
-})
+}
 
 export default TextInputComponent

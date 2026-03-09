@@ -1,10 +1,9 @@
 import {
 	DatePickerInput,
 	type DatePickerInputProps,
-	type DatesRangeValue,
 } from "@mantine/dates"
 import dayjs from "dayjs"
-import { useEffect, useState, forwardRef } from "react"
+import React, { useEffect, useState } from "react"
 
 import { CalendarIcon } from "@/components/Icons"
 import { isUnset } from "@/lib"
@@ -19,6 +18,7 @@ export interface DateInputProps
 	extends
 	Omit<DatePickerInputProps, "onChange" | "value">,
 	Omit<BaseInputProps, "disableAutofill"> {
+	ref?: React.Ref<HTMLButtonElement>
 	name?: string
 	id?: string
 	value: DateInputValue
@@ -26,22 +26,20 @@ export interface DateInputProps
 	onChange?: (date: DateInputValue) => void
 }
 
-const DateInputComponent = forwardRef<HTMLButtonElement, DateInputProps>((
-	{
-		label,
-		id,
-		name,
-		type = "default",
-		valueFormat = "L",
-		required,
-		wrapper,
-		wrapperProps,
-		value,
-		onChange,
-		...props
-	},
+const DateInputComponent = ({
+	label,
+	id,
+	name,
+	type = "default",
+	valueFormat = "L",
+	required,
+	wrapper,
+	wrapperProps,
+	value,
+	onChange,
 	ref,
-) => {
+	...props
+}: DateInputProps) => {
 	const inputId = id || name
 
 	const [localValue, setLocalValue] = useState<DateInputValue>(() => {
@@ -70,10 +68,10 @@ const DateInputComponent = forwardRef<HTMLButtonElement, DateInputProps>((
 		if(type === "range") {
 			if(Array.isArray(localValue)) {
 				if(localValue.length !== 2) {
-					setLocalValue([localValue[0], ""] as DatesRangeValue)
+					setLocalValue([localValue[0], ""])
 				}
 			} else if(localValue) {
-				setLocalValue([localValue, ""] as DatesRangeValue)
+				setLocalValue([localValue, ""])
 			} else {
 				setLocalValue(undefined)
 			}
@@ -104,7 +102,7 @@ const DateInputComponent = forwardRef<HTMLButtonElement, DateInputProps>((
 			/>
 		</InputWrapper>
 	)
-})
+}
 
 export default DateInputComponent
 

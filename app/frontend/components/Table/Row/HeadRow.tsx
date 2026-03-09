@@ -1,5 +1,5 @@
 import { Table } from "@mantine/core"
-import React, { useEffect, forwardRef } from "react"
+import React, { useEffect } from "react"
 
 import { useCheckboxState } from "@/lib/hooks"
 
@@ -10,16 +10,14 @@ import { useTableContext } from "../TableContext"
 import { type TableRow } from "./index"
 
 interface HeadRowProps extends TableRow {
+	ref?: React.Ref<HTMLTableRowElement>
 	name?: string
 	rows?: Record<string, any>[]
 	selectable: boolean
 	selected: Set<string>
 }
 
-const HeadRow = forwardRef<HTMLTableRowElement, HeadRowProps>((
-	{ children, name, rows, selectable, selected, ...props },
-	ref,
-) => {
+const HeadRow = ({ children, name, rows, selectable, selected, ref, ...props }: HeadRowProps) => {
 	const { tableState: { columns }, setTableState } = useTableContext()
 
 	let { length, selectedCount } = { length: 0, selectedCount: 0 }
@@ -51,6 +49,6 @@ const HeadRow = forwardRef<HTMLTableRowElement, HeadRowProps>((
 			{ children }
 		</Table.Tr>
 	)
-})
+}
 
 export default HeadRow

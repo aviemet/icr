@@ -1,17 +1,24 @@
 import { Switch, type SwitchProps as MantineSwitchProps } from "@mantine/core"
-import React, { forwardRef } from "react"
+import React from "react"
 
 import InputWrapper from "./InputWrapper"
 
 import { type BaseInputProps } from "."
 
 
-export interface SwitchProps extends MantineSwitchProps, Omit<BaseInputProps, "disableAutofill"> {}
+export interface SwitchProps extends MantineSwitchProps, Omit<BaseInputProps, "disableAutofill"> {
+	ref?: React.Ref<HTMLInputElement>
+}
 
-const SwitchComponent = forwardRef<HTMLInputElement, SwitchProps>((
-	{ id, name, style, wrapper, wrapperProps, ...props },
+const SwitchComponent = ({
+	id,
+	name,
+	style,
+	wrapper,
+	wrapperProps,
 	ref,
-) => {
+	...props
+}: SwitchProps) => {
 	const inputId = id ?? name
 
 	return (
@@ -26,6 +33,6 @@ const SwitchComponent = forwardRef<HTMLInputElement, SwitchProps>((
 			/>
 		</InputWrapper>
 	)
-})
+}
 
 export default SwitchComponent

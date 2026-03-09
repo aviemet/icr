@@ -4,7 +4,7 @@ import {
 	type SegmentedControlProps as MantineSegmentedControlProps,
 	type SegmentedControlItem,
 } from "@mantine/core"
-import React, { forwardRef } from "react"
+import React from "react"
 
 import InputWrapper from "./InputWrapper"
 import Label from "./Label"
@@ -16,6 +16,7 @@ export interface SegmentedControlProps
 	extends
 	Omit<MantineSegmentedControlProps, "data">,
 	Omit<BaseInputProps, "disableAutofill"> {
+	ref?: React.Ref<HTMLDivElement>
 	label?: string
 	labelPosition?: "start" | "end"
 	name: string
@@ -24,21 +25,19 @@ export interface SegmentedControlProps
 	required?: boolean
 }
 
-const SegmentedControlComponent = forwardRef<HTMLDivElement, SegmentedControlProps>((
-	{
-		label,
-		labelPosition = "start",
-		options,
-		name,
-		id,
-		value,
-		required,
-		onChange,
-		wrapper,
-		...props
-	},
+const SegmentedControlComponent = ({
+	label,
+	labelPosition = "start",
+	options,
+	name,
+	id,
+	value,
+	required,
+	onChange,
+	wrapper,
 	ref,
-) => {
+	...props
+}: SegmentedControlProps) => {
 	const theme = useMantineTheme()
 
 	const LabelComponent = () => <Label required={ required } htmlFor={ id }>{ label }</Label>
@@ -59,6 +58,6 @@ const SegmentedControlComponent = forwardRef<HTMLDivElement, SegmentedControlPro
 			{ label && labelPosition === "end" && <LabelComponent /> }
 		</InputWrapper>
 	)
-})
+}
 
 export default SegmentedControlComponent

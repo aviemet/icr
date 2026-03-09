@@ -1,5 +1,5 @@
 import { Table } from "@mantine/core"
-import React, { forwardRef, useCallback } from "react"
+import React, { useCallback } from "react"
 
 import { usePageProps } from "@/lib/hooks"
 
@@ -10,16 +10,14 @@ import { type TableRow } from "./index"
 
 
 interface RowInContextProps extends TableRow {
+	ref?: React.Ref<HTMLTableRowElement>
 	name?: string
 	rows?: Record<string, any>[]
 	selectable: boolean
 	selected: Set<string>
 }
 
-const RowInContext = forwardRef<HTMLTableRowElement, RowInContextProps>((
-	{ children, name, rows, selectable, selected, ...props },
-	ref,
-) => {
+const RowInContext = ({ children, name, rows, selectable, selected, ref, ...props }: RowInContextProps) => {
 	const { auth: { user: { table_preferences } } } = usePageProps()
 	const { tableState: { model, columns } } = useTableContext()
 
@@ -56,6 +54,6 @@ const RowInContext = forwardRef<HTMLTableRowElement, RowInContextProps>((
 			}) }
 		</Table.Tr>
 	)
-})
+}
 
 export default RowInContext

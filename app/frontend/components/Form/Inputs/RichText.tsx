@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { forwardRef, type ForwardedRef } from "react"
+import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
 import RichTextInput, { type RichTextInputProps } from "@/components/Inputs/RichText"
@@ -12,27 +12,27 @@ import { type InputConflicts, type BaseFormInputProps } from "."
 interface FormRichTextInputProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<RichTextInputProps, InputConflicts>,
-	BaseFormInputProps<string, TForm> {}
+	BaseFormInputProps<string, TForm> {
+	ref?: React.Ref<HTMLDivElement>
+}
 
-const RichText = forwardRef(<TForm extends NestedObject = NestedObject>(
-	{
-		label,
-		name,
-		required = false,
-		id,
-		onChange,
-		onBlur,
-		onFocus,
-		model,
-		field = true,
-		wrapperProps,
-		errorKey,
-		defaultValue,
-		clearErrorsOnChange,
-		...props
-	}: FormRichTextInputProps<TForm>,
-	ref: ForwardedRef<HTMLInputElement>
-) => {
+function RichText<TForm extends NestedObject = NestedObject>({
+	label,
+	name,
+	required = false,
+	id,
+	onChange,
+	onBlur,
+	onFocus,
+	model,
+	field = true,
+	wrapperProps,
+	errorKey,
+	defaultValue,
+	clearErrorsOnChange,
+	ref,
+	...props
+}: FormRichTextInputProps<TForm>) {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<string, TForm>({
 		name,
 		model,
@@ -74,6 +74,6 @@ const RichText = forwardRef(<TForm extends NestedObject = NestedObject>(
 			/>
 		</InputWrapper>
 	)
-})
+}
 
 export default RichText

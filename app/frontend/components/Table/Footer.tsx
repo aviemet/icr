@@ -1,11 +1,13 @@
 import { Table, type TableTfootProps } from "@mantine/core"
-import React, { forwardRef } from "react"
+import React from "react"
 
 import { TableSectionContextProvider } from "./TableContext"
 
-interface TableFooterProps extends TableTfootProps {}
+interface TableFooterProps extends TableTfootProps {
+	ref?: React.Ref<HTMLTableSectionElement>
+}
 
-const Footer = forwardRef<HTMLTableSectionElement, TableFooterProps>(({ children, ...props }, ref) => {
+const Footer = ({ children, ref, ...props }: TableFooterProps) => {
 	return (
 		<TableSectionContextProvider value={ { section: "footer" } }>
 			<Table.Tfoot { ...props } ref={ ref }>
@@ -13,6 +15,6 @@ const Footer = forwardRef<HTMLTableSectionElement, TableFooterProps>(({ children
 			</Table.Tfoot>
 		</TableSectionContextProvider>
 	)
-})
+}
 
 export default Footer

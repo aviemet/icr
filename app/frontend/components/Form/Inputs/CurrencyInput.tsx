@@ -1,4 +1,4 @@
-import { forwardRef, type ForwardedRef } from "react"
+import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
 import CurrencyInput, { type CurrencyInputProps } from "@/components/Inputs/CurrencyInput"
@@ -13,27 +13,25 @@ interface INumberInputProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<CurrencyInputProps, InputConflicts>,
 	BaseFormInputProps<number, TForm> {
-
+	ref?: React.Ref<HTMLInputElement>
 }
 
-const FormInput = forwardRef(<TForm extends NestedObject = NestedObject>(
-	{
-		name,
-		model,
-		onChange,
-		onBlur,
-		onFocus,
-		id,
-		required,
-		field = true,
-		wrapperProps,
-		errorKey,
-		defaultValue,
-		clearErrorsOnChange,
-		...props
-	} : INumberInputProps<TForm>,
-	ref: ForwardedRef<HTMLInputElement>
-) => {
+function FormInput<TForm extends NestedObject = NestedObject>({
+	name,
+	model,
+	onChange,
+	onBlur,
+	onFocus,
+	id,
+	required,
+	field = true,
+	wrapperProps,
+	errorKey,
+	defaultValue,
+	clearErrorsOnChange,
+	ref,
+	...props
+}: INumberInputProps<TForm>) {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<number | Money, TForm>({
 		name,
 		model,
@@ -82,6 +80,6 @@ const FormInput = forwardRef(<TForm extends NestedObject = NestedObject>(
 			/>
 		</InputWrapper>
 	)
-})
+}
 
 export default FormInput

@@ -1,21 +1,21 @@
 import { isEmpty } from "lodash-es"
-import React, { forwardRef } from "react"
+import React from "react"
 
 import { Select as InputSelect } from "@/components/Inputs"
 import { useGetTimezones } from "@/queries/locale"
 
 import { type AsyncDropdown } from ".."
 
-interface TimezonesDropdownProps extends AsyncDropdown<Schema.TimezoneOption> {}
+interface TimezonesDropdownProps extends AsyncDropdown<Schema.TimezoneOption> {
+	ref?: React.Ref<HTMLInputElement>
+}
 
-const TimezonesDropdown = forwardRef<HTMLInputElement, TimezonesDropdownProps>((
-	{
-		label = "Timezone",
-		name = "timezone",
-		...props
-	},
+const TimezonesDropdown = ({
+	label = "Timezone",
+	name = "timezone",
 	ref,
-) => {
+	...props
+}: TimezonesDropdownProps) => {
 	const { data, refetch } = useGetTimezones({
 		staleTime: Infinity,
 	})
@@ -36,6 +36,6 @@ const TimezonesDropdown = forwardRef<HTMLInputElement, TimezonesDropdownProps>((
 		clearable
 		{ ...props }
 	/>
-})
+}
 
 export default TimezonesDropdown

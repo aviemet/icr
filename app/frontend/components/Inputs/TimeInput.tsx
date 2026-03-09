@@ -1,5 +1,5 @@
 import { TimePicker, type TimePickerProps as MantineTimePickerProps } from "@mantine/dates"
-import { forwardRef } from "react"
+import React from "react"
 
 import { ClockIcon } from "@/components/Icons"
 
@@ -12,26 +12,25 @@ export interface TimeInputProps
 	extends
 	Omit<BaseInputProps, "disableAutofill">,
 	MantineTimePickerProps {
+	ref?: React.Ref<HTMLDivElement>
 	name?: string
 	id?: string
 }
 
-const TimeInput = forwardRef<HTMLDivElement, TimeInputProps>((
-	{
-		label,
-		id,
-		name,
-		wrapper,
-		wrapperProps,
-		format = "12h",
-		required = false,
-		value,
-		withDropdown = true,
-		popoverProps,
-		...props
-	},
-	ref
-) => {
+const TimeInput = ({
+	label,
+	id,
+	name,
+	wrapper,
+	wrapperProps,
+	format = "12h",
+	required = false,
+	value,
+	withDropdown = true,
+	popoverProps,
+	ref,
+	...props
+}: TimeInputProps) => {
 	const inputId = id || name
 
 	return (
@@ -53,6 +52,6 @@ const TimeInput = forwardRef<HTMLDivElement, TimeInputProps>((
 			/>
 		</InputWrapper>
 	)
-})
+}
 
 export default TimeInput

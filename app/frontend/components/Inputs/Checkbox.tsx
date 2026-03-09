@@ -1,30 +1,28 @@
 import { Checkbox, type CheckboxProps as MantineCheckboxProps } from "@mantine/core"
-import React, { forwardRef } from "react"
+import React from "react"
 
 import InputWrapper from "./InputWrapper"
 
 import { withInjectedProps, type BaseInputProps } from "."
 
 
-export interface CheckboxProps extends MantineCheckboxProps, BaseInputProps {}
+export interface CheckboxProps extends MantineCheckboxProps, BaseInputProps {
+	ref?: React.Ref<HTMLInputElement>
+}
 
-type CheckboxComponentType = React.ForwardRefExoticComponent<
-CheckboxProps & React.RefAttributes<HTMLInputElement>
-> & {
+type CheckboxComponentType = React.FC<CheckboxProps> & {
 	Group: typeof Checkbox.Group
-};
+}
 
-const CheckboxComponent: CheckboxComponentType = forwardRef<HTMLInputElement, CheckboxProps>((
-	{
-		id,
-		name,
-		wrapper,
-		wrapperProps,
-		disableAutofill = true,
-		...props
-	},
+const CheckboxComponent: CheckboxComponentType = ({
+	id,
+	name,
+	wrapper,
+	wrapperProps,
+	disableAutofill = true,
 	ref,
-) => {
+	...props
+}: CheckboxProps) => {
 	const inputId = id ?? name
 
 	return (
@@ -39,7 +37,7 @@ const CheckboxComponent: CheckboxComponentType = forwardRef<HTMLInputElement, Ch
 			/>
 		</InputWrapper>
 	)
-}) as CheckboxComponentType
+}
 
 CheckboxComponent.Group = Checkbox.Group
 

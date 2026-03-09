@@ -152,7 +152,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 
 #### Component Organization
 - Frontend: components, features, layouts, lib, pages, queries, types under app/frontend.
-- Gotcha: For components that use forwardRef with generics, define forwardRef on the component itself, not on the export; otherwise generic inference breaks and you end up with type assertions.
+- React 19: ref is passed as a normal prop; components that need ref support accept ref in their props interface (ref?: React.Ref&lt;HTMLElement&gt;) and pass it to the underlying DOM or child. forwardRef is not used.
 
 #### Links and navigation
 - Use the Link component with `as="button"` and `buttonProps` for button-styled navigation (not `Button component={Link}`); Link with as="button" renders an anchor styled as a button and uses Inertia routing.

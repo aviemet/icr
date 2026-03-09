@@ -1,4 +1,4 @@
-import { forwardRef, type ForwardedRef } from "react"
+import React from "react"
 import { useInertiaInput, type NestedObject } from "use-inertia-form"
 
 import TimeInput, { type TimeInputProps } from "@/components/Inputs/TimeInput"
@@ -11,26 +11,26 @@ import { type InputConflicts, type BaseFormInputProps } from "."
 interface FormTimeInputProps<TForm extends NestedObject>
 	extends
 	Omit<TimeInputProps, InputConflicts>,
-	BaseFormInputProps<string, TForm> {}
+	BaseFormInputProps<string, TForm> {
+	ref?: React.Ref<HTMLDivElement>
+}
 
-const TimeFormInput = forwardRef(<TForm extends NestedObject>(
-	{
-		name,
-		model,
-		onChange,
-		onBlur,
-		onFocus,
-		id,
-		required,
-		field = true,
-		wrapperProps,
-		errorKey,
-		defaultValue,
-		clearErrorsOnChange,
-		...props
-	}: FormTimeInputProps<TForm>,
-	ref: ForwardedRef<HTMLDivElement>
-) => {
+function TimeFormInput<TForm extends NestedObject>({
+	name,
+	model,
+	onChange,
+	onBlur,
+	onFocus,
+	id,
+	required,
+	field = true,
+	wrapperProps,
+	errorKey,
+	defaultValue,
+	clearErrorsOnChange,
+	ref,
+	...props
+}: FormTimeInputProps<TForm>) {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<string, TForm>({
 		name,
 		model,
@@ -73,6 +73,6 @@ const TimeFormInput = forwardRef(<TForm extends NestedObject>(
 			/>
 		</InputWrapper>
 	)
-})
+}
 
 export default TimeFormInput

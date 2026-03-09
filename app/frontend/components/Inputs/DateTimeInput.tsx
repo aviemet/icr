@@ -1,6 +1,6 @@
 import { DateTimePicker, DateTimePickerProps } from "@mantine/dates"
 import dayjs from "dayjs"
-import { forwardRef } from "react"
+import React from "react"
 
 import { isUnset } from "@/lib"
 
@@ -14,6 +14,7 @@ export interface DateTimeProps
 	extends
 	DateTimePickerProps,
 	Omit<BaseInputProps, "disableAutofill"> {
+	ref?: React.Ref<HTMLButtonElement>
 	name?: string
 	id?: string
 	value?: string | Date
@@ -21,21 +22,19 @@ export interface DateTimeProps
 	error?: string | string[]
 }
 
-const DateTime = forwardRef<HTMLButtonElement, DateTimeProps>((
-	{
-		label,
-		id,
-		name,
-		required,
-		value,
-		radius = "xs",
-		valueFormat = "L LT",
-		wrapper,
-		wrapperProps,
-		...props
-	},
+const DateTime = ({
+	label,
+	id,
+	name,
+	required,
+	value,
+	radius = "xs",
+	valueFormat = "L LT",
+	wrapper,
+	wrapperProps,
 	ref,
-) => {
+	...props
+}: DateTimeProps) => {
 	const inputId = id || name
 
 	return (
@@ -61,6 +60,6 @@ const DateTime = forwardRef<HTMLButtonElement, DateTimeProps>((
 			/>
 		</InputWrapper>
 	)
-})
+}
 
 export default DateTime
