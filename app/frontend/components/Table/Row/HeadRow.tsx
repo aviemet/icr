@@ -1,11 +1,11 @@
 import { Table } from "@mantine/core"
-import React, { useEffect } from "react"
+import React from "react"
 
-import { useCheckboxState } from "@/lib/hooks"
+import { useCheckboxState, useInit } from "@/lib/hooks"
 
 import HeadCheckbox from "./HeadCheckbox"
-import { coerceArray } from "../../../lib/index"
 import { useTableContext } from "../TableContext"
+import { TableHeadCellProps } from "../Th"
 
 import { type TableRow } from "./index"
 
@@ -28,15 +28,19 @@ const HeadRow = ({ children, name, rows, selectable, selected, ref, ...props }: 
 	const { allChecked, indeterminate } = useCheckboxState(length, selectedCount)
 
 	// Register hideable attributes in context
-	useEffect(() => {
+	useInit(() => {
 		if(!children) return
 
-		coerceArray(children).forEach(({ props }, i) => {
-			const hideable = (props.hideable ?? props.sort) ?? false
-			columns[i] = { label: props.children, hideable }
+		React.Children.forEach(children, (child, index) => {
+			if(!React.isValidElement<TableHeadCellProps>(child)) return
+
+			const { props: childProps } = child
+			const hideable = String(childProps.hideable ?? childProps.sort ?? "")
+			columns[index] = { label: String(childProps.children ?? ""), hideable }
 		})
+
 		setTableState({ columns })
-	}, [])
+	})
 
 	return (
 		<Table.Tr { ...props } ref={ ref }>

@@ -4,6 +4,7 @@ import { NestedObject, useInertiaInput } from "use-inertia-form"
 
 import RichTextInput, { type RichTextInputProps } from "@/components/Inputs/RichText"
 
+import { FieldProps } from "../components/Field"
 import InputWrapper from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
@@ -14,6 +15,7 @@ interface FormRichTextInputProps<TForm extends NestedObject = NestedObject>
 	Omit<RichTextInputProps, InputConflicts>,
 	BaseFormInputProps<string, TForm> {
 	ref?: React.Ref<HTMLDivElement>
+	wrapperProps?: Omit<FieldProps, "children">
 }
 
 function RichText<TForm extends NestedObject = NestedObject>({

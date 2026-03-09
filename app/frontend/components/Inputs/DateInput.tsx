@@ -51,6 +51,7 @@ const DateInputComponent = ({
 				if(typeof v === "string") return v
 				return ""
 			})
+
 			return formattedValues as string[]
 		}
 		return value
@@ -65,21 +66,23 @@ const DateInputComponent = ({
 	useEffect(() => {
 		if(datePickerType === type) return
 
-		if(type === "range") {
-			if(Array.isArray(localValue)) {
-				if(localValue.length !== 2) {
-					setLocalValue([localValue[0], ""])
+		const nextType = type
+		queueMicrotask(() => {
+			if(nextType === "range") {
+				if(Array.isArray(localValue)) {
+					if(localValue.length !== 2) {
+						setLocalValue([localValue[0], ""])
+					}
+				} else if(localValue) {
+					setLocalValue([localValue, ""])
+				} else {
+					setLocalValue(undefined)
 				}
-			} else if(localValue) {
-				setLocalValue([localValue, ""])
 			} else {
-				setLocalValue(undefined)
+				setLocalValue(Array.isArray(localValue) ? localValue[0] : undefined)
 			}
-		} else {
-			setLocalValue(Array.isArray(localValue) ? localValue[0] : undefined)
-		}
-
-		setDatePickerType(type)
+			setDatePickerType(nextType)
+		})
 	}, [type, datePickerType, localValue])
 
 	return (
@@ -91,7 +94,7 @@ const DateInputComponent = ({
 				ref={ ref }
 				id={ inputId }
 				name={ name }
-				value={ localValue }
+				value={ localValue as DatePickerInputProps["value"] }
 				type={ datePickerType }
 				onChange={ handleChange }
 				valueFormat={ valueFormat }

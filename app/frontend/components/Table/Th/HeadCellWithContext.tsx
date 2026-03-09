@@ -1,6 +1,6 @@
 import { Table } from "@mantine/core"
 import clsx from "clsx"
-import React, { useMemo, useRef } from "react"
+import { useMemo, useRef } from "react"
 
 import { Link, Flex } from "@/components"
 import { useLocation } from "@/lib/hooks"
@@ -25,7 +25,7 @@ const HeadCellWithContext = ({
 	const thRef = useRef<HTMLTableCellElement>(null)
 	const { pathname, params } = useLocation()
 
-	const localParams = new URLSearchParams(params)
+	const localParams = useMemo(() => new URLSearchParams(params), [params])
 
 	const paramsSort = localParams.get("sort")
 	const paramsDirection = localParams.get("direction")
@@ -48,7 +48,7 @@ const HeadCellWithContext = ({
 		localParams.set("direction", direction)
 
 		return `${pathname}?${localParams.toString()}`
-	}, [showSortLink, sort, direction, pathname])
+	}, [showSortLink, localParams, sort, direction, pathname])
 
 	return (
 		<Table.Th

@@ -8,7 +8,7 @@ import { type ReactQueryFunction } from ".."
 export const useGetCurrencies: ReactQueryFunction<Schema.CurrencyOption[]> = options => {
 	return useQuery({
 		queryKey: ["currencies"],
-		queryFn: async () => {
+		queryFn: async() => {
 			const res = await axios.get(Routes.apiCurrencies())
 			return res.data
 		},
@@ -16,10 +16,10 @@ export const useGetCurrencies: ReactQueryFunction<Schema.CurrencyOption[]> = opt
 	})
 }
 
-export const useGetTimezones: ReactQueryFunction<Schema.CurrencyOption[]> = options => {
+export const useGetTimezones: ReactQueryFunction<Record<string, Schema.TimezoneOption["items"]>> = options => {
 	return useQuery({
 		queryKey: ["timezones"],
-		queryFn: async () => {
+		queryFn: async() => {
 			const res = await axios.get(Routes.apiTimezones())
 			return res.data
 		},
@@ -30,7 +30,7 @@ export const useGetTimezones: ReactQueryFunction<Schema.CurrencyOption[]> = opti
 export const useGetPayPeriodTypes: ReactQueryFunction<any[]> = options => {
 	return useQuery({
 		queryKey: ["payPeriodTypes"],
-		queryFn: async () => {
+		queryFn: async() => {
 			const res = await axios.get(Routes.apiPayPeriods())
 			return res.data
 		},
@@ -41,7 +41,7 @@ export const useGetPayPeriodTypes: ReactQueryFunction<any[]> = options => {
 export const useGetLanguages: ReactQueryFunction<any[]> = options => {
 	return useQuery({
 		queryKey: ["languages"],
-		queryFn: async () => {
+		queryFn: async() => {
 			const res = await axios.get(Routes.apiLanguages())
 			return res.data
 		},

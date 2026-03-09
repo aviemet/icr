@@ -3,6 +3,7 @@ import { NestedObject, useInertiaInput } from "use-inertia-form"
 
 import SegmentedControl, { type SegmentedControlProps } from "@/components/Inputs/SegmentedControl"
 
+import { type FieldProps } from "../components/Field"
 import InputWrapper from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
@@ -12,6 +13,7 @@ interface FormSegmentedControlProps<TForm extends NestedObject = NestedObject>
 	Omit<SegmentedControlProps, InputConflicts>,
 	BaseFormInputProps<string, TForm> {
 	ref?: React.Ref<HTMLDivElement>
+	wrapperProps?: Omit<FieldProps, "children">
 }
 
 function FormSegmentedControl<TForm extends NestedObject = NestedObject>({
