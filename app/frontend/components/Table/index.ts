@@ -1,5 +1,4 @@
-import Table, { type TableObject } from "./Table"
+export { Table, type TableProps, type TableObject } from "./Table"
 
-export { default as useAdvancedSearch } from "./SearchInput/AdvancedSearch/useAdvancedSearch"
+export { useAdvancedSearch } from "./SearchInput/AdvancedSearch/useAdvancedSearch"
 
-export default Table as TableObject

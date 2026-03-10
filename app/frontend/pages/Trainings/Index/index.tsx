@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
 import { IndexPageTemplate } from "@/features"
-import TrainingsTable from "@/features/Trainings/Index"
+import { TrainingTable } from "@/features/Trainings/Index"
 import { Routes } from "@/lib"
 
 
@@ -20,7 +20,7 @@ const TrainingsIndex = ({ trainings, pagination }: TrainingIndexProps) => {
 				{ label: "New Training", href: Routes.newTraining(), icon: <NewIcon /> },
 			] }
 		>
-			<TrainingsTable />
+			<TrainingTable />
 		</IndexPageTemplate>
 	)
 }

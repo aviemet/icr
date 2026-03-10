@@ -14,7 +14,7 @@ export interface TrainingFormProps {
 	training: Schema.TrainingsFormData
 }
 
-const TrainingForm = ({ method = "post", training, ...props }: TrainingFormProps) => {
+export function TrainingForm({ method = "post", training, ...props }: TrainingFormProps) {
 	return (
 		<Form
 			model="training"
@@ -40,5 +40,3 @@ const TrainingForm = ({ method = "post", training, ...props }: TrainingFormProps
 		</Form>
 	)
 }
-
-export default TrainingForm

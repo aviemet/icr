@@ -7,12 +7,12 @@ import { useCheckboxState } from "@/lib/hooks"
 import { tableRows, type JobTitleFormData, type Permissions } from "./formData"
 
 
-interface ColumnToggleProps {
+export interface ColumnToggleProps {
 	permission: keyof Permissions
 }
 
-const ColumnToggle = ({ permission }: ColumnToggleProps) => {
-	const { data, setData, getData } = useForm<JobTitleFormData>()
+export function ColumnToggle({ permission }: ColumnToggleProps) {
+	const { setData, getData } = useForm<JobTitleFormData>()
 	// const checkboxRef = useRef<HTMLInputElement>(null)
 
 	const columnProperties = useCallback(() => {
@@ -25,7 +25,7 @@ const ColumnToggle = ({ permission }: ColumnToggleProps) => {
 			}
 			return { length, selected }
 		}, { length: 0, selected: 0 })
-	}, [])
+	}, [getData, permission])
 
 	const { length, selected } = columnProperties()
 	const { allChecked, indeterminate } = useCheckboxState(length, selected)
@@ -48,5 +48,3 @@ const ColumnToggle = ({ permission }: ColumnToggleProps) => {
 		/>
 	)
 }
-
-export default ColumnToggle

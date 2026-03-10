@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
 import { IndexPageTemplate } from "@/features"
-import ShiftTemplatesTable from "@/features/ShiftTemplates/Table"
+import { ShiftTemplateTable } from "@/features/ShiftTemplates/Table"
 import { Routes } from "@/lib"
 
 interface ShiftTemplateIndexProps {
@@ -20,7 +20,7 @@ const ShiftTemplatesIndex = ({ shift_templates, pagination }: ShiftTemplateIndex
 				{ label: "New Shift Template", href: Routes.newShiftTemplate(), icon: <NewIcon /> },
 			] }
 		>
-			<ShiftTemplatesTable />
+			<ShiftTemplateTable />
 		</IndexPageTemplate>
 	)
 }

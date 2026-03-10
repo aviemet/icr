@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 
 import { Title, Page, Section } from "@/components"
-import EmployeesForm from "@/features/Employees/Form"
+import { EmployeeForm } from "@/features/Employees/Form"
 import { Routes } from "@/lib"
 
 interface EditEmployeeProps {
@@ -21,7 +21,7 @@ const EditEmployee = ({ employee }: EditEmployeeProps) => {
 			<Section>
 				<Title>{ title }</Title>
 
-				<EmployeesForm
+				<EmployeeForm
 					method="put"
 					to={ Routes.employee(employee.slug) }
 					employee={ employee }

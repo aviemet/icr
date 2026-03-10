@@ -1,6 +1,6 @@
 import clsx from "clsx"
 
-import useStickySentinel from "@/lib/hooks/useStickySentinel"
+import { useStickySentinel } from "@/lib/hooks/useStickySentinel"
 
 import * as classes from "../../MonthView.css"
 
@@ -8,7 +8,7 @@ interface DaysHeadingProps {
 	weekdays: string[]
 }
 
-const DaysHeading = ({ weekdays }: DaysHeadingProps) => {
+export const DaysHeading = ({ weekdays }: DaysHeadingProps) => {
 	const [headerRef, isStuck] = useStickySentinel<HTMLDivElement>()
 
 	return (
@@ -24,4 +24,3 @@ const DaysHeading = ({ weekdays }: DaysHeadingProps) => {
 	)
 }
 
-export { DaysHeading }

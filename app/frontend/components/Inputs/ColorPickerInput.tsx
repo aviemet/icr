@@ -4,9 +4,9 @@ import React from "react"
 import { theme, vars } from "@/lib"
 
 import { ColorPickerComponent } from "../ColorPicker"
-import HiddenInput from "./HiddenInput"
-import InputWrapper from "./InputWrapper"
-import Label from "./Label"
+import { HiddenInput } from "./HiddenInput"
+import { InputWrapper } from "./InputWrapper"
+import { Label } from "./Label"
 
 import { type BaseInputProps } from "."
 
@@ -22,7 +22,7 @@ export interface ColorPickerInputProps extends Omit<BaseInputProps, "disableAuto
 	children?: React.ReactNode
 }
 
-const ColorPickerInput = ({
+export function ColorPickerInput({
 	label,
 	id,
 	name,
@@ -36,7 +36,7 @@ const ColorPickerInput = ({
 	children,
 	ref,
 	...props
-}: ColorPickerInputProps) => {
+}: ColorPickerInputProps) {
 	const inputId = id || name
 
 	return (
@@ -75,5 +75,3 @@ const ColorPickerInput = ({
 		</InputWrapper>
 	)
 }
-
-export default ColorPickerInput

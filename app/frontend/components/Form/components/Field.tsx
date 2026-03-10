@@ -13,7 +13,7 @@ export interface FieldProps extends BoxProps {
 	inline?: boolean
 }
 
-const Field = ({
+export function Field({
 	children,
 	type,
 	required = false,
@@ -21,7 +21,7 @@ const Field = ({
 	className,
 	inline = false,
 	...props
-}: FieldProps) => {
+}: FieldProps) {
 	return (
 		<Box
 			className={ clsx(
@@ -38,5 +38,3 @@ const Field = ({
 		</Box>
 	)
 }
-
-export default Field

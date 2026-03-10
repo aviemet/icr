@@ -9,7 +9,7 @@ interface ToggleColorSchemeButtonProps
 	rightSection?: React.ReactNode
 }
 
-const ToggleColorSchemeButton = ({ leftSection, rightSection, ...props }: ToggleColorSchemeButtonProps) => {
+export function ToggleColorSchemeButton({ leftSection, rightSection, ...props }: ToggleColorSchemeButtonProps) {
 	const { colorScheme, toggleColorScheme } = useMantineColorScheme()
 
 	const iconProps = { size: 18 }
@@ -30,5 +30,3 @@ const ToggleColorSchemeButton = ({ leftSection, rightSection, ...props }: Toggle
 		</ActionIcon>
 	)
 }
-
-export default ToggleColorSchemeButton

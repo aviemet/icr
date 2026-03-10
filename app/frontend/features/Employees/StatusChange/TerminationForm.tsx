@@ -2,11 +2,11 @@ import { Grid } from "@/components"
 import { Form, Textarea, Submit, DateInput } from "@/components/Form"
 import { Routes } from "@/lib"
 
-interface TerminationFormProps {
+export interface TerminationFormProps {
 	employee: Schema.EmployeesShow
 }
 
-const TerminationForm = ({ employee }: TerminationFormProps) => {
+export function TerminationForm({ employee }: TerminationFormProps) {
 	return (
 		<Form
 			model="employee"
@@ -46,5 +46,3 @@ const TerminationForm = ({ employee }: TerminationFormProps) => {
 		</Form>
 	)
 }
-
-export default TerminationForm

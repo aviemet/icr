@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 
-const useInit = (cb: Function) => {
+export function useInit(cb: Function) {
 	useEffect(() => {
 		cb()
 		// Really quite stupid that I have to do something hacky like this. I get the arguments,
@@ -11,5 +11,3 @@ const useInit = (cb: Function) => {
 		// eslint-disable-next-line
 	}, [])
 }
-
-export default useInit

@@ -6,7 +6,7 @@ import { type SharedInertiaProps } from "@/lib/hooks/usePageProps"
 
 const shownMessageIds = new Set<string>()
 
-const Flash = () => {
+export function Flash() {
 	const { flash } = usePage<SharedInertiaProps>().props
 
 	useEffect(() => {
@@ -42,5 +42,3 @@ const Flash = () => {
 
 	return <></>
 }
-
-export default Flash

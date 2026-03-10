@@ -14,7 +14,7 @@ export interface TimesheetFormProps {
 	timesheet: Schema.TimesheetsFormData
 }
 
-const TimesheetForm = ({ method = "post", timesheet, ...props }: TimesheetFormProps) => {
+export function TimesheetForm({ method = "post", timesheet, ...props }: TimesheetFormProps) {
 	return (
 		<Form
 			model="timesheet"
@@ -31,5 +31,3 @@ const TimesheetForm = ({ method = "post", timesheet, ...props }: TimesheetFormPr
 		</Form>
 	)
 }
-
-export default TimesheetForm

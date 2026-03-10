@@ -6,15 +6,15 @@ import { useGetCurrencies } from "@/queries/locale"
 
 import { type FormAsyncDropdown } from ".."
 
-interface FormCurrenciesDropdownProps extends Omit<FormAsyncDropdown<Schema.CurrencyOption>, "name"> {
+export interface FormCurrenciesDropdownProps extends Omit<FormAsyncDropdown<Schema.CurrencyOption>, "name"> {
 	name?: string
 }
 
-const FormCurrenciesDropdown = ({
+export function FormCurrenciesDropdown({
 	label = "Currency",
 	name = "currency",
 	...props
-}: FormCurrenciesDropdownProps) => {
+}: FormCurrenciesDropdownProps) {
 	const { data, refetch } = useGetCurrencies({
 		staleTime: Infinity,
 	})
@@ -37,7 +37,4 @@ const FormCurrenciesDropdown = ({
 			{ ...props }
 		/>
 	)
-
 }
-
-export default FormCurrenciesDropdown

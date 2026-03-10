@@ -1,5 +1,4 @@
-import { Group } from "@mantine/core"
-
+import { Box, Group } from "@/components"
 import { type Money } from "@/types"
 
 interface FlexCurrencyFormatterProps {
@@ -28,17 +27,14 @@ const getParts = (formatter: Intl.NumberFormat, value: number | Money | null) =>
 	}
 }
 
-const FlexCurrencyFormatter = ({ children, formatter, accounting }: FlexCurrencyFormatterProps) => {
+export function FlexCurrencyFormatter({ children, formatter, accounting }: FlexCurrencyFormatterProps) {
 	const { symbol, value, formattedValue } = getParts(formatter, children)
 
 	return (
 		<Group wrap="nowrap" justify="space-between">
-			<div>{ symbol }</div>
-			<div>{ value < 0 && accounting ? `(${formattedValue})` : formattedValue }</div>
-			{ formattedValue === "-" && <div></div> }
+			<Box>{ symbol }</Box>
+			<Box>{ value < 0 && accounting ? `(${formattedValue})` : formattedValue }</Box>
+			{ formattedValue === "-" && <Box></Box> }
 		</Group>
 	)
 }
-
-
-export default FlexCurrencyFormatter

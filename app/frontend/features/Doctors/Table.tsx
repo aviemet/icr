@@ -3,7 +3,7 @@ import { EditButton } from "@/components/Button"
 import { type TableProps } from "@/components/Table/Table"
 import { Routes } from "@/lib"
 
-const DoctorTable = (props: TableProps) => {
+export function DoctorTable(props: TableProps) {
 	return (
 		<Table { ...props }>
 			<Table.Head>
@@ -35,5 +35,3 @@ const DoctorTable = (props: TableProps) => {
 		</Table>
 	)
 }
-
-export default DoctorTable

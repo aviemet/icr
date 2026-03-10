@@ -2,15 +2,15 @@ import clsx from "clsx"
 import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
-import RichTextInput, { type RichTextInputProps } from "@/components/Inputs/RichText"
+import { RichText as BaseRichText, type RichTextInputProps } from "@/components/Inputs/RichText"
 
 import { FieldProps } from "../components/Field"
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
 
 
-interface FormRichTextInputProps<TForm extends NestedObject = NestedObject>
+export interface FormRichTextInputProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<RichTextInputProps, InputConflicts>,
 	BaseFormInputProps<string, TForm> {
@@ -18,7 +18,7 @@ interface FormRichTextInputProps<TForm extends NestedObject = NestedObject>
 	wrapperProps?: Omit<FieldProps, "children">
 }
 
-function RichText<TForm extends NestedObject = NestedObject>({
+export function RichText<TForm extends NestedObject = NestedObject>({
 	label,
 	name,
 	required = false,
@@ -63,7 +63,7 @@ function RichText<TForm extends NestedObject = NestedObject>({
 			{ label && <label className={ clsx({ required }) } htmlFor={ id || inputId }>
 				{ label }
 			</label> }
-			<RichTextInput
+			<BaseRichText
 				ref={ ref }
 				id={ id }
 				name={ inputName }
@@ -77,5 +77,3 @@ function RichText<TForm extends NestedObject = NestedObject>({
 		</InputWrapper>
 	)
 }
-
-export default RichText

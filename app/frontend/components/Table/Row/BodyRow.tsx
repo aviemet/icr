@@ -3,13 +3,13 @@ import React, { useCallback } from "react"
 
 import { usePageProps } from "@/lib/hooks"
 
-import RowCheckbox from "./RowCheckbox"
+import { RowCheckbox } from "./RowCheckbox"
 import { useTableContext } from "../TableContext"
 
 import { type TableRow } from "./index"
 
 
-interface RowInContextProps extends TableRow {
+interface BodyRowProps extends TableRow {
 	ref?: React.Ref<HTMLTableRowElement>
 	name?: string
 	rows?: Record<string, any>[]
@@ -17,7 +17,7 @@ interface RowInContextProps extends TableRow {
 	selected: Set<string>
 }
 
-const RowInContext = ({ children, name, rows, selectable, selected, ref, ...props }: RowInContextProps) => {
+export function BodyRow({ children, name, rows, selectable, selected, ref, ...props }: BodyRowProps) {
 	const { auth: { user: { table_preferences } } } = usePageProps()
 	const { tableState: { model, columns } } = useTableContext()
 
@@ -55,5 +55,3 @@ const RowInContext = ({ children, name, rows, selectable, selected, ref, ...prop
 		</Table.Tr>
 	)
 }
-
-export default RowInContext

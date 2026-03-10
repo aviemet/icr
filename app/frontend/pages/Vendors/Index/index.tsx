@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
 import { IndexPageTemplate } from "@/features"
-import VendorsTable from "@/features/Vendors/Table"
+import { VendorTable } from "@/features/Vendors/Table"
 import { Routes } from "@/lib"
 
 interface VendorIndexProps {
@@ -20,7 +20,7 @@ const VendorsIndex = ({ vendors, pagination }: VendorIndexProps) => {
 				{ label: "New Vendor", href: Routes.newVendor(), icon: <NewIcon /> },
 			] }
 		>
-			<VendorsTable />
+			<VendorTable />
 		</IndexPageTemplate>
 	)
 }

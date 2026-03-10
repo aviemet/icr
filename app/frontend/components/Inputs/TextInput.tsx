@@ -1,8 +1,11 @@
-import { TextInput, type TextInputProps as MantineTextInputProps } from "@mantine/core"
+import {
+	TextInput as MantineTextInput,
+	type TextInputProps as MantineTextInputProps,
+} from "@mantine/core"
 import React from "react"
 
-import InputWrapper from "./InputWrapper"
-import Label from "./Label"
+import { InputWrapper } from "./InputWrapper"
+import { Label } from "./Label"
 import { CrossIcon } from "../Icons"
 
 import { withInjectedProps, type BaseInputProps } from "."
@@ -12,7 +15,7 @@ export interface TextInputProps extends MantineTextInputProps, BaseInputProps {
 	clearable?: boolean
 }
 
-const TextInputComponent = ({
+export function TextInput({
 	name,
 	label,
 	required = false,
@@ -26,7 +29,7 @@ const TextInputComponent = ({
 	disableAutofill = true,
 	ref,
 	...props
-}: TextInputProps) => {
+}: TextInputProps) {
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		onChange?.(e)
 	}
@@ -47,7 +50,7 @@ const TextInputComponent = ({
 			{ label && <Label required={ required } htmlFor={ inputId }>
 				{ label }
 			</Label> }
-			<TextInput
+			<MantineTextInput
 				ref={ ref }
 				name={ name }
 				id={ inputId }
@@ -62,5 +65,3 @@ const TextInputComponent = ({
 		</InputWrapper>
 	)
 }
-
-export default TextInputComponent

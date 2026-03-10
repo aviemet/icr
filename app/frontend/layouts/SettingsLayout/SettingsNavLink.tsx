@@ -4,16 +4,16 @@ import React from "react"
 import { Link } from "@/components"
 import { type LinkProps } from "@/components/Link"
 
-interface SettingsNavLinkProps extends LinkProps {
+export interface SettingsNavLinkProps extends LinkProps {
 	ref?: React.Ref<HTMLAnchorElement>
 }
 
-const SettingsNavLink = ({
+export function SettingsNavLink({
 	children,
 	underline = "never",
 	ref,
 	...props
-}: SettingsNavLinkProps) => {
+}: SettingsNavLinkProps) {
 	return <Link
 		ref={ ref }
 		underline={ underline }
@@ -22,5 +22,3 @@ const SettingsNavLink = ({
 		<span className={ clsx("controlLabel") }>{ children }</span>
 	</Link>
 }
-
-export default SettingsNavLink

@@ -4,9 +4,9 @@ import React from "react"
 
 import { isUnset } from "@/lib"
 
-import Label from "./Label"
+import { Label } from "./Label"
 import { CalendarIcon } from "../Icons"
-import InputWrapper from "./InputWrapper"
+import { InputWrapper } from "./InputWrapper"
 
 import { type BaseInputProps } from "."
 
@@ -22,7 +22,7 @@ export interface DateTimeProps
 	error?: string | string[]
 }
 
-const DateTime = ({
+export function DateTimeInput({
 	label,
 	id,
 	name,
@@ -34,7 +34,7 @@ const DateTime = ({
 	wrapperProps,
 	ref,
 	...props
-}: DateTimeProps) => {
+}: DateTimeProps) {
 	const inputId = id || name
 
 	return (
@@ -61,5 +61,3 @@ const DateTime = ({
 		</InputWrapper>
 	)
 }
-
-export default DateTime

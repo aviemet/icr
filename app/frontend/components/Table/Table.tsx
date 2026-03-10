@@ -1,18 +1,21 @@
-import { Table, type TableProps as MantineTableProps } from "@mantine/core"
+import {
+	Table as MantineTable,
+	type TableProps as MantineTableProps,
+} from "@mantine/core"
 import clsx from "clsx"
 
-import Body from "./Body"
-import Footer from "./Footer"
-import Head from "./Head"
-import Pagination from "./Pagination"
-import Row from "./Row"
-import RowIterator from "./RowIterator"
-import SearchInput from "./SearchInput"
-import TableSection from "./Section"
-import TableProvider, { useTableContext } from "./TableContext"
-import Cell from "./Td"
-import HeadCell from "./Th"
-import ConditionalWrapper from "../ConditionalWrapper"
+import { Body } from "./Body"
+import { Footer } from "./Footer"
+import { Head } from "./Head"
+import { Pagination } from "./Pagination"
+import { Row } from "./Row"
+import { RowIterator } from "./RowIterator"
+import { SearchInput } from "./SearchInput"
+import { TableSection } from "./Section"
+import { TableProvider, useTableContext } from "./TableContext"
+import { Td as Cell } from "./Td"
+import { HeadCell } from "./Th"
+import { ConditionalWrapper } from "../ConditionalWrapper"
 import * as classes from "./Table.css"
 
 export interface TableProps extends MantineTableProps {
@@ -20,7 +23,7 @@ export interface TableProps extends MantineTableProps {
 	wrapper?: boolean
 }
 
-type TableComponent = ((props: TableProps) => JSX.Element)
+type Table = ((props: TableProps) => JSX.Element)
 
 type TableObjects = {
 	Head: typeof Head
@@ -36,9 +39,9 @@ type TableObjects = {
 	SearchInput: typeof SearchInput
 }
 
-export type TableObject = TableComponent & TableObjects
+export type TableObject = Table & TableObjects
 
-const TableComponent: TableObject = ({
+const Table: TableObject = ({
 	children,
 	className,
 	wrapper = true,
@@ -59,7 +62,7 @@ const TableComponent: TableObject = ({
 				condition={ tableState === null }
 				wrapper={ children => <TableProvider>{ children }</TableProvider> }
 			>
-				<Table
+				<MantineTable
 					striped={ striped }
 					highlightOnHover={ highlightOnHover }
 					className={ clsx(className, classes.table) }
@@ -67,22 +70,22 @@ const TableComponent: TableObject = ({
 					{ ...props }
 				>
 					{ children }
-				</Table>
+				</MantineTable>
 			</ConditionalWrapper>
 		</ConditionalWrapper>
 	)
 }
 
-TableComponent.TableProvider = TableProvider
-TableComponent.Section = TableSection
-TableComponent.SearchInput = SearchInput
-TableComponent.Head = Head
-TableComponent.HeadCell = HeadCell
-TableComponent.Body = Body
-TableComponent.Cell = Cell
-TableComponent.Row = Row
-TableComponent.RowIterator = RowIterator
-TableComponent.Footer = Footer
-TableComponent.Pagination = Pagination
+Table.TableProvider = TableProvider
+Table.Section = TableSection
+Table.SearchInput = SearchInput
+Table.Head = Head
+Table.HeadCell = HeadCell
+Table.Body = Body
+Table.Cell = Cell
+Table.Row = Row
+Table.RowIterator = RowIterator
+Table.Footer = Footer
+Table.Pagination = Pagination
 
-export default TableComponent
+export { Table }

@@ -7,7 +7,7 @@ import { CSSProperties, PropsWithChildren, useCallback } from "react"
 import { EventResources, BaseCalendarEvent } from "@/components/Calendar"
 import { GridDisplayProperties } from "@/components/Calendar/lib/displayStrategies"
 import { vars } from "@/lib"
-import useStore from "@/lib/store"
+import { useStore } from "@/lib/store"
 
 import * as classes from "./Event.css"
 

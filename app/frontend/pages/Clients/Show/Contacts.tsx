@@ -6,9 +6,8 @@ import {
 	Text,
 	Group,
 	Section,
-	AddressFormatter,
 } from "@/components"
-import { PhoneFormatter, EmailFormatter } from "@/components/Formatters"
+import { AddressFormatter, PhoneFormatter, EmailFormatter } from "@/components/Formatters"
 
 import { type ShowClientProps } from "."
 

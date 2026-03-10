@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import ShiftTemplateForm from "@/features/ShiftTemplates/Form"
+import { ShiftTemplateForm } from "@/features/ShiftTemplates/Form"
 import { Routes } from "@/lib"
 
 interface NewShiftTemplateProps {

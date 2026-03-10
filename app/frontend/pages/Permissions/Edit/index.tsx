@@ -1,7 +1,6 @@
 import { Title, Page, Section } from "@/components"
+import { PermissionForm } from "@/features/Permissions/Form"
 import { Routes } from "@/lib"
-
-import PermissionsForm from "../Form"
 
 
 interface EditPermissionProps {
@@ -20,7 +19,7 @@ const EditPermission = ({ permission }: EditPermissionProps) => {
 			<Section>
 				<Title>{ title }</Title>
 
-				<PermissionsForm
+				<PermissionForm
 					method="put"
 					to={ Routes.permission() }
 					permission={ permission }

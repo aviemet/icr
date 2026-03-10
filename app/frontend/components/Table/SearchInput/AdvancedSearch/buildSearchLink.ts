@@ -9,7 +9,7 @@ import { type InputParam } from "./useAdvancedSearch"
  * @param values Map of all current search values
  * @returns Link to same page with URL params to use for advanced search
  */
-function buildSearchLink(
+export function buildSearchLink(
 	inputParams: readonly InputParam[],
 	values: NestedURLSearchParams,
 ) {
@@ -54,5 +54,3 @@ function buildSearchLink(
 		return localValues.toString()
 	}
 }
-
-export default buildSearchLink

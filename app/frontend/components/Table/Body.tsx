@@ -7,7 +7,7 @@ interface TableBody extends TableTbodyProps {
 	ref?: React.Ref<HTMLTableSectionElement>
 }
 
-const Body = ({ children, ref, ...props }: TableBody) => {
+export function Body({ children, ref, ...props }: TableBody) {
 	const tableState = useTableContext(false)
 
 	if(tableState === null) {
@@ -31,5 +31,3 @@ const Body = ({ children, ref, ...props }: TableBody) => {
 		</TableSectionContextProvider>
 	)
 }
-
-export default Body

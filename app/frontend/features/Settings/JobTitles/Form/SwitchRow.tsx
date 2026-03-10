@@ -8,14 +8,14 @@ import { useCheckboxState } from "@/lib/hooks"
 
 import { type JobTitleFormData } from "./formData"
 
-interface SwitchRowProps {
+export interface SwitchRowProps {
 	label: string
 	model: string
 	permissions: string[]
 }
 
-const SwitchRow = ({ label, model, permissions }: SwitchRowProps) => {
-	const { data, setData, getData } = useForm<JobTitleFormData>()
+export function SwitchRow({ label, model, permissions }: SwitchRowProps) {
+	const { setData, getData } = useForm<JobTitleFormData>()
 
 	const isCompanyAdmin = false
 
@@ -27,7 +27,7 @@ const SwitchRow = ({ label, model, permissions }: SwitchRowProps) => {
 			}
 			return { length, selected }
 		}, { length: 0, selected: 0 })
-	}, [])
+	}, [getData, model, permissions])
 
 	const { length, selected } = columnProperties()
 	const { allChecked, indeterminate } = useCheckboxState(length, selected)
@@ -36,7 +36,7 @@ const SwitchRow = ({ label, model, permissions }: SwitchRowProps) => {
 		permissions.forEach(permission => {
 			setData(`${model}.${permission}`, checked)
 		})
-	}, [])
+	}, [permissions, setData])
 
 	let checked = {}
 
@@ -66,7 +66,5 @@ const SwitchRow = ({ label, model, permissions }: SwitchRowProps) => {
 		</NestedFields>
 	)
 }
-
-export default SwitchRow
 
 

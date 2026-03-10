@@ -9,14 +9,14 @@ import { type AsyncDropdown } from ".."
 
 type CategoryValueKey = "id" | "slug"
 
-interface CategoriesDropdownInputProps extends Omit<AsyncDropdown<Schema.CategoriesOptions>, "name"> {
+export interface CategoriesDropdownInputProps extends Omit<AsyncDropdown<Schema.CategoriesOptions>, "name"> {
 	name?: string
 	categoryType: CategoryType
 	valueKey?: CategoryValueKey
 	defaultValue?: string
 }
 
-const CategoriesDropdownInput = ({
+export function CategoriesDropdownInput({
 	label = "Category",
 	name = "category_id",
 	categoryType,
@@ -24,7 +24,7 @@ const CategoriesDropdownInput = ({
 	initialData,
 	defaultValue,
 	...props
-}: CategoriesDropdownInputProps) => {
+}: CategoriesDropdownInputProps) {
 	const { data, isStale, refetch } = useGetCategoriesAsOptions(
 		{ categoryType },
 		{ initialData },
@@ -60,5 +60,3 @@ const CategoriesDropdownInput = ({
 		/>
 	)
 }
-
-export default CategoriesDropdownInput

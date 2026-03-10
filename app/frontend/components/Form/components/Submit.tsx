@@ -10,13 +10,13 @@ interface SubmitButtonProps extends ButtonProps {
 	requiredFields?: string[]
 }
 
-const Submit = ({
+export function Submit({
 	children,
 	cancelRoute,
 	style,
 	ref,
 	...props
-}: SubmitButtonProps) => {
+}: SubmitButtonProps) {
 	return (
 		<Flex gap="md" className="submit">
 			<Button
@@ -33,5 +33,3 @@ const Submit = ({
 		</Flex>
 	)
 }
-
-export default Submit

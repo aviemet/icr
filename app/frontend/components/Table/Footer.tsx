@@ -7,7 +7,7 @@ interface TableFooterProps extends TableTfootProps {
 	ref?: React.Ref<HTMLTableSectionElement>
 }
 
-const Footer = ({ children, ref, ...props }: TableFooterProps) => {
+export function Footer({ children, ref, ...props }: TableFooterProps) {
 	return (
 		<TableSectionContextProvider value={ { section: "footer" } }>
 			<Table.Tfoot { ...props } ref={ ref }>
@@ -16,5 +16,3 @@ const Footer = ({ children, ref, ...props }: TableFooterProps) => {
 		</TableSectionContextProvider>
 	)
 }
-
-export default Footer

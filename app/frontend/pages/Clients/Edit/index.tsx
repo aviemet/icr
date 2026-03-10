@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 
 import { Title, Page, Section } from "@/components"
-import ClientsForm from "@/features/Clients/Form"
+import { ClientForm } from "@/features/Clients/Form"
 import { Routes } from "@/lib"
 
 interface EditClientProps {
@@ -21,7 +21,7 @@ const EditClient = ({ client }: EditClientProps) => {
 			<Section>
 				<Title>{ title }</Title>
 
-				<ClientsForm
+				<ClientForm
 					method="put"
 					to={ Routes.client(client.slug) }
 					client={ client }

@@ -4,12 +4,12 @@ import { Box, Center, Paper, Group } from "@/components"
 
 import * as classes from "./AuthPaperLayout.css"
 
-interface AuthPaperLayoutProps {
+export interface AuthPaperLayoutProps {
 	children: React.ReactNode
 	bottomLinks?: React.ReactNode[]
 }
 
-const AuthPaperLayout = ({ children, bottomLinks }: AuthPaperLayoutProps) => {
+export function AuthPaperLayout({ children, bottomLinks }: AuthPaperLayoutProps) {
 	return (
 
 		<Center p="lg" className={ clsx(classes.loginWrapper) }>
@@ -32,5 +32,3 @@ const AuthPaperLayout = ({ children, bottomLinks }: AuthPaperLayoutProps) => {
 		</Center>
 	)
 }
-
-export default AuthPaperLayout

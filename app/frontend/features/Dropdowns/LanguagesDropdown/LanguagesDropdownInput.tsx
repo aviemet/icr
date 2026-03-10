@@ -6,16 +6,16 @@ import { useGetLanguages } from "@/queries/locale"
 
 import { type AsyncDropdown } from ".."
 
-interface LanguagesDropdownProps extends AsyncDropdown<Schema.LanguageOption> {
+export interface LanguagesDropdownProps extends AsyncDropdown<Schema.LanguageOption> {
 	ref?: React.Ref<HTMLInputElement>
 }
 
-const LanguagesDropdown = ({
+export function LanguagesDropdown({
 	label = "Language",
 	name = "language",
 	ref,
 	...props
-}: LanguagesDropdownProps) => {
+}: LanguagesDropdownProps) {
 	const { data, refetch } = useGetLanguages({
 		staleTime: Infinity,
 	})
@@ -38,5 +38,3 @@ const LanguagesDropdown = ({
 		{ ...props }
 	/>
 }
-
-export default LanguagesDropdown

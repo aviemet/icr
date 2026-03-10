@@ -2,7 +2,7 @@ import clsx from "clsx"
 import { useMemo } from "react"
 
 import { useCalendarContext, EventResources } from "@/components/Calendar"
-import TimeGrid from "@/components/Calendar/components/TimeGrid"
+import { TimeGrid } from "@/components/Calendar/components/TimeGrid"
 import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS } from "@/components/Calendar/views"
 
 import * as classes from "./WeekView.css"

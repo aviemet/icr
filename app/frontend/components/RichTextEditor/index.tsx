@@ -1,4 +1,4 @@
-import { RichTextEditor, Link, type RichTextEditorProps as MantineRichTextEditorProps } from "@mantine/tiptap"
+import { RichTextEditor as MantineRTE, Link, type RichTextEditorProps as MantineRTEProps } from "@mantine/tiptap"
 import Highlight from "@tiptap/extension-highlight"
 import SubScript from "@tiptap/extension-subscript"
 import Superscript from "@tiptap/extension-superscript"
@@ -11,13 +11,13 @@ import React from "react"
 
 import { DEFAULT_LABELS } from "./tiptapLabels"
 
-export interface RichTextEditorProps extends Omit<MantineRichTextEditorProps, "children" | "editor" | "onChange"> {
+export interface RichTextEditorProps extends Omit<MantineRTEProps, "children" | "editor" | "onChange"> {
 	ref?: React.Ref<HTMLDivElement>
 	children?: string
 	onChange?: (value: string) => void
 }
 
-const RichTextEditorComponent = ({ children, onChange, ref }: RichTextEditorProps) => {
+export function RichTextEditor({ children, onChange, ref }: RichTextEditorProps) {
 	const editor = useEditor({
 		extensions: [
 			StarterKit,
@@ -35,73 +35,71 @@ const RichTextEditorComponent = ({ children, onChange, ref }: RichTextEditorProp
 	})
 
 	return (
-		<RichTextEditor
+		<MantineRTE
 			ref={ ref }
 			editor={ editor }
 			labels={ DEFAULT_LABELS }
 		>
-			<RichTextEditor.Toolbar sticky stickyOffset={ 60 }>
-				<RichTextEditor.ControlsGroup>
-					<RichTextEditor.Bold />
-					<RichTextEditor.Italic />
-					<RichTextEditor.Underline />
-					<RichTextEditor.Strikethrough />
-					<RichTextEditor.ClearFormatting />
-					<RichTextEditor.Highlight />
-					<RichTextEditor.Code />
-				</RichTextEditor.ControlsGroup>
+			<MantineRTE.Toolbar sticky stickyOffset={ 60 }>
+				<MantineRTE.ControlsGroup>
+					<MantineRTE.Bold />
+					<MantineRTE.Italic />
+					<MantineRTE.Underline />
+					<MantineRTE.Strikethrough />
+					<MantineRTE.ClearFormatting />
+					<MantineRTE.Highlight />
+					<MantineRTE.Code />
+				</MantineRTE.ControlsGroup>
 
-				<RichTextEditor.ControlsGroup>
-					<RichTextEditor.H1 />
-					<RichTextEditor.H2 />
-					<RichTextEditor.H3 />
-					<RichTextEditor.H4 />
-				</RichTextEditor.ControlsGroup>
+				<MantineRTE.ControlsGroup>
+					<MantineRTE.H1 />
+					<MantineRTE.H2 />
+					<MantineRTE.H3 />
+					<MantineRTE.H4 />
+				</MantineRTE.ControlsGroup>
 
-				<RichTextEditor.ControlsGroup>
-					<RichTextEditor.Blockquote />
-					<RichTextEditor.Hr />
-					<RichTextEditor.BulletList />
-					<RichTextEditor.OrderedList />
-					<RichTextEditor.Subscript />
-					<RichTextEditor.Superscript />
-				</RichTextEditor.ControlsGroup>
+				<MantineRTE.ControlsGroup>
+					<MantineRTE.Blockquote />
+					<MantineRTE.Hr />
+					<MantineRTE.BulletList />
+					<MantineRTE.OrderedList />
+					<MantineRTE.Subscript />
+					<MantineRTE.Superscript />
+				</MantineRTE.ControlsGroup>
 
-				<RichTextEditor.ControlsGroup>
-					<RichTextEditor.Link />
-					<RichTextEditor.Unlink />
-				</RichTextEditor.ControlsGroup>
+				<MantineRTE.ControlsGroup>
+					<MantineRTE.Link />
+					<MantineRTE.Unlink />
+				</MantineRTE.ControlsGroup>
 
-				<RichTextEditor.ControlsGroup>
-					<RichTextEditor.AlignLeft />
-					<RichTextEditor.AlignCenter />
-					<RichTextEditor.AlignJustify />
-					<RichTextEditor.AlignRight />
-				</RichTextEditor.ControlsGroup>
-			</RichTextEditor.Toolbar>
+				<MantineRTE.ControlsGroup>
+					<MantineRTE.AlignLeft />
+					<MantineRTE.AlignCenter />
+					<MantineRTE.AlignJustify />
+					<MantineRTE.AlignRight />
+				</MantineRTE.ControlsGroup>
+			</MantineRTE.Toolbar>
 
 			{ editor && (
 				<BubbleMenu editor={ editor }>
-					<RichTextEditor.ControlsGroup>
-						<RichTextEditor.Bold />
-						<RichTextEditor.Italic />
-						<RichTextEditor.Link />
-					</RichTextEditor.ControlsGroup>
+					<MantineRTE.ControlsGroup>
+						<MantineRTE.Bold />
+						<MantineRTE.Italic />
+						<MantineRTE.Link />
+					</MantineRTE.ControlsGroup>
 				</BubbleMenu>
 			) }
 
 			{ editor && (
 				<FloatingMenu editor={ editor }>
-					<RichTextEditor.ControlsGroup>
-						<RichTextEditor.H1 />
-						<RichTextEditor.H2 />
-						<RichTextEditor.BulletList />
-					</RichTextEditor.ControlsGroup>
+					<MantineRTE.ControlsGroup>
+						<MantineRTE.H1 />
+						<MantineRTE.H2 />
+						<MantineRTE.BulletList />
+					</MantineRTE.ControlsGroup>
 				</FloatingMenu>
 			) }
-			<RichTextEditor.Content />
-		</RichTextEditor>
+			<MantineRTE.Content />
+		</MantineRTE>
 	)
 }
-
-export default RichTextEditorComponent

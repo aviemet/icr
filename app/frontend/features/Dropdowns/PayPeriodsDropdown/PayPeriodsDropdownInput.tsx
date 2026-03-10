@@ -6,16 +6,16 @@ import { useGetPayPeriodTypes } from "@/queries/locale"
 
 import { type AsyncDropdown } from ".."
 
-interface PayPeriodsDropdownProps extends AsyncDropdown<Schema.PayPeriodOption> {
+export interface PayPeriodsDropdownProps extends AsyncDropdown<Schema.PayPeriodOption> {
 	ref?: React.Ref<HTMLInputElement>
 }
 
-const PayPeriodsDropdown = ({
+export function PayPeriodsDropdown({
 	label = "PayPeriod",
 	name = "payPeriod",
 	ref,
 	...props
-}: PayPeriodsDropdownProps) => {
+}: PayPeriodsDropdownProps) {
 	const { data, refetch } = useGetPayPeriodTypes({
 		staleTime: Infinity,
 	})
@@ -38,5 +38,3 @@ const PayPeriodsDropdown = ({
 		{ ...props }
 	/>
 }
-
-export default PayPeriodsDropdown

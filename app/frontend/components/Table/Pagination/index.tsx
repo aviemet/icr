@@ -1,10 +1,14 @@
-import { Group, Pagination, type PaginationProps } from "@mantine/core"
+import {
+	Group,
+	Pagination as MantinePagination,
+	type PaginationProps as MantinePaginationProps,
+} from "@mantine/core"
 import clsx from "clsx"
 
 import { Link } from "@/components"
 
 import { useTableContext } from "../TableContext"
-import LimitSelect from "./LimitSelect"
+import { LimitSelect } from "./LimitSelect"
 import * as classes from "../Table.css"
 
 const pageLink = (page: number) => {
@@ -19,14 +23,14 @@ const pageLink = (page: number) => {
 	return `${url.pathname}${url.search}`
 }
 
-interface PaginationComponent extends Omit<PaginationProps, "total"> {}
+interface PaginationProps extends Omit<MantinePaginationProps, "total"> {}
 
-const PaginationComponent = ({
+export function Pagination({
 	boundaries = 2,
 	siblings = 2,
 	className,
 	...props
-}: PaginationComponent) => {
+}: PaginationProps) {
 	const { tableState: { pagination, model } } = useTableContext()
 
 	if(!pagination) return <></>
@@ -49,7 +53,7 @@ const PaginationComponent = ({
 				Showing <b> { recordStart } - { recordEnd } / { count } </b>
 			</div>
 
-			<Pagination.Root
+			<MantinePagination.Root
 				className={ clsx(className, classes.pagination) }
 				total={ pages }
 				getItemProps={ (page) => ({
@@ -63,36 +67,34 @@ const PaginationComponent = ({
 					style={ { "a:hover": {
 						textDecoration: "none",
 					} } }>
-					<Pagination.First
+					<MantinePagination.First
 						component={ Link }
 						href={ pageLink(1) }
 						disabled={ current_page === 1 }
 					/>
 
-					<Pagination.Previous
+					<MantinePagination.Previous
 						component={ Link }
 						href={ pageLink(prev_page) }
 						disabled={ prev_page === null }
 					/>
 
-					<Pagination.Items />
+					<MantinePagination.Items />
 
-					<Pagination.Next
+					<MantinePagination.Next
 						component={ Link }
 						href={ pageLink(next_page) }
 						disabled={ next_page === null }
 					/>
 
-					<Pagination.Last
+					<MantinePagination.Last
 						component={ Link }
 						href={ pageLink(pages) }
 						disabled={ current_page === pages }
 					/>
 
 				</Group>
-			</Pagination.Root>
+			</MantinePagination.Root>
 		</Group>
 	)
 }
-
-export default PaginationComponent

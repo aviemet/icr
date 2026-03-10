@@ -1,11 +1,11 @@
 import { Flash } from "@/components"
-import SpotlightComponent from "@/features/Spotlight"
-import Providers from "@/layouts/Providers"
+import { SpotlightComponent } from "@/features/Spotlight"
+import { Providers } from "@/layouts/Providers"
 
-import BareAppLayout from "./AppLayout"
-import BareAuthLayout from "./AuthLayout"
-import BarePublicLayout from "./PublicLayout"
-import BareSettingsLayout from "./SettingsLayout"
+import { AppLayout as BareAppLayout } from "./AppLayout"
+import { AuthLayout as BareAuthLayout } from "./AuthLayout"
+import { PublicLayout as BarePublicLayout } from "./PublicLayout"
+import { SettingsLayout as BareSettingsLayout } from "./SettingsLayout"
 
 import "@/lib/i18n"
 

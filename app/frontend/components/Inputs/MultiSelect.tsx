@@ -1,11 +1,15 @@
 import { router } from "@inertiajs/react"
-import { MultiSelect, type ComboboxData, type MultiSelectProps as MantineMultiSelectInputProps } from "@mantine/core"
+import {
+	MultiSelect as MantineMultiSelect,
+	type ComboboxData,
+	type MultiSelectProps as MantineMultiSelectInputProps,
+} from "@mantine/core"
 import React from "react"
 
 import { coerceArray } from "@/lib"
 
-import InputWrapper from "./InputWrapper"
-import Label from "./Label"
+import { InputWrapper } from "./InputWrapper"
+import { Label } from "./Label"
 
 import { withInjectedProps, type BaseInputProps } from "."
 
@@ -15,7 +19,7 @@ export interface MultiSelectInputProps extends Omit<MantineMultiSelectInputProps
 	fetchOnOpen?: string
 }
 
-const MultiSelectComponent = ({
+export function MultiSelect({
 	options = [],
 	label,
 	required,
@@ -29,7 +33,7 @@ const MultiSelectComponent = ({
 	disableAutofill = true,
 	ref,
 	...props
-}: MultiSelectInputProps) => {
+}: MultiSelectInputProps) {
 	const inputId = id || name
 
 	const handleDropdownOpen = () => {
@@ -45,7 +49,7 @@ const MultiSelectComponent = ({
 			{ label && <Label required={ required } htmlFor={ inputId }>
 				{ label }
 			</Label> }
-			<MultiSelect
+			<MantineMultiSelect
 				ref={ ref }
 				// Add "search" suffix to prevent password managers trying to autofill dropdowns
 				id={ `${inputId}-search` }
@@ -63,5 +67,3 @@ const MultiSelectComponent = ({
 		</InputWrapper>
 	)
 }
-
-export default MultiSelectComponent

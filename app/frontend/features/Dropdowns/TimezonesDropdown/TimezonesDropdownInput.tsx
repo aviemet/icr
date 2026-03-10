@@ -6,16 +6,16 @@ import { useGetTimezones } from "@/queries/locale"
 
 import { type AsyncDropdown } from ".."
 
-interface TimezonesDropdownProps extends AsyncDropdown<Schema.TimezoneOption> {
+export interface TimezonesDropdownProps extends AsyncDropdown<Schema.TimezoneOption> {
 	ref?: React.Ref<HTMLInputElement>
 }
 
-const TimezonesDropdown = ({
+export function TimezonesDropdown({
 	label = "Timezone",
 	name = "timezone",
 	ref,
 	...props
-}: TimezonesDropdownProps) => {
+}: TimezonesDropdownProps) {
 	const { data, refetch } = useGetTimezones({
 		staleTime: Infinity,
 	})
@@ -41,5 +41,3 @@ const TimezonesDropdown = ({
 		{ ...props }
 	/>
 }
-
-export default TimezonesDropdown

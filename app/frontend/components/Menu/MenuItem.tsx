@@ -12,7 +12,7 @@ interface IMenuItemProps extends MenuItemProps {
 	icon?: JSX.Element
 }
 
-const MenuItem = ({
+const MenuItemInner = ({
 	children,
 	disabled = false,
 	href,
@@ -56,4 +56,4 @@ const MenuItem = ({
 	)
 }
 
-export default createPolymorphicComponent<"button", IMenuItemProps>(MenuItem)
+export const MenuItem = createPolymorphicComponent<"button", IMenuItemProps>(MenuItemInner)

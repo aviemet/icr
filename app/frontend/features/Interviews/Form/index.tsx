@@ -14,7 +14,7 @@ export interface EmployeeInterviewFormProps {
 	employee_interview: Schema.EmployeeInterviewsFormData
 }
 
-const EmployeeInterviewForm = ({ method = "post", employee_interview, ...props }: EmployeeInterviewFormProps) => {
+export function EmployeeInterviewForm({ method = "post", employee_interview, ...props }: EmployeeInterviewFormProps) {
 	return (
 		<Form
 			model="employee_interview"
@@ -37,5 +37,3 @@ const EmployeeInterviewForm = ({ method = "post", employee_interview, ...props }
 		</Form>
 	)
 }
-
-export default EmployeeInterviewForm

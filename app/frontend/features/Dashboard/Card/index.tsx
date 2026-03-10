@@ -1,6 +1,6 @@
 import { Card, Image, Text, Badge, Button, Group } from "@/components"
 
-const DashboardCard = () => {
+export function DashboardCard() {
 	return (
 		<Card shadow="sm" padding="lg" radius="md" withBorder>
 			<Card.Section>
@@ -27,5 +27,3 @@ const DashboardCard = () => {
 		</Card>
 	)
 }
-
-export default DashboardCard

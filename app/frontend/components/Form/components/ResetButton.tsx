@@ -3,11 +3,11 @@ import { useForm } from "use-inertia-form"
 
 import { Button } from "@/components"
 
-interface ResetButton extends ButtonProps {
+export interface ResetButtonProps extends ButtonProps {
 	fields?: string | string[]
 }
 
-const ResetButton = ({ fields, children, ...props }: ResetButton) => {
+export function ResetButton({ fields, children, ...props }: ResetButtonProps) {
 	const { reset } = useForm()
 
 	const handleReset = () => {
@@ -20,5 +20,3 @@ const ResetButton = ({ fields, children, ...props }: ResetButton) => {
 		<Button onClick={ handleReset } { ...props }>{ children || "Reset" }</Button>
 	)
 }
-
-export default ResetButton

@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
 import { IndexPageTemplate } from "@/features"
-import HouseholdsTable from "@/features/Households/Table"
+import { HouseholdTable } from "@/features/Households/Table"
 import { Routes } from "@/lib"
 
 interface IHouseholdIndexProps {
@@ -20,7 +20,7 @@ const HouseholdsIndex = ({ households, pagination }: IHouseholdIndexProps) => {
 				{ label: "New Household", href: Routes.newHousehold(), icon: <NewIcon /> },
 			] }
 		>
-			<HouseholdsTable />
+			<HouseholdTable />
 		</IndexPageTemplate>
 	)
 }

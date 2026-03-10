@@ -1,20 +1,20 @@
 import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
-import SwatchInput, { type SwatchInputProps } from "@/components/Inputs/SwatchInput"
+import { SwatchInput as BaseSwatchInput, type SwatchInputProps } from "@/components/Inputs/SwatchInput"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
 
-interface FormSwatchInputProps<TForm extends NestedObject = NestedObject>
+export interface FormSwatchInputProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<SwatchInputProps, InputConflicts>,
 	BaseFormInputProps<string, TForm> {
 	ref?: React.Ref<HTMLInputElement>
 }
 
-function SwatchFormInput<TForm extends NestedObject = NestedObject>({
+export function SwatchInput<TForm extends NestedObject = NestedObject>({
 	name,
 	model,
 	onChange,
@@ -52,7 +52,7 @@ function SwatchFormInput<TForm extends NestedObject = NestedObject>({
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<SwatchInput
+			<BaseSwatchInput
 				ref={ ref }
 				initialValue={ value }
 				value={ value }
@@ -66,5 +66,3 @@ function SwatchFormInput<TForm extends NestedObject = NestedObject>({
 		</InputWrapper>
 	)
 }
-
-export default SwatchFormInput

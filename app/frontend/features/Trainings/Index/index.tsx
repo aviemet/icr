@@ -2,7 +2,7 @@ import { Table, Link, type TableProps } from "@/components"
 import { EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
-const TrainingTable = (props: TableProps) => {
+export function TrainingTable(props: TableProps) {
 	return (
 		<Table { ...props }>
 			<Table.Head>
@@ -38,5 +38,3 @@ const TrainingTable = (props: TableProps) => {
 		</Table>
 	)
 }
-
-export default TrainingTable

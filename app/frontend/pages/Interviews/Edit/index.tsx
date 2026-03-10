@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import EmployeeInterviewsForm from "@/features/Interviews/Form"
+import { EmployeeInterviewForm } from "@/features/Interviews/Form"
 import { Routes } from "@/lib"
 
 
@@ -12,16 +12,16 @@ const EditEmployeeInterview = ({ employee_interview }: EditEmployeeInterviewProp
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: "Interviews", href: Routes.employeeInterviews() },
-			{ title: "EmployeeInterview", href: Routes.employeeInterview(employee_interview.id) },
+			{ title: "Interviews", href: Routes.interviews() },
+			{ title: "EmployeeInterview", href: Routes.interview(employee_interview.id) },
 			{ title, href: window.location.href },
 		] }>
 			<Section>
 				<Title>{ title }</Title>
 
-				<EmployeeInterviewsForm
+				<EmployeeInterviewForm
 					method="put"
-					to={ Routes.employeeInterview() }
+					to={ Routes.interview(employee_interview.id) }
 					employee_interview={ employee_interview }
 				/>
 			</Section>

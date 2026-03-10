@@ -3,30 +3,33 @@ import { useMemo } from "react"
 
 import { Box } from "@/components"
 
-interface AddressFormatterProps {
+export interface AddressFormatterProps {
 	address: Schema.Address
 }
 
-const AddressFormatter = ({ address }: AddressFormatterProps) => {
+export function AddressFormatter({ address }: AddressFormatterProps) {
 	const formatAddressLines = useMemo(() => {
-		const addressData = {
+		const toStr = (v: unknown): string | undefined =>
+			v !== null && v !== undefined && v !== "" ? String(v) : undefined
+		const addressData: Parameters<typeof addressFormatter.format>[0] = {
 			road: address.address_2
-				? `${address.address}\n${address.address_2}`
-				: address.address,
-			city: address.city,
-			state: address.region,
-			postcode: address.postal,
-			countryCode: address.country,
-			name: address?.category
-				? `${address.name} - ${address.category.name}`
-				: address.name,
+				? `${String(address.address)}\n${String(address.address_2)}`
+				: toStr(address.address),
+			city: toStr(address.city),
+			state: toStr(address.region),
+			postcode: toStr(address.postal),
+			countryCode: toStr(address.country),
 		}
-
+		const nameLine =
+			address?.category !== undefined && address?.category !== null
+				? `${String(address.name)} - ${String(address.category.name)}`
+				: toStr(address.name)
 		const formattedLines = addressFormatter.format(addressData, {
 			output: "array",
 			appendCountry: true,
 		})
-		return formattedLines.filter(Boolean)
+		const lines = formattedLines.filter(Boolean)
+		return nameLine !== undefined ? [nameLine, ...lines] : lines
 	}, [address])
 
 	return (
@@ -39,5 +42,3 @@ const AddressFormatter = ({ address }: AddressFormatterProps) => {
 		</address>
 	)
 }
-
-export default AddressFormatter

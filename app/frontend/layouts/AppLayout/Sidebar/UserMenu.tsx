@@ -2,7 +2,7 @@ import { ActionIcon, Avatar, Menu } from "@/components"
 import { LogoutIcon, UserSettingsIcon } from "@/components/Icons"
 import { Routes } from "@/lib"
 
-const UserMenu = () => {
+export function UserMenu() {
 	return (
 		<Menu withArrow arrowPosition="center" position="bottom-start">
 			<Menu.Target>
@@ -27,5 +27,3 @@ const UserMenu = () => {
 		</Menu>
 	)
 }
-
-export default UserMenu

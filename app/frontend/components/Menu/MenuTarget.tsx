@@ -11,7 +11,7 @@ interface IMenuTargetProps extends Omit<MenuTargetProps, "children"> {
 	color?: string
 }
 
-const MenuTarget = ({ children, icon, variant, color, ref, ...props }: IMenuTargetProps) => {
+export function MenuTarget({ children, icon, variant, color, ref, ...props }: IMenuTargetProps) {
 	if(!children) {
 		return (
 			<Menu.Target ref={ ref } { ...props }>
@@ -28,5 +28,3 @@ const MenuTarget = ({ children, icon, variant, color, ref, ...props }: IMenuTarg
 		</Menu.Target>
 	)
 }
-
-export default MenuTarget

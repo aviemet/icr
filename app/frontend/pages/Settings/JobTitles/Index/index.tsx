@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
 import { IndexPageTemplate } from "@/features"
-import JobTitlesTable from "@/features/Settings/JobTitles/Table"
+import { JobTitleTable } from "@/features/Settings/JobTitles/Table"
 import { Routes, withLayout } from "@/lib"
 
 interface JobTitleIndexProps {
@@ -20,7 +20,7 @@ const JobTitlesIndex = ({ job_titles, pagination }: JobTitleIndexProps) => {
 				{ label: "New Job Title", href: Routes.newSettingsJobTitle(), icon: <NewIcon /> },
 			] }
 		>
-			<JobTitlesTable />
+			<JobTitleTable />
 		</IndexPageTemplate>
 	)
 }

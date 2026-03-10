@@ -3,7 +3,7 @@ import { type TableThProps } from "@mantine/core"
 import { usePageProps } from "@/lib/hooks"
 
 import { useTableContext } from "../TableContext"
-import HeadCell from "./HeadCell"
+import { HeadCell as InnerHeadCell } from "./HeadCell"
 
 export interface TableHeadCellProps extends TableThProps {
 	fitContent?: boolean
@@ -13,7 +13,7 @@ export interface TableHeadCellProps extends TableThProps {
 	ref?: React.RefObject<HTMLTableCellElement>
 }
 
-const RenderedCell = ({ children = true, hideable, sort, ...props }: TableHeadCellProps) => {
+export function HeadCell({ children = true, hideable, sort, ...props }: TableHeadCellProps) {
 	const { auth: { user: { table_preferences } } } = usePageProps()
 
 	const tableState = useTableContext(false)
@@ -31,7 +31,5 @@ const RenderedCell = ({ children = true, hideable, sort, ...props }: TableHeadCe
 
 	if(hiddenByUser) return <></>
 
-	return <HeadCell hideable={ hideable } sort={ sort } { ...props }>{ children }</HeadCell>
+	return <InnerHeadCell hideable={ hideable } sort={ sort } { ...props }>{ children }</InnerHeadCell>
 }
-
-export default RenderedCell

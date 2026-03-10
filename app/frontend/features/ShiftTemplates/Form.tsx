@@ -14,7 +14,7 @@ export interface ShiftTemplateFormProps {
 	shift_template: Schema.ShiftTemplatesFormData
 }
 
-const ShiftTemplateForm = ({ method = "post", shift_template, ...props }: ShiftTemplateFormProps) => {
+export function ShiftTemplateForm({ method = "post", shift_template, ...props }: ShiftTemplateFormProps) {
 	return (
 		<Form
 			model="shift_template"
@@ -40,5 +40,3 @@ const ShiftTemplateForm = ({ method = "post", shift_template, ...props }: ShiftT
 		</Form>
 	)
 }
-
-export default ShiftTemplateForm

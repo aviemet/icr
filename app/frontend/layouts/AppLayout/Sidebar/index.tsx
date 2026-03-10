@@ -9,17 +9,17 @@ import {
 	Divider,
 } from "@/components"
 import { ClientIcon, ClockIcon, DashboardIcon, EmployeeIcon, HelpingIcon, SettingsIcon } from "@/components/Icons"
-import IconProvider from "@/layouts/Providers/IconProvider"
+import { IconProvider } from "@/layouts/Providers/IconProvider"
 import { matchesAtPosition, Routes } from "@/lib"
 import { useLocation, usePageProps } from "@/lib/hooks"
-import useStore from "@/lib/store"
+import { useStore } from "@/lib/store"
 
-import ToggleSidebarButton from "../ToggleSidebarButton"
-import MenuLink from "./MenuLink"
+import { ToggleSidebarButton } from "../ToggleSidebarButton"
+import { MenuLink } from "./MenuLink"
 import * as classes from "../AppLayout.css"
-import UserMenu from "./UserMenu"
+import { UserMenu } from "./UserMenu"
 
-const Sidebar = () => {
+export function Sidebar() {
 	const { auth: { user }, permissions } = usePageProps()
 	const { sidebarOpen, siteTitle } = useStore()
 	const { paths } = useLocation()
@@ -122,5 +122,3 @@ const Sidebar = () => {
 		</IconProvider>
 	)
 }
-
-export default Sidebar

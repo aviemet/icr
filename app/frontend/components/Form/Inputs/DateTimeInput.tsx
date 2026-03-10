@@ -1,20 +1,23 @@
 import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
-import DateTimeInput, { type DateTimeProps } from "@/components/Inputs/DateTimeInput"
+import {
+	DateTimeInput as BaseDateTimeInput,
+	type DateTimeProps,
+} from "@/components/Inputs/DateTimeInput"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
 
-interface DateTimeFormProps<TForm extends NestedObject = NestedObject>
+export interface FormDateTimeInputProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<DateTimeProps, InputConflicts>,
 	BaseFormInputProps<Date | "", TForm> {
 	ref?: React.Ref<HTMLButtonElement>
 }
 
-function DateTime<TForm extends NestedObject = NestedObject>({
+export function DateTimeInput<TForm extends NestedObject = NestedObject>({
 	name,
 	required,
 	onChange,
@@ -29,7 +32,7 @@ function DateTime<TForm extends NestedObject = NestedObject>({
 	clearErrorsOnChange,
 	ref,
 	...props
-}: DateTimeFormProps<TForm>) {
+}: FormDateTimeInputProps<TForm>) {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<Date | "", TForm>({
 		name,
 		model,
@@ -64,7 +67,7 @@ function DateTime<TForm extends NestedObject = NestedObject>({
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<DateTimeInput
+			<BaseDateTimeInput
 				ref={ ref }
 				id={ id || inputId }
 				name={ inputName }
@@ -80,5 +83,3 @@ function DateTime<TForm extends NestedObject = NestedObject>({
 		</InputWrapper>
 	)
 }
-
-export default DateTime

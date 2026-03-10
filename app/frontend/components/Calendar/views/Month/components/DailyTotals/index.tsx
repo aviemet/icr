@@ -4,11 +4,11 @@ import { Box, Group } from "@/components"
 
 import * as classes from "./DailyTotals.css"
 
-interface DailyTotalsProps {
+export interface DailyTotalsProps {
 	dailyMinutesTotal: number
 }
 
-const DailyTotals = ({ dailyMinutesTotal }: DailyTotalsProps) => {
+export function DailyTotals({ dailyMinutesTotal }: DailyTotalsProps) {
 	return (
 		<Box className={ clsx((classes.dailyTotals)) }>
 			<Group justify="space-between">
@@ -18,5 +18,3 @@ const DailyTotals = ({ dailyMinutesTotal }: DailyTotalsProps) => {
 		</Box>
 	)
 }
-
-export default DailyTotals

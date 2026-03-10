@@ -3,7 +3,7 @@ import clsx from "clsx"
 import { EventResources, BaseCalendarEvent, useCalendarContext } from "@/components/Calendar"
 import { TimeGridDisplayProperties } from "@/components/Calendar/lib/displayStrategies"
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
-import useStore from "@/lib/store"
+import { useStore } from "@/lib/store"
 
 import * as classes from "./Event.css"
 import { CalendarEvent } from "../../../Event"

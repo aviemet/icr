@@ -1,7 +1,6 @@
 import { Title, Page, Section } from "@/components"
+import { PermissionForm } from "@/features/Permissions/Form"
 import { Routes } from "@/lib"
-
-import PermissionForm from "../Form"
 
 
 interface NewPermissionProps {

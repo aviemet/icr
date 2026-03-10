@@ -14,9 +14,11 @@ import React, { useState } from "react"
 
 import { DoubleDownArrowIcon } from "@/components/Icons"
 import { useBooleanToggle } from "@/lib/hooks"
-import useStore from "@/lib/store"
+import { useStore } from "@/lib/store"
 
 import * as classes from "./AdvancedSearch.css"
+
+export { useAdvancedSearch } from "./useAdvancedSearch"
 
 const scaleY = {
 	in: { opacity: 1, transform: "scaleY(1)" },
@@ -29,7 +31,7 @@ interface AdvancedSearchProps {
 	children: React.ReactNode
 }
 
-const AdvancedSearch = ({ children }: AdvancedSearchProps) => {
+export function AdvancedSearch({ children }: AdvancedSearchProps) {
 	const { sidebarOpen } = useStore()
 	const { primaryColor, other: { navbar: { width } } } = useMantineTheme()
 	const navBarWidth = width[sidebarOpen ? "open" : "closed"]
@@ -90,6 +92,3 @@ const AdvancedSearch = ({ children }: AdvancedSearchProps) => {
 	)
 }
 
-export default AdvancedSearch
-
-export { default as useAdvancedSearch } from "./useAdvancedSearch"

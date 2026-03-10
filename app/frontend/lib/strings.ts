@@ -158,7 +158,7 @@ export const ensureViewName = (name: string | null | undefined): VIEW_NAMES => {
 /**
  *
  */
-export default function greeting() {
+export function greeting() {
 	const hour = new Date().getHours()
 	const welcomeTypes = ["Good morning", "Good afternoon", "Good evening"]
 

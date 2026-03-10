@@ -19,7 +19,7 @@ export interface IndexTableTitleSectionProps {
 	}[]
 }
 
-const IndexTableTitleSection = ({ children, title, deleteRoute, menuOptions }: IndexTableTitleSectionProps) => {
+export function IndexTableTitleSection({ children, title, deleteRoute, menuOptions }: IndexTableTitleSectionProps) {
 	const theme = useMantineTheme()
 	const { tableState: { selected } } = useTableContext()
 
@@ -71,5 +71,3 @@ const IndexTableTitleSection = ({ children, title, deleteRoute, menuOptions }: I
 		</Group>
 	)
 }
-
-export default IndexTableTitleSection

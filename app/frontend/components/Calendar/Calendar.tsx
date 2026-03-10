@@ -11,7 +11,7 @@ import {
 	CalendarEventTitleCallback,
 	EventResources,
 } from "@/components/Calendar"
-import Toolbar from "@/components/Calendar/components/Toolbar"
+import { Toolbar } from "@/components/Calendar/components/Toolbar"
 import { CalendarLocalizer, useDefaultLocalizer } from "@/components/Calendar/lib/localizers"
 import { invariant } from "@/lib"
 import { hasUniqueValues } from "@/lib/collections"

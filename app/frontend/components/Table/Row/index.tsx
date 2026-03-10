@@ -1,7 +1,7 @@
 import { Table, type TableTrProps } from "@mantine/core"
 
 import { useTableContext } from "../TableContext"
-import RowInContext from "./RowInContext"
+import { RowInContext } from "./RowInContext"
 
 export interface TableRow extends TableTrProps {
 	children?: React.ReactElement | React.ReactElement[] | (React.ReactElement | React.ReactElement[])[]
@@ -12,7 +12,7 @@ interface TableRowProps extends Omit<TableRow, "ref"> {
 	name?: string
 }
 
-const Row = ({ children, render, name, ...props }: TableRowProps) => {
+export function Row({ children, render, name, ...props }: TableRowProps) {
 	const tableState = useTableContext(false)
 
 	if(tableState === null) {
@@ -37,5 +37,3 @@ const Row = ({ children, render, name, ...props }: TableRowProps) => {
 		</RowInContext>
 	)
 }
-
-export default Row

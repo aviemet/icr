@@ -2,10 +2,10 @@ import { type ComboboxData } from "@mantine/core"
 import React from "react"
 import { NestedObject, UseFormProps, useInertiaInput } from "use-inertia-form"
 
-import MultiSelect, { type MultiSelectInputProps } from "@/components/Inputs/MultiSelect"
+import { MultiSelect as BaseMultiSelect, type MultiSelectInputProps } from "@/components/Inputs/MultiSelect"
 import { exclude, isUnset, coerceArray } from "@/lib"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
 
@@ -24,7 +24,7 @@ export interface FormMultiSelectProps<TForm extends NestedObject = NestedObject>
 	onOptionSubmit?: (values: string[], options: ComboboxData, form: UseFormProps<TForm>) => void
 }
 
-function MultiSelectComponent<TForm extends NestedObject = NestedObject>({
+export function MultiSelect<TForm extends NestedObject = NestedObject>({
 	options = [],
 	label,
 	required,
@@ -92,7 +92,7 @@ function MultiSelectComponent<TForm extends NestedObject = NestedObject>({
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<MultiSelect
+			<BaseMultiSelect
 				ref={ ref }
 				// Add "search" suffix to prevent password managers trying to autofill dropdowns
 				id={ `${id || inputId}-search` }
@@ -115,5 +115,3 @@ function MultiSelectComponent<TForm extends NestedObject = NestedObject>({
 		</InputWrapper>
 	)
 }
-
-export default MultiSelectComponent

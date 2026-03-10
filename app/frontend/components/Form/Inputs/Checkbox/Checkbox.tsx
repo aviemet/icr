@@ -1,17 +1,17 @@
 import { useInertiaInput, type NestedObject } from "use-inertia-form"
 
-import CheckboxInput, { type CheckboxProps } from "@/components/Inputs/Checkbox"
+import { Checkbox, type CheckboxProps } from "@/components/Inputs/Checkbox"
 
 import { type InputConflicts, type BaseFormInputProps } from ".."
-import FormCheckboxGroup from "./Group"
-import InputWrapper from "../../components/InputWrapper"
+import { CheckboxGroup } from "./Group"
+import { InputWrapper } from "../../components/InputWrapper"
 
 export interface FormCheckboxProps<TForm extends NestedObject>
 	extends
 	Omit<CheckboxProps, InputConflicts>,
 	BaseFormInputProps<boolean, TForm> {}
 
-const FormCheckboxComponent = <TForm extends NestedObject>(
+function CheckboxInput <TForm extends NestedObject>(
 	{
 		name,
 		onChange,
@@ -29,7 +29,7 @@ const FormCheckboxComponent = <TForm extends NestedObject>(
 		clearErrorsOnChange,
 		...props
 	}: FormCheckboxProps<TForm>,
-) => {
+) {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<boolean, TForm>({
 		name,
 		model,
@@ -55,7 +55,7 @@ const FormCheckboxComponent = <TForm extends NestedObject>(
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<CheckboxInput
+			<Checkbox
 				id={ id || inputId }
 				className={ className }
 				name={ inputName }
@@ -73,6 +73,6 @@ const FormCheckboxComponent = <TForm extends NestedObject>(
 	)
 }
 
-FormCheckboxComponent.Group = FormCheckboxGroup
+CheckboxInput.Group = CheckboxGroup
 
-export default FormCheckboxComponent
+export { CheckboxInput }

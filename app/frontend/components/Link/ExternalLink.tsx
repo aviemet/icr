@@ -16,7 +16,7 @@ interface IExternalLinkProps
 	disabled?: boolean
 }
 
-const ExternalLink = ({
+export function ExternalLink({
 	children,
 	href,
 	as,
@@ -24,7 +24,7 @@ const ExternalLink = ({
 	disabled = false,
 	ref,
 	...props
-}: IExternalLinkProps) => {
+}: IExternalLinkProps) {
 	const url = normalizeUrl(href, { stripWWW: false })
 
 	return (
@@ -41,5 +41,3 @@ const ExternalLink = ({
 		</Anchor>
 	)
 }
-
-export default ExternalLink

@@ -1,21 +1,21 @@
 import React from "react"
 import { useInertiaInput, type NestedObject } from "use-inertia-form"
 
-import TimeInput, { type TimeInputProps } from "@/components/Inputs/TimeInput"
+import { TimeInput as BaseTimeInput, type TimeInputProps } from "@/components/Inputs/TimeInput"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
 
 
-interface FormTimeInputProps<TForm extends NestedObject>
+export interface FormTimeInputProps<TForm extends NestedObject>
 	extends
 	Omit<TimeInputProps, InputConflicts>,
 	BaseFormInputProps<string, TForm> {
 	ref?: React.Ref<HTMLDivElement>
 }
 
-function TimeFormInput<TForm extends NestedObject>({
+export function TimeInput<TForm extends NestedObject>({
 	name,
 	model,
 	onChange,
@@ -56,7 +56,7 @@ function TimeFormInput<TForm extends NestedObject>({
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<TimeInput
+			<BaseTimeInput
 				ref={ ref }
 				id={ id || inputId }
 				name={ inputName }
@@ -74,5 +74,3 @@ function TimeFormInput<TForm extends NestedObject>({
 		</InputWrapper>
 	)
 }
-
-export default TimeFormInput

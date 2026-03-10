@@ -3,7 +3,7 @@ import { EditButton } from "@/components/Button"
 import { type TableProps } from "@/components/Table/Table"
 import { Routes } from "@/lib"
 
-const RequirementRequirementTable = (props: TableProps) => {
+export function RequirementRequirementTable(props: TableProps) {
 	return (
 		<Table { ...props }>
 			<Table.Head>
@@ -17,29 +17,36 @@ const RequirementRequirementTable = (props: TableProps) => {
 				</Table.Row>
 			</Table.Head>
 			<Table.Body>
-				<Table.RowIterator render={ (requirement_requirement: Schema.RequirementRequirementsIndex) => (
-					<Table.Row key={ requirement_requirement.id }>
-						<Table.Cell>
-							<Link href={ Routes.requirementRequirement(requirement_requirement.id) }>{ requirement_requirement.name }</Link>
-						</Table.Cell>
-						<Table.Cell>
-							<Link href={ Routes.requirementRequirement(requirement_requirement.id) }>{ requirement_requirement.description }</Link>
-						</Table.Cell>
+				<Table.RowIterator render={ (requirement_requirement: Schema.RequirementRequirementsIndex) => {
+					const id = requirement_requirement.id as string
+					const name = String(requirement_requirement.name as string | number)
+					const description = String(requirement_requirement.description as string | number)
+					const scopeType = String(requirement_requirement.scope_type as string | number)
+					const scopeId = String(requirement_requirement.scope_id as string | number)
 
-						<Table.Cell>
-							<Link href={ Routes.requirementRequirement(requirement_requirement.id) }>{ requirement_requirement.scope_type }</Link>
-						</Table.Cell>
-						<Table.Cell>
-							<Link href={ Routes.requirementRequirement(requirement_requirement.id) }>{ requirement_requirement.scope_id }</Link>
-						</Table.Cell>
-						<Table.Cell>
-							<EditButton href={ Routes.editRequirementRequirement(requirement_requirement.id) } />
-						</Table.Cell>
-					</Table.Row>
-				) } />
+					return (
+						<Table.Row key={ id }>
+							<Table.Cell>
+								<Link href={ Routes.requirement(id) }>{ name }</Link>
+							</Table.Cell>
+							<Table.Cell>
+								<Link href={ Routes.requirement(id) }>{ description }</Link>
+							</Table.Cell>
+
+							<Table.Cell>
+								<Link href={ Routes.requirement(id) }>{ scopeType }</Link>
+							</Table.Cell>
+							<Table.Cell>
+								<Link href={ Routes.requirement(id) }>{ scopeId }</Link>
+							</Table.Cell>
+							<Table.Cell>
+								<EditButton href={ Routes.editRequirement(id) } />
+							</Table.Cell>
+						</Table.Row>
+					)
+				} }
+				/>
 			</Table.Body>
 		</Table>
 	)
 }
-
-export default RequirementRequirementTable

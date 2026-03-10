@@ -4,10 +4,10 @@ import { type ButtonProps } from "@mantine/core"
 import React from "react"
 
 import { Button } from "@/components"
-import AnchorLink, { type IAnchorLinkProps } from "@/components/Link/AnchorLink"
+import { AnchorLink, type AnchorLinkProps } from "@/components/Link/AnchorLink"
 import { exclude } from "@/lib/collections"
 
-interface ILinkProps extends IAnchorLinkProps {
+interface InertiaLinkProps extends AnchorLinkProps {
 	ref?: React.Ref<HTMLAnchorElement>
 	children?: React.ReactNode
 	href: string
@@ -18,7 +18,7 @@ interface ILinkProps extends IAnchorLinkProps {
 	disabled?: boolean
 }
 
-const InertiaLinkComponent = ({
+export function InertiaLink({
 	children,
 	href,
 	as = "a",
@@ -29,7 +29,7 @@ const InertiaLinkComponent = ({
 	disabled,
 	ref,
 	...props
-}: ILinkProps) => {
+}: InertiaLinkProps) {
 	const handleHTTP = (e: React.MouseEvent<Element, MouseEvent>) => {
 		e.preventDefault()
 
@@ -78,5 +78,3 @@ const InertiaLinkComponent = ({
 		<AnchorLink href={ processedHref } ref={ ref } { ...props }>{ children }</AnchorLink>
 	)
 }
-
-export default InertiaLinkComponent

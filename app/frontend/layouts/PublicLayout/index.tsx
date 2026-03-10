@@ -7,7 +7,7 @@ import { Routes } from "@/lib"
 
 import { type LayoutProps } from ".."
 
-const PublicLayout = ({ children }: LayoutProps) => {
+export function PublicLayout({ children }: LayoutProps) {
 	const [opened, { toggle }] = useDisclosure()
 
 	return (
@@ -45,5 +45,3 @@ const PublicLayout = ({ children }: LayoutProps) => {
 		</AppShell>
 	)
 }
-
-export default PublicLayout

@@ -1,20 +1,20 @@
 import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
-import SwitchInput, { type SwitchProps } from "@/components/Inputs/Switch"
+import { Switch as BaseSwitch, type SwitchProps } from "@/components/Inputs/Switch"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
 
-interface FormSwitchProps<TForm extends NestedObject = NestedObject>
+export interface FormSwitchProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<SwitchProps, InputConflicts>,
 	BaseFormInputProps<boolean, TForm> {
 	ref?: React.Ref<HTMLInputElement>
 }
 
-function FormSwitchComponent<TForm extends NestedObject = NestedObject>({
+export function Switch<TForm extends NestedObject = NestedObject>({
 	name,
 	onChange,
 	onBlur,
@@ -56,7 +56,7 @@ function FormSwitchComponent<TForm extends NestedObject = NestedObject>({
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<SwitchInput
+			<BaseSwitch
 				ref={ ref }
 				id={ id || inputId }
 				name={ inputName }
@@ -73,5 +73,3 @@ function FormSwitchComponent<TForm extends NestedObject = NestedObject>({
 		</InputWrapper>
 	)
 }
-
-export default FormSwitchComponent

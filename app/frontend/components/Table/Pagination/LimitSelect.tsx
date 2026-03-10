@@ -5,7 +5,7 @@ import clsx from "clsx"
 
 import { Routes } from "@/lib"
 import { useLocation, usePageProps } from "@/lib/hooks"
-import useStore from "@/lib/store/"
+import { useStore } from "@/lib/store"
 
 import * as classes from "../Table.css"
 
@@ -14,7 +14,7 @@ interface LimitSelectProps extends SelectProps {
 	model: string
 }
 
-const LimitSelect = ({ pagination, model }: LimitSelectProps) => {
+export function LimitSelect({ pagination, model }: LimitSelectProps) {
 	const { auth: { user } } = usePageProps()
 	const location = useLocation()
 	const defaultLimit = useStore(state => state.defaults.tableRecordsLimit)
@@ -65,5 +65,3 @@ const LimitSelect = ({ pagination, model }: LimitSelectProps) => {
 		/>
 	)
 }
-
-export default LimitSelect

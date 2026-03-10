@@ -1,22 +1,22 @@
 import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
-import CurrencyInput, { type CurrencyInputProps } from "@/components/Inputs/CurrencyInput"
+import { CurrencyInput as BaseCurrencyInput, type CurrencyInputProps } from "@/components/Inputs/CurrencyInput"
 import { useCurrency } from "@/lib/hooks"
 import { type Money } from "@/types"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { InputConflicts, type BaseFormInputProps } from "."
 
-interface INumberInputProps<TForm extends NestedObject = NestedObject>
+export interface FormCurrencyInputProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<CurrencyInputProps, InputConflicts>,
 	BaseFormInputProps<number, TForm> {
 	ref?: React.Ref<HTMLInputElement>
 }
 
-function FormInput<TForm extends NestedObject = NestedObject>({
+export function CurrencyInput<TForm extends NestedObject = NestedObject>({
 	name,
 	model,
 	onChange,
@@ -31,7 +31,7 @@ function FormInput<TForm extends NestedObject = NestedObject>({
 	clearErrorsOnChange,
 	ref,
 	...props
-}: INumberInputProps<TForm>) {
+}: FormCurrencyInputProps<TForm>) {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<number | Money, TForm>({
 		name,
 		model,
@@ -66,7 +66,7 @@ function FormInput<TForm extends NestedObject = NestedObject>({
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<CurrencyInput
+			<BaseCurrencyInput
 				ref={ ref }
 				id={ id || inputId }
 				name={ inputName }
@@ -81,5 +81,3 @@ function FormInput<TForm extends NestedObject = NestedObject>({
 		</InputWrapper>
 	)
 }
-
-export default FormInput

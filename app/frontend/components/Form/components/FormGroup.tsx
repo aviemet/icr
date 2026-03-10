@@ -11,13 +11,13 @@ interface FormGroupProps extends DivProps {
 	grid?: boolean
 }
 
-const FormGroup = ({
+export function FormGroup({
 	children,
 	legend,
 	outline = true,
 	model,
 	grid = false,
-}: FormGroupProps) => {
+}: FormGroupProps) {
 	return (
 		<ConditionalWrapper
 			condition={ grid }
@@ -50,5 +50,3 @@ const FormGroup = ({
 		</ConditionalWrapper>
 	)
 }
-
-export default FormGroup

@@ -4,10 +4,10 @@ import { useInertiaInput, type UseFormProps, NestedObject } from "use-inertia-fo
 
 import { ConditionalWrapper, Group } from "@/components"
 import { ModalFormButton } from "@/components/Button"
-import SelectInput, { type SelectInputProps } from "@/components/Inputs/Select"
+import { Select as SelectInput, type SelectInputProps } from "@/components/Inputs/Select"
 import { exclude } from "@/lib"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type BaseFormInputProps } from "."
 
@@ -32,7 +32,7 @@ export interface FormSelectProps<TForm extends NestedObject = NestedObject>
 	field?: boolean
 }
 
-function Select<TForm extends NestedObject = NestedObject>({
+export function Select<TForm extends NestedObject = NestedObject>({
 	name,
 	label,
 	model,
@@ -147,5 +147,3 @@ function Select<TForm extends NestedObject = NestedObject>({
 		</ConditionalWrapper>
 	)
 }
-
-export default Select

@@ -1,14 +1,14 @@
 import { useForm } from "use-inertia-form"
 
-import { Grid, Table, Text, Title, Tooltip } from "@/components"
+import { Grid, Table, Text, Title } from "@/components"
 import { FormGroup } from "@/components/Form"
 import { aOrAn } from "@/lib/strings"
 
-import ColumnToggle from "./ColumnToggle"
+import { ColumnToggle } from "./ColumnToggle"
 import { tableRows, type JobTitleFormData } from "./formData"
-import SwitchRow from "./SwitchRow"
+import { SwitchRow } from "./SwitchRow"
 
-const PermissionsSection = () => {
+export function PermissionsSection() {
 	const { getData } = useForm<JobTitleFormData>()
 
 	return (
@@ -64,5 +64,3 @@ const PermissionsSection = () => {
 		</FormGroup>
 	)
 }
-
-export default PermissionsSection

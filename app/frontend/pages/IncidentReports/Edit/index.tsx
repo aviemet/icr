@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import IncidentReportsForm from "@/features/IncidentReports/Form"
+import { IncidentReportForm } from "@/features/IncidentReports/Form"
 import { Routes } from "@/lib"
 
 interface EditIncidentReportProps {
@@ -18,7 +18,7 @@ const EditIncidentReport = ({ incident_report }: EditIncidentReportProps) => {
 			<Section>
 				<Title>{ title }</Title>
 
-				<IncidentReportsForm
+				<IncidentReportForm
 					method="put"
 					to={ Routes.incidentReport(incident_report.id) }
 					incident_report={ incident_report }

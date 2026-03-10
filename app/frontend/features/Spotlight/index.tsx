@@ -8,7 +8,7 @@ import { Routes } from "@/lib"
 import { useDebouncedValue, usePageProps } from "@/lib/hooks"
 import { useGetSpotlights } from "@/queries"
 
-const SpotlightComponent = () => {
+export function SpotlightComponent() {
 	const { permissions } = usePageProps()
 
 	const [query, setQuery] = useState("")
@@ -135,7 +135,7 @@ const SpotlightComponent = () => {
 				onClick: () => {},
 			}
 		})
-	}, [query, isSuccess, data])
+	}, [debouncedQuery, isSuccess, data])
 
 	const actions = useMemo<SpotlightActionData[]>(() => {
 		if(!debouncedQuery.trim()) return staticActions
@@ -159,6 +159,4 @@ const SpotlightComponent = () => {
 		/>
 	)
 }
-
-export default SpotlightComponent
 

@@ -6,8 +6,7 @@ import { NestedURLSearchParams } from "@/lib"
 import { isUnset } from "@/lib/forms"
 import { useLocation } from "@/lib/hooks"
 
-import buildSearchLink from "./buildSearchLink"
-
+import { buildSearchLink } from "./buildSearchLink"
 
 type SpecialSearchTypes = "date"
 
@@ -33,10 +32,10 @@ export type ParamValue = string | number | Date | Date[] | undefined | null
  *  reset(): A method to clear all search values,
  * 	inputProps(name): Method to return object of props to be passed into an input
  */
-const useAdvancedSearch = (
+export function useAdvancedSearch(
 	inputParams: InputParam[],
 	options?: Options,
-) => {
+) {
 	// TODO: Trying to infer keys from prop
 	type InputParamName = typeof inputParams[number]["name"]
 
@@ -165,5 +164,3 @@ const useAdvancedSearch = (
 		reset: resetValues,
 	}
 }
-
-export default useAdvancedSearch

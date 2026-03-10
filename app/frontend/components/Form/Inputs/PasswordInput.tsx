@@ -1,21 +1,21 @@
 import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
-import PasswordInput, { type PasswordInputProps } from "@/components/Inputs/PasswordInput"
+import { PasswordInput as BasePasswordInput, type PasswordInputProps } from "@/components/Inputs/PasswordInput"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
 
 
-interface FormPasswordInputProps<TForm extends NestedObject>
+export interface FormPasswordInputProps<TForm extends NestedObject>
 	extends
 	Omit<PasswordInputProps, InputConflicts>,
 	BaseFormInputProps<string, TForm> {
 	ref?: React.Ref<HTMLInputElement>
 }
 
-function FormInput<TForm extends NestedObject>({
+export function PasswordInput<TForm extends NestedObject>({
 	name,
 	model,
 	onChange,
@@ -61,7 +61,7 @@ function FormInput<TForm extends NestedObject>({
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<PasswordInput
+			<BasePasswordInput
 				ref={ ref }
 				id={ id || inputId }
 				name={ inputName }
@@ -76,5 +76,3 @@ function FormInput<TForm extends NestedObject>({
 		</InputWrapper>
 	)
 }
-
-export default FormInput

@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
 import { IndexPageTemplate } from "@/features"
-import IncidentReportsTable from "@/features/IncidentReports/Table"
+import { IncidentReportTable } from "@/features/IncidentReports/Table"
 import { Routes } from "@/lib"
 
 interface IncidentReportIndexProps {
@@ -20,7 +20,7 @@ const IncidentReportsIndex = ({ incident_reports, pagination }: IncidentReportIn
 				{ label: "New Incident Report", href: Routes.newIncidentReport(), icon: <NewIcon /> },
 			] }
 		>
-			<IncidentReportsTable />
+			<IncidentReportTable />
 		</IndexPageTemplate>
 	)
 }

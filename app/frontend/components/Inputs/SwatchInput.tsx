@@ -1,10 +1,10 @@
 import React, { useState } from "react"
 import { InputProps } from "react-html-props"
 
-import HiddenInput from "./HiddenInput"
-import SwatchPicker from "../SwatchPicker"
-import InputWrapper from "./InputWrapper"
-import Label from "./Label"
+import { HiddenInput } from "./HiddenInput"
+import { SwatchPicker } from "../SwatchPicker"
+import { InputWrapper } from "./InputWrapper"
+import { Label } from "./Label"
 
 import { type BaseInputProps } from "."
 
@@ -20,7 +20,7 @@ export interface SwatchInputProps
 	wrapperProps?: Record<string, any>
 }
 
-const SwatchInput = ({
+export function SwatchInput({
 	label,
 	id,
 	name,
@@ -31,7 +31,7 @@ const SwatchInput = ({
 	wrapperProps,
 	ref,
 	...props
-}: SwatchInputProps) => {
+}: SwatchInputProps) {
 	const [color, setColor] = useState(initialValue || "")
 
 	const handleChange = (color: string) => {
@@ -52,5 +52,3 @@ const SwatchInput = ({
 		</InputWrapper>
 	)
 }
-
-export default SwatchInput

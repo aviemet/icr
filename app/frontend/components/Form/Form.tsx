@@ -34,7 +34,7 @@ export interface FormProps<TForm> extends Omit<UifFormProps<TForm>, "to"> {
 	to?: string
 }
 
-const Form = <TForm extends NestedObject>({
+export function Form<TForm extends NestedObject>({
 	children,
 	data,
 	className,
@@ -45,7 +45,7 @@ const Form = <TForm extends NestedObject>({
 	onSubmit,
 	to,
 	...props
-}: FormProps<TForm>) => {
+}: FormProps<TForm>) {
 
 	const handleSubmit = (formProps: FormSubmitProps<TForm>) => {
 		// Only proceed if passing a custom submit handler
@@ -95,5 +95,3 @@ const Form = <TForm extends NestedObject>({
 		</Box>
 	)
 }
-
-export default Form

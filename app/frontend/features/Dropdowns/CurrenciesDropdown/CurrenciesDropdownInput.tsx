@@ -6,16 +6,16 @@ import { useGetCurrencies } from "@/queries/locale"
 
 import { type AsyncDropdown } from ".."
 
-interface CurrenciesDropdownProps extends AsyncDropdown<Schema.CurrencyOption> {
+export interface CurrenciesDropdownProps extends AsyncDropdown<Schema.CurrencyOption> {
 	ref?: React.Ref<HTMLInputElement>
 }
 
-const CurrenciesDropdown = ({
+export function CurrenciesDropdown({
 	label = "Currency",
 	name = "currency",
 	ref,
 	...props
-}: CurrenciesDropdownProps) => {
+}: CurrenciesDropdownProps) {
 	const { data, refetch } = useGetCurrencies({
 		staleTime: Infinity,
 	})
@@ -38,5 +38,3 @@ const CurrenciesDropdown = ({
 		{ ...props }
 	/>
 }
-
-export default CurrenciesDropdown

@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import RequirementRequirementsForm from "@/features/Requirements/Form"
+import { RequirementRequirementForm } from "@/features/Requirements/Form"
 import { Routes } from "@/lib"
 
 
@@ -12,16 +12,16 @@ const EditRequirementRequirement = ({ requirement_requirement }: EditRequirement
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: "Requirements", href: Routes.requirementRequirements() },
-			{ title: "RequirementRequirement", href: Routes.requirementRequirement(requirement_requirement.id) },
+			{ title: "Requirements", href: Routes.requirements() },
+			{ title: "RequirementRequirement", href: Routes.requirement(requirement_requirement.id) },
 			{ title, href: window.location.href },
 		] }>
 			<Section>
 				<Title>{ title }</Title>
 
-				<RequirementRequirementsForm
+				<RequirementRequirementForm
 					method="put"
-					to={ Routes.requirementRequirement() }
+					to={ Routes.requirement(requirement_requirement.id) }
 					requirement_requirement={ requirement_requirement }
 				/>
 			</Section>

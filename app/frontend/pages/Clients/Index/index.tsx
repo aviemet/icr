@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 
 import { IndexPageTemplate } from "@/features"
-import ClientsTable from "@/features/Clients/Table"
+import { ClientTable } from "@/features/Clients/Table"
 import { Routes } from "@/lib"
 
 interface ClientIndexProps {
@@ -20,7 +20,7 @@ const ClientsIndex = ({ clients, pagination }: ClientIndexProps) => {
 			pagination={ pagination }
 			deleteRoute={ Routes.clients() }
 		>
-			<ClientsTable />
+			<ClientTable />
 		</IndexPageTemplate>
 	)
 }

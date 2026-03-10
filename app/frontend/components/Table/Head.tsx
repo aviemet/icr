@@ -7,7 +7,7 @@ interface TableHead extends TableTheadProps {
 	ref?: React.Ref<HTMLTableSectionElement>
 }
 
-const Head = ({ children, ref, ...props }: TableHead) => {
+export function Head({ children, ref, ...props }: TableHead) {
 	return (
 		<TableSectionContextProvider value={ { section: "head" } }>
 			<Table.Thead
@@ -19,5 +19,3 @@ const Head = ({ children, ref, ...props }: TableHead) => {
 		</TableSectionContextProvider>
 	)
 }
-
-export default Head

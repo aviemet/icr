@@ -12,7 +12,7 @@ interface HeadCellWithContextProps extends TableHeadCellProps {
 	rows?: Record<string, any>[]
 }
 
-const HeadCellWithContext = ({
+export function HeadCellWithContext({
 	children,
 	fitContent = false,
 	sort,
@@ -21,7 +21,7 @@ const HeadCellWithContext = ({
 	hideable,
 	style,
 	...props
-}: HeadCellWithContextProps) => {
+}: HeadCellWithContextProps) {
 	const thRef = useRef<HTMLTableCellElement>(null)
 	const { pathname, params } = useLocation()
 
@@ -79,5 +79,3 @@ const HeadCellWithContext = ({
 		</Table.Th>
 	)
 }
-
-export default HeadCellWithContext

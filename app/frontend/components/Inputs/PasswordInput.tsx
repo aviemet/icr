@@ -1,8 +1,8 @@
-import { PasswordInput, type PasswordInputProps as MantinePasswordInputProps } from "@mantine/core"
+import { PasswordInput as MantinePasswordInput, type PasswordInputProps as MantinePasswordInputProps } from "@mantine/core"
 import React from "react"
 
-import InputWrapper from "./InputWrapper"
-import Label from "./Label"
+import { InputWrapper } from "./InputWrapper"
+import { Label } from "./Label"
 
 import { type BaseInputProps } from "."
 
@@ -14,7 +14,7 @@ export interface PasswordInputProps
 	ref?: React.Ref<HTMLInputElement>
 }
 
-const PasswordInputComponent = ({
+export function PasswordInput({
 	label,
 	name,
 	required = false,
@@ -23,7 +23,7 @@ const PasswordInputComponent = ({
 	wrapperProps,
 	ref,
 	...props
-}: PasswordInputProps) => {
+}: PasswordInputProps) {
 	const inputId = id || name
 
 	return (
@@ -31,7 +31,7 @@ const PasswordInputComponent = ({
 			{ label && <Label required={ required } htmlFor={ inputId }>
 				{ label }
 			</Label> }
-			<PasswordInput
+			<MantinePasswordInput
 				id={ inputId }
 				required={ required }
 				ref={ ref }
@@ -40,5 +40,3 @@ const PasswordInputComponent = ({
 		</InputWrapper>
 	)
 }
-
-export default PasswordInputComponent

@@ -14,7 +14,7 @@ export interface PersonFormProps {
 	person: Schema.PeopleFormData
 }
 
-const PersonForm = ({ method = "post", person, ...props }: PersonFormProps) => {
+export function PersonForm({ method = "post", person, ...props }: PersonFormProps) {
 	return (
 		<Form
 			model="person"
@@ -52,5 +52,3 @@ const PersonForm = ({ method = "post", person, ...props }: PersonFormProps) => {
 		</Form>
 	)
 }
-
-export default PersonForm

@@ -7,17 +7,17 @@ interface InformationProps {
 	position?: FloatingPosition
 }
 
-const Information = ({ children, position = "right" }: InformationProps) => (
-	<Tooltip label={ children } withArrow position={ position } openDelay={ 300 }>
-		<ThemeIcon
-			color="gray"
-			size="sm"
-			radius="xl"
-			style={ { cursor: "help" } }
-		>
-			i
-		</ThemeIcon>
-	</Tooltip>
-)
-
-export default Information
+export function Information({ children, position = "right" }: InformationProps) {
+	return (
+		<Tooltip label={ children } withArrow position={ position } openDelay={ 300 }>
+			<ThemeIcon
+				color="gray"
+				size="sm"
+				radius="xl"
+				style={ { cursor: "help" } }
+			>
+				i
+			</ThemeIcon>
+		</Tooltip>
+	)
+}

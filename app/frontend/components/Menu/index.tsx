@@ -1,20 +1,18 @@
-import { Menu, type MenuProps } from "@mantine/core"
+import { Menu as MantineMenu, type MenuProps } from "@mantine/core"
 
-import MenuItem from "./MenuItem"
-import MenuLink from "./MenuLink"
-import MenuTarget from "./MenuTarget"
+import { MenuItem } from "./MenuItem"
+import { MenuLink } from "./MenuLink"
+import { MenuTarget } from "./MenuTarget"
 
-const MenuComponent = ({ children, ...props }: MenuProps) => {
+export function Menu({ children, ...props }: MenuProps) {
 	return (
-		<Menu { ...props }>{ children }</Menu>
+		<MantineMenu { ...props }>{ children }</MantineMenu>
 	)
 }
 
-MenuComponent.Target = MenuTarget
-MenuComponent.Dropdown = Menu.Dropdown
-MenuComponent.Label = Menu.Label
-MenuComponent.Item = MenuItem
-MenuComponent.Link = MenuLink
-MenuComponent.Divider = Menu.Divider
-
-export default MenuComponent
+Menu.Target = MenuTarget
+Menu.Dropdown = MantineMenu.Dropdown
+Menu.Label = MantineMenu.Label
+Menu.Item = MenuItem
+Menu.Link = MenuLink
+Menu.Divider = MantineMenu.Divider

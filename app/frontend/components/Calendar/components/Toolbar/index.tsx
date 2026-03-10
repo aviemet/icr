@@ -13,17 +13,17 @@ import { useAnimateWidth } from "@/lib/hooks/useAnimateWidth"
 
 import * as classes from "./Toolbar.css"
 
-interface ToolbarProps {
+export interface ToolbarProps {
 	ref?: React.Ref<HTMLDivElement>
 	views?: readonly VIEW_NAMES[]
 	view: VIEW_NAMES
 }
 
-const Toolbar = ({
+export function Toolbar({
 	views = Object.values(VIEWS),
 	view,
 	ref,
-}: ToolbarProps) => {
+}: ToolbarProps) {
 	const { date, localizer, handleViewChange, handleDateChange, resourcesById } = useCalendarContext()
 	const [opened, { close, toggle }] = useDisclosure(false)
 
@@ -137,5 +137,3 @@ const Toolbar = ({
 		</Group>
 	)
 }
-
-export default Toolbar

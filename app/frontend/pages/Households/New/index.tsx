@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import HouseholdForm from "@/features/Households/Form"
+import { HouseholdForm } from "@/features/Households/Form"
 import { Routes } from "@/lib"
 
 interface INewHouseholdProps {

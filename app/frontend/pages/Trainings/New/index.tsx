@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import TrainingForm from "@/features/Trainings/Form"
+import { TrainingForm } from "@/features/Trainings/Form"
 import { Routes } from "@/lib"
 
 

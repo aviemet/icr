@@ -1,2 +1,2 @@
-export { default as TimezonesDropdown } from "./TimezonesDropdownInput"
-export { default as FormTimezonesDropdown } from "./FormTimezonesDropdown"
+export { TimezonesDropdown } from "./TimezonesDropdownInput"
+export { FormTimezonesDropdown } from "./FormTimezonesDropdown"

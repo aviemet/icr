@@ -14,7 +14,7 @@ export interface DoctorFormProps {
 	doctor: Schema.DoctorsFormData
 }
 
-const DoctorForm = ({ method = "post", doctor, ...props }: DoctorFormProps) => {
+export function DoctorForm({ method = "post", doctor, ...props }: DoctorFormProps) {
 	return (
 		<Form
 			model="doctor"
@@ -40,5 +40,3 @@ const DoctorForm = ({ method = "post", doctor, ...props }: DoctorFormProps) => {
 		</Form>
 	)
 }
-
-export default DoctorForm

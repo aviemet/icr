@@ -1,6 +1,6 @@
 import { unset, get, set, isEmpty } from "lodash-es"
 
-export default class NestedObject {
+export class NestedObject {
 	data = {}
 
 	constructor(initialData?: Record<string, any> | Map<string, any>) {

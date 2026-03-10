@@ -1,15 +1,15 @@
 import React from "react"
 
-import ContrastingColorsSetup from "./ContrastingColorsSetup"
-import IconProvider from "./IconProvider"
-import QueryProvider from "./QueryProvider"
-import UiFrameworkProvider from "./UiFrameworkProvider"
+import { ContrastingColorsSetup } from "./ContrastingColorsSetup"
+import { IconProvider } from "./IconProvider"
+import { QueryProvider } from "./QueryProvider"
+import { UiFrameworkProvider } from "./UiFrameworkProvider"
 
-interface IProviderProps {
+export interface ProvidersProps {
 	children?: React.ReactNode
 }
 
-const Providers = React.memo(({ children }: IProviderProps) => {
+export const Providers = React.memo(({ children }: ProvidersProps) => {
 	return (
 		<QueryProvider>
 			<UiFrameworkProvider>
@@ -21,5 +21,3 @@ const Providers = React.memo(({ children }: IProviderProps) => {
 		</QueryProvider>
 	)
 })
-
-export default Providers

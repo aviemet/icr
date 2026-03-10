@@ -3,9 +3,9 @@ import { useForm } from "use-inertia-form"
 
 import { Button, Divider, Grid, Group, Stack, Text, Tooltip } from "@/components"
 import { DateInput, Select, Submit, TextInput } from "@/components/Form"
-import FormColorPickerInput from "@/components/Form/Inputs/ColorPickerInput"
+import { ColorPickerInput as FormColorPickerInput } from "@/components/Form/Inputs/ColorPickerInput"
 import { RandomizeIcon } from "@/components/Icons"
-import JobTitlesDropdownInput from "@/features/Dropdowns/JobTitlesDropdown/JobTitlesDropdownInput"
+import { JobTitlesDropdownInput } from "@/features/Dropdowns/JobTitlesDropdown/JobTitlesDropdownInput"
 import { generateRandomColor } from "@/lib"
 
 import { EmployeeFormData } from "."
@@ -15,7 +15,7 @@ export interface EmployeeInputProps {
 	jobTitles?: Schema.EmployeeJobTitlesOptions[]
 }
 
-const Inputs = ({ employee, jobTitles = [] }: EmployeeInputProps) => {
+export function Inputs({ employee, jobTitles = [] }: EmployeeInputProps) {
 	const { getData, setData } = useForm<EmployeeFormData>()
 
 	const statusOptions = [
@@ -103,5 +103,3 @@ const Inputs = ({ employee, jobTitles = [] }: EmployeeInputProps) => {
 		</Stack>
 	)
 }
-
-export default Inputs

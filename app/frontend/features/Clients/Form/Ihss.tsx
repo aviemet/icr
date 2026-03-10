@@ -1,7 +1,7 @@
 import { Grid, Title } from "@/components"
 import { useFormField } from "@/components/Form3"
 
-const Ihss = () => {
+export function Ihss() {
 	const [ihss] = useFormField("client.ihss")
 
 	if(!ihss) return null
@@ -18,5 +18,3 @@ const Ihss = () => {
 		</>
 	)
 }
-
-export default Ihss

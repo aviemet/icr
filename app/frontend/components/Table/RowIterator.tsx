@@ -1,12 +1,11 @@
 import clsx from "clsx"
 import React from "react"
 
+import { Table } from "./Table"
 import { useTableContext } from "./TableContext"
 
-import Table from "."
 
-
-const RowIterator = ({ render }: { render: (obj: any) => JSX.Element }) => {
+export function RowIterator({ render }: { render: (obj: any) => JSX.Element }) {
 	const { tableState: { selected, rows, columns, selectable, fallbackMessage } } = useTableContext()
 
 	if(!rows || rows.length === 0) {
@@ -32,5 +31,3 @@ const RowIterator = ({ render }: { render: (obj: any) => JSX.Element }) => {
 
 	return <>{ rows.map(row => injectRowProps(render(row))) }</>
 }
-
-export default RowIterator

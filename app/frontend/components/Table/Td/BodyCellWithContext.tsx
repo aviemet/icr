@@ -10,7 +10,7 @@ export interface BodyCellWithContextProps extends Omit<TableCellProps, "hideable
 	model?: string
 }
 
-const BodyCellWithContext = ({ children, nowrap, fitContent, hideable, model, style, className, ...props }: BodyCellWithContextProps) => {
+export function BodyCellWithContext({ children, nowrap, fitContent, hideable, model, style, className, ...props }: BodyCellWithContextProps) {
 	const tdRef = useRef<HTMLTableCellElement>(null)
 
 	return (
@@ -24,5 +24,3 @@ const BodyCellWithContext = ({ children, nowrap, fitContent, hideable, model, st
 		</Table.Td>
 	)
 }
-
-export default BodyCellWithContext

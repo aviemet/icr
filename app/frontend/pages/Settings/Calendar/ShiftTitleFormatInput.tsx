@@ -6,7 +6,7 @@ import { useForm } from "use-inertia-form"
 import { Badge, Box, Code, Group, Paper } from "@/components"
 import { TextInput } from "@/components/Form"
 import { formatEventTitle } from "@/lib"
-import { GeneralSettingsFormData } from "@/Pages/Settings/General"
+import { GeneralSettingsFormData } from "@/pages/Settings/General"
 
 import * as classes from "../Settings.css"
 
@@ -41,10 +41,10 @@ const ShiftTitleFormatInput = ({ settings }: SettingIndexProps) => {
 
 	const inputValue = getData("settings.shift_title_format")
 
-	const previewText = useMemo(() => {
-		const format = inputRef.current?.value || inputValue
-		return formatEventTitle(format, new Date(), dayjs().add(4, "hours").toDate(), SAMPLE_DATA)
-	}, [inputValue])
+	const previewText = useMemo(
+		() => formatEventTitle(inputValue, new Date(), dayjs().add(4, "hours").toDate(), SAMPLE_DATA),
+		[inputValue],
+	)
 
 	const insertVariable = (variable: string) => {
 		const input = inputRef.current

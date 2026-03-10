@@ -1,7 +1,7 @@
 import { cloneDeep, isPlainObject, unset } from "lodash-es"
 
-export { default as NestedObject } from "./Collections/NestedObject"
-export { default as NestedURLSearchParams } from "./Collections/NestedURLSearchParams"
+export { NestedObject } from "./Collections/NestedObject"
+export { NestedURLSearchParams } from "./Collections/NestedURLSearchParams"
 
 export const coerceArray = <T extends unknown>(arg: T | T[] | null | undefined) => {
 	if(arg === null || arg === undefined) return []

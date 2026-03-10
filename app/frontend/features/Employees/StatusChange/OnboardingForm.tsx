@@ -2,11 +2,11 @@ import { Grid } from "@/components"
 import { Form, Submit, DateInput } from "@/components/Form"
 import { Routes } from "@/lib"
 
-interface OnboardingFormProps {
+export interface OnboardingFormProps {
 	employee: Schema.EmployeesShow
 }
 
-const OnboardingForm = ({ employee }: OnboardingFormProps) => {
+export function OnboardingForm({ employee }: OnboardingFormProps) {
 	return (
 		<Form
 			model="employee"
@@ -36,5 +36,3 @@ const OnboardingForm = ({ employee }: OnboardingFormProps) => {
 		</Form>
 	)
 }
-
-export default OnboardingForm

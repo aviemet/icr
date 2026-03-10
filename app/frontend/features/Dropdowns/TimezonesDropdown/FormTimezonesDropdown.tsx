@@ -1,21 +1,20 @@
 import { isEmpty } from "lodash-es"
 import React from "react"
 
-import { Flags } from "@/components"
 import { Select as FormSelect } from "@/components/Form"
 import { useGetTimezones } from "@/queries/locale"
 
 import { type FormAsyncDropdown } from ".."
 
-interface FormTimezonesDropdownProps extends Omit<FormAsyncDropdown<Schema.TimezoneOption>, "name"> {
+export interface FormTimezonesDropdownProps extends Omit<FormAsyncDropdown<Schema.TimezoneOption>, "name"> {
 	name?: string
 }
 
-const FormTimezonesDropdown = ({
+export function FormTimezonesDropdown({
 	label = "Timezone",
 	name = "timezone",
 	...props
-}: FormTimezonesDropdownProps) => {
+}: FormTimezonesDropdownProps) {
 	const { data, refetch } = useGetTimezones({
 		staleTime: Infinity,
 	})
@@ -38,7 +37,4 @@ const FormTimezonesDropdown = ({
 			{ ...props }
 		/>
 	)
-
 }
-
-export default FormTimezonesDropdown

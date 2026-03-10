@@ -8,12 +8,12 @@ export interface FormCheckboxGroupProps extends CheckboxGroupProps {
 	model?: string
 }
 
-const FormCheckboxGroup = ({
+export function CheckboxGroup({
 	children,
 	name,
 	model,
 	...props
-}: FormCheckboxGroupProps) => {
+}: FormCheckboxGroupProps) {
 	const { value, setValue } = useInertiaInput<string[]>({ name, model })
 
 	const handleValueChange = (vals: string[]) => {
@@ -30,5 +30,3 @@ const FormCheckboxGroup = ({
 		</Checkbox.Group>
 	)
 }
-
-export default FormCheckboxGroup

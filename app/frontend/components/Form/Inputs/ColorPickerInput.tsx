@@ -1,13 +1,16 @@
 import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
-import ColorPickerInput, { type ColorPickerInputProps } from "@/components/Inputs/ColorPickerInput"
+import {
+	ColorPickerInput as BaseColorPickerInput,
+	type ColorPickerInputProps,
+} from "@/components/Inputs/ColorPickerInput"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type BaseFormInputProps, type InputConflicts } from "."
 
-interface FormColorPickerInputProps<TForm extends NestedObject = NestedObject>
+export interface FormColorPickerInputProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<ColorPickerInputProps, InputConflicts>,
 	BaseFormInputProps<string, TForm> {
@@ -15,7 +18,7 @@ interface FormColorPickerInputProps<TForm extends NestedObject = NestedObject>
 	id?: string
 }
 
-function FormColorPickerInput<TForm extends NestedObject = NestedObject>({
+export function ColorPickerInput<TForm extends NestedObject = NestedObject>({
 	name,
 	model,
 	onChange,
@@ -56,7 +59,7 @@ function FormColorPickerInput<TForm extends NestedObject = NestedObject>({
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<ColorPickerInput
+			<BaseColorPickerInput
 				ref={ ref }
 				value={ value }
 				onChange={ handleChange }
@@ -70,5 +73,3 @@ function FormColorPickerInput<TForm extends NestedObject = NestedObject>({
 		</InputWrapper>
 	)
 }
-
-export default FormColorPickerInput

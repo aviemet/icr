@@ -10,7 +10,7 @@ const ShowEmployeeInterview = ({ employee_interview }: ShowEmployeeInterviewProp
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: "Interview", href: Routes.employeeInterviews() },
+			{ title: "Interview", href: Routes.interviews() },
 			{ title, href: window.location.href },
 		] }>
 			<Section>
@@ -20,7 +20,7 @@ const ShowEmployeeInterview = ({ employee_interview }: ShowEmployeeInterviewProp
 					<Menu position="bottom-end">
 						<Menu.Target />
 						<Menu.Dropdown>
-							<Menu.Link href={ Routes.editEmployeeInterview(employee_interview.id) }>
+							<Menu.Link href={ Routes.editInterview(employee_interview.id) }>
 								Edit EmployeeInterview
 							</Menu.Link>
 						</Menu.Dropdown>

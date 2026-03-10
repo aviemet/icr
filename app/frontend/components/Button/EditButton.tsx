@@ -2,7 +2,7 @@ import { useMantineTheme } from "@mantine/core"
 
 import { Link, Tooltip } from "@/components"
 import { EditIcon } from "@/components/Icons"
-import useStore from "@/lib/store"
+import { useStore } from "@/lib/store"
 
 import { LinkProps } from "../Link"
 
@@ -10,7 +10,7 @@ interface EditButtonProps extends Omit<LinkProps, "children"> {
 	label?: string
 }
 
-const EditButton = ({ href, label }: EditButtonProps) => {
+export function EditButton({ href, label }: EditButtonProps) {
 	const { primaryColor } = useMantineTheme()
 	const { getContrastingColor } = useStore()
 
@@ -31,5 +31,3 @@ const EditButton = ({ href, label }: EditButtonProps) => {
 		</Tooltip>
 	)
 }
-
-export default EditButton

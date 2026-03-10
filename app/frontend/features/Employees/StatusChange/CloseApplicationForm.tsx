@@ -2,11 +2,11 @@ import { Grid } from "@/components"
 import { Form, Textarea, Submit } from "@/components/Form"
 import { Routes } from "@/lib"
 
-interface CloseApplicationFormProps {
+export interface CloseApplicationFormProps {
 	employee: Schema.EmployeesShow
 }
 
-const CloseApplicationForm = ({ employee }: CloseApplicationFormProps) => {
+export function CloseApplicationForm({ employee }: CloseApplicationFormProps) {
 	return (
 		<Form
 			model="employee"
@@ -34,5 +34,3 @@ const CloseApplicationForm = ({ employee }: CloseApplicationFormProps) => {
 		</Form>
 	)
 }
-
-export default CloseApplicationForm

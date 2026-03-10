@@ -51,7 +51,7 @@ interface TableContextProviderProps {
 const [useTableContext, TableContextProvider] = createContext<TableContextValues>()
 export { useTableContext }
 
-const TableProvider = ({
+export function TableProvider({
 	children,
 	selectable = false,
 	pagination,
@@ -59,7 +59,7 @@ const TableProvider = ({
 	hideable = true,
 	model,
 	fallbackMessage,
-}: TableContextProviderProps) => {
+}: TableContextProviderProps) {
 	const tableReducer = (tableState: TableState, newTableState: Partial<TableState>) => ({
 		...tableState,
 		...newTableState,
@@ -108,5 +108,3 @@ const StatePreservingRowUpdater = React.memo(({ children, rows, pagination }: St
 
 	return <>{ children }</>
 })
-
-export default TableProvider

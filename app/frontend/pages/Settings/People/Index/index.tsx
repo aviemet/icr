@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
 import { IndexPageTemplate } from "@/features"
-import PeopleTable from "@/features/Settings/People/Table"
+import { PersonTable } from "@/features/Settings/People/Table"
 import { Routes } from "@/lib"
 import { withLayout } from "@/lib/withLayout"
 
@@ -20,7 +20,7 @@ const PeopleIndex = ({ people, pagination }: PersonIndexProps) => {
 				{ label: "New Person", href: Routes.newSettingsPerson(), icon: <NewIcon /> },
 			] }
 		>
-			<PeopleTable />
+			<PersonTable />
 		</IndexPageTemplate>
 	)
 }

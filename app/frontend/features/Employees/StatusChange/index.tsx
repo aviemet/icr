@@ -4,16 +4,16 @@ import { useState, useMemo } from "react"
 import { Title, Page, Section } from "@/components"
 import { Routes } from "@/lib"
 
-import CloseApplicationForm from "./CloseApplicationForm"
-import OnboardingForm from "./OnboardingForm"
-import ResignationForm from "./ResignationForm"
-import TerminationForm from "./TerminationForm"
+import { CloseApplicationForm } from "./CloseApplicationForm"
+import { OnboardingForm } from "./OnboardingForm"
+import { ResignationForm } from "./ResignationForm"
+import { TerminationForm } from "./TerminationForm"
 
-interface StatusChangeProps {
+export interface StatusChangeProps {
 	employee: Schema.EmployeesShow
 }
 
-const StatusChange = ({ employee }: StatusChangeProps) => {
+export function StatusChange({ employee }: StatusChangeProps) {
 	const [selectedTransition, setSelectedTransition] = useState<string>(() => {
 		if(employee.status === "applicant") return "begin_onboarding"
 		return ""
@@ -82,5 +82,3 @@ const StatusChange = ({ employee }: StatusChangeProps) => {
 		</Page>
 	)
 }
-
-export default StatusChange

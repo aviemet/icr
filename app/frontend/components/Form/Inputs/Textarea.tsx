@@ -2,9 +2,9 @@ import clsx from "clsx"
 import React from "react"
 import { useInertiaInput, type NestedObject } from "use-inertia-form"
 
-import TextareaInput, { type TextareaProps } from "@/components/Inputs/Textarea"
+import { Textarea as TextareaInput, type TextareaProps } from "@/components/Inputs/Textarea"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { InputConflicts, type BaseFormInputProps } from "."
 
@@ -15,7 +15,7 @@ interface FormTextareaProps<TForm extends NestedObject = NestedObject>
 	ref?: React.Ref<HTMLTextAreaElement>
 }
 
-function Textarea<TForm extends NestedObject = NestedObject>({
+export function Textarea<TForm extends NestedObject = NestedObject>({
 	label,
 	name,
 	required,
@@ -78,5 +78,3 @@ function Textarea<TForm extends NestedObject = NestedObject>({
 		</InputWrapper>
 	)
 }
-
-export default Textarea

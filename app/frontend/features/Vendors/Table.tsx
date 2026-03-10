@@ -3,7 +3,7 @@ import { EditButton } from "@/components/Button"
 import { type TableProps } from "@/components/Table/Table"
 import { Routes } from "@/lib"
 
-const VendorTable = (props: TableProps) => {
+export function VendorTable(props: TableProps) {
 	return (
 		<Table { ...props }>
 			<Table.Head>
@@ -31,5 +31,3 @@ const VendorTable = (props: TableProps) => {
 		</Table>
 	)
 }
-
-export default VendorTable

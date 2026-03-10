@@ -1,8 +1,11 @@
-import { NumberInput, type NumberInputProps as MantineNumberInputProps } from "@mantine/core"
+import {
+	NumberInput as MantineNumberInput,
+	type NumberInputProps as MantineNumberInputProps,
+} from "@mantine/core"
 import React from "react"
 
-import InputWrapper from "./InputWrapper"
-import Label from "./Label"
+import { InputWrapper } from "./InputWrapper"
+import { Label } from "./Label"
 
 import { withInjectedProps, type BaseInputProps } from "."
 
@@ -10,7 +13,7 @@ export interface NumberInputProps extends MantineNumberInputProps, BaseInputProp
 	ref?: React.Ref<HTMLInputElement>
 }
 
-const NumberInputComponent = ({
+export function NumberInput({
 	label,
 	name,
 	required = false,
@@ -21,7 +24,7 @@ const NumberInputComponent = ({
 	disableAutofill = true,
 	ref,
 	...props
-}: NumberInputProps) => {
+}: NumberInputProps) {
 	const inputId = id || name
 
 	return (
@@ -29,7 +32,7 @@ const NumberInputComponent = ({
 			{ label && <Label required={ required } htmlFor={ inputId }>
 				{ label }
 			</Label> }
-			<NumberInput
+			<MantineNumberInput
 				ref={ ref }
 				id={ inputId }
 				value={ value }
@@ -41,5 +44,3 @@ const NumberInputComponent = ({
 		</InputWrapper>
 	)
 }
-
-export default NumberInputComponent

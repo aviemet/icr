@@ -5,7 +5,7 @@ import { EditButton } from "@/components/Button"
 import { type TableProps } from "@/components/Table/Table"
 import { Routes } from "@/lib"
 
-const ScheduleTable = (props: TableProps) => {
+export function ScheduleTable(props: TableProps) {
 	return (
 		<Table { ...props }>
 			<Table.Head>
@@ -29,5 +29,3 @@ const ScheduleTable = (props: TableProps) => {
 		</Table>
 	)
 }
-
-export default ScheduleTable

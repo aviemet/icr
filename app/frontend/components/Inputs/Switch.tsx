@@ -1,7 +1,10 @@
-import { Switch, type SwitchProps as MantineSwitchProps } from "@mantine/core"
+import {
+	Switch as MantineSwitch,
+	type SwitchProps as MantineSwitchProps,
+} from "@mantine/core"
 import React from "react"
 
-import InputWrapper from "./InputWrapper"
+import { InputWrapper } from "./InputWrapper"
 
 import { type BaseInputProps } from "."
 
@@ -10,7 +13,7 @@ export interface SwitchProps extends MantineSwitchProps, Omit<BaseInputProps, "d
 	ref?: React.Ref<HTMLInputElement>
 }
 
-const SwitchComponent = ({
+export function Switch({
 	id,
 	name,
 	style,
@@ -18,12 +21,12 @@ const SwitchComponent = ({
 	wrapperProps,
 	ref,
 	...props
-}: SwitchProps) => {
+}: SwitchProps) {
 	const inputId = id ?? name
 
 	return (
 		<InputWrapper wrapper={ wrapper } wrapperProps={ wrapperProps }>
-			<Switch
+			<MantineSwitch
 				ref={ ref }
 				id={ inputId }
 				name={ name }
@@ -34,5 +37,3 @@ const SwitchComponent = ({
 		</InputWrapper>
 	)
 }
-
-export default SwitchComponent

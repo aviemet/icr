@@ -3,7 +3,7 @@ import { EditButton } from "@/components/Button"
 import { type TableProps } from "@/components/Table/Table"
 import { Routes } from "@/lib"
 
-const ShiftTemplateTable = (props: TableProps) => {
+export function ShiftTemplateTable(props: TableProps) {
 	return (
 		<Table { ...props }>
 			<Table.Head>
@@ -30,5 +30,3 @@ const ShiftTemplateTable = (props: TableProps) => {
 		</Table>
 	)
 }
-
-export default ShiftTemplateTable

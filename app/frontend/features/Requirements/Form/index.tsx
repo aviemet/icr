@@ -14,7 +14,7 @@ export interface RequirementRequirementFormProps {
 	requirement_requirement: Schema.RequirementRequirementsFormData
 }
 
-const RequirementRequirementForm = ({ method = "post", requirement_requirement, ...props }: RequirementRequirementFormProps) => {
+export function RequirementRequirementForm({ method = "post", requirement_requirement, ...props }: RequirementRequirementFormProps) {
 	return (
 		<Form
 			model="requirement_requirement"
@@ -43,5 +43,3 @@ const RequirementRequirementForm = ({ method = "post", requirement_requirement, 
 		</Form>
 	)
 }
-
-export default RequirementRequirementForm

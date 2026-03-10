@@ -2,7 +2,7 @@ import { Table, type TableProps } from "@/components"
 import { EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
-const TimesheetTable = (props: TableProps) => {
+export function TimesheetTable(props: TableProps) {
 	return (
 		<Table { ...props }>
 			<Table.Head>
@@ -22,5 +22,3 @@ const TimesheetTable = (props: TableProps) => {
 		</Table>
 	)
 }
-
-export default TimesheetTable

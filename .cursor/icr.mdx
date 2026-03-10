@@ -98,6 +98,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 ### Development Guidelines
 - No multi-tenancy support
 - Changes must be atomic and focused
+- Frontend: no default exports; use named exports only (except for the app/frontend/pages directory, those all MUST be default exports). React components use function declarations: `export function ComponentName({ ...props }: Props) { ... }`. Barrel files re-export with `export { X } from "./Y"`. Inertia page modules may export a named `Page` (e.g. `export const Page = withLayout(Inner, "layout")`) for the resolver.
 - When checking HTTP response status, use exact status equality (e.g. 201), not range checks.
 - TypeScript: strict types, prefer existing types and generics over inline types or assertions; only annotate return types when intent is ambiguous or for public API.
 - Nested ternaries are disallowed; use `if`/`else` or early returns.

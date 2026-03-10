@@ -15,7 +15,7 @@ const personLink = (person: Schema.PeopleIndex) => {
 	return Routes.settingsPerson(person.slug)
 }
 
-const PersonTable = (props: TableProps) => {
+export function PersonTable(props: TableProps) {
 	return (
 		<Table { ...props }>
 			<Table.Head>
@@ -68,5 +68,3 @@ const PersonTable = (props: TableProps) => {
 		</Table>
 	)
 }
-
-export default PersonTable

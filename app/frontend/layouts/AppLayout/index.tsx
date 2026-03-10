@@ -5,15 +5,15 @@ import { useEffect } from "react"
 
 import "@mantine/tiptap/styles.css"
 import { AppShell } from "@/components"
-import useStore from "@/lib/store"
+import { useStore } from "@/lib/store"
 
 import * as classes from "./AppLayout.css"
-import Footer from "./Footer"
-import Sidebar from "./Sidebar"
-import Topbar from "./Topbar"
+import { Footer } from "./Footer"
+import { Sidebar } from "./Sidebar"
+import { Topbar } from "./Topbar"
 import { LayoutProps } from "../index"
 
-const AppLayout = ({ children }: LayoutProps) => {
+export function AppLayout({ children }: LayoutProps) {
 	const theme = useMantineTheme()
 	const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`)
 	const toggleSidebarOpen = useStore(state => state.toggleSidebarOpen)
@@ -57,5 +57,3 @@ const AppLayout = ({ children }: LayoutProps) => {
 		</AppShell>
 	)
 }
-
-export default AppLayout

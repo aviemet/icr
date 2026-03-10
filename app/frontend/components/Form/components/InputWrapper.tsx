@@ -1,14 +1,13 @@
-import ConditionalWrapper from "@/components/ConditionalWrapper"
+import { ConditionalWrapper } from "@/components/ConditionalWrapper"
 
-import Field, { type FieldProps } from "./Field"
-
+import { Field, type FieldProps } from "./Field"
 
 interface InputWrapperProps extends FieldProps {
 	children: React.ReactNode
 	wrapped?: boolean
 }
 
-const InputWrapper = ({ children, wrapped = true, ...props }: InputWrapperProps) => {
+export function InputWrapper({ children, wrapped = true, ...props }: InputWrapperProps) {
 	return (
 		<ConditionalWrapper
 			condition={ wrapped }
@@ -22,5 +21,3 @@ const InputWrapper = ({ children, wrapped = true, ...props }: InputWrapperProps)
 		</ConditionalWrapper>
 	)
 }
-
-export default InputWrapper

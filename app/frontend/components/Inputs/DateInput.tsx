@@ -9,8 +9,8 @@ import { CalendarIcon } from "@/components/Icons"
 import { isUnset } from "@/lib"
 import { isDate } from "@/lib/dates"
 
-import InputWrapper from "./InputWrapper"
-import Label from "./Label"
+import { InputWrapper } from "./InputWrapper"
+import { Label } from "./Label"
 
 import { type DateInputValue, type BaseInputProps } from "."
 
@@ -26,7 +26,7 @@ export interface DateInputProps
 	onChange?: (date: DateInputValue) => void
 }
 
-const DateInputComponent = ({
+export function DateInput({
 	label,
 	id,
 	name,
@@ -39,7 +39,7 @@ const DateInputComponent = ({
 	onChange,
 	ref,
 	...props
-}: DateInputProps) => {
+}: DateInputProps) {
 	const inputId = id || name
 
 	const [localValue, setLocalValue] = useState<DateInputValue>(() => {
@@ -106,6 +106,4 @@ const DateInputComponent = ({
 		</InputWrapper>
 	)
 }
-
-export default DateInputComponent
 

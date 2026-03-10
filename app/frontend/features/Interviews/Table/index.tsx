@@ -3,7 +3,7 @@ import { EditButton } from "@/components/Button"
 import { type TableProps } from "@/components/Table/Table"
 import { Routes } from "@/lib"
 
-const EmployeeInterviewTable = (props: TableProps) => {
+export function EmployeeInterviewTable(props: TableProps) {
 	return (
 		<Table { ...props }>
 			<Table.Head>
@@ -15,23 +15,27 @@ const EmployeeInterviewTable = (props: TableProps) => {
 				</Table.Row>
 			</Table.Head>
 			<Table.Body>
-				<Table.RowIterator render={ (employee_interview: Schema.EmployeeInterviewsIndex) => (
-					<Table.Row key={ employee_interview.id }>
+				<Table.RowIterator render={ (employee_interview: Schema.EmployeeInterviewsIndex) => {
+					const id = employee_interview.id as string
+					const scheduledAt = String(employee_interview.scheduled_at as string | number | Date)
+					const notes = String(employee_interview.notes as string | number | Date)
 
-						<Table.Cell>
-							<Link href={ Routes.employeeInterview(employee_interview.id) }>{ employee_interview.scheduled_at }</Link>
-						</Table.Cell>
-						<Table.Cell>
-							<Link href={ Routes.employeeInterview(employee_interview.id) }>{ employee_interview.notes }</Link>
-						</Table.Cell>
-						<Table.Cell>
-							<EditButton href={ Routes.editEmployeeInterview(employee_interview.id) } />
-						</Table.Cell>
-					</Table.Row>
-				) } />
+					return (
+						<Table.Row key={ id }>
+							<Table.Cell>
+								<Link href={ Routes.interview(id) }>{ scheduledAt }</Link>
+							</Table.Cell>
+							<Table.Cell>
+								<Link href={ Routes.interview(id) }>{ notes }</Link>
+							</Table.Cell>
+							<Table.Cell>
+								<EditButton href={ Routes.editInterview(id) } />
+							</Table.Cell>
+						</Table.Row>
+					)
+				} }
+				/>
 			</Table.Body>
 		</Table>
 	)
 }
-
-export default EmployeeInterviewTable

@@ -12,7 +12,7 @@ import { useDeleteClientCalendarEvent } from "@/queries/clients"
 
 import * as classes from "./EventPopoverContent.css"
 
-interface EventPopoverContentProps {
+export interface EventPopoverContentProps {
 	event: BaseCalendarEvent
 	localizer: CalendarLocalizer
 	primaryResource?: "client" | "employee"
@@ -32,7 +32,7 @@ function isClientResource(value: unknown): value is Schema.ClientsPersisted {
 	return typeof (value as { id: unknown }).id === "string" && typeof (value as { slug: unknown }).slug === "string"
 }
 
-const EventPopoverContent = ({ event, localizer, primaryResource = "employee" }: EventPopoverContentProps) => {
+export function EventPopoverContent({ event, localizer, primaryResource = "employee" }: EventPopoverContentProps) {
 	const [editing, setEditing] = useState(false)
 
 	const modals = useModals()
@@ -121,5 +121,3 @@ const EventPopoverContent = ({ event, localizer, primaryResource = "employee" }:
 		</Stack>
 	)
 }
-
-export default EventPopoverContent

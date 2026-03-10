@@ -2,7 +2,7 @@ import { Checkbox } from "@/components/Inputs"
 import { CheckboxProps } from "@/components/Inputs/Checkbox"
 
 import { useTableContext } from "../TableContext"
-import Td from "../Td"
+import { Td } from "../Td"
 
 interface RowCheckBoxProps extends CheckboxProps {
 	selected: Set<string>
@@ -11,7 +11,7 @@ interface RowCheckBoxProps extends CheckboxProps {
 	indeterminate: boolean
 }
 
-const HeadCheckbox = ({ selected, rows, allChecked, indeterminate, ...props }: RowCheckBoxProps) => {
+export function HeadCheckbox({ selected, rows, allChecked, indeterminate, ...props }: RowCheckBoxProps) {
 	const { setTableState } = useTableContext()
 
 	const handleClick = () => {
@@ -40,5 +40,3 @@ const HeadCheckbox = ({ selected, rows, allChecked, indeterminate, ...props }: R
 		</Td>
 	)
 }
-
-export default HeadCheckbox

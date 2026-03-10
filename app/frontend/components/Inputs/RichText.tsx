@@ -1,8 +1,8 @@
 import React from "react"
 
-import RichTextEditor, { type RichTextEditorProps } from "../RichTextEditor"
-import InputWrapper from "./InputWrapper"
-import Label from "./Label"
+import { RichTextEditor, type RichTextEditorProps } from "../RichTextEditor"
+import { InputWrapper } from "./InputWrapper"
+import { Label } from "./Label"
 
 import { type BaseInputProps } from "."
 
@@ -18,7 +18,7 @@ export interface RichTextInputProps
 	name?: string
 }
 
-const RichText = ({
+export function RichText({
 	label,
 	name,
 	required = false,
@@ -27,7 +27,7 @@ const RichText = ({
 	wrapper,
 	ref,
 	...props
-}: RichTextInputProps) => {
+}: RichTextInputProps) {
 	const inputId = id || name
 
 	return (
@@ -41,5 +41,3 @@ const RichText = ({
 		</InputWrapper>
 	)
 }
-
-export default RichText

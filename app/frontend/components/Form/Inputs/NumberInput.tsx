@@ -1,21 +1,21 @@
 import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
-import NumberInput, { type NumberInputProps } from "@/components/Inputs/NumberInput"
+import { NumberInput as BaseNumberInput, type NumberInputProps } from "@/components/Inputs/NumberInput"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
 
 
-interface FormNumberInputProps<TForm extends NestedObject = NestedObject>
+export interface FormNumberInputProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<NumberInputProps, InputConflicts>,
 	BaseFormInputProps<number, TForm> {
 	ref?: React.Ref<HTMLInputElement>
 }
 
-function FormInput<TForm extends NestedObject = NestedObject>({
+export function NumberInput<TForm extends NestedObject = NestedObject>({
 	name,
 	model,
 	onChange,
@@ -54,7 +54,7 @@ function FormInput<TForm extends NestedObject = NestedObject>({
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<NumberInput
+			<BaseNumberInput
 				ref={ ref }
 				id={ id || inputId }
 				name={ inputName }
@@ -69,5 +69,3 @@ function FormInput<TForm extends NestedObject = NestedObject>({
 		</InputWrapper>
 	)
 }
-
-export default FormInput

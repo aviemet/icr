@@ -2,10 +2,10 @@ import { type Method, type Visit } from "@inertiajs/core"
 import { type AnchorProps, type ButtonProps } from "@mantine/core"
 import React, { useMemo } from "react"
 
-import ExternalLink from "./ExternalLink"
-import InertiaLink from "./InertiaLink"
+import { ExternalLink } from "./ExternalLink"
+import { InertiaLink } from "./InertiaLink"
 
-export { default as NavLink, type NavLinkProps } from "./NavLink"
+export { NavLink, type NavLinkProps } from "./NavLink"
 
 export interface LinkProps
 	extends
@@ -30,7 +30,7 @@ export interface LinkProps
 
 const externalPrefix = ["http", "www"]
 
-const Link = ({
+export function Link({
 	children,
 	href,
 	as = "a",
@@ -43,7 +43,7 @@ const Link = ({
 	disabled = false,
 	ref,
 	...props
-}: LinkProps) => {
+}: LinkProps) {
 	// Disable navigation if link is disabled
 	const handleClick = (e: React.MouseEvent<Element, MouseEvent>) => {
 		if(disabled) {
@@ -101,5 +101,3 @@ const Link = ({
 		</InertiaLink>
 	)
 }
-
-export default Link

@@ -1,9 +1,9 @@
 import { useComputedColorScheme } from "@mantine/core"
 
 import { Burger } from "@/components"
-import useStore from "@/lib/store"
+import { useStore } from "@/lib/store"
 
-const ToggleSidebarButton = () => {
+export function ToggleSidebarButton() {
 	const { sidebarOpen, toggleSidebarOpen } = useStore()
 	const colorScheme = useComputedColorScheme()
 
@@ -21,5 +21,3 @@ const ToggleSidebarButton = () => {
 		/>
 	)
 }
-
-export default ToggleSidebarButton

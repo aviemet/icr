@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from "react"
 
 import { NestedURLSearchParams } from "@/lib/collections"
 
-const useLocation = () => {
+export function useLocation() {
 	const [location, setLocation] = useState(window.location)
 
 	const listenToPopstate = () => {
@@ -42,5 +42,3 @@ const useLocation = () => {
 		toString: () => location.toString(),
 	}
 }
-
-export default useLocation

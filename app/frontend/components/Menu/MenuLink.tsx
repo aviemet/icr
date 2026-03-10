@@ -12,7 +12,7 @@ interface MenuItemProps extends MantineMenuItemProps, Omit<LinkProps, "color" | 
 	type?: string
 }
 
-const MenuItem = ({
+const MenuLinkInner = ({
 	children,
 	disabled = false,
 	className,
@@ -33,4 +33,6 @@ const MenuItem = ({
 	)
 }
 
-export default createPolymorphicComponent<typeof Link, MenuItemProps>(MenuItem)
+const MenuLink = createPolymorphicComponent<typeof Link, MenuItemProps>(MenuLinkInner)
+
+export { MenuLink }

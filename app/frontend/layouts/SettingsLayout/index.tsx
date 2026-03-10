@@ -6,11 +6,11 @@ import { Box, Paper, Container } from "@/components"
 import { Routes } from "@/lib"
 import { useLocation } from "@/lib/hooks"
 
-import SettingsNavLink from "./SettingsNavLink"
-import AppLayout from "../AppLayout"
+import { SettingsNavLink } from "./SettingsNavLink"
+import { AppLayout } from "../AppLayout"
 import * as classes from "./SettingsLayout.css"
 
-interface SettingsLayoutProps {
+export interface SettingsLayoutProps {
 	children: React.ReactNode
 }
 
@@ -24,7 +24,7 @@ const links = [
 
 const linkIndex = (path: string) => links.findIndex(link => link.href === path || path.startsWith(link.href))
 
-const SettingsLayout = ({ children }: SettingsLayoutProps) => {
+export function SettingsLayout({ children }: SettingsLayoutProps) {
 	const { pathname } = useLocation()
 
 	const [rootRef, setRootRef] = useState<HTMLElement | null>(null)
@@ -81,5 +81,3 @@ const SettingsLayout = ({ children }: SettingsLayoutProps) => {
 		</AppLayout>
 	)
 }
-
-export default SettingsLayout

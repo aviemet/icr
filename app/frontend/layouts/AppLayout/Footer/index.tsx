@@ -2,12 +2,12 @@ import { Box, AppShell, Group } from "@mantine/core"
 
 import { ToggleColorSchemeButton } from "@/components/Button"
 
-const FooterComponent = () => {
+export function Footer() {
 	return (
 		<AppShell.Footer py={ 4 } px={ 8 }>
 			<Group>
 				<ToggleColorSchemeButton />
-				<div id="footer-portal" />
+				<Box id="footer-portal" />
 				<Box style={ { marginLeft: "auto" } }>
 					©{ (new Date).getFullYear() }
 				</Box>
@@ -15,5 +15,3 @@ const FooterComponent = () => {
 		</AppShell.Footer>
 	)
 }
-
-export default FooterComponent

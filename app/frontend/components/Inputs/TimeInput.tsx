@@ -1,10 +1,13 @@
-import { TimePicker, type TimePickerProps as MantineTimePickerProps } from "@mantine/dates"
+import {
+	TimePicker,
+	type TimePickerProps as MantineTimePickerProps,
+} from "@mantine/dates"
 import React from "react"
 
 import { ClockIcon } from "@/components/Icons"
 
-import InputWrapper from "./InputWrapper"
-import Label from "./Label"
+import { InputWrapper } from "./InputWrapper"
+import { Label } from "./Label"
 
 import { type BaseInputProps } from "."
 
@@ -17,7 +20,7 @@ export interface TimeInputProps
 	id?: string
 }
 
-const TimeInput = ({
+export function TimeInput({
 	label,
 	id,
 	name,
@@ -30,7 +33,7 @@ const TimeInput = ({
 	popoverProps,
 	ref,
 	...props
-}: TimeInputProps) => {
+}: TimeInputProps) {
 	const inputId = id || name
 
 	return (
@@ -53,5 +56,3 @@ const TimeInput = ({
 		</InputWrapper>
 	)
 }
-
-export default TimeInput

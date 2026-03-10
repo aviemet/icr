@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import RequirementRequirementForm from "@/features/Requirements/Form"
+import { RequirementRequirementForm } from "@/features/Requirements/Form"
 import { Routes } from "@/lib"
 
 
@@ -12,7 +12,7 @@ const NewRequirementRequirement = ({ ...data }: NewRequirementRequirementProps) 
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: "Requirements", href: Routes.requirementRequirements() },
+			{ title: "Requirements", href: Routes.requirements() },
 			{ title: "New Requirement", href: window.location.href },
 		] }>
 
@@ -20,7 +20,7 @@ const NewRequirementRequirement = ({ ...data }: NewRequirementRequirementProps) 
 				<Title>{ title }</Title>
 
 				<RequirementRequirementForm
-					to={ Routes.requirementRequirements() }
+					to={ Routes.requirements() }
 					{ ...data }
 				/>
 			</Section>

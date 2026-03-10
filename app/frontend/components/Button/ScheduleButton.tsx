@@ -2,7 +2,7 @@ import { useMantineTheme } from "@mantine/core"
 
 import { Link, Tooltip } from "@/components"
 import { CalendarIcon } from "@/components/Icons"
-import useStore from "@/lib/store"
+import { useStore } from "@/lib/store"
 
 import { LinkProps } from "../Link"
 
@@ -10,7 +10,7 @@ interface ScheduleButtonProps extends Omit<LinkProps, "children"> {
 	label?: string
 }
 
-const ScheduleButton = ({ href, label }: ScheduleButtonProps) => {
+export function ScheduleButton({ href, label }: ScheduleButtonProps) {
 	const { primaryColor } = useMantineTheme()
 	const { getContrastingColor } = useStore()
 
@@ -31,5 +31,3 @@ const ScheduleButton = ({ href, label }: ScheduleButtonProps) => {
 		</Tooltip>
 	)
 }
-
-export default ScheduleButton

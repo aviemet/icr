@@ -14,7 +14,7 @@ export interface IHouseholdFormProps {
 	household: Schema.HouseholdsFormData
 }
 
-const HouseholdForm = ({ method = "post", household, ...props }: IHouseholdFormProps) => {
+export function HouseholdForm({ method = "post", household, ...props }: IHouseholdFormProps) {
 	return (
 		<Form
 			model="household"
@@ -26,5 +26,3 @@ const HouseholdForm = ({ method = "post", household, ...props }: IHouseholdFormP
 		</Form>
 	)
 }
-
-export default HouseholdForm

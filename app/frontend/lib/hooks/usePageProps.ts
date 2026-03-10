@@ -14,8 +14,6 @@ export interface SharedInertiaProps extends PageProps {
 	permissions: Record<string, Record<string, boolean>>
 }
 
-const usePageProps = () => {
+export function usePageProps() {
 	return usePage<SharedInertiaProps>().props
 }
-
-export default usePageProps

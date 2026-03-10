@@ -8,14 +8,14 @@ interface LabelProps
 	required?: boolean
 }
 
-const Label = ({ children, required = false, className, ...props }: LabelProps) => (
-	<Box
-		component="label"
-		className={ clsx(className, { required }) }
-		{ ...props }
-	>
-		{ children }
-	</Box>
-)
-
-export default Label
+export function Label({ children, required = false, className, ...props }: LabelProps) {
+	return (
+		<Box
+			component="label"
+			className={ clsx(className, { required }) }
+			{ ...props }
+		>
+			{ children }
+		</Box>
+	)
+}

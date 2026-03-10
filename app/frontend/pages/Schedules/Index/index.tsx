@@ -1,5 +1,5 @@
 import { IndexPageTemplate } from "@/features"
-import SchedulesTable from "@/features/Schedules/Table"
+import { ScheduleTable } from "@/features/Schedules/Table"
 import { Routes } from "@/lib"
 
 interface ScheduleIndexProps {
@@ -16,7 +16,7 @@ const Index = ({ clients, pagination }: ScheduleIndexProps) => {
 			pagination={ pagination }
 			deleteRoute={ Routes.clients() }
 		>
-			<SchedulesTable />
+			<ScheduleTable />
 		</IndexPageTemplate>
 	)
 }

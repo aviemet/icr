@@ -11,7 +11,7 @@ import {
 	VIEWS,
 } from "@/components/Calendar/views"
 
-import DailyTotals from "./components/DailyTotals"
+import { DailyTotals } from "./components/DailyTotals"
 import { DaysHeading } from "./components/DaysHeading"
 import { EventWrapper, MonthEvent } from "./components/Event"
 import * as classes from "./MonthView.css"

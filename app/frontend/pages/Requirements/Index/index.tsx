@@ -1,11 +1,11 @@
 import { NewIcon } from "@/components/Icons"
 import { IndexPageTemplate } from "@/features"
-import RequirementsTable from "@/features/Requirements/Table"
+import { RequirementRequirementTable } from "@/features/Requirements/Table"
 import { Routes } from "@/lib"
 
 
 interface RequirementIndexProps {
-	requirements: Schema.RequirementsIndex[]
+	requirements: Schema.RequirementRequirementsIndex[]
 	pagination: Schema.Pagination
 }
 
@@ -21,7 +21,7 @@ const RequirementsIndex = ({ requirements, pagination }: RequirementIndexProps) 
 				{ label: "New Requirement", href: Routes.newRequirement(), icon: <NewIcon /> },
 			] }
 		>
-			<RequirementsTable />
+			<RequirementRequirementTable />
 		</IndexPageTemplate>
 	)
 }

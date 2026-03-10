@@ -5,11 +5,11 @@ import { withDefaults } from "@/lib"
 const defaultClassName = "react-icon"
 const defaultSize = "1rem"
 
-interface IconProviderProps extends IconContextProps {
+export interface IconProviderProps extends IconContextProps {
 	children: React.ReactNode
 }
 
-const IconProvider = ({ children, ...props }: IconProviderProps) => {
+export function IconProvider({ children, ...props }: IconProviderProps) {
 	const value: IconContextProps = withDefaults(props, {
 		className: defaultClassName,
 		size: defaultSize,
@@ -20,5 +20,3 @@ const IconProvider = ({ children, ...props }: IconProviderProps) => {
 		</IconContext.Provider>
 	)
 }
-
-export default IconProvider

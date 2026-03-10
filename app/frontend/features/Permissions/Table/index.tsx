@@ -1,11 +1,11 @@
-import { Table, Link } from "@/Components"
-import { EditButton } from "@/Components/Button"
-import { type TableProps } from "@/Components/Table/Table"
+import { Table } from "@/components"
+import { EditButton } from "@/components/Button"
+import { type TableProps } from "@/components/Table/Table"
 import { Routes } from "@/lib"
 
-const PermissionTable = (props: TableProps) => {
+export function PermissionTable(props: TableProps) {
 	return (
-		<Table { ...props}>
+		<Table { ...props }>
 			<Table.Head>
 				<Table.Row>
 					<Table.HeadCell className="actions">Actions</Table.HeadCell>
@@ -23,5 +23,3 @@ const PermissionTable = (props: TableProps) => {
 		</Table>
 	)
 }
-
-export default PermissionTable

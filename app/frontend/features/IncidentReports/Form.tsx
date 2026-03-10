@@ -14,7 +14,7 @@ export interface IncidentReportFormProps {
 	incident_report: Schema.IncidentReportsFormData
 }
 
-const IncidentReportForm = ({ method = "post", incident_report, ...props }: IncidentReportFormProps) => {
+export function IncidentReportForm({ method = "post", incident_report, ...props }: IncidentReportFormProps) {
 	return (
 		<Form
 			model="incident_report"
@@ -43,5 +43,3 @@ const IncidentReportForm = ({ method = "post", incident_report, ...props }: Inci
 		</Form>
 	)
 }
-
-export default IncidentReportForm

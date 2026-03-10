@@ -3,7 +3,7 @@ import { Form as Form3, DynamicFields, Submit as Submit3 } from "@/components/Fo
 import { Checkbox as Checkbox3, TextInput as TextInput3 } from "@/components/Inputs"
 import { type HTTPVerb } from "@/lib"
 
-import Ihss from "./Ihss"
+import { Ihss } from "./Ihss"
 
 export type ClientFormData = {
 	client: Partial<Schema.ClientsFormData> & {
@@ -18,7 +18,7 @@ export interface ClientFormProps {
 	client: Schema.ClientsFormData & { phone_numbers?: { number: string }[] }
 }
 
-const ClientForm = ({ method = "post", to, client, ...props }: ClientFormProps) => {
+export function ClientForm({ method = "post", to, client, ...props }: ClientFormProps) {
 	return (
 		<Form3 action={ to } method={ method } initialData={ { client } } { ...props }>
 			<Grid>
@@ -60,5 +60,3 @@ const ClientForm = ({ method = "post", to, client, ...props }: ClientFormProps) 
 		</Form3>
 	)
 }
-
-export default ClientForm

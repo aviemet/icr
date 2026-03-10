@@ -12,7 +12,7 @@ import { usePageProps } from "@/lib/hooks"
 import * as classes from "../Table.css"
 import { useTableContext } from "../TableContext"
 
-const ColumnPicker = () => {
+export function ColumnPicker() {
 	const { auth: { user } } = usePageProps()
 	const { tableState: { hideable, columns, model } } = useTableContext()
 
@@ -58,5 +58,3 @@ const ColumnPicker = () => {
 		</Menu>
 	)
 }
-
-export default ColumnPicker

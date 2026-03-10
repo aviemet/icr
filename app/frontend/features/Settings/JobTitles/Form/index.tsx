@@ -4,7 +4,7 @@ import { Grid } from "@/components"
 import { Form, TextInput, Submit, RichText } from "@/components/Form"
 
 import { emptyPermissions, JobTitleFormData } from "./formData"
-import PermissionsSection from "./PermissionsSection"
+import { PermissionsSection } from "./PermissionsSection"
 
 
 export interface JobTitleFormProps {
@@ -14,7 +14,7 @@ export interface JobTitleFormProps {
 	job_title: Schema.JobTitlesFormData
 }
 
-const JobTitleForm = ({ method = "post", job_title, ...props }: JobTitleFormProps) => {
+export function JobTitleForm({ method = "post", job_title, ...props }: JobTitleFormProps) {
 	return (
 		<Form
 			model="job_title"
@@ -41,5 +41,3 @@ const JobTitleForm = ({ method = "post", job_title, ...props }: JobTitleFormProp
 		</Form>
 	)
 }
-
-export default JobTitleForm

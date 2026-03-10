@@ -4,7 +4,7 @@ import { Checkbox } from "@/components/Inputs"
 import { CheckboxProps } from "@/components/Inputs/Checkbox"
 
 import { useTableContext } from "../TableContext"
-import Td from "../Td"
+import { Td } from "../Td"
 
 
 interface RowCheckBox extends CheckboxProps {
@@ -12,7 +12,7 @@ interface RowCheckBox extends CheckboxProps {
 	selected: Set<string>
 }
 
-const RowCheckbox = ({ name, selected, ...props }: RowCheckBox) => {
+export function RowCheckbox({ name, selected, ...props }: RowCheckBox) {
 	const { setTableState } = useTableContext()
 
 	const handleClick = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,5 +32,3 @@ const RowCheckbox = ({ name, selected, ...props }: RowCheckBox) => {
 		</Td>
 	)
 }
-
-export default RowCheckbox

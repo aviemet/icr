@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next"
 
 import { NewIcon } from "@/components/Icons"
 import { IndexPageTemplate } from "@/features"
-import EmployeesTable from "@/features/Employees/Table"
+import { EmployeeTable } from "@/features/Employees/Table"
 import { Routes } from "@/lib"
 
 interface EmployeeIndexProps {
@@ -24,7 +24,7 @@ const EmployeesIndex = ({ employees, pagination }: EmployeeIndexProps) => {
 				{ label: t("views.employees.index.new"), href: Routes.newEmployee(), icon: <NewIcon /> },
 			] }
 		>
-			<EmployeesTable />
+			<EmployeeTable />
 		</IndexPageTemplate>
 	)
 }

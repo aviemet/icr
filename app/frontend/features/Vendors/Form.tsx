@@ -14,7 +14,7 @@ export interface VendorFormProps {
 	vendor: Schema.VendorsFormData
 }
 
-const VendorForm = ({ method = "post", vendor, ...props }: VendorFormProps) => {
+export function VendorForm({ method = "post", vendor, ...props }: VendorFormProps) {
 	return (
 		<Form
 			model="vendor"
@@ -37,5 +37,3 @@ const VendorForm = ({ method = "post", vendor, ...props }: VendorFormProps) => {
 		</Form>
 	)
 }
-
-export default VendorForm

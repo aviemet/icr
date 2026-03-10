@@ -4,10 +4,10 @@ import { DateInput, type DateInputValue } from "@/components/Inputs"
 
 import { type AdvancedInputProps } from "."
 
-const SearchDateInput = ({
+export function SearchDateInput({
 	advancedSearch,
 	name,
-}: AdvancedInputProps) => {
+}: AdvancedInputProps) {
 	const { values, inputProps, setInputValue } = advancedSearch
 
 	const { mb, wrapperProps, value } = inputProps<DateInputValue>(`${name}[start]`)
@@ -41,5 +41,3 @@ const SearchDateInput = ({
 		/>
 	)
 }
-
-export default SearchDateInput

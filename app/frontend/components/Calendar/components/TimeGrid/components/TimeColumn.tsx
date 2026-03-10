@@ -4,17 +4,17 @@ import { useCalendarContext } from "@/components/Calendar"
 
 import * as classes from "../TimeGrid.css"
 
-interface TimeColumnProps {
+export interface TimeColumnProps {
 	start: Date
 	end: Date
 	increment: number
 }
 
-const TimeColumn = ({
+export function TimeColumn({
 	start,
 	end,
 	increment,
-}: TimeColumnProps) => {
+}: TimeColumnProps) {
 	const { localizer } = useCalendarContext()
 
 	const timeSlots = useMemo(() => {
@@ -43,5 +43,3 @@ const TimeColumn = ({
 		</div>
 	)
 }
-
-export default TimeColumn

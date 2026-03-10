@@ -1,9 +1,10 @@
-import { Table, Link, Group, DateTimeFormatter } from "@/components"
+import { Table, Link, Group } from "@/components"
 import { EditButton, ScheduleButton } from "@/components/Button"
+import { DateTimeFormatter } from "@/components/Formatters"
 import { type TableProps } from "@/components/Table/Table"
 import { Routes } from "@/lib"
 
-const EmployeeTable = (props: TableProps) => {
+export function EmployeeTable(props: TableProps) {
 	return (
 		<Table { ...props }>
 			<Table.Head>
@@ -47,5 +48,3 @@ const EmployeeTable = (props: TableProps) => {
 		</Table>
 	)
 }
-
-export default EmployeeTable

@@ -3,7 +3,7 @@ import { type TableTdProps } from "@mantine/core"
 import { usePageProps } from "@/lib/hooks"
 
 import { useTableContext } from "../TableContext"
-import BodyCell from "./BodyCell"
+import { BodyCell } from "./BodyCell"
 
 export interface TableCellProps extends TableTdProps {
 	fitContent?: boolean
@@ -13,7 +13,7 @@ export interface TableCellProps extends TableTdProps {
 	ref?: React.RefObject<HTMLTableCellElement>
 }
 
-const RenderedCell = ({ children = true, hideable, sort, ...props }: TableCellProps) => {
+export function Td({ children = true, hideable, sort, ...props }: TableCellProps) {
 	const { auth: { user: { table_preferences } } } = usePageProps()
 
 	const tableState = useTableContext(false)
@@ -33,5 +33,3 @@ const RenderedCell = ({ children = true, hideable, sort, ...props }: TableCellPr
 
 	return <BodyCell { ...props }>{ children }</BodyCell>
 }
-
-export default RenderedCell

@@ -1,14 +1,14 @@
 import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
-import AutocompleteInput, { type AutocompleteProps } from "@/components/Inputs/AutocompleteInput"
+import { AutocompleteInput, type AutocompleteProps } from "@/components/Inputs/AutocompleteInput"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { InputConflicts, type BaseFormInputProps } from "."
 
 
-interface FormAutocompleteProps<TForm extends NestedObject = NestedObject>
+export interface FormAutocompleteProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<AutocompleteProps, InputConflicts>,
 	BaseFormInputProps<string, TForm> {
@@ -16,7 +16,7 @@ interface FormAutocompleteProps<TForm extends NestedObject = NestedObject>
 	endpoint?: string
 }
 
-function FormAutocompleteComponent<TForm extends NestedObject>({
+export function Autocomplete<TForm extends NestedObject>({
 	name,
 	model,
 	onChange,
@@ -72,5 +72,3 @@ function FormAutocompleteComponent<TForm extends NestedObject>({
 		</InputWrapper>
 	)
 }
-
-export default FormAutocompleteComponent

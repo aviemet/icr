@@ -1,7 +1,7 @@
 import clsx from "clsx"
 
 import { Text } from "@/components"
-import useStickySentinel from "@/lib/hooks/useStickySentinel"
+import { useStickySentinel } from "@/lib/hooks/useStickySentinel"
 
 import * as classes from "../AgendaView.css"
 

@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 import { type UseFormProps } from "use-inertia-form"
 
 import { Grid, Title, Link } from "@/components"
-import { Form, Field, TextInput, PasswordInput, Checkbox, Submit } from "@/components/Form"
+import { Form, Field, TextInput, PasswordInput, CheckboxInput, Submit } from "@/components/Form"
 import { AuthPaperLayout } from "@/features"
 import { Routes, withLayout } from "@/lib"
 import { usePageProps } from "@/lib/hooks"
@@ -91,7 +91,7 @@ const Login = () => {
 
 					<Grid.Col>
 						<Field>
-							<Checkbox name="remember_me" label={ t("views.devise.login.remember_me") } />
+							<CheckboxInput name="remember_me" label={ t("views.devise.login.remember_me") } />
 						</Field>
 					</Grid.Col>
 

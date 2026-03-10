@@ -9,14 +9,14 @@ import { type FormAsyncDropdown } from ".."
 
 type CategoryValueKey = "id" | "slug"
 
-interface FormCategoriesDropdownProps extends Omit<FormAsyncDropdown<Schema.CategoriesOptions>, "name"> {
+export interface FormCategoriesDropdownProps extends Omit<FormAsyncDropdown<Schema.CategoriesOptions>, "name"> {
 	name?: string
 	categoryType: CategoryType
 	valueKey?: CategoryValueKey
 	defaultValue?: string
 }
 
-const FormCategoriesDropdown = ({
+export function FormCategoriesDropdown({
 	label = "Category",
 	name = "category_id",
 	categoryType,
@@ -24,7 +24,7 @@ const FormCategoriesDropdown = ({
 	initialData,
 	defaultValue,
 	...props
-}: FormCategoriesDropdownProps) => {
+}: FormCategoriesDropdownProps) {
 	const { data, isStale, refetch } = useGetCategoriesAsOptions(
 		{ categoryType },
 		{ initialData },
@@ -62,5 +62,3 @@ const FormCategoriesDropdown = ({
 		/>
 	)
 }
-
-export default FormCategoriesDropdown

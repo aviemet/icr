@@ -4,7 +4,7 @@ import { DateTimeFormatter } from "@/components/Formatters"
 import { type TableProps } from "@/components/Table/Table"
 import { Routes } from "@/lib"
 
-const ClientTable = (props: TableProps) => {
+export function ClientTable(props: TableProps) {
 	return (
 		<Table { ...props }>
 			<Table.Head>
@@ -47,5 +47,3 @@ const ClientTable = (props: TableProps) => {
 		</Table>
 	)
 }
-
-export default ClientTable

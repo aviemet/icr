@@ -1,3 +1,5 @@
+import React from "react"
+
 import { Select } from "@/components/Inputs"
 
 import { type AdvancedInputProps } from "."
@@ -11,7 +13,7 @@ export const dateRangeOptions = [
 
 type DateRangeType = typeof dateRangeOptions[number]["value"]
 
-const Type = ({
+export const Type = React.memo(({
 	advancedSearch,
 	name,
 }: AdvancedInputProps) => {
@@ -31,6 +33,5 @@ const Type = ({
 			options={ dateRangeOptions }
 		/>
 	)
-}
+})
 
-export default React.memo(Type)

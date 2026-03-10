@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
 import { IndexPageTemplate } from "@/features"
-import DoctorsTable from "@/features/Doctors/Table"
+import { DoctorTable } from "@/features/Doctors/Table"
 import { Routes } from "@/lib"
 
 interface DoctorIndexProps {
@@ -20,7 +20,7 @@ const DoctorsIndex = ({ doctors, pagination }: DoctorIndexProps) => {
 				{ label: "New Doctor", href: Routes.newDoctor(), icon: <NewIcon /> },
 			] }
 		>
-			<DoctorsTable />
+			<DoctorTable />
 		</IndexPageTemplate>
 	)
 }

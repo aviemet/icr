@@ -1,22 +1,22 @@
 import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
-import { DateInput, type DateInputValue } from "@/components/Inputs"
+import { DateInput as BaseDateInput, type DateInputValue } from "@/components/Inputs"
 import { type DateInputProps } from "@/components/Inputs/DateInput"
 import { isUnset } from "@/lib"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
 
-interface FormDateInputProps<TForm extends NestedObject = NestedObject>
+export interface FormDateInputProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<DateInputProps, InputConflicts>,
 	BaseFormInputProps<Exclude<DateInputValue, undefined | null> | "", TForm> {
 	ref?: React.Ref<HTMLButtonElement>
 }
 
-function FormDateInput<TForm extends NestedObject = NestedObject>({
+export function DateInput<TForm extends NestedObject = NestedObject>({
 	name,
 	required,
 	onChange,
@@ -63,7 +63,7 @@ function FormDateInput<TForm extends NestedObject = NestedObject>({
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<DateInput
+			<BaseDateInput
 				ref={ ref }
 				id={ id || inputId }
 				name={ inputName }
@@ -78,5 +78,3 @@ function FormDateInput<TForm extends NestedObject = NestedObject>({
 		</InputWrapper>
 	)
 }
-
-export default FormDateInput

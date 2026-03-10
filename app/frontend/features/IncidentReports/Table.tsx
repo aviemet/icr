@@ -4,7 +4,7 @@ import { DateTimeFormatter } from "@/components/Formatters"
 import { type TableProps } from "@/components/Table/Table"
 import { Routes } from "@/lib"
 
-const IncidentReportTable = (props: TableProps) => {
+export function IncidentReportTable(props: TableProps) {
 	return (
 		<Table { ...props }>
 			<Table.Head>
@@ -53,5 +53,3 @@ const IncidentReportTable = (props: TableProps) => {
 		</Table>
 	)
 }
-
-export default IncidentReportTable

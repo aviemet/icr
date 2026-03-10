@@ -14,7 +14,7 @@ interface DynamicInputsProps {
 	grid?: boolean
 }
 
-const DynamicInputs = ({ children, model, label, emptyData, grid = true }: DynamicInputsProps) => {
+export function DynamicInputs({ children, model, label, emptyData, grid = true }: DynamicInputsProps) {
 	const { addInput, removeInput, paths } = useDynamicInputs({ model, emptyData })
 
 	return (
@@ -43,5 +43,3 @@ const DynamicInputs = ({ children, model, label, emptyData, grid = true }: Dynam
 		</>
 	)
 }
-
-export default DynamicInputs

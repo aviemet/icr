@@ -1,3 +1,2 @@
-export { default as CategoriesDropdown } from "./FormCategoriesDropdown"
-export { default as FormCategoriesDropdown } from "./FormCategoriesDropdown"
-export { default as CategoriesDropdownInput } from "./CategoriesDropdownInput"
+export { FormCategoriesDropdown as CategoriesDropdown, FormCategoriesDropdown } from "./FormCategoriesDropdown"
+export { CategoriesDropdownInput } from "./CategoriesDropdownInput"

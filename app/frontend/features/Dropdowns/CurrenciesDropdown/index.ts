@@ -1,2 +1,2 @@
-export { default as CurrenciesDropdown } from "./CurrenciesDropdownInput"
-export { default as FormCurrenciesDropdown } from "./FormCurrenciesDropdown"
+export { CurrenciesDropdown } from "./CurrenciesDropdownInput"
+export { FormCurrenciesDropdown } from "./FormCurrenciesDropdown"

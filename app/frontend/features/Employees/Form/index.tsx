@@ -4,7 +4,7 @@ import { Paper, Stack } from "@/components"
 import { Form } from "@/components/Form"
 import { generateRandomColor } from "@/lib/colors"
 
-import Inputs, { EmployeeInputProps } from "./Inputs"
+import { Inputs, type EmployeeInputProps } from "./Inputs"
 
 export type EmployeeFormData = {
 	employee: Schema.EmployeesFormData
@@ -16,7 +16,7 @@ export interface EmployeeFormProps extends EmployeeInputProps {
 	onSubmit?: (object: UseFormProps<EmployeeFormData>) => boolean | void
 }
 
-const EmployeeForm = ({ method = "post", employee, jobTitles, ...props }: EmployeeFormProps) => {
+export function EmployeeForm({ method = "post", employee, jobTitles, ...props }: EmployeeFormProps) {
 	return (
 		<Form
 			model="employee"
@@ -37,5 +37,3 @@ const EmployeeForm = ({ method = "post", employee, jobTitles, ...props }: Employ
 		</Form>
 	)
 }
-
-export default EmployeeForm

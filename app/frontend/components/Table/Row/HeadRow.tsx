@@ -3,7 +3,7 @@ import React from "react"
 
 import { useCheckboxState, useInit } from "@/lib/hooks"
 
-import HeadCheckbox from "./HeadCheckbox"
+import { HeadCheckbox } from "./HeadCheckbox"
 import { useTableContext } from "../TableContext"
 import { TableHeadCellProps } from "../Th"
 
@@ -17,7 +17,7 @@ interface HeadRowProps extends TableRow {
 	selected: Set<string>
 }
 
-const HeadRow = ({ children, name, rows, selectable, selected, ref, ...props }: HeadRowProps) => {
+export function HeadRow({ children, name, rows, selectable, selected, ref, ...props }: HeadRowProps) {
 	const { tableState: { columns }, setTableState } = useTableContext()
 
 	let { length, selectedCount } = { length: 0, selectedCount: 0 }
@@ -54,5 +54,3 @@ const HeadRow = ({ children, name, rows, selectable, selected, ref, ...props }: 
 		</Table.Tr>
 	)
 }
-
-export default HeadRow

@@ -1,14 +1,14 @@
 import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
-import SegmentedControl, { type SegmentedControlProps } from "@/components/Inputs/SegmentedControl"
+import { SegmentedControl as BaseSegmentedControl, type SegmentedControlProps } from "@/components/Inputs/SegmentedControl"
 
 import { type FieldProps } from "../components/Field"
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
 
-interface FormSegmentedControlProps<TForm extends NestedObject = NestedObject>
+export interface FormSegmentedControlProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<SegmentedControlProps, InputConflicts>,
 	BaseFormInputProps<string, TForm> {
@@ -16,7 +16,7 @@ interface FormSegmentedControlProps<TForm extends NestedObject = NestedObject>
 	wrapperProps?: Omit<FieldProps, "children">
 }
 
-function FormSegmentedControl<TForm extends NestedObject = NestedObject>({
+export function SegmentedControl<TForm extends NestedObject = NestedObject>({
 	options,
 	name,
 	id,
@@ -63,7 +63,7 @@ function FormSegmentedControl<TForm extends NestedObject = NestedObject>({
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<SegmentedControl
+			<BaseSegmentedControl
 				ref={ ref }
 				options={ options }
 				id={ id || inputId }
@@ -78,5 +78,3 @@ function FormSegmentedControl<TForm extends NestedObject = NestedObject>({
 		</InputWrapper>
 	)
 }
-
-export default FormSegmentedControl
