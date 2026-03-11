@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 
-import stringsLib, {
+import {
 	capitalize,
 	toCamelCase,
 	toKebabCase,
@@ -10,6 +10,7 @@ import stringsLib, {
 	formatEventTitle,
 	ensureViewName,
 	isNonEmptyString,
+	greeting,
 } from "@/lib/strings"
 
 describe("capitalize", () => {
@@ -138,7 +139,7 @@ describe("ensureViewName", () => {
 
 describe("greeting", () => {
 	it("returns one of the greeting strings", () => {
-		const result = stringsLib()
+		const result = greeting()
 		expect(["Good morning", "Good afternoon", "Good evening"]).toContain(result)
 	})
 })

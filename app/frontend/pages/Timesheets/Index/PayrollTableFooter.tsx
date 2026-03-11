@@ -1,13 +1,16 @@
+import { router } from "@inertiajs/react"
 import { useTranslation } from "react-i18next"
 
 import { Button, Group, Text } from "@/components"
 import { useTableContext } from "@/components/Table/TableContext"
+import { Routes } from "@/lib"
 
 interface PayrollTableFooterProps {
 	employeeCount: number
 	totalRegularHours?: number
 	totalOtHours?: number
 	approvalWindowOpen: boolean
+	timesheetIdsByEmployee: Record<string, string>
 }
 
 export default function PayrollTableFooter({
@@ -15,10 +18,16 @@ export default function PayrollTableFooter({
 	totalRegularHours = 0,
 	totalOtHours = 0,
 	approvalWindowOpen,
+	timesheetIdsByEmployee,
 }: PayrollTableFooterProps) {
 	const { t } = useTranslation()
+
 	const { tableState: { selected } } = useTableContext()
 	const selectedCount = selected.size
+	const selectedTimesheetIds = Array.from(selected)
+		.map(employeeId => timesheetIdsByEmployee[employeeId as string])
+		.filter(Boolean) as string[]
+	const canApproveSelected = selectedCount > 0 && selectedTimesheetIds.length > 0
 
 	if(employeeCount === 0 && selectedCount === 0) return null
 
@@ -39,10 +48,17 @@ export default function PayrollTableFooter({
 			</Group>
 			{ approvalWindowOpen && (
 				<Group>
-					<Button variant="filled" disabled={ selectedCount === 0 }>
+					<Button
+						variant="filled"
+						disabled={ !canApproveSelected }
+						onClick={ () => router.post(Routes.bulkApproveTimesheets(), { timesheet_ids: selectedTimesheetIds }) }
+					>
 						{ t("views.timesheets.index.approve_selected") }
 					</Button>
-					<Button variant="default">
+					<Button
+						variant="default"
+						onClick={ () => router.post(Routes.bulkApproveTimesheets(), { approve_all: true }) }
+					>
 						{ t("views.timesheets.index.approve_all_clean") }
 					</Button>
 				</Group>

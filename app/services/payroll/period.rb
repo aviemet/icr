@@ -33,6 +33,44 @@ module Payroll
         period_dates(end_date + 1.day)
       end
 
+      def payroll_due_date(period_end_date)
+        case Setting.payroll_due_date_rule_type
+        when Setting::PAYROLL_DUE_DATE_RULE_TYPES[:days_after_period_end]
+          period_end_date + Setting.payroll_due_date_days.days
+        when Setting::PAYROLL_DUE_DATE_RULE_TYPES[:day_of_week_after_period_end]
+          target_wday = %w[sunday monday tuesday wednesday thursday friday saturday].index(Setting.payroll_due_date_day_of_week)
+          cursor = period_end_date + 1.day
+          cursor += 1.day until cursor.wday == target_wday
+          cursor
+        when Setting::PAYROLL_DUE_DATE_RULE_TYPES[:day_of_month]
+          day_str = Setting.payroll_due_date_day_of_month
+          due_month = period_end_date + 1.day
+          if day_str == "-1"
+            due_month.end_of_month
+          else
+            day = day_str.to_i
+            due_month.change(day: [day, due_month.end_of_month.day].min)
+          end
+        else
+          period_end_date + 5.days
+        end
+      end
+
+      def approval_window_opens_at(period_end_date)
+        period_end_date + 1.day
+      end
+
+      def approval_window_closes_at(period_end_date)
+        payroll_due_date(period_end_date)
+      end
+
+      def approval_window_open?(period_end_date)
+        today = Date.current
+        return false if today <= period_end_date
+
+        today <= approval_window_closes_at(period_end_date)
+      end
+
       private
 
       def weekly_period_dates(date)

@@ -159,7 +159,7 @@ export const ensureViewName = (name: string | null | undefined): VIEW_NAMES => {
  *
  */
 export function greeting() {
-	const hour = new Date().getHours()
+	const hour = dayjs().hour()
 	const welcomeTypes = ["Good morning", "Good afternoon", "Good evening"]
 
 	let greeting: string

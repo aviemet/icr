@@ -1,4 +1,4 @@
-import dayjs from "dayjs"
+import { router } from "@inertiajs/react"
 import { useTranslation } from "react-i18next"
 
 import {
@@ -20,14 +20,6 @@ import { formatter, Routes } from "@/lib"
 
 import ReviewTable from "./ReviewTable"
 
-const APPROVAL_WINDOW_DAYS_BEFORE_END = 3
-
-function approvalWindowOpen(periodEnd: Date) {
-	const today = dayjs().startOf("day")
-	const windowStart = dayjs(periodEnd).subtract(APPROVAL_WINDOW_DAYS_BEFORE_END, "day").startOf("day")
-	return today.isSameOrAfter(windowStart)
-}
-
 interface EmployeeHoursMap {
 	regular_hours?: number
 	ot_hours?: number
@@ -36,15 +28,20 @@ interface EmployeeHoursMap {
 interface TimesheetsEmployeeReviewProps {
 	employee: Schema.EmployeesIndex
 	period_dates: [Date, Date]
+	approval_window_open: boolean
 	timesheet: Schema.TimesheetsShow | null
 	shifts: Schema.ShiftsReview[]
+	shift_exception_reasons: Record<string, string[]>
 	employee_hours: EmployeeHoursMap
 }
 
 export default function TimesheetsEmployeeReview({
 	employee,
 	period_dates,
+	approval_window_open,
+	timesheet,
 	shifts,
+	shift_exception_reasons = {},
 	employee_hours,
 }: TimesheetsEmployeeReviewProps) {
 	const { t } = useTranslation()
@@ -56,7 +53,6 @@ export default function TimesheetsEmployeeReview({
 	const regularHours = employee_hours.regular_hours ?? 0
 	const otHours = employee_hours.ot_hours ?? 0
 	const totalHours = regularHours + otHours
-	const approvalWindow = approvalWindowOpen(periodEnd)
 
 	return (
 		<Page
@@ -69,9 +65,14 @@ export default function TimesheetsEmployeeReview({
 			<Section>
 				<Container size="xl">
 					<Group gap="lg" justify="space-between" mb="xl">
-						{ approvalWindow && (
+						{ approval_window_open && timesheet && (
 							<Group justify="flex-end" wrap="wrap" gap="xs">
-								<Button variant="filled">{ t("views.timesheets.employee_review.approve") }</Button>
+								<Button
+									variant="filled"
+									onClick={ () => router.post(Routes.approveTimesheet(timesheet.id)) }
+								>
+									{ t("views.timesheets.employee_review.approve") }
+								</Button>
 							</Group>
 						) }
 
@@ -142,8 +143,11 @@ export default function TimesheetsEmployeeReview({
 
 					<ReviewTable
 						shifts={ shifts }
+						shiftExceptionReasons={ shift_exception_reasons }
 						regularHours={ regularHours }
 						otHours={ otHours }
+						approvalWindowOpen={ approval_window_open }
+						employeeId={ employee.id }
 						mb="lg"
 					/>
 

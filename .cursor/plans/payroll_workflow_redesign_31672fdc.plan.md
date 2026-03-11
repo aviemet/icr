@@ -1,6 +1,6 @@
 ---
 name: Payroll workflow redesign
-overview: "Payroll index is a list of employees; historical view (/payroll/historical) deferred. PayPeriod is a snapshot of a pay period (derived from settings, no overlapping). Timesheet is created before submittal and tracks approval status. Shift creation and PayPeriod creation drive Timesheet/PayPeriod association via model callbacks."
+overview: "Payroll index is a list of employees; historical view (/payroll/historical) deferred. PayPeriod is a snapshot of a pay period (derived from settings, no overlapping). Payroll due date is a user-configurable setting (duration/date rule: days after period end, day of week, or day of month); approval window is after period close through that due date. Timesheet is created before submittal and tracks approval status. Shift creation and PayPeriod creation drive Timesheet/PayPeriod association via model callbacks."
 todos: []
 isProject: false
 ---
@@ -14,8 +14,19 @@ isProject: false
 
 ## Approval window
 
-- **Approve** actions (index row menu, footer "Approve selected" / "Approve all clean", and employee review page "Approve" button) are shown only when the current date is within the **approval window**: from **3 days before the pay period end** through the end of the period. Before that, approval controls are hidden. Implemented on the frontend using `period_dates` from the server; no backend flag yet.
-- When the backend gains payroll deadline or "lock date" settings, visibility can be driven by that instead.
+- **Period close:** The last day of the pay period is the last day employees can log hours. Timesheets are therefore incomplete until the period has closed; managers cannot meaningfully approve during the open period.
+- **Payroll due date:** The date by which timesheets must be approved and payroll is processed is a **user-configurable setting** that supports multiple rule types. Examples: semi-monthly might use "5 days after period end"; bi-weekly might use "the following Tuesday"; monthly might use "the 5th of the month." The setting is a duration/date rule the user can change (not a fixed "N days" only).
+- **Approval window:** Approve actions are shown only when the current date is **after** the period has closed and **before** the payroll due date. So the window is: **(period_close + 1)** through **(payroll_due_date)**. Implemented on the frontend today using `period_dates` and a hardcoded "3 days before period end" rule, which is **incorrect**; when the backend gains the payroll due date setting and computes the resulting date per period, visibility should be driven by server-computed `approval_window_opens_at` / `approval_window_closes_at` (or a single `approval_window_open` boolean).
+
+## Timesheet due and approval timeline
+
+- **Period close** = last day of period (from `Payroll::Period.period_dates` end date).
+- **Payroll due date** = user-configurable setting that defines when payroll (and thus the approval window) ends for each period. The setting must support multiple duration/date rule types, for example:
+  - **Days after period end:** e.g. 5 days after the period closes (common for semi-monthly).
+  - **Day of week after period end:** e.g. the following Tuesday (common for bi-weekly).
+  - **Day of month:** e.g. the 5th of the month (common for monthly).
+  The backend computes the actual due date for a given period from this setting; the approval window closes on that date.
+- **Approval window** = from the day after period close through the payroll due date. Frontend and backend should use server-provided window bounds so the UI does not assume a wrong timeline.
 
 ## Index and employee review UX (current)
 
@@ -73,7 +84,8 @@ Implemented as **`PayPeriod`** `after_create :backfill_timesheets_from_shifts`.
 
 ## Next steps (backend)
 
-- Add approval/update endpoints so Approve and "Approve selected" / "Approve all clean" submit to the server. Optionally add a `payroll_due_at` or `approval_window` flag to index/employee_review props so visibility can be server-driven.
+- Add a **user-configurable payroll due date** setting that supports multiple rule types (e.g. days after period end, day of week after period end, day of month). Compute the resulting due date per period from this setting; the approval window ends on that date. Expose `approval_window_open` or `approval_window_opens_at` / `approval_window_closes_at` (or equivalent) so the frontend can show Approve actions only when the current date is within the post-close, pre-payroll-due window.
+- Add approval/update endpoints so Approve and "Approve selected" / "Approve all clean" submit to the server.
 - Provide per-employee exception counts (or flags) for the index and per-shift exception reasons for the review table so the Exception column can show real data instead of "--".
 
 ## Future UX (when adding period-scoped or historical views)

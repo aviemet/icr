@@ -100,7 +100,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Changes must be atomic and focused
 - Frontend: no default exports; use named exports only (except for the app/frontend/pages directory, those all MUST be default exports). React components use function declarations: `export function ComponentName({ ...props }: Props) { ... }`. Barrel files re-export with `export { X } from "./Y"`. Inertia page modules may export a named `Page` (e.g. `export const Page = withLayout(Inner, "layout")`) for the resolver.
 - When checking HTTP response status, use exact status equality (e.g. 201), not range checks.
-- TypeScript: strict types, prefer existing types and generics over inline types or assertions; only annotate return types when intent is ambiguous or for public API.
+- TypeScript: strict types, prefer existing types and generics over inline types. Do not use type assertions (as, as unknown as). Do not add explicit return type annotations when TypeScript can infer them; only annotate when intent is genuinely ambiguous. Fix type errors by correcting the types (e.g. union types, generics), not by casting.
 - Nested ternaries are disallowed; use `if`/`else` or early returns.
 
 ## Feature Documentation
@@ -113,6 +113,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 
 ### Payroll Settings
 - Period types: weekly, bi-weekly, semi-monthly, monthly; each with configurable start day(s) or dates. Monthly can use last day of month.
+- Payroll due date: user-configurable setting that defines when the approval window closes for each period; supports multiple rule types (e.g. days after period end, day of week after period end, day of month). See payroll workflow redesign plan.
 - Overtime: configurable weekly/daily thresholds; exemption rules by shift category, time range, duration.
 - Pay rates: historical records with effective dates; hourly and salary; currency.
 
@@ -133,12 +134,15 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 ### Timesheet System
 - Payroll index: employees only; historical view deferred.
 - Employee payroll review: per-employee view for the current pay period; authorization follows timesheet show.
-- PayPeriod: one per (starts_at, ends_at); no overlapping periods; derived from settings.
+- PayPeriod: one per (starts_at, ends_at); no overlapping periods; derived from settings. Use PayPeriod.for_period_dates(start_date, end_date) to resolve the current period: it finds any period overlapping that range (so existing periods are found even if stored timestamps differ, e.g. timezone), or creates one with canonical start/end.
 - Timesheet: pre-submittal; tracks approval; belongs to PayPeriod and Employee; has many Shifts.
 - Shift create: if within current pay period, find or create that PayPeriod and a Timesheet for the employee; if the PayPeriod was just created, backfill timesheets for all shifts in that range.
 - PayPeriod create: backfill timesheets from shifts whose event overlaps the period (one Timesheet per employee).
+- PayPeriod#associate_orphan_shifts: on payroll index and employee_review, after resolving the current pay period we call this to attach shifts that overlap the period but have nil timesheet_id (e.g. created before the period existed).
+- Employee review table: In/Out times are editable time inputs (when approval window is open).
 - Payroll index hours: Payroll::EmployeePeriodHours computes per-employee regular_hours and ot_hours for a pay period. Uses Setting overtime_weekly_hours and overtime_daily_hours; splits shifts by day (including overnight); applies active OvertimeExemption rules to exclude exempt shift hours from OT; weekly OT and daily OT are summed. Overtime exemption category criteria use Shift.category (Shift's own category_id), not calendar event category.
-- Payroll approval UI: Approve actions (index row menu, footer bulk approve, employee review Approve button) are visible only during the approval window (current date within 3 days before period end through period end).
+- Payroll hours pipeline tests: request spec `spec/requests/timesheets_spec.rb` (GET /index "includes non-zero employee_hours when pay period has shifts with hours", :inertia) asserts that shift hours appear in index props; `spec/models/pay_period_spec.rb` (#associate_orphan_shifts) and `spec/models/shift_spec.rb` (after_create callback) cover association behavior.
+ - PayPeriod destroy: destroying a pay period is blocked if any associated timesheet has an approved_at value; when no timesheets are approved, destroying the pay period will also destroy all its unapproved timesheets.
 
 ### Frontend Components
 #### UI Framework
@@ -176,7 +180,11 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Form state: use-inertia-form
 
 #### Type System
-- Strict TypeScript; prefer existing types and generics; no any/unknown or casting.
+- Strict TypeScript; prefer existing types and generics.
+- **NEVER use type assertions (typecasting).** No `as`, no `as unknown as`, no `as any`. If something does not type-check, fix the types (e.g. add a union type, widen a generic, export a type the API accepts). Casting is a project rule violation.
+- **NEVER add explicit return types** on functions when the return type can be inferred. Let TypeScript infer. Only add a return type when it is required for a public API or when inference is genuinely wrong/ambiguous.
+- Do not use `any` or `unknown` as escape hatches; do not add unnecessary type annotations on variables when the literal or expression already satisfies the expected type.
+- These TypeScript rules are non-negotiable. When in doubt, try without the cast or annotation first; the code often already type-checks.
 - Ruby constants can be exported to TS via rails types:generate; add a subtask in types.rake so it stays in sync.
 - moduleResolution "bundler" is required for subpath exports (e.g. tiptap menus).
 

@@ -473,6 +473,11 @@
         }
       }
     },
+    "payroll": {
+      "shift_exceptions": {
+        "overlap": "Overlaps with shift on %{time}"
+      }
+    },
     "permission_group": "Permission Group",
     "permissions": {
       "edit": {
@@ -539,6 +544,11 @@
         "us": "%m/%d/%Y %I:%M %p"
       },
       "pm": "PM"
+    },
+    "timesheets": {
+      "approval_window_closed": "Approval is only allowed after the period has closed and before the payroll due date.",
+      "approved": "Timesheet approved.",
+      "bulk_approved": "%{count} timesheet(s) approved."
     },
     "users": null,
     "views": {
@@ -759,6 +769,7 @@
           "pto_hours": "PTO Hours",
           "regular_hours": "Regular Hours",
           "request_changes": "Request Changes",
+          "save_times": "Save times",
           "shift": "Shift",
           "sick_hours": "Sick",
           "status_approved": "Approved",

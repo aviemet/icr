@@ -1,21 +1,17 @@
 import { useForm } from "use-inertia-form"
 
-import { Grid, Title } from "@/components"
+import { Grid } from "@/components"
 import { Select } from "@/components/Form"
 
-import { type PayrollSettingsFormData, type CalendarSettingsProps } from ".."
+import { type PayrollSettingsFormData, type PayrollSettingsProps } from ".."
 import PayrollPeriodOptions from "./PayrollPeriodOptions"
 
-const Payroll = ({ settings, shift_types }: CalendarSettingsProps) => {
+const Payroll = ({ settings, shift_types }: PayrollSettingsProps) => {
 	const { getData } = useForm<PayrollSettingsFormData>()
 
 	const payrollPeriod = getData("settings.payroll_period_type")
 	return (
 		<>
-			<Grid.Col>
-				<Title order={ 3 }>Payroll</Title>
-			</Grid.Col>
-
 			<Grid.Col span={ { xs: 12, sm: 6 } }>
 				<Select
 					name="payroll_period_type"

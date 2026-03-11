@@ -1,4 +1,4 @@
-import { Button, Grid, Table, Title } from "@/components"
+import { Button, Grid, Table } from "@/components"
 import { Form, TextInput } from "@/components/Form"
 import { Routes } from "@/lib"
 
@@ -16,11 +16,6 @@ const ShiftTypes = ({ shift_types }: ShiftTypesProps) => {
 			data={ { shift_types } }
 		>
 			<Grid>
-
-				<Grid.Col>
-					<Title order={ 3 }>Shift Types</Title>
-				</Grid.Col>
-
 				<Grid.Col>
 					<Table>
 						<Table.Head>

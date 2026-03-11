@@ -71,14 +71,7 @@ class Shift < ApplicationRecord
     return if shift_date < active_start
     return if shift_date > active_end
 
-    period_start_dt = active_start.to_time.beginning_of_day
-    period_end_dt = active_end.to_time.end_of_day
-    pay_period = PayPeriod.find_by(starts_at: period_start_dt, ends_at: period_end_dt)
-
-    unless pay_period
-      pay_period = PayPeriod.create!(starts_at: period_start_dt, ends_at: period_end_dt)
-      return
-    end
+    pay_period = PayPeriod.for_period_dates(active_start, active_end)
 
     timesheet = pay_period.timesheets.find_or_create_by!(employee_id: employee_id)
     update_column(:timesheet_id, timesheet.id) # rubocop:disable Rails/SkipsModelValidations

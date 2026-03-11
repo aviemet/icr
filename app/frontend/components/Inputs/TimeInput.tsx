@@ -2,6 +2,7 @@ import {
 	TimePicker,
 	type TimePickerProps as MantineTimePickerProps,
 } from "@mantine/dates"
+import dayjs from "dayjs"
 import React from "react"
 
 import { ClockIcon } from "@/components/Icons"
@@ -10,6 +11,13 @@ import { InputWrapper } from "./InputWrapper"
 import { Label } from "./Label"
 
 import { type BaseInputProps } from "."
+
+function normalizeTimeValue(value: unknown): string | undefined {
+	if(value === null || value === undefined) return undefined
+	if(typeof value === "string") return dayjs(value).isValid() ? dayjs(value).format("HH:mm") : value
+	if(typeof value === "object" && value instanceof Date) return dayjs(value).format("HH:mm")
+	return undefined
+}
 
 export interface TimeInputProps
 	extends
@@ -35,6 +43,7 @@ export function TimeInput({
 	...props
 }: TimeInputProps) {
 	const inputId = id || name
+	const pickerValue = normalizeTimeValue(value)
 
 	return (
 		<InputWrapper wrapper={ wrapper } wrapperProps={ wrapperProps }>
@@ -44,7 +53,7 @@ export function TimeInput({
 			<TimePicker
 				ref={ ref }
 				name={ name }
-				value={ value }
+				value={ pickerValue }
 				withDropdown={ withDropdown }
 				format={ format }
 				leftSection={ <ClockIcon /> }

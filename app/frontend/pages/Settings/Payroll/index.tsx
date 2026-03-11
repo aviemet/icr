@@ -1,4 +1,4 @@
-import { Divider, Grid } from "@/components"
+import { Box, Grid, Paper, Stack, Text, Title } from "@/components"
 import { Form, Submit } from "@/components/Form"
 import { Routes, withLayout } from "@/lib"
 
@@ -18,34 +18,65 @@ export interface PayrollSettingsProps {
 
 const PayrollSettings = ({ settings, shift_types }: PayrollSettingsProps) => {
 	return (
-		<>
-			<Form<PayrollSettingsFormData>
-				to={ Routes.settingsPayroll() }
-				model="settings"
-				method="patch"
-				data={ { settings } }
-				remember={ false }
-			>
-				<Grid>
-					<Overtime settings={ settings } shift_types={ shift_types } />
+		<Box>
+			<Stack gap="xl">
+				<Form<PayrollSettingsFormData>
+					to={ Routes.settingsPayroll() }
+					model="settings"
+					method="patch"
+					data={ { settings } }
+					remember={ false }
+				>
+					<Stack gap="xl">
+						<Paper p="lg" withBorder>
+							<Stack gap="md">
+								<Title order={ 4 }>Pay period</Title>
+								<Text size="sm" c="dimmed">
+									Define when each pay period starts and how often payroll runs.
+								</Text>
+								<Grid>
+									<Payroll settings={ settings } shift_types={ shift_types } />
+								</Grid>
+							</Stack>
+						</Paper>
 
-					<Grid.Col><Divider /></Grid.Col>
+						<Paper p="lg" withBorder>
+							<Stack gap="md">
+								<Title order={ 4 }>Overtime thresholds</Title>
+								<Text size="sm" c="dimmed">
+									Hours above these counts in a week or day are paid as overtime.
+								</Text>
+								<Grid>
+									<Overtime settings={ settings } shift_types={ shift_types } />
+								</Grid>
+							</Stack>
+						</Paper>
 
-					<Payroll settings={ settings } shift_types={ shift_types } />
+						<Submit>Update settings</Submit>
+					</Stack>
+				</Form>
 
-					<Grid.Col mt="md">
-						<Submit>Update Settings</Submit>
-					</Grid.Col>
+				<Paper p="lg" withBorder>
+					<Stack gap="md">
+						<Title order={ 4 }>Overtime exemptions</Title>
+						<Text size="sm" c="dimmed">
+							Shifts that match these rules are excluded from overtime calculation.
+						</Text>
+						<OvertimeExemptions />
+					</Stack>
+				</Paper>
 
-				</Grid>
-			</Form>
-
-			<Divider my="lg" />
-			<OvertimeExemptions />
-
-			<Divider my="lg" />
-			<ShiftTypes shift_types={ shift_types } />
-		</>
+				<Paper p="lg" withBorder>
+					<Stack gap="md">
+						<Title order={ 4 }>Shift types</Title>
+						<Text size="sm" c="dimmed">
+							Categories for shifts; used in scheduling and overtime exemption rules.
+						</Text>
+						<ShiftTypes shift_types={ shift_types } />
+					</Stack>
+				</Paper>
+			</Stack>
+		</Box>
 	)
 }
 

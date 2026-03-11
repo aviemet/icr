@@ -47,13 +47,13 @@ export function AppLayout({ children }: LayoutProps) {
 		>
 			<Topbar />
 			<Sidebar />
-			<Footer />
 			<AppShell.Main className={ clsx(classes.main) }>
-				<div id="above-content-portal"></div>
 				<Box className={ clsx(classes.wrapper) }>
+					<Box id="above-content-portal" />
 					{ children }
 				</Box>
 			</AppShell.Main>
+			<Footer />
 		</AppShell>
 	)
 }

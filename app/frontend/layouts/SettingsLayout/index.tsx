@@ -43,6 +43,7 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
 	return (
 		<AppLayout>
 			<Portal target="#above-content-portal">
+
 				<Container>
 					<Paper
 						ref={ setRootRef }
@@ -69,15 +70,17 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
 							parent={ rootRef }
 							className={ clsx("indicator") }
 						/>
-
 					</Paper>
 				</Container>
+
 			</Portal>
+
 			<Box>
 				<Container>
 					{ children }
 				</Container>
 			</Box>
+
 		</AppLayout>
 	)
 }

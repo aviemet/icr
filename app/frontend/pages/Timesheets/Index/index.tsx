@@ -20,40 +20,50 @@ import { formatter, Routes } from "@/lib"
 import EmployeesTable from "./EmployeesTable"
 import PayrollTableFooter from "./PayrollTableFooter"
 
-const APPROVAL_WINDOW_DAYS_BEFORE_END = 3
-
-function approvalWindowOpen(periodEnd: string): boolean {
-	const today = dayjs().startOf("day")
-	const windowStart = dayjs(periodEnd).subtract(APPROVAL_WINDOW_DAYS_BEFORE_END, "day").startOf("day")
-	return today.isSameOrAfter(windowStart)
-}
-
 interface EmployeeHoursMap {
 	regular_hours?: number
 	ot_hours?: number
 }
 
+interface EmployeeExceptionsMap {
+	exception_count?: number
+}
+
 interface TimesheetsIndexProps {
 	period_dates: [string, string]
+	payroll_due_date: string
+	approval_window_open: boolean
+	timesheet_ids_by_employee: Record<string, string>
+	employee_exceptions: Record<string, EmployeeExceptionsMap>
 	employees: Schema.EmployeesPersisted[]
 	employee_hours: Record<string, EmployeeHoursMap>
 	pagination: Schema.Pagination
 }
 
-export default function TimesheetsIndex({ period_dates, employees, employee_hours, pagination }: TimesheetsIndexProps) {
+export default function TimesheetsIndex({
+	period_dates,
+	payroll_due_date,
+	approval_window_open,
+	timesheet_ids_by_employee = {},
+	employee_exceptions = {},
+	employees,
+	employee_hours,
+	pagination,
+}: TimesheetsIndexProps) {
 	const { t } = useTranslation()
 	const [activeTab, setActiveTab] = useState<string>("all")
 
 	const [periodStart, periodEnd] = period_dates
 	const periodRange = periodStart && periodEnd ? formatter.datetime.range(periodStart, periodEnd) : ""
-	const approvalWindow = periodEnd ? approvalWindowOpen(periodEnd) : false
 	const approvedCount = 0
 	const totalCount = employees.length
 	const pendingCount = 0
 	const flaggedCount = 0
 	const overtimeHours = Object.values(employee_hours).reduce((sum, h) => sum + (h.ot_hours ?? 0), 0)
 	const ptoHours = 0
-	const dueInDays = periodEnd ? dayjs(periodEnd).startOf("day").diff(dayjs().startOf("day"), "day") : 0
+	const dueInDays = payroll_due_date
+		? dayjs(payroll_due_date).startOf("day").diff(dayjs().startOf("day"), "day")
+		: 0
 
 	return (
 		<Page
@@ -149,9 +159,10 @@ export default function TimesheetsIndex({ period_dates, employees, employee_hour
 								</Group>
 
 								<EmployeesTable
-									employees={ employees }
 									employee_hours={ employee_hours }
-									approvalWindowOpen={ approvalWindow }
+									approvalWindowOpen={ approval_window_open }
+									timesheetIdsByEmployee={ timesheet_ids_by_employee }
+									employeeExceptions={ employee_exceptions }
 								/>
 							</Box>
 
@@ -159,7 +170,8 @@ export default function TimesheetsIndex({ period_dates, employees, employee_hour
 								employeeCount={ employees.length }
 								totalRegularHours={ Object.values(employee_hours).reduce((sum, h) => sum + (h.regular_hours ?? 0), 0) }
 								totalOtHours={ overtimeHours }
-								approvalWindowOpen={ approvalWindow }
+								approvalWindowOpen={ approval_window_open }
+								timesheetIdsByEmployee={ timesheet_ids_by_employee }
 							/>
 						</Stack>
 					</Table.TableProvider>

@@ -42,6 +42,9 @@ en:
         one: Wrong length (should be 1 character)
         other: Wrong length (should be %{count} characters)
   member: Member
+  payroll:
+    shift_exceptions:
+      overlap: Overlaps with shift on %{time}
   permission_group: Permission Group
   pundit:
     not_authorized: You are not authorized to access this page.
@@ -55,3 +58,7 @@ en:
         destroyed: "%{model} was successfully destroyed."
         status_updated: "%{model} status updated successfully"
         updated: "%{model} was successfully updated."
+  timesheets:
+    approval_window_closed: Approval is only allowed after the period has closed and before the payroll due date.
+    approved: Timesheet approved.
+    bulk_approved: "%{count} timesheet(s) approved."

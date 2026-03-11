@@ -1,42 +1,29 @@
-import { Grid, Title } from "@/components"
+import { Grid } from "@/components"
 import { NumberInput } from "@/components/Form"
-import { rem } from "@/lib"
 
-import { CalendarSettingsProps } from ".."
+import { type PayrollSettingsProps } from ".."
 
-const Overtime = ({ settings, shift_types }: CalendarSettingsProps) => {
+const Overtime = ({ settings, shift_types }: PayrollSettingsProps) => {
 	return (
 		<>
-			<Grid.Col>
-				<Title order={ 3 }>Overtime</Title>
-			</Grid.Col>
-
-			<Grid.Col>
-				Hours worked over
+			<Grid.Col span={ { xs: 12, sm: 6 } }>
 				<NumberInput
 					name="overtime_weekly_hours"
-					size="xs"
-					wrapperProps={ {
-						inline: true,
-						w: rem(50),
-					} }
+					label="Weekly threshold (hours)"
+					description="Hours over this in a week are overtime"
+					min={ 0 }
+					max={ 168 }
 				/>
-				in a week are considered overtime.
 			</Grid.Col>
-
-			<Grid.Col>
-				Hours worked over
+			<Grid.Col span={ { xs: 12, sm: 6 } }>
 				<NumberInput
 					name="overtime_daily_hours"
-					size="xs"
-					wrapperProps={ {
-						inline: true,
-						w: rem(50),
-					} }
+					label="Daily threshold (hours)"
+					description="Hours over this in a day are overtime"
+					min={ 0 }
+					max={ 24 }
 				/>
-				in a day are considered overtime.
 			</Grid.Col>
-
 		</>
 	)
 }

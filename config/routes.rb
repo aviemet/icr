@@ -85,7 +85,15 @@ Rails.application.routes.draw do
 
   scope path: "payroll" do
     get "employees/:employee_id", to: "timesheets#employee_review", as: :payroll_employee_review
-    resources :timesheets, path: ""
+    resources :timesheets, path: "" do
+      member do
+        post :approve
+      end
+
+      collection do
+        post :bulk_approve
+      end
+    end
   end
 
   resources :vendors, param: :slug

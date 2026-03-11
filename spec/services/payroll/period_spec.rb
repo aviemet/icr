@@ -148,4 +148,68 @@ RSpec.describe Payroll::Period do
       expect(end_date).to eq(Date.new(2024, 4, 30))
     end
   end
+
+  describe ".payroll_due_date" do
+    let(:period_end) { Date.new(2024, 3, 31) }
+
+    context "with days_after_period_end" do
+      before do
+        Setting.payroll_due_date_rule_type = Setting::PAYROLL_DUE_DATE_RULE_TYPES[:days_after_period_end]
+        Setting.payroll_due_date_days = 5
+      end
+
+      it "returns period_end + N days" do
+        expect(described_class.payroll_due_date(period_end)).to eq(Date.new(2024, 4, 5))
+      end
+    end
+
+    context "with day_of_week_after_period_end" do
+      before do
+        Setting.payroll_due_date_rule_type = Setting::PAYROLL_DUE_DATE_RULE_TYPES[:day_of_week_after_period_end]
+        Setting.payroll_due_date_day_of_week = "tuesday"
+      end
+
+      it "returns the first Tuesday after period end" do
+        expect(described_class.payroll_due_date(period_end)).to eq(Date.new(2024, 4, 2))
+      end
+    end
+
+    context "with day_of_month" do
+      before do
+        Setting.payroll_due_date_rule_type = Setting::PAYROLL_DUE_DATE_RULE_TYPES[:day_of_month]
+        Setting.payroll_due_date_day_of_month = "5"
+      end
+
+      it "returns the 5th of the following month" do
+        expect(described_class.payroll_due_date(period_end)).to eq(Date.new(2024, 4, 5))
+      end
+    end
+  end
+
+  describe ".approval_window_open?" do
+    let(:period_end) { Date.new(2024, 3, 31) }
+
+    before do
+      Setting.payroll_due_date_rule_type = Setting::PAYROLL_DUE_DATE_RULE_TYPES[:days_after_period_end]
+      Setting.payroll_due_date_days = 5
+    end
+
+    it "returns false when today is before or on period end" do
+      travel_to Date.new(2024, 3, 31) do
+        expect(described_class.approval_window_open?(period_end)).to be(false)
+      end
+    end
+
+    it "returns true when today is after period end and on or before due date" do
+      travel_to Date.new(2024, 4, 2) do
+        expect(described_class.approval_window_open?(period_end)).to be(true)
+      end
+    end
+
+    it "returns false when today is after due date" do
+      travel_to Date.new(2024, 4, 6) do
+        expect(described_class.approval_window_open?(period_end)).to be(false)
+      end
+    end
+  end
 end

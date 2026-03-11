@@ -14,6 +14,7 @@ export type CalendarEventData = {
 	}
 }
 
+
 export const useCreateCalendarEvent: ReactMutationFunction<Schema.CalendarEventsShow, CalendarEventData> = (
 	options
 ) => {
@@ -34,7 +35,14 @@ export const useCreateCalendarEvent: ReactMutationFunction<Schema.CalendarEvents
 	})
 }
 
-export const useUpdateCalendarEvent: ReactMutationFunction<Schema.CalendarEventsShow, CalendarEventData, { id: string }> = (
+export type CalendarEventTimeUpdate = {
+	calendar_event: {
+		starts_at: string
+		ends_at: string
+	}
+}
+
+export const useUpdateCalendarEvent: ReactMutationFunction<Schema.CalendarEventsShow, CalendarEventData | CalendarEventTimeUpdate, { id: string }> = (
 	options
 ) => {
 	const queryClient = useQueryClient()
