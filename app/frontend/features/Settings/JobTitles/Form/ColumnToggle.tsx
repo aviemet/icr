@@ -1,10 +1,10 @@
 import React, { useCallback } from "react"
-import { useForm } from "use-inertia-form"
 
+import { useFormFieldContext } from "@/components/Form"
 import { Checkbox } from "@/components/Inputs"
 import { useCheckboxState } from "@/lib/hooks"
 
-import { tableRows, type JobTitleFormData, type Permissions } from "./formData"
+import { tableRows, type Permissions } from "./formData"
 
 
 export interface ColumnToggleProps {
@@ -12,20 +12,19 @@ export interface ColumnToggleProps {
 }
 
 export function ColumnToggle({ permission }: ColumnToggleProps) {
-	const { setData, getData } = useForm<JobTitleFormData>()
-	// const checkboxRef = useRef<HTMLInputElement>(null)
+	const { getValue, setValue } = useFormFieldContext()
 
 	const columnProperties = useCallback(() => {
 		return tableRows.reduce(({ length, selected }, row) => {
 			if(row.permissions.includes(permission)) {
 				length++
-				if(getData(`person_group.permissions.${row.model}.${permission}`)) {
+				if(getValue(`permissions.${row.model}.${permission}`)) {
 					selected++
 				}
 			}
 			return { length, selected }
 		}, { length: 0, selected: 0 })
-	}, [getData, permission])
+	}, [getValue, permission])
 
 	const { length, selected } = columnProperties()
 	const { allChecked, indeterminate } = useCheckboxState(length, selected)
@@ -33,14 +32,13 @@ export function ColumnToggle({ permission }: ColumnToggleProps) {
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		tableRows.forEach(row => {
 			if(row.permissions.includes(permission)) {
-				setData(`person_group.permissions.${row.model}.${permission}`, e.target.checked)
+				setValue(`permissions.${row.model}.${permission}`, e.target.checked)
 			}
 		})
 	}
 
 	return (
 		<Checkbox
-			// ref={ checkboxRef }
 			onChange={ handleChange }
 			checked={ allChecked }
 			indeterminate={ indeterminate }

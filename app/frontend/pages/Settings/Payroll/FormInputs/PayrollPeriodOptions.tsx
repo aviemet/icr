@@ -1,26 +1,27 @@
 import { ComboboxItem } from "@mantine/core"
 
 import { Box } from "@/components"
-import { Select } from "@/components/Form"
+import { Select } from "@/components/Inputs"
 import { rem } from "@/lib"
 import { type PayrollPeriodType } from "@/types/PayrollPeriodType"
 
-const DayOfWeekSelect = () => <Select
-	name="payroll_period_day"
-	options={ [
-		{ label: "Monday", value: "monday" },
-		{ label: "Tuesday", value: "tuesday" },
-		{ label: "Wednesday", value: "wednesday" },
-		{ label: "Thursday", value: "thursday" },
-		{ label: "Friday", value: "friday" },
-		{ label: "Saturday", value: "saturday" },
-		{ label: "Sunday", value: "sunday" },
-	] }
-	wrapperProps={ {
-		inline: true,
-		w: rem(150),
-	} }
-/>
+const DayOfWeekSelect = () => (
+	<Select
+		name="settings.payroll_period_day"
+		options={ [
+			{ label: "Monday", value: "monday" },
+			{ label: "Tuesday", value: "tuesday" },
+			{ label: "Wednesday", value: "wednesday" },
+			{ label: "Thursday", value: "thursday" },
+			{ label: "Friday", value: "friday" },
+			{ label: "Saturday", value: "saturday" },
+			{ label: "Sunday", value: "sunday" },
+		] }
+		wrapperProps={ {
+			style: { display: "inline-block", width: rem(150) },
+		} }
+	/>
+)
 
 interface DateSelectProps {
 	name?: string
@@ -54,14 +55,15 @@ const DateSelect = ({
 			options = [...firstOptions, ...lastOptions]
 	}
 
-	return <Select
-		name={ name }
-		options={ options }
-		wrapperProps={ {
-			inline: true,
-			w: rem(85),
-		} }
-	/>
+	return (
+		<Select
+			name={ name.startsWith("settings.") ? name : `settings.${name}` }
+			options={ options }
+			wrapperProps={ {
+				style: { display: "inline-block", width: rem(85) },
+			} }
+		/>
+	)
 }
 
 interface PayrollPeriodOptionsProps {
@@ -75,7 +77,7 @@ const PayrollPeriodOptions = ({ payroll_period_type }: PayrollPeriodOptionsProps
 		case "weekly":
 			return <Box>Payroll is processed every <DayOfWeekSelect /></Box>
 		case "semi_monthly":
-			return <Box>Payroll is processed on the <DateSelect period="first" /> and <DateSelect name="payroll_period_date_2" period="last" /> of the month</Box>
+			return <Box>Payroll is processed on the <DateSelect period="first" /> and <DateSelect name="settings.payroll_period_date_2" period="last" /> of the month</Box>
 		case "monthly":
 			return <Box>Payroll is processed on the <DateSelect /> of the month</Box>
 	}

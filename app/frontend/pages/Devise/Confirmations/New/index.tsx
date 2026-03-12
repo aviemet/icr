@@ -1,5 +1,6 @@
-import { Grid, Title, Link } from "@/components"
-import { Form, TextInput, Submit } from "@/components/Form"
+import { Grid, Title, Link, Box } from "@/components"
+import { Form, Submit } from "@/components/Form"
+import { TextInput } from "@/components/Inputs"
 import { AuthPaperLayout } from "@/features"
 import { Routes, withLayout } from "@/lib"
 
@@ -17,31 +18,27 @@ const ConfirmationsNew = ({ user }: IConfirmationsNew) => {
 				Log In Instead
 			</Link>,
 		] }>
-			<Form
-				model="user"
-				data={ { user } }
-				to={ Routes.userConfirmation() }
-			>
+			<Form action={ Routes.userConfirmation() } initialData={ { user } }>
 				<Grid>
 
 					<Grid.Col>
-						<div>
+						<Box>
 							<Title order={ 3 }>Please check your email</Title>
 							<p>An email has been sent to the address provided. Please follow the link to confirm your account.</p>
 							<p>If you don&apos;t receive an email, use the form below to resend it.</p>
-						</div>
+						</Box>
 					</Grid.Col>
 
 					<Grid.Col>
-						<div>
-							<TextInput name="email" placeholder="Email" autoComplete="Email" required />
-						</div>
+						<Box>
+							<TextInput name="user.email" placeholder="Email" autoComplete="Email" required />
+						</Box>
 					</Grid.Col>
 
 					<Grid.Col>
-						<div>
+						<Box>
 							<Submit className="large">Resend confirmation instructions</Submit>
-						</div>
+						</Box>
 					</Grid.Col>
 
 				</Grid>

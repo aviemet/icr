@@ -1,12 +1,11 @@
 import clsx from "clsx"
 import dayjs from "dayjs"
 import { useMemo, useRef } from "react"
-import { useForm } from "use-inertia-form"
 
 import { Badge, Box, Code, Group, Paper } from "@/components"
-import { TextInput } from "@/components/Form"
+import { useFormField } from "@/components/Form"
+import { TextInput } from "@/components/Inputs"
 import { formatEventTitle } from "@/lib"
-import { GeneralSettingsFormData } from "@/pages/Settings/General"
 
 import * as classes from "../Settings.css"
 
@@ -36,30 +35,25 @@ interface SettingIndexProps {
 }
 
 const ShiftTitleFormatInput = ({ settings }: SettingIndexProps) => {
-	const { getData } = useForm<GeneralSettingsFormData>()
+	const [inputValue, setInputValue] = useFormField("settings.shift_title_format")
 	const inputRef = useRef<HTMLInputElement>(null)
 
-	const inputValue = getData("settings.shift_title_format")
-
 	const previewText = useMemo(
-		() => formatEventTitle(inputValue, new Date(), dayjs().add(4, "hours").toDate(), SAMPLE_DATA),
+		() => formatEventTitle(String(inputValue ?? ""), new Date(), dayjs().add(4, "hours").toDate(), SAMPLE_DATA),
 		[inputValue],
 	)
 
 	const insertVariable = (variable: string) => {
 		const input = inputRef.current
-		if(!input) return
-
 		const value = `{${variable}}`
-		const cursorPos = input.selectionStart || input.value.length
-		const currentValue = input.value
-
-		input.value = currentValue.slice(0, cursorPos) +
-      value +
-      currentValue.slice(cursorPos)
-
-		input.focus()
-		input.setSelectionRange(cursorPos + value.length, cursorPos + value.length)
+		const current = String(inputValue ?? "")
+		const cursorPos = input ? (input.selectionStart ?? current.length) : current.length
+		const next = current.slice(0, cursorPos) + value + current.slice(cursorPos)
+		setInputValue(next)
+		setTimeout(() => {
+			input?.focus()
+			input?.setSelectionRange(cursorPos + value.length, cursorPos + value.length)
+		}, 0)
 	}
 
 	return (
@@ -68,7 +62,9 @@ const ShiftTitleFormatInput = ({ settings }: SettingIndexProps) => {
 				ref={ inputRef }
 				id="shift_title_format-search"
 				label="Shift Title Format"
-				name="shift_title_format"
+				name="settings.shift_title_format"
+				value={ String(inputValue ?? "") }
+				onChange={ (e) => setInputValue(e.target.value) }
 				placeholder="{start:h:mma - {end:h:mma}: {full_name}"
 				disableAutofill
 			/>

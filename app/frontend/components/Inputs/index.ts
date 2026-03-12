@@ -2,6 +2,7 @@ import { type DateValue, type DatesRangeValue } from "@mantine/dates"
 
 export { AutocompleteInput, type AutocompleteProps } from "./AutocompleteInput"
 export { Checkbox, type CheckboxProps } from "./Checkbox"
+export { ColorPickerInput, type ColorPickerInputProps } from "./ColorPickerInput"
 export { CurrencyInput, type CurrencyInputProps } from "./CurrencyInput"
 export { DateInput, type DateInputProps } from "./DateInput"
 export { DateTimeInput, type DateTimeProps } from "./DateTimeInput"
@@ -13,9 +14,11 @@ export { SegmentedControl, type SegmentedControlProps } from "./SegmentedControl
 export { RichText, type RichTextInputProps } from "./RichText"
 export { Select, type SelectInputProps } from "./Select"
 export { SwatchInput, type SwatchInputProps } from "./SwatchInput"
+export { Switch, type SwitchProps } from "./Switch"
 export { Textarea, type TextareaProps } from "./Textarea"
 export { TextInput, type TextInputProps } from "./TextInput"
 export { TimeInput, type TimeInputProps } from "./TimeInput"
+export { SplitDateTimeInput } from "./SplitDateTimeInput"
 
 export interface BaseInputProps {
 	wrapper?: boolean

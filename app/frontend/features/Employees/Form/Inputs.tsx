@@ -1,22 +1,29 @@
 import React from "react"
-import { useForm } from "use-inertia-form"
 
 import { Button, Divider, Grid, Group, Stack, Text, Tooltip } from "@/components"
-import { DateInput, Select, Submit, TextInput } from "@/components/Form"
-import { ColorPickerInput as FormColorPickerInput } from "@/components/Form/Inputs/ColorPickerInput"
+import { useFormField, Submit } from "@/components/Form"
 import { RandomizeIcon } from "@/components/Icons"
-import { JobTitlesDropdownInput } from "@/features/Dropdowns/JobTitlesDropdown/JobTitlesDropdownInput"
+import { ColorPickerInput, DateInput, Select, TextInput } from "@/components/Inputs"
+import { type DateInputValue } from "@/components/Inputs"
+import { JobTitlesDropdown } from "@/components/Inputs/Dropdowns"
 import { generateRandomColor } from "@/lib"
-
-import { EmployeeFormData } from "."
 
 export interface EmployeeInputProps {
 	employee: Schema.EmployeesFormData
 	jobTitles?: Schema.EmployeeJobTitlesOptions[]
 }
 
+function toDateInputValue(v: unknown): DateInputValue {
+	if(v === undefined || v === null) return undefined
+	if(typeof v === "string" || v instanceof Date) return v
+	if(Array.isArray(v)) return v
+	return undefined
+}
+
 export function Inputs({ employee, jobTitles = [] }: EmployeeInputProps) {
-	const { getData, setData } = useForm<EmployeeFormData>()
+	const [status] = useFormField("employee.status")
+	const [color, setColor] = useFormField("employee.color")
+	const [activeAt, setActiveAt] = useFormField("employee.active_at")
 
 	const statusOptions = [
 		{ value: "applicant", label: "Applicant" },
@@ -24,13 +31,8 @@ export function Inputs({ employee, jobTitles = [] }: EmployeeInputProps) {
 	]
 
 	const handleRandomizeColor = () => {
-		setData("employee.color", generateRandomColor())
+		setColor(generateRandomColor())
 	}
-
-	const formattedJobTitles = jobTitles.map(title => ({
-		value: title.id.toString(),
-		label: title.name,
-	}))
 
 	return (
 		<Stack gap="xl">
@@ -38,7 +40,7 @@ export function Inputs({ employee, jobTitles = [] }: EmployeeInputProps) {
 				<Grid gutter="lg">
 					<Grid.Col span={ { xxs: 12, sm: 6 } }>
 						<Select
-							name="status"
+							name="employee.status"
 							label="Employment Status"
 							options={ statusOptions }
 						/>
@@ -52,15 +54,15 @@ export function Inputs({ employee, jobTitles = [] }: EmployeeInputProps) {
 				<Text size="sm" fw={ 500 } c="dimmed">Personal Information</Text>
 				<Grid gutter="lg">
 					<Grid.Col span={ { xs: 12, sm: 6, md: 4 } }>
-						<TextInput name="person.first_name" label="First Name" />
+						<TextInput name="employee.person.first_name" label="First Name" />
 					</Grid.Col>
 
 					<Grid.Col span={ { xs: 12, sm: 6, md: 4 } }>
-						<TextInput name="person.middle_name" label="Middle Name" />
+						<TextInput name="employee.person.middle_name" label="Middle Name" />
 					</Grid.Col>
 
 					<Grid.Col span={ { xs: 12, sm: 6, md: 4 } }>
-						<TextInput name="person.last_name" label="Last Name" />
+						<TextInput name="employee.person.last_name" label="Last Name" />
 					</Grid.Col>
 				</Grid>
 			</Stack>
@@ -68,31 +70,36 @@ export function Inputs({ employee, jobTitles = [] }: EmployeeInputProps) {
 			<Stack gap="md">
 				<Text size="sm" fw={ 500 } c="dimmed">Employment Details</Text>
 				<Grid gutter="lg">
-					{ getData("employee.status") === "employed" &&
+					{ status === "employed" && (
 						<Grid.Col span={ { xs: 12, sm: 6 } }>
-							<TextInput name="number" label="Employee Number" />
+							<TextInput name="employee.number" label="Employee Number" />
 						</Grid.Col>
-					}
+					) }
 
 					<Grid.Col span={ { xxs: 12, sm: 6 } }>
-						<DateInput name="active_at" label="Start Date" />
+						<DateInput
+							name="employee.active_at"
+							label="Start Date"
+							value={ toDateInputValue(activeAt) }
+							onChange={ (v) => setActiveAt(v) }
+						/>
 					</Grid.Col>
 
 					<Grid.Col span={ { xxs: 12, sm: 6 } }>
-						<JobTitlesDropdownInput />
-						{ /* <Select
-							name="job_title_id"
-							label="Job Title"
-							options={ formattedJobTitles }
-						/> */ }
+						<JobTitlesDropdown name="employee.job_title_id" />
 					</Grid.Col>
 
 					<Grid.Col span={ { xxs: 12, sm: 6 } }>
-						<FormColorPickerInput name="color" label="Default Calendar Color">
+						<ColorPickerInput
+							name="employee.color"
+							label="Default Calendar Color"
+							value={ typeof color === "string" ? color : undefined }
+							onChange={ (c: string) => setColor(c) }
+						>
 							<Tooltip label="Random" position="right-end">
 								<Button variant="transparent" mx={ 0 } px="xxs" onClick={ handleRandomizeColor }><RandomizeIcon /></Button>
 							</Tooltip>
-						</FormColorPickerInput>
+						</ColorPickerInput>
 					</Grid.Col>
 				</Grid>
 			</Stack>

@@ -12,7 +12,7 @@ export interface RichTextInputProps
 	Omit<BaseInputProps, "disableAutofill"> {
 	ref?: React.Ref<HTMLDivElement>
 	label?: React.ReactNode
-	value: string
+	value?: string
 	required?: boolean
 	id?: string
 	name?: string

@@ -8,7 +8,7 @@ interface NewClientProps {
 	client: Schema.ClientsFormData
 }
 
-const NewClient = ({ ...data }: NewClientProps) => {
+const NewClient = ({ client }: NewClientProps) => {
 	const { t } = useTranslation()
 	const title = t("views.clients.new.title")
 
@@ -24,7 +24,7 @@ const NewClient = ({ ...data }: NewClientProps) => {
 
 				<ClientForm
 					to={ Routes.clients() }
-					{ ...data }
+					client={ client }
 				/>
 			</Section>
 		</Page>

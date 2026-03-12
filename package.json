@@ -79,7 +79,6 @@
     "react-i18next": "^16.5.4",
     "react-icons": "^5.5.0",
     "react-use-url": "^1.0.5",
-    "use-inertia-form": "^4.6.0",
     "xstate": "^5.28.0",
     "zustand": "^5.0.11"
   },

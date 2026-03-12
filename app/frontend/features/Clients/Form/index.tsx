@@ -1,6 +1,6 @@
 import { Grid } from "@/components"
-import { Form as Form3, DynamicFields, Submit as Submit3 } from "@/components/Form3"
-import { Checkbox as Checkbox3, TextInput as TextInput3 } from "@/components/Inputs"
+import { DynamicFields, Form, Submit } from "@/components/Form"
+import { Checkbox, TextInput } from "@/components/Inputs"
 import { type HTTPVerb } from "@/lib"
 
 import { Ihss } from "./Ihss"
@@ -19,24 +19,25 @@ export interface ClientFormProps {
 }
 
 export function ClientForm({ method = "post", to, client, ...props }: ClientFormProps) {
+
 	return (
-		<Form3 action={ to } method={ method } initialData={ { client } } { ...props }>
+		<Form action={ to } method={ method } initialData={ { client } } { ...props }>
 			<Grid>
 
 				<Grid.Col span={ { xxs: 12, sm: 4 } }>
-					<TextInput3 name="client.person.first_name" label="First Name" />
+					<TextInput name="client.person.first_name" label="First Name" />
 				</Grid.Col>
 
 				<Grid.Col span={ { xxs: 12, sm: 4 } }>
-					<TextInput3 name="client.person.middle_name" label="Middle Name" />
+					<TextInput name="client.person.middle_name" label="Middle Name" />
 				</Grid.Col>
 
 				<Grid.Col span={ { xxs: 12, sm: 4 } }>
-					<TextInput3 name="client.person.last_name" label="Last Name" />
+					<TextInput name="client.person.last_name" label="Last Name" />
 				</Grid.Col>
 
 				<Grid.Col>
-					<Checkbox3 name="client.ihss" label="Client has IHSS hours" />
+					<Checkbox name="client.ihss" label="Client has IHSS hours" />
 				</Grid.Col>
 
 				<Grid.Col span={ 12 }>
@@ -45,7 +46,7 @@ export function ClientForm({ method = "post", to, client, ...props }: ClientForm
 						initialCount={ client.phone_numbers?.length ?? 0 }
 					>
 						{ (_, namePrefix) => (
-							<TextInput3 name={ `${namePrefix}.number` } label="Phone number" />
+							<TextInput name={ `${namePrefix}.number` } label="Phone number" />
 						) }
 					</DynamicFields>
 				</Grid.Col>
@@ -53,10 +54,10 @@ export function ClientForm({ method = "post", to, client, ...props }: ClientForm
 				<Ihss />
 
 				<Grid.Col>
-					<Submit3>{ client.id ? "Update" : "Create" } Client</Submit3>
+					<Submit>{ client.id ? "Update" : "Create" } Client</Submit>
 				</Grid.Col>
 
 			</Grid>
-		</Form3>
+		</Form>
 	)
 }

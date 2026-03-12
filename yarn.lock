@@ -9261,7 +9261,6 @@ __metadata:
     ts-node: "npm:^10.9.2"
     type-fest: "npm:^5.4.4"
     typescript: "npm:^5.9.3"
-    use-inertia-form: "npm:^4.6.0"
     vite: "npm:^7.3.1"
     vite-plugin-dynamic-import: "npm:^1.6.0"
     vite-plugin-full-reload: "npm:^1.2.0"
@@ -14898,18 +14897,6 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 10c0/c77e0cba9579b7746d52feaf3ce77d8c345f266c9c1ef46584ae68f54646537c87b2ad97f5219a4b1db52f97ec2905e88e5b146add1f28f7e457bd52ca1b93cf
-  languageName: node
-  linkType: hard
-
-"use-inertia-form@npm:^4.6.0":
-  version: 4.6.0
-  resolution: "use-inertia-form@npm:4.6.0"
-  peerDependencies:
-    "@inertiajs/react": ^1.0.0 || ^2.0.0
-    axios: ^1.7.8
-    react: ^16.9.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-    react-dom: ^16.9.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/82d2cf8f1f79843898ab23edcefcb86774e768f4039e891fdf2744f3c8e5eea885d867bdf9c1e467ab57a4695d5580ab9aace4da6b3fec09ca7994f7abae4417
   languageName: node
   linkType: hard
 

@@ -5,9 +5,9 @@ import dayjs from "dayjs"
 import { Form, useForm } from "use-inertia-form"
 import { describe, it, expect, beforeEach } from "vitest"
 
-import { parseTimeString } from "@/components/Form/Inputs/SplitDateTimeInput"
 import { type EventData } from "@/features/Clients/schedule/EventForm"
 import { EventTotalHours } from "@/features/Clients/schedule/EventForm/EventTotalHours"
+import { parseTimeString } from "@/lib/dates"
 
 function TestWrapper({ children }: { children: React.ReactNode }) {
 	return <MantineProvider>{ children }</MantineProvider>
@@ -41,7 +41,7 @@ function UpdateTimesButton() {
 				form.setData("calendar_event.ends_at", base.hour(19).minute(0).toDate())
 			} }
 		>
-			Set 10–19
+			Set 10-19
 		</button>
 	)
 }

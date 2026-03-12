@@ -5,9 +5,9 @@ import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { Button, Group, Table, Text } from "@/components"
-import { parseTimeString } from "@/components/Form/Inputs/SplitDateTimeInput"
 import { TimeInput } from "@/components/Inputs"
 import { formatter, Routes } from "@/lib"
+import { parseTimeString } from "@/lib/dates"
 import { useUpdateCalendarEvent } from "@/queries/calendarEvents/mutations"
 
 function shiftRowHours(startDate: Date, endDate: Date): number {
@@ -16,8 +16,11 @@ function shiftRowHours(startDate: Date, endDate: Date): number {
 
 function mergedDateTime(baseDate: Date, timeString: string): Date | null {
 	const parsed = parseTimeString(timeString)
+
 	if(parsed === null) return null
+
 	const base = dayjs(baseDate)
+
 	return base.hour(parsed.hour).minute(parsed.minute).second(0).millisecond(0).toDate()
 }
 

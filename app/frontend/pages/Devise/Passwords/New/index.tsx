@@ -1,19 +1,14 @@
 import { useTranslation } from "react-i18next"
 
 import { Grid, Title, Link } from "@/components"
-import { Field, Form, TextInput, Submit } from "@/components/Form"
+import { Field, Form, Submit } from "@/components/Form"
+import { TextInput } from "@/components/Inputs"
 import { AuthPaperLayout } from "@/features"
 import { Routes, withLayout } from "@/lib"
 
-type TPasswordsNewFormData = {
-	email: string
-}
-
 const PasswordsNew = () => {
 	const { t } = useTranslation()
-	const defaultData: TPasswordsNewFormData = {
-		email: "",
-	}
+	const defaultData = { user: { email: "" } }
 
 	return (
 		<AuthPaperLayout bottomLinks={ [
@@ -21,7 +16,7 @@ const PasswordsNew = () => {
 				{ t("frontend.pages.devise.shared.login") }
 			</Link>,
 		] }>
-			<Form model="user" data={ defaultData } to={ Routes.newUserPassword() }>
+			<Form action={ Routes.newUserPassword() } initialData={ defaultData }>
 				<Grid>
 
 					<Grid.Col>
@@ -33,7 +28,7 @@ const PasswordsNew = () => {
 					<Grid.Col>
 						<Field>
 							<TextInput
-								name="email"
+								name="user.email"
 								placeholder={ t("frontend.pages.devise.shared.email") }
 								autoFocus
 								autoComplete="Email"

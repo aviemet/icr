@@ -7,10 +7,6 @@ import OvertimeExemptions from "./FormInputs/OvertimeExemptions"
 import Payroll from "./FormInputs/Payroll"
 import ShiftTypes from "./FormInputs/ShiftTypes"
 
-export type PayrollSettingsFormData = {
-	settings: Schema.Setting
-}
-
 export interface PayrollSettingsProps {
 	settings: Schema.Setting
 	shift_types: Schema.Category[]
@@ -20,12 +16,10 @@ const PayrollSettings = ({ settings, shift_types }: PayrollSettingsProps) => {
 	return (
 		<Box>
 			<Stack gap="xl">
-				<Form<PayrollSettingsFormData>
-					to={ Routes.settingsPayroll() }
-					model="settings"
+				<Form
+					action={ Routes.settingsPayroll() }
 					method="patch"
-					data={ { settings } }
-					remember={ false }
+					initialData={ { settings } }
 				>
 					<Stack gap="xl">
 						<Paper p="lg" withBorder>

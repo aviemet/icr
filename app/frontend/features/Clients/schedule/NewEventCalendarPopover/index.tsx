@@ -1,11 +1,10 @@
+import dayjs from "dayjs"
 import { isEmpty } from "lodash-es"
 import { useCallback, useEffect, useRef } from "react"
-import { type UseFormProps } from "use-inertia-form"
 
 import { BaseCalendarEvent, useCalendarContext } from "@/components/Calendar"
 import { EventForm, type EventData } from "@/features/Clients/schedule/EventForm"
 import { useGetEmployeesAsOptions } from "@/queries/employees"
-
 
 interface ScheduleResources {
 	[key: string]: object
@@ -23,20 +22,21 @@ export function EventCalendarPopover({ client, selectedDate }: EventCalendarPopo
 	const draftIdRef = useRef<string>(crypto.randomUUID())
 	const { data: employees = [] } = useGetEmployeesAsOptions({ enabled: true })
 
-	const handleFormChange = useCallback((form: UseFormProps<EventData>) => {
-		const startsAt = form.data.calendar_event?.starts_at
-		const endsAt = form.data.calendar_event?.ends_at
-		const employeeId = form.data.calendar_event?.shift?.employee_id
+	const handleFormChange = useCallback((data: EventData) => {
+		const calendarEvent = data.calendar_event
+		const startsAt = calendarEvent?.starts_at
+		const endsAt = calendarEvent?.ends_at
+		const employeeId = calendarEvent?.shift?.employee_id
 
 		const draftId = draftIdRef.current
 		const patchData: Partial<BaseCalendarEvent<ScheduleResources>> = {}
 
 		if(!isEmpty(startsAt)) {
-			patchData.start = new Date(startsAt)
+			patchData.start = dayjs(startsAt).toDate()
 		}
 
 		if(!isEmpty(endsAt)) {
-			patchData.end = new Date(endsAt)
+			patchData.end = dayjs(endsAt).toDate()
 		}
 
 		if(employeeId !== undefined) {

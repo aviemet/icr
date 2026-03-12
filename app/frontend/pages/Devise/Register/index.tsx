@@ -1,44 +1,32 @@
 import { useTranslation } from "react-i18next"
-import { type UseFormProps } from "use-inertia-form"
 
 import { Box, Grid, Title, Link } from "@/components"
-import { Form, TextInput, PasswordInput, Submit, Field } from "@/components/Form"
+import { Form, Field, FormConsumer, Submit, type FormConsumerState } from "@/components/Form"
+import { PasswordInput, TextInput } from "@/components/Inputs"
 import { AuthPaperLayout } from "@/features"
 import { Routes, withLayout } from "@/lib"
 
-type TRegisterFormData = {
-	user: {
-		email: string
-		password: string
-		password_confirmation: string
-	}
-}
-
 const Register = () => {
 	const { t } = useTranslation()
-
-	const handleFormChange = ({ data }: UseFormProps<TRegisterFormData>) => {
-		// console.log({ data })
+	const defaultData = {
+		user: {
+			email: "",
+			password: "",
+			password_confirmation: "",
+		},
 	}
 
-	const handlePasswordChange = (value: string | number, { data, getError, clearErrors }: UseFormProps<TRegisterFormData>) => {
-		if(getError("user.password") || getError("user.password_confirmation")) {
-			if(data.user.password === data.user.password_confirmation) {
-				clearErrors("user.password")
-				clearErrors("user.password_confirmation")
-			}
+	const handleFormChange = (state: FormConsumerState) => {
+		const data = state.getFormData()
+		const user = data?.user as { password?: string, password_confirmation?: string } | undefined
+		const password = user?.password ?? ""
+		const confirmation = user?.password_confirmation ?? ""
+		if(!state.slotProps) return
+		if(confirmation !== "" && password !== confirmation) {
+			state.slotProps.setError("user.password_confirmation", t("views.devise.register.errors.passwords_must_match"))
+		} else {
+			state.slotProps.clearErrors("user.password_confirmation")
 		}
-	}
-
-	const handleSubmit = ({ data, setError, errors, transform }: UseFormProps<TRegisterFormData>) => {
-		if(data.user.password !== data.user.password_confirmation) {
-			setError("user.password_confirmation", t("views.devise.register.errors.passwords_must_match"))
-			return false
-		}
-	}
-
-	const handleEmailBlur = (value: string | number, form: UseFormProps<TRegisterFormData>) => {
-		// console.log({ value, form })
 	}
 
 	return (
@@ -47,19 +35,8 @@ const Register = () => {
 				{ t("views.devise.register.login_instead") }
 			</Link>,
 		] }>
-			<Form
-				data={ {
-					user: {
-						email: "",
-						password: "",
-						password_confirmation: "",
-					},
-				} }
-				model="user"
-				to={ Routes.userRegistration() }
-				onChange={ handleFormChange }
-				onSubmit={ handleSubmit }
-			>
+			<Form action={ Routes.userRegistration() } initialData={ defaultData }>
+				<FormConsumer onChange={ handleFormChange } />
 				<Grid>
 
 					<Grid.Col>
@@ -71,12 +48,11 @@ const Register = () => {
 					<Grid.Col>
 						<Field>
 							<TextInput
-								name="email"
+								name="user.email"
 								placeholder={ t("views.devise.register.email") }
 								autoFocus
 								autoComplete="Email"
 								required
-								onBlur={ handleEmailBlur }
 							/>
 						</Field>
 					</Grid.Col>
@@ -84,11 +60,10 @@ const Register = () => {
 					<Grid.Col>
 						<Field>
 							<PasswordInput
-								name="password"
+								name="user.password"
 								placeholder={ t("views.devise.register.password") }
 								autoComplete="new-password"
 								required
-								onChange={ handlePasswordChange }
 							/>
 						</Field>
 					</Grid.Col>
@@ -96,11 +71,10 @@ const Register = () => {
 					<Grid.Col>
 						<Field>
 							<PasswordInput
-								name="password_confirmation"
+								name="user.password_confirmation"
 								placeholder={ t("views.devise.register.confirm_password") }
 								autoComplete="new-password"
 								required
-								onChange={ handlePasswordChange }
 							/>
 						</Field>
 					</Grid.Col>

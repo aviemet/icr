@@ -6,7 +6,7 @@ interface New<%= singular_table_name.camelize %>Props {
 	<%= singular_table_name %>: Schema.<%= plural_table_name.camelize %>FormData
 }
 
-const New<%= singular_table_name.camelize %> = ({ ...data }: New<%= singular_table_name.camelize %>Props) => {
+export function New<%= singular_table_name.camelize %> ({ <%= singular_table_name %> }: New<%= singular_table_name.camelize %>Props) => {
 	const title = 'New <%= human_name.titleize %>'
 
 	return (
@@ -20,12 +20,10 @@ const New<%= singular_table_name.camelize %> = ({ ...data }: New<%= singular_tab
 
 				<<%= singular_table_name.camelize %>Form
 					to={ Routes.<%= plural_table_name.camelize(:lower) %>() }
-					{ ...data }
+					<%= singular_table_name %>={ <%= singular_table_name %> }
 				/>
 			</Section>
 
 		</Page>
 	)
 }
-
-export default New<%= singular_table_name.camelize %>

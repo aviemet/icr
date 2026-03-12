@@ -1,22 +1,11 @@
-import clsx from "clsx"
 import { useTranslation } from "react-i18next"
-import { type UseFormProps } from "use-inertia-form"
 
 import { Grid, Title, Link } from "@/components"
-import { Form, Field, TextInput, PasswordInput, CheckboxInput, Submit } from "@/components/Form"
+import { Form, Field, Submit } from "@/components/Form"
+import { Checkbox, PasswordInput, TextInput } from "@/components/Inputs"
 import { AuthPaperLayout } from "@/features"
 import { Routes, withLayout } from "@/lib"
 import { usePageProps } from "@/lib/hooks"
-
-import * as classes from "./Login.css"
-
-type LoginFormData = {
-	user: {
-		email: string
-		password: string
-		remember_me: boolean
-	}
-}
 
 const defaultData = {
 	user: {
@@ -30,12 +19,6 @@ const Login = () => {
 	const { t } = useTranslation()
 	const { settings } = usePageProps()
 
-	const handleSubmit = ({ data }: UseFormProps<LoginFormData>) => {
-		if(data.user.email === "" || data.user.password === "") {
-			return false
-		}
-	}
-
 	return (
 		<AuthPaperLayout bottomLinks={ [
 			<Link href={ Routes.newUserPassword() } key="reset">
@@ -45,12 +28,7 @@ const Login = () => {
 				{ t("views.devise.login.register") }
 			</Link>,
 		] }>
-			<Form
-				model="user"
-				data={ defaultData }
-				to={ Routes.newUserSession() }
-				onSubmit={ handleSubmit }
-			>
+			<Form action={ Routes.newUserSession() } initialData={ defaultData }>
 				<Grid>
 
 					<Grid.Col>
@@ -62,7 +40,7 @@ const Login = () => {
 					<Grid.Col>
 						<Field>
 							<TextInput
-								name="email"
+								name="user.email"
 								placeholder={ t("views.devise.login.email") }
 								autoFocus
 								autoComplete="Email"
@@ -75,7 +53,7 @@ const Login = () => {
 					<Grid.Col>
 						<Field>
 							<PasswordInput
-								name="password"
+								name="user.password"
 								placeholder={ t("views.devise.login.password") }
 								autoComplete="current-password"
 								required
@@ -91,14 +69,13 @@ const Login = () => {
 
 					<Grid.Col>
 						<Field>
-							<CheckboxInput name="remember_me" label={ t("views.devise.login.remember_me") } />
+							<Checkbox name="user.remember_me" label={ t("views.devise.login.remember_me") } />
 						</Field>
 					</Grid.Col>
 
 				</Grid>
 			</Form>
 		</AuthPaperLayout>
-
 	)
 }
 

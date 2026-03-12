@@ -1,16 +1,12 @@
 import { Box, Grid } from "@/components"
-import { Form, Submit, TextInput } from "@/components/Form"
+import { Form, Submit } from "@/components/Form"
+import { TextInput } from "@/components/Inputs"
 import {
-	FormCurrenciesDropdown,
-	FormLanguagesDropdown,
-	// FormPayPeriodsDropdown,
-	FormTimezonesDropdown,
-} from "@/features/Dropdowns"
+	CurrenciesDropdown,
+	LanguagesDropdown,
+	TimezonesDropdown,
+} from "@/components/Inputs/Dropdowns"
 import { Routes, withLayout } from "@/lib"
-
-export type GeneralSettingsFormData = {
-	settings: Schema.Setting
-}
 
 interface GeneralSettingsProps {
 	settings: Schema.Setting
@@ -19,39 +15,37 @@ interface GeneralSettingsProps {
 const GeneralSettings = ({ settings }: GeneralSettingsProps) => {
 	return (
 		<Box>
-			<Form<GeneralSettingsFormData>
-				to={ Routes.settings() }
-				model="settings"
+			<Form
+				action={ Routes.settings() }
 				method="patch"
-				data={ { settings } }
-				remember={ false }
+				initialData={ { settings } }
 			>
 				<Grid>
 					<Grid.Col>
 						<TextInput
 							label="Company Name"
-							name="company_name"
+							name="settings.company_name"
 						/>
 					</Grid.Col>
 
 					<Grid.Col>
-						<FormLanguagesDropdown
+						<LanguagesDropdown
 							label="Default Language"
-							name="default_language"
+							name="settings.default_language"
 						/>
 					</Grid.Col>
 
 					<Grid.Col>
-						<FormCurrenciesDropdown
+						<CurrenciesDropdown
 							label="Default Currency"
-							name="default_currency"
+							name="settings.default_currency"
 						/>
 					</Grid.Col>
 
 					<Grid.Col>
-						<FormTimezonesDropdown
+						<TimezonesDropdown
 							label="Default Timezone"
-							name="default_timezone"
+							name="settings.default_timezone"
 						/>
 					</Grid.Col>
 
