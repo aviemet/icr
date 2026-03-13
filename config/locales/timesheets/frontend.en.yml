@@ -8,6 +8,7 @@ en:
         back_to_payroll: Back to Payroll
         break: Break
         category: Category
+        client: Client
         date: Date
         employee_label: Employee
         exception: Exception
@@ -16,6 +17,7 @@ en:
         hours: Hours
         in_out_times: In / Out Times
         no_shifts: No shifts in this period
+        ot: OT
         ot_hours: OT Hours
         overtime: Overtime
         period_bi_weekly: Bi-Weekly Period

@@ -32,6 +32,7 @@ interface TimesheetsEmployeeReviewProps {
 	timesheet: Schema.TimesheetsShow | null
 	shifts: Schema.ShiftsReview[]
 	shift_exception_reasons: Record<string, string[]>
+	shift_ot_hours: Record<string, number>
 	employee_hours: EmployeeHoursMap
 }
 
@@ -42,6 +43,7 @@ export default function TimesheetsEmployeeReview({
 	timesheet,
 	shifts,
 	shift_exception_reasons = {},
+	shift_ot_hours = {},
 	employee_hours,
 }: TimesheetsEmployeeReviewProps) {
 	const { t } = useTranslation()
@@ -144,6 +146,7 @@ export default function TimesheetsEmployeeReview({
 					<ReviewTable
 						shifts={ shifts }
 						shiftExceptionReasons={ shift_exception_reasons }
+						shiftOtHours={ shift_ot_hours }
 						regularHours={ regularHours }
 						otHours={ otHours }
 						approvalWindowOpen={ approval_window_open }

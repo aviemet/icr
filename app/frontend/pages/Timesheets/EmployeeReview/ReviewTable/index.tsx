@@ -9,6 +9,7 @@ import { ReviewRow } from "./ReviewRow"
 interface ReviewTableProps extends TableProps {
 	shifts: Schema.ShiftsReview[]
 	shiftExceptionReasons?: Record<string, string[]>
+	shiftOtHours?: Record<string, number>
 	regularHours: number
 	otHours: number
 	approvalWindowOpen: boolean
@@ -18,6 +19,7 @@ interface ReviewTableProps extends TableProps {
 export default function ReviewTable({
 	shifts,
 	shiftExceptionReasons = {},
+	shiftOtHours = {},
 	regularHours,
 	otHours,
 	approvalWindowOpen,
@@ -39,8 +41,10 @@ export default function ReviewTable({
 							<Checkbox size="sm" />
 						</Table.HeadCell>
 						<Table.HeadCell>{ t("views.timesheets.employee_review.date") }</Table.HeadCell>
+						<Table.HeadCell>{ t("views.timesheets.employee_review.client") }</Table.HeadCell>
 						<Table.HeadCell>{ t("views.timesheets.employee_review.in_out_times") }</Table.HeadCell>
 						<Table.HeadCell>{ t("views.timesheets.employee_review.hours") }</Table.HeadCell>
+						<Table.HeadCell>{ t("views.timesheets.employee_review.ot") }</Table.HeadCell>
 						<Table.HeadCell>{ t("views.timesheets.employee_review.exception") }</Table.HeadCell>
 					</Table.Row>
 				</Table.Head>
@@ -52,6 +56,7 @@ export default function ReviewTable({
 								key={ shift.id }
 								shift={ shift }
 								shiftExceptionReasons={ shiftExceptionReasons }
+								shiftOtHours={ shiftOtHours }
 								approvalWindowOpen={ approvalWindowOpen }
 								employeeId={ employeeId }
 							/>
@@ -62,7 +67,7 @@ export default function ReviewTable({
 				{ shifts.length > 0 && (
 					<Table.Footer>
 						<Table.Row>
-							<Table.Cell colSpan={ 3 }>
+							<Table.Cell colSpan={ 5 }>
 								<Text fw={ 500 }>{ t("views.timesheets.employee_review.total") }</Text>
 							</Table.Cell>
 							<Table.Cell colSpan={ 2 }>

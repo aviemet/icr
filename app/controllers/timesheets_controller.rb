@@ -55,10 +55,12 @@ class TimesheetsController < ApplicationController
     record_to_authorize = timesheet || Timesheet.new(employee_id: employee.id)
     authorize record_to_authorize, :show?
 
-    shifts_scope = timesheet ? timesheet.shifts.includes(:calendar_event, :category) : Shift.none
+    shifts_scope = timesheet ? timesheet.shifts.joins(:calendar_event).order("calendar_events.starts_at").includes(:category, calendar_event: { clients: :person }) : Shift.none
     employee_hours = Payroll::EmployeePeriodHours.call(pay_period, [employee.id])
     approval_window_open = Payroll::Period.approval_window_open?(period_end)
     shift_exception_reasons = Payroll::ShiftExceptions.call(shifts_scope)[:reasons_by_shift_id]
+    hours_data = employee_hours[employee.id.to_s] || {}
+    shift_ot_hours = hours_data[:shift_ot_hours] || {}
 
     render inertia: "Timesheets/EmployeeReview", props: {
       employee: -> { employee.render(:index) },
@@ -67,7 +69,8 @@ class TimesheetsController < ApplicationController
       timesheet: -> { timesheet&.render(:show) },
       shifts: -> { shifts_scope.render(:review) },
       shift_exception_reasons: -> { shift_exception_reasons },
-      employee_hours: -> { employee_hours[employee.id.to_s] || {} },
+      shift_ot_hours: -> { shift_ot_hours },
+      employee_hours: -> { hours_data.except(:shift_ot_hours) },
     }
   end
 

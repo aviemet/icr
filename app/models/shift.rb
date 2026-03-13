@@ -38,6 +38,7 @@ class Shift < ApplicationRecord
   belongs_to :timesheet, optional: true
 
   validates :calendar_event_id, uniqueness: true
+  validate :no_overlapping_shifts_for_employee
 
   after_create :associate_with_timesheet_if_in_active_period
 
@@ -62,6 +63,20 @@ class Shift < ApplicationRecord
   scope :includes_associated, -> { includes(:calendar_event, :timesheet) }
 
   private
+
+  def no_overlapping_shifts_for_employee
+    return if employee_id.blank?
+    return unless calendar_event.present? && start_time.present? && end_time.present?
+
+    scope = Shift.joins(:calendar_event)
+      .where(employee_id: employee_id)
+      .where("calendar_events.starts_at < ? AND calendar_events.ends_at > ?", end_time, start_time)
+    scope = scope.where.not(id: id) if id.present?
+
+    return unless scope.exists?
+
+    errors.add(:base, "overlaps another shift for the same employee")
+  end
 
   def associate_with_timesheet_if_in_active_period
     shift_date = start_time&.to_date

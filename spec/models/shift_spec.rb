@@ -37,6 +37,46 @@ RSpec.describe Shift do
         expect(build(:shift, attr => nil)).not_to be_valid
       end
     end
+
+    describe "no_overlapping_shifts_for_employee" do
+      it "is invalid when another shift for the same employee overlaps" do
+        employee = create(:employee)
+        base_time = Time.zone.local(2024, 3, 15, 9, 0)
+        create(:shift, employee: employee, calendar_event: create(:calendar_event, starts_at: base_time, ends_at: base_time + 2.hours))
+        overlapping = build(:shift, employee: employee, calendar_event: build(:calendar_event, starts_at: base_time + 1.hour, ends_at: base_time + 3.hours))
+
+        expect(overlapping).not_to be_valid
+        expect(overlapping.errors[:base]).to include("overlaps another shift for the same employee")
+      end
+
+      it "is valid when another shift for the same employee does not overlap" do
+        employee = create(:employee)
+        base_time = Time.zone.local(2024, 3, 15, 9, 0)
+        create(:shift, employee: employee, calendar_event: create(:calendar_event, starts_at: base_time, ends_at: base_time + 2.hours))
+        after_shift = build(:shift, employee: employee, calendar_event: build(:calendar_event, starts_at: base_time + 3.hours, ends_at: base_time + 5.hours))
+
+        expect(after_shift).to be_valid
+      end
+
+      it "is valid when overlapping shift is for a different employee" do
+        employee1 = create(:employee)
+        employee2 = create(:employee)
+        base_time = Time.zone.local(2024, 3, 15, 9, 0)
+        create(:shift, employee: employee1, calendar_event: create(:calendar_event, starts_at: base_time, ends_at: base_time + 2.hours))
+        same_slot = build(:shift, employee: employee2, calendar_event: build(:calendar_event, starts_at: base_time + 1.hour, ends_at: base_time + 3.hours))
+
+        expect(same_slot).to be_valid
+      end
+
+      it "allows updating a shift without self-overlap" do
+        employee = create(:employee)
+        base_time = Time.zone.local(2024, 3, 15, 9, 0)
+        shift = create(:shift, employee: employee, calendar_event: create(:calendar_event, starts_at: base_time, ends_at: base_time + 2.hours))
+
+        shift.calendar_event.assign_attributes(starts_at: base_time + 30.minutes, ends_at: base_time + 1.hour)
+        expect(shift).to be_valid
+      end
+    end
   end
 
   describe "Associations" do

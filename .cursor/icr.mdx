@@ -88,6 +88,8 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 ### Architecture
 - Single-tenant application
 - Company settings use singleton pattern
+- Front end is Typescript using Yarn, Vite, Inertia.js and React (do *not* use npm or pnpm, this project uses yarn)
+- Backend is Ruby on Rails using Inertia
 
 ### Controller Concerns
 - Config used in instance methods (e.g. sortable fields) must use `class_attribute` so each including class gets its own config. Module-level instance variables set in `included` are class ivars and are not visible in instance methods.
@@ -140,7 +142,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - PayPeriod create: backfill timesheets from shifts whose event overlaps the period (one Timesheet per employee).
 - PayPeriod#associate_orphan_shifts: on payroll index and employee_review, after resolving the current pay period we call this to attach shifts that overlap the period but have nil timesheet_id (e.g. created before the period existed).
 - Employee review table: In/Out times are editable time inputs (when approval window is open).
-- Payroll index hours: Payroll::EmployeePeriodHours computes per-employee regular_hours and ot_hours for a pay period. Uses Setting overtime_weekly_hours and overtime_daily_hours; splits shifts by day (including overnight); applies active OvertimeExemption rules to exclude exempt shift hours from OT; weekly OT and daily OT are summed. Overtime exemption category criteria use Shift.category (Shift's own category_id), not calendar event category.
+- Payroll index hours: Payroll::EmployeePeriodHours computes per-employee regular_hours, ot_hours, and shift_ot_hours. OT rules (thresholds, designations like overnight, exemptions) are configurable; see payroll settings and OvertimeExemption.
 - Payroll hours pipeline tests: request spec `spec/requests/timesheets_spec.rb` (GET /index "includes non-zero employee_hours when pay period has shifts with hours", :inertia) asserts that shift hours appear in index props; `spec/models/pay_period_spec.rb` (#associate_orphan_shifts) and `spec/models/shift_spec.rb` (after_create callback) cover association behavior.
  - PayPeriod destroy: destroying a pay period is blocked if any associated timesheet has an approved_at value; when no timesheets are approved, destroying the pay period will also destroy all its unapproved timesheets.
 

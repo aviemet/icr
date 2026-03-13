@@ -1,14 +1,16 @@
 import { router } from "@inertiajs/react"
 import { Checkbox } from "@mantine/core"
 import dayjs from "dayjs"
-import { useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { Button, Group, Table, Text } from "@/components"
-import { TimeInput } from "@/components/Inputs"
+import { Group, Table, Text } from "@/components"
+import { Form } from "@/components/Form"
 import { formatter, Routes } from "@/lib"
 import { parseTimeString } from "@/lib/dates"
 import { useUpdateCalendarEvent } from "@/queries/calendarEvents/mutations"
+
+import { ReviewRowFormFields, type ReviewRowFormData } from "./ReviewRowFormFields"
 
 function shiftRowHours(startDate: Date, endDate: Date): number {
 	return (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60)
@@ -27,6 +29,7 @@ function mergedDateTime(baseDate: Date, timeString: string): Date | null {
 interface ReviewRowProps {
 	shift: Schema.ShiftsReview
 	shiftExceptionReasons: Record<string, string[]>
+	shiftOtHours: Record<string, number>
 	approvalWindowOpen: boolean
 	employeeId: string
 }
@@ -34,14 +37,16 @@ interface ReviewRowProps {
 export function ReviewRow({
 	shift,
 	shiftExceptionReasons,
+	shiftOtHours,
 	approvalWindowOpen,
 	employeeId,
 }: ReviewRowProps) {
 	const { t } = useTranslation()
-	const startDate = new Date(String(shift.starts_at))
-	const endDate = new Date(String(shift.ends_at))
-	const [startTime, setStartTime] = useState(() => dayjs(startDate).format("HH:mm"))
-	const [endTime, setEndTime] = useState(() => dayjs(endDate).format("HH:mm"))
+
+	const startDate = useMemo(() => new Date(String(shift.starts_at)), [shift.starts_at])
+	const endDate = useMemo(() => new Date(String(shift.ends_at)), [shift.ends_at])
+	const [startTime, setStartTime] = useState(() => dayjs(String(shift.starts_at)).format("HH:mm"))
+	const [endTime, setEndTime] = useState(() => dayjs(String(shift.ends_at)).format("HH:mm"))
 
 	const displayStart = mergedDateTime(startDate, startTime) ?? startDate
 	const displayEnd = mergedDateTime(endDate, endTime) ?? endDate
@@ -57,18 +62,33 @@ export function ReviewRow({
 		},
 	})
 
-	const handleSubmit = (event: React.FormEvent) => {
-		event.preventDefault()
-		const startsAt = mergedDateTime(startDate, startTime)
-		const endsAt = mergedDateTime(endDate, endTime)
-		if(startsAt === null || endsAt === null) return
-		updateEvent.mutate({
-			calendar_event: {
-				starts_at: startsAt.toISOString(),
-				ends_at: endsAt.toISOString(),
-			},
-		})
-	}
+	const initialData = useMemo<ReviewRowFormData>(
+		() => ({
+			start_time: dayjs(startDate).format("HH:mm"),
+			end_time: dayjs(endDate).format("HH:mm"),
+		}),
+		[startDate, endDate]
+	)
+
+	const submitWith = useCallback(
+		(data: ReviewRowFormData) => {
+			const startsAt = mergedDateTime(startDate, data.start_time)
+			const endsAt = mergedDateTime(endDate, data.end_time)
+			if(startsAt === null || endsAt === null) return Promise.reject(new Error("Invalid times"))
+			return updateEvent.mutateAsync({
+				calendar_event: {
+					starts_at: startsAt.toISOString(),
+					ends_at: endsAt.toISOString(),
+				},
+			})
+		},
+		[startDate, endDate, updateEvent]
+	)
+
+	const onTimesChange = useCallback((start: string, end: string) => {
+		setStartTime(start)
+		setEndTime(end)
+	}, [])
 
 	return (
 		<Table.Row key={ shift.id }>
@@ -84,30 +104,25 @@ export function ReviewRow({
 				</Group>
 			</Table.Cell>
 			<Table.Cell>
-				<form onSubmit={ handleSubmit }>
-					<Group gap="xs" wrap="nowrap">
-						<TimeInput
-							value={ startTime }
-							onChange={ setStartTime }
-							disabled={ updateEvent.isPending }
-							wrapper={ false }
-							label=""
-						/>
-						<TimeInput
-							value={ endTime }
-							onChange={ setEndTime }
-							disabled={ updateEvent.isPending }
-							wrapper={ false }
-							label=""
-						/>
-						<Button type="submit" size="xs" loading={ updateEvent.isPending }>
-							{ t("views.timesheets.employee_review.save_times") }
-						</Button>
-					</Group>
-				</form>
+				<Text size="sm">{ shift.client_name ?? t("views.timesheets.index.no_value") }</Text>
+			</Table.Cell>
+			<Table.Cell>
+				<Form
+					method="post"
+					action={ Routes.payrollEmployeeReview(employeeId) }
+					initialData={ initialData }
+					submitWith={ submitWith }
+					onBefore={ () => true }
+					railsAttributes={ false }
+				>
+					<ReviewRowFormFields initialData={ initialData } onTimesChange={ onTimesChange } />
+				</Form>
 			</Table.Cell>
 			<Table.Cell>
 				<Text size="sm">{ formatter.number.decimal(hours, 2) }</Text>
+			</Table.Cell>
+			<Table.Cell>
+				<Text size="sm">{ formatter.number.decimal(shiftOtHours[shift.id] ?? 0, 2) }</Text>
 			</Table.Cell>
 			<Table.Cell>
 				<Text size="sm" c="dimmed">
