@@ -3,7 +3,8 @@ import { css } from "@linaria/core"
 import { rem, vars } from "@/lib/css"
 
 export const loginWrapper = css`
-	height: 100%;
+	width: 100%;
+	max-width: 100%;
 `
 
 export const loginPaper = css`
@@ -18,6 +19,33 @@ export const loginPaper = css`
 	[data-mantine-color-scheme="dark"] & {
 		background-color: color-mix(in srgb, ${ vars.colors.dark[7] } 88%, transparent);
 		backdrop-filter: blur(12px);
+	}
+`
+
+export const loginContent = css`
+	min-height: 360px;
+	display: flex;
+	flex-direction: column;
+`
+
+export const loginContentInner = css`
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+
+	& > * {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		min-height: 0;
+	}
+
+	& form {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		min-height: 0;
 	}
 `
 

@@ -14,8 +14,10 @@ export function AuthPaperLayout({ children, bottomLinks }: AuthPaperLayoutProps)
 
 		<Center p="lg" className={ clsx(classes.loginWrapper) }>
 			<Paper shadow="md" radius="md" withBorder className={ clsx(classes.loginPaper) }>
-				<Box p="xl">
-					{ children }
+				<Box className={ clsx(classes.loginContent) } p="xl">
+					<Box className={ clsx(classes.loginContentInner) }>
+						{ children }
+					</Box>
 				</Box>
 
 				{ bottomLinks && bottomLinks.length > 0 && (

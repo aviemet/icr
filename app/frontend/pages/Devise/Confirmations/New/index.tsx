@@ -1,5 +1,7 @@
-import { Grid, Title, Link } from "@/components"
-import { Form, TextInput, Submit } from "@/components/Form"
+import { useTranslation } from "react-i18next"
+
+import { Stack, Title, Text, Link, Box } from "@/components"
+import { Field, Form, TextInput, Submit } from "@/components/Form"
 import { AuthPaperLayout } from "@/features"
 import { Routes, withLayout } from "@/lib"
 
@@ -8,13 +10,15 @@ interface IConfirmationsNew {
 }
 
 const ConfirmationsNew = ({ user }: IConfirmationsNew) => {
+	const { t } = useTranslation()
+
 	return (
 		<AuthPaperLayout bottomLinks={ [
 			<Link href={ Routes.newUserRegistration() } key="register">
-				Register
+				{ t("views.devise.login.register") }
 			</Link>,
 			<Link href={ Routes.newUserSession() } key="login">
-				Log In Instead
+				{ t("views.devise.register.login_instead") }
 			</Link>,
 		] }>
 			<Form
@@ -22,29 +26,34 @@ const ConfirmationsNew = ({ user }: IConfirmationsNew) => {
 				data={ { user } }
 				to={ Routes.userConfirmation() }
 			>
-				<Grid>
+				<Stack gap="lg" justify="space-between" flex={ 1 }>
 
-					<Grid.Col>
-						<div>
-							<Title order={ 3 }>Please check your email</Title>
-							<p>An email has been sent to the address provided. Please follow the link to confirm your account.</p>
-							<p>If you don&apos;t receive an email, use the form below to resend it.</p>
-						</div>
-					</Grid.Col>
+					<Stack gap="md">
+						<Title order={ 3 }>{ t("views.devise.confirmations.new.title") }</Title>
+						<Text component="p" size="sm">
+							{ t("views.devise.confirmations.new.body_sent") }
+						</Text>
+						<Text component="p" size="sm">
+							{ t("views.devise.confirmations.new.body_resend") }
+						</Text>
 
-					<Grid.Col>
-						<div>
-							<TextInput name="email" placeholder="Email" autoComplete="Email" required />
-						</div>
-					</Grid.Col>
+						<Field>
+							<TextInput
+								name="email"
+								placeholder={ t("views.devise.shared.email") }
+								autoComplete="Email"
+								required
+							/>
+						</Field>
+					</Stack>
 
-					<Grid.Col>
-						<div>
-							<Submit className="large">Resend confirmation instructions</Submit>
-						</div>
-					</Grid.Col>
+					<Box>
+						<Field>
+							<Submit className="large">{ t("views.devise.confirmations.new.submit") }</Submit>
+						</Field>
+					</Box>
 
-				</Grid>
+				</Stack>
 			</Form>
 		</AuthPaperLayout>
 	)

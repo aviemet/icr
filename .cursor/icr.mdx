@@ -182,6 +182,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 
 #### Internationalization (i18n)
 - react-i18next; locales from Rails (i18n-js). Model-specific frontend strings in config/locales/[model]/frontend.en.yml; rest in frontend.en.yml. Keys: views.[feature].[page].[key]. Controller notices use shared templates under templates.controllers.notices with %{model}; CRUD notices (created/updated/destroyed/status_updated) use these.
+- Devise Inertia pages use `config/locales/devise/frontend.en.yml` under `views.devise` (shared copy such as `views.devise.shared.email`, per-flow keys such as `views.devise.confirmations.new.title`).
 
 #### Testing
 - Unit: Vitest + RTL; E2E: Playwright (no mocks). Tests mirror app/frontend under app/frontend/tests.

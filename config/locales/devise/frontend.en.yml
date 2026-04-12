@@ -1,19 +1,11 @@
 ---
 en:
-  frontend:
-    pages:
-      devise:
-        passwords:
-          new:
-            submit: Send reset password instructions
-            title: Forgot your password?
-        shared:
-          email: Email
-          login: Log in
   views:
     devise:
-      login:
+      shared:
         email: Email
+        login: Log In Instead
+      login:
         password: Password
         register: Register
         remember_me: Remember Me
@@ -22,10 +14,18 @@ en:
         subtitle: Schedules, clients, and staff in one place.
       register:
         confirm_password: Confirm Password
-        email: Email
         errors:
           passwords_must_match: Passwords must match
-        login_instead: Log In Instead
         password: Password
         submit: Sign Up
         title: Sign Up
+      passwords:
+        new:
+          title: Forgot your password?
+          submit: Send reset password instructions
+      confirmations:
+        new:
+          title: Please check your email
+          body_sent: An email has been sent to the address provided. Please follow the link to confirm your account.
+          body_resend: If you don't receive an email, use the form below to resend it.
+          submit: Resend confirmation instructions
