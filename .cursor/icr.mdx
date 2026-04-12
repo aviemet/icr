@@ -189,6 +189,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Gotcha: Forms must use remember={ false } or the form library can persist state across unmount/remount and tests see stale values.
 - Gotcha: For form-context tests, use Form from use-inertia-form (not the app Form wrapper). For Mantine, wrap with MantineProvider, stub matchMedia in beforeEach, and wrap Grid.Col in Grid.
 - Do not test literal constants from the source; test behavior, branches, and contracts.
+- Prefer smoke-level checks for presentational layout (e.g. main content renders, interactive regions exist) over asserting element order, separators, or exact hrefs unless that order is a behavioral contract.
 
 #### Serializers
 - Smoke spec discovers serializers, infers model from name, renders each. Slug-identified models need persisted records so the smoke spec creates them. Gotcha: Identification uses the id_type column; serializers must use :id_type, not :type.

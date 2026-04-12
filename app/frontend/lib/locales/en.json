@@ -635,7 +635,8 @@
           "register": "Register",
           "remember_me": "Remember Me",
           "reset_password": "Reset Password",
-          "submit": "Log In"
+          "submit": "Log In",
+          "subtitle": "Schedules, clients, and staff in one place."
         },
         "register": {
           "confirm_password": "Confirm Password",

@@ -13,20 +13,21 @@ export function AuthPaperLayout({ children, bottomLinks }: AuthPaperLayoutProps)
 	return (
 
 		<Center p="lg" className={ clsx(classes.loginWrapper) }>
-			<Paper shadow="lg" radius="lg" withBorder className={ clsx(classes.loginPaper) }>
+			<Paper shadow="md" radius="md" withBorder className={ clsx(classes.loginPaper) }>
 				<Box p="xl">
 					{ children }
 				</Box>
 
-				{ bottomLinks && <Group
-					justify="center"
-					content="center"
-					grow
-					className={ clsx(classes.bottomLinks ) }
-					gap={ 0 }
-				>
-					{ bottomLinks }
-				</Group> }
+				{ bottomLinks && bottomLinks.length > 0 && (
+					<Group
+						justify="center"
+						grow
+						className={ clsx(classes.bottomLinks) }
+						gap={ 0 }
+					>
+						{ bottomLinks }
+					</Group>
+				) }
 
 			</Paper>
 		</Center>
