@@ -106,6 +106,9 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 ## Feature Documentation
 *Document completed features and their core functionality here*
 
+### Dashboard
+- Root Inertia page loads `dashboard` props from `Dashboard::StatsSerializer.render(Dashboard::Stats#payload)` so the payload matches `Schema.DashboardStats` from TypesFromSerializers. When `user` is nil, `Dashboard::Stats` uses `Client.none`, `Employee.none`, `Calendar::Event.none`, and `Timesheet.none` instead of calling Pundit, so counts and lists collapse to empty without a separate blank payload path. Nested rows are `Struct` instances; use `Payload#to_h` for plain hashes. `Dashboard::StatsSerializer` and its nested serializers subclass `BaseSerializer` (not `ApplicationSerializer`) so the root DTO is not forced through `identifier`/ActiveRecord-oriented hooks. Counts and lists use `Pundit.policy_scope` for `Client`, `Employee`, `Calendar::Event`, and `Timesheet` so the numbers match what that user could list in those areas. Week hours sum shift lengths (calendar event duration) for scoped employees in the current calendar week. Pending timesheets are unapproved rows for the current pay period when that `PayPeriod` row already exists (GET does not create periods). Recent activity is derived from the newest clients and employees in scope, not from the activity table.
+
 ### Permission System
 - Groups define permissions with effects (allow/deny) and conditions. Assignments link groups to users or job titles (optional time bounds). Resolution uses precedence and conditions.
 - Precedence: higher overrides lower. At each level, deny wins over allow.
@@ -182,6 +185,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 
 #### Internationalization (i18n)
 - react-i18next; locales from Rails (i18n-js). Model-specific frontend strings in config/locales/[model]/frontend.en.yml; rest in frontend.en.yml. Keys: views.[feature].[page].[key]. Controller notices use shared templates under templates.controllers.notices with %{model}; CRUD notices (created/updated/destroyed/status_updated) use these.
+- RSpec (`spec/i18n_spec.rb`) asserts there are no missing keys reported by i18n-tasks for references under `app/` (including TSX). Other i18n-tasks reports (unused, normalize, interpolation) are optional; run `bundle exec i18n-tasks` when needed.
 - Devise Inertia pages use `config/locales/devise/frontend.en.yml` under `views.devise` (shared copy such as `views.devise.shared.email`, per-flow keys such as `views.devise.confirmations.new.title`).
 
 #### Testing

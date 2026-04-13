@@ -568,45 +568,41 @@
           "new_employee": "New Employee"
         },
         "activity": {
+          "empty": "No recent client or employee additions.",
+          "item_client": "New client: %{name}",
+          "item_employee": "New employee: %{name}",
           "latest": "Latest Updates",
           "title": "Recent Activity",
-          "updates": {
-            "milestone": "Project milestone completed - Tech Solutions",
-            "new_client": "New client onboarded - Acme Corp",
-            "new_employee": "New employee joined - Sarah Smith",
-            "policies": "Updated company policies"
-          }
+          "unnamed": "(no name)"
         },
         "clients": {
           "active_count": "%{count} Active Clients",
           "add_new": "Add New Client",
-          "pending_count": "%{count} pending proposals",
+          "inactive_count": "%{count} inactive",
           "title": "Clients Overview",
           "view_all": "View All Clients"
         },
         "command_center": "%{company} Command Center",
         "schedule": {
           "add": "Add Event",
-          "events": {
-            "client_checkin": "11:30 AM - Client Check-in",
-            "team_meeting": "9:00 AM - Team Meeting",
-            "training": "2:00 PM - Employee Training"
-          },
+          "empty": "No upcoming events in your view.",
+          "shift_for": "Shift - %{name}",
           "title": "Today's Schedule",
+          "untitled_shift": "Shift",
           "upcoming": "Upcoming Appointments",
           "view": "View Schedule"
         },
         "team": {
           "add_new": "Add New Employee",
+          "hiring_pipeline": "%{count} in hiring pipeline",
           "member_count": "%{count} Team Members",
-          "on_leave": "%{count} on leave",
           "title": "Team Overview",
           "view_all": "View All Employees"
         },
         "time": {
           "pending_timesheets": "%{count} timesheets pending approval",
           "title": "Time Tracking",
-          "total_hours": "%{count} Hours",
+          "total_hours": "%{hours} Hours",
           "total_hours_week": "Total hours tracked this week",
           "view": "View Timesheets"
         },
@@ -812,6 +808,24 @@
             "needs_approval": "Needs Approval"
           },
           "title": "Payroll Approval"
+        },
+        "show": {
+          "approve": "Approve",
+          "companion": "Companion",
+          "employee": "Employee",
+          "reject": "Reject",
+          "title": "Timesheet",
+          "week_one": "Week 1",
+          "week_two": "Week 2"
+        },
+        "weekly": {
+          "date": "Date",
+          "hours": "Hours",
+          "overtime": "Overtime",
+          "shift": "Shift",
+          "sick": "Sick",
+          "total": "Total",
+          "vacation": "Vacation"
         }
       }
     }

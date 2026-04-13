@@ -18,7 +18,7 @@ const ConfirmationsNew = ({ user }: IConfirmationsNew) => {
 				{ t("views.devise.login.register") }
 			</Link>,
 			<Link href={ Routes.newUserSession() } key="login">
-				{ t("views.devise.register.login_instead") }
+				{ t("views.devise.shared.login") }
 			</Link>,
 		] }>
 			<Form

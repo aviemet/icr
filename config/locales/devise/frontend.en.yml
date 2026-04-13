@@ -2,9 +2,12 @@
 en:
   views:
     devise:
-      shared:
-        email: Email
-        login: Log In Instead
+      confirmations:
+        new:
+          body_resend: If you don't receive an email, use the form below to resend it.
+          body_sent: An email has been sent to the address provided. Please follow the link to confirm your account.
+          submit: Resend confirmation instructions
+          title: Please check your email
       login:
         password: Password
         register: Register
@@ -12,6 +15,10 @@ en:
         reset_password: Reset Password
         submit: Log In
         subtitle: Schedules, clients, and staff in one place.
+      passwords:
+        new:
+          submit: Send reset password instructions
+          title: Forgot your password?
       register:
         confirm_password: Confirm Password
         errors:
@@ -19,13 +26,6 @@ en:
         password: Password
         submit: Sign Up
         title: Sign Up
-      passwords:
-        new:
-          title: Forgot your password?
-          submit: Send reset password instructions
-      confirmations:
-        new:
-          title: Please check your email
-          body_sent: An email has been sent to the address provided. Please follow the link to confirm your account.
-          body_resend: If you don't receive an email, use the form below to resend it.
-          submit: Resend confirmation instructions
+      shared:
+        email: Email
+        login: Log In Instead
