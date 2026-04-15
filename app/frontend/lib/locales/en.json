@@ -692,6 +692,11 @@
           }
         }
       },
+      "households": {
+        "schedule": {
+          "title": "%{name}'s Schedule"
+        }
+      },
       "pagination": {
         "first": "&laquo; First",
         "last": "Last &raquo;",

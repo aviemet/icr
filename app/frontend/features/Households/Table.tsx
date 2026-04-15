@@ -1,5 +1,5 @@
 import { Table, Link, Box } from "@/components"
-import { EditButton } from "@/components/Button"
+import { EditButton, ScheduleButton } from "@/components/Button"
 import { type TableProps } from "@/components/Table/Table"
 import { Routes } from "@/lib"
 
@@ -28,6 +28,7 @@ export function HouseholdTable(props: TableProps) {
 
 						<Table.Cell>
 							<EditButton href={ Routes.editHousehold(household.slug) } />
+							<ScheduleButton href={ Routes.scheduleHousehold(household.slug) } />
 						</Table.Cell>
 					</Table.Row>
 				) } />

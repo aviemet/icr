@@ -132,6 +132,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Gotcha: The popover closes on click-outside. Date/time pickers or other inputs inside the popover must not use a portal, or the popover will close when the user selects a value.
 - Client schedule: Events come from React Query; mutations must invalidate the schedule query so the calendar refetches. If invalidation is skipped, the UI can show stale or duplicate events.
 - Client schedule uniqueness: Participantable's calendar_events is has_many through event_participants; the join can return the same event multiple times. The association uses a distinct scope so the API returns each event once.
+- Gotcha: If a Calendar::Event relation uses joins and also includes employee job_title (via Employee's active job title scope), Postgres can raise "column reference starts_at is ambiguous". Avoid by filtering events via a subquery of ids, then applying includes on the outer relation (no joins on the outer query).
 
 ### Timesheet System
 - Payroll index: employees only; historical view deferred.

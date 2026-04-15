@@ -33,4 +33,8 @@ class HouseholdPolicy < ApplicationPolicy
       end
     end
   end
+
+  def schedule?
+    show?
+  end
 end

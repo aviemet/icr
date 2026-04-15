@@ -1,0 +1,6 @@
+---
+en:
+  views:
+    households:
+      schedule:
+        title: "%{name}'s Schedule"
