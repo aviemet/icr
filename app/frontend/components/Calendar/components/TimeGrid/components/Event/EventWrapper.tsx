@@ -51,7 +51,7 @@ const EventWrapper = <P extends TimeGridDisplayProperties = TimeGridDisplayPrope
 			style={ {
 				...cssVars,
 				...style,
-			} as unknown as React.CSSProperties }
+			} as React.CSSProperties }
 		>
 			{ children }
 		</div>

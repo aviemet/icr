@@ -78,6 +78,9 @@ const Schedule = ({ household, schedules: initialSchedules }: ScheduleProps) => 
 			const end = ensureDate(schedule.ends_at)
 			const client = schedule.clients?.[0]
 			const employee = schedule.shift?.employee
+			const totalClients = schedule.clients?.length ?? 0
+			const clientInitial = client?.first_name?.trim()?.[0] || client?.full_name?.trim()?.[0] || client?.name?.trim()?.[0]
+			const indicatorLabel = totalClients > 1 ? "+" : (clientInitial ? clientInitial.toUpperCase() : undefined)
 
 			return {
 				id: schedule.id,
@@ -86,6 +89,8 @@ const Schedule = ({ household, schedules: initialSchedules }: ScheduleProps) => 
 				end,
 				allDay: schedule.all_day,
 				color: employee?.color,
+				indicatorColor: client?.color,
+				indicatorLabel,
 				resources: { client, employee },
 			}
 		}) ?? []

@@ -125,4 +125,6 @@ if Category.none?
       })
     end
   end
+
+  puts "[seeds] categories"
 end

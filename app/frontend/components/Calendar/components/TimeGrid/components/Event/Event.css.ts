@@ -1,6 +1,7 @@
 import { css } from "@linaria/core"
 
 import { vars } from "@/lib/css"
+import * as baseEventClasses from "@/components/Calendar/components/Event/Event.css"
 
 export const eventWrapper = css`
   --column-start: 1;
@@ -20,6 +21,7 @@ export const eventWrapper = css`
   font-size: ${ vars.fontSizes.xs };
   grid-column: var(--column-start) / span var(--column-span);
   grid-row: var(--row-start) / span var(--row-span);
+  position: relative;
 `
 
 export const allDayEvent = css``
@@ -27,7 +29,7 @@ export const allDayEvent = css``
 export const timeGridEvent = css`
   background-color: var(--event-color);
   color: var(--contrasting-color);
-  padding: 4px 4px 4px 8px;
+  padding: 4px 6px;
   border-radius: 4px;
   border-color: light-dark(${ vars.colors.gray[2] }, ${ vars.colors.gray[9] });
   border-width: 0.25px;
@@ -35,9 +37,20 @@ export const timeGridEvent = css`
   height: calc(100% - 2px);
   transition: background-color 200ms ease-in-out;
   width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
   box-shadow: ${ vars.shadows.sm };
+  display: flex;
+  align-items: start;
+  gap: 0;
+  min-width: 0;
+
+  .${ baseEventClasses.indicator } {
+    width: 1rem;
+    height: 1rem;
+    padding: 0 6px;
+    border-radius: 100%;
+    margin-right: 6px;
+    flex: 0 0 auto;
+  }
 
   &:hover {
     filter: brightness(0.9);
@@ -45,11 +58,22 @@ export const timeGridEvent = css`
   }
 
   &.${ allDayEvent } {
-    padding: 2px 4px 0 8px;
+    padding: 2px 4px 0 0;
     overflow: hidden;
     white-space: nowrap;
     grid-column: var(--column-start) / span var(--column-span);
     position: relative;
+
+    .${ baseEventClasses.indicator } {
+      width: 1rem;
+      height: 100%;
+      padding: 0;
+      margin-right: 0;
+      border-radius: 0;
+      border-top-left-radius: inherit;
+      border-bottom-left-radius: inherit;
+      align-self: stretch;
+    }
 
     &.continues-from {
       border-top-left-radius: 0;
