@@ -5,6 +5,6 @@ class Api::HouseholdsController < ApplicationController
       .find_by!(slug: params[:slug])
       .schedule_events_between(*DateRangeCalculator.new(params).call)
 
-    render json: schedules.render(:client)
+    render json: schedules.render(:household)
   end
 end

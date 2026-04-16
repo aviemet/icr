@@ -6,7 +6,7 @@ import { Routes } from "@/lib"
 
 import { ReactQueryFunction } from ".."
 
-export const useGetHouseholdSchedules: ReactQueryFunction<Schema.CalendarEventsClient[], {
+export const useGetHouseholdSchedules: ReactQueryFunction<Schema.CalendarEventsHousehold[], {
 	slug: string
 	view?: VIEW_NAMES
 	date?: string | Date

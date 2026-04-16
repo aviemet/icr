@@ -56,7 +56,7 @@ class HouseholdsController < ApplicationController
 
     render inertia: "Households/Schedule", props: {
       household: -> { household_for_show.render(:show) },
-      schedules: -> { schedules.render(:client) },
+      schedules: -> { schedules.render(:household) },
     }
   end
 

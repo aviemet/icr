@@ -22,15 +22,16 @@ import { useGetHouseholdSchedules } from "@/queries/households"
 
 interface ScheduleProps {
 	household: Schema.HouseholdsShow
-	schedules: Schema.CalendarEventsClient[]
+	schedules: Schema.CalendarEventsHousehold[]
 }
 
 type ScheduleResources = Record<string, object> & {
+	client?: Schema.ClientsPersisted
 	employee?: Schema.EmployeesPersisted
 }
 
 function isScheduleResources(resources: EventResources | undefined): resources is ScheduleResources {
-	return resources !== undefined && "employee" in resources
+	return resources !== undefined && ("client" in resources || "employee" in resources)
 }
 
 const Schedule = ({ household, schedules: initialSchedules }: ScheduleProps) => {
@@ -75,16 +76,17 @@ const Schedule = ({ household, schedules: initialSchedules }: ScheduleProps) => 
 		return data?.map(schedule => {
 			const start = ensureDate(schedule.starts_at)
 			const end = ensureDate(schedule.ends_at)
+			const client = schedule.clients?.[0]
 			const employee = schedule.shift?.employee
 
 			return {
 				id: schedule.id,
-				title: schedule.name ?? "",
+				title: client ? (client.full_name || client.name) : (schedule.name ?? ""),
 				start,
 				end,
 				allDay: schedule.all_day,
 				color: employee?.color,
-				resources: { employee },
+				resources: { client, employee },
 			}
 		}) ?? []
 	}, [data])
@@ -108,12 +110,13 @@ const Schedule = ({ household, schedules: initialSchedules }: ScheduleProps) => 
 				onNavigate={ handleNavigate }
 				onViewChange={ handleViewChange }
 				defaultTitleBuilder={ (event) => {
+					const client = isScheduleResources(event.resources) ? event.resources.client : undefined
 					const employee = isScheduleResources(event.resources) ? event.resources.employee : undefined
-					return formatEventTitle(event, employee)
+					return formatEventTitle(event, employee ?? client )
 				} }
 				popoverContent={ {
 					event: (event: BaseCalendarEvent, localizer: CalendarLocalizer) => (
-						<EventPopoverContent event={ event } localizer={ localizer } primaryResource="employee" />
+						<EventPopoverContent event={ event } localizer={ localizer } primaryResource="client" />
 					),
 				} satisfies Partial<PopoverContentMap> }
 			/>
