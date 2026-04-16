@@ -1,7 +1,7 @@
 import { css } from "@linaria/core"
 
 import { vars } from "@/lib/css"
-import * as baseEventClasses from "@/components/Calendar/components/Event/Event.css"
+import { event, indicator, title } from "@/components/Calendar/components/Event/Event.css"
 
 export const eventWrapper = css`
   --column-start: 1;
@@ -16,7 +16,7 @@ export const eventWrapper = css`
           white
         );
 
-  /* overflow: hidden; */
+  overflow: hidden;
   margin: 1px;
   font-size: ${ vars.fontSizes.xs };
   grid-column: var(--column-start) / span var(--column-span);
@@ -39,17 +39,24 @@ export const timeGridEvent = css`
   width: 100%;
   box-shadow: ${ vars.shadows.sm };
   display: flex;
-  align-items: start;
   gap: 0;
   min-width: 0;
 
-  .${ baseEventClasses.indicator } {
+  &.${ event } {
+    align-items: flex-start;
+  }
+
+  .${ indicator } {
     width: 1rem;
     height: 1rem;
     padding: 0 6px;
     border-radius: 100%;
     margin-right: 6px;
     flex: 0 0 auto;
+  }
+
+  .${ title } {
+    flex-direction: column;
   }
 
   &:hover {
@@ -64,7 +71,7 @@ export const timeGridEvent = css`
     grid-column: var(--column-start) / span var(--column-span);
     position: relative;
 
-    .${ baseEventClasses.indicator } {
+    .${ indicator } {
       width: 1rem;
       height: 100%;
       padding: 0;

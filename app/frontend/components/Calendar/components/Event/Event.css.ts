@@ -42,8 +42,5 @@ export const indicator = css`
 export const title = css`
   flex: 1 1 auto;
   min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   padding-left: 4px;
 `

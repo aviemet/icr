@@ -169,6 +169,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 
 #### UI & Styling
 - Mantine; Linaria with .css.ts; clsx for class composition; theme supports dark/light.
+- Gotcha: Linaria-generated class order can make overrides between multiple classes on the same element unreliable. When a view-specific class must override a base class (e.g. base `event` plus TimeGrid `timeGridEvent`), prefer a combined selector like `&.${event} { ... }` in the overriding class so it wins regardless of CSS emission order.
 
 #### Form Implementation
 - use-inertia-form v4.6.0; Form wraps Inertia + Mantine; nested data, Rails-style attributes; custom inputs via the form hook; strict typing.

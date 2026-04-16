@@ -3,7 +3,7 @@ import { css } from "@linaria/core"
 import { eventHeight } from "../../MonthView.css"
 
 import { vars } from "@/lib/css"
-import * as baseEventClasses from "@/components/Calendar/components/Event/Event.css"
+import { event, title, hasIndicator } from "@/components/Calendar/components/Event/Event.css"
 
 const triangleWidth = 3
 
@@ -32,8 +32,10 @@ export const monthEventWrapper = css`
 `
 
 export const monthEvent = css`
-  min-height: ${ eventHeight };
-  height: ${ eventHeight };
+  &.${ event } {
+    min-height: ${ eventHeight };
+    height: ${ eventHeight };
+  }
 
   &, &:before, &:after {
     transition: all 200ms ease-in-out;
@@ -123,8 +125,14 @@ export const monthEvent = css`
     }
   }
 
-  &.${ baseEventClasses.hasIndicator } {
+  &.${ hasIndicator } {
     padding-left: 0;
+  }
+
+  .${ title } {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 `
 
