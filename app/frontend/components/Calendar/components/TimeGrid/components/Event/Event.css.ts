@@ -58,8 +58,8 @@ export const timeGridEvent = css`
     transform: translate(50%, -50%);
     width: 1rem;
     height: 1rem;
-    padding: 0 6px;
-    border-radius: 100%;
+    padding: 2px 5px 0 6px;
+    border-radius: 3px;
     margin-right: 0;
     flex: 0 0 auto;
   }

@@ -49,6 +49,13 @@ export function EventPopoverContent({ event, localizer, primaryResource = "emplo
 		primaryLink = { href: Routes.employee(employee.slug), label: employee.name }
 	}
 
+	let secondaryLink: { href: string, label: string } | null = null
+	if(primaryResource === "client" && employee) {
+		secondaryLink = { href: Routes.employee(employee.slug), label: employee.name }
+	} else if(primaryResource === "employee" && client) {
+		secondaryLink = { href: Routes.client(client.slug), label: client.full_name || client.name }
+	}
+
 	const deleteEvent = useDeleteClientCalendarEvent({
 		params: { slug: client?.slug ?? "", id: String(event.id) },
 	})
@@ -103,6 +110,12 @@ export function EventPopoverContent({ event, localizer, primaryResource = "emplo
 					</Group>
 				) }
 			</Group>
+
+			{ secondaryLink && (
+				<Text size="sm">
+					<Link href={ secondaryLink.href }>{ secondaryLink.label }</Link>
+				</Text>
+			) }
 
 			<Text size="sm">
 				<strong>Start:</strong> { localizer.format(event.start, "M/D h:mma") }
