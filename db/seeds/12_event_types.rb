@@ -18,6 +18,6 @@ if Rails.env.development?
       end
     end
 
-    puts "[seeds] all day events"
+    Rails.logger.info "[seeds] all day events"
   end
 end

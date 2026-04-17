@@ -3,7 +3,7 @@ if Rails.env.development?
     Setting.company_name = "ICR SLS"
     Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
 
-    puts "[seeds] settings"
+    Rails.logger.info "[seeds] settings"
   end
 
   dev_password = "Complex1!"
@@ -25,7 +25,7 @@ if Rails.env.development?
       user: admin
     })
 
-    puts "[seeds] admin user"
+    Rails.logger.info "[seeds] admin user"
   end
 
   if Employee::JobTitle.none?
@@ -33,7 +33,7 @@ if Rails.env.development?
     Employee::JobTitle.create({ name: "Facilitator" })
     Employee::JobTitle.create({ name: "Director" })
 
-    puts "[seeds] job titles"
+    Rails.logger.info "[seeds] job titles"
   end
 
   if Client.none?
@@ -57,7 +57,7 @@ if Rails.env.development?
       person: Client.first.person
     })
 
-    puts "[seeds] clients (4) + household + client user"
+    Rails.logger.info "[seeds] clients (4) + household + client user"
   end
 
   if Employee.none?
@@ -99,7 +99,7 @@ if Rails.env.development?
       FactoryBot.create(:phone, contact: director.person.contact, category: Category.type("Contact::Phone").sample)
     end
 
-    puts "[seeds] employees + facilitator/director users"
+    Rails.logger.info "[seeds] employees + facilitator/director users"
   end
 
 end

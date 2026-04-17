@@ -15,9 +15,51 @@ export function assignEventOverlaps<TEventResources extends EventResources>(
 		if(!eventObj?.event?.allDay) timedEventIndices.push(eventIndex)
 	})
 
-	// Sweep line algorithm
 	let group: number[] = []
 	let groupEnd: Date | null = null
+
+	const finalizeGroup = (groupEventIndices: number[]) => {
+		if(groupEventIndices.length === 0) return
+
+		const eventIndexToColumn = new Map<number, number>()
+		let maxColumnCount = 0
+
+		const active: Array<{ endsAt: Date, columnIndex: number }> = []
+		const availableColumns: number[] = []
+		let nextNewColumnIndex = 0
+
+		const releaseFinished = (startsAt: Date) => {
+			for(let activeIndex = active.length - 1; activeIndex >= 0; activeIndex--) {
+				if(active[activeIndex].endsAt > startsAt) continue
+
+				availableColumns.push(active[activeIndex].columnIndex)
+				active.splice(activeIndex, 1)
+			}
+
+			availableColumns.sort((a, b) => a - b)
+			active.sort((a, b) => a.endsAt.getTime() - b.endsAt.getTime())
+		}
+
+		groupEventIndices.forEach((eventIndex) => {
+			const { displayStart, displayEnd } = columnEvents.get(eventIndex).displayProperties
+
+			releaseFinished(displayStart)
+
+			const columnIndex = availableColumns.shift() ?? nextNewColumnIndex++
+
+			eventIndexToColumn.set(eventIndex, columnIndex)
+
+			active.push({ endsAt: displayEnd, columnIndex })
+			maxColumnCount = Math.max(maxColumnCount, active.length)
+		})
+
+		groupEventIndices.forEach((eventIndex) => {
+			overlapData.set(eventIndex, {
+				slotIndex: eventIndexToColumn.get(eventIndex) ?? 0,
+				groupSize: maxColumnCount,
+			})
+		})
+	}
 
 	for(let i = 0; i < timedEventIndices.length; i++) {
 		const eventIndex = timedEventIndices[i]
@@ -35,21 +77,13 @@ export function assignEventOverlaps<TEventResources extends EventResources>(
 			// Extend the group end if this event ends later
 			if(displayEnd > groupEnd!) groupEnd = displayEnd
 		} else {
-			// Finalize the current group
-			group.forEach((idx, slotIndex) => {
-				overlapData.set(idx, { slotIndex, groupSize: group.length })
-			})
+			finalizeGroup(group)
 			// Start a new group
 			group = [eventIndex]
 			groupEnd = displayEnd
 		}
 	}
-	// Finalize the last group
-	if(group.length > 0) {
-		group.forEach((idx, slotIndex) => {
-			overlapData.set(idx, { slotIndex, groupSize: group.length })
-		})
-	}
+	finalizeGroup(group)
 
 	return overlapData
 }

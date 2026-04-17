@@ -51,7 +51,7 @@ if Rails.env.development?
 
     end
 
-    puts "[seeds] shifts: client 1 + attendant user"
+    Rails.logger.info "[seeds] shifts: client 1 + attendant user"
 
   end
 
@@ -108,7 +108,7 @@ if Rails.env.development?
       end
     end
 
-    puts "[seeds] shifts: household clients 2/3"
+    Rails.logger.info "[seeds] shifts: household clients 2/3"
   end
 
   if Client.fourth.calendar_events.empty?
@@ -162,6 +162,6 @@ if Rails.env.development?
 
     end
 
-    puts "[seeds] shifts: client 4 + overlaps"
+    Rails.logger.info "[seeds] shifts: client 4 + overlaps"
   end
 end

@@ -126,5 +126,5 @@ if Category.none?
     end
   end
 
-  puts "[seeds] categories"
+  Rails.logger.info "[seeds] categories"
 end

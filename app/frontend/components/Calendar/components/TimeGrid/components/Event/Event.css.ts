@@ -41,22 +41,32 @@ export const timeGridEvent = css`
   display: flex;
   gap: 0;
   min-width: 0;
+  position: relative;
 
   &.${ event } {
     align-items: flex-start;
   }
 
-  .${ indicator } {
+  &:not(.${ allDayEvent }) {
+    padding-top: 6px;
+  }
+
+  &:not(.${ allDayEvent }) .${ indicator } {
+    position: absolute;
+    top: 6px;
+    right: 3px;
+    transform: translate(50%, -50%);
     width: 1rem;
     height: 1rem;
     padding: 0 6px;
     border-radius: 100%;
-    margin-right: 6px;
+    margin-right: 0;
     flex: 0 0 auto;
   }
 
-  .${ title } {
-    flex-direction: column;
+  &:not(.${ allDayEvent }) .${ title } {
+    width: 100%;
+    padding-left: 0;
   }
 
   &:hover {
