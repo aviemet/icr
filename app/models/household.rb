@@ -43,19 +43,7 @@ class Household < ApplicationRecord
 
     Calendar::Event
       .where(id: calendar_event_ids)
-      .includes([
-        :recurring_patterns,
-        :event_participants,
-        :clients,
-        shift: {
-          employee: [
-            :person,
-            :job_title,
-            :calendar_customization,
-            { person: { contact: { addresses: :category, emails: :category, phones: :category } } },
-          ],
-        },
-      ])
+      .with_schedule_association_preloads
       .between(start_time, end_time)
   end
 end
