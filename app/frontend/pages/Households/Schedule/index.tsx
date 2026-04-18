@@ -16,7 +16,7 @@ import { EventPopoverContent } from "@/features/Clients/EventPopoverContent"
 import { ensureViewName, Routes } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
-import { useLocation } from "@/lib/hooks"
+import { useCalendarScheduleQueryInitialData, useLocation } from "@/lib/hooks"
 import { useEventTitleFormatter } from "@/lib/hooks/useEventTitleFormatter"
 import { useGetHouseholdSchedules } from "@/queries/households"
 
@@ -44,13 +44,22 @@ const Schedule = ({ household, schedules: initialSchedules }: ScheduleProps) => 
 	const [calendarDate, setCalendarDate] = useState<Date>(ensureDate(location.params.get("date")))
 	const [calendarView, setCalendarView] = useState<VIEW_NAMES>(ensureViewName(location.params.get("view")))
 
+	const scheduleQueryInitialData = useCalendarScheduleQueryInitialData(
+		`households/${household.slug}/schedule`,
+		location.params,
+		calendarDate,
+		calendarView,
+		userTimezone,
+		initialSchedules,
+	)
+
 	const { data } = useGetHouseholdSchedules({
 		slug: household.slug,
 		date: datetime.dateUrl(calendarDate),
 		view: calendarView,
 		timezone: userTimezone,
 	}, {
-		initialData: initialSchedules,
+		initialData: scheduleQueryInitialData,
 		refetchOnWindowFocus: false,
 	})
 

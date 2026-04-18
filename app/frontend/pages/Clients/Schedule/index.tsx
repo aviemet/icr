@@ -22,7 +22,7 @@ import { EventCalendarPopover } from "@/features/Clients/schedule/NewEventCalend
 import { ensureViewName, Routes } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
-import { useLocation } from "@/lib/hooks"
+import { useCalendarScheduleQueryInitialData, useLocation } from "@/lib/hooks"
 import { useEventTitleFormatter } from "@/lib/hooks/useEventTitleFormatter"
 import { useGetClientSchedules } from "@/queries/clients"
 
@@ -62,13 +62,22 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 	const [calendarDate, setCalendarDate] = useState<Date>(ensureDate(location.params.get("date")))
 	const [calendarView, setCalendarView] = useState<VIEW_NAMES>(ensureViewName(location.params.get("view")))
 
+	const scheduleQueryInitialData = useCalendarScheduleQueryInitialData(
+		`clients/${client.slug}/schedule`,
+		location.params,
+		calendarDate,
+		calendarView,
+		userTimezone,
+		initialSchedules,
+	)
+
 	const { data } = useGetClientSchedules({
 		slug: client.slug,
 		date: datetime.dateUrl(calendarDate),
 		view: calendarView,
 		timezone: userTimezone,
 	}, {
-		initialData: initialSchedules,
+		initialData: scheduleQueryInitialData,
 		refetchOnWindowFocus: false,
 	})
 
