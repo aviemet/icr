@@ -141,7 +141,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Timesheet: pre-submittal; tracks approval; belongs to PayPeriod and Employee; has many Shifts.
 - Shift create: if within current pay period, find or create that PayPeriod and a Timesheet for the employee; if the PayPeriod was just created, backfill timesheets for all shifts in that range.
 - PayPeriod create: backfill timesheets from shifts whose event overlaps the period (one Timesheet per employee).
-- Payroll index hours: Payroll::EmployeePeriodHours computes per-employee regular_hours and ot_hours for a pay period. Uses Setting overtime_weekly_hours and overtime_daily_hours; splits shifts by day (including overnight); applies active OvertimeExemption rules to exclude exempt shift hours from OT; weekly OT and daily OT are summed. Overtime exemption category criteria use Shift.category (Shift's own category_id), not calendar event category.
+- Payroll index hours: Payroll::EmployeePeriodHours computes per-employee regular_hours and ot_hours for a pay period. Uses Setting overtime_weekly_hours and overtime_daily_hours; splits work intervals by day (including overnight); applies active OvertimeExemption rules to exclude exempt intervals from OT; weekly OT and daily OT are summed. The calculator reads intervals via a collector interface (default: scheduled shifts), so payroll can later swap in a clock-in/out collector without changing overtime math or UI contracts.
 - Payroll approval UI: Approve actions (index row menu, footer bulk approve, employee review Approve button) are visible only during the approval window (current date within 3 days before period end through period end).
 
 ### Frontend Components
