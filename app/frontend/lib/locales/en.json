@@ -690,6 +690,13 @@
             "process_termination": "Process Termination",
             "record_resignation": "Record Resignation"
           }
+        },
+        "table": {
+          "actions": "Actions",
+          "first_name": "First Name",
+          "hire_date": "Hire Date",
+          "job_title": "Job Title",
+          "last_name": "Last Name"
         }
       },
       "households": {
