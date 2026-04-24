@@ -25,12 +25,13 @@ export function HeadCellWithContext({
 	const thRef = useRef<HTMLTableCellElement>(null)
 	const { pathname, params } = useLocation()
 
-	const localParams = useMemo(() => new URLSearchParams(params), [params])
+	const paramsSort = params.get("sort")
+	const paramsDirection = params.get("direction")
 
-	const paramsSort = localParams.get("sort")
-	const paramsDirection = localParams.get("direction")
-
-	const direction = paramsSort === sort && paramsDirection === "asc" ? "desc" : "asc"
+	const currentDirection = paramsSort === sort && (paramsDirection === "asc" || paramsDirection === "desc")
+		? paramsDirection
+		: undefined
+	const nextDirection = currentDirection === "asc" ? "desc" : "asc"
 
 	const showSortLink: boolean = sort !== undefined && rows!.length > 1
 
@@ -39,16 +40,15 @@ export function HeadCellWithContext({
 		if(!showSortLink) return undefined
 
 		if(sort === undefined) {
-			localParams.delete("sort")
 			return undefined
 		}
 
+		const localParams = new URLSearchParams(params)
 		localParams.set("sort", sort)
-
-		localParams.set("direction", direction)
+		localParams.set("direction", nextDirection)
 
 		return `${pathname}?${localParams.toString()}`
-	}, [showSortLink, localParams, sort, direction, pathname])
+	}, [showSortLink, params, sort, nextDirection, pathname])
 
 	return (
 		<Table.Th
@@ -56,7 +56,7 @@ export function HeadCellWithContext({
 			className={ clsx(
 				{ "table-column-fit": fitContent },
 				{ "sortable": showSortLink },
-				{ [direction]: showSortLink && paramsSort === sort },
+				{ [currentDirection ?? "asc"]: showSortLink && paramsSort === sort },
 			) }
 			style={ {
 				whiteSpace: nowrap ? "nowrap" : "normal",
