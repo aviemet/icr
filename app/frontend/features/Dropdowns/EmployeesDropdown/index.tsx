@@ -1,2 +1,1 @@
-export { default as EmployeesDropdown } from "./FormEmployeesDropdown"
-export { default as FormEmployeesDropdown } from "./FormEmployeesDropdown"
+export { EmployeesDropdownInput, EmployeesDropdownInput as FormEmployeesDropdown, EmployeesDropdownInput as EmployeesDropdown } from "./FormEmployeesDropdown"

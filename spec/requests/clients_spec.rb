@@ -189,12 +189,12 @@ RSpec.describe "/clients", :inertia do
         ends_at: Time.current.beginning_of_month + 5.days + 2.hours,)
       create(:event_participant, calendar_event: in_range_event, participant: client)
 
-      # Create an event outside the range
+      # Create an event outside the range (month view can extend ~6 days before the 1st)
       out_of_range_shift = create(:shift, employee: employee)
       out_of_range_event = create(:calendar_event,
         shift: out_of_range_shift,
-        starts_at: Time.current.beginning_of_month - 5.days,
-        ends_at: Time.current.beginning_of_month - 5.days + 2.hours,)
+        starts_at: Time.current.beginning_of_month - 15.days,
+        ends_at: Time.current.beginning_of_month - 15.days + 2.hours,)
       create(:event_participant, calendar_event: out_of_range_event, participant: client)
 
       # Request the current month's schedule

@@ -1,36 +1,35 @@
-import { forwardRef, type ForwardedRef } from "react"
+import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
-import SwatchInput, { type SwatchInputProps } from "@/components/Inputs/SwatchInput"
+import { SwatchInput as BaseSwatchInput, type SwatchInputProps } from "@/components/Inputs/SwatchInput"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
 
-interface FormSwatchInputProps<TForm extends NestedObject = NestedObject>
+export interface FormSwatchInputProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<SwatchInputProps, InputConflicts>,
 	BaseFormInputProps<string, TForm> {
+	ref?: React.Ref<HTMLInputElement>
 }
 
-const SwatchFormInput = forwardRef(<TForm extends NestedObject = NestedObject>(
-	{
-		name,
-		model,
-		onChange,
-		onBlur,
-		onFocus,
-		id,
-		required,
-		field = true,
-		wrapperProps,
-		errorKey,
-		defaultValue,
-		clearErrorsOnChange,
-		...props
-	}: FormSwatchInputProps<TForm>,
-	ref: ForwardedRef<HTMLInputElement>
-) => {
+export function SwatchInput<TForm extends NestedObject = NestedObject>({
+	name,
+	model,
+	onChange,
+	onBlur,
+	onFocus,
+	id,
+	required,
+	field = true,
+	wrapperProps,
+	errorKey,
+	defaultValue,
+	clearErrorsOnChange,
+	ref,
+	...props
+}: FormSwatchInputProps<TForm>) {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<string, TForm>({
 		name,
 		model,
@@ -53,7 +52,7 @@ const SwatchFormInput = forwardRef(<TForm extends NestedObject = NestedObject>(
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<SwatchInput
+			<BaseSwatchInput
 				ref={ ref }
 				initialValue={ value }
 				value={ value }
@@ -66,6 +65,4 @@ const SwatchFormInput = forwardRef(<TForm extends NestedObject = NestedObject>(
 			/>
 		</InputWrapper>
 	)
-})
-
-export default SwatchFormInput
+}

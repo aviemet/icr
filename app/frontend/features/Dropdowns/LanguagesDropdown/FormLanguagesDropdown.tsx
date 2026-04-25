@@ -6,15 +6,15 @@ import { useGetLanguages } from "@/queries/locale"
 
 import { type FormAsyncDropdown } from ".."
 
-interface FormLanguagesDropdownProps extends Omit<FormAsyncDropdown<Schema.LanguageOption>, "name"> {
+export interface FormLanguagesDropdownProps extends Omit<FormAsyncDropdown<Schema.LanguageOption>, "name"> {
 	name?: string
 }
 
-const FormLanguagesDropdown = ({
+export function FormLanguagesDropdown({
 	label = "Languages",
 	name = "languages",
 	...props
-}: FormLanguagesDropdownProps) => {
+}: FormLanguagesDropdownProps) {
 	const { data, refetch } = useGetLanguages({
 		staleTime: Infinity,
 	})
@@ -32,7 +32,4 @@ const FormLanguagesDropdown = ({
 			{ ...props }
 		/>
 	)
-
 }
-
-export default FormLanguagesDropdown

@@ -11,6 +11,9 @@ export default mergeConfig(viteConfig, defineConfig({
 		coverage: {
 			include: ["app/frontend/**/*.test.{ts,tsx}"],
 		},
-		setupFiles: [path.resolve(__dirname, "app/frontend/tests/helpers/mockServer.ts")],
+		setupFiles: [
+			path.resolve(__dirname, "app/frontend/tests/helpers/setup.ts"),
+			path.resolve(__dirname, "app/frontend/tests/helpers/mockServer.ts"),
+		],
 	},
 }))

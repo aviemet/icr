@@ -1,21 +1,21 @@
 import { isEmpty } from "lodash-es"
-import React, { forwardRef } from "react"
+import React from "react"
 
 import { Select as InputSelect } from "@/components/Inputs"
 import { useGetLanguages } from "@/queries/locale"
 
 import { type AsyncDropdown } from ".."
 
-interface LanguagesDropdownProps extends AsyncDropdown<Schema.LanguageOption> {}
+export interface LanguagesDropdownProps extends AsyncDropdown<Schema.LanguageOption> {
+	ref?: React.Ref<HTMLInputElement>
+}
 
-const LanguagesDropdown = forwardRef<HTMLInputElement, LanguagesDropdownProps>((
-	{
-		label = "Language",
-		name = "language",
-		...props
-	},
+export function LanguagesDropdown({
+	label = "Language",
+	name = "language",
 	ref,
-) => {
+	...props
+}: LanguagesDropdownProps) {
 	const { data, refetch } = useGetLanguages({
 		staleTime: Infinity,
 	})
@@ -37,6 +37,4 @@ const LanguagesDropdown = forwardRef<HTMLInputElement, LanguagesDropdownProps>((
 		clearable
 		{ ...props }
 	/>
-})
-
-export default LanguagesDropdown
+}

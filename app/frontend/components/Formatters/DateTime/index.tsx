@@ -1,25 +1,27 @@
-import { TooltipBaseProps } from "@mantine/core/lib/components/Tooltip/Tooltip.types"
 import { isEmpty } from "lodash-es"
 
-import { Stack, Tooltip } from "@/components"
+import { Stack, Tooltip, type TooltipProps } from "@/components"
+import { ConditionalWrapper } from "@/components"
 import { formatter } from "@/lib"
 
-import ConditionalWrapper from "../../ConditionalWrapper"
+const datetimeSingleArg = Object.fromEntries(
+	Object.entries(formatter.datetime).filter(([key]) => key !== "range")
+) as Omit<typeof formatter.datetime, "range">
+type DateTimeSingleArgKey = keyof typeof datetimeSingleArg
 
-
-interface DateTimeFormatterProps {
+export interface DateTimeFormatterProps {
 	children: string | Date | undefined
-	format?: keyof typeof formatter["datetime"]
-	tooltipFormats?: (keyof typeof formatter["datetime"])[]
-	tooltipOptions?: TooltipBaseProps
+	format?: DateTimeSingleArgKey
+	tooltipFormats?: DateTimeSingleArgKey[]
+	tooltipOptions?: TooltipProps
 }
 
-const DateTimeFormatter = ({
+export function DateTimeFormatter({
 	children,
 	format = "dateShort",
 	tooltipFormats,
 	tooltipOptions,
-}: DateTimeFormatterProps) => {
+}: DateTimeFormatterProps) {
 	if(!children) return <></>
 
 	return (
@@ -39,7 +41,7 @@ const DateTimeFormatter = ({
 									key={ f }
 									dateTime={ children.toString() }
 								>
-									{ formatter.datetime[f](children) }
+									{ datetimeSingleArg[f](children) }
 								</time>
 							)) }</Stack> }
 						>
@@ -48,10 +50,8 @@ const DateTimeFormatter = ({
 					)
 				} }
 			>
-				<time dateTime={ children.toString() }>{ formatter.datetime[format](children) }</time>
+				<time dateTime={ children.toString() }>{ datetimeSingleArg[format](children) }</time>
 			</ConditionalWrapper>
 		</>
 	)
 }
-
-export default DateTimeFormatter

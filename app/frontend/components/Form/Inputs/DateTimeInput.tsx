@@ -1,19 +1,23 @@
-import { forwardRef, type ForwardedRef } from "react"
+import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
-import DateTimeInput, { type DateTimeProps } from "@/components/Inputs/DateTimeInput"
-import { isUnset } from "@/lib"
+import {
+	DateTimeInput as BaseDateTimeInput,
+	type DateTimeProps,
+} from "@/components/Inputs/DateTimeInput"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
 
-interface DateTimeFormProps<TForm extends NestedObject = NestedObject>
+export interface FormDateTimeInputProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<DateTimeProps, InputConflicts>,
-	BaseFormInputProps<Date | "", TForm> {}
+	BaseFormInputProps<Date | "", TForm> {
+	ref?: React.Ref<HTMLButtonElement>
+}
 
-const DateTime = forwardRef(<TForm extends NestedObject = NestedObject>({
+export function DateTimeInput<TForm extends NestedObject = NestedObject>({
 	name,
 	required,
 	onChange,
@@ -26,10 +30,9 @@ const DateTime = forwardRef(<TForm extends NestedObject = NestedObject>({
 	errorKey,
 	defaultValue,
 	clearErrorsOnChange,
+	ref,
 	...props
-}: DateTimeFormProps<TForm>,
-	ref: ForwardedRef<HTMLButtonElement>
-) => {
+}: FormDateTimeInputProps<TForm>) {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<Date | "", TForm>({
 		name,
 		model,
@@ -38,9 +41,11 @@ const DateTime = forwardRef(<TForm extends NestedObject = NestedObject>({
 		clearErrorsOnChange,
 	})
 
-	const handleChange = (date: Date | null) => {
-		const dateWithValidEmptyType = isUnset(date) ? "" : date
-
+	const handleChange = (value: string | null) => {
+		let dateWithValidEmptyType: Date | "" = ""
+		if(value !== null && value !== "") {
+			dateWithValidEmptyType = new Date(value)
+		}
 		setValue(dateWithValidEmptyType)
 
 		onChange?.(dateWithValidEmptyType, form)
@@ -62,7 +67,7 @@ const DateTime = forwardRef(<TForm extends NestedObject = NestedObject>({
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<DateTimeInput
+			<BaseDateTimeInput
 				ref={ ref }
 				id={ id || inputId }
 				name={ inputName }
@@ -77,6 +82,4 @@ const DateTime = forwardRef(<TForm extends NestedObject = NestedObject>({
 			/>
 		</InputWrapper>
 	)
-})
-
-export default DateTime
+}

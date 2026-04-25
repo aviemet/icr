@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import ShiftTemplatesForm from "@/features/ShiftTemplates/Form"
+import { ShiftTemplateForm } from "@/domains/ShiftTemplates/Form"
 import { Routes } from "@/lib"
 
 interface EditShiftTemplateProps {
@@ -18,7 +18,7 @@ const EditShiftTemplate = ({ shift_template }: EditShiftTemplateProps) => {
 			<Section>
 				<Title>{ title }</Title>
 
-				<ShiftTemplatesForm
+				<ShiftTemplateForm
 					method="put"
 					to={ Routes.shiftTemplate(shift_template.id) }
 					shift_template={ shift_template }

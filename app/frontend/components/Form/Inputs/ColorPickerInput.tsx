@@ -1,37 +1,39 @@
-import React, { ForwardedRef, forwardRef } from "react"
+import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
-import ColorPickerInput, { type ColorPickerInputProps } from "@/components/Inputs/ColorPickerInput"
+import {
+	ColorPickerInput as BaseColorPickerInput,
+	type ColorPickerInputProps,
+} from "@/components/Inputs/ColorPickerInput"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type BaseFormInputProps, type InputConflicts } from "."
 
-interface FormColorPickerInputProps<TForm extends NestedObject = NestedObject>
+export interface FormColorPickerInputProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<ColorPickerInputProps, InputConflicts>,
 	BaseFormInputProps<string, TForm> {
+	ref?: React.Ref<HTMLInputElement>
 	id?: string
 }
 
-const FormColorPickerInput = forwardRef(<TForm extends NestedObject = NestedObject>(
-	{
-		name,
-		model,
-		onChange,
-		onBlur,
-		onFocus,
-		id,
-		required,
-		field = true,
-		wrapperProps,
-		errorKey,
-		defaultValue,
-		clearErrorsOnChange,
-		...props
-	}: FormColorPickerInputProps<TForm>,
-	ref: ForwardedRef<HTMLInputElement>,
-) => {
+export function ColorPickerInput<TForm extends NestedObject = NestedObject>({
+	name,
+	model,
+	onChange,
+	onBlur,
+	onFocus,
+	id,
+	required,
+	field = true,
+	wrapperProps,
+	errorKey,
+	defaultValue,
+	clearErrorsOnChange,
+	ref,
+	...props
+}: FormColorPickerInputProps<TForm>) {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<string, TForm>({
 		name,
 		model,
@@ -57,7 +59,7 @@ const FormColorPickerInput = forwardRef(<TForm extends NestedObject = NestedObje
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<ColorPickerInput
+			<BaseColorPickerInput
 				ref={ ref }
 				value={ value }
 				onChange={ handleChange }
@@ -70,6 +72,4 @@ const FormColorPickerInput = forwardRef(<TForm extends NestedObject = NestedObje
 			/>
 		</InputWrapper>
 	)
-})
-
-export default FormColorPickerInput
+}

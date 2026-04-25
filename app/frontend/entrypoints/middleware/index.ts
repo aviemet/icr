@@ -5,7 +5,7 @@ import { Root } from "react-dom/client"
 import { runAxe } from "./axe"
 import { convertDates } from "./convertDates"
 
-export { default as  handlePageLayout } from "./handlePageLayout"
+export { handlePageLayout } from "./handlePageLayout"
 
 export const applyPropsMiddleware = (props: PageProps & {
 	errors: Errors & ErrorBag

@@ -40,13 +40,13 @@ RSpec.describe SettingPolicy, type: :policy do
   end
 
   permissions :index? do
-    it "allows admin" do
+    it "allows admin to index" do
       expect(described_class.new(@admin_user, Setting.new)).to authorize(:index)
     end
   end
 
   permissions :show? do
-    it "allows admin" do
+    it "allows admin to show" do
       expect(described_class.new(@admin_user, Setting.new)).to authorize(:show)
     end
   end

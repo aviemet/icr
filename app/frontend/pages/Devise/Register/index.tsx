@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 import { type UseFormProps } from "use-inertia-form"
 
-import { Box, Grid, Title, Link } from "@/components"
+import { Stack, Title, Link, Box } from "@/components"
 import { Form, TextInput, PasswordInput, Submit, Field } from "@/components/Form"
 import { AuthPaperLayout } from "@/features"
 import { Routes, withLayout } from "@/lib"
@@ -44,7 +44,7 @@ const Register = () => {
 	return (
 		<AuthPaperLayout bottomLinks={ [
 			<Link href={ Routes.newUserSession() } key="login">
-				{ t("views.devise.register.login_instead") }
+				{ t("views.devise.shared.login") }
 			</Link>,
 		] }>
 			<Form
@@ -60,28 +60,22 @@ const Register = () => {
 				onChange={ handleFormChange }
 				onSubmit={ handleSubmit }
 			>
-				<Grid>
+				<Stack gap="lg" justify="space-between" flex={ 1 }>
 
-					<Grid.Col>
-						<Box>
-							<Title>{ t("views.devise.register.title") }</Title>
-						</Box>
-					</Grid.Col>
+					<Stack gap="md">
+						<Title>{ t("views.devise.register.title") }</Title>
 
-					<Grid.Col>
 						<Field>
 							<TextInput
 								name="email"
-								placeholder={ t("views.devise.register.email") }
+								placeholder={ t("views.devise.shared.email") }
 								autoFocus
 								autoComplete="Email"
 								required
 								onBlur={ handleEmailBlur }
 							/>
 						</Field>
-					</Grid.Col>
 
-					<Grid.Col>
 						<Field>
 							<PasswordInput
 								name="password"
@@ -91,9 +85,7 @@ const Register = () => {
 								onChange={ handlePasswordChange }
 							/>
 						</Field>
-					</Grid.Col>
 
-					<Grid.Col>
 						<Field>
 							<PasswordInput
 								name="password_confirmation"
@@ -103,15 +95,15 @@ const Register = () => {
 								onChange={ handlePasswordChange }
 							/>
 						</Field>
-					</Grid.Col>
+					</Stack>
 
-					<Grid.Col>
+					<Box>
 						<Field mb={ 16 }>
 							<Submit className="large">{ t("views.devise.register.submit") }</Submit>
 						</Field>
-					</Grid.Col>
+					</Box>
 
-				</Grid>
+				</Stack>
 			</Form>
 		</AuthPaperLayout>
 	)

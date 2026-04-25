@@ -2,11 +2,11 @@ import clsx from "clsx"
 import { useCallback, useMemo, useRef } from "react"
 
 import { assignEventOverlaps } from "@/components/Calendar/lib/assignEventOverlaps"
-import useStickySentinel from "@/lib/hooks/useStickySentinel"
+import { useStickySentinel } from "@/lib/hooks/useStickySentinel"
 
 import { BaseCalendarEvent, EventResources, useCalendarContext } from "../../"
 import { EventNode } from "./components/Event"
-import TimeColumn from "./components/TimeColumn"
+import { TimeColumn } from "./components/TimeColumn"
 import { TimeIndicator } from "./components/TimeIndicator"
 import * as classes from "./TimeGrid.css"
 import { CalendarTransitionContainer } from "../../lib/CalendarTransitionContainer"
@@ -21,7 +21,7 @@ export interface TimeGridHeading {
 	resourceId?: string | number
 }
 
-interface TimeGridProps<
+export interface TimeGridProps<
 	// eslint-disable-next-line no-unused-vars
 	TEventResources extends EventResources,
 	V extends "week" | "day" = "week"
@@ -40,7 +40,7 @@ interface TimeGridProps<
 	displayStrategy?: ViewStrategyName<V>
 }
 
-const TimeGrid = <
+export function TimeGrid<
 	TEventResources extends EventResources,
 	V extends "week" | "day" = "week"
 >({
@@ -52,7 +52,7 @@ const TimeGrid = <
 	columnHeadings,
 	timeIncrement = 60,
 	displayStrategy = "overlap",
-}: TimeGridProps<TEventResources, V>) => {
+}: TimeGridProps<TEventResources, V>) {
 	const { localizer, onClick, groupByResource } = useCalendarContext()
 
 	const onEventClick = useCallback((event: BaseCalendarEvent<EventResources>, element: HTMLElement) => {
@@ -100,9 +100,10 @@ const TimeGrid = <
 
 			// Build the list of events per column
 			columnEvents.forEach(({ event, displayProperties }, index) => {
+				const eventKey = `${event.id}-${displayProperties.displayStart.toISOString()}-${columnIndex}-${index}`
 				const eventNode = (displayProperties: TimeGridDisplayProperties) => (
 					<EventNode<TEventResources>
-						key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
+						key={ eventKey }
 						event={ event }
 						displayProperties={ displayProperties }
 						startTime={ localStartTime }
@@ -213,5 +214,3 @@ const TimeGrid = <
 		</div>
 	)
 }
-
-export default TimeGrid

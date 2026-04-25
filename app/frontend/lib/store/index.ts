@@ -6,10 +6,8 @@ import { createLayoutSlice, type LayoutSlice } from "./layoutSlice"
 
 type GlobalStore = ContrastingColorSlice & LayoutSlice & DefaultsSlice
 
-const useStore = create<GlobalStore>((...args) => ({
+export const useStore = create<GlobalStore>((...args) => ({
 	...createContrastingColorSlice(...args),
 	...createLayoutSlice(...args),
 	...createDefaultsSlice(...args),
 }))
-
-export default useStore

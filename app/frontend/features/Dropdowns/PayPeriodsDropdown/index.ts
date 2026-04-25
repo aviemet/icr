@@ -1,2 +1,2 @@
-export { default as PayPeriodsDropdown } from "./PayPeriodsDropdownInput"
-export { default as FormPayPeriodsDropdown } from "./FormPayPeriodsDropdown"
+export { PayPeriodsDropdown } from "./PayPeriodsDropdownInput"
+export { FormPayPeriodsDropdown } from "./FormPayPeriodsDropdown"

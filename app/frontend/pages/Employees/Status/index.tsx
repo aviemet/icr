@@ -8,7 +8,7 @@ import {
 	OnboardingForm,
 	ResignationForm,
 	TerminationForm,
-} from "@/features/Employees/StatusChange"
+} from "@/domains/Employees/StatusChange"
 import { Routes } from "@/lib"
 
 interface StatusProps {

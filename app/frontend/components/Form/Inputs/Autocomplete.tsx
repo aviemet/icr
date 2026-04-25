@@ -1,40 +1,38 @@
-import { forwardRef, type ForwardedRef } from "react"
+import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
-import AutocompleteInput, { type AutocompleteProps } from "@/components/Inputs/AutocompleteInput"
+import { AutocompleteInput, type AutocompleteProps } from "@/components/Inputs/AutocompleteInput"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { InputConflicts, type BaseFormInputProps } from "."
 
 
-interface FormAutocompleteProps<TForm extends NestedObject = NestedObject>
+export interface FormAutocompleteProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<AutocompleteProps, InputConflicts>,
 	BaseFormInputProps<string, TForm> {
-
+	ref?: React.Ref<HTMLInputElement>
 	endpoint?: string
 }
 
-const FormAutocompleteComponent = forwardRef(<TForm extends NestedObject>(
-	{
-		name,
-		model,
-		onChange,
-		onBlur,
-		onFocus,
-		id,
-		required,
-		field = true,
-		endpoint,
-		wrapperProps,
-		errorKey,
-		defaultValue,
-		clearErrorsOnChange,
-		...props
-	} : FormAutocompleteProps<TForm>,
-	ref: ForwardedRef<HTMLInputElement>
-) => {
+export function Autocomplete<TForm extends NestedObject>({
+	name,
+	model,
+	onChange,
+	onBlur,
+	onFocus,
+	id,
+	required,
+	field = true,
+	endpoint,
+	wrapperProps,
+	errorKey,
+	defaultValue,
+	clearErrorsOnChange,
+	ref,
+	...props
+}: FormAutocompleteProps<TForm>) {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<string, TForm>({
 		name,
 		model,
@@ -73,6 +71,4 @@ const FormAutocompleteComponent = forwardRef(<TForm extends NestedObject>(
 			/>
 		</InputWrapper>
 	)
-})
-
-export default FormAutocompleteComponent
+}

@@ -1,35 +1,35 @@
-import { forwardRef, type ForwardedRef } from "react"
+import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
-import SwitchInput, { type SwitchProps } from "@/components/Inputs/Switch"
+import { Switch as BaseSwitch, type SwitchProps } from "@/components/Inputs/Switch"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
 
-interface FormSwitchProps<TForm extends NestedObject = NestedObject>
+export interface FormSwitchProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<SwitchProps, InputConflicts>,
-	BaseFormInputProps<boolean, TForm> {}
+	BaseFormInputProps<boolean, TForm> {
+	ref?: React.Ref<HTMLInputElement>
+}
 
-const FormSwitchComponent = forwardRef(<TForm extends NestedObject = NestedObject>(
-	{
-		name,
-		onChange,
-		onBlur,
-		onFocus,
-		id,
-		required,
-		model,
-		field = true,
-		wrapperProps,
-		errorKey,
-		defaultValue,
-		clearErrorsOnChange,
-		...props
-	}: FormSwitchProps<TForm>,
-	ref: ForwardedRef<HTMLInputElement>
-) => {
+export function Switch<TForm extends NestedObject = NestedObject>({
+	name,
+	onChange,
+	onBlur,
+	onFocus,
+	id,
+	required,
+	model,
+	field = true,
+	wrapperProps,
+	errorKey,
+	defaultValue,
+	clearErrorsOnChange,
+	ref,
+	...props
+}: FormSwitchProps<TForm>) {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<boolean, TForm>({
 		name,
 		model,
@@ -56,7 +56,7 @@ const FormSwitchComponent = forwardRef(<TForm extends NestedObject = NestedObjec
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<SwitchInput
+			<BaseSwitch
 				ref={ ref }
 				id={ id || inputId }
 				name={ inputName }
@@ -72,6 +72,4 @@ const FormSwitchComponent = forwardRef(<TForm extends NestedObject = NestedObjec
 			/>
 		</InputWrapper>
 	)
-})
-
-export default FormSwitchComponent
+}

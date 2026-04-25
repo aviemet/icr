@@ -79,11 +79,14 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :households, param: :slug
+  resources :households, param: :slug, concerns: :schedulable
 
   resources :shift_templates
 
-  resources :timesheets
+  scope path: "payroll" do
+    get "employees/:employee_id", to: "timesheets#employee_review", as: :payroll_employee_review
+    resources :timesheets, path: ""
+  end
 
   resources :vendors, param: :slug
 

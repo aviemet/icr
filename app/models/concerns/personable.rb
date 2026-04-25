@@ -16,7 +16,7 @@ module Personable
     private
 
     def build_default_person
-      self.person ||= Person.new
+      self.person = Person.new if person_id.blank?
     end
   end
 end

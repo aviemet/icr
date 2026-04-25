@@ -29,9 +29,10 @@ You are an expert in Ruby on Rails, PostgreSQL, Hotwire (Turbo and Stimulus), an
 
 ## Syntax and Formatting
 
-- Follow the Ruby Style Guide (https://rubystyle.guide/)
+- Follow the Ruby Style Guide (<https://rubystyle.guide/>)
 - Use Ruby's expressive syntax (e.g., unless, ||=, &.)
 - Prefer single quotes for strings unless interpolation is needed.
+- Do not use `OpenStruct`, use `Struct` instead.
 
 ## Error Handling and Validation
 
@@ -52,7 +53,7 @@ You are an expert in Ruby on Rails, PostgreSQL, Hotwire (Turbo and Stimulus), an
 - Use proper number and date formatting.
 - Use proper currency formatting.
 - Implement proper RTL support.
-- 
+
 ## Performance Optimization
 
 - Use database indexing effectively.
@@ -85,11 +86,11 @@ You are an expert in Ruby on Rails, PostgreSQL, Hotwire (Turbo and Stimulus), an
   - Focus on user workflows to ensure app functionality.
   - Set up and tear down test environments properly to maintain test independence.
 
-  ### Inertia Testing 
+  ### Inertia Testing
 
   - Inertia has its own set of rspec assertions, use them when appropriate to test inertia specific actions. Examples below:
 
-    ```ruby
+  ```ruby
     RSpec.describe '/events', inertia: true do
       describe '#index' do
         let!(:event) { Event.create!(title: 'Foo', start_date: '2024-02-21', description: 'Foo bar') }
@@ -120,12 +121,11 @@ You are an expert in Ruby on Rails, PostgreSQL, Hotwire (Turbo and Stimulus), an
         end
       end
     end
-  ```
 
+  ```
 
 ## Security
 
 - Implement proper authentication and authorization (e.g., Devise, Rolify, Pundit).
 - Use strong parameters in controllers, using the strong_params method defined in the strong_params.rb concern.
 - Protect against common web vulnerabilities (XSS, CSRF, SQL injection).
-

@@ -1,5 +1,7 @@
 {
   "en": {
+    "active": "Active",
+    "admin": "Admin",
     "application": {
       "invalid_authenticity_token_notice": "The page expired, please try again."
     },
@@ -130,6 +132,10 @@
         "month": "Month",
         "second": "Seconds",
         "year": "Year"
+      },
+      "relative": {
+        "future": "in %{time}",
+        "past": "%{time} ago"
       }
     },
     "devise": {
@@ -223,6 +229,7 @@
         "unlocked": "Your account has been unlocked successfully. Please sign in to continue."
       }
     },
+    "ends_at": "Ends At",
     "flash": {
       "actions": {
         "create": {
@@ -381,6 +388,7 @@
       },
       "until": "until %{date}"
     },
+    "member": "Member",
     "number": {
       "currency": {
         "format": {
@@ -449,9 +457,30 @@
         }
       }
     },
+    "permission_group": "Permission Group",
+    "permissions": {
+      "edit": {
+        "title": "Edit Permission Group"
+      },
+      "form": {
+        "add_permission": "Add Permission",
+        "assignments": "Assignments",
+        "basic_info": "Basic Information",
+        "conditions": {
+          "owner_only": "Owner Only",
+          "time_restricted": "Time Restricted"
+        },
+        "permissions": "Permissions"
+      },
+      "new": {
+        "title": "New Permission Group"
+      }
+    },
     "pundit": {
       "not_authorized": "You are not authorized to access this page."
     },
+    "role": "Role",
+    "save": "Save",
     "settings": {
       "errors": {
         "update_failed": "Updating settings failed. Please notify your site administrator."
@@ -460,6 +489,7 @@
         "updated": "Settings have been updated successfully."
       }
     },
+    "starts_at": "Starts At",
     "support": {
       "array": {
         "last_word_connector": ", and ",
@@ -538,69 +568,81 @@
           "new_employee": "New Employee"
         },
         "activity": {
+          "empty": "No recent client or employee additions.",
+          "item_client": "New client: %{name}",
+          "item_employee": "New employee: %{name}",
           "latest": "Latest Updates",
           "title": "Recent Activity",
-          "updates": {
-            "milestone": "Project milestone completed - Tech Solutions",
-            "new_client": "New client onboarded - Acme Corp",
-            "new_employee": "New employee joined - Sarah Smith",
-            "policies": "Updated company policies"
-          }
+          "unnamed": "(no name)"
         },
         "clients": {
           "active_count": "%{count} Active Clients",
           "add_new": "Add New Client",
-          "pending_count": "%{count} pending proposals",
+          "inactive_count": "%{count} inactive",
           "title": "Clients Overview",
           "view_all": "View All Clients"
         },
         "command_center": "%{company} Command Center",
         "schedule": {
           "add": "Add Event",
-          "events": {
-            "client_checkin": "11:30 AM - Client Check-in",
-            "team_meeting": "9:00 AM - Team Meeting",
-            "training": "2:00 PM - Employee Training"
-          },
+          "empty": "No upcoming events in your view.",
+          "shift_for": "Shift - %{name}",
           "title": "Today's Schedule",
+          "untitled_shift": "Shift",
           "upcoming": "Upcoming Appointments",
           "view": "View Schedule"
         },
         "team": {
           "add_new": "Add New Employee",
+          "hiring_pipeline": "%{count} in hiring pipeline",
           "member_count": "%{count} Team Members",
-          "on_leave": "%{count} on leave",
           "title": "Team Overview",
           "view_all": "View All Employees"
         },
         "time": {
           "pending_timesheets": "%{count} timesheets pending approval",
           "title": "Time Tracking",
-          "total_hours": "%{count} Hours",
+          "total_hours": "%{hours} Hours",
           "total_hours_week": "Total hours tracked this week",
           "view": "View Timesheets"
         },
         "welcome": "Welcome back, %{name}"
       },
       "devise": {
+        "confirmations": {
+          "new": {
+            "body_resend": "If you don't receive an email, use the form below to resend it.",
+            "body_sent": "An email has been sent to the address provided. Please follow the link to confirm your account.",
+            "submit": "Resend confirmation instructions",
+            "title": "Please check your email"
+          }
+        },
         "login": {
-          "email": "Email",
           "password": "Password",
           "register": "Register",
           "remember_me": "Remember Me",
           "reset_password": "Reset Password",
-          "submit": "Log In"
+          "submit": "Log In",
+          "subtitle": "Schedules, clients, and staff in one place."
+        },
+        "passwords": {
+          "new": {
+            "submit": "Send reset password instructions",
+            "title": "Forgot your password?"
+          }
         },
         "register": {
           "confirm_password": "Confirm Password",
-          "email": "Email",
           "errors": {
             "passwords_must_match": "Passwords must match"
           },
-          "login_instead": "Log In Instead",
           "password": "Password",
           "submit": "Sign Up",
           "title": "Sign Up"
+        },
+        "shared": {
+          "email": "Email",
+          "login": "Log In Instead"
         }
       },
       "employees": {
@@ -648,6 +690,18 @@
             "process_termination": "Process Termination",
             "record_resignation": "Record Resignation"
           }
+        },
+        "table": {
+          "actions": "Actions",
+          "first_name": "First Name",
+          "hire_date": "Hire Date",
+          "job_title": "Job Title",
+          "last_name": "Last Name"
+        }
+      },
+      "households": {
+        "schedule": {
+          "title": "%{name}'s Schedule"
         }
       },
       "pagination": {
@@ -692,48 +746,89 @@
         }
       },
       "timesheets": {
-        "filters": {
-          "apply": "Apply Filters",
-          "date_from": "From",
-          "date_to": "To",
-          "select_date": "Select date",
-          "select_status": "Select status",
-          "status": "Status"
+        "employee_review": {
+          "approve": "Approve",
+          "back": "Back",
+          "back_to_payroll": "Back to Payroll",
+          "break": "Break",
+          "category": "Category",
+          "date": "Date",
+          "employee_label": "Employee",
+          "exception": "Exception",
+          "footer_overtime": "Overtime",
+          "footer_regular": "Regular",
+          "hours": "Hours",
+          "in_out_times": "In / Out Times",
+          "no_shifts": "No shifts in this period",
+          "ot_hours": "OT Hours",
+          "overtime": "Overtime",
+          "period_bi_weekly": "Bi-Weekly Period",
+          "period_label": "Period",
+          "pto_hours": "PTO Hours",
+          "regular_hours": "Regular Hours",
+          "request_changes": "Request Changes",
+          "shift": "Shift",
+          "sick_hours": "Sick",
+          "status_approved": "Approved",
+          "status_pending": "Pending",
+          "status_submitted": "Submitted",
+          "tab_date": "Date",
+          "tab_day": "Day",
+          "title": "Timesheet Review",
+          "total": "Total"
         },
         "index": {
-          "current_period": "Current Pay Period",
-          "title": "Timesheets"
-        },
-        "list": {
-          "actions": "Actions",
-          "overtime_hours": "Overtime Hours",
-          "period": "Pay Period",
-          "regular_hours": "Regular Hours",
-          "status": "Status",
-          "total_hours": "Total Hours"
+          "approve_all_clean": "Approve All Clean",
+          "approve_selected": "Approve Selected",
+          "approved_count": "%{approved} / %{total} Approved",
+          "due_in_days": "Due in %{count} days",
+          "employees": {
+            "actions": "Action",
+            "approve": "Approve",
+            "employee": "Employee",
+            "exceptions": "Exceptions",
+            "ot_hours": "OT Hours",
+            "pto_sick": "PTO / Sick",
+            "regular_hours": "Regular Hours",
+            "review": "Review",
+            "status": "Status"
+          },
+          "exception_missing_punch": "Missing Punch",
+          "exception_overlapping": "Overlapping Shifts",
+          "export_summary": "Export Summary",
+          "footer_ot_hours": "OT: %{count} hrs",
+          "footer_selected": "%{count} Selected",
+          "footer_total_hours": "Total: %{count} hrs",
+          "no_value": "--",
+          "period_label": "Period: %{range} (%{type})",
+          "period_type_bi_weekly": "Bi-Weekly",
+          "period_type_monthly": "Monthly",
+          "period_type_semi_monthly": "Semi-Monthly",
+          "period_type_weekly": "Weekly",
+          "status_approved": "Approved",
+          "status_pending": "Pending",
+          "status_submitted": "Submitted",
+          "summary_flagged": "Flagged",
+          "summary_hours": "%{count} hrs",
+          "summary_overtime": "Overtime",
+          "summary_pending": "Pending",
+          "summary_pto": "PTO",
+          "tabs": {
+            "all": "All",
+            "approved": "Approved",
+            "flagged": "Flagged",
+            "needs_approval": "Needs Approval"
+          },
+          "title": "Payroll Approval"
         },
         "show": {
           "approve": "Approve",
           "companion": "Companion",
           "employee": "Employee",
           "reject": "Reject",
-          "title": "Timesheet Details",
-          "week_one": "Week One",
-          "week_two": "Week Two"
-        },
-        "stats": {
-          "overtime_hours": "Overtime Hours",
-          "regular_hours": "Regular Hours",
-          "remaining_shifts": "Remaining Shifts",
-          "this_period": "This Pay Period",
-          "this_week": "This Week",
-          "total_hours": "Total Hours"
-        },
-        "status": {
-          "approved": "Approved",
-          "draft": "Draft",
-          "rejected": "Rejected",
-          "submitted": "Submitted"
+          "title": "Timesheet",
+          "week_one": "Week 1",
+          "week_two": "Week 2"
         },
         "weekly": {
           "date": "Date",

@@ -7,6 +7,7 @@
 #  description        :text
 #  name               :string           not null
 #  slug               :string           not null
+#  system             :boolean          default(FALSE), not null
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  parent_id          :uuid
@@ -23,9 +24,11 @@
 #
 class Category < ApplicationRecord
   extend FriendlyId
+
   friendly_id :slug_from_category_type
 
   include PgSearchable
+
   pg_search_config(against: [:name])
 
   resourcify
@@ -42,6 +45,9 @@ class Category < ApplicationRecord
     Identification
     Employee::EmploymentStatus
   ).freeze
+
+  before_update :prevent_system_modification
+  before_destroy :prevent_system_modification
 
   # Self-referential association to create parent-child relationships
   belongs_to :parent, class_name: "Category", optional: true
@@ -77,5 +83,9 @@ class Category < ApplicationRecord
 
   def slug_from_category_type
     "#{self.categorizable_type}-#{self.name}".downcase
+  end
+
+  def prevent_system_modification
+    throw(:abort) if system?
   end
 end

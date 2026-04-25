@@ -1,21 +1,21 @@
 import { isEmpty } from "lodash-es"
-import React, { forwardRef } from "react"
+import React from "react"
 
 import { Select as InputSelect } from "@/components/Inputs"
 import { useGetPayPeriodTypes } from "@/queries/locale"
 
 import { type AsyncDropdown } from ".."
 
-interface PayPeriodsDropdownProps extends AsyncDropdown<Schema.PayPeriodOption> {}
+export interface PayPeriodsDropdownProps extends AsyncDropdown<Schema.PayPeriodOption> {
+	ref?: React.Ref<HTMLInputElement>
+}
 
-const PayPeriodsDropdown = forwardRef<HTMLInputElement, PayPeriodsDropdownProps>((
-	{
-		label = "PayPeriod",
-		name = "payPeriod",
-		...props
-	},
+export function PayPeriodsDropdown({
+	label = "PayPeriod",
+	name = "payPeriod",
 	ref,
-) => {
+	...props
+}: PayPeriodsDropdownProps) {
 	const { data, refetch } = useGetPayPeriodTypes({
 		staleTime: Infinity,
 	})
@@ -37,6 +37,4 @@ const PayPeriodsDropdown = forwardRef<HTMLInputElement, PayPeriodsDropdownProps>
 		clearable
 		{ ...props }
 	/>
-})
-
-export default PayPeriodsDropdown
+}

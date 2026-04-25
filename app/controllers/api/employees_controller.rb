@@ -3,17 +3,15 @@ class Api::EmployeesController < Api::ApiController
 
   # @route GET /api/options/employees (api_employees_options)
   def options
-    render json: employees.render(:options)
+    render json: employees.includes([person: [:user, :client]]).render(:options)
   end
 
+  # @route GET /api/employees/:slug/schedule {param: :slug} (api_employee_schedule)
   def schedule
     schedules = Employee
-      .includes([:person])
-      .find_by(slug: params[:slug])
-      .calendar_events
-      .includes([:recurring_patterns, shift: [employee: [:person, :job_title, :calendar_customization]]])
-      .between(*DateRangeCalculator.new(params).call)
+      .find_by!(slug: params[:slug])
+      .schedule_events_between(*DateRangeCalculator.new(params).call)
 
-    render json: schedules.render
+    render json: schedules.render(:employee)
   end
 end

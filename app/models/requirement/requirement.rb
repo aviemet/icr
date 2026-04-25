@@ -23,6 +23,8 @@ module Requirement
   class Requirement < ApplicationRecord
     self.table_name = "requirements"
 
+    resourcify
+
     belongs_to :requirement_type, class_name: "Requirement::Type"
     belongs_to :scope, polymorphic: true, optional: true
 

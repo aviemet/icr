@@ -7,6 +7,7 @@
 #  description        :text
 #  name               :string           not null
 #  slug               :string           not null
+#  system             :boolean          default(FALSE), not null
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  parent_id          :uuid

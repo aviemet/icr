@@ -1,37 +1,37 @@
-import { forwardRef, type ForwardedRef } from "react"
+import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
-import { DateInput, type DateInputValue } from "@/components/Inputs"
+import { DateInput as BaseDateInput, type DateInputValue } from "@/components/Inputs"
 import { type DateInputProps } from "@/components/Inputs/DateInput"
 import { isUnset } from "@/lib"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
 
-interface FormDateInputProps<TForm extends NestedObject = NestedObject>
+export interface FormDateInputProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<DateInputProps, InputConflicts>,
-	BaseFormInputProps<Exclude<DateInputValue, undefined | null> | "", TForm> {}
+	BaseFormInputProps<Exclude<DateInputValue, undefined | null> | "", TForm> {
+	ref?: React.Ref<HTMLButtonElement>
+}
 
-const FormDateInput = forwardRef(<TForm extends NestedObject = NestedObject>(
-	{
-		name,
-		required,
-		onChange,
-		onBlur,
-		onFocus,
-		id,
-		model,
-		field = true,
-		wrapperProps,
-		errorKey,
-		defaultValue,
-		clearErrorsOnChange,
-		...props
-	}: FormDateInputProps<TForm>,
-	ref: ForwardedRef<HTMLButtonElement>
-) => {
+export function DateInput<TForm extends NestedObject = NestedObject>({
+	name,
+	required,
+	onChange,
+	onBlur,
+	onFocus,
+	id,
+	model,
+	field = true,
+	wrapperProps,
+	errorKey,
+	defaultValue,
+	clearErrorsOnChange,
+	ref,
+	...props
+}: FormDateInputProps<TForm>) {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<
 		Exclude<DateInputValue, undefined | null> | "",
 		TForm
@@ -63,7 +63,7 @@ const FormDateInput = forwardRef(<TForm extends NestedObject = NestedObject>(
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<DateInput
+			<BaseDateInput
 				ref={ ref }
 				id={ id || inputId }
 				name={ inputName }
@@ -77,6 +77,4 @@ const FormDateInput = forwardRef(<TForm extends NestedObject = NestedObject>(
 			/>
 		</InputWrapper>
 	)
-})
-
-export default FormDateInput
+}

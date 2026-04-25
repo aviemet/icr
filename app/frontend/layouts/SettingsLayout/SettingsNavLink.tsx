@@ -1,19 +1,19 @@
 import clsx from "clsx"
-import { forwardRef } from "react"
+import React from "react"
 
 import { Link } from "@/components"
 import { type LinkProps } from "@/components/Link"
 
+export interface SettingsNavLinkProps extends LinkProps {
+	ref?: React.Ref<HTMLAnchorElement>
+}
 
-interface SettingsNavLinkProps extends LinkProps {}
-
-const SettingsNavLink = forwardRef<HTMLAnchorElement, SettingsNavLinkProps>((
-	{ children,
-		underline = "never",
-		...props
-	},
-	ref
-) => {
+export function SettingsNavLink({
+	children,
+	underline = "never",
+	ref,
+	...props
+}: SettingsNavLinkProps) {
 	return <Link
 		ref={ ref }
 		underline={ underline }
@@ -21,6 +21,4 @@ const SettingsNavLink = forwardRef<HTMLAnchorElement, SettingsNavLinkProps>((
 	>
 		<span className={ clsx("controlLabel") }>{ children }</span>
 	</Link>
-})
-
-export default SettingsNavLink
+}

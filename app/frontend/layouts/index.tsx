@@ -1,10 +1,11 @@
 import { Flash } from "@/components"
-import Providers from "@/layouts/Providers"
+import { SpotlightComponent } from "@/features/Spotlight"
+import { Providers } from "@/layouts/Providers"
 
-import BareAppLayout from "./AppLayout"
-import BareAuthLayout from "./AuthLayout"
-import BarePublicLayout from "./PublicLayout"
-import BareSettingsLayout from "./SettingsLayout"
+import { AppLayout as BareAppLayout } from "./AppLayout"
+import { AuthLayout as BareAuthLayout } from "./AuthLayout"
+import { PublicLayout as BarePublicLayout } from "./PublicLayout"
+import { SettingsLayout as BareSettingsLayout } from "./SettingsLayout"
 
 import "@/lib/i18n"
 
@@ -41,6 +42,7 @@ export const AuthLayout = ({ children }: LayoutProps) => {
 export const AppLayout = ({ children }: LayoutProps) => {
 	return (
 		<LayoutWrapper>
+			<SpotlightComponent />
 			<BareAppLayout>
 				{ children }
 			</BareAppLayout>
@@ -51,6 +53,7 @@ export const AppLayout = ({ children }: LayoutProps) => {
 export const SettingsLayout = ({ children }: LayoutProps) => {
 	return (
 		<LayoutWrapper>
+			<SpotlightComponent />
 			<BareSettingsLayout>
 				{ children }
 			</BareSettingsLayout>

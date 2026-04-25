@@ -1,5 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react"
-import { Box, darken, isLightColor, lighten } from "@mantine/core"
+import { Box, darken, isLightColor, lighten, useMantineColorScheme } from "@mantine/core"
 import clsx from "clsx"
 import { ContextMenuItemOptions, useContextMenu } from "mantine-contextmenu"
 import { CSSProperties, PropsWithChildren, useCallback } from "react"
@@ -7,7 +7,7 @@ import { CSSProperties, PropsWithChildren, useCallback } from "react"
 import { EventResources, BaseCalendarEvent } from "@/components/Calendar"
 import { GridDisplayProperties } from "@/components/Calendar/lib/displayStrategies"
 import { vars } from "@/lib"
-import useStore from "@/lib/store"
+import { useStore } from "@/lib/store"
 
 import * as classes from "./Event.css"
 
@@ -40,7 +40,13 @@ const EventWrapper = <P extends GridDisplayProperties = GridDisplayProperties>({
 
 	const eventColor = event.color || vars.colors.primaryColors.filled
 
-	const contrastingColor = getContrastingColor(eventColor)
+	const { colorScheme } = useMantineColorScheme()
+
+	const isFilled = displayProperties.className?.toString().includes("filled")
+
+	const contrastingColor = isFilled
+		? getContrastingColor(eventColor)
+		: (colorScheme === "dark" ? vars.colors.white : vars.colors.black)
 
 	const customMenuItemsWithDivider = useCallback(() => {
 		if(!contextMenuOptions) return []

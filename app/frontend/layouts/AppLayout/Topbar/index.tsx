@@ -1,13 +1,13 @@
 import clsx from "clsx"
 
 import { Box, AppShell, Group } from "@/components"
-import useStore from "@/lib/store"
+import { useStore } from "@/lib/store"
 
-import AvatarMenu from "./AvatarMenu"
+import { AvatarMenu } from "./AvatarMenu"
 import * as classes from "../AppLayout.css"
-import ToggleSidebarButton from "../ToggleSidebarButton"
+import { ToggleSidebarButton } from "../ToggleSidebarButton"
 
-const Topbar = () => {
+export function Topbar() {
 	const { sidebarOpen, siteTitle } = useStore()
 
 	return (
@@ -25,5 +25,3 @@ const Topbar = () => {
 		</AppShell.Header>
 	)
 }
-
-export default Topbar

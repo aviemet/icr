@@ -1,21 +1,21 @@
 import { isEmpty } from "lodash-es"
-import React, { forwardRef } from "react"
+import React from "react"
 
 import { Select as InputSelect } from "@/components/Inputs"
 import { useGetCurrencies } from "@/queries/locale"
 
 import { type AsyncDropdown } from ".."
 
-interface CurrenciesDropdownProps extends AsyncDropdown<Schema.CurrencyOption> {}
+export interface CurrenciesDropdownProps extends AsyncDropdown<Schema.CurrencyOption> {
+	ref?: React.Ref<HTMLInputElement>
+}
 
-const CurrenciesDropdown = forwardRef<HTMLInputElement, CurrenciesDropdownProps>((
-	{
-		label = "Currency",
-		name = "currency",
-		...props
-	},
+export function CurrenciesDropdown({
+	label = "Currency",
+	name = "currency",
 	ref,
-) => {
+	...props
+}: CurrenciesDropdownProps) {
 	const { data, refetch } = useGetCurrencies({
 		staleTime: Infinity,
 	})
@@ -37,6 +37,4 @@ const CurrenciesDropdown = forwardRef<HTMLInputElement, CurrenciesDropdownProps>
 		clearable
 		{ ...props }
 	/>
-})
-
-export default CurrenciesDropdown
+}

@@ -14,6 +14,7 @@ export {
 	TbSquarePlus as ReplenishIcon,
 	TbMoonStars as MoonIcon,
 	TbEye as ViewIcon,
+	TbAlertTriangle as WarningTriangleIcon,
 } from "react-icons/tb"
 
 export {
@@ -99,7 +100,6 @@ export {
 } from "react-icons/lia"
 
 export {
-	// PiPersonSimpleCircle as ClientIcon,
 } from "react-icons/pi"
 
 export {

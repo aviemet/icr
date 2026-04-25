@@ -11,7 +11,7 @@ import {
 	VIEWS,
 } from "@/components/Calendar/views"
 
-import DailyTotals from "./components/DailyTotals"
+import { DailyTotals } from "./components/DailyTotals"
 import { DaysHeading } from "./components/DaysHeading"
 import { EventWrapper, MonthEvent } from "./components/Event"
 import * as classes from "./MonthView.css"
@@ -132,15 +132,16 @@ const MonthViewComponent = <TEventResources extends EventResources>({
 										return null
 									}
 
+									const eventKey = `${event.id}-${displayProperties.displayStart.toISOString()}-${dayEventsIndex}`
 									const eventComponent = (
 										<EventWrapper
-											key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
+											key={ eventKey }
 											displayProperties={ displayProperties }
 											event={ event }
 											setHoverId={ setHoverId }
 										>
 											<MonthEvent
-												key={ `${event.id}-${displayProperties.displayStart.toISOString()}` }
+												key={ eventKey }
 												event={ event }
 												displayProperties={ displayProperties }
 												localizer={ localizer }

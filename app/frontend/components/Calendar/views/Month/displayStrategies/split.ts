@@ -1,6 +1,7 @@
 import clsx from "clsx"
 
 import { EventResources, BaseCalendarEvent } from "@/components/Calendar"
+import * as classes from "@/components/Calendar/Calendar.css"
 import {
 	BaseDisplayStrategy,
 } from "@/components/Calendar/lib/displayStrategies/BaseDisplayStrategy"
@@ -8,8 +9,6 @@ import {
 	EventDisplayDetails,
 	GridDisplayProperties,
 } from "@/components/Calendar/lib/displayStrategies/types"
-
-import * as classes from "../../../Calendar.css"
 
 /**
  * Month Split Strategy:
@@ -51,6 +50,7 @@ export class MonthSplitStrategy<TEventResources extends EventResources>
 				columnStart: gridPlacement.columnStart,
 				columnSpan: event.allDay ? gridPlacement.columnSpan : 1,
 				className: clsx(
+					"split",
 					"filled", // Split events are typically shown as solid blocks
 					this.getContinuationClasses(index, daySegments.length), {
 						[classes.allDayEvent]: event.allDay,

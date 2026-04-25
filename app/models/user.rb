@@ -53,9 +53,11 @@ require "tzinfo"
 
 class User < ApplicationRecord
   extend FriendlyId
+
   friendly_id :email, use: [:slugged, :history]
 
   include PgSearchable
+
   pg_search_config(against: [:email], enable_multisearch: true)
 
   resourcify
@@ -125,6 +127,11 @@ class User < ApplicationRecord
       person.contact.present? &&
       saved_change_to_email?
 
-    person.contact.emails.find_or_create_by!(email: email)
+    email_record = person.contact.emails.find_or_initialize_by(email: email)
+    if email_record.new_record? && email_record.category.blank?
+      email_record.category = Category.type("Contact::Email").where(name: "Other").first ||
+        Category.create!(categorizable_type: "Contact::Email", name: "Other", system: true)
+    end
+    email_record.save!
   end
 end

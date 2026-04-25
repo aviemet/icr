@@ -42,6 +42,7 @@ export class MonthSpanStrategy<TEventResources extends EventResources>
 				columnStart: gridPlacement.columnStart,
 				columnSpan: gridPlacement.columnSpan,
 				className: clsx(
+					"span",
 					doesSpanMultipleDays ? "filled" : "indicator",
 					this.getContinuationClasses(index, weekSegments.length)
 				),

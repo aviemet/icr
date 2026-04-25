@@ -8,7 +8,7 @@ import { coerceArray } from "@/lib"
 
 import { ITabsComponentProps } from "."
 
-const UrlTabs = ({ children, onChange, defaultValue, dependencies, ...props }: ITabsComponentProps) => {
+export function UrlTabs({ children, onChange, defaultValue, dependencies, ...props }: ITabsComponentProps) {
 	const navigateTab = (value: string | null, options?: VisitOptions) => {
 		let only: string[] = []
 		if(value && dependencies?.[value]) {
@@ -58,5 +58,3 @@ const UrlTabs = ({ children, onChange, defaultValue, dependencies, ...props }: I
 		</Tabs>
 	)
 }
-
-export default UrlTabs

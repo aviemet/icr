@@ -105,6 +105,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_24_203322) do
 
   create_table "calendar_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "all_day", default: false, null: false
+    t.uuid "category_id", null: false
     t.datetime "created_at", null: false
     t.uuid "created_by_id"
     t.datetime "ends_at"
@@ -112,6 +113,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_24_203322) do
     t.uuid "parent_id"
     t.datetime "starts_at"
     t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_calendar_events_on_category_id"
     t.index ["created_by_id"], name: "index_calendar_events_on_created_by_id"
     t.index ["parent_id"], name: "index_calendar_events_on_parent_id"
   end
@@ -138,6 +140,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_24_203322) do
     t.string "name", null: false
     t.uuid "parent_id"
     t.string "slug", null: false
+    t.boolean "system", default: false, null: false
     t.datetime "updated_at", null: false
     t.index ["name", "categorizable_type"], name: "index_categories_on_name_and_categorizable_type", unique: true
     t.index ["parent_id"], name: "index_categories_on_parent_id"
@@ -308,6 +311,16 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_24_203322) do
     t.uuid "updated_by_id", null: false
     t.index ["employee_id"], name: "index_employment_statuses_on_employee_id"
     t.index ["updated_by_id"], name: "index_employment_statuses_on_updated_by_id"
+  end
+
+  create_table "event_details", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "address_id", null: false
+    t.uuid "calendar_event_id", null: false
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.datetime "updated_at", null: false
+    t.index ["address_id"], name: "index_event_details_on_address_id"
+    t.index ["calendar_event_id"], name: "index_event_details_on_calendar_event_id"
   end
 
   create_table "event_participants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -536,6 +549,18 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_24_203322) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "pay_periods", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "approved_at"
+    t.jsonb "config_snapshot"
+    t.datetime "created_at", null: false
+    t.datetime "ends_at"
+    t.integer "period_type"
+    t.datetime "starts_at"
+    t.integer "status"
+    t.datetime "updated_at", null: false
+    t.index ["starts_at", "ends_at"], name: "index_pay_periods_on_starts_at_and_ends_at", unique: true
+  end
+
   create_table "pay_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.uuid "employee_id", null: false
@@ -702,36 +727,33 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_24_203322) do
 
   create_table "shifts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "calendar_event_id", null: false
+    t.uuid "category_id", null: false
     t.datetime "created_at", null: false
     t.uuid "employee_id", null: false
+    t.uuid "timesheet_id"
     t.datetime "updated_at", null: false
-    t.index ["calendar_event_id"], name: "index_shifts_on_calendar_event_id"
+    t.index ["calendar_event_id"], name: "index_shifts_on_calendar_event_id", unique: true
+    t.index ["category_id"], name: "index_shifts_on_category_id"
     t.index ["employee_id"], name: "index_shifts_on_employee_id"
-  end
-
-  create_table "timesheet_hours", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.uuid "employee_id", null: false
-    t.datetime "ended_at", null: false
-    t.decimal "hours", precision: 4, scale: 2, null: false
-    t.datetime "started_at", null: false
-    t.uuid "timesheet_id", null: false
-    t.datetime "updated_at", null: false
-    t.index ["employee_id"], name: "index_timesheet_hours_on_employee_id"
-    t.index ["timesheet_id", "employee_id", "started_at"], name: "idx_timesheet_hours_unique_day", unique: true
-    t.index ["timesheet_id"], name: "index_timesheet_hours_on_timesheet_id"
+    t.index ["timesheet_id"], name: "index_shifts_on_timesheet_id"
   end
 
   create_table "timesheets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.jsonb "approval_snapshot", default: {}, null: false
     t.date "approved_at"
     t.uuid "approved_by_id"
     t.datetime "created_at", null: false
     t.uuid "employee_id", null: false
-    t.date "pay_period_end", null: false
-    t.date "pay_period_start", null: false
+    t.uuid "pay_period_id", null: false
+    t.integer "status"
+    t.decimal "total_ot_hours"
+    t.decimal "total_pto_hours"
+    t.decimal "total_regular_hours"
+    t.decimal "total_sick_hours"
     t.datetime "updated_at", null: false
     t.index ["approved_by_id"], name: "index_timesheets_on_approved_by_id"
     t.index ["employee_id"], name: "index_timesheets_on_employee_id"
+    t.index ["pay_period_id"], name: "index_timesheets_on_pay_period_id"
   end
 
   create_table "trainings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -825,6 +847,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_24_203322) do
   add_foreign_key "addresses", "contacts"
   add_foreign_key "calendar_event_exceptions", "calendar_events"
   add_foreign_key "calendar_events", "calendar_events", column: "parent_id"
+  add_foreign_key "calendar_events", "categories"
   add_foreign_key "calendar_events", "users", column: "created_by_id"
   add_foreign_key "calendar_recurring_patterns", "calendar_events"
   add_foreign_key "categories", "categories", column: "parent_id"
@@ -850,6 +873,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_24_203322) do
   add_foreign_key "employees_trainings", "trainings"
   add_foreign_key "employment_statuses", "employees"
   add_foreign_key "employment_statuses", "users", column: "updated_by_id"
+  add_foreign_key "event_details", "addresses"
+  add_foreign_key "event_details", "calendar_events"
   add_foreign_key "event_participants", "calendar_events"
   add_foreign_key "households_clients", "clients"
   add_foreign_key "households_clients", "households"
@@ -879,10 +904,11 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_24_203322) do
   add_foreign_key "shift_templates", "clients"
   add_foreign_key "shift_templates", "users", column: "created_by_id"
   add_foreign_key "shifts", "calendar_events"
+  add_foreign_key "shifts", "categories"
   add_foreign_key "shifts", "employees"
-  add_foreign_key "timesheet_hours", "employees"
-  add_foreign_key "timesheet_hours", "timesheets"
+  add_foreign_key "shifts", "timesheets"
   add_foreign_key "timesheets", "employees"
+  add_foreign_key "timesheets", "pay_periods"
   add_foreign_key "timesheets", "users", column: "approved_by_id"
   add_foreign_key "vendors", "categories"
   add_foreign_key "websites", "categories"

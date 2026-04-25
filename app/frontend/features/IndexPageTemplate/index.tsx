@@ -1,29 +1,27 @@
 import { Page, Table } from "@/components"
 import { type Breadcrumb } from "@/components/Breadcrumbs"
 
-import TableTitleSection, { IndexTableTitleSectionProps } from "./TableTitleSection"
+import { IndexTableTitleSection, type IndexTableTitleSectionProps } from "./TableTitleSection"
 
-interface IIndexPageTemplateProps extends IndexTableTitleSectionProps {
+export interface IndexPageTemplateProps extends IndexTableTitleSectionProps {
 	model: string
-	rows: Record<string, any>[]
 	pagination: Schema.Pagination
 	search?: boolean
 	breadcrumbs?: Breadcrumb[]
 	advancedSearch?: React.ReactNode
 }
 
-const IndexPageTemplate = ({
+export function IndexPageTemplate({
 	children,
 	title,
 	model,
-	rows,
 	pagination,
 	search = true,
 	breadcrumbs,
 	menuOptions,
 	advancedSearch,
 	deleteRoute,
-}: IIndexPageTemplateProps) => {
+}: IndexPageTemplateProps) {
 	return (
 		<Page title={ title } breadcrumbs={ breadcrumbs ?? [
 			{ title, href: window.location.href },
@@ -32,20 +30,17 @@ const IndexPageTemplate = ({
 				<Table.TableProvider
 					selectable
 					model={ model }
-					rows={ rows }
 					pagination={ pagination }
 				>
-					<TableTitleSection title={ title } menuOptions={ menuOptions } deleteRoute={ deleteRoute }>
-						{ search && <Table.SearchInput advancedSearch={ advancedSearch } /> }
-					</TableTitleSection>
+					<IndexTableTitleSection title={ title } menuOptions={ menuOptions } deleteRoute={ deleteRoute }>
+						{ search && <Table.SearchInput model={ model } advancedSearch={ advancedSearch } /> }
+					</IndexTableTitleSection>
 
 					{ children }
 
-					<Table.Pagination />
+					<Table.Pagination pagination={ pagination } model={ model } />
 				</Table.TableProvider>
 			</Table.Section>
 		</Page>
 	)
 }
-
-export default IndexPageTemplate

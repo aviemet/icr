@@ -1,10 +1,10 @@
 class EmployeesController < ApplicationController
   include Searchable
 
-  expose :employees, -> { search(Employee.includes_associated) }
+  expose :employees, -> { search(Employee.includes_associated.left_joins(:person)) }
   expose :employee, id: -> { params[:slug] }, find_by: :slug, scope: -> { Employee.includes_associated }
 
-  sortable_fields %w(person_id active_at inactive_at number)
+  sortable_fields %w(active_at inactive_at number people.first_name people.last_name)
 
   strong_params :employee, permit: [
     :person_id, :active_at, :inactive_at, :number, :status, :ineligibility_reason, :termination_reason,
@@ -55,10 +55,9 @@ class EmployeesController < ApplicationController
 
   # @route GET /employees/:slug/schedule (schedule_employee)
   def schedule
-    schedules = employee
-      .all_events
-      .includes([:recurring_patterns, :shift, :clients])
-      .between(range_start, range_end)
+    authorize employee
+
+    schedules = employee.schedule_events_between(*DateRangeCalculator.new(params).call)
 
     render inertia: "Employees/Schedule", props: {
       employee: -> { employee.render(:show) },
@@ -82,7 +81,7 @@ class EmployeesController < ApplicationController
   # @route PUT /employees/:slug/status (status_employee)
   def update_status
     if employee.update(employee_status_params)
-      redirect_to employee_path(employee), notice: "Employee status updated successfully"
+      redirect_to employee_path(employee), notice: t("templates.controllers.notices.status_updated", model: "Employee")
     else
       render inertia: "Employees/Status", props: {
         employee: employee.render(:show),
@@ -94,6 +93,7 @@ class EmployeesController < ApplicationController
   # @route POST /employees (employees)
   def create
     authorize Employee.new
+    employee.assign_attributes(employee_params)
     if employee.save
       redirect_to employee_path(employee), notice: t("templates.controllers.notices.created", model: "Employee")
     else
@@ -119,16 +119,6 @@ class EmployeesController < ApplicationController
 
     employee.destroy!
     redirect_to employees_url, notice: t("templates.controllers.notices.destroyed", model: "Employee")
-  end
-
-  private
-
-  def range_start
-    params[:start] || Time.current.beginning_of_month.prev_occurring(:sunday)
-  end
-
-  def range_end
-    params[:end] || Time.current.end_of_month.next_occurring(:saturday)
   end
 
 end

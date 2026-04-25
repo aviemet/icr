@@ -1,17 +1,21 @@
 import { Box, type BoxProps } from "@mantine/core"
 import clsx from "clsx"
-import { LabelProps } from "react-html-props"
 
-interface ILabelProps extends BoxProps, Omit<LabelProps, "ref"> {
+interface LabelProps
+	extends BoxProps,
+	Omit<React.ComponentPropsWithRef<"label">, keyof BoxProps>
+{
 	required?: boolean
 }
 
-const Label = ({ children, required = false, className, ...props }: ILabelProps) => {
+export function Label({ children, required = false, className, ...props }: LabelProps) {
 	return (
-		<Box component="label" className={ clsx(className, { required }) } { ...props }>
+		<Box
+			component="label"
+			className={ clsx(className, { required }) }
+			{ ...props }
+		>
 			{ children }
 		</Box>
 	)
 }
-
-export default Label

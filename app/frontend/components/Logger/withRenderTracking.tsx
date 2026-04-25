@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react"
 
 /* eslint-disable no-console */
 
-const withRenderTracking = <P extends object>(
+export const withRenderTracking = <P extends object>(
 	WrappedComponent: React.ComponentType<P>,
 	componentName: string
 ) => {
@@ -51,5 +51,3 @@ const withRenderTracking = <P extends object>(
 		return <WrappedComponent { ...props } />
 	}
 }
-
-export default withRenderTracking

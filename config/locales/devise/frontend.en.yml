@@ -1,19 +1,31 @@
+---
 en:
   views:
     devise:
+      confirmations:
+        new:
+          body_resend: If you don't receive an email, use the form below to resend it.
+          body_sent: An email has been sent to the address provided. Please follow the link to confirm your account.
+          submit: Resend confirmation instructions
+          title: Please check your email
       login:
-        reset_password: Reset Password
+        password: Password
         register: Register
-        email: Email
-        password: Password
-        submit: Log In
         remember_me: Remember Me
+        reset_password: Reset Password
+        submit: Log In
+        subtitle: Schedules, clients, and staff in one place.
+      passwords:
+        new:
+          submit: Send reset password instructions
+          title: Forgot your password?
       register:
-        title: Sign Up
-        email: Email
-        password: Password
         confirm_password: Confirm Password
-        submit: Sign Up
-        login_instead: Log In Instead
         errors:
           passwords_must_match: Passwords must match
+        password: Password
+        submit: Sign Up
+        title: Sign Up
+      shared:
+        email: Email
+        login: Log In Instead

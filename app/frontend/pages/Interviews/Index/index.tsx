@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
+import { EmployeeInterviewTable } from "@/domains/Interviews/Table"
 import { IndexPageTemplate } from "@/features"
-import EmployeeInterviewsTable from "@/features/Interviews/Table"
 import { Routes } from "@/lib"
 
 
@@ -14,14 +14,13 @@ const EmployeeInterviewsIndex = ({ employee_interviews, pagination }: EmployeeIn
 		<IndexPageTemplate
 			title="EmployeeInterviews"
 			model="employee_interviews"
-			rows={ employee_interviews }
 			pagination={ pagination }
-			deleteRoute={ Routes.employeeInterviews() }
+			deleteRoute={ Routes.interviews() }
 			menuOptions={ [
-				{ label: "New Interview", href: Routes.newEmployeeInterview(), icon: <NewIcon /> },
+				{ label: "New Interview", href: Routes.newInterview(), icon: <NewIcon /> },
 			] }
 		>
-			<EmployeeInterviewsTable />
+			<EmployeeInterviewTable />
 		</IndexPageTemplate>
 	)
 }

@@ -1,6 +1,6 @@
 import { unset, get, set, isEmpty } from "lodash-es"
 
-export default class NestedURLSearchParams {
+export class NestedURLSearchParams {
 	_data: Record<string, unknown> = {}
 
 	constructor(initialData?: string | Record<string, any> | URLSearchParams) {

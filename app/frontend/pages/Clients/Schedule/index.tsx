@@ -3,19 +3,26 @@ import { useTranslation } from "react-i18next"
 
 import {
 	Box,
+	Button,
 	Calendar,
 	Group,
+	Page,
+	Title,
 } from "@/components"
+import { Breadcrumb } from "@/components/Breadcrumbs"
 import { BaseCalendarEvent, EventResources } from "@/components/Calendar"
 import { type PopoverContentMap } from "@/components/Calendar/components/CalendarPopover"
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 import { NAVIGATION_ACTION, VIEW_NAMES } from "@/components/Calendar/views"
-import EventPopoverContent from "@/features/Clients/EventPopoverContent"
-import { NewShiftCalendarPopover } from "@/features/Clients/schedule/NewShiftCalendarPopover"
-import { ensureViewName } from "@/lib"
+import { PlusIcon } from "@/components/Icons"
+import { Modal, useModalContext } from "@/components/Modal"
+import { EventPopoverContent } from "@/domains/Clients/EventPopoverContent"
+import { EventForm } from "@/domains/Clients/schedule/EventForm"
+import { EventCalendarPopover } from "@/domains/Clients/schedule/NewEventCalendarPopover"
+import { ensureViewName, Routes } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
-import { useLocation } from "@/lib/hooks"
+import { useCalendarScheduleQueryInitialData, useLocation } from "@/lib/hooks"
 import { useEventTitleFormatter } from "@/lib/hooks/useEventTitleFormatter"
 import { useGetClientSchedules } from "@/queries/clients"
 
@@ -30,12 +37,24 @@ interface ScheduleResources {
 	client: Schema.ClientsShow
 }
 
+
 function isScheduleResources(resources: EventResources | undefined): resources is ScheduleResources {
 	return resources !== undefined && "employee" in resources && "client" in resources
 }
 
+function NewEventModalContent({ client }: { client: Schema.ClientsShow }) {
+	const { close } = useModalContext()
+	return (
+		<EventForm
+			client={ client }
+			onSuccess={ () => close() }
+		/>
+	)
+}
+
 const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 	const { t } = useTranslation()
+
 	const formatEventTitle = useEventTitleFormatter()
 	const location = useLocation()
 	const userTimezone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone, [])
@@ -43,13 +62,22 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 	const [calendarDate, setCalendarDate] = useState<Date>(ensureDate(location.params.get("date")))
 	const [calendarView, setCalendarView] = useState<VIEW_NAMES>(ensureViewName(location.params.get("view")))
 
+	const scheduleQueryInitialData = useCalendarScheduleQueryInitialData(
+		`clients/${client.slug}/schedule`,
+		location.params,
+		calendarDate,
+		calendarView,
+		userTimezone,
+		initialSchedules,
+	)
+
 	const { data } = useGetClientSchedules({
 		slug: client.slug,
 		date: datetime.dateUrl(calendarDate),
 		view: calendarView,
 		timezone: userTimezone,
 	}, {
-		initialData: initialSchedules,
+		initialData: scheduleQueryInitialData,
 		refetchOnWindowFocus: false,
 	})
 
@@ -85,15 +113,32 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 				allDay: schedule.all_day,
 				color: employee?.color,
 				resources: { employee, client },
-			} satisfies BaseCalendarEvent<ScheduleResources>
-		}) || []
+			}
+		}) ?? []
 	}, [client, data])
 
+	const breadcrumbs: Breadcrumb[] = [
+		{ title: "Clients", href: Routes.clients() },
+		{ title: client.full_name, href: Routes.client(client.slug) },
+		{ title: "Schedule" },
+	]
+
 	return (
-		<>
+		<Page title={ `${client.full_name} Schedule` } breadcrumbs={ breadcrumbs }>
 			<Group justify="space-between">
-				<h1>{ t("views.clients.schedule.title", { name: client?.person?.name }) }</h1>
-				<Box></Box>
+				<Title>{ t("views.clients.schedule.title", { name: client?.person?.name }) }</Title>
+				<Box>
+					<Modal
+						trigger={
+							<Button leftSection={ <PlusIcon /> }>
+								New Event
+							</Button>
+						}
+						title="New Event"
+					>
+						<NewEventModalContent client={ client } />
+					</Modal>
+				</Box>
 			</Group>
 
 			<Calendar
@@ -108,10 +153,10 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 				} }
 				popoverContent={ {
 					event: (event: BaseCalendarEvent, localizer: CalendarLocalizer) => <EventPopoverContent event={ event } localizer={ localizer } />,
-					background: (context) => <NewShiftCalendarPopover client={ client } selectedDate={ context.date } />,
+					background: (context) => <EventCalendarPopover client={ client } selectedDate={ context.date } />,
 				} satisfies Partial<PopoverContentMap> }
 			/>
-		</>
+		</Page>
 	)
 }
 

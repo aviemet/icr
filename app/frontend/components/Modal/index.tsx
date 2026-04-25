@@ -1,10 +1,10 @@
-import { Modal } from "@mantine/core"
+import { Modal as MantineModal } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
 import React from "react"
 
 import { createContext } from "@/lib/hooks"
 
-export type TriggerComponent =  React.ReactElement<{ onClick: () => void }>
+export type TriggerComponent = React.ReactElement<{ onClick: () => void }>
 
 type ModalDisclosureVariables = {
 	opened: boolean
@@ -22,23 +22,21 @@ interface ModalProps {
 	children: React.ReactNode
 }
 
-const ReusableModal = ({ children, trigger, title, ...props }: ModalProps) => {
+export function Modal({ children, trigger, title, ...props }: ModalProps) {
 	const [opened, { open, close, toggle }] = useDisclosure(false)
 
 	return (
 		<ModalContextProvider value={ { opened, open, close, toggle } }>
 			{ React.cloneElement(trigger, { onClick: open }) }
 
-			<Modal
+			<MantineModal
 				opened={ opened }
 				onClose={ close }
 				title={ title }
 				{ ...props }
 			>
 				{ children }
-			</Modal>
+			</MantineModal>
 		</ModalContextProvider>
 	)
 }
-
-export default ReusableModal

@@ -6,16 +6,16 @@ import { useGetJobTitlesAsOptions } from "@/queries/jobTitles"
 
 import { type FormAsyncDropdown } from ".."
 
-interface FormJobTitlesDropdownProps extends Omit<FormAsyncDropdown<Schema.EmployeeJobTitlesOptions>, "name"> {
+export interface FormJobTitlesDropdownProps extends Omit<FormAsyncDropdown<Schema.EmployeeJobTitlesOptions>, "name"> {
 	name?: string
 }
 
-const FormJobTitlesDropdown = ({
+export function FormJobTitlesDropdown({
 	label = "Job Title",
 	name = "job_title_id",
 	initialData,
 	...props
-}: FormJobTitlesDropdownProps) => {
+}: FormJobTitlesDropdownProps) {
 	const { data, isStale, refetch } = useGetJobTitlesAsOptions({
 		initialData,
 	})
@@ -39,5 +39,3 @@ const FormJobTitlesDropdown = ({
 		/>
 	)
 }
-
-export default FormJobTitlesDropdown

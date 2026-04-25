@@ -1,36 +1,36 @@
-import { forwardRef, type ForwardedRef } from "react"
+import React from "react"
 import { useInertiaInput, type NestedObject } from "use-inertia-form"
 
-import TextInput, { type TextInputProps } from "@/components/Inputs/TextInput"
+import { TextInput as BaseTextInput, type TextInputProps } from "@/components/Inputs/TextInput"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
 
 
-interface FormTextInputProps<TForm extends NestedObject>
+export interface FormTextInputProps<TForm extends NestedObject>
 	extends
 	Omit<TextInputProps, InputConflicts>,
-	BaseFormInputProps<string, TForm> {}
+	BaseFormInputProps<string, TForm> {
+	ref?: React.Ref<HTMLInputElement>
+}
 
-const TextFormInput = forwardRef(<TForm extends NestedObject>(
-	{
-		name,
-		model,
-		onChange,
-		onBlur,
-		onFocus,
-		id,
-		required,
-		field = true,
-		wrapperProps,
-		errorKey,
-		defaultValue,
-		clearErrorsOnChange,
-		...props
-	}: FormTextInputProps<TForm>,
-	ref: ForwardedRef<HTMLInputElement>
-) => {
+export function TextInput<TForm extends NestedObject>({
+	name,
+	model,
+	onChange,
+	onBlur,
+	onFocus,
+	id,
+	required,
+	field = true,
+	wrapperProps,
+	errorKey,
+	defaultValue,
+	clearErrorsOnChange,
+	ref,
+	...props
+}: FormTextInputProps<TForm>) {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<string, TForm>({
 		name,
 		model,
@@ -61,7 +61,7 @@ const TextFormInput = forwardRef(<TForm extends NestedObject>(
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<TextInput
+			<BaseTextInput
 				ref={ ref }
 				id={ id || inputId }
 				name={ inputName }
@@ -75,6 +75,4 @@ const TextFormInput = forwardRef(<TForm extends NestedObject>(
 			/>
 		</InputWrapper>
 	)
-})
-
-export default TextFormInput
+}

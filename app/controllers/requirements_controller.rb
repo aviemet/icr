@@ -1,8 +1,8 @@
 class RequirementsController < ApplicationController
   include Searchable
 
-  expose :requirements, -> { search(Requirement::Requirement.new.includes_associated) }
-  expose :requirement, scope: ->{ Requirement::Requirement.new.includes_associated }
+  expose :requirements, -> { search(Requirement::Requirement.includes_associated) }
+  expose :requirement, scope: ->{ Requirement::Requirement.includes_associated }
 
   sortable_fields %w(name description requirement_type_id scope_type scope_id)
 
@@ -14,7 +14,7 @@ class RequirementsController < ApplicationController
 
     paginated_requirements = paginate(requirements, :requirements)
 
-    render inertia: "Requirement/Requirements/Index", props: {
+    render inertia: "Requirements/Index", props: {
       requirements: -> { paginated_requirements.render(:index) },
       pagination: -> { {
         count: requirements.size,
@@ -26,7 +26,7 @@ class RequirementsController < ApplicationController
   # @route GET /requirements/:id (requirement)
   def show
     authorize requirement
-    render inertia: "Requirement/Requirements/Show", props: {
+    render inertia: "Requirements/Show", props: {
       requirement: -> { requirement.render(:show) }
     }
   end
@@ -34,7 +34,7 @@ class RequirementsController < ApplicationController
   # @route GET /requirements/new (new_requirement)
   def new
     authorize Requirement::Requirement.new
-    render inertia: "Requirement/Requirements/New", props: {
+    render inertia: "Requirements/New", props: {
       requirement: Requirement::Requirement.new.render(:form_data)
     }
   end
@@ -42,7 +42,7 @@ class RequirementsController < ApplicationController
   # @route GET /requirements/:id/edit (edit_requirement)
   def edit
     authorize requirement
-    render inertia: "Requirement/Requirements/Edit", props: {
+    render inertia: "Requirements/Edit", props: {
       requirement: requirement.render(:edit)
     }
   end
@@ -50,8 +50,9 @@ class RequirementsController < ApplicationController
   # @route POST /requirements (requirements)
   def create
     authorize Requirement::Requirement.new
+    requirement.assign_attributes(requirement_params)
     if requirement.save
-      redirect_to requirement, notice: t("templates.controllers.notices.created", model: "Requirement")
+      redirect_to requirement_url(requirement), notice: t("templates.controllers.notices.created", model: "Requirement")
     else
       redirect_to new_requirement_path, inertia: { errors: requirement.errors }
     end
@@ -62,9 +63,9 @@ class RequirementsController < ApplicationController
   def update
     authorize requirement
     if requirement.update(requirement_params)
-      redirect_to requirement, notice: t("templates.controllers.notices.updated", model: "Requirement")
+      redirect_to requirement_url(requirement), notice: t("templates.controllers.notices.updated", model: "Requirement")
     else
-      redirect_to edit_requirement_path, inertia: { errors: requirement.errors }
+      redirect_to edit_requirement_path(requirement), inertia: { errors: requirement.errors }
     end
   end
 

@@ -5,7 +5,7 @@ import importPlugin from "eslint-plugin-import"
 import jsoncPlugin from "eslint-plugin-jsonc"
 import jsxA11yPlugin from "eslint-plugin-jsx-a11y"
 import reactHooksPlugin from "eslint-plugin-react-hooks"
-import jsoncParser from "jsonc-eslint-parser"
+import { parseForESLint } from "jsonc-eslint-parser"
 
 const ignores = [
 	"app/javascript/**/*",
@@ -222,7 +222,7 @@ export default [
 			json,
 		},
 		languageOptions: {
-			parser: jsoncParser,
+			parser: { parseForESLint },
 		},
 		rules: {
 			"json/no-duplicate-keys": "error",

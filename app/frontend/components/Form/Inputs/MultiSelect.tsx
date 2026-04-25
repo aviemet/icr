@@ -1,11 +1,11 @@
 import { type ComboboxData } from "@mantine/core"
-import { forwardRef, type ForwardedRef } from "react"
+import React from "react"
 import { NestedObject, UseFormProps, useInertiaInput } from "use-inertia-form"
 
-import MultiSelect, { type MultiSelectInputProps } from "@/components/Inputs/MultiSelect"
+import { MultiSelect as BaseMultiSelect, type MultiSelectInputProps } from "@/components/Inputs/MultiSelect"
 import { exclude, isUnset, coerceArray } from "@/lib"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
 
@@ -13,7 +13,7 @@ type OmittedDropdownTypes = InputConflicts | "onDropdownOpen" | "onDropdownClose
 export interface FormMultiSelectProps<TForm extends NestedObject = NestedObject>
 	extends Omit<MultiSelectInputProps, OmittedDropdownTypes>,
 	Omit<BaseFormInputProps<string[], TForm>, "onChange" | "onBlur" | "onFocus"> {
-
+	ref?: React.Ref<HTMLInputElement>
 	value?: string[]
 	onChange?: (values: string[], options: ComboboxData, form: UseFormProps<TForm>) => void
 	onBlur?: (values: string[], options: ComboboxData, form: UseFormProps<TForm>) => void
@@ -24,30 +24,28 @@ export interface FormMultiSelectProps<TForm extends NestedObject = NestedObject>
 	onOptionSubmit?: (values: string[], options: ComboboxData, form: UseFormProps<TForm>) => void
 }
 
-const MultiSelectComponent = forwardRef(<TForm extends NestedObject = NestedObject>(
-	{
-		options = [],
-		label,
-		required,
-		id,
-		name,
-		model,
-		field = true,
-		onBlur,
-		onChange,
-		onFocus,
-		onClear,
-		onDropdownOpen,
-		onDropdownClose,
-		onOptionSubmit,
-		wrapperProps,
-		errorKey,
-		defaultValue,
-		clearErrorsOnChange,
-		...props
-	}: FormMultiSelectProps<TForm>,
-	ref: ForwardedRef<HTMLInputElement>
-) => {
+export function MultiSelect<TForm extends NestedObject = NestedObject>({
+	options = [],
+	label,
+	required,
+	id,
+	name,
+	model,
+	field = true,
+	onBlur,
+	onChange,
+	onFocus,
+	onClear,
+	onDropdownOpen,
+	onDropdownClose,
+	onOptionSubmit,
+	wrapperProps,
+	errorKey,
+	defaultValue,
+	clearErrorsOnChange,
+	ref,
+	...props
+}: FormMultiSelectProps<TForm>) {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<string[], TForm>({
 		name,
 		model,
@@ -94,7 +92,7 @@ const MultiSelectComponent = forwardRef(<TForm extends NestedObject = NestedObje
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<MultiSelect
+			<BaseMultiSelect
 				ref={ ref }
 				// Add "search" suffix to prevent password managers trying to autofill dropdowns
 				id={ `${id || inputId}-search` }
@@ -116,6 +114,4 @@ const MultiSelectComponent = forwardRef(<TForm extends NestedObject = NestedObje
 			/>
 		</InputWrapper>
 	)
-})
-
-export default MultiSelectComponent
+}

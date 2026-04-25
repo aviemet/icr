@@ -1,17 +1,16 @@
 import {
 	DatePickerInput,
 	type DatePickerInputProps,
-	type DatesRangeValue,
 } from "@mantine/dates"
 import dayjs from "dayjs"
-import { useEffect, useState, forwardRef } from "react"
+import React, { useEffect, useState } from "react"
 
 import { CalendarIcon } from "@/components/Icons"
 import { isUnset } from "@/lib"
 import { isDate } from "@/lib/dates"
 
-import InputWrapper from "./InputWrapper"
-import Label from "./Label"
+import { InputWrapper } from "./InputWrapper"
+import { Label } from "./Label"
 
 import { type DateInputValue, type BaseInputProps } from "."
 
@@ -19,6 +18,7 @@ export interface DateInputProps
 	extends
 	Omit<DatePickerInputProps, "onChange" | "value">,
 	Omit<BaseInputProps, "disableAutofill"> {
+	ref?: React.Ref<HTMLButtonElement>
 	name?: string
 	id?: string
 	value: DateInputValue
@@ -26,22 +26,20 @@ export interface DateInputProps
 	onChange?: (date: DateInputValue) => void
 }
 
-const DateInputComponent = forwardRef<HTMLButtonElement, DateInputProps>((
-	{
-		label,
-		id,
-		name,
-		type = "default",
-		valueFormat = "L",
-		required,
-		wrapper,
-		wrapperProps,
-		value,
-		onChange,
-		...props
-	},
+export function DateInput({
+	label,
+	id,
+	name,
+	type = "default",
+	valueFormat = "L",
+	required,
+	wrapper,
+	wrapperProps,
+	value,
+	onChange,
 	ref,
-) => {
+	...props
+}: DateInputProps) {
 	const inputId = id || name
 
 	const [localValue, setLocalValue] = useState<DateInputValue>(() => {
@@ -53,6 +51,7 @@ const DateInputComponent = forwardRef<HTMLButtonElement, DateInputProps>((
 				if(typeof v === "string") return v
 				return ""
 			})
+
 			return formattedValues as string[]
 		}
 		return value
@@ -67,21 +66,23 @@ const DateInputComponent = forwardRef<HTMLButtonElement, DateInputProps>((
 	useEffect(() => {
 		if(datePickerType === type) return
 
-		if(type === "range") {
-			if(Array.isArray(localValue)) {
-				if(localValue.length !== 2) {
-					setLocalValue([localValue[0], ""] as DatesRangeValue)
+		const nextType = type
+		queueMicrotask(() => {
+			if(nextType === "range") {
+				if(Array.isArray(localValue)) {
+					if(localValue.length !== 2) {
+						setLocalValue([localValue[0], ""])
+					}
+				} else if(localValue) {
+					setLocalValue([localValue, ""])
+				} else {
+					setLocalValue(undefined)
 				}
-			} else if(localValue) {
-				setLocalValue([localValue, ""] as DatesRangeValue)
 			} else {
-				setLocalValue(undefined)
+				setLocalValue(Array.isArray(localValue) ? localValue[0] : undefined)
 			}
-		} else {
-			setLocalValue(Array.isArray(localValue) ? localValue[0] : undefined)
-		}
-
-		setDatePickerType(type)
+			setDatePickerType(nextType)
+		})
 	}, [type, datePickerType, localValue])
 
 	return (
@@ -93,7 +94,7 @@ const DateInputComponent = forwardRef<HTMLButtonElement, DateInputProps>((
 				ref={ ref }
 				id={ inputId }
 				name={ name }
-				value={ localValue }
+				value={ localValue as DatePickerInputProps["value"] }
 				type={ datePickerType }
 				onChange={ handleChange }
 				valueFormat={ valueFormat }
@@ -104,7 +105,5 @@ const DateInputComponent = forwardRef<HTMLButtonElement, DateInputProps>((
 			/>
 		</InputWrapper>
 	)
-})
-
-export default DateInputComponent
+}
 

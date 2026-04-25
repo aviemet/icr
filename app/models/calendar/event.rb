@@ -9,21 +9,25 @@
 #  starts_at     :datetime
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  category_id   :uuid             not null
 #  created_by_id :uuid
 #  parent_id     :uuid
 #
 # Indexes
 #
+#  index_calendar_events_on_category_id    (category_id)
 #  index_calendar_events_on_created_by_id  (created_by_id)
 #  index_calendar_events_on_parent_id      (parent_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (category_id => categories.id)
 #  fk_rails_...  (created_by_id => users.id)
 #  fk_rails_...  (parent_id => calendar_events.id)
 #
 class Calendar::Event < ApplicationRecord
   include PgSearchable
+
   pg_search_config(against: [:name, :starts_at, :ends_at])
 
   resourcify
@@ -54,7 +58,13 @@ class Calendar::Event < ApplicationRecord
     inverse_of: :calendar_event,
     dependent: :destroy
 
+  has_one :event_detail,
+  foreign_key: "calendar_event_id",
+  inverse_of: :calendar_event,
+  dependent: :destroy
+
   before_validation :sanitize_all_day_times
+  before_validation :set_shift_category_when_shift_present
 
   validates :starts_at, presence: true
   validates :ends_at, presence: true
@@ -74,6 +84,30 @@ class Calendar::Event < ApplicationRecord
   }
   scope :all_day, ->{ where(all_day: true) }
 
+  scope :with_schedule_association_preloads, -> {
+    includes([
+      :recurring_patterns,
+      :event_participants,
+      {
+        clients: [
+          :calendar_customization,
+          { person: [:employee, :client, :user] },
+        ],
+        shift: [
+          :category,
+          {
+            employee: [
+              :person,
+              :job_title,
+              :calendar_customization,
+              { person: { contact: { addresses: :category, emails: :category, phones: :category } } },
+            ],
+          },
+        ],
+      },
+    ])
+  }
+
   private
 
   def starts_at_before_ends_at
@@ -88,6 +122,12 @@ class Calendar::Event < ApplicationRecord
     return unless name.blank? && shift.blank?
 
     errors.add(:name, "Event must have a title when it's not an employee shift")
+  end
+
+  def set_shift_category_when_shift_present
+    return if category_id.present? || shift.blank?
+
+    self.category_id = Category.type("Calendar::Event").find_by!(name: "Shift").id
   end
 
   def sanitize_all_day_times

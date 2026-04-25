@@ -11,12 +11,12 @@ interface UseCurrencyProps {
 
 type OmittedOptions = Pick<Intl.NumberFormatOptions, "style" | "currency">
 
-const useCurrency = ({
+export function useCurrency({
 	amount,
 	currency = "USD",
 	locale = "en-US",
 	options = {},
-}: UseCurrencyProps): [amount: number, formatter: Intl.NumberFormat] => {
+}: UseCurrencyProps): [amount: number, formatter: Intl.NumberFormat] {
 	let currencyIso = currency
 	if(typeof amount !== "number" && amount?.hasOwnProperty("currency_iso")) {
 		currencyIso = amount.currency_iso
@@ -40,5 +40,3 @@ const useCurrency = ({
 
 	return [value, currencyFormatter]
 }
-
-export default useCurrency

@@ -1,16 +1,16 @@
 import { type Method, type Visit } from "@inertiajs/core"
 import { type AnchorProps, type ButtonProps } from "@mantine/core"
-import React, { forwardRef, useMemo } from "react"
+import React, { useMemo } from "react"
 
-import ExternalLink from "./ExternalLink"
-import InertiaLink from "./InertiaLink"
+import { ExternalLink } from "./ExternalLink"
+import { InertiaLink } from "./InertiaLink"
 
-
-export { default as NavLink, type NavLinkProps } from "./NavLink"
+export { NavLink, type NavLinkProps } from "./NavLink"
 
 export interface LinkProps
 	extends
 	Omit<AnchorProps, "onProgress"> {
+	ref?: React.Ref<HTMLAnchorElement>
 	children?: React.ReactNode
 	href: string
 	method?: Method
@@ -25,26 +25,25 @@ export interface LinkProps
 	disabled?: boolean
 	buttonProps?: ButtonProps
 	preserveScroll?: boolean
+	leftSection?: React.ReactNode
 }
 
 const externalPrefix = ["http", "www"]
 
-const Link = forwardRef<HTMLAnchorElement, LinkProps>((
-	{
-		children,
-		href,
-		as = "a",
-		method,
-		visit,
-		external,
-		onProgress,
-		onClick,
-		preserveScroll,
-		disabled = false,
-		...props
-	},
+export function Link({
+	children,
+	href,
+	as = "a",
+	method,
+	visit,
+	external,
+	onProgress,
+	onClick,
+	preserveScroll,
+	disabled = false,
 	ref,
-) => {
+	...props
+}: LinkProps) {
 	// Disable navigation if link is disabled
 	const handleClick = (e: React.MouseEvent<Element, MouseEvent>) => {
 		if(disabled) {
@@ -101,6 +100,4 @@ const Link = forwardRef<HTMLAnchorElement, LinkProps>((
 			{ children }
 		</InertiaLink>
 	)
-})
-
-export default Link
+}

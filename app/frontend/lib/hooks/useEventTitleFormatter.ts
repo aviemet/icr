@@ -118,5 +118,3 @@ export const useEventTitleFormatter = (options: UseEventTitleFormatterOptions = 
 		})
 	}, [formatMultipleNames, settings.shift_title_format])
 }
-
-export default useEventTitleFormatter

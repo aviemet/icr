@@ -1,3 +1,4 @@
+---
 en:
   activerecord:
     errors:
@@ -5,4 +6,4 @@ en:
         clients_manager:
           attributes:
             manager_id:
-              already_manages: Already manages 
+              already_manages: Already manages

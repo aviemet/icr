@@ -1,7 +1,7 @@
 require_relative "../../../lib/renderable"
 
 # For use on models which don't inherit from ActiveRecord
-# Renderable is applied to all ActiveRecord models through an initialzier
+# Renderable is applied to all ActiveRecord models through an initializer
 module Renderable
   extend ActiveSupport::Concern
 

@@ -1,34 +1,35 @@
-import { TextInput, type TextInputProps as MantineTextInputProps } from "@mantine/core"
-import React, { forwardRef } from "react"
+import {
+	TextInput as MantineTextInput,
+	type TextInputProps as MantineTextInputProps,
+} from "@mantine/core"
+import React from "react"
 
-import InputWrapper from "./InputWrapper"
-import Label from "./Label"
+import { InputWrapper } from "./InputWrapper"
+import { Label } from "./Label"
 import { CrossIcon } from "../Icons"
 
 import { withInjectedProps, type BaseInputProps } from "."
 
-
 export interface TextInputProps extends MantineTextInputProps, BaseInputProps {
+	ref?: React.Ref<HTMLInputElement>
 	clearable?: boolean
 }
 
-const TextInputComponent = forwardRef<HTMLInputElement, TextInputProps>((
-	{
-		name,
-		label,
-		required = false,
-		id,
-		wrapper,
-		wrapperProps,
-		clearable = false,
-		value = "",
-		onChange,
-		readOnly,
-		disableAutofill = true,
-		...props
-	},
+export function TextInput({
+	name,
+	label,
+	required = false,
+	id,
+	wrapper,
+	wrapperProps,
+	clearable = false,
+	value,
+	onChange,
+	readOnly,
+	disableAutofill = true,
 	ref,
-) => {
+	...props
+}: TextInputProps) {
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		onChange?.(e)
 	}
@@ -49,20 +50,18 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputProps>((
 			{ label && <Label required={ required } htmlFor={ inputId }>
 				{ label }
 			</Label> }
-			<TextInput
+			<MantineTextInput
 				ref={ ref }
 				name={ name }
 				id={ inputId }
-				value={ value }
+				{ ...(value !== undefined && { value }) }
 				onChange={ handleChange }
 				required={ required }
-				rightSection={ !readOnly && clearable && value !== "" && <CrossIcon onClick={ handleClear } /> }
+				rightSection={ !readOnly && clearable && value !== "" && value !== undefined && <CrossIcon onClick={ handleClear } /> }
 				{ ...withInjectedProps(props, {
 					disableAutofill,
 				}) }
 			/>
 		</InputWrapper>
 	)
-})
-
-export default TextInputComponent
+}

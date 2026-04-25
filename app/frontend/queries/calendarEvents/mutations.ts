@@ -2,12 +2,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
 import { type PartialDeep } from "type-fest"
 
-import { Routes, exclude } from "@/lib"
+import { Routes, exclude, assertStatus, HTTP_STATUS } from "@/lib"
 
 import { ReactMutationFunction } from ".."
 
-type CalendarEventData = {
-	calendar_event: PartialDeep<Schema.CalendarEventsFormData> & {
+export type CalendarEventData = {
+	calendar_event: Omit<PartialDeep<Schema.CalendarEventsFormData>, "event_participants"> & {
+		category_slug?: string
 		shift: PartialDeep<Schema.Shift>
 		event_participants: PartialDeep<Schema.EventParticipantsFormData>[]
 	}
@@ -21,9 +22,7 @@ export const useCreateCalendarEvent: ReactMutationFunction<Schema.CalendarEvents
 	return useMutation({
 		mutationFn: async(data) => {
 			const res = await axios.post(Routes.apiCalendarEvents(), data)
-			if(res.statusText !== "OK") {
-				throw new Error("Failed to create calendar event")
-			}
+			assertStatus(res, HTTP_STATUS.CREATED)
 			return res.data
 		},
 		mutationKey: ["calendar_events"],
@@ -43,10 +42,7 @@ export const useUpdateCalendarEvent: ReactMutationFunction<Schema.CalendarEvents
 	return useMutation({
 		mutationFn: async(data) => {
 			const res = await axios.patch(Routes.apiCalendarEvent(options.params.id), data)
-
-			if(res.statusText !== "OK") {
-				throw new Error("Failed to update calendar event")
-			}
+			assertStatus(res, [HTTP_STATUS.OK, HTTP_STATUS.CREATED])
 			return res.data
 		},
 		mutationKey: ["calendar_events", options.params.id],
@@ -54,6 +50,23 @@ export const useUpdateCalendarEvent: ReactMutationFunction<Schema.CalendarEvents
 		onSuccess: (data, variables) => {
 			queryClient.invalidateQueries({ queryKey: ["calendar_events"] })
 			options?.onSuccess?.(data, variables)
+		},
+	})
+}
+
+export const useDeleteCalendarEvent: ReactMutationFunction<void, void, { id: string }> = (options) => {
+	const queryClient = useQueryClient()
+
+	return useMutation({
+		mutationFn: async() => {
+			const res = await axios.delete(Routes.apiCalendarEvent(options.params.id))
+			assertStatus(res, HTTP_STATUS.NO_CONTENT)
+		},
+		mutationKey: ["calendar_events", "delete", options.params.id],
+		...exclude(options, "params"),
+		onSuccess: (_data, _variables) => {
+			queryClient.invalidateQueries({ queryKey: ["calendar_events"] })
+			options?.onSuccess?.()
 		},
 	})
 }

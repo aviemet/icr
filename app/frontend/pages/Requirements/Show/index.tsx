@@ -10,7 +10,7 @@ const ShowRequirementRequirement = ({ requirement_requirement }: ShowRequirement
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: "Requirement", href: Routes.requirementRequirements() },
+			{ title: "Requirement", href: Routes.requirements() },
 			{ title, href: window.location.href },
 		] }>
 			<Section>
@@ -20,7 +20,7 @@ const ShowRequirementRequirement = ({ requirement_requirement }: ShowRequirement
 					<Menu position="bottom-end">
 						<Menu.Target />
 						<Menu.Dropdown>
-							<Menu.Link href={ Routes.editRequirementRequirement(requirement_requirement.id) }>
+							<Menu.Link href={ Routes.editRequirement(requirement_requirement.id) }>
 								Edit RequirementRequirement
 							</Menu.Link>
 						</Menu.Dropdown>

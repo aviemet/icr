@@ -26,6 +26,8 @@ Consider the keyword `any` to be forbidden, with NO EXCEPTIONS!
 - Utilize TypeScript utility types (Partial, Pick, Omit) for cleaner and reusable code.
 - Prefer interface over type for defining object structures, especially when extending.
 - Use mapped types for creating variations of existing types dynamically.
+- Let TypeScript infer return types when the return value is obvious.
+  - Only specify an explicit return type when inference is ambiguous or you need to constrain a public API surface.
 
 ## Code Style and Structure
 

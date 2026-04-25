@@ -1,13 +1,13 @@
 import { type ComboboxData, type ComboboxItem, type ComboboxItemGroup } from "@mantine/core"
-import { forwardRef, type ForwardedRef } from "react"
+import React from "react"
 import { useInertiaInput, type UseFormProps, NestedObject } from "use-inertia-form"
 
 import { ConditionalWrapper, Group } from "@/components"
 import { ModalFormButton } from "@/components/Button"
-import SelectInput, { type SelectInputProps } from "@/components/Inputs/Select"
+import { Select as SelectInput, type SelectInputProps } from "@/components/Inputs/Select"
 import { exclude } from "@/lib"
 
-import InputWrapper from "../components/InputWrapper"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type BaseFormInputProps } from "."
 
@@ -19,7 +19,7 @@ export interface FormSelectProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<SelectInputProps, OmittedOverwrittenTypes | "name" | "defaultValue">,
 	Omit<BaseFormInputProps<string, TForm>, OmittedOverwrittenTypes> {
-
+	ref?: React.Ref<HTMLInputElement>
 	onChange?: (option: SelectOption | null, options: ComboboxData, form: UseFormProps<TForm>) => void
 	onBlur?: (option: SelectOption | null, options: ComboboxData, form: UseFormProps<TForm>) => void
 	onFocus?: (option: SelectOption | null, options: ComboboxData, form: UseFormProps<TForm>) => void
@@ -32,33 +32,31 @@ export interface FormSelectProps<TForm extends NestedObject = NestedObject>
 	field?: boolean
 }
 
-const Select = forwardRef(<TForm extends NestedObject = NestedObject>(
-	{
-		name,
-		label,
-		model,
-		required,
-		onChange,
-		onBlur,
-		onFocus,
-		onClear,
-		onDropdownOpen,
-		onDropdownClose,
-		onOptionSubmit,
-		fetchOnOpen,
-		endpoint,
-		newForm,
-		field = true,
-		id,
-		options,
-		wrapperProps,
-		defaultValue,
-		errorKey,
-		clearErrorsOnChange,
-		...props
-	}: FormSelectProps<TForm>,
-	ref: ForwardedRef<HTMLInputElement>
-) => {
+export function Select<TForm extends NestedObject = NestedObject>({
+	name,
+	label,
+	model,
+	required,
+	onChange,
+	onBlur,
+	onFocus,
+	onClear,
+	onDropdownOpen,
+	onDropdownClose,
+	onOptionSubmit,
+	fetchOnOpen,
+	endpoint,
+	newForm,
+	field = true,
+	id,
+	options,
+	wrapperProps,
+	defaultValue,
+	errorKey,
+	clearErrorsOnChange,
+	ref,
+	...props
+}: FormSelectProps<TForm>) {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<string, TForm>({
 		name,
 		model,
@@ -148,6 +146,4 @@ const Select = forwardRef(<TForm extends NestedObject = NestedObject>(
 			</>
 		</ConditionalWrapper>
 	)
-})
-
-export default Select
+}

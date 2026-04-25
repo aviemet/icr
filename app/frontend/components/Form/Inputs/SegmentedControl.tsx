@@ -1,36 +1,38 @@
-import { forwardRef, type ForwardedRef } from "react"
+import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
-import SegmentedControl, { type SegmentedControlProps } from "@/components/Inputs/SegmentedControl"
+import { SegmentedControl as BaseSegmentedControl, type SegmentedControlProps } from "@/components/Inputs/SegmentedControl"
 
-import InputWrapper from "../components/InputWrapper"
+import { type FieldProps } from "../components/Field"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
 
-interface FormSegmentedControlProps<TForm extends NestedObject = NestedObject>
+export interface FormSegmentedControlProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<SegmentedControlProps, InputConflicts>,
-	BaseFormInputProps<string, TForm> {}
+	BaseFormInputProps<string, TForm> {
+	ref?: React.Ref<HTMLDivElement>
+	wrapperProps?: Omit<FieldProps, "children">
+}
 
-const FormSegmentedControl = forwardRef(<TForm extends NestedObject = NestedObject>(
-	{
-		options,
-		name,
-		id,
-		model,
-		onChange,
-		onBlur,
-		onFocus,
-		required,
-		field = true,
-		wrapperProps,
-		errorKey,
-		defaultValue,
-		clearErrorsOnChange,
-		...props
-	}: FormSegmentedControlProps<TForm>,
-	ref: ForwardedRef<HTMLInputElement>
-) => {
+export function SegmentedControl<TForm extends NestedObject = NestedObject>({
+	options,
+	name,
+	id,
+	model,
+	onChange,
+	onBlur,
+	onFocus,
+	required,
+	field = true,
+	wrapperProps,
+	errorKey,
+	defaultValue,
+	clearErrorsOnChange,
+	ref,
+	...props
+}: FormSegmentedControlProps<TForm>) {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<string, TForm>({
 		name,
 		model,
@@ -61,7 +63,7 @@ const FormSegmentedControl = forwardRef(<TForm extends NestedObject = NestedObje
 			errors={ !!error }
 			{ ...wrapperProps }
 		>
-			<SegmentedControl
+			<BaseSegmentedControl
 				ref={ ref }
 				options={ options }
 				id={ id || inputId }
@@ -75,6 +77,4 @@ const FormSegmentedControl = forwardRef(<TForm extends NestedObject = NestedObje
 			/>
 		</InputWrapper>
 	)
-})
-
-export default FormSegmentedControl
+}

@@ -1,6 +1,6 @@
 import { Head } from "@inertiajs/react"
 
-import Breadcrumbs, { type Breadcrumb } from "@/components/Breadcrumbs"
+import { Breadcrumbs, type Breadcrumb } from "@/components/Breadcrumbs"
 
 export interface PageProps {
 	children?: React.ReactNode
@@ -9,7 +9,7 @@ export interface PageProps {
 	breadcrumbs?: Breadcrumb[]
 }
 
-const Page = ({ children, title, meta, breadcrumbs }: PageProps) => {
+export function Page({ children, title, meta, breadcrumbs }: PageProps) {
 	return (
 		<>
 			{ title && <Head title={ title }>
@@ -20,5 +20,3 @@ const Page = ({ children, title, meta, breadcrumbs }: PageProps) => {
 		</>
 	)
 }
-
-export default Page

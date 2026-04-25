@@ -96,51 +96,65 @@ const useCalendarPopover = (): UseCalendarPopoverReturn => {
 
 	const pagePadding = 28
 
-	useLayoutEffect(() => {
-		if(opened && popoverRef.current && clickedElement) {
-			const popoverRect = popoverRef.current.getBoundingClientRect()
-			const viewportWidth = window.innerWidth
-			const viewportHeight = window.innerHeight
-			const scrollTop = window.scrollY || document.documentElement.scrollTop
-			const scrollLeft = window.scrollX || document.documentElement.scrollLeft
+	const constrainToViewport = useCallback(() => {
+		if(!popoverRef.current || !clickedElement) return
+		if(!clickedElement.isConnected) return
 
-			const elementRect = clickedElement.getBoundingClientRect()
-			const isTimeGrid = clickedElement.closest('[data-calendar-view="time-grid"]') !== null
+		const popoverRect = popoverRef.current.getBoundingClientRect()
+		const viewportWidth = window.innerWidth
+		const viewportHeight = window.innerHeight
+		const scrollTop = window.scrollY || document.documentElement.scrollTop
+		const scrollLeft = window.scrollX || document.documentElement.scrollLeft
 
-			const topAlignTop = elementRect.top + scrollTop
-			const bottomAlignBottom = elementRect.bottom + scrollTop + 5
-			const topAlignBottom = elementRect.top + scrollTop - popoverRect.height - 5
+		const viewportTop = scrollTop + pagePadding
+		const viewportBottom = scrollTop + viewportHeight - pagePadding
+		const viewportLeft = scrollLeft + pagePadding
+		const viewportRight = scrollLeft + viewportWidth - pagePadding
 
-			let top: number
+		const elementRect = clickedElement.getBoundingClientRect()
+		const isTimeGrid = clickedElement.closest('[data-calendar-view="time-grid"]') !== null
 
-			if(isTimeGrid) {
-				if(topAlignTop + popoverRect.height <= viewportHeight + scrollTop) {
-					top = topAlignTop
-				} else {
-					top = bottomAlignBottom
-				}
+		const topAlignTop = elementRect.top + scrollTop
+		const bottomAlignBottom = elementRect.bottom + scrollTop + 5
+		const topAlignBottom = elementRect.top + scrollTop - popoverRect.height - 5
+
+		let top: number
+
+		if(isTimeGrid) {
+			if(topAlignTop + popoverRect.height <= viewportBottom) {
+				top = topAlignTop
 			} else {
-				if(bottomAlignBottom + popoverRect.height <= viewportHeight + scrollTop) {
-					top = bottomAlignBottom
-				} else {
-					top = topAlignBottom
-				}
+				top = bottomAlignBottom
 			}
-
-			let left = elementRect.left + (elementRect.width / 2) - (popoverRect.width / 2) + scrollLeft
-
-			if(left < scrollLeft + pagePadding) {
-				left = scrollLeft + pagePadding
-			}
-			if(left + popoverRect.width > viewportWidth + scrollLeft - pagePadding) {
-				left = viewportWidth + scrollLeft - popoverRect.width - pagePadding
-			}
-
-			if(popoverPosition.top !== top || popoverPosition.left !== left) {
-				setPopoverPosition(() => ({ top, left }))
+		} else {
+			if(bottomAlignBottom + popoverRect.height <= viewportBottom) {
+				top = bottomAlignBottom
+			} else {
+				top = topAlignBottom
 			}
 		}
-	}, [opened, popoverPosition, popoverRef, clickedElement])
+
+		top = Math.max(viewportTop, Math.min(top, viewportBottom - popoverRect.height))
+
+		let left = elementRect.left + (elementRect.width / 2) - (popoverRect.width / 2) + scrollLeft
+		left = Math.max(viewportLeft, Math.min(left, viewportRight - popoverRect.width))
+
+		setPopoverPosition((prev) =>
+			(prev.top !== top || prev.left !== left) ? { top, left } : prev
+		)
+	}, [clickedElement])
+
+	useLayoutEffect(() => {
+		if(!opened || !clickedElement) return
+		constrainToViewport()
+	}, [opened, clickedElement, constrainToViewport])
+
+	useLayoutEffect(() => {
+		if(!opened || !popoverRef.current) return
+		const observer = new ResizeObserver(constrainToViewport)
+		observer.observe(popoverRef.current)
+		return () => observer.disconnect()
+	}, [opened, constrainToViewport])
 
 	return {
 		popoverOpen: opened,

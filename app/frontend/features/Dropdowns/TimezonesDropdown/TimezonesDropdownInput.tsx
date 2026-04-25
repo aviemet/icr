@@ -1,34 +1,38 @@
 import { isEmpty } from "lodash-es"
-import React, { forwardRef } from "react"
+import React, { useMemo } from "react"
 
 import { Select as InputSelect } from "@/components/Inputs"
 import { useGetTimezones } from "@/queries/locale"
 
 import { type AsyncDropdown } from ".."
 
-interface TimezonesDropdownProps extends AsyncDropdown<Schema.TimezoneOption> {}
+export interface TimezonesDropdownProps extends AsyncDropdown<Schema.TimezoneOption> {
+	ref?: React.Ref<HTMLInputElement>
+}
 
-const TimezonesDropdown = forwardRef<HTMLInputElement, TimezonesDropdownProps>((
-	{
-		label = "Timezone",
-		name = "timezone",
-		...props
-	},
+export function TimezonesDropdown({
+	label = "Timezone",
+	name = "timezone",
 	ref,
-) => {
+	...props
+}: TimezonesDropdownProps) {
 	const { data, refetch } = useGetTimezones({
 		staleTime: Infinity,
 	})
+
+	const timezoneOptions = useMemo(() => {
+		if(!data) return []
+
+		return Object.entries(data).map(([region, timezones]) => ({
+			group: region, items: timezones,
+		}))
+	}, [data])
 
 	return <InputSelect
 		ref={ ref }
 		label={ label }
 		name={ name }
-		options={ !data
-			? []
-			: Object.entries(data).map(([region, timezones]) => ({
-				group: region, items: timezones,
-			})) }
+		options={ timezoneOptions }
 		onDropdownOpen={ () => {
 			if(isEmpty(data)) refetch()
 		} }
@@ -36,6 +40,4 @@ const TimezonesDropdown = forwardRef<HTMLInputElement, TimezonesDropdownProps>((
 		clearable
 		{ ...props }
 	/>
-})
-
-export default TimezonesDropdown
+}

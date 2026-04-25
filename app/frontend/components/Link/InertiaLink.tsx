@@ -1,13 +1,14 @@
 import { Method, Visit } from "@inertiajs/core"
 import { router } from "@inertiajs/react"
 import { type ButtonProps } from "@mantine/core"
-import React, { forwardRef } from "react"
+import React from "react"
 
 import { Button } from "@/components"
-import AnchorLink, { type IAnchorLinkProps } from "@/components/Link/AnchorLink"
+import { AnchorLink, type AnchorLinkProps } from "@/components/Link/AnchorLink"
 import { exclude } from "@/lib/collections"
 
-interface ILinkProps extends IAnchorLinkProps {
+interface InertiaLinkProps extends AnchorLinkProps {
+	ref?: React.Ref<HTMLAnchorElement>
 	children?: React.ReactNode
 	href: string
 	as: "a" | "button"
@@ -17,10 +18,18 @@ interface ILinkProps extends IAnchorLinkProps {
 	disabled?: boolean
 }
 
-const InertiaLinkComponent = forwardRef<HTMLAnchorElement, ILinkProps>((
-	{ children, href, as = "a", method, visit, buttonProps, style, disabled, ...props },
+export function InertiaLink({
+	children,
+	href,
+	as = "a",
+	method,
+	visit,
+	buttonProps,
+	style,
+	disabled,
 	ref,
-) => {
+	...props
+}: InertiaLinkProps) {
 	const handleHTTP = (e: React.MouseEvent<Element, MouseEvent>) => {
 		e.preventDefault()
 
@@ -68,6 +77,4 @@ const InertiaLinkComponent = forwardRef<HTMLAnchorElement, ILinkProps>((
 	return (
 		<AnchorLink href={ processedHref } ref={ ref } { ...props }>{ children }</AnchorLink>
 	)
-})
-
-export default InertiaLinkComponent
+}

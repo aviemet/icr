@@ -22,10 +22,17 @@ class Doctor < ApplicationRecord
   include Personable
 
   extend FriendlyId
+
   friendly_id :name, use: [:slugged, :history]
 
   include PgSearchable
-  pg_search_config(against: [:first_name, :last_name, :notes])
+
+  pg_search_config(
+    against: [],
+    associated_against: {
+      person: [:first_name, :last_name]
+    },
+  )
 
   resourcify
 

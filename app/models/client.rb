@@ -30,6 +30,7 @@ class Client < ApplicationRecord
   include Attachment::HasDocuments
 
   include PgSearchable
+
   pg_search_config(
     against: [:active_at, :inactive_at, :number],
     associated_against: {
@@ -38,6 +39,7 @@ class Client < ApplicationRecord
   )
 
   extend FriendlyId
+
   friendly_id :slug_candidates
 
   resourcify
@@ -71,6 +73,12 @@ class Client < ApplicationRecord
     source: :attendant
 
   scope :includes_associated, -> { includes([:person, :calendar_customization]) }
+
+  def schedule_events_between(start_time, end_time)
+    calendar_events
+      .with_schedule_association_preloads
+      .between(start_time, end_time)
+  end
 
   after_create -> { self.update(active_at: Time.current) }
 

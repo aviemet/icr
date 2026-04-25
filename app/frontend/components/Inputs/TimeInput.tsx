@@ -1,64 +1,58 @@
-import { ActionIcon } from "@mantine/core"
-import { TimeInput as MantineTimeInput, type TimeInputProps as MantineTimeInputProps } from "@mantine/dates"
-import { forwardRef, useRef } from "react"
+import {
+	TimePicker,
+	type TimePickerProps as MantineTimePickerProps,
+} from "@mantine/dates"
+import React from "react"
 
 import { ClockIcon } from "@/components/Icons"
-import { mergeRefs } from "@/lib/mergeRefs"
 
-import InputWrapper from "./InputWrapper"
-import Label from "./Label"
+import { InputWrapper } from "./InputWrapper"
+import { Label } from "./Label"
 
 import { type BaseInputProps } from "."
 
 export interface TimeInputProps
 	extends
-	BaseInputProps,
-	MantineTimeInputProps {
+	Omit<BaseInputProps, "disableAutofill">,
+	MantineTimePickerProps {
+	ref?: React.Ref<HTMLDivElement>
 	name?: string
 	id?: string
-	picker?: boolean
 }
 
-const TimeInput = forwardRef<HTMLInputElement, TimeInputProps>((
-	{
-		label,
-		id,
-		name,
-		wrapper,
-		wrapperProps,
-		required = false,
-		value,
-		picker = true,
-		...props
-	},
-	ref
-) => {
-	const localInputRef = useRef<HTMLInputElement>(null)
-	const combinedRef = mergeRefs([ref, localInputRef])
-
+export function TimeInput({
+	label,
+	id,
+	name,
+	wrapper,
+	wrapperProps,
+	format = "12h",
+	required = false,
+	value,
+	withDropdown = true,
+	popoverProps,
+	ref,
+	...props
+}: TimeInputProps) {
 	const inputId = id || name
-
-	const pickerControl = (
-		<ActionIcon variant="subtle" color="gray" onClick={ () => localInputRef.current?.showPicker() }>
-			<ClockIcon />
-		</ActionIcon>
-	)
 
 	return (
 		<InputWrapper wrapper={ wrapper } wrapperProps={ wrapperProps }>
 			{ label && <Label required={ required } htmlFor={ inputId }>
 				{ label }
 			</Label> }
-			<MantineTimeInput
-				ref={ combinedRef }
-				id={ inputId }
+			<TimePicker
+				ref={ ref }
 				name={ name }
 				value={ value }
-				leftSection={ picker ? pickerControl : undefined }
+				withDropdown={ withDropdown }
+				format={ format }
+				leftSection={ <ClockIcon /> }
+				leftSectionPointerEvents="none"
+				hiddenInputProps={ { id: inputId, required } }
+				popoverProps={ { withinPortal: false, ...popoverProps } }
 				{ ...props }
 			/>
 		</InputWrapper>
 	)
-})
-
-export default TimeInput
+}

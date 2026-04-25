@@ -1,5 +1,5 @@
 import { Group, Title, Menu, Page, Section, Table } from "@/components"
-import EmployeesTable from "@/features/Employees/Table"
+import { EmployeeTable } from "@/domains/Employees/Table"
 import { Routes, withLayout } from "@/lib"
 
 interface ShowJobTitleProps {
@@ -36,7 +36,7 @@ const ShowJobTitle = ({ job_title, employees }: ShowJobTitleProps) => {
 						model="employees"
 						rows={ employees }
 					>
-						<EmployeesTable />
+						<EmployeeTable />
 
 						<Table.Pagination />
 					</Table.TableProvider>

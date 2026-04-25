@@ -1,5 +1,5 @@
 import { isEmpty } from "lodash-es"
-import { forwardRef } from "react"
+import React from "react"
 
 import { Select } from "@/components/Inputs"
 import { useGetEmployeesAsOptions } from "@/queries"
@@ -7,18 +7,18 @@ import { useGetEmployeesAsOptions } from "@/queries"
 import { type AsyncDropdown } from ".."
 
 interface ItemsDropdownProps extends Omit<AsyncDropdown<Schema.EmployeesOptions>, "name"> {
+	ref?: React.Ref<HTMLInputElement>
 	name?: string
 }
 
-const EmployeesDropdownInput = forwardRef<HTMLInputElement, ItemsDropdownProps>(({
+const EmployeesDropdownInput = ({
 	label = "Employee",
 	name = "employee_id",
 	initialData,
 	value,
+	ref,
 	...props
-},
-ref
-) => {
+}: ItemsDropdownProps) => {
 	const { data, isStale, refetch } = useGetEmployeesAsOptions({
 		enabled: value !== undefined,
 		initialData,
@@ -43,6 +43,6 @@ ref
 		value={ value }
 		{ ...props }
 	/>
-})
+}
 
 export default EmployeesDropdownInput

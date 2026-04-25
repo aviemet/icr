@@ -1,38 +1,40 @@
 import clsx from "clsx"
-import { forwardRef, type ForwardedRef } from "react"
+import React from "react"
 import { NestedObject, useInertiaInput } from "use-inertia-form"
 
-import RichTextInput, { type RichTextInputProps } from "@/components/Inputs/RichText"
+import { RichText as BaseRichText, type RichTextInputProps } from "@/components/Inputs/RichText"
 
-import InputWrapper from "../components/InputWrapper"
+import { FieldProps } from "../components/Field"
+import { InputWrapper } from "../components/InputWrapper"
 
 import { type InputConflicts, type BaseFormInputProps } from "."
 
 
-interface FormRichTextInputProps<TForm extends NestedObject = NestedObject>
+export interface FormRichTextInputProps<TForm extends NestedObject = NestedObject>
 	extends
 	Omit<RichTextInputProps, InputConflicts>,
-	BaseFormInputProps<string, TForm> {}
+	BaseFormInputProps<string, TForm> {
+	ref?: React.Ref<HTMLDivElement>
+	wrapperProps?: Omit<FieldProps, "children">
+}
 
-const RichText = forwardRef(<TForm extends NestedObject = NestedObject>(
-	{
-		label,
-		name,
-		required = false,
-		id,
-		onChange,
-		onBlur,
-		onFocus,
-		model,
-		field = true,
-		wrapperProps,
-		errorKey,
-		defaultValue,
-		clearErrorsOnChange,
-		...props
-	}: FormRichTextInputProps<TForm>,
-	ref: ForwardedRef<HTMLInputElement>
-) => {
+export function RichText<TForm extends NestedObject = NestedObject>({
+	label,
+	name,
+	required = false,
+	id,
+	onChange,
+	onBlur,
+	onFocus,
+	model,
+	field = true,
+	wrapperProps,
+	errorKey,
+	defaultValue,
+	clearErrorsOnChange,
+	ref,
+	...props
+}: FormRichTextInputProps<TForm>) {
 	const { form, inputName, inputId, value, setValue, error } = useInertiaInput<string, TForm>({
 		name,
 		model,
@@ -61,7 +63,7 @@ const RichText = forwardRef(<TForm extends NestedObject = NestedObject>(
 			{ label && <label className={ clsx({ required }) } htmlFor={ id || inputId }>
 				{ label }
 			</label> }
-			<RichTextInput
+			<BaseRichText
 				ref={ ref }
 				id={ id }
 				name={ inputName }
@@ -74,6 +76,4 @@ const RichText = forwardRef(<TForm extends NestedObject = NestedObject>(
 			/>
 		</InputWrapper>
 	)
-})
-
-export default RichText
+}

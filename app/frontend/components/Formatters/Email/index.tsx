@@ -1,11 +1,11 @@
 import { Anchor, ConditionalWrapper } from "@/components"
 
-interface EmailDisplayProps {
+export interface EmailFormatterProps {
 	children: string
 	link?: boolean
 }
 
-const EmailDisplay = ({ children, link = true }: EmailDisplayProps) => {
+export function EmailFormatter({ children, link = true }: EmailFormatterProps) {
 	return (
 		<ConditionalWrapper
 			condition={ link }
@@ -15,5 +15,3 @@ const EmailDisplay = ({ children, link = true }: EmailDisplayProps) => {
 		</ConditionalWrapper>
 	)
 }
-
-export default EmailDisplay

@@ -12,24 +12,14 @@ interface EventWrapperProps<P extends TimeGridDisplayProperties = TimeGridDispla
 	displayProperties: P
 }
 
-function calculateWidth(groupSize: number) {
-	if(groupSize <= 1) return "calc(100% - 2px)"
-	return `calc(${100 / groupSize}% - 2px)`
-}
-
-function calculateLeft(groupSize: number, slotIndex: number) {
-	if(groupSize <= 1) return "0"
-	return `calc(${(100 / groupSize) * slotIndex}%)`
-}
-
 const EventWrapper = <P extends TimeGridDisplayProperties = TimeGridDisplayProperties>({
 	children,
 	event,
 	style,
 	displayProperties,
 }: EventWrapperProps<P>) => {
-	const groupSize = displayProperties.groupSize || 1
-	const slotIndex = displayProperties.slotIndex || 0
+	const groupSize = displayProperties.groupSize ?? 1
+	const slotIndex = displayProperties.slotIndex ?? 0
 
 	const cssVars = event.allDay
 		? {
@@ -39,22 +29,29 @@ const EventWrapper = <P extends TimeGridDisplayProperties = TimeGridDisplayPrope
 			"--row-span": displayProperties.rowEnd - displayProperties.rowStart,
 		}
 		: {
+			position: "absolute",
 			top: `calc(${(displayProperties.rowStart - 1) * 100}% / var(--rows-per-day))`,
 			height: `calc((${(displayProperties.rowEnd - displayProperties.rowStart) * 100}% / var(--rows-per-day)) - 1px)`,
-			width: calculateWidth(groupSize),
-			left: calculateLeft(groupSize, slotIndex),
+			width: groupSize > 1
+				? `calc((100% - 2px) / ${groupSize})`
+				: "calc(100% - 2px)",
+			left: groupSize > 1
+				? `calc(${slotIndex} * ((100% - 2px) / ${groupSize}))`
+				: "0",
+			zIndex: groupSize > 1 ? slotIndex + 1 : 1,
 		}
 
 	return (
 		<div
 			className={ clsx(
 				classes.eventWrapper,
+				groupSize > 1,
 				displayProperties.className
 			) }
 			style={ {
 				...cssVars,
 				...style,
-			} as unknown as React.CSSProperties }
+			} as React.CSSProperties }
 		>
 			{ children }
 		</div>

@@ -2,7 +2,7 @@ class HouseholdsController < ApplicationController
   include Searchable
 
   expose :households, -> { search(Household.includes_associated) }
-  expose :household, scope: ->{ Household }, find: ->(id, scope){ scope.includes_associated.find(id) }
+  expose :household, id: ->{ params[:slug] }, scope: ->{ Household.includes_associated }, find_by: :slug
 
   sortable_fields %w(householdable_id householdable_type type number notes issued_at expires_at extra_fields)
 
@@ -44,6 +44,19 @@ class HouseholdsController < ApplicationController
     authorize household
     render inertia: "Households/Edit", props: {
       household: household.render(:edit)
+    }
+  end
+
+  # @route GET /households/:slug/schedule (schedule_household)
+  def schedule
+    authorize household
+
+    household_for_show = Household.includes(clients: [:person]).find(household.id)
+    schedules = household.schedule_events_between(*DateRangeCalculator.new(params).call)
+
+    render inertia: "Households/Schedule", props: {
+      household: -> { household_for_show.render(:show) },
+      schedules: -> { schedules.render(:household) },
     }
   end
 

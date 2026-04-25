@@ -58,9 +58,12 @@ export class MonthStackStrategy<TEventResources extends EventResources>
 					allDay: event.allDay,
 					columnStart: gridPlacement.columnStart,
 					columnSpan: gridPlacement.columnSpan,
-					className: clsx("filled", this.getContinuationClasses(index, weekSegments.length), {
-						[classes.allDayEvent]: event.allDay,
-					}),
+					className: clsx(
+						"filled",
+						this.getContinuationClasses(index, weekSegments.length), {
+							[classes.allDayEvent]: event.allDay,
+						}
+					),
 				}
 			} else {
 				displayProperties = {
@@ -69,9 +72,12 @@ export class MonthStackStrategy<TEventResources extends EventResources>
 					allDay: event.allDay,
 					columnStart: gridPlacement.columnStart,
 					columnSpan: 1,
-					className: clsx("indicator", {
-						[classes.allDayEvent]: event.allDay,
-					}),
+					className: clsx(
+						"stack",
+						"indicator", {
+							[classes.allDayEvent]: event.allDay,
+						}
+					),
 				}
 			}
 

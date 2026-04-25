@@ -1,13 +1,13 @@
 import { useState } from "react"
 
-import { useTableSectionContext } from "@/components/Table/TableContext"
+import { useTableSectionContext } from "@/components/Table"
 import { useCurrency, type UseCurrencyOptions } from "@/lib/hooks"
 import { type Money } from "@/types"
 
-import FlexCurrency from "./FlexCurrency"
+import { FlexCurrencyFormatter } from "./FlexCurrency"
 
 
-interface CurrencyFormatterProps {
+export interface CurrencyFormatterProps {
 	children?: number | Money | null
 	currency?: string
 	locale?: string
@@ -15,13 +15,13 @@ interface CurrencyFormatterProps {
 	options?: UseCurrencyOptions
 }
 
-const CurrencyFormatter = ({
+export function CurrencyFormatter({
 	children,
 	currency = "USD",
 	locale = "en-US",
 	accounting = false,
 	options = {},
-}: CurrencyFormatterProps) => {
+}: CurrencyFormatterProps) {
 	const [inTable, setInTable] = useState(false)
 
 	const useCurrencyOptions: UseCurrencyOptions = options
@@ -43,16 +43,14 @@ const CurrencyFormatter = ({
 
 	if(accounting || (inTable && accounting === undefined)) {
 		return (
-			<FlexCurrency
+			<FlexCurrencyFormatter
 				formatter={ formatter }
 				accounting={ accounting }
 			>
 				{ amount }
-			</FlexCurrency>
+			</FlexCurrencyFormatter>
 		)
 	}
 
 	return <>{ formatter.format(amount) }</>
 }
-
-export default CurrencyFormatter

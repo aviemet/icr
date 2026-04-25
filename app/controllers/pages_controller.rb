@@ -1,7 +1,9 @@
 class PagesController < ApplicationController
   # @route GET / (root)
   def dashboard
-    render inertia: "Dashboard", props: {}
+    render inertia: "Dashboard", props: {
+      dashboard: Dashboard::StatsSerializer.render(Dashboard::Stats.new(current_user).payload),
+    }
   end
 
   # @route GET /home (home)

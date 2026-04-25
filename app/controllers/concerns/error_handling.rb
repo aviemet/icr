@@ -5,7 +5,7 @@ module ErrorHandling
 
   included do
     # Skip error handling in test environment or if skipped by controller
-    unless !Rails.env.production? || (self.respond_to?(:skip_handle_exceptions) && self.skip_handle_exceptions)
+    unless Rails.env.test? || (respond_to?(:skip_handle_exceptions) && skip_handle_exceptions)
 
       # Order matters: more general errors first, more specific errors last
 
@@ -55,6 +55,7 @@ module ErrorHandling
 
       redirect_to error_path(status:), flash: {
         server_error: error_details,
+        url: request.original_url,
       }
     end
   end

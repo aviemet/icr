@@ -1,9 +1,9 @@
 import { useComputedColorScheme, useMantineTheme } from "@mantine/core"
 import { useEffect } from "react"
 
-import useStore from "@/lib/store"
+import { useStore } from "@/lib/store"
 
-const ContrastingColorsSetup = () => {
+export function ContrastingColorsSetup() {
 	const theme = useMantineTheme()
 	const colorScheme = useComputedColorScheme()
 	const setThemeData = useStore((state) => state.setThemeData)
@@ -14,5 +14,3 @@ const ContrastingColorsSetup = () => {
 
 	return <></>
 }
-
-export default ContrastingColorsSetup

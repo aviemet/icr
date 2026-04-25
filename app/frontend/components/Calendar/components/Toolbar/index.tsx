@@ -2,7 +2,7 @@ import { DatePicker, DateValue, MonthPicker } from "@mantine/dates"
 import { useDisclosure } from "@mantine/hooks"
 import clsx from "clsx"
 import dayjs from "dayjs"
-import { forwardRef } from "react"
+import React from "react"
 
 import { Box, Button, Group, Menu, Paper } from "@/components"
 import { FloatingIndicator } from "@/components/Button/FloatingIndicator"
@@ -13,18 +13,17 @@ import { useAnimateWidth } from "@/lib/hooks/useAnimateWidth"
 
 import * as classes from "./Toolbar.css"
 
-interface ToolbarProps {
+export interface ToolbarProps {
+	ref?: React.Ref<HTMLDivElement>
 	views?: readonly VIEW_NAMES[]
 	view: VIEW_NAMES
 }
 
-const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>((
-	{
-		views = Object.values(VIEWS),
-		view,
-	},
+export function Toolbar({
+	views = Object.values(VIEWS),
+	view,
 	ref,
-) => {
+}: ToolbarProps) {
 	const { date, localizer, handleViewChange, handleDateChange, resourcesById } = useCalendarContext()
 	const [opened, { close, toggle }] = useDisclosure(false)
 
@@ -137,6 +136,4 @@ const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>((
 			</Box>
 		</Group>
 	)
-})
-
-export default Toolbar
+}

@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import JobTitlesForm from "@/features/Settings/JobTitles/Form"
+import { JobTitleForm } from "@/domains/Settings/JobTitles/Form"
 import { Routes, withLayout } from "@/lib"
 
 interface EditJobTitleProps {
@@ -18,7 +18,7 @@ const EditJobTitle = ({ job_title }: EditJobTitleProps) => {
 			<Section>
 				<Title>{ title }</Title>
 
-				<JobTitlesForm
+				<JobTitleForm
 					method="put"
 					to={ Routes.settingsJobTitle(job_title.slug) }
 					job_title={ job_title }

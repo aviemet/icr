@@ -2,7 +2,9 @@ class Api::CalendarEventsController < Api::ApiController
   expose :calendar_events, -> { Calendar::Event.all }
   expose :calendar_event, model: Calendar::Event
 
-  strong_params :calendar_event, permit: [:name, :starts_at, :ends_at, :parent_id, shift_attributes: [:employee_id], event_participants_attributes: [:participant_id, :participant_type]]
+  before_action :resolve_category_slug, only: [:create, :update]
+
+  strong_params :calendar_event, permit: [:name, :starts_at, :ends_at, :parent_id, :category_id, shift_attributes: [:employee_id], event_participants_attributes: [:participant_id, :participant_type]]
 
   # @route POST /api/calendar_events (api_calendar_events)
   def create
@@ -38,5 +40,22 @@ class Api::CalendarEventsController < Api::ApiController
     else
       render json: { errors: }
     end
+  end
+
+  private
+
+  def resolve_category_slug
+    slug = params.dig(:calendar_event, :category_slug)
+    if slug.present?
+      params[:calendar_event][:category_id] = Category.type("Calendar::Event").find_by!(slug: slug).id
+      params[:calendar_event].delete(:category_slug)
+      return
+    end
+
+    id_or_slug = params.dig(:calendar_event, :category_id)
+    return if id_or_slug.blank?
+
+    category = Category.find_by(id: id_or_slug) || Category.find_by!(slug: id_or_slug)
+    params[:calendar_event][:category_id] = category.id
   end
 end

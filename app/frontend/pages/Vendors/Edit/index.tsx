@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import VendorsForm from "@/features/Vendors/Form"
+import { VendorForm } from "@/domains/Vendors/Form"
 import { Routes } from "@/lib"
 
 interface EditVendorProps {
@@ -18,7 +18,7 @@ const EditVendor = ({ vendor }: EditVendorProps) => {
 			<Section>
 				<Title>{ title }</Title>
 
-				<VendorsForm
+				<VendorForm
 					method="put"
 					to={ Routes.vendor(vendor.id) }
 					vendor={ vendor }

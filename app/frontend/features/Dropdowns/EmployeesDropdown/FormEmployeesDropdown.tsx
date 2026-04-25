@@ -5,19 +5,19 @@ import { useGetEmployeesAsOptions } from "@/queries"
 
 import { type FormAsyncDropdown } from ".."
 
-interface ItemsDropdownProps extends Omit<FormAsyncDropdown<Schema.EmployeesOptions>, "name"> {
+export interface ItemsDropdownProps extends Omit<FormAsyncDropdown<Schema.EmployeesOptions>, "name"> {
 	name?: string
 }
 
-const EmployeesDropdownInput = ({
+export function EmployeesDropdownInput({
 	label = "Employee",
 	name = "employee_id",
 	initialData,
 	value,
 	...props
-}: ItemsDropdownProps) => {
+}: ItemsDropdownProps) {
 	const { data, isStale, refetch } = useGetEmployeesAsOptions({
-		enabled: value !== undefined,
+		enabled: true,
 		initialData,
 	})
 
@@ -42,5 +42,3 @@ const EmployeesDropdownInput = ({
 		{ ...props }
 	/>
 }
-
-export default EmployeesDropdownInput

@@ -39,11 +39,20 @@ function buildSearchLink(
 			const dateStr = coerceArray(value).reduce((str, date, i) => {
 				return `${str}${i === 0 ? "" : ","}${date.toISOString()}`
 			}, "")
-			localValues.set(param.name, dateStr)
+			const normalizedKey = param.name.replace(/\[(\w+)\]/g, ".$1")
+			if(normalizedKey !== param.name) {
+				localValues.unset(param.name)
+			}
+			localValues.set(normalizedKey, dateStr)
 			return
 		}
 
-		localValues.set(param.name, value)
+		// Convert bracket notation to dot notation for nested params
+		const normalizedKey = param.name.replace(/\[(\w+)\]/g, ".$1")
+		if(normalizedKey !== param.name) {
+			localValues.unset(param.name)
+		}
+		localValues.set(normalizedKey, value)
 
 	})
 
@@ -55,4 +64,4 @@ function buildSearchLink(
 	}
 }
 
-export default buildSearchLink
+export { buildSearchLink }

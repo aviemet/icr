@@ -58,13 +58,19 @@ class ClientsController < ApplicationController
   def schedule
     authorize client
 
-    schedules = client
-      .calendar_events
-      .includes([:recurring_patterns, :event_participants, shift: [employee: [:person, :job_title, :calendar_customization]]])
-      .between(*DateRangeCalculator.new(params).call)
+    client_for_show = Client.includes(
+      :calendar_customization,
+      person: [
+        :employee,
+        :client,
+        { contact: { addresses: :category, emails: :category, phones: :category } },
+      ],
+    ).find(client.id)
+
+    schedules = client.schedule_events_between(*DateRangeCalculator.new(params).call)
 
     render inertia: "Clients/Schedule", props: {
-      client: -> { client.render(:show) },
+      client: -> { client_for_show.render(:show) },
       schedules: lambda {
         schedules.render(:client)
       },
@@ -74,6 +80,8 @@ class ClientsController < ApplicationController
   # @route POST /clients (clients)
   def create
     authorize Client.new
+
+    client.assign_attributes(client_params)
 
     if client.save
       redirect_to client_path(client), notice: t("templates.controllers.notices.created", model: "Client")

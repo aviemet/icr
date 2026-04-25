@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import EmployeeInterviewForm from "@/features/Interviews/Form"
+import { EmployeeInterviewForm } from "@/domains/Interviews/Form"
 import { Routes } from "@/lib"
 
 
@@ -12,7 +12,7 @@ const NewEmployeeInterview = ({ ...data }: NewEmployeeInterviewProps) => {
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: "Interviews", href: Routes.employeeInterviews() },
+			{ title: "Interviews", href: Routes.interviews() },
 			{ title: "New Interview", href: window.location.href },
 		] }>
 
@@ -20,7 +20,7 @@ const NewEmployeeInterview = ({ ...data }: NewEmployeeInterviewProps) => {
 				<Title>{ title }</Title>
 
 				<EmployeeInterviewForm
-					to={ Routes.employeeInterviews() }
+					to={ Routes.interviews() }
 					{ ...data }
 				/>
 			</Section>

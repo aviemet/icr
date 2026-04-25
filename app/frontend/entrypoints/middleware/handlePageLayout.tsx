@@ -16,11 +16,9 @@ const LAYOUT_COMPONENTS: Record<keyof typeof LAYOUTS, ({ children }: LayoutProps
 	"public": PublicLayout,
 } as const
 
-const handlePageLayout = (page: PagesObject) => {
+export function handlePageLayout(page: PagesObject) {
 	const DefaultLayout = LAYOUT_COMPONENTS[page.default.defaultLayout as keyof typeof LAYOUTS] || AppLayout
 	page.default.layout ||= (children: React.ReactNode) => <DefaultLayout>{ children }</DefaultLayout>
 
 	return page.default
 }
-
-export default handlePageLayout

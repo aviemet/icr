@@ -1,16 +1,17 @@
 import { ColorSwatch, Group, Popover } from "@mantine/core"
-import React, { forwardRef } from "react"
+import React from "react"
 
 import { theme, vars } from "@/lib"
 
 import { ColorPickerComponent } from "../ColorPicker"
-import HiddenInput from "./HiddenInput"
-import InputWrapper from "./InputWrapper"
-import Label from "./Label"
+import { HiddenInput } from "./HiddenInput"
+import { InputWrapper } from "./InputWrapper"
+import { Label } from "./Label"
 
 import { type BaseInputProps } from "."
 
 export interface ColorPickerInputProps extends Omit<BaseInputProps, "disableAutofill"> {
+	ref?: React.Ref<HTMLInputElement>
 	label?: React.ReactNode
 	value?: string
 	initialValue?: string
@@ -21,23 +22,21 @@ export interface ColorPickerInputProps extends Omit<BaseInputProps, "disableAuto
 	children?: React.ReactNode
 }
 
-const ColorPickerInput = forwardRef<HTMLInputElement, ColorPickerInputProps>((
-	{
-		label,
-		id,
-		name,
-		required,
-		onChange,
-		onFocus,
-		value,
-		initialValue,
-		wrapper = true,
-		wrapperProps,
-		children,
-		...props
-	},
+export function ColorPickerInput({
+	label,
+	id,
+	name,
+	required,
+	onChange,
+	onFocus,
+	value,
+	initialValue,
+	wrapper = true,
+	wrapperProps,
+	children,
 	ref,
-) => {
+	...props
+}: ColorPickerInputProps) {
 	const inputId = id || name
 
 	return (
@@ -75,6 +74,4 @@ const ColorPickerInput = forwardRef<HTMLInputElement, ColorPickerInputProps>((
 			<HiddenInput value={ value || "" } id={ inputId } name={ name } ref={ ref } />
 		</InputWrapper>
 	)
-})
-
-export default ColorPickerInput
+}

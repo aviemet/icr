@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import TrainingsForm from "@/features/Trainings/Form"
+import { TrainingForm } from "@/domains/Trainings/Form"
 import { Routes } from "@/lib"
 
 
@@ -19,7 +19,7 @@ const EditTraining = ({ training }: EditTrainingProps) => {
 			<Section>
 				<Title>{ title }</Title>
 
-				<TrainingsForm
+				<TrainingForm
 					method="put"
 					to={ Routes.training(training.id) }
 					training={ training }

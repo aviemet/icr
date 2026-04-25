@@ -7,7 +7,7 @@ import { useMemo } from "react"
 import { Flash } from "@/components"
 import { toKebabCase } from "@/lib"
 import { useInit } from "@/lib/hooks"
-import useStore from "@/lib/store"
+import { useStore } from "@/lib/store"
 import { theme as themeObject, vars } from "@/lib/theme"
 
 import "./reset.css"
@@ -16,9 +16,11 @@ import "@mantine/tiptap/styles.css"
 import "@mantine/dates/styles.css"
 import "@mantine/notifications/styles.css"
 import "mantine-contextmenu/styles.layer.css"
+import "@mantine/spotlight/styles.css"
+import "mantine-datatable/styles.css"
 import "./global.css"
 
-const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
+export function UiFrameworkProvider({ children }: { children: React.ReactNode }) {
 	/**
 	 * Primary color customization
 	 */
@@ -51,7 +53,9 @@ const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 
 	useInit(() => {
 		if(import.meta.env.MODE === "development") {
+			// eslint-disable-next-line no-console
 			console.log({ theme })
+			// eslint-disable-next-line no-console
 			console.log({ vars })
 		}
 	})
@@ -72,5 +76,3 @@ const UiFrameworkProvider = ({ children }: { children: React.ReactNode }) => {
 		</MantineProvider>
 	)
 }
-
-export default UiFrameworkProvider

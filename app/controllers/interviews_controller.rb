@@ -2,7 +2,7 @@ class InterviewsController < ApplicationController
   include Searchable
 
   expose :employee_interviews, -> { search(policy_scope(Employee::Interview.includes_associated)) }
-  expose :employee_interview, scope: ->{ policy_scope(Employee::Interview.includes_associated) }
+  expose :employee_interview, model: Employee::Interview, scope: ->{ policy_scope(Employee::Interview.includes_associated) }
 
   sortable_fields %w(employee_id scheduled_at notes)
 
@@ -53,11 +53,12 @@ class InterviewsController < ApplicationController
   # @route POST /employees/interviews (interviews)
   def create
     authorize Employee::Interview.new
+    employee_interview.assign_attributes(employee_interview_params)
 
     if employee_interview.save
-      redirect_to employee_interview, notice: t("templates.controllers.notices.created", model: "Interview")
+      redirect_to interview_url(employee_interview), notice: t("templates.controllers.notices.created", model: "Interview")
     else
-      redirect_to new_employee_interview_path, inertia: { errors: employee_interview.errors }
+      redirect_to new_interview_path, inertia: { errors: employee_interview.errors }
     end
   end
 
@@ -67,9 +68,9 @@ class InterviewsController < ApplicationController
     authorize employee_interview
 
     if employee_interview.update(employee_interview_params)
-      redirect_to employee_interview, notice: t("templates.controllers.notices.updated", model: "Interview")
+      redirect_to interview_url(employee_interview), notice: t("templates.controllers.notices.updated", model: "Interview")
     else
-      redirect_to edit_employee_interview_path, inertia: { errors: employee_interview.errors }
+      redirect_to edit_interview_path(employee_interview), inertia: { errors: employee_interview.errors }
     end
   end
 
@@ -78,6 +79,6 @@ class InterviewsController < ApplicationController
     authorize employee_interview
 
     employee_interview.destroy!
-    redirect_to employee_interviews_url, notice: t("templates.controllers.notices.destroyed", model: "Interview")
+    redirect_to interviews_url, notice: t("templates.controllers.notices.destroyed", model: "Interview")
   end
 end

@@ -1,4 +1,8 @@
 class EmployeePolicy < ApplicationPolicy
+  def schedule?
+    show?
+  end
+
   class Scope < ApplicationPolicy::Scope
     def resolve
       # Admins can see all employees

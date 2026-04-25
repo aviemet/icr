@@ -7,7 +7,7 @@ interface ISectionProps extends BoxProps, ElementProps<"section"> {
 	fullHeight?: boolean
 }
 
-const Section = ({ children, fullHeight = false, className, ...props }: ISectionProps) => {
+export function Section({ children, fullHeight = false, className, ...props }: ISectionProps) {
 	return (
 		<Box
 			component="section"
@@ -18,5 +18,3 @@ const Section = ({ children, fullHeight = false, className, ...props }: ISection
 		</Box>
 	)
 }
-
-export default Section

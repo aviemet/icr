@@ -4,7 +4,7 @@ import { Menu } from "@/components"
 import { Routes } from "@/lib"
 import { usePageProps } from "@/lib/hooks"
 
-const AvatarMenu = () => {
+export function AvatarMenu() {
 	const props = usePageProps()
 
 	return (
@@ -20,10 +20,7 @@ const AvatarMenu = () => {
 			</Menu.Target>
 
 			<Menu.Dropdown>
-				{ /* <Menu.Link href={ Routes.user(props.auth.user.id) }>Profile & Account</Menu.Link> */ }
 			</Menu.Dropdown>
 		</Menu>
 	)
 }
-
-export default AvatarMenu

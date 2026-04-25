@@ -4,10 +4,8 @@ interface IDangerousHtmlProps extends BoxProps {
 	children?: string | null
 }
 
-const DangerousHtml = ({ children, ...props }: IDangerousHtmlProps) => {
+export function DangerousHtml({ children, ...props }: IDangerousHtmlProps) {
 	return (
 		<Box { ...props } dangerouslySetInnerHTML={ { __html: children || "" } } />
 	)
 }
-
-export default DangerousHtml

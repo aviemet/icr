@@ -2,7 +2,7 @@ import clsx from "clsx"
 import { useMemo } from "react"
 
 import { useCalendarContext, Resource, EventResources } from "@/components/Calendar"
-import TimeGrid, { TimeGridHeading } from "@/components/Calendar/components/TimeGrid"
+import { TimeGrid, TimeGridHeading } from "@/components/Calendar/components/TimeGrid"
 import { BaseViewProps, createViewComponent, NAVIGATION, VIEWS, ViewStaticMethodProps } from "@/components/Calendar/views"
 
 import * as classes from "./DayView.css"
@@ -19,6 +19,7 @@ interface DayViewTimeGridHeading extends TimeGridHeading {
 const DayViewComponent = <TEventResources extends EventResources>({
 	className,
 	style,
+	displayStrategy,
 }: DayViewProps<TEventResources>) => {
 	const { date, localizer, resourcesById, groupByResource } = useCalendarContext()
 
@@ -49,7 +50,7 @@ const DayViewComponent = <TEventResources extends EventResources>({
 				columnHeadings={ columnHeadings }
 				startTime={ startTime }
 				endTime={ endTime }
-				displayStrategy="overlap"
+				displayStrategy={ displayStrategy }
 			/>
 		</div>
 	)

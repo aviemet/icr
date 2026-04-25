@@ -10,7 +10,7 @@ import {
 	Button,
 } from "@mantine/core"
 import { useUncontrolled } from "@mantine/hooks"
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 
 import * as classes from "./FloatingIndicator.css"
 
@@ -42,6 +42,7 @@ const FloatingIndicator = <T extends string = string>({
 	...props
 }: FloatingIndicatorProps<T>) => {
 	const [rootRef, setRootRef] = useState<HTMLDivElement | null>(null)
+	const [activeTarget, setActiveTarget] = useState<HTMLButtonElement | null>(null)
 	const controlsRefs = useRef<Record<string, HTMLButtonElement | null>>({})
 
 	const [currentValue, handleChange] = useUncontrolled<T>({
@@ -53,7 +54,14 @@ const FloatingIndicator = <T extends string = string>({
 
 	const setControlRef = (key: T) => (node: HTMLButtonElement | null) => {
 		controlsRefs.current[key] = node
+		setActiveTarget(controlsRefs.current[currentValue] ?? null)
 	}
+
+	useEffect(() => {
+		const next = controlsRefs.current[currentValue] ?? null
+		const id = setTimeout(() => setActiveTarget(next), 0)
+		return () => clearTimeout(id)
+	}, [currentValue])
 
 	const handleClick = (item: FloatingIndicatorOption<T>) => {
 		handleChange(item.key)
@@ -87,9 +95,9 @@ const FloatingIndicator = <T extends string = string>({
 				</Button>
 			)) }
 
-			{ currentValue && controlsRefs.current[currentValue] && rootRef && (
+			{ currentValue && activeTarget && rootRef && (
 				<MantineFloatingIndicator
-					target={ controlsRefs.current[currentValue] }
+					target={ activeTarget }
 					parent={ rootRef }
 					className={ classes.indicator }
 				/>

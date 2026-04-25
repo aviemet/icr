@@ -158,7 +158,7 @@ export const ensureViewName = (name: string | null | undefined): VIEW_NAMES => {
 /**
  *
  */
-export default function greeting() {
+export function greeting() {
 	const hour = new Date().getHours()
 	const welcomeTypes = ["Good morning", "Good afternoon", "Good evening"]
 
@@ -169,4 +169,11 @@ export default function greeting() {
 	else greeting = welcomeTypes[2]
 
 	return greeting
+}
+
+/**
+ *
+ */
+export function isNonEmptyString(value: unknown): value is string {
+	return typeof value === "string" && value.length > 0
 }

@@ -36,9 +36,11 @@ class Employee < ApplicationRecord
   include Employee::StateMachine
 
   extend FriendlyId
+
   friendly_id :slug_candidates, use: [:slugged, :history]
 
   include PgSearchable
+
   pg_search_config(
     against: [:active_at, :inactive_at, :number, :status],
     associated_against: {
@@ -103,6 +105,13 @@ class Employee < ApplicationRecord
   ##########
   has_many :shifts, dependent: :destroy
   has_many :shift_events, through: :shifts, class_name: "Calendar::Event", source: :calendar_event, dependent: :destroy
+
+  def schedule_events_between(start_time, end_time)
+    all_events
+      .distinct
+      .with_schedule_association_preloads
+      .between(start_time, end_time)
+  end
 
   #############
   # Pay Rates #

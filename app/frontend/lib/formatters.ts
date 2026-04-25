@@ -10,11 +10,17 @@ export const currency = (amount: number, currency = "USD") => {
 	return formatter.format(amount)
 }
 
+export const number = {
+	decimal: (value: number, fractionDigits = 1) =>
+		new Intl.NumberFormat("en-US", { minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits }).format(value),
+}
+
 export const datetime = {
 	// Date formatters
 	dateShort: (date: string | Date) => dayjs(ensureDate(date)).format("M/DD/YY"),
 	dateLong: (date: string | Date) => dayjs(ensureDate(date)).format("MM/DD/YYYY HH:mm:ss"),
 	dateEnglish: (date: string | Date) => dayjs(ensureDate(date)).format("MM/DD/YYYY"),
+	dateWithWeekday: (date: string | Date) => dayjs(ensureDate(date)).format("MMM D - dddd"),
 	dateUrl: (date: string | Date) => dayjs(ensureDate(date)).format("YYYY-MM-DD"),
 
 	// Time formatters
@@ -47,5 +53,10 @@ export const datetime = {
 	duration: (date: string | Date, relativeTime?: string | Date) => {
 		const start = relativeTime === undefined ? dayjs() : dayjs(ensureDate(relativeTime))
 		return start.from(ensureDate(date), true)
+	},
+	range: (start: string | Date, end: string | Date) => {
+		const startStr = dayjs(ensureDate(start)).format("MMMM D")
+		const endStr = dayjs(ensureDate(end)).format("MMMM D")
+		return `${startStr} - ${endStr}`
 	},
 }

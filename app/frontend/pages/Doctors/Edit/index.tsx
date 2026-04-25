@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import DoctorsForm from "@/features/Doctors/Form"
+import { DoctorForm } from "@/domains/Doctors/Form"
 import { Routes } from "@/lib"
 
 interface EditDoctorProps {
@@ -18,7 +18,7 @@ const EditDoctor = ({ doctor }: EditDoctorProps) => {
 			<Section>
 				<Title>{ title }</Title>
 
-				<DoctorsForm
+				<DoctorForm
 					method="put"
 					to={ Routes.doctor(doctor.slug) }
 					doctor={ doctor }

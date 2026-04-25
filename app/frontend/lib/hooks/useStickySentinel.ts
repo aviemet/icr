@@ -19,7 +19,7 @@ interface StickyOptions {
  * @param options - Configuration options for the Intersection Observer
  * @returns Tuple containing ref to attach to the sticky element and boolean indicating if element is stuck
  */
-const useStickySentinel = <T extends HTMLElement>(options: StickyOptions = {}): [RefObject<T>, boolean] => {
+export function useStickySentinel<T extends HTMLElement>(options: StickyOptions = {}): [RefObject<T>, boolean] {
 	const [isStuck, setIsStuck] = useState<boolean>(false)
 	const stickyRef = useRef<T>(null)
 	const sentinelRef = useRef<HTMLDivElement | null>(null)
@@ -63,5 +63,3 @@ const useStickySentinel = <T extends HTMLElement>(options: StickyOptions = {}): 
 
 	return [stickyRef, isStuck]
 }
-
-export default useStickySentinel

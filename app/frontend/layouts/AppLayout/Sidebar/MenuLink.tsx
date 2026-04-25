@@ -7,7 +7,7 @@ import { NextIcon } from "@/components/Icons"
 
 import * as classes from "../AppLayout.css"
 
-interface MenuLinkProps {
+export interface MenuLinkProps {
 	href: string
 	label: string
 	leftSection?: ReactNode
@@ -15,13 +15,13 @@ interface MenuLinkProps {
 	children?: ReactNode
 }
 
-const MenuLink = ({
+export function MenuLink({
 	href,
 	label,
 	leftSection,
 	active,
 	children,
-}: MenuLinkProps) => {
+}: MenuLinkProps) {
 	return (
 		<li>
 			<Link
@@ -42,5 +42,3 @@ const MenuLink = ({
 		</li>
 	)
 }
-
-export default MenuLink

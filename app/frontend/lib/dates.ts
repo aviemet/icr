@@ -25,3 +25,8 @@ type Duration = {
 export const eventsOverlap = (eventA: Duration, eventB: Duration, localizer: CalendarLocalizer = dayJsLocalizer(dayjs)) => {
 	return localizer.isBefore(eventA.start, eventB.end) && localizer.isAfter(eventA.end, eventB.start)
 }
+
+export function nearestHalfHour(date: Date = new Date()) {
+	const d = dayjs(date)
+	return d.startOf("hour").add(Math.round(d.minute() / 30) * 30, "minute").toDate()
+}

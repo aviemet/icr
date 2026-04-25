@@ -22,6 +22,7 @@
 module Requirement
   class Item < ApplicationRecord
     include PgSearchable
+
     pg_search_config(
       against: [:requirement, :fulfillable],
       associated_against: {

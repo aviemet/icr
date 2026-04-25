@@ -6,8 +6,13 @@ alwaysApply: true
 # REQUIRED FOR EVERY INTERACTION:
 
 1. Read .cursor/icr.mdx at the start of each interaction
-2. Before ending ANY response, if you've learned anything useful about project-specific architectural details that are NOT immediately obvious from reading the code, you MUST update .cursor/icr.mdx with this information
-3. When updating .cursor/icr.mdx:
-   - Only document reusable, cross-cutting patterns; skip single-file or one-off implementation notes that are obvious from code
+2. **Testing:** When you add or change behavior (new code, bug fixes, refactors), you MUST:
+   - Add or update specs that cover the behavior (or the fix). Do not leave new/changed code untested.
+   - Run the relevant specs (and any obviously related specs) before finishing. Fix any failures.
+   - Prefer adding a focused spec file for new services/features; run the full spec suite for the touched area.
+3. When working on payroll or timesheet workflow features (e.g. payroll index, pay periods, timesheet approval), read and follow the plan at .cursor/plans/payroll_workflow_redesign_80191109.plan.md and document progress in .cursor/icr.mdx (Feature Documentation or Phase 6/7 checklist).
+4. Before ending ANY response, if you've learned anything useful about project-specific architectural details that are NOT immediately obvious from reading the code, you MUST update .cursor/icr.mdx with this information
+5. When updating .cursor/icr.mdx:
+   - Document only (a) non-obvious quirks or gotchas, or (b) overarching design/architectural decisions. Do not document implementation details that are obvious from reading the code or that will change as features iterate (no variable names, field names, or step-by-step flow).
    - Only add new information not already documented
-   - Place information in the appropriate section, if no appropriate section exists, create one
+   - Place information in the appropriate section; if no appropriate section exists, create one

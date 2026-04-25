@@ -3,6 +3,7 @@ import { css } from "@linaria/core"
 import { eventHeight } from "../../MonthView.css"
 
 import { vars } from "@/lib/css"
+import { event, title, hasIndicator } from "@/components/Calendar/components/Event/Event.css"
 
 const triangleWidth = 3
 
@@ -23,6 +24,7 @@ export const monthEventWrapper = css`
   overflow: hidden;
   pointer-events: all;
   grid-column: var(--column-start) / span var(--column-span);
+  position: relative;
 
   &.${ showMore } {
     grid-column: var(--column-start) / span var(--column-span);
@@ -30,16 +32,13 @@ export const monthEventWrapper = css`
 `
 
 export const monthEvent = css`
-  min-height: ${ eventHeight };
-  height: ${ eventHeight };
-  padding: 2px 4px 2px 8px;
+  &.${ event } {
+    min-height: ${ eventHeight };
+    height: ${ eventHeight };
+  }
 
   &, &:before, &:after {
     transition: all 200ms ease-in-out;
-  }
-
-  & > span {
-    overflow: hidden;
   }
 
   &.filled {
@@ -54,6 +53,8 @@ export const monthEvent = css`
   }
 
   &.indicator {
+    display: flex;
+
     &:hover {
       background-color: light-dark(${ vars.colors.gray[2] }, ${ vars.colors.dark[6] });
     }
@@ -66,7 +67,11 @@ export const monthEvent = css`
       border-radius: 50%;
       background-color: var(--event-color);
       margin-right: 4px;
-      vertical-align: middle;
+      align-self: center;
+    }
+
+    span {
+      flex: 1;
     }
   }
 
@@ -109,15 +114,25 @@ export const monthEvent = css`
       left: -${ triangleWidth }px;
       width: 0;
       height: 0;
-      border-top: calc(${ eventHeight } / 2) solid var(--event-color);
-      border-bottom: calc(${ eventHeight } / 2) solid var(--event-color);
+      border-top: calc(${ eventHeight } / 2) solid var(--indicator-color, var(--event-color));
+      border-bottom: calc(${ eventHeight } / 2) solid var(--indicator-color, var(--event-color));
       border-left: ${ triangleWidth }px solid transparent;
     }
 
     &:hover::before {
-      border-top-color: var(--hover-color);
-      border-bottom-color: var(--hover-color);
+      border-top-color: var(--indicator-color, var(--hover-color));
+      border-bottom-color: var(--indicator-color, var(--hover-color));
     }
+  }
+
+  &.${ hasIndicator } {
+    padding-left: 0;
+  }
+
+  .${ title } {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 `
 

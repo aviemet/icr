@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 
 import { Title, Page, Section } from "@/components"
-import EmployeeForm from "@/features/Employees/Form"
+import { EmployeeForm } from "@/domains/Employees/Form"
 import { Routes } from "@/lib"
 
 interface INewEmployeeProps {
