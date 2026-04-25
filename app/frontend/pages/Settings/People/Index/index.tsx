@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
+import { PersonTable } from "@/domains/Settings/People/Table"
 import { IndexPageTemplate } from "@/features"
-import { PersonTable } from "@/features/Settings/People/Table"
 import { Routes } from "@/lib"
 import { withLayout } from "@/lib/withLayout"
 

@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
+import { JobTitleTable } from "@/domains/Settings/JobTitles/Table"
 import { IndexPageTemplate } from "@/features"
-import { JobTitleTable } from "@/features/Settings/JobTitles/Table"
 import { Routes, withLayout } from "@/lib"
 
 interface JobTitleIndexProps {

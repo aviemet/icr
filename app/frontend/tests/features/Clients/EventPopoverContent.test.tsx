@@ -7,7 +7,7 @@ import { beforeEach, describe, expect, it } from "vitest"
 
 import { CalendarProvider } from "@/components/Calendar"
 import { dayJsLocalizer } from "@/components/Calendar/lib/localizers"
-import { EventPopoverContent } from "@/features/Clients/EventPopoverContent"
+import { EventPopoverContent } from "@/domains/Clients/EventPopoverContent"
 
 const localizer = dayJsLocalizer(dayjs)
 

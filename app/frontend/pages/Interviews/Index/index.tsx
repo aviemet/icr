@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
+import { EmployeeInterviewTable } from "@/domains/Interviews/Table"
 import { IndexPageTemplate } from "@/features"
-import { EmployeeInterviewTable } from "@/features/Interviews/Table"
 import { Routes } from "@/lib"
 
 

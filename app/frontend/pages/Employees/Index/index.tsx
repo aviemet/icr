@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next"
 
 import { NewIcon } from "@/components/Icons"
+import { EmployeeTable } from "@/domains/Employees/Table"
 import { IndexPageTemplate } from "@/features"
-import { EmployeeTable } from "@/features/Employees/Table"
 import { Routes } from "@/lib"
 
 interface EmployeeIndexProps {

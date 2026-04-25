@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef } from "react"
 import { type UseFormProps } from "use-inertia-form"
 
 import { BaseCalendarEvent, useCalendarContext } from "@/components/Calendar"
-import { EventForm, type EventData } from "@/features/Clients/schedule/EventForm"
+import { EventForm, type EventData } from "@/domains/Clients/schedule/EventForm"
 import { useGetEmployeesAsOptions } from "@/queries/employees"
 
 

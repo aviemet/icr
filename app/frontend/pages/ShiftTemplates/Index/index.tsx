@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
+import { ShiftTemplateTable } from "@/domains/ShiftTemplates/Table"
 import { IndexPageTemplate } from "@/features"
-import { ShiftTemplateTable } from "@/features/ShiftTemplates/Table"
 import { Routes } from "@/lib"
 
 interface ShiftTemplateIndexProps {

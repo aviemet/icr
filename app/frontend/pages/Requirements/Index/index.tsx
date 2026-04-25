@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
+import { RequirementRequirementTable } from "@/domains/Requirements/Table"
 import { IndexPageTemplate } from "@/features"
-import { RequirementRequirementTable } from "@/features/Requirements/Table"
 import { Routes } from "@/lib"
 
 

@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
+import { HouseholdTable } from "@/domains/Households/Table"
 import { IndexPageTemplate } from "@/features"
-import { HouseholdTable } from "@/features/Households/Table"
 import { Routes } from "@/lib"
 
 interface IHouseholdIndexProps {

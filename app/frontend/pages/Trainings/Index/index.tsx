@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
+import { TrainingTable } from "@/domains/Trainings/Index"
 import { IndexPageTemplate } from "@/features"
-import { TrainingTable } from "@/features/Trainings/Index"
 import { Routes } from "@/lib"
 
 

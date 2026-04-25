@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 
 import { Title, Page, Section } from "@/components"
-import { ClientForm } from "@/features/Clients/Form"
+import { ClientForm } from "@/domains/Clients/Form"
 import { Routes } from "@/lib"
 
 interface NewClientProps {

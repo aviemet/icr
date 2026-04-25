@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 
+import { ClientTable } from "@/domains/Clients/Table"
 import { IndexPageTemplate } from "@/features"
-import { ClientTable } from "@/features/Clients/Table"
 import { Routes } from "@/lib"
 
 interface ClientIndexProps {

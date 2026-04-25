@@ -1,5 +1,5 @@
 import { IndexPageTemplate } from "@/features"
-import { ScheduleTable } from "@/features/Schedules/Table"
+import { ScheduleTable } from "@/domains/Schedules/Table"
 import { Routes } from "@/lib"
 
 interface ScheduleIndexProps {

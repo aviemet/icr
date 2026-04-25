@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
+import { DoctorTable } from "@/domains/Doctors/Table"
 import { IndexPageTemplate } from "@/features"
-import { DoctorTable } from "@/features/Doctors/Table"
 import { Routes } from "@/lib"
 
 interface DoctorIndexProps {

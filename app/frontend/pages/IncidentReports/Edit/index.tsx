@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import { IncidentReportForm } from "@/features/IncidentReports/Form"
+import { IncidentReportForm } from "@/domains/IncidentReports/Form"
 import { Routes } from "@/lib"
 
 interface EditIncidentReportProps {

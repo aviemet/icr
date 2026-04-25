@@ -6,8 +6,8 @@ import { Form, useForm } from "use-inertia-form"
 import { describe, it, expect, beforeEach } from "vitest"
 
 import { parseTimeString } from "@/components/Form/Inputs/SplitDateTimeInput"
-import { type EventData } from "@/features/Clients/schedule/EventForm"
-import { EventTotalHours } from "@/features/Clients/schedule/EventForm/EventTotalHours"
+import { type EventData } from "@/domains/Clients/schedule/EventForm"
+import { EventTotalHours } from "@/domains/Clients/schedule/EventForm/EventTotalHours"
 
 function TestWrapper({ children }: { children: React.ReactNode }) {
 	return <MantineProvider>{ children }</MantineProvider>

@@ -6,7 +6,7 @@ import { ActionIcon, Box, Group, Link, Stack, Text, Title } from "@/components"
 import { BaseCalendarEvent } from "@/components/Calendar"
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 import { EditIcon, TrashIcon } from "@/components/Icons"
-import { EventForm } from "@/features/Clients/schedule/EventForm"
+import { EventForm } from "@/domains/Clients/schedule/EventForm"
 import { Routes } from "@/lib"
 import { useDeleteClientCalendarEvent } from "@/queries/clients"
 

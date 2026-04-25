@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import { EmployeeInterviewForm } from "@/features/Interviews/Form"
+import { EmployeeInterviewForm } from "@/domains/Interviews/Form"
 import { Routes } from "@/lib"
 
 

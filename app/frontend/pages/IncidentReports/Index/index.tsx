@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
+import { IncidentReportTable } from "@/domains/IncidentReports/Table"
 import { IndexPageTemplate } from "@/features"
-import { IncidentReportTable } from "@/features/IncidentReports/Table"
 import { Routes } from "@/lib"
 
 interface IncidentReportIndexProps {

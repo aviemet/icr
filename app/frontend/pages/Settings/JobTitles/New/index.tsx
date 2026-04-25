@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import { JobTitleForm } from "@/features/Settings/JobTitles/Form"
+import { JobTitleForm } from "@/domains/Settings/JobTitles/Form"
 import { Routes, withLayout } from "@/lib"
 
 interface NewJobTitleProps {
