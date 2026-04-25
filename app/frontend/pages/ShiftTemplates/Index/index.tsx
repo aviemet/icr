@@ -13,7 +13,6 @@ const ShiftTemplatesIndex = ({ shift_templates, pagination }: ShiftTemplateIndex
 		<IndexPageTemplate
 			title="ShiftTemplates"
 			model="shift_templates"
-			rows={ shift_templates }
 			pagination={ pagination }
 			deleteRoute={ Routes.shiftTemplates() }
 			menuOptions={ [

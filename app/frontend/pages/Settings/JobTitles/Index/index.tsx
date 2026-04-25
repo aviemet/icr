@@ -13,7 +13,6 @@ const JobTitlesIndex = ({ job_titles, pagination }: JobTitleIndexProps) => {
 		<IndexPageTemplate
 			title="JobTitles"
 			model="job_titles"
-			rows={ job_titles }
 			pagination={ pagination }
 			deleteRoute={ Routes.settingsJobTitles() }
 			menuOptions={ [

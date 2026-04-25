@@ -14,7 +14,6 @@ const EmployeeInterviewsIndex = ({ employee_interviews, pagination }: EmployeeIn
 		<IndexPageTemplate
 			title="EmployeeInterviews"
 			model="employee_interviews"
-			rows={ employee_interviews }
 			pagination={ pagination }
 			deleteRoute={ Routes.interviews() }
 			menuOptions={ [

@@ -1,37 +1,43 @@
 import { Table, Link } from "@/components"
 import { EditButton } from "@/components/Button"
-import { type TableProps } from "@/components/Table/Table"
+import { type TableColumn } from "@/components/Table"
 import { Routes } from "@/lib"
 
-export function DoctorTable(props: TableProps) {
+interface DoctorTableProps {
+	records: Schema.DoctorsIndex[]
+	pagination: Schema.Pagination
+	model: string
+}
+
+export function DoctorTable({ records, pagination, model }: DoctorTableProps) {
+	const columns: TableColumn<Schema.DoctorsIndex>[] = [
+		{
+			accessor: "first_name",
+			title: "First_name",
+			sortable: true,
+			render: (doctor) => <Link href={ Routes.doctor(doctor.id) }>{ doctor.first_name }</Link>,
+		},
+		{
+			accessor: "last_name",
+			title: "Last_name",
+			sortable: true,
+			render: (doctor) => <Link href={ Routes.doctor(doctor.id) }>{ doctor.last_name }</Link>,
+		},
+		{
+			accessor: "actions",
+			title: "Actions",
+			sortable: false,
+			render: (doctor) => <EditButton href={ Routes.editDoctor(doctor.id) } />,
+		},
+	]
+
 	return (
-		<Table { ...props }>
-			<Table.Head>
-				<Table.Row>
-					<Table.HeadCell sort="first_name">First_name</Table.HeadCell>
-					<Table.HeadCell sort="last_name">Last_name</Table.HeadCell>
-					<Table.HeadCell className="actions">Actions</Table.HeadCell>
-				</Table.Row>
-			</Table.Head>
-			<Table.Body>
-				<Table.RowIterator render={ (doctor: Schema.DoctorsIndex) => (
-					<Table.Row key={ doctor.id }>
-
-						<Table.Cell>
-							<Link href={ Routes.doctor(doctor.id) }>{ doctor.first_name }</Link>
-						</Table.Cell>
-
-						<Table.Cell>
-							<Link href={ Routes.doctor(doctor.id) }>{ doctor.last_name }</Link>
-						</Table.Cell>
-
-						<Table.Cell>
-							<EditButton href={ Routes.editDoctor(doctor.id) } />
-						</Table.Cell>
-
-					</Table.Row>
-				) } />
-			</Table.Body>
-		</Table>
+		<Table.DataTable
+			columns={ columns }
+			records={ records }
+			pagination={ pagination }
+			model={ model }
+			selectable
+		/>
 	)
 }

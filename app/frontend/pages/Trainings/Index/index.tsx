@@ -14,13 +14,12 @@ const TrainingsIndex = ({ trainings, pagination }: TrainingIndexProps) => {
 		<IndexPageTemplate
 			title="Trainings"
 			model="trainings"
-			rows={ trainings }
 			pagination={ pagination }
 			menuOptions={ [
 				{ label: "New Training", href: Routes.newTraining(), icon: <NewIcon /> },
 			] }
 		>
-			<TrainingTable />
+			<TrainingTable records={ trainings } pagination={ pagination } model="trainings" />
 		</IndexPageTemplate>
 	)
 }

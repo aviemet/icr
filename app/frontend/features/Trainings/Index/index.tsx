@@ -1,40 +1,53 @@
-import { Table, Link, type TableProps } from "@/components"
+import { Group, Table, Link } from "@/components"
 import { EditButton } from "@/components/Button"
+import { type TableColumn } from "@/components/Table"
 import { Routes } from "@/lib"
 
-export function TrainingTable(props: TableProps) {
+interface TrainingTableProps {
+	records: Schema.TrainingsIndex[]
+	pagination: Schema.Pagination
+	model: string
+}
+
+export function TrainingTable({ records, pagination, model }: TrainingTableProps) {
+	const columns: TableColumn<Schema.TrainingsIndex>[] = [
+		{
+			accessor: "name",
+			title: "Name",
+			sortable: true,
+			render: (training) => <Link href={ Routes.training(training.id) }>{ training.name }</Link>,
+		},
+		{
+			accessor: "estimated_minutes",
+			title: "Duration",
+			sortable: true,
+			render: (training) => <Link href={ Routes.training(training.id) }>{ training.estimated_minutes }</Link>,
+		},
+		{
+			accessor: "description",
+			title: "Description",
+			sortable: true,
+			render: (training) => <Link href={ Routes.training(training.id) }>{ training.description }</Link>,
+		},
+		{
+			accessor: "actions",
+			title: "Actions",
+			sortable: false,
+			render: (training) => (
+				<Group wrap="nowrap" gap="xs">
+					<EditButton href={ Routes.editTraining(training.id) } />
+				</Group>
+			),
+		},
+	]
+
 	return (
-		<Table { ...props }>
-			<Table.Head>
-				<Table.Row>
-					<Table.HeadCell sort="name">Name</Table.HeadCell>
-					<Table.HeadCell sort="estimated_minutes">Duration</Table.HeadCell>
-					<Table.HeadCell sort="description">Description</Table.HeadCell>
-					<Table.HeadCell className="actions">Actions</Table.HeadCell>
-				</Table.Row>
-			</Table.Head>
-			<Table.Body>
-				<Table.RowIterator render={ (training: Schema.TrainingsIndex) => (
-					<Table.Row key={ training.id }>
-
-						<Table.Cell>
-							<Link href={ Routes.training(training.id) }>{ training.name }</Link>
-						</Table.Cell>
-
-						<Table.Cell>
-							<Link href={ Routes.training(training.id) }>{ training.estimated_minutes }</Link>
-						</Table.Cell>
-
-						<Table.Cell>
-							<Link href={ Routes.training(training.id) }>{ training.description }</Link>
-						</Table.Cell>
-
-						<Table.Cell>
-							<EditButton href={ Routes.editTraining(training.id) } />
-						</Table.Cell>
-					</Table.Row>
-				) } />
-			</Table.Body>
-		</Table>
+		<Table.DataTable
+			columns={ columns }
+			records={ records }
+			pagination={ pagination }
+			model={ model }
+			selectable
+		/>
 	)
 }

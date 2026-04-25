@@ -13,14 +13,13 @@ const VendorsIndex = ({ vendors, pagination }: VendorIndexProps) => {
 		<IndexPageTemplate
 			title="Vendors"
 			model="vendors"
-			rows={ vendors }
 			pagination={ pagination }
 			deleteRoute={ Routes.vendors() }
 			menuOptions={ [
 				{ label: "New Vendor", href: Routes.newVendor(), icon: <NewIcon /> },
 			] }
 		>
-			<VendorTable />
+			<VendorTable records={ vendors } pagination={ pagination } model="vendors" />
 		</IndexPageTemplate>
 	)
 }

@@ -1,12 +1,11 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { renderHook } from "@testing-library/react"
-import axios from "axios"
+import { http, HttpResponse } from "msw"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
 import { Routes } from "@/lib"
 import { useCreateCalendarEvent, useUpdateCalendarEvent } from "@/queries/calendarEvents"
-
-vi.mock("axios")
+import { server } from "@/tests/helpers/mockServer"
 
 describe("Calendar Event Mutations", () => {
 	let queryClient: QueryClient
@@ -35,9 +34,6 @@ describe("Calendar Event Mutations", () => {
 		}
 
 		it("should create a calendar event", async() => {
-			const mockResponse = { data: { id: "123", ...mockCalendarData }, status: 201, statusText: "OK" }
-			vi.mocked(axios.post).mockResolvedValueOnce(mockResponse)
-
 			const { result } = renderHook(
 				() => useCreateCalendarEvent({
 					onSuccess: vi.fn(),
@@ -45,16 +41,14 @@ describe("Calendar Event Mutations", () => {
 				{ wrapper }
 			)
 
-			await result.current.mutateAsync(mockCalendarData)
-
-			expect(axios.post).toHaveBeenCalledWith(
-				Routes.apiCalendarEvents(),
-				mockCalendarData
-			)
+			const response = await result.current.mutateAsync(mockCalendarData)
+			expect(response.id).toBe("123")
 		})
 
 		it("should handle creation errors", async() => {
-			vi.mocked(axios.post).mockRejectedValueOnce(new Error("Network error"))
+			server.use(
+				http.post(Routes.apiCalendarEvents(), () => HttpResponse.json({ error: "nope" }, { status: 500 }))
+			)
 
 			const { result } = renderHook(
 				() => useCreateCalendarEvent({
@@ -81,9 +75,6 @@ describe("Calendar Event Mutations", () => {
 		}
 
 		it("should update a calendar event", async() => {
-			const mockResponse = { data: { id: eventId, ...mockCalendarData }, status: 200, statusText: "OK" }
-			vi.mocked(axios.patch).mockResolvedValueOnce(mockResponse)
-
 			const { result } = renderHook(
 				() => useUpdateCalendarEvent({
 					params: { id: eventId },
@@ -92,18 +83,11 @@ describe("Calendar Event Mutations", () => {
 				{ wrapper }
 			)
 
-			await result.current.mutateAsync(mockCalendarData)
-
-			expect(axios.patch).toHaveBeenCalledWith(
-				Routes.apiCalendarEvent(eventId),
-				mockCalendarData
-			)
+			const response = await result.current.mutateAsync(mockCalendarData)
+			expect(response.id).toBe(eventId)
 		})
 
 		it("should invalidate queries on successful update", async() => {
-			const mockResponse = { data: { id: eventId, ...mockCalendarData }, status: 200, statusText: "OK" }
-			vi.mocked(axios.patch).mockResolvedValueOnce(mockResponse)
-
 			const onSuccess = vi.fn()
 			const { result } = renderHook(
 				() => useUpdateCalendarEvent({

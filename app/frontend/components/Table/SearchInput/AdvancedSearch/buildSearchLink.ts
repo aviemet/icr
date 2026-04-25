@@ -9,7 +9,7 @@ import { type InputParam } from "./useAdvancedSearch"
  * @param values Map of all current search values
  * @returns Link to same page with URL params to use for advanced search
  */
-export function buildSearchLink(
+function buildSearchLink(
 	inputParams: readonly InputParam[],
 	values: NestedURLSearchParams,
 ) {
@@ -39,11 +39,20 @@ export function buildSearchLink(
 			const dateStr = coerceArray(value).reduce((str, date, i) => {
 				return `${str}${i === 0 ? "" : ","}${date.toISOString()}`
 			}, "")
-			localValues.set(param.name, dateStr)
+			const normalizedKey = param.name.replace(/\[(\w+)\]/g, ".$1")
+			if(normalizedKey !== param.name) {
+				localValues.unset(param.name)
+			}
+			localValues.set(normalizedKey, dateStr)
 			return
 		}
 
-		localValues.set(param.name, value)
+		// Convert bracket notation to dot notation for nested params
+		const normalizedKey = param.name.replace(/\[(\w+)\]/g, ".$1")
+		if(normalizedKey !== param.name) {
+			localValues.unset(param.name)
+		}
+		localValues.set(normalizedKey, value)
 
 	})
 
@@ -54,3 +63,5 @@ export function buildSearchLink(
 		return localValues.toString()
 	}
 }
+
+export { buildSearchLink }

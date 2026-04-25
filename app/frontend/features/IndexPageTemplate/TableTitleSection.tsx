@@ -3,8 +3,7 @@ import { Box, Title, Group, Divider, useMantineTheme } from "@mantine/core"
 
 import { Menu } from "@/components"
 import { TrashIcon } from "@/components/Icons"
-import { useTableContext } from "@/components/Table/TableContext"
-
+import { useTableContext } from "@/components/Table/Provider"
 
 import * as classes from "./IndexPage.css"
 
@@ -21,7 +20,7 @@ export interface IndexTableTitleSectionProps {
 
 export function IndexTableTitleSection({ children, title, deleteRoute, menuOptions }: IndexTableTitleSectionProps) {
 	const theme = useMantineTheme()
-	const { tableState: { selected } } = useTableContext()
+	const { selectedRecordIds } = useTableContext()
 
 
 	const deleteRecords = () => {
@@ -29,7 +28,7 @@ export function IndexTableTitleSection({ children, title, deleteRoute, menuOptio
 
 		router.visit(deleteRoute, {
 			method: "delete",
-			data: { ids: Array.from(selected) },
+			data: { ids: selectedRecordIds },
 		})
 	}
 
@@ -51,7 +50,7 @@ export function IndexTableTitleSection({ children, title, deleteRoute, menuOptio
 							)
 						}) }
 
-						{ deleteRoute && selected.size > 0 && <>
+						{ deleteRoute && selectedRecordIds.length > 0 && <>
 							<Divider />
 
 							<Menu.Item

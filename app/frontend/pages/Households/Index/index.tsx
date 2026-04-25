@@ -13,14 +13,13 @@ const HouseholdsIndex = ({ households, pagination }: IHouseholdIndexProps) => {
 		<IndexPageTemplate
 			title="Households"
 			model="households"
-			rows={ households }
 			pagination={ pagination }
 			deleteRoute={ Routes.households() }
 			menuOptions={ [
 				{ label: "New Household", href: Routes.newHousehold(), icon: <NewIcon /> },
 			] }
 		>
-			<HouseholdTable />
+			<HouseholdTable records={ households } pagination={ pagination } model="households" />
 		</IndexPageTemplate>
 	)
 }
