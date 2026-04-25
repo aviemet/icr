@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import { PermissionForm } from "@/features/Permissions/Form"
+import { PermissionForm } from "@/domains/Permissions/Form"
 import { Routes } from "@/lib"
 
 

@@ -109,19 +109,7 @@ class Employee < ApplicationRecord
   def schedule_events_between(start_time, end_time)
     all_events
       .distinct
-      .includes([
-        :recurring_patterns,
-        :event_participants,
-        :clients,
-        shift: {
-          employee: [
-            :person,
-            :job_title,
-            :calendar_customization,
-            { person: { contact: { addresses: :category, emails: :category, phones: :category } } },
-          ],
-        },
-      ])
+      .with_schedule_association_preloads
       .between(start_time, end_time)
   end
 

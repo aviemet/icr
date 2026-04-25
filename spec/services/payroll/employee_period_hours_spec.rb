@@ -96,5 +96,34 @@ RSpec.describe Payroll::EmployeePeriodHours do
       expect(result).to be_a(Hash)
       expect(result[employee.id.to_s]).to include(:regular_hours, :ot_hours, :shift_ot_hours)
     end
+
+    it "can compute hours from a collector without timesheets or shifts" do
+      period_start = Time.zone.local(2024, 3, 11, 0, 0, 0)
+      period_end = Time.zone.local(2024, 3, 24, 23, 59, 59)
+      pay_period = create(:pay_period, starts_at: period_start, ends_at: period_end)
+      employee = create(:employee)
+
+      interval = Payroll::WorkInterval.new(
+        employee_id: employee.id,
+        starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0),
+        ends_at: Time.zone.local(2024, 3, 15, 18, 0, 0),
+        category: nil
+      )
+
+      collector = Class.new(Payroll::WorkIntervalCollector) do
+        def initialize(intervals)
+          @intervals = intervals
+        end
+
+        def intervals_for(pay_period:, employee_ids:)
+          @intervals.select { |work_interval| employee_ids.include?(work_interval.employee_id) }
+        end
+      end.new([interval])
+
+      result = described_class.call(pay_period, [employee.id], collector: collector)
+
+      expect(result[employee.id.to_s][:regular_hours]).to eq(8.0)
+      expect(result[employee.id.to_s][:ot_hours]).to eq(1.0)
+    end
   end
 end

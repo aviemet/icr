@@ -5,9 +5,9 @@ import dayjs from "dayjs"
 import { describe, it, expect, beforeEach } from "vitest"
 
 import { Form, useFormField } from "@/components/Form"
-import { type EventData } from "@/features/Clients/schedule/EventForm"
-import { EventTotalHours } from "@/features/Clients/schedule/EventForm/EventTotalHours"
+import { EventTotalHours } from "@/domains/Clients/schedule/EventForm/EventTotalHours"
 import { parseTimeString } from "@/lib/dates"
+
 
 function TestWrapper({ children }: { children: React.ReactNode }) {
 	return <MantineProvider>{ children }</MantineProvider>
@@ -47,10 +47,10 @@ function UpdateTimesButton() {
 	)
 }
 
-function TestForm({ initialData }: { initialData: EventData }) {
+function TestForm({ initialData }: { initialData: Record<string, unknown> }) {
 	return (
 		<Form
-			initialData={ initialData as Record<string, unknown> }
+			initialData={ initialData }
 			action="#"
 			method="post"
 		>
@@ -85,14 +85,14 @@ describe("parseTimeString (SplitDateTimeInput)", () => {
 describe("EventTotalHours", () => {
 	it("shows duration from initial form data", async() => {
 		const base = dayjs().startOf("day")
-		const initialData: EventData = {
+		const initialData = {
 			calendar_event: {
 				starts_at: base.hour(9).minute(0).toDate(),
 				ends_at: base.hour(17).minute(0).toDate(),
 				shift: { employee_id: "" },
 				event_participants: [],
 			},
-		}
+		} satisfies Record<string, unknown>
 		render(<TestForm initialData={ initialData } />, { wrapper: TestWrapper })
 		await waitFor(() => {
 			expect(screen.getByText(/Duration: 8 hours/)).toBeInTheDocument()
@@ -101,14 +101,14 @@ describe("EventTotalHours", () => {
 
 	it("updates duration when form data calendar_event.starts_at and ends_at change", async() => {
 		const base = dayjs().startOf("day")
-		const initialData: EventData = {
+		const initialData = {
 			calendar_event: {
 				starts_at: base.hour(9).minute(0).toDate(),
 				ends_at: base.hour(17).minute(0).toDate(),
 				shift: { employee_id: "" },
 				event_participants: [],
 			},
-		}
+		} satisfies Record<string, unknown>
 		render(<TestForm initialData={ initialData } />, { wrapper: TestWrapper })
 		await waitFor(() => {
 			expect(screen.getByText(/Duration: 8 hours/)).toBeInTheDocument()

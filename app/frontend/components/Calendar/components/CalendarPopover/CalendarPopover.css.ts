@@ -5,18 +5,18 @@ import { vars } from "@/lib/css"
 export const container = css`
 	position: absolute;
 	z-index: 250;
-	transform-origin: top left;
 	opacity: 1;
-	transition: top 0.2s ease-out, left 0.2s ease-out, opacity 0.15s ease-out, transform 0.15s ease-out, width 0.15s ease-out, height 0.15s ease-out;
+	transform: translateY(0);
+	transition: opacity 0.12s ease-out, transform 0.12s ease-out;
 
 	&[data-entering] {
 		opacity: 0;
-		transform: scale(0.95);
+		transform: translateY(6px);
 	}
 
 	&[data-exiting] {
 		opacity: 0;
-		transform: scale(0.95);
+		transform: translateY(6px);
 	}
 `
 

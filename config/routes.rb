@@ -79,7 +79,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :households, param: :slug
+  resources :households, param: :slug, concerns: :schedulable
 
   resources :shift_templates
 

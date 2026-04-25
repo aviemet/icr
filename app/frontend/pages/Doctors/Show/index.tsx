@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import { DoctorForm } from "@/features/Doctors/Form"
+import { DoctorForm } from "@/domains/Doctors/Form"
 import { Routes } from "@/lib"
 
 interface NewDoctorProps {

@@ -13,23 +13,21 @@ const PasswordsNew = () => {
 	return (
 		<AuthPaperLayout bottomLinks={ [
 			<Link href={ Routes.newUserSession() } key="login">
-				{ t("frontend.pages.devise.shared.login") }
+				{ t("views.devise.shared.login") }
 			</Link>,
 		] }>
 			<Form action={ Routes.newUserPassword() } initialData={ defaultData }>
 				<Grid>
 
 					<Grid.Col>
-						<div>
-							<Title>{ t("frontend.pages.devise.passwords.new.title") }</Title>
-						</div>
+						<Title>{ t("views.devise.passwords.new.title") }</Title>
 					</Grid.Col>
 
 					<Grid.Col>
 						<Field>
 							<TextInput
 								name="user.email"
-								placeholder={ t("frontend.pages.devise.shared.email") }
+								placeholder={ t("views.devise.shared.email") }
 								autoFocus
 								autoComplete="Email"
 							/>
@@ -38,7 +36,7 @@ const PasswordsNew = () => {
 
 					<Grid.Col>
 						<Field>
-							<Submit>{ t("frontend.pages.devise.passwords.new.submit") }</Submit>
+							<Submit className="large">{ t("views.devise.passwords.new.submit") }</Submit>
 						</Field>
 					</Grid.Col>
 

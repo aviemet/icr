@@ -199,6 +199,18 @@ export const apiEmployeesOptions: ((
 
 /**
  * Generates rails route to
+ * /api/households/:slug/schedule(.:format)
+ * @param {any} slug
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiHouseholdSchedule: ((
+  slug: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
  * /api/options/job_titles(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
@@ -963,6 +975,18 @@ export const scheduleClient: ((
  * @returns {string} route path
  */
 export const scheduleEmployee: ((
+  slug: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /households/:slug/schedule(.:format)
+ * @param {any} slug
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const scheduleHousehold: ((
   slug: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;

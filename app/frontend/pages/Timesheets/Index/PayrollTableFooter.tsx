@@ -2,7 +2,7 @@ import { router } from "@inertiajs/react"
 import { useTranslation } from "react-i18next"
 
 import { Button, Group, Text } from "@/components"
-import { useTableContext } from "@/components/Table/TableContext"
+import { useTableContext } from "@/components/Table/Provider"
 import { Routes } from "@/lib"
 
 interface PayrollTableFooterProps {
@@ -22,11 +22,11 @@ export default function PayrollTableFooter({
 }: PayrollTableFooterProps) {
 	const { t } = useTranslation()
 
-	const { tableState: { selected } } = useTableContext()
-	const selectedCount = selected.size
-	const selectedTimesheetIds = Array.from(selected)
-		.map(employeeId => timesheetIdsByEmployee[employeeId as string])
-		.filter(Boolean) as string[]
+	const { selectedRecordIds } = useTableContext()
+	const selectedCount = selectedRecordIds.length
+	const selectedTimesheetIds = selectedRecordIds
+		.map(employeeId => timesheetIdsByEmployee[employeeId])
+		.filter((timesheetId): timesheetId is string => Boolean(timesheetId))
 	const canApproveSelected = selectedCount > 0 && selectedTimesheetIds.length > 0
 
 	if(employeeCount === 0 && selectedCount === 0) return null

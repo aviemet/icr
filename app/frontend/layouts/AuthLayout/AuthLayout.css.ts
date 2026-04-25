@@ -1,16 +1,30 @@
 import { css } from "@linaria/core"
 
-import helping_tree from "@/images/helping_tree.jpg"
+import { vars } from "@/lib/css"
 
 export const authLayout = css`
-	height: 100%;
-	background: 
-	radial-gradient(circle, 
-		rgba(0, 0, 0, 0.9) 30%, 
-		rgba(0, 0, 0, 0.5) 35%, 
-		rgba(0, 0, 0, 0.05) 90%), 
-	url(${ helping_tree });
-	background-size: cover;
-	background-position: center;
-	background-repeat: no-repeat;
+	min-height: 100vh;
+	min-height: 100dvh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	background-color: ${ vars.colors.dark[8] };
+	background-image: linear-gradient(
+		165deg,
+		${ vars.colors.dark[9] } 0%,
+		${ vars.colors.dark[8] } 42%,
+		color-mix(in srgb, ${ vars.colors.blue[9] } 35%, ${ vars.colors.dark[8] }) 100%
+	);
+
+	[data-mantine-color-scheme="light"] & {
+		background-color: ${ vars.colors.gray[0] };
+		background-image: linear-gradient(
+			165deg,
+			${ vars.colors.blue[0] } 0%,
+			${ vars.colors.gray[0] } 45%,
+			color-mix(in srgb, ${ vars.colors.blue[1] } 55%, ${ vars.colors.gray[0] }) 100%
+		);
+	}
 `

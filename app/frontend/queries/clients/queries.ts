@@ -4,7 +4,7 @@ import axios from "axios"
 import { VIEW_NAMES } from "@/components/Calendar/views/index"
 import { Routes } from "@/lib"
 
-import { ReactQueryFunction } from ".."
+import { CALENDAR_SCHEDULE_STALE_TIME_MS, ReactQueryFunction } from ".."
 
 export const useGetClientsAsOptions: ReactQueryFunction<Schema.ClientsOptions[]> = (options) => {
 	return useQuery({
@@ -29,6 +29,7 @@ export const useGetClientSchedules: ReactQueryFunction<Schema.CalendarEventsClie
 			const res = await axios.get(Routes.apiClientSchedule(slug, params))
 			return res.data
 		},
+		staleTime: CALENDAR_SCHEDULE_STALE_TIME_MS,
 		...options,
 	})
 }

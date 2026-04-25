@@ -32,20 +32,16 @@ const Register = () => {
 	return (
 		<AuthPaperLayout bottomLinks={ [
 			<Link href={ Routes.newUserSession() } key="login">
-				{ t("views.devise.register.login_instead") }
+				{ t("views.devise.shared.login") }
 			</Link>,
 		] }>
 			<Form action={ Routes.userRegistration() } initialData={ defaultData }>
 				<FormConsumer onChange={ handleFormChange } />
 				<Grid>
 
-					<Grid.Col>
-						<Box>
-							<Title>{ t("views.devise.register.title") }</Title>
-						</Box>
-					</Grid.Col>
+					<Stack gap="md">
+						<Title>{ t("views.devise.register.title") }</Title>
 
-					<Grid.Col>
 						<Field>
 							<TextInput
 								name="user.email"
@@ -55,9 +51,7 @@ const Register = () => {
 								required
 							/>
 						</Field>
-					</Grid.Col>
 
-					<Grid.Col>
 						<Field>
 							<PasswordInput
 								name="user.password"
@@ -66,9 +60,7 @@ const Register = () => {
 								required
 							/>
 						</Field>
-					</Grid.Col>
 
-					<Grid.Col>
 						<Field>
 							<PasswordInput
 								name="user.password_confirmation"
@@ -77,13 +69,13 @@ const Register = () => {
 								required
 							/>
 						</Field>
-					</Grid.Col>
+					</Stack>
 
-					<Grid.Col>
+					<Box>
 						<Field mb={ 16 }>
 							<Submit className="large">{ t("views.devise.register.submit") }</Submit>
 						</Field>
-					</Grid.Col>
+					</Box>
 
 				</Grid>
 			</Form>

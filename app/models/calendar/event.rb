@@ -84,6 +84,30 @@ class Calendar::Event < ApplicationRecord
   }
   scope :all_day, ->{ where(all_day: true) }
 
+  scope :with_schedule_association_preloads, -> {
+    includes([
+      :recurring_patterns,
+      :event_participants,
+      {
+        clients: [
+          :calendar_customization,
+          { person: [:employee, :client, :user] },
+        ],
+        shift: [
+          :category,
+          {
+            employee: [
+              :person,
+              :job_title,
+              :calendar_customization,
+              { person: { contact: { addresses: :category, emails: :category, phones: :category } } },
+            ],
+          },
+        ],
+      },
+    ])
+  }
+
   private
 
   def starts_at_before_ends_at

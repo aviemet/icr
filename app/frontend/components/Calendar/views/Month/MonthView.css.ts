@@ -162,15 +162,19 @@ export const dateCellHeading = css`
 `
 
 export const dateToday = css`
+  --circle-width: calc(1.625rem * var(--mantine-scale));
+
   font-weight: 600;
   
   span {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 1.55rem;
-    height: 1.55rem;
-    border-radius: 50%;
+    aspect-ratio: 1;
+    padding-top: 1px;
+    width: var(--circle-width);
+    height: var(--circle-width);
+    border-radius: 100%;
     background-color: ${ vars.colors.primaryColors.filled };
     border: 1px solid light-dark(${ vars.colors.gray[4] }, ${ vars.colors.dark[4] });
     transition: all 200ms ease;

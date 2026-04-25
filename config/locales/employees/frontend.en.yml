@@ -27,6 +27,12 @@ en:
           details: Details
           documents: Documents
         title: Employee
+      table:
+        actions: Actions
+        first_name: First Name
+        hire_date: Hire Date
+        job_title: Job Title
+        last_name: Last Name
       status:
         change_for: Change Status for %{name}
         label: Status Change

@@ -3,9 +3,9 @@
  * @version 22549a54df8789b47935d8296324ef3bc09dfa8a4398d034a1683398853c161e
  * @see https://github.com/railsware/js-routes
  */
-// eslint-disable-next-line
+ 
 const __jsr = (
-// eslint-disable-next-line
+ 
 () => {
     const hasProp = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
     let NodeTypes;
@@ -214,7 +214,7 @@ const __jsr = (
             return this.is_callable(result) ? result.call(object) : result;
         }
         partition_parameters(parts, required_params, default_options, call_arguments) {
-            // eslint-disable-next-line prefer-const
+             
             let { args, options } = this.extract_options(parts.length, call_arguments);
             if (args.length > parts.length) {
                 throw new Error("Too many parameters provided for path");
@@ -627,6 +627,15 @@ export const apiEmployeeSchedule = /*#__PURE__*/ __jsr.r({"slug":{"r":true},"for
  * @returns {string} route path
  */
 export const apiEmployeesOptions = /*#__PURE__*/ __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"api"],[2,[7,"/"],[2,[6,"options"],[2,[7,"/"],[2,[6,"employees"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /api/households/:slug/schedule(.:format)
+ * @param {any} slug
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const apiHouseholdSchedule = /*#__PURE__*/ __jsr.r({"slug":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"api"],[2,[7,"/"],[2,[6,"households"],[2,[7,"/"],[2,[3,"slug"],[2,[7,"/"],[2,[6,"schedule"],[1,[2,[8,"."],[3,"format"]]]]]]]]]]]);
 
 /**
  * Generates rails route to
@@ -1225,6 +1234,15 @@ export const scheduleClient = /*#__PURE__*/ __jsr.r({"slug":{"r":true},"format":
  * @returns {string} route path
  */
 export const scheduleEmployee = /*#__PURE__*/ __jsr.r({"slug":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"employees"],[2,[7,"/"],[2,[3,"slug"],[2,[7,"/"],[2,[6,"schedule"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
+
+/**
+ * Generates rails route to
+ * /households/:slug/schedule(.:format)
+ * @param {any} slug
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const scheduleHousehold = /*#__PURE__*/ __jsr.r({"slug":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"households"],[2,[7,"/"],[2,[3,"slug"],[2,[7,"/"],[2,[6,"schedule"],[1,[2,[8,"."],[3,"format"]]]]]]]]]);
 
 /**
  * Generates rails route to

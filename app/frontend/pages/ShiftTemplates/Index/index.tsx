@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
+import { ShiftTemplateTable } from "@/domains/ShiftTemplates/Table"
 import { IndexPageTemplate } from "@/features"
-import { ShiftTemplateTable } from "@/features/ShiftTemplates/Table"
 import { Routes } from "@/lib"
 
 interface ShiftTemplateIndexProps {
@@ -13,7 +13,6 @@ const ShiftTemplatesIndex = ({ shift_templates, pagination }: ShiftTemplateIndex
 		<IndexPageTemplate
 			title="ShiftTemplates"
 			model="shift_templates"
-			rows={ shift_templates }
 			pagination={ pagination }
 			deleteRoute={ Routes.shiftTemplates() }
 			menuOptions={ [

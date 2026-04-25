@@ -76,18 +76,7 @@ class Client < ApplicationRecord
 
   def schedule_events_between(start_time, end_time)
     calendar_events
-      .includes([
-        :recurring_patterns,
-        :event_participants,
-        shift: {
-          employee: [
-            :person,
-            :job_title,
-            :calendar_customization,
-            { person: { contact: { addresses: :category, emails: :category, phones: :category } } },
-          ],
-        },
-      ])
+      .with_schedule_association_preloads
       .between(start_time, end_time)
   end
 

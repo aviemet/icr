@@ -1,5 +1,5 @@
 import { Page, Section, Title } from "@/components"
-import { PersonForm } from "@/features/Settings/People/Form"
+import { PersonForm } from "@/domains/Settings/People/Form"
 import { Routes, withLayout } from "@/lib"
 
 interface EditPersonProps {

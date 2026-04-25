@@ -20,6 +20,8 @@ export interface BaseCalendarEvent<TEventResources extends EventResources = Even
 	end: Date
 	allDay?: boolean
 	color?: string
+	indicatorColor?: string
+	indicatorLabel?: string
 	description?: string
 	resources?: TEventResources
 	resourceId?: string | number

@@ -108,6 +108,9 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 ## Feature Documentation
 *Document completed features and their core functionality here*
 
+### Dashboard
+- Root Inertia page loads `dashboard` props from `Dashboard::StatsSerializer.render(Dashboard::Stats#payload)` so the payload matches `Schema.DashboardStats` from TypesFromSerializers. When `user` is nil, `Dashboard::Stats` uses `Client.none`, `Employee.none`, `Calendar::Event.none`, and `Timesheet.none` instead of calling Pundit, so counts and lists collapse to empty without a separate blank payload path. Nested rows are `Struct` instances; use `Payload#to_h` for plain hashes. `Dashboard::StatsSerializer` and its nested serializers subclass `BaseSerializer` (not `ApplicationSerializer`) so the root DTO is not forced through `identifier`/ActiveRecord-oriented hooks. Counts and lists use `Pundit.policy_scope` for `Client`, `Employee`, `Calendar::Event`, and `Timesheet` so the numbers match what that user could list in those areas. Week hours sum shift lengths (calendar event duration) for scoped employees in the current calendar week. Pending timesheets are unapproved rows for the current pay period when that `PayPeriod` row already exists (GET does not create periods). Recent activity is derived from the newest clients and employees in scope, not from the activity table.
+
 ### Permission System
 - Groups define permissions with effects (allow/deny) and conditions. Assignments link groups to users or job titles (optional time bounds). Resolution uses precedence and conditions.
 - Precedence: higher overrides lower. At each level, deny wins over allow.
@@ -132,6 +135,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Gotcha: The popover closes on click-outside. Date/time pickers or other inputs inside the popover must not use a portal, or the popover will close when the user selects a value.
 - Client schedule: Events come from React Query; mutations must invalidate the schedule query so the calendar refetches. If invalidation is skipped, the UI can show stale or duplicate events.
 - Client schedule uniqueness: Participantable's calendar_events is has_many through event_participants; the join can return the same event multiple times. The association uses a distinct scope so the API returns each event once.
+- Gotcha: If a Calendar::Event relation uses joins and also includes employee job_title (via Employee's active job title scope), Postgres can raise "column reference starts_at is ambiguous". Avoid by filtering events via a subquery of ids, then applying includes on the outer relation (no joins on the outer query).
 
 ### Timesheet System
 - Payroll index: employees only; historical view deferred.
@@ -140,11 +144,8 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Timesheet: pre-submittal; tracks approval; belongs to PayPeriod and Employee; has many Shifts.
 - Shift create: if within current pay period, find or create that PayPeriod and a Timesheet for the employee; if the PayPeriod was just created, backfill timesheets for all shifts in that range.
 - PayPeriod create: backfill timesheets from shifts whose event overlaps the period (one Timesheet per employee).
-- PayPeriod#associate_orphan_shifts: on payroll index and employee_review, after resolving the current pay period we call this to attach shifts that overlap the period but have nil timesheet_id (e.g. created before the period existed).
-- Employee review table: In/Out times are editable time inputs (when approval window is open).
-- Payroll index hours: Payroll::EmployeePeriodHours computes per-employee regular_hours, ot_hours, and shift_ot_hours. OT rules (thresholds, designations like overnight, exemptions) are configurable; see payroll settings and OvertimeExemption.
-- Payroll hours pipeline tests: request spec `spec/requests/timesheets_spec.rb` (GET /index "includes non-zero employee_hours when pay period has shifts with hours", :inertia) asserts that shift hours appear in index props; `spec/models/pay_period_spec.rb` (#associate_orphan_shifts) and `spec/models/shift_spec.rb` (after_create callback) cover association behavior.
- - PayPeriod destroy: destroying a pay period is blocked if any associated timesheet has an approved_at value; when no timesheets are approved, destroying the pay period will also destroy all its unapproved timesheets.
+- Payroll index hours: Payroll::EmployeePeriodHours computes per-employee regular_hours and ot_hours for a pay period. Uses Setting overtime_weekly_hours and overtime_daily_hours; splits work intervals by day (including overnight); applies active OvertimeExemption rules to exclude exempt intervals from OT; weekly OT and daily OT are summed. The calculator reads intervals via a collector interface (default: scheduled shifts), so payroll can later swap in a clock-in/out collector without changing overtime math or UI contracts.
+- Payroll approval UI: Approve actions (index row menu, footer bulk approve, employee review Approve button) are visible only during the approval window (current date within 3 days before period end through period end).
 
 ### Frontend Components
 #### UI Framework
@@ -171,6 +172,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 
 #### UI & Styling
 - Mantine; Linaria with .css.ts; clsx for class composition; theme supports dark/light.
+- Gotcha: Linaria-generated class order can make overrides between multiple classes on the same element unreliable. When a view-specific class must override a base class (e.g. base `event` plus TimeGrid `timeGridEvent`), prefer a combined selector like `&.${event} { ... }` in the overriding class so it wins regardless of CSS emission order.
 
 #### Form Implementation
 - use-inertia-form v4.6.0; Form wraps Inertia + Mantine; nested data, Rails-style attributes; custom inputs via the form hook; strict typing.
@@ -192,6 +194,8 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 
 #### Internationalization (i18n)
 - react-i18next; locales from Rails (i18n-js). Model-specific frontend strings in config/locales/[model]/frontend.en.yml; rest in frontend.en.yml. Keys: views.[feature].[page].[key]. Controller notices use shared templates under templates.controllers.notices with %{model}; CRUD notices (created/updated/destroyed/status_updated) use these.
+- RSpec (`spec/i18n_spec.rb`) asserts there are no missing keys reported by i18n-tasks for references under `app/` (including TSX). Other i18n-tasks reports (unused, normalize, interpolation) are optional; run `bundle exec i18n-tasks` when needed.
+- Devise Inertia pages use `config/locales/devise/frontend.en.yml` under `views.devise` (shared copy such as `views.devise.shared.email`, per-flow keys such as `views.devise.confirmations.new.title`).
 
 #### Testing
 - Unit: Vitest + RTL; E2E: Playwright (no mocks). Tests mirror app/frontend under app/frontend/tests.
@@ -199,6 +203,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Gotcha: Forms must use remember={ false } or the form library can persist state across unmount/remount and tests see stale values.
 - Gotcha: For form-context tests, use Form from use-inertia-form (not the app Form wrapper). For Mantine, wrap with MantineProvider, stub matchMedia in beforeEach, and wrap Grid.Col in Grid.
 - Do not test literal constants from the source; test behavior, branches, and contracts.
+- Prefer smoke-level checks for presentational layout (e.g. main content renders, interactive regions exist) over asserting element order, separators, or exact hrefs unless that order is a behavioral contract.
 
 #### Serializers
 - Smoke spec discovers serializers, infers model from name, renders each. Slug-identified models need persisted records so the smoke spec creates them. Gotcha: Identification uses the id_type column; serializers must use :id_type, not :type.

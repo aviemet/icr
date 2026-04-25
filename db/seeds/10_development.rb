@@ -2,6 +2,8 @@ if Rails.env.development?
   if Setting.none?
     Setting.company_name = "ICR SLS"
     Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
+
+    Rails.logger.info "[seeds] settings"
   end
 
   dev_password = "Complex1!"
@@ -22,16 +24,20 @@ if Rails.env.development?
       last_name: "Walden",
       user: admin
     })
+
+    Rails.logger.info "[seeds] admin user"
   end
 
   if Employee::JobTitle.none?
     Employee::JobTitle.create({ name: "Attendant" })
     Employee::JobTitle.create({ name: "Facilitator" })
     Employee::JobTitle.create({ name: "Director" })
+
+    Rails.logger.info "[seeds] job titles"
   end
 
   if Client.none?
-    3.times do
+    4.times do
       client = FactoryBot.create :client
       FactoryBot.create(:address, contact: client.contact, category: Category.type("Contact::Address").find_by(name: "Personal"))
       FactoryBot.create(:email, contact: client.contact, category: Category.type("Contact::Email").find_by(name: "Personal"))
@@ -50,6 +56,8 @@ if Rails.env.development?
       time_zone: test_timezone,
       person: Client.first.person
     })
+
+    Rails.logger.info "[seeds] clients (4) + household + client user"
   end
 
   if Employee.none?
@@ -90,6 +98,8 @@ if Rails.env.development?
       FactoryBot.create(:address, contact: director.person.contact, category: Category.type("Contact::Address").sample)
       FactoryBot.create(:phone, contact: director.person.contact, category: Category.type("Contact::Phone").sample)
     end
+
+    Rails.logger.info "[seeds] employees + facilitator/director users"
   end
 
 end

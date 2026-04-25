@@ -1,5 +1,5 @@
 import { Group, Title, Menu, Page, Section, Table } from "@/components"
-import { EmployeeTable } from "@/features/Employees/Table"
+import { EmployeeTable } from "@/domains/Employees/Table"
 import { Routes, withLayout } from "@/lib"
 
 interface ShowJobTitleProps {

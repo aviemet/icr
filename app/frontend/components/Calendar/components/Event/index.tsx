@@ -1,6 +1,8 @@
 import clsx from "clsx"
 import { HTMLAttributes } from "react"
 
+import { useStore } from "@/lib/store"
+
 import * as classes from "./Event.css"
 import { type BaseCalendarEvent, EventResources, useCalendarContext } from "../.."
 import { BaseDisplayProperties } from "../../lib/displayStrategies"
@@ -21,9 +23,18 @@ const CalendarEvent = ({
 	event,
 	onClick,
 	displayProperties,
+	style,
 	...props
 }: EventProps) => {
 	const { onClick: onClickFromContext } = useCalendarContext()
+	const { getContrastingColor } = useStore()
+
+	const indicatorVars = (event.indicatorColor && event.indicatorLabel)
+		? {
+			"--indicator-color": event.indicatorColor,
+			"--indicator-contrast": getContrastingColor(event.indicatorColor),
+		}
+		: {}
 
 	const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
 		if(onClick) {
@@ -35,11 +46,24 @@ const CalendarEvent = ({
 
 	return (
 		<div
-			className={ clsx(classes.event, className) }
+			className={ clsx(classes.event, className, {
+				[classes.hasIndicator]: Boolean(event.indicatorLabel && event.indicatorColor),
+			}) }
 			onClick={ handleClick }
+			style={ {
+				...indicatorVars,
+				...style,
+			} as React.CSSProperties }
 			{ ...props }
 		>
-			<span>{ children }</span>
+			{ (event.indicatorLabel && event.indicatorColor) && (
+				<span
+					className={ classes.indicator }
+				>
+					{ event.indicatorLabel }
+				</span>
+			) }
+			<span className={ classes.title }>{ children }</span>
 		</div>
 	)
 }

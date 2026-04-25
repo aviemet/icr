@@ -125,4 +125,6 @@ if Category.none?
       })
     end
   end
+
+  Rails.logger.info "[seeds] categories"
 end

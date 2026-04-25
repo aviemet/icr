@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import { RequirementRequirementForm } from "@/features/Requirements/Form"
+import { RequirementRequirementForm } from "@/domains/Requirements/Form"
 import { Routes } from "@/lib"
 
 

@@ -1,12 +1,12 @@
 import { router } from "@inertiajs/react"
 import clsx from "clsx"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 
-import { NestedURLSearchParams } from "@/lib"
-import { isUnset } from "@/lib/forms"
+import { NestedURLSearchParams, isUnset } from "@/lib"
 import { useLocation } from "@/lib/hooks"
 
 import { buildSearchLink } from "./buildSearchLink"
+
 
 type SpecialSearchTypes = "date"
 
@@ -32,10 +32,10 @@ export type ParamValue = string | number | Date | Date[] | undefined | null
  *  reset(): A method to clear all search values,
  * 	inputProps(name): Method to return object of props to be passed into an input
  */
-export function useAdvancedSearch(
+const useAdvancedSearch = (
 	inputParams: InputParam[],
 	options?: Options,
-) {
+) => {
 	// TODO: Trying to infer keys from prop
 	type InputParamName = typeof inputParams[number]["name"]
 
@@ -76,7 +76,7 @@ export function useAdvancedSearch(
 			// Handle special input types
 			switch(param?.type) {
 				case "date":
-					data.set(`${param.name}[type]`, "exact")
+					data.set(`${param.name}[type]`, data.get(`${param.name}[type]`) || "exact")
 					data.set(`${param.name}[start]`, data.get(`${param.name}[start]`) || "")
 					data.set(`${param.name}[end]`, data.get(`${param.name}[end]`) || "")
 
@@ -98,27 +98,55 @@ export function useAdvancedSearch(
 	}, [localInputParams, values])
 
 	const resetValues = useCallback(() => {
-		setValues(prevValues => localInputParams.reduce(
-			(data, param) => {
-				data.set(param.name, param.default ?? "")
-				return data
-			},
-			prevValues.clone(),
-		))
-	}, [localInputParams])
+		setValues(prevValues => {
+			const newValues = prevValues.clone()
+
+			inputParams.forEach(param => {
+				switch(param?.type) {
+					case "date":
+						newValues.set(`${param.name}[type]`, "exact")
+						newValues.set(`${param.name}[start]`, "")
+						newValues.set(`${param.name}[end]`, "")
+						break
+					default:
+						if(param.default !== undefined) {
+							newValues.set(param.name, param.default)
+						} else {
+							newValues.unset(param.name)
+						}
+				}
+			})
+
+			return newValues
+		})
+	}, [inputParams])
 
 	// Method returned from hook to be passed to an input
 	const buildInputProps = <T = string | Date>(name: InputParamName) => {
 		const param = localInputParams.find(param => param.name === name)
+		const dateParam = inputParams.find(p => p.type === "date" && (name === `${p.name}[start]` || name === `${p.name}[end]` || name === `${p.name}[type]`))
 
 		let value: T
-		switch(param?.type) {
-			case "date":
-				// @ts-ignore
-				value = new Date(values.get(name))
-				break
-			default:
-				value = values.get(name) as T
+		if(dateParam) {
+			const rawValue = values.get(name)
+			if(name.endsWith("[start]") || name.endsWith("[end]")) {
+				if(rawValue !== null && rawValue !== undefined && rawValue !== "") {
+					const dateValue = new Date(rawValue as string)
+					if(!isNaN(dateValue.getTime())) {
+						value = dateValue as T
+					} else {
+						value = null as T
+					}
+				} else {
+					value = null as T
+				}
+			} else {
+				const rawValue = values.get(name)
+				value = (rawValue !== null && rawValue !== undefined ? rawValue : "") as T
+			}
+		} else {
+			const rawValue = values.get(name)
+			value = (rawValue !== null && rawValue !== undefined ? rawValue : "") as T
 		}
 
 		return {
@@ -164,3 +192,5 @@ export function useAdvancedSearch(
 		reset: resetValues,
 	}
 }
+
+export { useAdvancedSearch }

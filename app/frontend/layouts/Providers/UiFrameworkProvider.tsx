@@ -17,6 +17,7 @@ import "@mantine/dates/styles.css"
 import "@mantine/notifications/styles.css"
 import "mantine-contextmenu/styles.layer.css"
 import "@mantine/spotlight/styles.css"
+import "mantine-datatable/styles.css"
 import "./global.css"
 
 export function UiFrameworkProvider({ children }: { children: React.ReactNode }) {

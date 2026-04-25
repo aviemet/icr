@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import { Grid, Title, Link, Box } from "@/components"
 import { Form, Submit } from "@/components/Form"
 import { TextInput } from "@/components/Inputs"
@@ -9,13 +11,15 @@ interface IConfirmationsNew {
 }
 
 const ConfirmationsNew = ({ user }: IConfirmationsNew) => {
+	const { t } = useTranslation()
+
 	return (
 		<AuthPaperLayout bottomLinks={ [
 			<Link href={ Routes.newUserRegistration() } key="register">
-				Register
+				{ t("views.devise.login.register") }
 			</Link>,
 			<Link href={ Routes.newUserSession() } key="login">
-				Log In Instead
+				{ t("views.devise.shared.login") }
 			</Link>,
 		] }>
 			<Form action={ Routes.userConfirmation() } initialData={ { user } }>

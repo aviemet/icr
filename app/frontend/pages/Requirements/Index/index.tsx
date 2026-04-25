@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
+import { RequirementRequirementTable } from "@/domains/Requirements/Table"
 import { IndexPageTemplate } from "@/features"
-import { RequirementRequirementTable } from "@/features/Requirements/Table"
 import { Routes } from "@/lib"
 
 
@@ -14,14 +14,13 @@ const RequirementsIndex = ({ requirements, pagination }: RequirementIndexProps) 
 		<IndexPageTemplate
 			title="Requirements"
 			model="requirements"
-			rows={ requirements }
 			pagination={ pagination }
 			deleteRoute={ Routes.requirements() }
 			menuOptions={ [
 				{ label: "New Requirement", href: Routes.newRequirement(), icon: <NewIcon /> },
 			] }
 		>
-			<RequirementRequirementTable />
+			<RequirementRequirementTable records={ requirements } pagination={ pagination } model="requirements" />
 		</IndexPageTemplate>
 	)
 }

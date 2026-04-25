@@ -1,5 +1,5 @@
 import { Title, Page, Section } from "@/components"
-import { VendorForm } from "@/features/Vendors/Form"
+import { VendorForm } from "@/domains/Vendors/Form"
 import { Routes } from "@/lib"
 
 interface INewVendorProps {

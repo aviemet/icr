@@ -5,8 +5,6 @@ import { TimeGridDisplayProperties } from "@/components/Calendar/lib/displayStra
 
 import * as classes from "./Event.css"
 
-const overlapOffsetPx = 12
-
 interface EventWrapperProps<P extends TimeGridDisplayProperties = TimeGridDisplayProperties> {
 	event: BaseCalendarEvent<EventResources>
 	children: React.ReactNode
@@ -35,9 +33,11 @@ const EventWrapper = <P extends TimeGridDisplayProperties = TimeGridDisplayPrope
 			top: `calc(${(displayProperties.rowStart - 1) * 100}% / var(--rows-per-day))`,
 			height: `calc((${(displayProperties.rowEnd - displayProperties.rowStart) * 100}% / var(--rows-per-day)) - 1px)`,
 			width: groupSize > 1
-				? `calc(100% - 2px - ${(groupSize - 1) * overlapOffsetPx}px)`
+				? `calc((100% - 2px) / ${groupSize})`
 				: "calc(100% - 2px)",
-			left: groupSize > 1 ? `${slotIndex * overlapOffsetPx}px` : "0",
+			left: groupSize > 1
+				? `calc(${slotIndex} * ((100% - 2px) / ${groupSize}))`
+				: "0",
 			zIndex: groupSize > 1 ? slotIndex + 1 : 1,
 		}
 
@@ -51,7 +51,7 @@ const EventWrapper = <P extends TimeGridDisplayProperties = TimeGridDisplayPrope
 			style={ {
 				...cssVars,
 				...style,
-			} as unknown as React.CSSProperties }
+			} as React.CSSProperties }
 		>
 			{ children }
 		</div>

@@ -9,14 +9,19 @@ import {
 	CalendarIcon,
 	ClockIcon,
 } from "@/components/Icons"
-import { Routes } from "@/lib"
+import { formatter, Routes } from "@/lib"
 import { usePageProps } from "@/lib/hooks"
 
 import * as classes from "./index.css"
 
-const Dashboard = () => {
+interface DashboardPageProps {
+	dashboard: Schema.DashboardStats
+}
+
+export default function Dashboard({ dashboard }: DashboardPageProps) {
 	const { t } = useTranslation()
 	const { settings, auth: { user } } = usePageProps()
+	const hoursLabel = formatter.number.decimal(dashboard.week_tracked_hours, 1)
 
 	return (
 		<Section>
@@ -57,8 +62,8 @@ const Dashboard = () => {
 							</Card.Section>
 							<Stack gap="md" p="md">
 								<div>
-									<Text size="xl" fw={ 700 }>{ t("views.dashboard.clients.active_count", { count: 24 }) }</Text>
-									<Text color="dimmed">{ t("views.dashboard.clients.pending_count", { count: 3 }) }</Text>
+									<Text size="xl" fw={ 700 }>{ t("views.dashboard.clients.active_count", { count: dashboard.active_client_count }) }</Text>
+									<Text color="dimmed">{ t("views.dashboard.clients.inactive_count", { count: dashboard.inactive_client_count }) }</Text>
 								</div>
 								<Group>
 									<Link href={ Routes.clients() }>{ t("views.dashboard.clients.view_all") }</Link>
@@ -78,8 +83,8 @@ const Dashboard = () => {
 							</Card.Section>
 							<Stack gap="md" p="md">
 								<Box>
-									<Text size="xl" fw={ 700 }>{ t("views.dashboard.team.member_count", { count: 12 }) }</Text>
-									<Text color="dimmed">{ t("views.dashboard.team.on_leave", { count: 2 }) }</Text>
+									<Text size="xl" fw={ 700 }>{ t("views.dashboard.team.member_count", { count: dashboard.active_team_count }) }</Text>
+									<Text color="dimmed">{ t("views.dashboard.team.hiring_pipeline", { count: dashboard.hiring_pipeline_count }) }</Text>
 								</Box>
 								<Group>
 									<Link href={ Routes.employees() }>{ t("views.dashboard.team.view_all") }</Link>
@@ -100,9 +105,19 @@ const Dashboard = () => {
 							<Stack gap="xs" p="md">
 								<Text size="lg" fw={ 600 }>{ t("views.dashboard.schedule.upcoming") }</Text>
 								<Stack gap="xs">
-									<Text>{ t("views.dashboard.schedule.events.team_meeting") }</Text>
-									<Text>{ t("views.dashboard.schedule.events.client_checkin") }</Text>
-									<Text>{ t("views.dashboard.schedule.events.training") }</Text>
+									{ dashboard.upcoming_events.length === 0
+										? (
+											<Text c="dimmed">{ t("views.dashboard.schedule.empty") }</Text>
+										)
+										: (
+											dashboard.upcoming_events.map((event) => (
+												<Text key={ event.id }>
+													{ formatter.datetime.timeShort(event.starts_at) }
+													{ " - " }
+													{ event.name }
+												</Text>
+											))
+										) }
 								</Stack>
 								<Group mt="md">
 									<Link href={ Routes.timesheets() }>{ t("views.dashboard.schedule.view") }</Link>
@@ -123,10 +138,19 @@ const Dashboard = () => {
 							<Stack gap="xs" p="md">
 								<Text size="lg" fw={ 600 }>{ t("views.dashboard.activity.latest") }</Text>
 								<Stack gap="xs">
-									<Text>{ t("views.dashboard.activity.updates.new_client") }</Text>
-									<Text>{ t("views.dashboard.activity.updates.milestone") }</Text>
-									<Text>{ t("views.dashboard.activity.updates.new_employee") }</Text>
-									<Text>{ t("views.dashboard.activity.updates.policies") }</Text>
+									{ dashboard.activity_items.length === 0
+										? (
+											<Text c="dimmed">{ t("views.dashboard.activity.empty") }</Text>
+										)
+										: (
+											dashboard.activity_items.map((item) => {
+												const label = item.name || t("views.dashboard.activity.unnamed")
+												const text = item.kind === "client"
+													? t("views.dashboard.activity.item_client", { name: label })
+													: t("views.dashboard.activity.item_employee", { name: label })
+												return <Text key={ `${item.kind}-${item.id}` }>{ text }</Text>
+											})
+										) }
 								</Stack>
 							</Stack>
 						</Card>
@@ -142,9 +166,9 @@ const Dashboard = () => {
 							</Card.Section>
 							<Stack gap="md" p="md">
 								<div>
-									<Text size="xl" fw={ 700 }>{ t("views.dashboard.time.total_hours", { count: 168 }) }</Text>
+									<Text size="xl" fw={ 700 }>{ t("views.dashboard.time.total_hours", { hours: hoursLabel }) }</Text>
 									<Text color="dimmed">{ t("views.dashboard.time.total_hours_week") }</Text>
-									<Text color="blue">{ t("views.dashboard.time.pending_timesheets", { count: 15 }) }</Text>
+									<Text color="blue">{ t("views.dashboard.time.pending_timesheets", { count: dashboard.pending_timesheet_count }) }</Text>
 								</div>
 								<Link href={ Routes.timesheets() }>{ t("views.dashboard.time.view") }</Link>
 							</Stack>
@@ -155,5 +179,3 @@ const Dashboard = () => {
 		</Section>
 	)
 }
-
-export default Dashboard

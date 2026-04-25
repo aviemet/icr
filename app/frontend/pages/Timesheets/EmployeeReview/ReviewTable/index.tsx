@@ -83,7 +83,6 @@ export default function ReviewTable({
 						</Table.Row>
 					</Table.Footer>
 				) }
-
 			</Table>
 		</Table.TableProvider>
 	)

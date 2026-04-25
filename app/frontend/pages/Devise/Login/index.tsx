@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 
-import { Grid, Title, Link } from "@/components"
+import { Box, Grid, Title, Link, Text } from "@/components"
 import { Form, Field, Submit } from "@/components/Form"
 import { Checkbox, PasswordInput, TextInput } from "@/components/Inputs"
 import { AuthPaperLayout } from "@/features"
@@ -32,16 +32,19 @@ const Login = () => {
 				<Grid>
 
 					<Grid.Col>
-						<div>
-							<Title mb="xs">{ settings.company_name }</Title>
-						</div>
+						<Title order={ 1 } size="h2">
+							{ settings.company_name }
+						</Title>
+						<Text size="sm" c="dimmed">
+							{ t("views.devise.login.subtitle") }
+						</Text>
 					</Grid.Col>
 
 					<Grid.Col>
 						<Field>
 							<TextInput
 								name="user.email"
-								placeholder={ t("views.devise.login.email") }
+								placeholder={ t("views.devise.shared.email") }
 								autoFocus
 								autoComplete="Email"
 								required
@@ -63,14 +66,16 @@ const Login = () => {
 
 					<Grid.Col>
 						<Field>
-							<Submit>{ t("views.devise.login.submit") }</Submit>
+							<Checkbox name="user.remember_me" label={ t("views.devise.login.remember_me") } />
 						</Field>
 					</Grid.Col>
 
 					<Grid.Col>
-						<Field>
-							<Checkbox name="user.remember_me" label={ t("views.devise.login.remember_me") } />
-						</Field>
+						<Box>
+							<Field>
+								<Submit className="large">{ t("views.devise.login.submit") }</Submit>
+							</Field>
+						</Box>
 					</Grid.Col>
 
 				</Grid>

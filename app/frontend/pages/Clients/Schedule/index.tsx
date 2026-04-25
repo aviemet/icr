@@ -16,13 +16,13 @@ import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 import { NAVIGATION_ACTION, VIEW_NAMES } from "@/components/Calendar/views"
 import { PlusIcon } from "@/components/Icons"
 import { Modal, useModalContext } from "@/components/Modal"
-import { EventPopoverContent } from "@/features/Clients/EventPopoverContent"
-import { EventForm } from "@/features/Clients/schedule/EventForm"
-import { EventCalendarPopover } from "@/features/Clients/schedule/NewEventCalendarPopover"
+import { EventPopoverContent } from "@/domains/Clients/EventPopoverContent"
+import { EventForm } from "@/domains/Clients/schedule/EventForm"
+import { EventCalendarPopover } from "@/domains/Clients/schedule/NewEventCalendarPopover"
 import { ensureViewName, Routes } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
-import { useLocation } from "@/lib/hooks"
+import { useCalendarScheduleQueryInitialData, useLocation } from "@/lib/hooks"
 import { useEventTitleFormatter } from "@/lib/hooks/useEventTitleFormatter"
 import { useGetClientSchedules } from "@/queries/clients"
 
@@ -54,6 +54,7 @@ function NewEventModalContent({ client }: { client: Schema.ClientsShow }) {
 
 const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 	const { t } = useTranslation()
+
 	const formatEventTitle = useEventTitleFormatter()
 	const location = useLocation()
 	const userTimezone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone, [])
@@ -61,13 +62,22 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 	const [calendarDate, setCalendarDate] = useState<Date>(ensureDate(location.params.get("date")))
 	const [calendarView, setCalendarView] = useState<VIEW_NAMES>(ensureViewName(location.params.get("view")))
 
+	const scheduleQueryInitialData = useCalendarScheduleQueryInitialData(
+		`clients/${client.slug}/schedule`,
+		location.params,
+		calendarDate,
+		calendarView,
+		userTimezone,
+		initialSchedules,
+	)
+
 	const { data } = useGetClientSchedules({
 		slug: client.slug,
 		date: datetime.dateUrl(calendarDate),
 		view: calendarView,
 		timezone: userTimezone,
 	}, {
-		initialData: initialSchedules,
+		initialData: scheduleQueryInitialData,
 		refetchOnWindowFocus: false,
 	})
 

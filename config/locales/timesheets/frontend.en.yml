@@ -76,3 +76,19 @@ en:
           flagged: Flagged
           needs_approval: Needs Approval
         title: Payroll Approval
+      show:
+        approve: Approve
+        companion: Companion
+        employee: Employee
+        reject: Reject
+        title: Timesheet
+        week_one: Week 1
+        week_two: Week 2
+      weekly:
+        date: Date
+        hours: Hours
+        overtime: Overtime
+        shift: Shift
+        sick: Sick
+        total: Total
+        vacation: Vacation

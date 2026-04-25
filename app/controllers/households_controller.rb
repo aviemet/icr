@@ -47,6 +47,19 @@ class HouseholdsController < ApplicationController
     }
   end
 
+  # @route GET /households/:slug/schedule (schedule_household)
+  def schedule
+    authorize household
+
+    household_for_show = Household.includes(clients: [:person]).find(household.id)
+    schedules = household.schedule_events_between(*DateRangeCalculator.new(params).call)
+
+    render inertia: "Households/Schedule", props: {
+      household: -> { household_for_show.render(:show) },
+      schedules: -> { schedules.render(:household) },
+    }
+  end
+
   # @route POST /households (households)
   def create
     authorize Household.new

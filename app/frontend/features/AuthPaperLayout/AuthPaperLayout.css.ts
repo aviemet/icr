@@ -3,11 +3,50 @@ import { css } from "@linaria/core"
 import { rem, vars } from "@/lib/css"
 
 export const loginWrapper = css`
-	height: 100%;
+	width: 100%;
+	max-width: 100%;
 `
 
 export const loginPaper = css`
-	width: clamp(${ rem(vars.breakpoints["2xs"]) }, 85vw, ${ rem(vars.breakpoints.xs) });
+	width: clamp(${ rem(vars.breakpoints["2xs"]) }, 90vw, ${ rem(440) });
+	overflow: hidden;
+
+	[data-mantine-color-scheme="light"] & {
+		background-color: color-mix(in srgb, ${ vars.colors.white } 92%, transparent);
+		backdrop-filter: blur(10px);
+	}
+
+	[data-mantine-color-scheme="dark"] & {
+		background-color: color-mix(in srgb, ${ vars.colors.dark[7] } 88%, transparent);
+		backdrop-filter: blur(12px);
+	}
+`
+
+export const loginContent = css`
+	min-height: 360px;
+	display: flex;
+	flex-direction: column;
+`
+
+export const loginContentInner = css`
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+
+	& > * {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		min-height: 0;
+	}
+
+	& form {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		min-height: 0;
+	}
 `
 
 export const form = css`
@@ -32,10 +71,10 @@ export const bottomLinks = css`
 	}
 
 	& > a:first-child {
-		border-bottom-left-radius: ${ vars.radius.lg };
+		border-bottom-left-radius: ${ vars.radius.md };
 	}
 
 	& > a:last-child {
-		border-bottom-right-radius: ${ vars.radius.lg };
+		border-bottom-right-radius: ${ vars.radius.md };
 	}
 `

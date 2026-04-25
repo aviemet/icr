@@ -9,6 +9,7 @@ import {
 	buildShiftTitle,
 	formatEventTitle,
 	ensureViewName,
+	greeting,
 	isNonEmptyString,
 	greeting,
 } from "@/lib/strings"

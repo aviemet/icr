@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next"
 
 import { NewIcon } from "@/components/Icons"
+import { EmployeeTable } from "@/domains/Employees/Table"
 import { IndexPageTemplate } from "@/features"
-import { EmployeeTable } from "@/features/Employees/Table"
 import { Routes } from "@/lib"
 
 interface EmployeeIndexProps {
@@ -17,14 +17,13 @@ const EmployeesIndex = ({ employees, pagination }: EmployeeIndexProps) => {
 		<IndexPageTemplate
 			title={ t("views.employees.index.title") }
 			model="employees"
-			rows={ employees }
 			pagination={ pagination }
 			deleteRoute={ Routes.employees() }
 			menuOptions={ [
 				{ label: t("views.employees.index.new"), href: Routes.newEmployee(), icon: <NewIcon /> },
 			] }
 		>
-			<EmployeeTable />
+			<EmployeeTable records={ employees } pagination={ pagination } model="employees" />
 		</IndexPageTemplate>
 	)
 }

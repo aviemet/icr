@@ -48,7 +48,19 @@ RSpec.describe "InertiaShare Concerns", type: :request do
       get root_path
 
       expect(response).to be_successful
-      expect_inertia.to include_props(menu: nil)
+      expect_inertia.to include_props(
+        menu: nil,
+        dashboard: a_hash_including(
+          active_client_count: 0,
+          inactive_client_count: 0,
+          active_team_count: 0,
+          hiring_pipeline_count: 0,
+          week_tracked_hours: 0.0,
+          pending_timesheet_count: 0,
+          upcoming_events: [],
+          activity_items: [],
+        ),
+      )
     end
   end
 end

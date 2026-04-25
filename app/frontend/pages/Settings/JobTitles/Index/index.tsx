@@ -1,6 +1,6 @@
 import { NewIcon } from "@/components/Icons"
+import { JobTitleTable } from "@/domains/Settings/JobTitles/Table"
 import { IndexPageTemplate } from "@/features"
-import { JobTitleTable } from "@/features/Settings/JobTitles/Table"
 import { Routes, withLayout } from "@/lib"
 
 interface JobTitleIndexProps {
@@ -13,7 +13,6 @@ const JobTitlesIndex = ({ job_titles, pagination }: JobTitleIndexProps) => {
 		<IndexPageTemplate
 			title="JobTitles"
 			model="job_titles"
-			rows={ job_titles }
 			pagination={ pagination }
 			deleteRoute={ Routes.settingsJobTitles() }
 			menuOptions={ [
