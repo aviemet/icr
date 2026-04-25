@@ -1,5 +1,6 @@
 import { Grid } from "@/components"
-import { Form, Submit, DateInput } from "@/components/Form"
+import { Form, Submit } from "@/components/Form"
+import { DateInput } from "@/components/Inputs"
 import { Routes } from "@/lib"
 
 export interface OnboardingFormProps {
@@ -9,20 +10,19 @@ export interface OnboardingFormProps {
 export function OnboardingForm({ employee }: OnboardingFormProps) {
 	return (
 		<Form
-			model="employee"
-			method="put"
-			to={ Routes.statusEmployee(employee.slug) }
-			data={ {
+			action={ Routes.statusEmployee(employee.slug) }
+			initialData={ {
 				employee: {
 					status: "employed",
 					active_at: new Date(),
 				},
 			} }
+			method="put"
 		>
 			<Grid>
 				<Grid.Col span={ { xxs: 12 } }>
 					<DateInput
-						name="active_at"
+						name="employee.active_at"
 						label="Start Date"
 						required
 						valueFormat="YYYY-MM-DD"

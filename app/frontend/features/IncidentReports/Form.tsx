@@ -1,7 +1,7 @@
-import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
-
 import { Grid } from "@/components"
-import { Form, TextInput, Submit } from "@/components/Form"
+import { Form, Submit } from "@/components/Form"
+import { TextInput } from "@/components/Inputs"
+import { type HTTPVerb } from "@/lib"
 
 type TIncidentReportFormData = {
 	incident_report: Schema.IncidentReportsFormData
@@ -10,30 +10,29 @@ type TIncidentReportFormData = {
 export interface IncidentReportFormProps {
 	to: string
 	method?: HTTPVerb
-	onSubmit?: (object: UseFormProps<TIncidentReportFormData>) => boolean | void
 	incident_report: Schema.IncidentReportsFormData
 }
 
-export function IncidentReportForm({ method = "post", incident_report, ...props }: IncidentReportFormProps) {
+export function IncidentReportForm({ method = "post", to, incident_report, ...props }: IncidentReportFormProps) {
 	return (
-		<Form
-			model="incident_report"
-			data={ { incident_report } }
+		<Form<TIncidentReportFormData>
+			action={ to }
+			initialData={ { incident_report } }
 			method={ method }
 			{ ...props }
 		>
 			<Grid>
 				<Grid.Col>
-					<TextInput name="occurred_at" label="Occurred_at" />
+					<TextInput name="incident_report.occurred_at" label="Occurred_at" />
 				</Grid.Col>
 				<Grid.Col>
-					<TextInput name="reported_at" label="Reported_at" />
+					<TextInput name="incident_report.reported_at" label="Reported_at" />
 				</Grid.Col>
 				<Grid.Col>
-					<TextInput name="agency_notified_at" label="Agency_notified_at" />
+					<TextInput name="incident_report.agency_notified_at" label="Agency_notified_at" />
 				</Grid.Col>
 				<Grid.Col>
-					<TextInput name="location" label="Location" />
+					<TextInput name="incident_report.location" label="Location" />
 				</Grid.Col>
 
 				<Grid.Col>

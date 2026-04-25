@@ -38,6 +38,13 @@ export function createInitialSyntheticSlotProps(): FormComponentSlotProps {
 	}
 }
 
+export function mergeSlotPropsWithSyntheticFallback(
+	live: FormComponentSlotProps | null
+): FormComponentSlotProps {
+	if(!live) return createInitialSyntheticSlotProps()
+	return { ...createInitialSyntheticSlotProps(), ...live }
+}
+
 type ErrorWithPossibleErrors = {
 	response?: { data?: { errors?: Record<string, string> } }
 	errors?: Record<string, string>

@@ -1,7 +1,7 @@
 import { isEmpty } from "lodash-es"
 import React from "react"
 
-import { Select as FormSelect } from "@/components/Form"
+import { Select as FormSelect } from "@/components/Inputs"
 import { useGetPayPeriodTypes } from "@/queries/locale"
 
 import { type FormAsyncDropdown } from ".."

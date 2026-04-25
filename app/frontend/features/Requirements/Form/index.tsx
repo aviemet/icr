@@ -1,7 +1,7 @@
-import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
-
 import { Grid } from "@/components"
-import { Form, TextInput, Submit } from "@/components/Form"
+import { Form, Submit } from "@/components/Form"
+import { TextInput } from "@/components/Inputs"
+import { type HTTPVerb } from "@/lib"
 
 type RequirementRequirementFormData = {
 	requirement_requirement: Schema.RequirementRequirementsFormData
@@ -10,30 +10,29 @@ type RequirementRequirementFormData = {
 export interface RequirementRequirementFormProps {
 	to: string
 	method?: HTTPVerb
-	onSubmit?: (object: UseFormProps<RequirementRequirementFormData>) => boolean | void
 	requirement_requirement: Schema.RequirementRequirementsFormData
 }
 
-export function RequirementRequirementForm({ method = "post", requirement_requirement, ...props }: RequirementRequirementFormProps) {
+export function RequirementRequirementForm({ method = "post", to, requirement_requirement, ...props }: RequirementRequirementFormProps) {
 	return (
-		<Form
-			model="requirement_requirement"
-			data={ { requirement_requirement } }
+		<Form<RequirementRequirementFormData>
+			action={ to }
+			initialData={ { requirement_requirement } }
 			method={ method }
 			{ ...props }
 		>
 			<Grid>
 				<Grid.Col>
-					<TextInput name="name" label="Name" />
+					<TextInput name="requirement_requirement.name" label="Name" />
 				</Grid.Col>
 				<Grid.Col>
-					<TextInput name="description" label="Description" />
+					<TextInput name="requirement_requirement.description" label="Description" />
 				</Grid.Col>
 				<Grid.Col>
-					<TextInput name="scope_type" label="Scope_type" />
+					<TextInput name="requirement_requirement.scope_type" label="Scope_type" />
 				</Grid.Col>
 				<Grid.Col>
-					<TextInput name="scope_id" label="Scope_id" />
+					<TextInput name="requirement_requirement.scope_id" label="Scope_id" />
 				</Grid.Col>
 
 				<Grid.Col>

@@ -1,5 +1,3 @@
-import { type UseFormProps } from "use-inertia-form"
-
 import { Form, Submit } from "@/components/Form"
 import { type HTTPVerb } from "@/lib"
 
@@ -10,15 +8,14 @@ type THouseholdFormData = {
 export interface IHouseholdFormProps {
 	to: string
 	method?: HTTPVerb
-	onSubmit?: (object: UseFormProps<THouseholdFormData>) => boolean | void
 	household: Schema.HouseholdsFormData
 }
 
-export function HouseholdForm({ method = "post", household, ...props }: IHouseholdFormProps) {
+export function HouseholdForm({ method = "post", to, household, ...props }: IHouseholdFormProps) {
 	return (
-		<Form
-			model="household"
-			data={ { household } }
+		<Form<THouseholdFormData>
+			action={ to }
+			initialData={ { household } }
 			method={ method }
 			{ ...props }
 		>

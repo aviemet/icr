@@ -1,7 +1,7 @@
-import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
-
 import { Grid } from "@/components"
-import { Form, TextInput, Submit } from "@/components/Form"
+import { Form, Submit } from "@/components/Form"
+import { TextInput } from "@/components/Inputs"
+import { type HTTPVerb } from "@/lib"
 
 type EmployeeInterviewFormData = {
 	employee_interview: Schema.EmployeeInterviewsFormData
@@ -10,24 +10,23 @@ type EmployeeInterviewFormData = {
 export interface EmployeeInterviewFormProps {
 	to: string
 	method?: HTTPVerb
-	onSubmit?: (object: UseFormProps<EmployeeInterviewFormData>) => boolean | void
 	employee_interview: Schema.EmployeeInterviewsFormData
 }
 
-export function EmployeeInterviewForm({ method = "post", employee_interview, ...props }: EmployeeInterviewFormProps) {
+export function EmployeeInterviewForm({ method = "post", to, employee_interview, ...props }: EmployeeInterviewFormProps) {
 	return (
-		<Form
-			model="employee_interview"
-			data={ { employee_interview } }
+		<Form<EmployeeInterviewFormData>
+			action={ to }
+			initialData={ { employee_interview } }
 			method={ method }
 			{ ...props }
 		>
 			<Grid>
 				<Grid.Col>
-					<TextInput name="scheduled_at" label="Scheduled_at" />
+					<TextInput name="employee_interview.scheduled_at" label="Scheduled_at" />
 				</Grid.Col>
 				<Grid.Col>
-					<TextInput name="notes" label="Notes" />
+					<TextInput name="employee_interview.notes" label="Notes" />
 				</Grid.Col>
 
 				<Grid.Col>

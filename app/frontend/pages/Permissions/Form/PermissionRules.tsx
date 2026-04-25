@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 
 import { Button, Grid } from "@/components"
-import { DateTimeInput, Select, Switch } from "@/components/Form"
+import { DateTimeInput, Select, Switch } from "@/components/Inputs"
 
 interface Permission {
 	resource: string
@@ -97,7 +97,7 @@ export const PermissionRules = ({ value, onChange, error }: Props) => {
 								label="Resource"
 								value={ permission.resource }
 								onChange={ value => handleChange(index, "resource", value) }
-								data={ RESOURCES }
+								options={ RESOURCES }
 							/>
 						</Grid.Col>
 
@@ -106,7 +106,7 @@ export const PermissionRules = ({ value, onChange, error }: Props) => {
 								label="Action"
 								value={ permission.action }
 								onChange={ value => handleChange(index, "action", value) }
-								data={ ACTIONS }
+								options={ ACTIONS }
 							/>
 						</Grid.Col>
 
@@ -115,7 +115,7 @@ export const PermissionRules = ({ value, onChange, error }: Props) => {
 								label="Effect"
 								value={ permission.effect }
 								onChange={ value => handleChange(index, "effect", value as "allow" | "deny") }
-								data={ EFFECTS }
+								options={ EFFECTS }
 							/>
 						</Grid.Col>
 

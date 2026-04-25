@@ -6,7 +6,7 @@ import { Box } from "@/components"
 import { renameObjectWithAttributes } from "@/lib/collections"
 
 import {
-	createInitialSyntheticSlotProps,
+	mergeSlotPropsWithSyntheticFallback,
 	defaultNormalizeSubmitError,
 	runSubmitWithIntercept,
 	type NormalizeSubmitError,
@@ -33,8 +33,6 @@ export interface FormProps<TFormData extends Record<string, unknown> = Record<st
 	rememberKey?: string
 	submitWith?: SubmitWith<TFormData>
 }
-
-const initialSyntheticSlotProps = createInitialSyntheticSlotProps()
 
 function loadRememberedData(key: string): Record<string, unknown> | undefined {
 	try {
@@ -72,6 +70,10 @@ function FormInner<TFormData extends Record<string, unknown>>({
 	const appliedInitialDataRef = useRef(false)
 	const { registerForm, handleFormChange, setSlotProps, applyInitialData, subscribeFormData } = useFormFieldContext()
 	const slotProps = useSlotProps()
+	const latestSlotPropsRef = useRef<FormComponentSlotProps | null>(null)
+	useEffect(() => {
+		latestSlotPropsRef.current = slotProps
+	}, [slotProps])
 
 	useLayoutEffect(() => {
 		const form = wrapperRef.current?.querySelector("form") ?? null
@@ -135,21 +137,23 @@ function FormInner<TFormData extends Record<string, unknown>>({
 
 	const handleOnBefore = useCallback(
 		(visit: Parameters<NonNullable<InertiaFormProps["onBefore"]>>[0]) => {
-			if(submitWith && onBefore?.(visit)) {
+			const beforeResult = onBefore?.(visit)
+			if(beforeResult === false) return false
+			if(submitWith) {
 				const payload = visit.data
 				if(!(payload instanceof FormData)) {
+					const base = mergeSlotPropsWithSyntheticFallback(latestSlotPropsRef.current)
 					runSubmitWithIntercept(
-						payload,
+						payload as Record<string, FormDataConvertible>,
 						(data) => submitWith(data as TFormData),
 						setSlotProps,
 						normalizeSubmitError,
-						initialSyntheticSlotProps
+						base
 					)
 				}
 				return false
 			}
-
-			return onBefore?.(visit)
+			return beforeResult
 		},
 		[submitWith, setSlotProps, normalizeSubmitError, onBefore]
 	)
