@@ -1,10 +1,10 @@
 class EmployeesController < ApplicationController
   include Searchable
 
-  expose :employees, -> { search(Employee.includes_associated) }
+  expose :employees, -> { search(Employee.includes_associated.left_joins(:person)) }
   expose :employee, id: -> { params[:slug] }, find_by: :slug, scope: -> { Employee.includes_associated }
 
-  sortable_fields %w(active_at inactive_at number people.first_name people.last_name job_titles.name)
+  sortable_fields %w(active_at inactive_at number people.first_name people.last_name)
 
   strong_params :employee, permit: [
     :person_id, :active_at, :inactive_at, :number, :status, :ineligibility_reason, :termination_reason,

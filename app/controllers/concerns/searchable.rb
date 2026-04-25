@@ -167,8 +167,11 @@ module Searchable
     # if `column` is in the form 'model.field', or further chained such as 'model1.model2.field',
     # ignore the passed `model` param and use the last chained model sent in `column`
     if split_fields.length > 1
-      model = split_fields[-2].titleize.singularize.constantize
+      table_name = split_fields[-2]
       column = split_fields[-1]
+
+      schema_cache = ActiveRecord::Base.connection.schema_cache
+      return schema_cache.columns_hash(table_name)&.[](column)&.type
     end
 
     model.column_for_attribute(column).type

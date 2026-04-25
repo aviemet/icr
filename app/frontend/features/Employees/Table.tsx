@@ -16,7 +16,7 @@ export function EmployeeTable(props: TableProps) {
 					<Table.HeadCell style={ { width: 40 } }>{ "" }</Table.HeadCell>
 					<Table.HeadCell sort="people.first_name">{ t("views.employees.table.first_name") }</Table.HeadCell>
 					<Table.HeadCell sort="people.last_name">{ t("views.employees.table.last_name") }</Table.HeadCell>
-					<Table.HeadCell sort="employee.job_titles.name">{ t("views.employees.table.job_title") }</Table.HeadCell>
+					<Table.HeadCell>{ t("views.employees.table.job_title") }</Table.HeadCell>
 					<Table.HeadCell sort="active_at">{ t("views.employees.table.hire_date") }</Table.HeadCell>
 					<Table.HeadCell className="actions">{ t("views.employees.table.actions") }</Table.HeadCell>
 				</Table.Row>
