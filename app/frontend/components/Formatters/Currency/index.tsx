@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import { useTableSectionContext } from "@/components/Table/TableContext"
+import { useTableSectionContext } from "@/components/Table"
 import { useCurrency, type UseCurrencyOptions } from "@/lib/hooks"
 import { type Money } from "@/types"
 

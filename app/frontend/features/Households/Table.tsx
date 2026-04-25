@@ -1,38 +1,56 @@
-import { Table, Link, Box } from "@/components"
+import { Table, Link, Box, Group } from "@/components"
 import { EditButton, ScheduleButton } from "@/components/Button"
-import { type TableProps } from "@/components/Table/Table"
+import { type TableColumn } from "@/components/Table"
 import { Routes } from "@/lib"
 
-export function HouseholdTable(props: TableProps) {
+interface HouseholdTableProps {
+	records: Schema.HouseholdsIndex[]
+	pagination: Schema.Pagination
+	model: string
+}
+
+export function HouseholdTable({ records, pagination, model }: HouseholdTableProps) {
+	const columns: TableColumn<Schema.HouseholdsIndex>[] = [
+		{
+			accessor: "name",
+			title: "Household Name",
+			sortable: true,
+			render: (household) => <Link href={ Routes.household(household.slug) }>{ household.name }</Link>,
+		},
+		{
+			accessor: "clients",
+			title: "Clients",
+			sortable: false,
+			render: (household) => (
+				<>
+					{ household.clients.map(client => (
+						<Box key={ client.slug }>
+							<Link href={ Routes.client(client.slug) }>{ client.full_name }</Link>
+						</Box>
+					)) }
+				</>
+			),
+		},
+		{
+			accessor: "actions",
+			title: "Actions",
+			sortable: false,
+			render: (household) => (
+				<Group wrap="nowrap" gap="xs">
+					<EditButton href={ Routes.editHousehold(household.slug) } />
+					<ScheduleButton href={ Routes.scheduleHousehold(household.slug) } />
+				</Group>
+			),
+		},
+	]
+
 	return (
-		<Table { ...props }>
-			<Table.Head>
-				<Table.Row>
-					<Table.Cell sort="name">Household Name</Table.Cell>
-					<Table.Cell>Clients</Table.Cell>
-					<Table.Cell className="actions">Actions</Table.Cell>
-				</Table.Row>
-			</Table.Head>
-			<Table.Body>
-				<Table.RowIterator render={ (household: Schema.HouseholdsIndex) => (
-					<Table.Row key={ household.id }>
-						<Table.Cell>
-							<Link href={ Routes.household(household.slug) }>{ household.name }</Link>
-						</Table.Cell>
-
-						<Table.Cell>{ household.clients.map(client => (
-							<Box><Link href={ Routes.client(client.slug) }>{ client.full_name }</Link></Box>
-						))
-
-						}</Table.Cell>
-
-						<Table.Cell>
-							<EditButton href={ Routes.editHousehold(household.slug) } />
-							<ScheduleButton href={ Routes.scheduleHousehold(household.slug) } />
-						</Table.Cell>
-					</Table.Row>
-				) } />
-			</Table.Body>
-		</Table>
+		<Table.DataTable
+			columns={ columns }
+			records={ records }
+			pagination={ pagination }
+			model={ model }
+			selectable
+		/>
 	)
 }

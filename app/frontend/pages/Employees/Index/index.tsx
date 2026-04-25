@@ -17,14 +17,13 @@ const EmployeesIndex = ({ employees, pagination }: EmployeeIndexProps) => {
 		<IndexPageTemplate
 			title={ t("views.employees.index.title") }
 			model="employees"
-			rows={ employees }
 			pagination={ pagination }
 			deleteRoute={ Routes.employees() }
 			menuOptions={ [
 				{ label: t("views.employees.index.new"), href: Routes.newEmployee(), icon: <NewIcon /> },
 			] }
 		>
-			<EmployeeTable />
+			<EmployeeTable records={ employees } pagination={ pagination } model="employees" />
 		</IndexPageTemplate>
 	)
 }

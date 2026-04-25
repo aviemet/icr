@@ -13,7 +13,6 @@ const IncidentReportsIndex = ({ incident_reports, pagination }: IncidentReportIn
 		<IndexPageTemplate
 			title="IncidentReports"
 			model="incident_reports"
-			rows={ incident_reports }
 			pagination={ pagination }
 			deleteRoute={ Routes.incidentReports() }
 			menuOptions={ [

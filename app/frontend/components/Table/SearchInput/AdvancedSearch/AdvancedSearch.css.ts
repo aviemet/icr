@@ -1,6 +1,6 @@
 import { css } from "@linaria/core"
 
-import { rem, vars } from "@/lib/css"
+import { vars } from "@/lib/theme"
 
 export const paper = css`
 	position: absolute;

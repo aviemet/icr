@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 
 import { Button, Group, Text } from "@/components"
-import { useTableContext } from "@/components/Table/TableContext"
+import { useTableContext } from "@/components/Table/Provider"
 
 interface PayrollTableFooterProps {
 	employeeCount: number
@@ -17,8 +17,8 @@ export default function PayrollTableFooter({
 	approvalWindowOpen,
 }: PayrollTableFooterProps) {
 	const { t } = useTranslation()
-	const { tableState: { selected } } = useTableContext()
-	const selectedCount = selected.size
+	const { selectedRecordIds } = useTableContext()
+	const selectedCount = selectedRecordIds.length
 
 	if(employeeCount === 0 && selectedCount === 0) return null
 

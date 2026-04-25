@@ -14,7 +14,6 @@ const PeopleIndex = ({ people, pagination }: PersonIndexProps) => {
 		<IndexPageTemplate
 			title="People"
 			model="people"
-			rows={ people }
 			pagination={ pagination }
 			menuOptions={ [
 				{ label: "New Person", href: Routes.newSettingsPerson(), icon: <NewIcon /> },

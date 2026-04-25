@@ -1,49 +1,61 @@
 import { Table, Link, Group } from "@/components"
 import { EditButton, ScheduleButton } from "@/components/Button"
 import { DateTimeFormatter } from "@/components/Formatters"
-import { type TableProps } from "@/components/Table/Table"
+import { type TableColumn } from "@/components/Table"
 import { Routes } from "@/lib"
 
-export function ClientTable(props: TableProps) {
+interface ClientTableProps {
+	records: Schema.ClientsIndex[]
+	pagination: Schema.Pagination
+	model: string
+}
+
+export function ClientTable({ records, pagination, model }: ClientTableProps) {
+	const columns: TableColumn<Schema.ClientsIndex>[] = [
+		{
+			accessor: "people.first_name",
+			title: "First Name",
+			sortable: true,
+			render: (client) => <Link href={ Routes.client(client.slug) }>{ client.person.first_name }</Link>,
+		},
+		{
+			accessor: "people.last_name",
+			title: "Last Name",
+			sortable: true,
+			render: (client) => <Link href={ Routes.client(client.slug) }>{ client.person.last_name }</Link>,
+		},
+		{
+			accessor: "number",
+			title: "Client #",
+			sortable: true,
+			render: (client) => <Link href={ Routes.client(client.slug) }>{ client.number }</Link>,
+		},
+		{
+			accessor: "active_at",
+			title: "Client Since",
+			sortable: true,
+			render: (client) => <DateTimeFormatter tooltipFormats={ ["fromNow"] }>{ client.active_at }</DateTimeFormatter>,
+		},
+		{
+			accessor: "actions",
+			title: "Actions",
+			sortable: false,
+			render: (client) => (
+				<Group wrap="nowrap" gap="xs">
+					<EditButton href={ Routes.editClient(client.slug) } />
+					<ScheduleButton href={ Routes.scheduleClient(client.slug) } />
+				</Group>
+			),
+		},
+	]
+
 	return (
-		<Table { ...props }>
-			<Table.Head>
-				<Table.Row>
-					<Table.HeadCell sort="people.first_name">First Name</Table.HeadCell>
-					<Table.HeadCell sort="people.last_name">Last Name</Table.HeadCell>
-					<Table.HeadCell sort="number">Client #</Table.HeadCell>
-					<Table.HeadCell sort="active_at">Client Since</Table.HeadCell>
-					<Table.HeadCell className="actions">Actions</Table.HeadCell>
-				</Table.Row>
-			</Table.Head>
-			<Table.Body>
-				<Table.RowIterator render={ (client: Schema.ClientsIndex) => (
-					<Table.Row key={ client.id }>
-						<Table.Cell>
-							<Link href={ Routes.client(client.slug) }>{ client.person.first_name }</Link>
-						</Table.Cell>
-
-						<Table.Cell>
-							<Link href={ Routes.client(client.slug) }>{ client.person.last_name }</Link>
-						</Table.Cell>
-
-						<Table.Cell>
-							<Link href={ Routes.client(client.slug) }>{ client.number }</Link>
-						</Table.Cell>
-
-						<Table.Cell fitContent>
-							<DateTimeFormatter tooltipFormats={ ["fromNow"] }>{ client.active_at }</DateTimeFormatter>
-						</Table.Cell>
-
-						<Table.Cell>
-							<Group wrap="nowrap" gap="xs">
-								<EditButton href={ Routes.editClient(client.slug) } />
-								<ScheduleButton href={ Routes.scheduleClient(client.slug) } />
-							</Group>
-						</Table.Cell>
-					</Table.Row>
-				) } />
-			</Table.Body>
-		</Table>
+		<Table.DataTable
+			columns={ columns }
+			records={ records }
+			pagination={ pagination }
+			model={ model }
+			selectable
+		/>
 	)
 }
