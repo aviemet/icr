@@ -11,7 +11,6 @@ import {
 	ensureViewName,
 	greeting,
 	isNonEmptyString,
-	greeting,
 } from "@/lib/strings"
 
 describe("capitalize", () => {
