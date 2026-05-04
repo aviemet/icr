@@ -87,29 +87,30 @@ function renameKey(
 	}
 }
 
-export function flattenToPaths(
-	obj: Record<string, unknown>,
-	prefix = ""
-): [string, unknown][] {
-	const result: [string, unknown][] = []
-	for(const [key, value] of Object.entries(obj)) {
-		const path = prefix ? `${prefix}.${key}` : key
-		if(value !== null && typeof value === "object" && !(value instanceof Date)) {
-			if(Array.isArray(value)) {
-				value.forEach((item, index) => {
-					const indexPath = `${path}.${index}`
-					if(item !== null && typeof item === "object" && !(item instanceof Date) && !Array.isArray(item)) {
-						result.push(...flattenToPaths(item as Record<string, unknown>, indexPath))
-					} else {
-						result.push([indexPath, item])
-					}
-				})
-			} else {
-				result.push(...flattenToPaths(value as Record<string, unknown>, path))
+export function flattenToPaths(value: Record<string, unknown>) {
+	const entries: Array<[string, unknown]> = []
+
+	const walk = (current: unknown, prefix: string) => {
+		if(isRecord(current)) {
+			for(const [key, child] of Object.entries(current)) {
+				const path = prefix ? `${prefix}.${key}` : key
+				walk(child, path)
 			}
-		} else {
-			result.push([path, value])
+			return
 		}
+
+		if(Array.isArray(current)) {
+			current.forEach((child, index) => {
+				const path = prefix ? `${prefix}.${index}` : String(index)
+				walk(child, path)
+			})
+			return
+		}
+
+		if(prefix) entries.push([prefix, current])
 	}
-	return result
+
+	walk(value, "")
+
+	return entries
 }

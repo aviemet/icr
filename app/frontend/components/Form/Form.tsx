@@ -1,5 +1,5 @@
-import { type FormComponentSlotProps, type FormDataConvertible } from "@inertiajs/core"
-import { Form as InertiaForm } from "@inertiajs/react"
+import { type FormComponentProps, type FormComponentSlotProps, type FormDataConvertible } from "@inertiajs/core"
+import { Form as InertiaForm, useFormContext } from "@inertiajs/react"
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, type ReactNode } from "react"
 
 import { Box } from "@/components"
@@ -15,7 +15,7 @@ import {
 import { FormFieldProvider, useFormFieldContext } from "./FormFieldContext"
 import { useSlotProps } from "./formFieldUtils"
 
-type InertiaFormProps = React.ComponentProps<typeof InertiaForm>
+type InertiaFormData = Record<string, FormDataConvertible>
 type HTMLInputType = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
 
 const REMEMBER_PREFIX = "form:"
@@ -25,13 +25,27 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
 }
 
 export interface FormProps<TFormData extends Record<string, unknown> = Record<string, unknown>>
-	extends Omit<InertiaFormProps, "children"> {
-	children: ReactNode | ((props: FormComponentSlotProps) => ReactNode)
+	extends FormComponentProps<InertiaFormData>,
+	Omit<React.FormHTMLAttributes<HTMLFormElement>, keyof FormComponentProps<InertiaFormData> | "children">,
+	Omit<React.AllHTMLAttributes<HTMLFormElement>, keyof FormComponentProps<InertiaFormData> | "children"> {
+
+	children: ReactNode
 	initialData?: TFormData
 	normalizeSubmitError?: NormalizeSubmitError
 	railsAttributes?: boolean
 	rememberKey?: string
 	submitWith?: SubmitWith<TFormData>
+}
+
+function InertiaFormSlotPropsSync() {
+	const inertiaForm = useFormContext()
+	const { setSlotProps } = useFormFieldContext()
+
+	useLayoutEffect(() => {
+		if(inertiaForm) setSlotProps(inertiaForm)
+	}, [inertiaForm, setSlotProps])
+
+	return null
 }
 
 function loadRememberedData(key: string): Record<string, unknown> | undefined {
@@ -57,11 +71,11 @@ function FormInner<TFormData extends Record<string, unknown>>({
 	...props
 }: FormProps<TFormData>) {
 
-	const composedTransform = useMemo((): ((data: Record<string, FormDataConvertible>) => Record<string, FormDataConvertible>) | undefined => {
+	const composedTransform = useMemo((): ((data: InertiaFormData) => InertiaFormData) | undefined => {
 		if(!railsAttributes && !transform) return undefined
 
-		return (data: Record<string, FormDataConvertible>) => {
-			const next = railsAttributes ? renameObjectWithAttributes<Record<string, FormDataConvertible>>(data) : data
+		return (data: InertiaFormData) => {
+			const next = railsAttributes ? renameObjectWithAttributes(data) : data
 			return transform ? transform(next) : next
 		}
 	}, [railsAttributes, transform])
@@ -136,7 +150,7 @@ function FormInner<TFormData extends Record<string, unknown>>({
 	)
 
 	const handleOnBefore = useCallback(
-		(visit: Parameters<NonNullable<InertiaFormProps["onBefore"]>>[0]) => {
+		(visit: Parameters<NonNullable<FormComponentProps<InertiaFormData>["onBefore"]>>[0]) => {
 			const beforeResult = onBefore?.(visit)
 			if(beforeResult === false) return false
 			if(submitWith) {
@@ -158,22 +172,15 @@ function FormInner<TFormData extends Record<string, unknown>>({
 		[submitWith, setSlotProps, normalizeSubmitError, onBefore]
 	)
 
-	const renderChildren = useCallback(
-		(slotProps: FormComponentSlotProps) => {
-			queueMicrotask(() => setSlotProps(slotProps))
-			return typeof children === "function" ? children(slotProps) : children
-		},
-		[children, setSlotProps]
-	)
-
 	return (
 		<Box ref={ wrapperRef } onInput={ handleInput } onChange={ handleInput }>
-			<InertiaForm
+			<InertiaForm<InertiaFormData>
 				onBefore={ handleOnBefore }
 				transform={ composedTransform }
 				{ ...props }
 			>
-				{ renderChildren }
+				<InertiaFormSlotPropsSync />
+				{ children }
 			</InertiaForm>
 		</Box>
 	)

@@ -11,8 +11,13 @@ alwaysApply: true
    - Run the relevant specs (and any obviously related specs) before finishing. Fix any failures.
    - Prefer adding a focused spec file for new services/features; run the full spec suite for the touched area.
 3. When working on payroll or timesheet workflow features (e.g. payroll index, pay periods, timesheet approval), read and follow the plan at .cursor/plans/payroll_workflow_redesign_80191109.plan.md and document progress in .cursor/icr.mdx (Feature Documentation or Phase 6/7 checklist).
-4. Before ending ANY response, if you've learned anything useful about project-specific architectural details that are NOT immediately obvious from reading the code, you MUST update .cursor/icr.mdx with this information
-5. When updating .cursor/icr.mdx:
-   - Document only (a) non-obvious quirks or gotchas, or (b) overarching design/architectural decisions. Do not document implementation details that are obvious from reading the code or that will change as features iterate (no variable names, field names, or step-by-step flow).
-   - Only add new information not already documented
+4. **`.cursor/icr.mdx` updates (high bar, opt-in):** Add to this file **only** when you learned something **specific to this application or this repo's conventions** that a competent reader would **not** reasonably infer from reading the relevant code paths in a few minutes. When in doubt, **do not** add a note. Silence is correct for most tasks.
+5. **Never** put the following in `.cursor/icr.mdx` (these are obvious, universal, or belong in normal code/commits, not project lore):
+   - Language, framework, or package-manager defaults and hygiene (e.g. direct imports need declared dependencies, how Yarn/npm works, generic Vitest/Vite behavior)
+   - Anything that restates what the code or `package.json` already says plainly
+   - Bug fix or incident play-by-play ("we forgot X, then added Y") unless it encodes a **lasting** domain or integration rule for this repo
+   - Variable names, field names, one-off flows, or details that will churn with the next refactor
+6. When you **do** update `.cursor/icr.mdx` (per item 4):
+   - Document only (a) non-obvious quirks or gotchas tied to **this** codebase, or (b) overarching design/architectural decisions that stabilize how the app is built or operated
+   - Only add information not already documented
    - Place information in the appropriate section; if no appropriate section exists, create one

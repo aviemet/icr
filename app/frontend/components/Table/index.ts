@@ -3,7 +3,7 @@ import { Pagination } from "./Pagination"
 import { TableProvider, useTableContext, useTableSectionContext } from "./Provider"
 import { SearchInput, AdvancedSearch, useAdvancedSearch, SearchDateInput, SearchDateTypeInput } from "./SearchInput"
 import { Section } from "./Section"
-import { Table as TableBase, Head, Body, Footer, Row, Cell, HeadCell } from "./Table"
+import { Table as TableBase, Head, Body, Footer, Row, Cell, HeadCell, type TableProps } from "./Table"
 
 export {
 	DataTable, type TableDataTableProps,
@@ -35,3 +35,4 @@ export const Table = Object.assign(TableBase, {
 })
 
 export { type DataTableColumn as TableColumn } from "mantine-datatable"
+export { type TableProps }

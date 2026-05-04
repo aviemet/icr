@@ -1,9 +1,8 @@
 import { useTranslation } from "react-i18next"
 
-import { Table, Link, Group, Avatar } from "@/components"
+import { Table, Link, Group, Avatar, type TableColumn } from "@/components"
 import { EditButton, ScheduleButton } from "@/components/Button"
 import { DateTimeFormatter } from "@/components/Formatters"
-import { TableColumn } from "@/components/Table"
 import { Routes } from "@/lib"
 
 interface EmployeeTableProps {

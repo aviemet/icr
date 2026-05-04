@@ -1,8 +1,8 @@
 interface ConditionalWrapperProps {
-	children: JSX.Element | React.ReactNode
+	children: React.ReactNode
 	condition: boolean
-	wrapper: (children: JSX.Element | React.ReactNode) => JSX.Element
-	elseWrapper?: (children: JSX.Element | React.ReactNode) => JSX.Element
+	wrapper: (children: React.ReactNode) => React.ReactNode
+	elseWrapper?: (children: React.ReactNode) => React.ReactNode
 }
 
 export function ConditionalWrapper({ children, condition, wrapper, elseWrapper }: ConditionalWrapperProps) {

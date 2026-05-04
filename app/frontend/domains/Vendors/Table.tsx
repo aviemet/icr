@@ -1,6 +1,5 @@
-import { Table, Link } from "@/components"
+import { Table, Link, type TableColumn } from "@/components"
 import { EditButton } from "@/components/Button"
-import { type TableColumn } from "@/components/Table"
 import { Routes } from "@/lib"
 
 interface VendorTableProps {

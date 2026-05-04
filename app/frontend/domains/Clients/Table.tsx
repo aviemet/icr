@@ -1,7 +1,6 @@
-import { Table, Link, Group } from "@/components"
+import { Table, Link, Group, type TableColumn } from "@/components"
 import { EditButton, ScheduleButton } from "@/components/Button"
 import { DateTimeFormatter } from "@/components/Formatters"
-import { type TableColumn } from "@/components/Table"
 import { Routes } from "@/lib"
 
 interface ClientTableProps {
