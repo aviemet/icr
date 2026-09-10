@@ -1,4 +1,5 @@
-import { cloneDeep, isPlainObject, unset } from "lodash-es"
+import { cloneDeep, isPlainObject } from "es-toolkit"
+import { unset } from "es-toolkit/compat"
 
 export { NestedObject } from "./Collections/NestedObject"
 export { NestedURLSearchParams } from "./Collections/NestedURLSearchParams"

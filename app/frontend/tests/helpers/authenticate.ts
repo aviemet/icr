@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios, { create } from "axios"
 import { beforeAll } from "vitest"
 
 beforeAll(async () => {
@@ -10,10 +10,7 @@ beforeAll(async () => {
 	})
 })
 
-export const axiosInstance = axios.create({
+export const axiosInstance = create({
 	baseURL: "http://localhost:3000",
 	withCredentials: true,
-	// headers: {
-	// 	Cookie: Object.entries(cookies).map(([key, value]) => `${key}=${value}`).join('; '),
-	// },
 })

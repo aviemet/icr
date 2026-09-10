@@ -1,6 +1,6 @@
 import { css } from "@linaria/core"
 
-import { vars, theme } from "@/lib/css"
+import { vars, theme } from "@/lib/theme"
 
 /**
  * AppShell

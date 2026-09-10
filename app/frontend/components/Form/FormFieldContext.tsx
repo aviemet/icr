@@ -1,5 +1,5 @@
 import { type FormComponentSlotProps, formDataToObject } from "@inertiajs/core"
-import { isEqual, pick } from "lodash-es"
+import { isEqual, pick } from "es-toolkit"
 import React, { useRef, useState } from "react"
 
 import { flattenToPaths } from "@/lib"

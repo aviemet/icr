@@ -1,6 +1,7 @@
 import { css } from "@linaria/core"
 
-import { rem, vars } from "@/lib/css"
+import { vars } from "@/lib/theme"
+import { rem } from "@/lib/units"
 
 export const loginWrapper = css`
 	width: 100%;

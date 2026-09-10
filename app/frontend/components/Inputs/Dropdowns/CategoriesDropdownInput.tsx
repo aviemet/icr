@@ -1,4 +1,4 @@
-import { isEmpty } from "lodash-es"
+import { isEmpty } from "es-toolkit/compat"
 import React, { useMemo } from "react"
 
 import { Select } from "@/components/Inputs"

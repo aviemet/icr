@@ -1,6 +1,6 @@
 import { css } from "@linaria/core"
 
-import { vars } from "@/lib/css"
+import { vars } from "@/lib/theme"
 
 
 export const borderColor = `light-dark(${ vars.colors.gray[5] }, ${ vars.colors.dark[2] })`

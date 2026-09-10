@@ -16,7 +16,7 @@ const PasswordsNew = () => {
 				{ t("views.devise.shared.login") }
 			</Link>,
 		] }>
-			<Form action={ Routes.newUserPassword() } initialData={ defaultData }>
+			<Form action={ Routes.newUserPassword() } method="post" initialData={ defaultData }>
 				<Grid>
 
 					<Grid.Col>

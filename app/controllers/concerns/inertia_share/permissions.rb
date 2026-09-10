@@ -12,7 +12,9 @@ module InertiaShare::Permissions
   private
 
   def cached_permissions
-    Rails.cache.fetch("user_permissions/#{current_user&.id}", expires_in: 5.minutes) do
+    return {} if current_user.nil?
+
+    Rails.cache.fetch("user_permissions/#{current_user.id}", expires_in: 5.minutes) do
       build_permissions_hash
     end
   end

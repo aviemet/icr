@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 
-import { Box, Grid, Title, Link } from "@/components"
+import { Box, Grid, Title, Link, Stack } from "@/components"
 import { Form, Field, FormConsumer, Submit, type FormConsumerState } from "@/components/Form"
 import { PasswordInput, TextInput } from "@/components/Inputs"
 import { AuthPaperLayout } from "@/features"
@@ -35,7 +35,7 @@ const Register = () => {
 				{ t("views.devise.shared.login") }
 			</Link>,
 		] }>
-			<Form action={ Routes.userRegistration() } initialData={ defaultData }>
+			<Form action={ Routes.userRegistration() } method="post" initialData={ defaultData }>
 				<FormConsumer onChange={ handleFormChange } />
 				<Grid>
 

@@ -1,4 +1,4 @@
-import { isPlainObject } from "lodash-es"
+import { isPlainObject } from "es-toolkit"
 
 /**
  * Recursively check each prop value and convert ISO strings to dates

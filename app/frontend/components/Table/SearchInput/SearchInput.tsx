@@ -2,7 +2,7 @@ import { type VisitOptions } from "@inertiajs/core"
 import { router } from "@inertiajs/react"
 import { ActionIcon, Box } from "@mantine/core"
 import { useSessionStorage } from "@mantine/hooks"
-import { debounce } from "lodash"
+import { debounce } from "es-toolkit"
 import React, { useMemo, useEffect } from "react"
 
 import { SearchIcon, CrossIcon } from "@/components/Icons"

@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { chunk } from "lodash-es"
+import { chunk } from "es-toolkit"
 import { CSSProperties, useMemo, useRef, useState } from "react"
 
 import { useCalendarContext, EventResources } from "@/components/Calendar"

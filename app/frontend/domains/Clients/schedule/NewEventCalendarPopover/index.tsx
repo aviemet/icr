@@ -1,5 +1,5 @@
 import dayjs from "dayjs"
-import { isEmpty } from "lodash-es"
+import { isEmpty } from "es-toolkit/compat"
 import { useCallback, useEffect, useRef } from "react"
 
 import { BaseCalendarEvent, useCalendarContext } from "@/components/Calendar"

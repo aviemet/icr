@@ -22,7 +22,7 @@ const ConfirmationsNew = ({ user }: IConfirmationsNew) => {
 				{ t("views.devise.shared.login") }
 			</Link>,
 		] }>
-			<Form action={ Routes.userConfirmation() } initialData={ { user } }>
+			<Form action={ Routes.userConfirmation() } method="post" initialData={ { user } }>
 				<Grid>
 
 					<Grid.Col>

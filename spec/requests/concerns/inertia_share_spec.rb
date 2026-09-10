@@ -42,6 +42,13 @@ RSpec.describe "InertiaShare Concerns", type: :request do
   end
 
   describe "shared data when unauthenticated", inertia: true do
+    it "does not compute policy permissions on login" do
+      get "/login"
+
+      expect(response).to be_successful
+      expect_inertia.to have_props(permissions: {})
+    end
+
     it "leaves menu nil (InertiaShare::Menu else branch)" do
       allow_any_instance_of(ApplicationController).to receive(:authenticate_user!)
 

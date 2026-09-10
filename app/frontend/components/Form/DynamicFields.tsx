@@ -1,6 +1,5 @@
 import clsx from "clsx"
-import get from "lodash-es/get"
-import set from "lodash-es/set"
+import { get, set } from "es-toolkit/compat"
 import { useCallback, useState, type ReactNode } from "react"
 
 import { Box, Button, Flex, Paper } from "@/components"

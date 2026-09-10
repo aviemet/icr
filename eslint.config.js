@@ -1,3 +1,4 @@
+import { fixupConfigRules } from "@eslint/compat"
 import json from "@eslint/json"
 import stylistic from "@stylistic/eslint-plugin"
 import tsParser from "@typescript-eslint/parser"
@@ -5,7 +6,11 @@ import importPlugin from "eslint-plugin-import"
 import jsoncPlugin from "eslint-plugin-jsonc"
 import jsxA11yPlugin from "eslint-plugin-jsx-a11y"
 import reactHooksPlugin from "eslint-plugin-react-hooks"
-import { parseForESLint } from "jsonc-eslint-parser"
+import { parseForESLint as parseJsoncForESLint } from "jsonc-eslint-parser"
+
+const importLintGlobs = [
+	"**/*.{js,cjs,mjs,jsx,ts,mts,cts,tsx}",
+]
 
 const ignores = [
 	"app/javascript/**/*",
@@ -13,6 +18,8 @@ const ignores = [
 	"app/frontend/lib/routes/urlParams.ts",
 	"app/frontend/lib/routes/routes.js",
 	"app/frontend/lib/routes/routes.d.ts",
+	"coverage/**/*",
+	"app/frontend/coverage/**/*",
 	"tmp/**/*",
 	"public/**/*",
 	".vscode/**/*",
@@ -20,6 +27,9 @@ const ignores = [
 ]
 
 export default [
+	{
+		ignores,
+	},
 	{
 		files: ["**/*.mjs"],
 		languageOptions: {
@@ -37,8 +47,13 @@ export default [
 			},
 		},
 	},
-	importPlugin.flatConfigs.recommended,
-	importPlugin.flatConfigs.typescript,
+	...fixupConfigRules([
+		importPlugin.flatConfigs.recommended,
+		importPlugin.flatConfigs.typescript,
+	]).map((config) => ({
+		...config,
+		files: importLintGlobs,
+	})),
 	// Typescript/Javascript files
 	{
 		...stylistic.configs.customize({
@@ -46,7 +61,6 @@ export default [
 		}),
 
 		files: ["**/*.{js,jsx,ts,tsx}"],
-		ignores,
 		languageOptions: {
 			ecmaVersion: "latest",
 			sourceType: "module",
@@ -128,7 +142,11 @@ export default [
 				functions: "only-multiline",
 			}],
 			"@stylistic/multiline-ternary": ["error", "always-multiline"],
-			"@stylistic/space-before-function-paren": ["error", "never"],
+			"@stylistic/space-before-function-paren": ["error", {
+				anonymous: "never",
+				named: "never",
+				asyncArrow: "always",
+			}],
 			"@stylistic/arrow-spacing": "error",
 			"@stylistic/space-before-blocks": ["error", "always"],
 			"@stylistic/no-multiple-empty-lines": ["error", {
@@ -143,7 +161,7 @@ export default [
 					"!": false,
 					"!!": false,
 					"+": true,
-					"-": true,
+					"-": false,
 				},
 			}],
 			"@stylistic/comma-spacing": ["error", {
@@ -162,7 +180,7 @@ export default [
 					"balanced": true,
 				},
 			}],
-			"no-trailing-spaces": ["error", {
+			"@stylistic/no-trailing-spaces": ["error", {
 				skipBlankLines: false,
 				ignoreComments: false,
 			}],
@@ -172,7 +190,7 @@ export default [
 			}],
 			"eqeqeq": "error",
 			"no-console": "warn",
-			"eol-last": ["error", "always"],
+			"@stylistic/eol-last": ["error", "always"],
 			"import/order": ["error", {
 				"groups": [
 					"builtin",
@@ -193,7 +211,7 @@ export default [
 			"import/newline-after-import": "error",
 			"import/consistent-type-specifier-style": ["error", "prefer-inline"],
 			"import/no-named-as-default": "off",
-			"semi": ["error", "never"],
+			"@stylistic/semi": ["error", "never"],
 			"@stylistic/quotes": ["error", "double", {
 				avoidEscape: true,
 				allowTemplateLiterals: "always",
@@ -205,24 +223,45 @@ export default [
 	// Typescript declaration files
 	{
 		files: ["**/*.d.ts"],
-		ignores,
+		languageOptions: {
+			parser: tsParser,
+			parserOptions: {
+				ecmaVersion: "latest",
+				sourceType: "module",
+			},
+		},
 		rules: {
 			"no-unused-vars": "off",
 			"@typescript-eslint/member-delimiter-style": "off",
 			"@stylistic/ts/indent": "off",
 		},
 	},
-	// Json files
+	// JSONC files (tsconfig, etc.)
 	{
-		files: ["**/*.json", "**/*.jsonc", "**/*.json5"],
+		files: ["**/tsconfig.json", "**/tsconfig.*.json", "**/*.jsonc", "**/*.json5"],
+		plugins: {
+			jsonc: jsoncPlugin,
+		},
+		languageOptions: {
+			parser: { parseForESLint: parseJsoncForESLint },
+		},
+		rules: {
+			"jsonc/no-dupe-keys": "error",
+			"jsonc/indent": ["error", 2, { ignoredNodes: ["Property"] }],
+			"@stylistic/no-multi-spaces": "off",
+		},
+	},
+	// Strict JSON files
+	{
+		files: ["**/*.json"],
+		ignores: ["**/tsconfig.json", "**/tsconfig.*.json"],
 		language: "json/json",
-		ignores,
 		plugins: {
 			jsonc: jsoncPlugin,
 			json,
 		},
 		languageOptions: {
-			parser: { parseForESLint },
+			parser: { parseForESLint: parseJsoncForESLint },
 		},
 		rules: {
 			"json/no-duplicate-keys": "error",
@@ -233,7 +272,6 @@ export default [
 	// CSS-in-TS files
 	{
 		files: ["**/*.css.ts"],
-		ignores,
 		languageOptions: {
 			parser: tsParser,
 		},

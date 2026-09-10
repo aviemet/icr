@@ -8,12 +8,31 @@ type CustomMantineTheme = Omit<MantineTheme, "spacing" | "other"> & {
 		xxl: string
 		xxs: string
 	}>
-	other: any
+	other: {
+		header: {
+			height: number
+		}
+		navbar: {
+			width: {
+				closed: number
+				open: number
+			}
+		}
+		footer: {
+			height: number
+		}
+		table: {
+			sortButtonHeight: number
+			sortButtonWidth: number
+		}
+	}
 }
+
+export type CustomThemeOther = CustomMantineTheme["other"]
 
 export const defaultColor = "blue"
 
-const themeObject: Partial<CustomMantineTheme> = {
+export const themeObject: Partial<CustomMantineTheme> = {
 	breakpoints,
 	defaultRadius: "sm",
 	spacing: {
@@ -81,8 +100,4 @@ const themeObject: Partial<CustomMantineTheme> = {
 
 export const theme = mergeMantineTheme(DEFAULT_THEME, createTheme(themeObject))
 
-export const vars = themeToVars(mergeMantineTheme(theme, {
-
-}))
-
-export { themeObject }
+export const vars = themeToVars(mergeMantineTheme(theme, {}))

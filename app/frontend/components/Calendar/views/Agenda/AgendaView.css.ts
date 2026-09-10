@@ -2,7 +2,7 @@ import { css } from "@linaria/core"
 
 import { borderColor } from "../../Calendar.css"
 
-import { vars } from "@/lib/css"
+import { vars } from "@/lib/theme"
 
 export const agendaView = css`
 	height: 100%;

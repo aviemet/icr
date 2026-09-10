@@ -28,7 +28,7 @@ const Login = () => {
 				{ t("views.devise.login.register") }
 			</Link>,
 		] }>
-			<Form action={ Routes.newUserSession() } initialData={ defaultData }>
+			<Form action={ Routes.newUserSession() } method="post" initialData={ defaultData }>
 				<Grid>
 
 					<Grid.Col>
