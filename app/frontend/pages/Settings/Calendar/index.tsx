@@ -1,29 +1,23 @@
 import { Box, Divider, Grid, Information, Label, Stack, Text } from "@/components"
-import { Form, Submit, Switch } from "@/components/Form"
-import { Select } from "@/components/Form/Inputs"
+import { Form, Submit } from "@/components/Form"
+import { Select, Switch } from "@/components/Inputs"
 import { Routes, withLayout } from "@/lib"
 
 import ShiftTitleFormatInput from "./ShiftTitleFormatInput"
-
-export type CalendarSettingsFormData = {
-	settings: Schema.Setting
-}
 
 interface CalendarSettingsProps {
 	settings: Schema.Setting
 }
 
-const splitEventsName = "calendar_split_events_show_original_times"
+const splitEventsName = "settings.calendar_split_events_show_original_times"
 
 const CalendarSettings = ({ settings }: CalendarSettingsProps) => {
 	return (
 		<Box>
-			<Form<CalendarSettingsFormData>
-				to={ Routes.settings() }
-				model="settings"
+			<Form
+				action={ Routes.settings() }
 				method="patch"
-				data={ { settings } }
-				remember={ false }
+				initialData={ { settings } }
 			>
 				<Grid>
 					<Grid.Col span={ 12 }>
@@ -45,7 +39,7 @@ const CalendarSettings = ({ settings }: CalendarSettingsProps) => {
 					</Grid.Col>
 
 					<Grid.Col span={ { lg: 4, md: 6, xs: 12 } }>
-						<Select name="calendar_layout_style" label="Strategy" options={ [
+						<Select name="settings.calendar_layout_style" label="Strategy" options={ [
 							{ label: "Split", value: "split" },
 							{ label: "Stack", value: "stack" },
 							{ label: "Span", value: "span" },

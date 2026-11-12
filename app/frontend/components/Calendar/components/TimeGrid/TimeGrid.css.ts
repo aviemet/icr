@@ -2,8 +2,8 @@ import { css } from "@linaria/core"
 
 import { eventWrapper } from "./components/Event/Event.css"
 
-import { rem, vars } from "@/lib/css"
-
+import { vars } from "@/lib/theme"
+import { rem } from "@/lib/units"
 
 const rowHeight = rem(60)
 const timeGridWidth = rem(50)

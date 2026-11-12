@@ -1,7 +1,7 @@
-import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
-
 import { Grid } from "@/components"
-import { Form, TextInput, Submit } from "@/components/Form"
+import { Form, Submit } from "@/components/Form"
+import { TextInput } from "@/components/Inputs"
+import { type HTTPVerb } from "@/lib"
 
 type TVendorFormData = {
 	vendor: Schema.VendorsFormData
@@ -10,24 +10,23 @@ type TVendorFormData = {
 export interface VendorFormProps {
 	to: string
 	method?: HTTPVerb
-	onSubmit?: (object: UseFormProps<TVendorFormData>) => boolean | void
 	vendor: Schema.VendorsFormData
 }
 
-export function VendorForm({ method = "post", vendor, ...props }: VendorFormProps) {
+export function VendorForm({ method = "post", to, vendor, ...props }: VendorFormProps) {
 	return (
-		<Form
-			model="vendor"
-			data={ { vendor } }
+		<Form<TVendorFormData>
+			action={ to }
+			initialData={ { vendor } }
 			method={ method }
 			{ ...props }
 		>
 			<Grid>
 				<Grid.Col>
-					<TextInput name="name" label="Name" />
+					<TextInput name="vendor.name" label="Name" />
 				</Grid.Col>
 				<Grid.Col>
-					<TextInput name="notes" label="Notes" />
+					<TextInput name="vendor.notes" label="Notes" />
 				</Grid.Col>
 
 				<Grid.Col>

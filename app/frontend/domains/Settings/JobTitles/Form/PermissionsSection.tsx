@@ -1,22 +1,19 @@
-import { useForm } from "use-inertia-form"
-
 import { Grid, Table, Text, Title } from "@/components"
-import { FormGroup } from "@/components/Form"
+import { useFormField } from "@/components/Form"
 import { aOrAn } from "@/lib/strings"
 
 import { ColumnToggle } from "./ColumnToggle"
-import { tableRows, type JobTitleFormData } from "./formData"
+import { tableRows } from "./formData"
 import { SwitchRow } from "./SwitchRow"
 
 export function PermissionsSection() {
-	const { getData } = useForm<JobTitleFormData>()
+	const [jobTitleName] = useFormField("job_title.name")
 
 	return (
-
-		<FormGroup model="permissions">
+		<>
 			<Grid.Col>
 				<Title order={ 3 }>Permissions</Title>
-				<Text>Select what { aOrAn(getData("job_title.name"), { articleOnly: true }) } <strong>{ getData("job_title.name") }</strong> has access to do in the application</Text>
+				<Text>Select what { aOrAn(String(jobTitleName ?? ""), { articleOnly: true }) } <strong>{ String(jobTitleName ?? "") }</strong> has access to do in the application</Text>
 			</Grid.Col>
 
 			<Grid.Col>
@@ -55,12 +52,10 @@ export function PermissionsSection() {
 					</Table.Head>
 
 					<Table.Body>{ tableRows.map(row => (
-
 						<SwitchRow key={ row.model } { ...row } />
-
 					)) }</Table.Body>
 				</Table>
 			</Grid.Col>
-		</FormGroup>
+		</>
 	)
 }

@@ -1,6 +1,6 @@
 class Timesheets::PersistedSerializer < TimesheetSerializer
   include Persisted
 
-  attributes(
-  )
+  attributes
+
 end

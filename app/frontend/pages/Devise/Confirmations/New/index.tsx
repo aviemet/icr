@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next"
 
-import { Stack, Title, Text, Link, Box } from "@/components"
-import { Field, Form, TextInput, Submit } from "@/components/Form"
+import { Grid, Title, Link, Box } from "@/components"
+import { Form, Submit } from "@/components/Form"
+import { TextInput } from "@/components/Inputs"
 import { AuthPaperLayout } from "@/features"
 import { Routes, withLayout } from "@/lib"
 
@@ -21,39 +22,30 @@ const ConfirmationsNew = ({ user }: IConfirmationsNew) => {
 				{ t("views.devise.shared.login") }
 			</Link>,
 		] }>
-			<Form
-				model="user"
-				data={ { user } }
-				to={ Routes.userConfirmation() }
-			>
-				<Stack gap="lg" justify="space-between" flex={ 1 }>
+			<Form action={ Routes.userConfirmation() } method="post" initialData={ { user } }>
+				<Grid>
 
-					<Stack gap="md">
-						<Title order={ 3 }>{ t("views.devise.confirmations.new.title") }</Title>
-						<Text component="p" size="sm">
-							{ t("views.devise.confirmations.new.body_sent") }
-						</Text>
-						<Text component="p" size="sm">
-							{ t("views.devise.confirmations.new.body_resend") }
-						</Text>
+					<Grid.Col>
+						<Box>
+							<Title order={ 3 }>Please check your email</Title>
+							<p>An email has been sent to the address provided. Please follow the link to confirm your account.</p>
+							<p>If you don&apos;t receive an email, use the form below to resend it.</p>
+						</Box>
+					</Grid.Col>
 
-						<Field>
-							<TextInput
-								name="email"
-								placeholder={ t("views.devise.shared.email") }
-								autoComplete="Email"
-								required
-							/>
-						</Field>
-					</Stack>
+					<Grid.Col>
+						<Box>
+							<TextInput name="user.email" placeholder="Email" autoComplete="Email" required />
+						</Box>
+					</Grid.Col>
 
-					<Box>
-						<Field>
-							<Submit className="large">{ t("views.devise.confirmations.new.submit") }</Submit>
-						</Field>
-					</Box>
+					<Grid.Col>
+						<Box>
+							<Submit className="large">Resend confirmation instructions</Submit>
+						</Box>
+					</Grid.Col>
 
-				</Stack>
+				</Grid>
 			</Form>
 		</AuthPaperLayout>
 	)

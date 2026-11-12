@@ -1,7 +1,7 @@
-import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
-
 import { Grid } from "@/components"
-import { Form, TextInput, Submit } from "@/components/Form"
+import { Form, Submit } from "@/components/Form"
+import { TextInput } from "@/components/Inputs"
+import { type HTTPVerb } from "@/lib"
 
 type PersonFormData = {
 	person: Schema.PeopleFormData
@@ -10,44 +10,36 @@ type PersonFormData = {
 export interface PersonFormProps {
 	to: string
 	method?: HTTPVerb
-	onSubmit?: (object: UseFormProps<PersonFormData>) => boolean | void
 	person: Schema.PeopleFormData
 }
 
-export function PersonForm({ method = "post", person, ...props }: PersonFormProps) {
+export function PersonForm({ method = "post", to, person, ...props }: PersonFormProps) {
 	return (
-		<Form
-			model="person"
-			data={ { person } }
+		<Form<PersonFormData>
+			action={ to }
+			initialData={ { person } }
 			method={ method }
 			{ ...props }
 		>
 			<Grid>
-
 				<Grid.Col>
-					<TextInput name="first_name" label="First Name" />
+					<TextInput name="person.first_name" label="First Name" />
 				</Grid.Col>
-
 				<Grid.Col>
-					<TextInput name="middle_name" label="Middle Name" />
+					<TextInput name="person.middle_name" label="Middle Name" />
 				</Grid.Col>
-
 				<Grid.Col>
-					<TextInput name="last_name" label="Last Name" />
+					<TextInput name="person.last_name" label="Last Name" />
 				</Grid.Col>
-
 				<Grid.Col>
-					<TextInput name="email" label="Email" />
+					<TextInput name="person.email" label="Email" />
 				</Grid.Col>
-
 				<Grid.Col>
-					<TextInput name="password" label="Password" />
+					<TextInput name="person.password" label="Password" />
 				</Grid.Col>
-
 				<Grid.Col>
 					<Submit>{ person.id ? "Update" : "Create" } Person</Submit>
 				</Grid.Col>
-
 			</Grid>
 		</Form>
 	)

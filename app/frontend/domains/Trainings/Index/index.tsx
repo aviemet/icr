@@ -1,6 +1,5 @@
-import { Group, Table, Link } from "@/components"
+import { Group, Table, Link, type TableColumn } from "@/components"
 import { EditButton } from "@/components/Button"
-import { type TableColumn } from "@/components/Table"
 import { Routes } from "@/lib"
 
 interface TrainingTableProps {

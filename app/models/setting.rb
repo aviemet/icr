@@ -12,6 +12,9 @@
 #
 #  index_settings_on_var  (var) UNIQUE
 #
+
+WEEKDAYS = %w(monday tuesday wednesday thursday friday saturday sunday).freeze
+
 class Setting < RailsSettings::Base
   include Renderable
 
@@ -35,9 +38,7 @@ class Setting < RailsSettings::Base
       cache_storage.delete(cache_key)
     end
 
-    def clear_cache
-      self.class.clear_cache
-    end
+    delegate :clear_cache, to: :class
   end
 
   PAY_PERIOD_TYPES = {
@@ -45,6 +46,12 @@ class Setting < RailsSettings::Base
     bi_weekly: "bi_weekly",
     semi_monthly: "semi_monthly",
     monthly: "monthly",
+  }.freeze
+
+  PAYROLL_DUE_DATE_RULE_TYPES = {
+    days_after_period_end: "days_after_period_end",
+    day_of_week_after_period_end: "day_of_week_after_period_end",
+    day_of_month: "day_of_month",
   }.freeze
 
   DEFAULT_SETTINGS = {
@@ -59,6 +66,10 @@ class Setting < RailsSettings::Base
     payroll_period_day: "monday",
     payroll_period_date: "1",
     payroll_period_date_2: "15",
+    payroll_due_date_rule_type: PAYROLL_DUE_DATE_RULE_TYPES[:days_after_period_end],
+    payroll_due_date_days: 5,
+    payroll_due_date_day_of_week: "tuesday",
+    payroll_due_date_day_of_month: "5",
     calendar_layout_style: "split",
     calendar_split_events_show_original_times: false
   }.freeze
@@ -94,7 +105,7 @@ class Setting < RailsSettings::Base
   }
   field :payroll_period_day, type: :string, default: "monday", validates: {
     presence: true,
-    inclusion: { in: %w(monday tuesday wednesday thursday friday saturday sunday) }
+    inclusion: { in: WEEKDAYS }
   }
 
   field :payroll_period_date, type: :string, default: "1", validates: {
@@ -104,6 +115,23 @@ class Setting < RailsSettings::Base
   field :payroll_period_date_2, type: :string, default: "15", validates: {
     presence: true,
     inclusion: { in: %w(15 20 -1) }
+  }
+
+  field :payroll_due_date_rule_type, type: :string, default: DEFAULT_SETTINGS[:payroll_due_date_rule_type], validates: {
+    presence: true,
+    inclusion: { in: PAYROLL_DUE_DATE_RULE_TYPES.values }
+  }
+  field :payroll_due_date_days, type: :integer, default: DEFAULT_SETTINGS[:payroll_due_date_days], validates: {
+    presence: true,
+    numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 31 }
+  }
+  field :payroll_due_date_day_of_week, type: :string, default: DEFAULT_SETTINGS[:payroll_due_date_day_of_week], validates: {
+    presence: true,
+    inclusion: { in: WEEKDAYS }
+  }
+  field :payroll_due_date_day_of_month, type: :string, default: DEFAULT_SETTINGS[:payroll_due_date_day_of_month], validates: {
+    presence: true,
+    inclusion: { in: %w(1 5 10 15 20 25 -1) }
   }
 
   layout_styles = %w(span stack split)

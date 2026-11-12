@@ -1,5 +1,6 @@
 import { Grid } from "@/components"
-import { Form, Textarea, Submit } from "@/components/Form"
+import { Form, Submit } from "@/components/Form"
+import { Textarea } from "@/components/Inputs"
 import { Routes } from "@/lib"
 
 export interface CloseApplicationFormProps {
@@ -9,19 +10,18 @@ export interface CloseApplicationFormProps {
 export function CloseApplicationForm({ employee }: CloseApplicationFormProps) {
 	return (
 		<Form
-			model="employee"
-			method="put"
-			to={ Routes.statusEmployee(employee.slug) }
-			data={ {
+			action={ Routes.statusEmployee(employee.slug) }
+			initialData={ {
 				employee: {
 					status: "application_withdrawn",
 				},
 			} }
+			method="put"
 		>
 			<Grid>
 				<Grid.Col span={ { xxs: 12 } }>
 					<Textarea
-						name="ineligibility_reason"
+						name="employee.ineligibility_reason"
 						label="Reason (Optional)"
 						placeholder="Enter reason for closing application"
 					/>

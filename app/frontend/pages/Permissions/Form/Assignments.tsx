@@ -1,15 +1,13 @@
 import { useTranslation } from "react-i18next"
-import { NestedObject } from "use-inertia-form"
 
-import { Box, Button, Grid } from "@/components"
-import { Select, Switch, DateTimeInput } from "@/components/Form/Inputs"
+import { Box, Grid } from "@/components"
+import { DateTimeInput, Select, Switch } from "@/components/Inputs"
 
-interface AssignmentsProps<TForm extends NestedObject = NestedObject> {
-	model: string
-	form: TForm
+interface AssignmentsProps {
+	prefix: string
 }
 
-const Assignments = <TForm extends NestedObject>({ model, form }: AssignmentsProps<TForm>) => {
+const Assignments = ({ prefix }: AssignmentsProps) => {
 	const { t } = useTranslation()
 
 	return (
@@ -17,8 +15,7 @@ const Assignments = <TForm extends NestedObject>({ model, form }: AssignmentsPro
 			<Grid>
 				<Grid.Col span={ { xs: 12, sm: 6 } }>
 					<Select
-						name="permission_group_id"
-						model={ model }
+						name={ `${prefix}.permission_group_id` }
 						label={ t("permission_group") }
 						options={ [] }
 					/>
@@ -26,8 +23,7 @@ const Assignments = <TForm extends NestedObject>({ model, form }: AssignmentsPro
 
 				<Grid.Col span={ { xs: 12, sm: 6 } }>
 					<Select
-						name="role"
-						model={ model }
+						name={ `${prefix}.role` }
 						label={ t("role") }
 						options={ [
 							{ value: "member", label: t("member") },
@@ -38,32 +34,23 @@ const Assignments = <TForm extends NestedObject>({ model, form }: AssignmentsPro
 
 				<Grid.Col span={ { xs: 12, sm: 6 } }>
 					<DateTimeInput
-						name="starts_at"
-						model={ model }
+						name={ `${prefix}.starts_at` }
 						label={ t("starts_at") }
 					/>
 				</Grid.Col>
 
 				<Grid.Col span={ { xs: 12, sm: 6 } }>
 					<DateTimeInput
-						name="ends_at"
-						model={ model }
+						name={ `${prefix}.ends_at` }
 						label={ t("ends_at") }
 					/>
 				</Grid.Col>
 
 				<Grid.Col span={ { xs: 12, sm: 6 } }>
 					<Switch
-						name="active"
-						model={ model }
+						name={ `${prefix}.active` }
 						label={ t("active") }
 					/>
-				</Grid.Col>
-
-				<Grid.Col span={ { xs: 12, sm: 6 } }>
-					<Button type="submit" fullWidth>
-						{ t("save") }
-					</Button>
 				</Grid.Col>
 			</Grid>
 		</Box>

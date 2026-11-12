@@ -1,17 +1,7 @@
-import { css } from "@linaria/core"
+import clsx from "clsx"
 import { useEffect, useState } from "react"
 
-import { vars } from "@/lib"
-
-const indicator = css`
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 1px;
-  border-top: 1px dotted ${vars.colors.blue[6]};
-  pointer-events: none;
-  z-index: 1;
-`
+import * as classes from "./TimeIndicator.css"
 
 interface TimeIndicatorProps {
 	containerRef: React.RefObject<HTMLDivElement>
@@ -45,5 +35,5 @@ export const TimeIndicator = ({ containerRef }: TimeIndicatorProps) => {
 
 	if(position === null) return null
 
-	return <div className={ indicator } style={ { top: position } } />
+	return <div className={ clsx(classes.indicator) } style={ { top: position } } />
 }

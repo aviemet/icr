@@ -3,10 +3,12 @@ import { describe, it, expect } from "vitest"
 import {
 	coerceArray,
 	exclude,
-	withDefaults,
-	matchesAtPosition,
 	hasUniqueValues,
+	matchesAtPosition,
+	NestedObject,
+	NestedURLSearchParams,
 	renameObjectWithAttributes,
+	withDefaults,
 } from "@/lib/collections"
 
 describe("coerceArray", () => {
@@ -40,6 +42,39 @@ describe("exclude", () => {
 		const obj = { a: 1, b: 2 }
 		exclude(obj, "b")
 		expect(obj).toEqual({ a: 1, b: 2 })
+	})
+
+	it("omits a nested path", () => {
+		const obj = { user: { name: "Ada", role: "admin" } }
+		expect(exclude(obj, "user.name")).toEqual({ user: { role: "admin" } })
+	})
+})
+
+describe("NestedObject", () => {
+	it("gets, sets, and unsets dotted paths", () => {
+		const nested = new NestedObject()
+		expect(nested.isEmpty()).toBe(true)
+
+		nested.set("user.name", "Ada")
+		expect(nested.get("user.name")).toBe("Ada")
+		expect(nested.isEmpty()).toBe(false)
+
+		nested.unset("user.name")
+		expect(nested.get("user.name")).toBeUndefined()
+	})
+})
+
+describe("NestedURLSearchParams", () => {
+	it("gets, sets, and unsets dotted paths", () => {
+		const params = new NestedURLSearchParams()
+		expect(params.isEmpty()).toBe(true)
+
+		params.set("filter.status", "open")
+		expect(params.get("filter.status")).toBe("open")
+		expect(params.isEmpty()).toBe(false)
+
+		params.unset("filter.status")
+		expect(params.get("filter.status")).toBeUndefined()
 	})
 })
 

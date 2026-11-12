@@ -1,5 +1,3 @@
-import { useForm } from "use-inertia-form"
-
 /**
  * Test if a value is "unset" in the context of a form input value. Returns true if the value can be considered "empty"
  * @param v Variable to test whether is an "unset" value
@@ -49,18 +47,5 @@ export function getInputOnChange<Value>(
 		} else {
 			setValue(val)
 		}
-	}
-}
-
-/**
- * Check if within a UseForm context
- * @returns boolean
- */
-export function useInFormContext() {
-	try {
-		useForm()
-		return true
-	} catch(e) {
-		return false
 	}
 }

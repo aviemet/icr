@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/react"
 import { useTranslation } from "react-i18next"
 
 import { Avatar, Badge, Group, Link, Menu, Table } from "@/components"
@@ -8,14 +9,31 @@ interface EmployeeHoursMap {
 	ot_hours?: number
 }
 
-interface EmployeesTableProps {
-	employees: Schema.EmployeesPersisted[]
-	employee_hours: Record<string, EmployeeHoursMap>
-	approvalWindowOpen: boolean
+interface EmployeeExceptionsMap {
+	exception_count?: number
 }
 
-export default function EmployeesTable({ employees, employee_hours, approvalWindowOpen }: EmployeesTableProps) {
+interface EmployeesTableProps {
+	employee_hours: Record<string, EmployeeHoursMap>
+	approvalWindowOpen: boolean
+	timesheetIdsByEmployee: Record<string, string>
+	employeeExceptions: Record<string, EmployeeExceptionsMap>
+}
+
+export default function EmployeesTable({
+	employee_hours,
+	approvalWindowOpen,
+	timesheetIdsByEmployee,
+	employeeExceptions,
+}: EmployeesTableProps) {
 	const { t } = useTranslation()
+	const noValue = t("views.timesheets.index.no_value")
+
+	const formatHours = (hours: number | undefined) =>
+		typeof hours === "number" ? formatter.number.decimal(hours, 2) : noValue
+
+	const formatExceptionCount = (count: number | undefined) =>
+		typeof count === "number" && count > 0 ? String(count) : noValue
 
 	return (
 		<Table>
@@ -31,63 +49,72 @@ export default function EmployeesTable({ employees, employee_hours, approvalWind
 				</Table.Row>
 			</Table.Head>
 			<Table.Body>
-				{ employees.map(employee => (
-					<Table.Row key={ employee.id } name={ employee.id }>
-						<Table.Cell>
-							<Link href={ Routes.payrollEmployeeReview(employee.id) }>
-								<Group gap="sm" wrap="nowrap" style={ { display: "inline-flex" } }>
-									<Avatar
-										src={ undefined }
-										radius="xl"
-										size="sm"
-										color={ employee.color ?? "gray" }
-									>
-										{ (employee.full_name ?? employee.name ?? "?").slice(0, 2).toUpperCase() }
-									</Avatar>
-									<span>{ employee.full_name ?? employee.name }</span>
-								</Group>
-							</Link>
-						</Table.Cell>
-						<Table.Cell>
-							{ (() => {
-								const hours = employee_hours[employee.id]?.regular_hours
-								return typeof hours === "number" ? formatter.number.decimal(hours, 2) : t("views.timesheets.index.no_value")
-							})() }
-						</Table.Cell>
-						<Table.Cell>
-							{ (() => {
-								const hours = employee_hours[employee.id]?.ot_hours
-								return typeof hours === "number" ? formatter.number.decimal(hours, 2) : t("views.timesheets.index.no_value")
-							})() }
-						</Table.Cell>
-						<Table.Cell>{ t("views.timesheets.index.no_value") }</Table.Cell>
-						<Table.Cell>{ t("views.timesheets.index.no_value") }</Table.Cell>
-						<Table.Cell>
-							<Badge variant="light" color="yellow" size="sm">
-								{ t("views.timesheets.index.status_pending") }
-							</Badge>
-						</Table.Cell>
-						<Table.Cell>
-							<Group gap="xs" wrap="nowrap">
-								<Link
-									as="button"
-									href={ Routes.payrollEmployeeReview(employee.id) }
-									buttonProps={ { variant: "light", size: "xs" } }
-								>
-									{ t("views.timesheets.index.employees.review") }
+				<Table.RowIterator
+					render={ (employee: Schema.EmployeesPersisted) => (
+						<Table.Row key={ employee.id } name={ employee.id }>
+							<Table.Cell>
+								<Link href={ Routes.payrollEmployeeReview(employee.id) }>
+									<Group gap="sm" wrap="nowrap" style={ { display: "inline-flex" } }>
+										<Avatar
+											src={ undefined }
+											radius="xl"
+											size="sm"
+											color={ employee.color ?? "gray" }
+										>
+											{ (employee.full_name ?? employee.name ?? "?").slice(0, 2).toUpperCase() }
+										</Avatar>
+										<span>{ employee.full_name ?? employee.name }</span>
+									</Group>
 								</Link>
-								{ approvalWindowOpen && (
-									<Menu position="bottom-end">
-										<Menu.Target />
-										<Menu.Dropdown>
-											<Menu.Item>{ t("views.timesheets.index.employees.approve") }</Menu.Item>
-										</Menu.Dropdown>
-									</Menu>
-								) }
-							</Group>
-						</Table.Cell>
-					</Table.Row>
-				)) }
+							</Table.Cell>
+
+							<Table.Cell>
+								{ formatHours(employee_hours[employee.id]?.regular_hours) }
+							</Table.Cell>
+
+							<Table.Cell>
+								{ formatHours(employee_hours[employee.id]?.ot_hours) }
+							</Table.Cell>
+
+							<Table.Cell>{ noValue }</Table.Cell>
+
+							<Table.Cell>
+								{ formatExceptionCount(employeeExceptions[employee.id]?.exception_count) }
+							</Table.Cell>
+
+							<Table.Cell>
+								<Badge variant="light" color="yellow" size="sm">
+									{ t("views.timesheets.index.status_pending") }
+								</Badge>
+							</Table.Cell>
+
+							<Table.Cell>
+								<Group gap="xs" wrap="nowrap">
+									<Link
+										as="button"
+										href={ Routes.payrollEmployeeReview(employee.id) }
+										buttonProps={ { variant: "light", size: "xs" } }
+									>
+										{ t("views.timesheets.index.employees.review") }
+									</Link>
+									{ approvalWindowOpen && timesheetIdsByEmployee[employee.id] && (
+										<Menu position="bottom-end">
+											<Menu.Target />
+											<Menu.Dropdown>
+												<Menu.Item
+													onClick={ () => router.post(Routes.approveTimesheet(timesheetIdsByEmployee[employee.id])) }
+												>
+													{ t("views.timesheets.index.employees.approve") }
+												</Menu.Item>
+											</Menu.Dropdown>
+										</Menu>
+									) }
+								</Group>
+							</Table.Cell>
+
+						</Table.Row>
+					) }
+				/>
 			</Table.Body>
 		</Table>
 	)

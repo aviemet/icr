@@ -1,7 +1,7 @@
-import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
-
 import { Grid } from "@/components"
-import { Form, TextInput, Submit } from "@/components/Form"
+import { Form, Submit } from "@/components/Form"
+import { TextInput } from "@/components/Inputs"
+import { type HTTPVerb } from "@/lib"
 
 type TDoctorFormData = {
 	doctor: Schema.DoctorsFormData
@@ -10,27 +10,26 @@ type TDoctorFormData = {
 export interface DoctorFormProps {
 	to: string
 	method?: HTTPVerb
-	onSubmit?: (object: UseFormProps<TDoctorFormData>) => boolean | void
 	doctor: Schema.DoctorsFormData
 }
 
-export function DoctorForm({ method = "post", doctor, ...props }: DoctorFormProps) {
+export function DoctorForm({ method = "post", to, doctor, ...props }: DoctorFormProps) {
 	return (
-		<Form
-			model="doctor"
-			data={ { doctor } }
+		<Form<TDoctorFormData>
+			action={ to }
+			initialData={ { doctor } }
 			method={ method }
 			{ ...props }
 		>
 			<Grid>
 				<Grid.Col>
-					<TextInput name="first_name" label="First_name" />
+					<TextInput name="doctor.first_name" label="First_name" />
 				</Grid.Col>
 				<Grid.Col>
-					<TextInput name="last_name" label="Last_name" />
+					<TextInput name="doctor.last_name" label="Last_name" />
 				</Grid.Col>
 				<Grid.Col>
-					<TextInput name="notes" label="Notes" />
+					<TextInput name="doctor.notes" label="Notes" />
 				</Grid.Col>
 
 				<Grid.Col>

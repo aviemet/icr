@@ -1,6 +1,5 @@
-import { Table, Link, Box, Group } from "@/components"
+import { Table, Link, Box, Group, type TableColumn } from "@/components"
 import { EditButton, ScheduleButton } from "@/components/Button"
-import { type TableColumn } from "@/components/Table"
 import { Routes } from "@/lib"
 
 interface HouseholdTableProps {

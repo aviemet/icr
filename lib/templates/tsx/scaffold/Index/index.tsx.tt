@@ -8,7 +8,7 @@ interface <%= singular_table_name.camelize %>IndexProps {
 	pagination: Schema.Pagination
 }
 
-const <%= plural_table_name.camelize %>Index = ({ <%= plural_table_name %>, pagination }: <%= singular_table_name.camelize %>IndexProps) => {
+export function <%= plural_table_name.camelize %>Index({ <%= plural_table_name %>, pagination }: <%= singular_table_name.camelize %>IndexProps) {
 	return (
 		<IndexPageTemplate
 			title="<%= plural_table_name.camelize %>"
@@ -24,5 +24,3 @@ const <%= plural_table_name.camelize %>Index = ({ <%= plural_table_name %>, pagi
 		</IndexPageTemplate>
 	)
 }
-
-export default <%= plural_table_name.camelize %>Index

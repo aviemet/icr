@@ -3,7 +3,7 @@ import { EditButton } from "@/Components/Button"
 import { type TableProps } from "@/Components/Table/Table"
 import { Routes } from "@/lib"
 
-const <%= singular_table_name.camelize %>Table = (props: TableProps) => {
+export function <%= singular_table_name.camelize %>Table({ ...props }: TableProps){
 	return (
 		<Table { ...props}>
 			<Table.Head>
@@ -27,5 +27,3 @@ const <%= singular_table_name.camelize %>Table = (props: TableProps) => {
 		</Table>
 	)
 }
-
-export default <%= singular_table_name.camelize %>Table
