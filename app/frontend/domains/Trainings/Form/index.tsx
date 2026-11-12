@@ -1,7 +1,7 @@
-import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
-
 import { Grid } from "@/components"
-import { Form, TextInput, Submit } from "@/components/Form"
+import { Form, Submit } from "@/components/Form"
+import { TextInput } from "@/components/Inputs"
+import { type HTTPVerb } from "@/lib"
 
 type TrainingFormData = {
 	training: Schema.TrainingsFormData
@@ -10,27 +10,26 @@ type TrainingFormData = {
 export interface TrainingFormProps {
 	to: string
 	method?: HTTPVerb
-	onSubmit?: (object: UseFormProps<TrainingFormData>) => boolean | void
 	training: Schema.TrainingsFormData
 }
 
-export function TrainingForm({ method = "post", training, ...props }: TrainingFormProps) {
+export function TrainingForm({ method = "post", to, training, ...props }: TrainingFormProps) {
 	return (
-		<Form
-			model="training"
-			data={ { training } }
+		<Form<TrainingFormData>
+			action={ to }
+			initialData={ { training } }
 			method={ method }
 			{ ...props }
 		>
 			<Grid>
 				<Grid.Col>
-					<TextInput name="name" label="Name" />
+					<TextInput name="training.name" label="Name" />
 				</Grid.Col>
 				<Grid.Col>
-					<TextInput name="description" label="Description" />
+					<TextInput name="training.description" label="Description" />
 				</Grid.Col>
 				<Grid.Col>
-					<TextInput name="estimated_minutes" label="Expected Duration" />
+					<TextInput name="training.estimated_minutes" label="Expected Duration" />
 				</Grid.Col>
 
 				<Grid.Col>

@@ -6,7 +6,7 @@ interface Edit<%= singular_table_name.camelize %>Props {
 	<%= singular_table_name %>: Schema.<%= plural_table_name.camelize %>Edit
 }
 
-const Edit<%= singular_table_name.camelize %> = ({ <%= singular_table_name %> }: Edit<%= singular_table_name.camelize %>Props) => {
+export function Edit<%= singular_table_name.camelize %>({ <%= singular_table_name %> }: Edit<%= singular_table_name.camelize %>Props){
 	const title = "Edit <%= human_name.titleize %>"
 
 	return (
@@ -27,5 +27,3 @@ const Edit<%= singular_table_name.camelize %> = ({ <%= singular_table_name %> }:
 		</Page>
 	)
 }
-
-export default Edit<%= singular_table_name.camelize %>

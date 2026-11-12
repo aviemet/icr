@@ -1,6 +1,6 @@
 import { css } from "@linaria/core"
 
-import { vars } from "@/lib/css"
+import { vars } from "@/lib/theme"
 import { event, indicator, title } from "@/components/Calendar/components/Event/Event.css"
 
 export const eventWrapper = css`

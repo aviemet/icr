@@ -6,6 +6,7 @@ export { Code } from "./Code"
 export { ConditionalWrapper } from "./ConditionalWrapper"
 export { DangerousHtml } from "./DangerousHtml"
 export { Flash } from "./Flash"
+export { Form } from "./Form"
 export { Information } from "./Information"
 export { Link, NavLink, type NavLinkProps } from "./Link"
 export { Menu } from "./Menu"
@@ -13,11 +14,9 @@ export { Modal } from "./Modal"
 export { Page, type PageProps } from "./Page"
 export { RichTextEditor } from "./RichTextEditor"
 export { Section } from "./Section"
-export { Table } from "./Table"
-export { type TableProps } from "./Table/Table"
+export { Table, type TableProps, type TableColumn } from "./Table"
 export { Label } from "./Label"
 export { Tabs } from "./Tabs"
-
 
 // Export UI library components as a proxy to allow easy refactoring
 export {

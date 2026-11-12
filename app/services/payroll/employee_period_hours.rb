@@ -53,9 +53,16 @@ module Payroll
       total_hours = 0.0
       daily_hours = Hash.new(0.0)
       weekly_hours = Hash.new(0.0)
+      overnight_ot = 0.0
 
       intervals.each do |interval|
         next if exempt?(interval)
+
+        if overnight?(interval)
+          overnight_ot += interval.duration_hours
+          total_hours += interval.duration_hours
+          next
+        end
 
         hours_by_date(interval).each do |date, hours|
           total_hours += hours
@@ -65,13 +72,68 @@ module Payroll
         end
       end
 
-      weekly_ot = weekly_hours.values.sum { |h| [h - @weekly_threshold, 0].max }
-      daily_ot = daily_hours.values.sum { |h| [h - @daily_threshold, 0].max }
-      ot_hours = (weekly_ot + daily_ot).round(2)
+      daily_ot_by_date = daily_hours.transform_values { |h| [h - @daily_threshold, 0].max }
+      weekly_ot_by_week = weekly_hours.transform_values { |h| [h - @weekly_threshold, 0].max }
+      threshold_ot = daily_ot_by_date.values.sum + weekly_ot_by_week.values.sum
+      ot_hours = (threshold_ot + overnight_ot).round(2)
       regular_hours = (total_hours - ot_hours).round(2)
       regular_hours = 0.0 if regular_hours.negative?
 
-      { regular_hours: regular_hours, ot_hours: ot_hours }
+      shift_ot_hours = shift_ot_hours_for_intervals(
+        intervals,
+        daily_hours: daily_hours,
+        weekly_hours: weekly_hours,
+        daily_ot_by_date: daily_ot_by_date,
+        weekly_ot_by_week: weekly_ot_by_week,
+      )
+
+      { regular_hours: regular_hours, ot_hours: ot_hours, shift_ot_hours: shift_ot_hours }
+    end
+
+    def shift_ot_hours_for_intervals(intervals, daily_hours:, weekly_hours:, daily_ot_by_date:, weekly_ot_by_week:)
+      intervals.each_with_object({}) do |interval, hash|
+        next unless interval.respond_to?(:id)
+
+        if exempt?(interval)
+          hash[interval.id.to_s] = 0.0
+          next
+        end
+
+        if overnight?(interval)
+          hash[interval.id.to_s] = interval.duration_hours.round(2)
+          next
+        end
+
+        interval_ot = 0.0
+        hours_by_date(interval).each do |date, hours|
+          total = daily_hours[date]
+          next if total.zero?
+
+          interval_ot += (hours / total) * daily_ot_by_date[date]
+        end
+
+        interval_weekly_hours = Hash.new(0.0)
+        hours_by_date(interval).each do |date, hours|
+          week_start = date.beginning_of_week(@week_start_day)
+          interval_weekly_hours[week_start] += hours
+        end
+        interval_weekly_hours.each do |week_start, interval_w|
+          total = weekly_hours[week_start]
+          next if total.zero?
+
+          interval_ot += (interval_w / total) * weekly_ot_by_week[week_start]
+        end
+
+        hash[interval.id.to_s] = interval_ot.round(2)
+      end
+    end
+
+    def overnight?(shift)
+      start_time = shift.start_time
+      end_time = shift.end_time
+      return false if start_time.blank? || end_time.blank?
+
+      start_time.to_date != end_time.to_date
     end
 
     # Allow business-configured exemption rules to remove some work from overtime

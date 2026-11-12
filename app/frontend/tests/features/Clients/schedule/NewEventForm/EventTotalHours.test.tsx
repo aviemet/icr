@@ -1,13 +1,13 @@
 import { Grid, MantineProvider } from "@mantine/core"
-import { cleanup, render, screen } from "@testing-library/react"
+import { cleanup, render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import dayjs from "dayjs"
-import { Form, useForm } from "use-inertia-form"
 import { describe, it, expect, beforeEach } from "vitest"
 
-import { parseTimeString } from "@/components/Form/Inputs/SplitDateTimeInput"
-import { type EventData } from "@/domains/Clients/schedule/EventForm"
+import { Form, useFormField } from "@/components/Form"
 import { EventTotalHours } from "@/domains/Clients/schedule/EventForm/EventTotalHours"
+import { parseTimeString } from "@/lib/dates"
+
 
 function TestWrapper({ children }: { children: React.ReactNode }) {
 	return <MantineProvider>{ children }</MantineProvider>
@@ -31,27 +31,28 @@ beforeEach(() => {
 })
 
 function UpdateTimesButton() {
-	const form = useForm<EventData>()
+	const [, setStarts] = useFormField("calendar_event.starts_at")
+	const [, setEnds] = useFormField("calendar_event.ends_at")
 	const base = dayjs().startOf("day")
 	return (
 		<button
 			type="button"
 			onClick={ () => {
-				form.setData("calendar_event.starts_at", base.hour(10).minute(0).toDate())
-				form.setData("calendar_event.ends_at", base.hour(19).minute(0).toDate())
+				setStarts(base.hour(10).minute(0).toDate())
+				setEnds(base.hour(19).minute(0).toDate())
 			} }
 		>
-			Set 10–19
+			Set 10-19
 		</button>
 	)
 }
 
-function TestForm({ initialData }: { initialData: EventData }) {
+function TestForm({ initialData }: { initialData: Record<string, unknown> }) {
 	return (
-		<Form<EventData>
-			data={ initialData }
-			model="calendar_event"
-			to="#"
+		<Form
+			initialData={ initialData }
+			action="#"
+			method="post"
 		>
 			<Grid>
 				<EventTotalHours />
@@ -82,33 +83,39 @@ describe("parseTimeString (SplitDateTimeInput)", () => {
 })
 
 describe("EventTotalHours", () => {
-	it("shows duration from initial form data", () => {
+	it("shows duration from initial form data", async() => {
 		const base = dayjs().startOf("day")
-		const initialData: EventData = {
+		const initialData = {
 			calendar_event: {
 				starts_at: base.hour(9).minute(0).toDate(),
 				ends_at: base.hour(17).minute(0).toDate(),
 				shift: { employee_id: "" },
 				event_participants: [],
 			},
-		}
+		} satisfies Record<string, unknown>
 		render(<TestForm initialData={ initialData } />, { wrapper: TestWrapper })
-		expect(screen.getByText(/Duration: 8 hours/)).toBeInTheDocument()
+		await waitFor(() => {
+			expect(screen.getByText(/Duration: 8 hours/)).toBeInTheDocument()
+		})
 	})
 
 	it("updates duration when form data calendar_event.starts_at and ends_at change", async() => {
 		const base = dayjs().startOf("day")
-		const initialData: EventData = {
+		const initialData = {
 			calendar_event: {
 				starts_at: base.hour(9).minute(0).toDate(),
 				ends_at: base.hour(17).minute(0).toDate(),
 				shift: { employee_id: "" },
 				event_participants: [],
 			},
-		}
+		} satisfies Record<string, unknown>
 		render(<TestForm initialData={ initialData } />, { wrapper: TestWrapper })
-		expect(screen.getByText(/Duration: 8 hours/)).toBeInTheDocument()
-		await userEvent.click(screen.getByRole("button", { name: /Set 10–19/ }))
-		expect(screen.getByText(/Duration: 9 hours/)).toBeInTheDocument()
+		await waitFor(() => {
+			expect(screen.getByText(/Duration: 8 hours/)).toBeInTheDocument()
+		})
+		await userEvent.click(screen.getByRole("button", { name: /Set 10-19/ }))
+		await waitFor(() => {
+			expect(screen.getByText(/Duration: 9 hours/)).toBeInTheDocument()
+		})
 	})
 })

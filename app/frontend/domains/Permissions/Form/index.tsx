@@ -1,7 +1,6 @@
-import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
-
 import { Grid } from "@/components"
-import { Form, TextInput, Submit } from "@/components/Form"
+import { Form, Submit } from "@/components/Form"
+import { type HTTPVerb } from "@/lib"
 
 type PermissionFormData = {
 	permission: Schema.PermissionsFormData
@@ -10,20 +9,18 @@ type PermissionFormData = {
 export interface PermissionFormProps {
 	to: string
 	method?: HTTPVerb
-	onSubmit?: (object: UseFormProps<PermissionFormData>) => boolean | void
 	permission: Schema.PermissionsFormData
 }
 
-export function PermissionForm({ method = "post", permission, ...props }: PermissionFormProps) {
+export function PermissionForm({ method = "post", to, permission, ...props }: PermissionFormProps) {
 	return (
-		<Form
-			model="permission"
-			data={ { permission } }
+		<Form<PermissionFormData>
+			action={ to }
+			initialData={ { permission } }
 			method={ method }
 			{ ...props }
 		>
 			<Grid>
-
 				<Grid.Col>
 					<Submit>{ permission.id ? "Update" : "Create" } Permission</Submit>
 				</Grid.Col>

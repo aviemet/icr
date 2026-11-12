@@ -1,19 +1,14 @@
 import { useTranslation } from "react-i18next"
 
-import { Stack, Title, Link, Box } from "@/components"
-import { Field, Form, TextInput, Submit } from "@/components/Form"
+import { Grid, Title, Link } from "@/components"
+import { Field, Form, Submit } from "@/components/Form"
+import { TextInput } from "@/components/Inputs"
 import { AuthPaperLayout } from "@/features"
 import { Routes, withLayout } from "@/lib"
 
-type TPasswordsNewFormData = {
-	email: string
-}
-
 const PasswordsNew = () => {
 	const { t } = useTranslation()
-	const defaultData: TPasswordsNewFormData = {
-		email: "",
-	}
+	const defaultData = { user: { email: "" } }
 
 	return (
 		<AuthPaperLayout bottomLinks={ [
@@ -21,29 +16,31 @@ const PasswordsNew = () => {
 				{ t("views.devise.shared.login") }
 			</Link>,
 		] }>
-			<Form model="user" data={ defaultData } to={ Routes.newUserPassword() }>
-				<Stack gap="lg" justify="space-between" flex={ 1 }>
+			<Form action={ Routes.newUserPassword() } method="post" initialData={ defaultData }>
+				<Grid>
 
-					<Stack gap="md">
+					<Grid.Col>
 						<Title>{ t("views.devise.passwords.new.title") }</Title>
+					</Grid.Col>
 
+					<Grid.Col>
 						<Field>
 							<TextInput
-								name="email"
+								name="user.email"
 								placeholder={ t("views.devise.shared.email") }
 								autoFocus
 								autoComplete="Email"
 							/>
 						</Field>
-					</Stack>
+					</Grid.Col>
 
-					<Box>
+					<Grid.Col>
 						<Field>
-							<Submit>{ t("views.devise.passwords.new.submit") }</Submit>
+							<Submit className="large">{ t("views.devise.passwords.new.submit") }</Submit>
 						</Field>
-					</Box>
+					</Grid.Col>
 
-				</Stack>
+				</Grid>
 			</Form>
 		</AuthPaperLayout>
 	)

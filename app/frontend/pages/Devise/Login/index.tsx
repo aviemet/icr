@@ -1,19 +1,11 @@
 import { useTranslation } from "react-i18next"
-import { type UseFormProps } from "use-inertia-form"
 
-import { Stack, Title, Text, Link, Box } from "@/components"
-import { Form, Field, TextInput, PasswordInput, CheckboxInput, Submit } from "@/components/Form"
+import { Box, Grid, Title, Link, Text } from "@/components"
+import { Form, Field, Submit } from "@/components/Form"
+import { Checkbox, PasswordInput, TextInput } from "@/components/Inputs"
 import { AuthPaperLayout } from "@/features"
 import { Routes, withLayout } from "@/lib"
 import { usePageProps } from "@/lib/hooks"
-
-type LoginFormData = {
-	user: {
-		email: string
-		password: string
-		remember_me: boolean
-	}
-}
 
 const defaultData = {
 	user: {
@@ -27,12 +19,6 @@ const Login = () => {
 	const { t } = useTranslation()
 	const { settings } = usePageProps()
 
-	const handleSubmit = ({ data }: UseFormProps<LoginFormData>) => {
-		if(data.user.email === "" || data.user.password === "") {
-			return false
-		}
-	}
-
 	return (
 		<AuthPaperLayout bottomLinks={ [
 			<Link href={ Routes.newUserPassword() } key="reset">
@@ -42,61 +28,59 @@ const Login = () => {
 				{ t("views.devise.login.register") }
 			</Link>,
 		] }>
-			<Form
-				model="user"
-				data={ defaultData }
-				to={ Routes.newUserSession() }
-				onSubmit={ handleSubmit }
-			>
-				<Stack gap="lg" justify="space-between" flex={ 1 }>
+			<Form action={ Routes.newUserSession() } method="post" initialData={ defaultData }>
+				<Grid>
 
-					<Stack gap="lg">
-						<Stack gap={ 4 }>
-							<Title order={ 1 } size="h2">
-								{ settings.company_name }
-							</Title>
-							<Text size="sm" c="dimmed">
-								{ t("views.devise.login.subtitle") }
-							</Text>
-						</Stack>
+					<Grid.Col>
+						<Title order={ 1 } size="h2">
+							{ settings.company_name }
+						</Title>
+						<Text size="sm" c="dimmed">
+							{ t("views.devise.login.subtitle") }
+						</Text>
+					</Grid.Col>
 
-						<Stack gap="md">
-							<Field>
-								<TextInput
-									name="email"
-									placeholder={ t("views.devise.shared.email") }
-									autoFocus
-									autoComplete="Email"
-									required
-									pattern=".+@.+\..+"
-								/>
-							</Field>
-
-							<Field>
-								<PasswordInput
-									name="password"
-									placeholder={ t("views.devise.login.password") }
-									autoComplete="current-password"
-									required
-								/>
-							</Field>
-
-							<Field>
-								<CheckboxInput name="remember_me" label={ t("views.devise.login.remember_me") } />
-							</Field>
-						</Stack>
-					</Stack>
-
-					<Box>
+					<Grid.Col>
 						<Field>
-							<Submit>{ t("views.devise.login.submit") }</Submit>
+							<TextInput
+								name="user.email"
+								placeholder={ t("views.devise.shared.email") }
+								autoFocus
+								autoComplete="Email"
+								required
+								pattern=".+@.+\..+"
+							/>
 						</Field>
-					</Box>
+					</Grid.Col>
 
-				</Stack>
+					<Grid.Col>
+						<Field>
+							<PasswordInput
+								name="user.password"
+								placeholder={ t("views.devise.login.password") }
+								autoComplete="current-password"
+								required
+							/>
+						</Field>
+					</Grid.Col>
+
+					<Grid.Col>
+						<Field>
+							<Checkbox name="user.remember_me" label={ t("views.devise.login.remember_me") } />
+						</Field>
+					</Grid.Col>
+
+					<Grid.Col>
+						<Box>
+							<Field>
+								<Submit className="large">{ t("views.devise.login.submit") }</Submit>
+							</Field>
+						</Box>
+					</Grid.Col>
+
+				</Grid>
 			</Form>
 		</AuthPaperLayout>
-
 	)
 }
 

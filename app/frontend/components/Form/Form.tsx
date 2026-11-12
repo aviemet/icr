@@ -1,97 +1,207 @@
-import { Box } from "@mantine/core"
-import clsx from "clsx"
+import { type FormComponentProps, type FormComponentSlotProps, type FormDataConvertible } from "@inertiajs/core"
+import { Form as InertiaForm, useFormContext } from "@inertiajs/react"
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, type ReactNode } from "react"
+
+import { Box } from "@/components"
+import { renameObjectWithAttributes } from "@/lib/collections"
+
 import {
-	Form as InertiaForm,
-	type FormProps as UifFormProps,
-	type NestedObject,
-	type UseFormProps,
-} from "use-inertia-form"
+	mergeSlotPropsWithSyntheticFallback,
+	defaultNormalizeSubmitError,
+	runSubmitWithIntercept,
+	type NormalizeSubmitError,
+	type SubmitWith,
+} from "./customSubmit"
+import { FormFieldProvider, useFormFieldContext } from "./FormFieldContext"
+import { useSlotProps } from "./formFieldUtils"
 
-import { renameObjectWithAttributes } from "@/lib"
+type InertiaFormData = Record<string, FormDataConvertible>
+type HTMLInputType = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
 
-import * as classes from "./Form.css"
+const REMEMBER_PREFIX = "form:"
 
-export type SubmitWithContext<TForm> = {
-	data: TForm
-	setError: (errors: Record<string, string | string[]>) => void
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+	return value !== null && typeof value === "object" && !Array.isArray(value)
 }
 
-export type FormSubmitProps<TForm> = UseFormProps<TForm> & {
-	setError?: (errors: Record<string, string | string[]>) => void
+export interface FormProps<TFormData extends Record<string, unknown> = Record<string, unknown>>
+	extends FormComponentProps<InertiaFormData>,
+	Omit<React.FormHTMLAttributes<HTMLFormElement>, keyof FormComponentProps<InertiaFormData> | "children">,
+	Omit<React.AllHTMLAttributes<HTMLFormElement>, keyof FormComponentProps<InertiaFormData> | "children"> {
+
+	children: ReactNode
+	initialData?: TFormData
+	normalizeSubmitError?: NormalizeSubmitError
+	railsAttributes?: boolean
+	rememberKey?: string
+	submitWith?: SubmitWith<TFormData>
 }
 
-export type FormSubmitError = {
-	response?: {
-		data?: {
-			errors?: Record<string, string | string[]>
-		}
+function InertiaFormSlotPropsSync() {
+	const inertiaForm = useFormContext()
+	const { setSlotProps } = useFormFieldContext()
+
+	useLayoutEffect(() => {
+		if(inertiaForm) setSlotProps(inertiaForm)
+	}, [inertiaForm, setSlotProps])
+
+	return null
+}
+
+function loadRememberedData(key: string): Record<string, unknown> | undefined {
+	try {
+		const raw = localStorage.getItem(REMEMBER_PREFIX + key)
+		if(!raw) return undefined
+		const parsed = JSON.parse(raw)
+		return isPlainObject(parsed) ? parsed : undefined
+	} catch{
+		return undefined
 	}
 }
 
-export interface FormProps<TForm> extends Omit<UifFormProps<TForm>, "to"> {
-	disableFormatting?: boolean
-	submitWith?: (context: SubmitWithContext<TForm>) => void | Promise<void>
-	to?: string
-}
-
-export function Form<TForm extends NestedObject>({
+function FormInner<TFormData extends Record<string, unknown>>({
 	children,
-	data,
-	className,
+	initialData,
+	method = "post",
+	normalizeSubmitError = defaultNormalizeSubmitError,
+	onBefore,
 	railsAttributes = true,
+	rememberKey,
 	submitWith,
-	onSuccess,
-	onError,
-	onSubmit,
-	to,
+	transform,
 	...props
-}: FormProps<TForm>) {
+}: FormProps<TFormData>) {
 
-	const handleSubmit = (formProps: FormSubmitProps<TForm>) => {
-		// Only proceed if passing a custom submit handler
-		if(!submitWith) return onSubmit?.(formProps)
+	const composedTransform = useMemo((): ((data: InertiaFormData) => InertiaFormData) | undefined => {
+		if(!railsAttributes && !transform) return undefined
 
-		const setError = formProps.setError ?? (() => undefined)
+		return (data: InertiaFormData) => {
+			const next = railsAttributes ? renameObjectWithAttributes(data) : data
+			return transform ? transform(next) : next
+		}
+	}, [railsAttributes, transform])
 
-		const submitData = railsAttributes
-			? renameObjectWithAttributes(formProps.data)
-			: formProps.data
+	const wrapperRef = useRef<HTMLDivElement>(null)
+	const initialSnapshotRef = useRef(initialData)
+	const hasAppliedInitialDataRef = useRef(false)
+	const appliedRememberKeyRef = useRef<string | undefined>(undefined)
+	const { registerForm, handleFormChange, setSlotProps, applyInitialData, subscribeFormData } = useFormFieldContext()
+	const slotProps = useSlotProps()
+	const latestSlotPropsRef = useRef<FormComponentSlotProps | null>(null)
+	useEffect(() => {
+		latestSlotPropsRef.current = slotProps
+	}, [slotProps])
 
-		// submitWith can return sync or Promise; normalize so we always call onSuccess once
-		const run = (): Promise<void> => {
-			const result = submitWith({ data: submitData, setError })
-			if(result && typeof (result as Promise<unknown>).then === "function") {
-				return (result as Promise<void>).then(() => onSuccess?.(formProps))
+	useLayoutEffect(() => {
+		const form = wrapperRef.current?.querySelector("form") ?? null
+		registerForm(form)
+
+		const shouldApplyInitialData = !hasAppliedInitialDataRef.current || appliedRememberKeyRef.current !== rememberKey
+
+		if(shouldApplyInitialData) {
+			hasAppliedInitialDataRef.current = true
+			appliedRememberKeyRef.current = rememberKey
+			const dataToApply = rememberKey ? loadRememberedData(rememberKey) : undefined
+			const data = dataToApply ?? initialSnapshotRef.current
+
+			if(data) {
+				const id = requestAnimationFrame(() => {
+					const formEl = wrapperRef.current?.querySelector("form") ?? null
+					if(formEl) registerForm(formEl)
+					applyInitialData(data)
+				})
+				return () => {
+					cancelAnimationFrame(id)
+					registerForm(null)
+				}
 			}
-
-			onSuccess?.(formProps)
-			return Promise.resolve()
 		}
 
-		void run().catch((err: FormSubmitError) => {
-			// Map API error body onto form field errors
-			setError(err?.response?.data?.errors ?? {})
-			onError?.(formProps)
-		})
+		return () => {
+			registerForm(null)
+		}
+	}, [registerForm, rememberKey, applyInitialData])
 
-		// Return false to prevent the form from submitting as it normally would
-		return false
-	}
+	useEffect(() => {
+		if(!rememberKey) return
+		return subscribeFormData((data) => {
+			try {
+				localStorage.setItem(REMEMBER_PREFIX + rememberKey, JSON.stringify(data))
+			} catch{
+				// ignore quota / private mode
+			}
+		})
+	}, [rememberKey, subscribeFormData])
+
+	useEffect(() => {
+		if(!rememberKey || !slotProps?.wasSuccessful) return
+		try {
+			localStorage.removeItem(REMEMBER_PREFIX + rememberKey)
+		} catch{
+			// ignore
+		}
+	}, [rememberKey, slotProps?.wasSuccessful])
+
+	const handleInput = useCallback(
+		(event: React.FormEvent<HTMLDivElement>) => {
+			const el = event.target
+			if(!(el instanceof Element)) return
+
+			const target = el.closest<HTMLInputType>("input, select, textarea")
+			if(target) handleFormChange({ target })
+		},
+		[handleFormChange]
+	)
+
+	const handleOnBefore = useCallback(
+		(visit: Parameters<NonNullable<FormComponentProps<InertiaFormData>["onBefore"]>>[0]) => {
+			const beforeResult = onBefore?.(visit)
+			if(beforeResult === false) return false
+			if(submitWith) {
+				const payload = visit.data
+				if(!(payload instanceof FormData)) {
+					const base = mergeSlotPropsWithSyntheticFallback(latestSlotPropsRef.current)
+					runSubmitWithIntercept(
+						payload as Record<string, FormDataConvertible>,
+						(data) => submitWith(data as TFormData),
+						setSlotProps,
+						normalizeSubmitError,
+						base
+					)
+				}
+				return false
+			}
+			return beforeResult
+		},
+		[submitWith, setSlotProps, normalizeSubmitError, onBefore]
+	)
 
 	return (
-		<Box className={ clsx(classes.form) }>
-			<InertiaForm
-				data={ data }
-				className={ clsx(className) }
-				railsAttributes={ railsAttributes }
-				to={ to ?? "#" }
-				onSubmit={ handleSubmit }
-				onSuccess={ onSuccess }
-				onError={ onError }
+		<Box ref={ wrapperRef } onInput={ handleInput } onChange={ handleInput }>
+			<InertiaForm<InertiaFormData>
+				method={ method }
+				onBefore={ handleOnBefore }
+				transform={ composedTransform }
 				{ ...props }
 			>
+				<InertiaFormSlotPropsSync />
 				{ children }
 			</InertiaForm>
 		</Box>
 	)
 }
+
+function FormContextWrapper<TFormData extends Record<string, unknown>>({
+	children,
+	...props
+}: FormProps<TFormData>) {
+	return (
+		<FormFieldProvider>
+			<FormInner<TFormData> { ...props }>
+				{ children }
+			</FormInner>
+		</FormFieldProvider>
+	)
+}
+
+export { FormContextWrapper as Form }

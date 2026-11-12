@@ -1,13 +1,21 @@
 import { css } from "@linaria/core"
 
-import { vars } from "@/lib/css"
-
-const fieldsetAlphaAdjustment = 0.125
+import { vars } from "@/lib/theme"
 
 export const form = css`
 `
 
 export const fieldset = css`
+`
+
+export const dynamicFieldsRow = css`
+	display: flex;
+	align-items: flex-start;
+	gap: ${ vars.spacing.xs };
+`
+
+export const dynamicFieldsContent = css`
+	flex: 1;
 `
 
 export const dynamicInputItem = css`
@@ -22,8 +30,3 @@ export const dynamicInputItem = css`
 	}
 `
 
-export const inline = css`
-	display: inline-block;
-	margin-left: ${ vars.spacing.xs };
-	margin-right: ${ vars.spacing.xs };
-`

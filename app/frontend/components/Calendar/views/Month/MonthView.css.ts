@@ -2,7 +2,8 @@ import { css } from "@linaria/core"
 
 import { borderColor } from "../../Calendar.css"
 
-import { rem, vars } from "@/lib/css"
+import { vars } from "@/lib/theme"
+import { rem } from "@/lib/units"
 
 const headingHeight = rem(25)
 export const eventHeight = rem(22)

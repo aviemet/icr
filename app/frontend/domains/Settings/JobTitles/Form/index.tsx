@@ -1,35 +1,33 @@
-import { type HTTPVerb, type UseFormProps } from "use-inertia-form"
-
 import { Grid } from "@/components"
-import { Form, TextInput, Submit, RichText } from "@/components/Form"
+import { Form, Submit } from "@/components/Form"
+import { RichText, TextInput } from "@/components/Inputs"
+import { type HTTPVerb } from "@/lib"
 
-import { emptyPermissions, JobTitleFormData } from "./formData"
+import { emptyPermissions } from "./formData"
 import { PermissionsSection } from "./PermissionsSection"
-
 
 export interface JobTitleFormProps {
 	to: string
 	method?: HTTPVerb
-	onSubmit?: (object: UseFormProps<JobTitleFormData>) => boolean | void
 	job_title: Schema.JobTitlesFormData
 }
 
-export function JobTitleForm({ method = "post", job_title, ...props }: JobTitleFormProps) {
+export function JobTitleForm({ method = "post", job_title, to, ...props }: JobTitleFormProps) {
 	return (
 		<Form
-			model="job_title"
-			data={ { job_title, ...emptyPermissions } }
+			action={ to }
 			method={ method }
+			initialData={ { job_title, ...emptyPermissions } }
 			{ ...props }
 		>
 			<Grid>
 
 				<Grid.Col>
-					<TextInput name="name" label="Title" />
+					<TextInput name="job_title.name" label="Title" />
 				</Grid.Col>
 
 				<Grid.Col>
-					<RichText name="description" label="Description" />
+					<RichText name="job_title.description" label="Description" />
 				</Grid.Col>
 
 				<PermissionsSection />

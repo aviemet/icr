@@ -2,8 +2,7 @@ import { useForm } from "@inertiajs/react"
 import { useTranslation } from "react-i18next"
 
 import { Button, Card, Grid, Title } from "@/components"
-import { Form as FormComponent } from "@/components/Form"
-import { TextInput, NumberInput, RichText } from "@/components/Form/Inputs"
+import { NumberInput, RichText, TextInput } from "@/components/Inputs"
 
 import Assignments from "./Assignments"
 import { PermissionRules } from "./PermissionRules"
@@ -41,7 +40,7 @@ interface Props {
 	assignable_types: string[]
 }
 
-const PermissionForm = ({ group, assignable_types }: Props) => {
+const PermissionForm = ({ group, assignable_types: _assignableTypes }: Props) => {
 	const { t } = useTranslation()
 	const form = useForm<PermissionGroup>({
 		...group,
@@ -69,9 +68,11 @@ const PermissionForm = ({ group, assignable_types }: Props) => {
 					</Card.Section>
 
 					<Card.Section inheritPadding py="md">
-						<FormComponent
-							data={ form.data }
-							onSubmit={ handleSubmit }
+						<form
+							onSubmit={ (e) => {
+								e.preventDefault()
+								void handleSubmit()
+							} }
 						>
 							<Grid>
 								<Grid.Col span={ 12 }>
@@ -82,8 +83,8 @@ const PermissionForm = ({ group, assignable_types }: Props) => {
 									<TextInput
 										name="name"
 										label={ t("activerecord.attributes.permission/group.name") }
-										defaultValue={ form.data.name }
-										onChange={ (value) => form.setData("name", value) }
+										value={ form.data.name }
+										onChange={ (e) => form.setData("name", e.currentTarget.value) }
 										error={ form.errors.name }
 									/>
 								</Grid.Col>
@@ -92,8 +93,8 @@ const PermissionForm = ({ group, assignable_types }: Props) => {
 									<NumberInput
 										name="precedence"
 										label={ t("activerecord.attributes.permission/group.precedence") }
-										defaultValue={ form.data.precedence }
-										onChange={ (value) => form.setData("precedence", value) }
+										value={ form.data.precedence }
+										onChange={ (value) => form.setData("precedence", typeof value === "number" ? value : Number(value)) }
 										error={ form.errors.precedence }
 									/>
 								</Grid.Col>
@@ -102,7 +103,7 @@ const PermissionForm = ({ group, assignable_types }: Props) => {
 									<RichText
 										name="description"
 										label={ t("activerecord.attributes.permission/group.description") }
-										defaultValue={ form.data.description }
+										value={ form.data.description }
 										onChange={ (value) => form.setData("description", value) }
 										error={ form.errors.description }
 									/>
@@ -112,7 +113,7 @@ const PermissionForm = ({ group, assignable_types }: Props) => {
 									<Title order={ 3 }>{ t("permissions.form.permissions") }</Title>
 									<PermissionRules
 										value={ form.data.permissions }
-										onChange={ value => form.setData("permissions", value) }
+										onChange={ (value) => form.setData("permissions", value) }
 										error={ form.errors.permissions }
 									/>
 								</Grid.Col>
@@ -120,7 +121,7 @@ const PermissionForm = ({ group, assignable_types }: Props) => {
 								<Grid.Col span={ 12 }>
 									<Title order={ 3 }>{ t("permissions.form.assignments") }</Title>
 									<Assignments
-										model="assignments_attributes"
+										prefix="assignments_attributes.0"
 										form={ form.data }
 									/>
 								</Grid.Col>
@@ -131,7 +132,7 @@ const PermissionForm = ({ group, assignable_types }: Props) => {
 									</Button>
 								</Grid.Col>
 							</Grid>
-						</FormComponent>
+						</form>
 					</Card.Section>
 				</Card>
 			</Grid.Col>

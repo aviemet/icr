@@ -7,7 +7,7 @@ import {
 	LayoutProps,
 } from "@/layouts"
 
-import { PagesObject } from "../application"
+import { type PagesObject } from "../application"
 
 const LAYOUT_COMPONENTS: Record<keyof typeof LAYOUTS, ({ children }: LayoutProps) => React.JSX.Element> = {
 	"auth": AuthLayout,

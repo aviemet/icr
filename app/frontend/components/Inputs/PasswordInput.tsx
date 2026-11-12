@@ -33,6 +33,7 @@ export function PasswordInput({
 			</Label> }
 			<MantinePasswordInput
 				id={ inputId }
+				name={ name }
 				required={ required }
 				ref={ ref }
 				{ ...props }

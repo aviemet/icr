@@ -31,6 +31,28 @@ RSpec.describe "/timesheets", type: :request do
       get timesheets_url
       expect(response).to be_successful
     end
+
+    it "includes non-zero employee_hours when pay period has shifts with hours", :inertia do
+      Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:bi_weekly]
+      Setting.payroll_period_day = "monday"
+      travel_to Time.zone.local(2024, 3, 15, 12, 0, 0) do
+        period_start = Date.new(2024, 3, 11).to_time.beginning_of_day
+        period_end = Date.new(2024, 3, 24).to_time.end_of_day
+        pay_period = PayPeriod.find_or_create_by!(starts_at: period_start, ends_at: period_end)
+        employee = create(:employee)
+        timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
+        event = create(:calendar_event, starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0), ends_at: Time.zone.local(2024, 3, 15, 17, 0, 0))
+        create(:shift, employee: employee, timesheet: timesheet, calendar_event: event)
+
+        get timesheets_url
+
+        expect(response).to be_successful
+        expect_inertia.to render_component "Timesheets/Index"
+        expect(inertia.props[:employee_hours]).to have_key(employee.id.to_s)
+        expect(inertia.props[:employee_hours][employee.id.to_s][:regular_hours]).to eq(8.0)
+        expect(inertia.props[:employee_hours][employee.id.to_s][:ot_hours]).to eq(0.0)
+      end
+    end
   end
 
   describe "GET /payroll/employees/:employee_id (employee_review)" do

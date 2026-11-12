@@ -1,21 +1,20 @@
 import dayjs from "dayjs"
-import { useForm } from "use-inertia-form"
 
 import { Grid, Text } from "@/components"
+import { useFormField } from "@/components/Form/formFieldUtils"
 
-import { type EventData } from "."
-
-function parseDateTime(value: Date | string | undefined): dayjs.Dayjs | null {
+function parseDateTime(value: unknown): dayjs.Dayjs | null {
 	if(value === null || value === undefined || value === "") return null
 
-	const d = dayjs(value)
+	const d = dayjs(value as string | Date)
 	return d.isValid() ? d : null
 }
 
 export function EventTotalHours() {
-	const { data } = useForm<EventData>()
-	const startsAt = parseDateTime(data.calendar_event?.starts_at)
-	const endsAt = parseDateTime(data.calendar_event?.ends_at)
+	const [startsAtVal] = useFormField("calendar_event.starts_at")
+	const [endsAtVal] = useFormField("calendar_event.ends_at")
+	const startsAt = parseDateTime(startsAtVal)
+	const endsAt = parseDateTime(endsAtVal)
 
 	let label = "—"
 	if(startsAt && endsAt) {

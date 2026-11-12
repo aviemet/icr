@@ -1,4 +1,4 @@
-import { isEmpty } from "lodash-es"
+import { isEmpty } from "es-toolkit/compat"
 
 import { Stack, Tooltip, type TooltipProps } from "@/components"
 import { ConditionalWrapper } from "@/components"

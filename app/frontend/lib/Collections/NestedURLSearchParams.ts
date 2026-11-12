@@ -1,4 +1,4 @@
-import { unset, get, set, isEmpty } from "lodash-es"
+import { unset, get, set, isEmpty } from "es-toolkit/compat"
 
 export class NestedURLSearchParams {
 	_data: Record<string, unknown> = {}

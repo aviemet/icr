@@ -10,11 +10,15 @@ import * as classes from "./DataTable.css"
 import { Pagination } from "../Pagination"
 import { useTableContext } from "../Provider"
 
+type TableRowWithId = object & { id: string | number }
+
+type DefaultTableRow = TableRowWithId & Record<string, unknown>
+
 const isValidDirection = (value: string | undefined): value is "asc" | "desc" => {
 	return value === "asc" || value === "desc"
 }
 
-export type TableDataTableProps<T = Record<string, unknown>> = Omit<DataTableProps<T>, "selectedRecords" | "onSelectedRecordsChange"> & {
+export type TableDataTableProps<T extends TableRowWithId = DefaultTableRow> = Omit<DataTableProps<T>, "selectedRecords" | "onSelectedRecordsChange"> & {
 	pagination?: Schema.Pagination
 	model?: string
 	selectable?: boolean
@@ -22,7 +26,7 @@ export type TableDataTableProps<T = Record<string, unknown>> = Omit<DataTablePro
 	onSelectedRecordsChange?: (records: T[]) => void
 }
 
-export function DataTable<T = Record<string, unknown>>({
+export function DataTable<T extends TableRowWithId = DefaultTableRow>({
 	columns = [],
 	records,
 	pagination,
@@ -84,7 +88,8 @@ export function DataTable<T = Record<string, unknown>>({
 	const handleSelectedRecordsChange = useCallback((newSelected: T[]) => {
 		setSelectedRecords(newSelected)
 		onSelectedRecordsChange?.(newSelected)
-	}, [onSelectedRecordsChange])
+		context?.setSelectedRecordIds(newSelected.map((record) => String(record.id)))
+	}, [context, onSelectedRecordsChange])
 
 	return (
 		<div style={ { position: "relative", flex: 1, display: "flex", flexDirection: "column", minHeight: 0 } }>

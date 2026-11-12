@@ -14,8 +14,12 @@ export const applyPropsMiddleware = (props: PageProps & {
 }
 
 export function setupCSRFToken() {
-	const csrfToken = (document.querySelector("meta[name=csrf-token]") as HTMLMetaElement).content
-	axios.defaults.headers.common["X-CSRF-Token"] = csrfToken
+	const csrfMeta = document.querySelector("meta[name=csrf-token]")
+	if(!(csrfMeta instanceof HTMLMetaElement)) {
+		return
+	}
+
+	axios.defaults.headers.common["X-CSRF-Token"] = csrfMeta.content
 }
 
 export function setupInertiaListeners(router: Router) {
