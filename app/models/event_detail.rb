@@ -24,7 +24,6 @@ class EventDetail < ApplicationRecord
 
   pg_search_config(against: [])
 
-  tracked
   resourcify
 
   belongs_to :calendar_event, class_name: "Calendar::Event"

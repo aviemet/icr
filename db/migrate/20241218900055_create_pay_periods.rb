@@ -7,6 +7,7 @@ class CreatePayPeriods < ActiveRecord::Migration[8.1]
       t.datetime :approved_at
       t.integer :period_type
       t.jsonb :config_snapshot
+      t.datetime :finalized_at
 
       t.timestamps
     end

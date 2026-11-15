@@ -26,10 +26,11 @@ gem "boolean_timestamp", ">= 1.1"
 gem "jsonb_accessor", ">= 1.3"
 gem "types_from_serializers", "~> 2.5"
 gem "oj_serializers", "~> 2.1"
-gem "public_activity", ">= 3.0"
+gem "paper_trail", ">= 15.0"
 gem "rails-settings-cached", "~> 2.9"
 
 # Helpers
+gem "csv", ">= 3.3"
 gem "factory_bot", ">= 6.4"
 gem "factory_bot_rails", ">= 6.4"
 gem "js-routes", ">= 2.2"

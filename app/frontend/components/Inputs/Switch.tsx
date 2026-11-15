@@ -4,6 +4,8 @@ import {
 } from "@mantine/core"
 import React from "react"
 
+import { useFormFieldError } from "@/components/Form"
+
 import { InputWrapper } from "./InputWrapper"
 
 import { type BaseInputProps } from "."
@@ -19,9 +21,11 @@ export function Switch({
 	style,
 	wrapper,
 	wrapperProps,
+	error,
 	ref,
 	...props
 }: SwitchProps) {
+	const fieldError = useFormFieldError(name)
 	const inputId = id ?? name
 
 	return (
@@ -31,6 +35,7 @@ export function Switch({
 				id={ inputId }
 				name={ name }
 				required={ props.required }
+				error={ error ?? fieldError }
 				style={ [{ padding: "14px 10px" }, style] }
 				{ ...props }
 			/>

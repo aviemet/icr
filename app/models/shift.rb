@@ -30,7 +30,6 @@ class Shift < ApplicationRecord
 
   pg_search_config(against: [:employee_id])
 
-  tracked
   resourcify
 
   belongs_to :employee
@@ -40,7 +39,7 @@ class Shift < ApplicationRecord
   validates :calendar_event_id, uniqueness: true
   validate :no_overlapping_shifts_for_employee
 
-  after_create :associate_with_timesheet_if_in_active_period
+  after_create :attach_to_containing_pay_period
 
   accepts_nested_attributes_for :calendar_event
 
@@ -78,17 +77,7 @@ class Shift < ApplicationRecord
     errors.add(:base, "overlaps another shift for the same employee")
   end
 
-  def associate_with_timesheet_if_in_active_period
-    shift_date = start_time&.to_date
-    return unless shift_date
-
-    active_start, active_end = Payroll::Period.period_dates(Date.current)
-    return if shift_date < active_start
-    return if shift_date > active_end
-
-    pay_period = PayPeriod.for_period_dates(active_start, active_end)
-
-    timesheet = pay_period.timesheets.find_or_create_by!(employee_id: employee_id)
-    update_column(:timesheet_id, timesheet.id) # rubocop:disable Rails/SkipsModelValidations
+  def attach_to_containing_pay_period
+    PayPeriod.attach_shift!(self)
   end
 end

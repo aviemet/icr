@@ -61,4 +61,15 @@ en:
   timesheets:
     approval_window_closed: Approval is only allowed after the period has closed and before the payroll due date.
     approved: Timesheet approved.
+    unapproved: Timesheet approval removed.
     bulk_approved: "%{count} timesheet(s) approved."
+  pay_periods:
+    already_finalized: This pay period is already finalized.
+    finalize_before_period_end: Close is available after the pay period ends.
+    finalized: Pay period closed.
+    finalized_locked: This pay period is finalized. Record an adjustment to change values.
+    export_requires_finalized: Export is available after the pay period is finalized.
+    adjustments_require_finalized: Adjustments are only allowed on finalized pay periods.
+    adjustment_change_set_required: Adjustment must include the values that changed.
+    adjustment_recorded: Adjustment recorded.
+    adjustment_failed: Could not record adjustment.

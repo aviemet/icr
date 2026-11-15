@@ -84,10 +84,21 @@ Rails.application.routes.draw do
   resources :shift_templates
 
   scope path: "payroll" do
-    get "employees/:employee_id", to: "timesheets#employee_review", as: :payroll_employee_review
-    resources :timesheets, path: "" do
+    get "/", to: "pay_periods#index", as: :payroll_periods
+
+    resources :periods, controller: "pay_periods", only: [:show] do
+      member do
+        post :finalize
+        get :export
+      end
+      post :adjustments, on: :member, action: :create_adjustment, as: :adjustments
+      get "employees/:employee_id", to: "timesheets#employee_review", as: :employee_review
+    end
+
+    resources :timesheets, only: [:show, :new, :edit, :create, :update, :destroy] do
       member do
         post :approve
+        post :unapprove
       end
 
       collection do

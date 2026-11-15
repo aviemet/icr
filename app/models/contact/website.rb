@@ -25,7 +25,6 @@ class Contact::Website < ApplicationRecord
 
   include Categorizable
 
-  tracked
   resourcify
 
   belongs_to :contact

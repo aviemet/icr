@@ -4,6 +4,7 @@ import React, { useCallback, useMemo } from "react"
 import { DateInput, TimeInput } from "@/components/Inputs"
 import { parseTimeString } from "@/lib/dates"
 
+import { HiddenInput } from "./HiddenInput"
 import { useFormField } from "../Form/formFieldUtils"
 
 function parseValue(value: unknown): Date | undefined {
@@ -122,7 +123,7 @@ export function SplitDateTimeInputRoot({ name, children }: SplitDateTimeInputRoo
 
 	return (
 		<SplitDateTimeContext.Provider value={ contextValue }>
-			<input type="hidden" name={ name } value={ typeof value === "string" ? value : "" } />
+			<HiddenInput name={ name } value={ typeof value === "string" ? value : "" } />
 			{ children }
 		</SplitDateTimeContext.Provider>
 	)

@@ -90,6 +90,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Company settings use singleton pattern
 - Front end is Typescript using Yarn, Vite, Inertia.js and React (do *not* use npm or pnpm, this project uses yarn)
 - Backend is Ruby on Rails using Inertia
+- Audit: paper_trail `versions` is the single audit store. Keep domain state columns that gate behavior on the model (`finalized_at`, `approved_at`, plus standard `created_at`/`updated_at`). Actor and audit-only actions (e.g. payroll export) live only on versions (`whodunnit`, custom `event`) - do not add `*_by` or audit-only `*_at` columns.
 
 ### Controller Concerns
 - Config used in instance methods (e.g. sortable fields) must use `class_attribute` so each including class gets its own config. Module-level instance variables set in `included` are class ivars and are not visible in instance methods.
@@ -117,7 +118,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Conditions: owner-only, time-restricted, or custom. Check with permission?(resource, action, context).
 
 ### Payroll Settings
-- Period types: weekly, bi-weekly, semi-monthly, monthly; each with configurable start day(s) or dates. Monthly can use last day of month.
+- Period types: weekly, bi-weekly, semi-monthly, monthly. Weekly/bi-weekly use a start weekday; monthly uses a configurable start date (including last day of month). Semi-monthly is fixed: 1st-15th and 16th-last.
 - Payroll due date: user-configurable setting that defines when the approval window closes for each period; supports multiple rule types (e.g. days after period end, day of week after period end, day of month). See payroll workflow redesign plan.
 - Overtime: configurable weekly/daily thresholds; exemption rules by shift category, time range, duration.
 - Pay rates: historical records with effective dates; hourly and salary; currency.
@@ -138,12 +139,13 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Gotcha: If a Calendar::Event relation uses joins and also includes employee job_title (via Employee's active job title scope), Postgres can raise "column reference starts_at is ambiguous". Avoid by filtering events via a subquery of ids, then applying includes on the outer relation (no joins on the outer query).
 
 ### Timesheet System
-- Payroll index: employees only; historical view deferred.
-- Employee payroll review: per-employee view for the current pay period; authorization follows timesheet show.
-- PayPeriod: one per (starts_at, ends_at); no overlapping periods; derived from settings. Use PayPeriod.for_period_dates(start_date, end_date) to resolve the current period: it finds any period overlapping that range (so existing periods are found even if stored timestamps differ, e.g. timezone), or creates one with canonical start/end.
+- Payroll is a time-approval and period-integrity workflow (approve timesheets, finalize/lock the period). A vendor-neutral hours export is available after finalize. EVV is deferred; keep shift and calendar_event identity intact as the future attachment point.
+- Payroll IA: `/payroll` is an attention home (counts + CTA into the current period); `/payroll/periods/:id` is the only employee roster for a period; employee review is the timecard drill-down.
+- Employee payroll review: per-employee view for a pay period; authorization follows timesheet show.
+- PayPeriod: one per (starts_at, ends_at); no overlapping periods; derived from settings. Use PayPeriod.for_period_dates(start_date, end_date) to resolve a period: it reuses a period that starts on the same calendar day (snapping end to the canonical range; timezone-safe), or creates one and shrinks any predecessor that overlapped into that range. Shrinking reattaches out-of-range shifts via PayPeriod.attach_shift!.
 - Timesheet: pre-submittal; tracks approval; belongs to PayPeriod and Employee; has many Shifts.
-- Shift create: if within current pay period, find or create that PayPeriod and a Timesheet for the employee; if the PayPeriod was just created, backfill timesheets for all shifts in that range.
-- PayPeriod create: backfill timesheets from shifts whose event overlaps the period (one Timesheet per employee).
+- Shift create: PayPeriod.attach_shift! finds or creates the pay period that contains the shift date and attaches a timesheet. Pay periods appear because shifts are scheduled into them.
+- PayPeriod create/sync: sync_shifts! attaches every overlapping shift onto this period's timesheets (one Timesheet per employee).
 - Payroll index hours: Payroll::EmployeePeriodHours computes per-employee regular_hours and ot_hours for a pay period. Uses Setting overtime_weekly_hours and overtime_daily_hours; splits work intervals by day (including overnight); applies active OvertimeExemption rules to exclude exempt intervals from OT; weekly OT and daily OT are summed. The calculator reads intervals via a collector interface (default: scheduled shifts), so payroll can later swap in a clock-in/out collector without changing overtime math or UI contracts.
 - Payroll approval UI: Approve actions (index row menu, footer bulk approve, employee review Approve button) are visible only during the approval window (current date within 3 days before period end through period end).
 

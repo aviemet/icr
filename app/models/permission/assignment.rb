@@ -31,7 +31,6 @@ module Permission
         group: [],
       },)
 
-    tracked
     resourcify
 
     belongs_to :group,

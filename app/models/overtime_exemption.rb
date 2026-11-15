@@ -10,7 +10,6 @@
 #  updated_at :datetime         not null
 #
 class OvertimeExemption < ApplicationRecord
-  tracked
   validates :name, presence: true
   validates :criteria, presence: true
 

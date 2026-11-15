@@ -5,6 +5,7 @@ import {
 import dayjs from "dayjs"
 import React, { useEffect, useState } from "react"
 
+import { useFormFieldError } from "@/components/Form"
 import { CalendarIcon } from "@/components/Icons"
 import { isUnset } from "@/lib"
 import { isDate } from "@/lib/dates"
@@ -37,9 +38,11 @@ export function DateInput({
 	wrapperProps,
 	value,
 	onChange,
+	error,
 	ref,
 	...props
 }: DateInputProps) {
+	const fieldError = useFormFieldError(name)
 	const inputId = id || name
 
 	const [localValue, setLocalValue] = useState<DateInputValue>(() => {
@@ -101,6 +104,7 @@ export function DateInput({
 				leftSection={ <CalendarIcon /> }
 				leftSectionPointerEvents="none"
 				clearable
+				error={ error ?? fieldError }
 				{ ...props }
 			/>
 		</InputWrapper>

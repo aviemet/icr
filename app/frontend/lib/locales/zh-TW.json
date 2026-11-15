@@ -16,7 +16,7 @@
           "submit_button": "發送邀請"
         },
         "no_invitations_remaining": "邀請名額已用盡",
-        "send_instructions": "邀請已發送至%{email)",
+        "send_instructions": "邀請已發送至%{email}",
         "updated": "你的密碼已設置成功，現在你已經登入了。",
         "updated_not_active": "密碼設置成功"
       },

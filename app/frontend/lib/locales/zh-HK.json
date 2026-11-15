@@ -16,7 +16,7 @@
           "submit_button": "發送邀請"
         },
         "no_invitations_remaining": "冇剩餘邀請",
-        "send_instructions": "邀請電子郵件已發送到%{email)。",
+        "send_instructions": "邀請電子郵件已發送到%{email}。",
         "updated": "你嘅密碼設置成功。 你而家已經登錄。",
         "updated_not_active": "你嘅密碼設置成功。"
       },

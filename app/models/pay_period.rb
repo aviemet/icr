@@ -6,6 +6,7 @@
 #  approved_at     :datetime
 #  config_snapshot :jsonb
 #  ends_at         :datetime
+#  finalized_at    :datetime
 #  period_type     :integer
 #  starts_at       :datetime
 #  status          :integer
@@ -21,36 +22,90 @@ class PayPeriod < ApplicationRecord
 
   pg_search_config(against: [:starts_at, :ends_at, :status, :approved_at, :period_type, :config_snapshot])
 
-  tracked
   resourcify
 
   has_many :timesheets, dependent: :destroy
+  has_many :adjustments, class_name: "Payroll::Adjustment", dependent: :destroy, inverse_of: :pay_period
 
-  after_create :backfill_timesheets_from_shifts
+  after_create :sync_shifts!
 
-  before_destroy :prevent_destroy_with_approved_timesheets, prepend: true
+  before_destroy :prevent_destroy_when_locked, prepend: true
 
   scope :includes_associated, -> { includes(:timesheets) }
+  scope :recent_first, -> { order(ends_at: :desc) }
+
+  def finalized?
+    finalized_at.present?
+  end
+
+  def finalize!(user)
+    if finalized?
+      errors.add(:base, "already finalized")
+      raise ActiveRecord::RecordInvalid, self
+    end
+
+    summary = Payroll::PeriodSummary.call(self)
+    PaperTrail.request(whodunnit: user.id) do
+      update!(
+        finalized_at: Time.current,
+        config_snapshot: {
+          finalized_summary: summary.except(:exception_counts),
+          payroll_period_type: Setting.payroll_period_type,
+        },
+      )
+    end
+  end
+
+  def record_export!(user)
+    unless finalized?
+      errors.add(:base, "must be finalized")
+      raise ActiveRecord::RecordInvalid, self
+    end
+
+    versions.create!(
+      event: "export",
+      whodunnit: user.id.to_s,
+    )
+  end
+
+  def record_adjustment!(user:, reason:, change_set:, timesheet: nil, employee: nil, &block)
+    unless finalized?
+      errors.add(:base, "must be finalized")
+      raise ActiveRecord::RecordInvalid, self
+    end
+
+    transaction do
+      adjustment = adjustments.create!(
+        user: user,
+        reason: reason,
+        change_set: change_set,
+        timesheet: timesheet,
+        employee: employee,
+      )
+      block&.call(adjustment)
+      adjustment
+    end
+  end
 
   def self.for_period_dates(period_start_date, period_end_date)
     start_t = period_start_date.to_time.beginning_of_day
     end_t = period_end_date.to_time.end_of_day
 
-    overlapping = where("starts_at <= ? AND ends_at >= ?", end_t, start_t).order(:starts_at)
-    if overlapping.exists?
-      base = overlapping.first
+    same_start = where(starts_at: start_t.all_day).order(:starts_at)
+    if same_start.exists?
+      base = same_start.first
       transaction do
-        new_starts_at = [base.starts_at, start_t].min
-        new_ends_at = [overlapping.maximum(:ends_at), end_t].max
-        base.update!(starts_at: new_starts_at, ends_at: new_ends_at)
+        base.update!(starts_at: start_t, ends_at: end_t)
 
-        ids_to_merge = overlapping.where.not(id: base.id).pluck(:id)
+        ids_to_merge = same_start.where.not(id: base.id).pluck(:id)
         if ids_to_merge.any?
           # We are only reassigning the pay_period_id foreign key for timesheets being merged into the base period.
           # No per-record validations or callbacks are needed here, and running them would make this merge significantly slower.
           Timesheet.where(pay_period_id: ids_to_merge).update_all(pay_period_id: base.id) # rubocop:disable Rails/SkipsModelValidations
           where(id: ids_to_merge).delete_all
         end
+
+        base.reattach_out_of_range_shifts!
       end
       return base
     end
@@ -58,12 +113,17 @@ class PayPeriod < ApplicationRecord
     transaction do
       created = create!(starts_at: start_t, ends_at: end_t)
 
-      previous = where(ends_at: ...created.starts_at).order(ends_at: :desc).first
+      where.not(id: created.id).where("starts_at < ? AND ends_at >= ?", start_t, start_t).find_each do |other|
+        other.update!(ends_at: start_t - 1.second)
+        other.reattach_out_of_range_shifts!
+      end
+
+      previous = where.not(id: created.id).where(ends_at: ...created.starts_at).order(ends_at: :desc).first
       if previous && previous.ends_at < created.starts_at - 1.second
         previous.update!(ends_at: created.starts_at - 1.second)
       end
 
-      following = where("starts_at > ?", created.ends_at).order(:starts_at).first
+      following = where.not(id: created.id).where("starts_at > ?", created.ends_at).order(:starts_at).first
       if following && following.starts_at > created.ends_at + 1.second
         following.update!(starts_at: created.ends_at + 1.second)
       end
@@ -80,41 +140,61 @@ class PayPeriod < ApplicationRecord
     )
   end
 
-  def associate_orphan_shifts
-    shifts_in_range = self.class.shifts_overlapping_period(self).where(timesheet_id: nil)
+  def self.attach_shift!(shift)
+    shift_date = shift.start_time&.to_date
+    return if shift_date.blank?
+
+    period_start, period_end = Payroll::Period.period_dates(shift_date)
+    pay_period = for_period_dates(period_start, period_end)
+    timesheet = pay_period.timesheets.find_or_create_by!(employee_id: shift.employee_id)
+    return pay_period if shift.timesheet_id == timesheet.id
+
+    shift.update_column(:timesheet_id, timesheet.id) # rubocop:disable Rails/SkipsModelValidations
+    pay_period
+  end
+
+  def sync_shifts!
+    shifts_in_range = self.class.shifts_overlapping_period(self)
     return if shifts_in_range.empty?
 
     shifts_in_range.distinct.pluck(:employee_id).each do |employee_id|
       timesheet = timesheets.find_or_create_by!(employee_id: employee_id)
+      employee_shifts = shifts_in_range.where(employee_id: employee_id)
+      misplaced = employee_shifts.left_outer_joins(:timesheet).where(
+        "shifts.timesheet_id IS NULL OR timesheets.pay_period_id IS DISTINCT FROM ?",
+        id,
+      )
+      next if misplaced.empty?
+
       # We are bulk attaching existing shifts to their employee's timesheet by setting timesheet_id only.
       # Skipping validations and callbacks keeps this operation efficient and avoids re-running business logic on historical shifts.
-      shifts_in_range
-        .where(employee_id: employee_id)
-        .update_all(timesheet_id: timesheet.id) # rubocop:disable Rails/SkipsModelValidations
+      misplaced.update_all(timesheet_id: timesheet.id) # rubocop:disable Rails/SkipsModelValidations
     end
+  end
+
+  def reattach_out_of_range_shifts!
+    Shift.joins(:timesheet, :calendar_event)
+      .where(timesheets: { pay_period_id: id })
+      .find_each do |shift|
+        shift_date = shift.start_time&.to_date
+        next if shift_date.blank?
+        next if shift_date.between?(starts_at.to_date, ends_at.to_date)
+
+        self.class.attach_shift!(shift)
+      end
   end
 
   private
 
-  def prevent_destroy_with_approved_timesheets
+  def prevent_destroy_when_locked
+    if finalized?
+      errors.add(:base, "cannot delete a finalized pay period")
+      throw :abort
+    end
+
     return unless timesheets.where.not(approved_at: nil).exists?
 
     errors.add(:base, "cannot delete pay period with approved timesheets")
     throw :abort
-  end
-
-  def backfill_timesheets_from_shifts
-    shifts_in_range = self.class.shifts_overlapping_period(self)
-
-    employee_ids = shifts_in_range.distinct.pluck(:employee_id)
-
-    employee_ids.each do |employee_id|
-      timesheet = timesheets.find_or_create_by!(employee_id: employee_id)
-      # When backfilling, we need to associate large numbers of existing shifts to a timesheet by setting timesheet_id.
-      # Validations and callbacks are not required for this mechanical foreign key update and would add unnecessary overhead.
-      shifts_in_range
-        .where(employee_id: employee_id)
-        .update_all(timesheet_id: timesheet.id) # rubocop:disable Rails/SkipsModelValidations
-    end
   end
 end

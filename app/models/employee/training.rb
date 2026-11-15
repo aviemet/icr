@@ -19,7 +19,6 @@ class Employee::Training < ApplicationRecord
   include PgSearchable
   pg_search_config(against: [:name, :description, :estimated_minutes, :active_on, :inactive_on])
 
-  tracked
   resourcify
 
   has_many :employees_trainings, class_name: "Employee::EmployeesTraining", dependent: :destroy, inverse_of: :training

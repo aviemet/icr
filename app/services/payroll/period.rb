@@ -102,33 +102,10 @@ module Payroll
       end
 
       def semi_monthly_period_dates(date)
-        first_date = Setting.payroll_period_date.to_i
-        second_date = Setting.payroll_period_date_2.to_i
-
-        # For last day of month setting, we need to determine if we're in the first or second half
-        if second_date == -1
-          if date.day >= 15
-            # Second half of the month
-            [date.change(day: 15), date.end_of_month]
-          elsif date.day >= first_date
-            # First half of the month
-            [date.change(day: first_date), date.change(day: 14)]
-          else
-            # Last period of previous month
-            prev_month = date.prev_month
-            [prev_month.change(day: 15), prev_month.end_of_month]
-          end
-        elsif date.day >= second_date
-          # Regular semi-monthly periods
-          # Last period of the month
-          [date.change(day: second_date), date.end_of_month]
-        elsif date.day >= first_date
-            # Middle period
-          [date.change(day: first_date), date.change(day: second_date - 1)]
+        if date.day >= 16
+          [date.change(day: 16), date.end_of_month]
         else
-            # First period (started in previous month)
-          prev_month = date.prev_month
-          [prev_month.change(day: second_date), date.change(day: first_date - 1)]
+          [date.change(day: 1), date.change(day: 15)]
         end
       end
 

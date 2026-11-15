@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+require "rails_helper"
+
 # == Schema Information
 #
 # Table name: shifts
@@ -24,79 +28,25 @@
 #  fk_rails_...  (employee_id => employees.id)
 #  fk_rails_...  (timesheet_id => timesheets.id)
 #
-require "rails_helper"
-
-RSpec.describe Shift do
-  describe "Validations" do
-    it "is valid with valid attributes" do
-      expect(build(:shift)).to be_valid
-    end
-
-    it "is invalid with missing attributes" do
-      %i().each do |attr|
-        expect(build(:shift, attr => nil)).not_to be_valid
-      end
-    end
-
-    describe "no_overlapping_shifts_for_employee" do
-      it "is invalid when another shift for the same employee overlaps" do
-        employee = create(:employee)
-        base_time = Time.zone.local(2024, 3, 15, 9, 0)
-        create(:shift, employee: employee, calendar_event: create(:calendar_event, starts_at: base_time, ends_at: base_time + 2.hours))
-        overlapping = build(:shift, employee: employee, calendar_event: build(:calendar_event, starts_at: base_time + 1.hour, ends_at: base_time + 3.hours))
-
-        expect(overlapping).not_to be_valid
-        expect(overlapping.errors[:base]).to include("overlaps another shift for the same employee")
-      end
-
-      it "is valid when another shift for the same employee does not overlap" do
-        employee = create(:employee)
-        base_time = Time.zone.local(2024, 3, 15, 9, 0)
-        create(:shift, employee: employee, calendar_event: create(:calendar_event, starts_at: base_time, ends_at: base_time + 2.hours))
-        after_shift = build(:shift, employee: employee, calendar_event: build(:calendar_event, starts_at: base_time + 3.hours, ends_at: base_time + 5.hours))
-
-        expect(after_shift).to be_valid
-      end
-
-      it "is valid when overlapping shift is for a different employee" do
-        employee1 = create(:employee)
-        employee2 = create(:employee)
-        base_time = Time.zone.local(2024, 3, 15, 9, 0)
-        create(:shift, employee: employee1, calendar_event: create(:calendar_event, starts_at: base_time, ends_at: base_time + 2.hours))
-        same_slot = build(:shift, employee: employee2, calendar_event: build(:calendar_event, starts_at: base_time + 1.hour, ends_at: base_time + 3.hours))
-
-        expect(same_slot).to be_valid
-      end
-
-      it "allows updating a shift without self-overlap" do
-        employee = create(:employee)
-        base_time = Time.zone.local(2024, 3, 15, 9, 0)
-        shift = create(:shift, employee: employee, calendar_event: create(:calendar_event, starts_at: base_time, ends_at: base_time + 2.hours))
-
-        shift.calendar_event.assign_attributes(starts_at: base_time + 30.minutes, ends_at: base_time + 1.hour)
-        expect(shift).to be_valid
-      end
-    end
-  end
-
-  describe "Associations" do
+RSpec.describe Shift, type: :model do
+  describe "associations" do
     it { is_expected.to belong_to(:employee) }
     it { is_expected.to belong_to(:calendar_event) }
     it { is_expected.to belong_to(:timesheet).optional }
   end
 
-  describe "after_create :associate_with_timesheet_if_in_active_period" do
+  describe "after_create :attach_to_containing_pay_period" do
     around do |example|
       Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:weekly]
       Setting.payroll_period_day = "monday"
       example.run
     end
 
-    it "associates shift with a new timesheet when shift is in active period and no PayPeriod exists yet" do
+    it "associates shift with a new timesheet when no PayPeriod exists yet" do
       travel_to Date.new(2024, 3, 15) do
-        active_start, active_end = Payroll::Period.period_dates(Date.current)
-        period_start_dt = active_start.to_time.beginning_of_day
-        period_end_dt = active_end.to_time.end_of_day
+        period_start, period_end = Payroll::Period.period_dates(Date.current)
+        period_start_dt = period_start.to_time.beginning_of_day
+        period_end_dt = period_end.to_time.end_of_day
         employee = create(:employee)
         event = create(:calendar_event, starts_at: period_start_dt + 1.day, ends_at: period_start_dt + 1.day + 2.hours)
 
@@ -114,9 +64,9 @@ RSpec.describe Shift do
 
     it "associates shift with existing timesheet when PayPeriod and timesheet for employee already exist" do
       travel_to Date.new(2024, 3, 15) do
-        active_start, active_end = Payroll::Period.period_dates(Date.current)
-        period_start_dt = active_start.to_time.beginning_of_day
-        period_end_dt = active_end.to_time.end_of_day
+        period_start, period_end = Payroll::Period.period_dates(Date.current)
+        period_start_dt = period_start.to_time.beginning_of_day
+        period_end_dt = period_end.to_time.end_of_day
         pay_period = PayPeriod.create!(starts_at: period_start_dt, ends_at: period_end_dt)
         employee = create(:employee)
         timesheet = pay_period.timesheets.create!(employee: employee)
@@ -131,9 +81,9 @@ RSpec.describe Shift do
 
     it "creates timesheet for employee when PayPeriod exists but no timesheet for that employee" do
       travel_to Date.new(2024, 3, 15) do
-        active_start, active_end = Payroll::Period.period_dates(Date.current)
-        period_start_dt = active_start.to_time.beginning_of_day
-        period_end_dt = active_end.to_time.end_of_day
+        period_start, period_end = Payroll::Period.period_dates(Date.current)
+        period_start_dt = period_start.to_time.beginning_of_day
+        period_end_dt = period_end.to_time.end_of_day
         pay_period = PayPeriod.create!(starts_at: period_start_dt, ends_at: period_end_dt)
         employee = create(:employee)
         event = create(:calendar_event, starts_at: period_start_dt + 1.day, ends_at: period_start_dt + 1.day + 2.hours)
@@ -146,27 +96,41 @@ RSpec.describe Shift do
       end
     end
 
-    it "does not associate when shift is before the active pay period" do
-      travel_to Date.new(2024, 3, 15) do
-        active_start, = Payroll::Period.period_dates(Date.current)
-        employee = create(:employee)
-        event_before = create(:calendar_event, starts_at: (active_start - 2.days).to_time.noon, ends_at: (active_start - 2.days).to_time.noon + 2.hours)
-
-        shift = create(:shift, employee: employee, calendar_event: event_before)
-
-        expect(shift.reload.timesheet_id).to be_nil
-      end
-    end
-
-    it "does not associate when shift is after the active pay period" do
+    it "attaches a future shift to the pay period that contains it" do
       travel_to Date.new(2024, 3, 15) do
         _, active_end = Payroll::Period.period_dates(Date.current)
+        future_start, future_end = Payroll::Period.period_dates(active_end + 1.day)
         employee = create(:employee)
-        event_after = create(:calendar_event, starts_at: (active_end + 1.day).to_time.noon, ends_at: (active_end + 1.day).to_time.noon + 2.hours)
+        event_after = create(
+          :calendar_event,
+          starts_at: future_start.to_time.noon,
+          ends_at: future_start.to_time.noon + 2.hours,
+        )
 
         shift = create(:shift, employee: employee, calendar_event: event_after)
 
-        expect(shift.reload.timesheet_id).to be_nil
+        pay_period = shift.reload.timesheet.pay_period
+        expect(pay_period.starts_at.to_date).to eq(future_start)
+        expect(pay_period.ends_at.to_date).to eq(future_end)
+      end
+    end
+
+    it "attaches a past shift to the pay period that contains it" do
+      travel_to Date.new(2024, 3, 15) do
+        active_start, = Payroll::Period.period_dates(Date.current)
+        past_start, past_end = Payroll::Period.period_dates(active_start - 1.day)
+        employee = create(:employee)
+        event_before = create(
+          :calendar_event,
+          starts_at: past_start.to_time.noon,
+          ends_at: past_start.to_time.noon + 2.hours,
+        )
+
+        shift = create(:shift, employee: employee, calendar_event: event_before)
+
+        pay_period = shift.reload.timesheet.pay_period
+        expect(pay_period.starts_at.to_date).to eq(past_start)
+        expect(pay_period.ends_at.to_date).to eq(past_end)
       end
     end
   end

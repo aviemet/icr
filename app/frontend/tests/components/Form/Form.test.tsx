@@ -5,7 +5,7 @@ import React, { useState } from "react"
 import { beforeEach, describe, expect, it } from "vitest"
 
 import { Form } from "@/components/Form"
-import { TextInput } from "@/components/Inputs"
+import { NumberInput, Select, TextInput } from "@/components/Inputs"
 import { theme } from "@/lib/theme"
 
 describe("components/Form/Form", () => {
@@ -43,6 +43,63 @@ describe("components/Form/Form", () => {
 			const el = screen.getByLabelText("Email")
 			if(!(el instanceof HTMLInputElement)) throw new Error("Expected input element")
 			expect(el.value).toBe("test@example.com")
+		})
+	})
+
+	it("applies initialData to Select inputs", async () => {
+		class ResizeObserverMock {
+			observe() {}
+			unobserve() {}
+			disconnect() {}
+		}
+		window.ResizeObserver = ResizeObserverMock
+
+		render(
+			<MantineProvider theme={ theme } defaultColorScheme="dark">
+				<Form
+					action="/test"
+					method="post"
+					initialData={ { settings: { payroll_period_type: "semi_monthly" } } }
+				>
+					<Select
+						name="settings.payroll_period_type"
+						label="Period interval"
+						options={ [
+							{ label: "Every 2 weeks", value: "bi_weekly" },
+							{ label: "Semi Monthly", value: "semi_monthly" },
+						] }
+					/>
+				</Form>
+			</MantineProvider>,
+		)
+
+		await waitFor(() => {
+			const hidden = document.querySelector('input[name="settings.payroll_period_type"]')
+			if(!(hidden instanceof HTMLInputElement)) throw new Error("Expected hidden select input")
+			expect(hidden.value).toBe("semi_monthly")
+			const combobox = screen.getByRole("combobox")
+			if(!(combobox instanceof HTMLInputElement)) throw new Error("Expected combobox input")
+			expect(combobox.value).toBe("Semi Monthly")
+		})
+	})
+
+	it("applies initialData to NumberInput", async () => {
+		render(
+			<MantineProvider theme={ theme } defaultColorScheme="dark">
+				<Form
+					action="/test"
+					method="post"
+					initialData={ { settings: { overtime_weekly_hours: 40 } } }
+				>
+					<NumberInput name="settings.overtime_weekly_hours" label="Weekly threshold" />
+				</Form>
+			</MantineProvider>,
+		)
+
+		await waitFor(() => {
+			const el = screen.getByLabelText("Weekly threshold")
+			if(!(el instanceof HTMLInputElement)) throw new Error("Expected input element")
+			expect(el.value).toBe("40")
 		})
 	})
 

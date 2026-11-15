@@ -1,0 +1,46 @@
+---
+en:
+  views:
+    pay_periods:
+      index:
+        title: Payroll
+        current_badge: Current
+        period_archive: Period archive
+        columns:
+          range: Period
+          status: Status
+          approved: Approved
+          flagged: Flagged
+          overtime: Overtime
+          due: Due
+        workflow:
+          open: Open
+          current: Current
+          pending: Pending
+          approved: Approved
+          closed: Closed
+        summary:
+          pending: Pending
+          flagged: Flagged
+          overtime: Overtime
+          approved_label: Approved
+          approved: "%{approved} / %{total}"
+          due_in_days: Due in %{count} days
+          finalized_on: Finalized %{date}
+      show:
+        title: Pay period
+        back_to_payroll: Back to Payroll
+        workflow_help: Review and approve each employee timesheet, then close the period to lock it.
+        finalize: Close period
+        finalize_blocked_before_period_end: Close is available after the period ends.
+        finalize_blocked_pending: Approve all timesheets before closing.
+        finalize_blocked_no_timesheets: No employee timesheets to close.
+        export: Export
+        finalized_stamp: Closed %{date}
+        adjustments_title: Adjustments
+        adjustment_reason: Reason
+        adjustment_submit: Record adjustment
+        adjustment_timesheet_id: Timesheet ID
+        adjustment_approved_at: Approved at (ISO date or blank to clear)
+        no_adjustments: No adjustments recorded
+        hours: "%{count} hrs"

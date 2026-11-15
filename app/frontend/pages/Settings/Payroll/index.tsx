@@ -1,11 +1,10 @@
 import { Box, Grid, Paper, Stack, Text, Title } from "@/components"
 import { Form, Submit } from "@/components/Form"
+import { Overtime } from "@/domains/Settings/Payroll/Form/Overtime"
+import { OvertimeExemptions } from "@/domains/Settings/Payroll/Form/OvertimeExemptions"
+import { Payroll } from "@/domains/Settings/Payroll/Form/Payroll"
+import { ShiftTypes } from "@/domains/Settings/Payroll/Form/ShiftTypes"
 import { Routes, withLayout } from "@/lib"
-
-import Overtime from "./FormInputs/Overtime"
-import OvertimeExemptions from "./FormInputs/OvertimeExemptions"
-import Payroll from "./FormInputs/Payroll"
-import ShiftTypes from "./FormInputs/ShiftTypes"
 
 export interface PayrollSettingsProps {
 	settings: Schema.Setting
