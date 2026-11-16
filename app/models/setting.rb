@@ -59,6 +59,7 @@ class Setting < RailsSettings::Base
     default_language: "en",
     default_currency: "USD",
     default_timezone: "America/Los_Angeles",
+    primary_color: "#228be6",
     shift_title_format: "{start:h:mma} - {end:h:mma}: {full_name}",
     overtime_weekly_hours: 40,
     overtime_daily_hours: 8,
@@ -82,6 +83,14 @@ class Setting < RailsSettings::Base
   }
   field :default_timezone, type: :string, default: DEFAULT_SETTINGS[:default_timezone], validates: {
     presence: true
+  }
+
+  field :primary_color, type: :string, default: DEFAULT_SETTINGS[:primary_color], validates: {
+    presence: true,
+    format: {
+      with: /\A#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})\z/,
+      message: "must be a hex color",
+    },
   }
 
   ########################

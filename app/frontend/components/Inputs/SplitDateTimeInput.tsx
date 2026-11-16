@@ -121,9 +121,13 @@ export function SplitDateTimeInputRoot({ name, children }: SplitDateTimeInputRoo
 		[inputId, dateValue, timeValue, onDateChange, onTimeChange]
 	)
 
+	const hiddenValue = dateValue
+		? dayjs(dateValue).toISOString()
+		: (typeof value === "string" ? value : "")
+
 	return (
 		<SplitDateTimeContext.Provider value={ contextValue }>
-			<HiddenInput name={ name } value={ typeof value === "string" ? value : "" } />
+			<HiddenInput name={ name } value={ hiddenValue } />
 			{ children }
 		</SplitDateTimeContext.Provider>
 	)

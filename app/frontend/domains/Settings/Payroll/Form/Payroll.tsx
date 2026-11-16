@@ -5,11 +5,6 @@ import { type PayrollPeriodType } from "@/types/PayrollPeriodType"
 
 import { PayrollPeriodOptions } from "./PayrollPeriodOptions"
 
-export interface PayrollFormSectionProps {
-	settings: Schema.Setting
-	shift_types: Schema.Category[]
-}
-
 const PAYROLL_PERIOD_VALUES: readonly string[] = ["weekly", "bi_weekly", "semi_monthly", "monthly"]
 
 function isPayrollPeriodType(value: unknown): value is PayrollPeriodType {
@@ -18,7 +13,7 @@ function isPayrollPeriodType(value: unknown): value is PayrollPeriodType {
 
 const DEFAULT_PAYROLL_PERIOD: PayrollPeriodType = "bi_weekly"
 
-export function Payroll(_props: PayrollFormSectionProps) {
+export function Payroll() {
 	const [payrollPeriod] = useFormField("settings.payroll_period_type")
 
 	return (

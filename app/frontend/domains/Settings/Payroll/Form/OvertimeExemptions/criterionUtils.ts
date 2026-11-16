@@ -1,9 +1,12 @@
-export interface CriterionCondition {
-	operator: string
-	value: string | number | string[] | number[]
-}
+import {
+	type OvertimeExemptionCriterionField,
+	type OvertimeExemptionCriterionValue,
+} from "@/types/OvertimeExemptionCriteria"
 
-export const FIELD_TYPES = {
+export const FIELD_TYPES: Record<OvertimeExemptionCriterionField, {
+	label: string
+	operators: ReadonlyArray<{ value: string, label: string }>
+}> = {
 	category: {
 		label: "Category",
 		operators: [
@@ -41,21 +44,34 @@ export const FIELD_TYPES = {
 			{ value: "between", label: "Between" },
 		],
 	},
-} as const
+}
 
-export type FieldKey = keyof typeof FIELD_TYPES
+export type CategoryOption = {
+	value: string
+	label: string
+}
 
-export const CATEGORY_OPTIONS = [
-	{ value: "sleep_shift", label: "Sleep Shift" },
-	{ value: "standby", label: "Standby" },
-	{ value: "regular", label: "Regular" },
-]
+export function categoryOptionsFromShiftTypes(shiftTypes: Schema.Category[]): CategoryOption[] {
+	return shiftTypes.flatMap(shiftType => {
+		const value = shiftType.slug || shiftType.id
+		if(!value) return []
+		return [{ value, label: shiftType.name }]
+	})
+}
 
-export function isFieldKey(field: string): field is FieldKey {
+export function isFieldKey(field: string): field is OvertimeExemptionCriterionField {
 	return Object.hasOwn(FIELD_TYPES, field)
 }
 
-export function fieldKeys(): FieldKey[] {
+export function isCriterionValue(value: unknown): value is OvertimeExemptionCriterionValue {
+	if(typeof value === "string" || typeof value === "number") return true
+	if(!Array.isArray(value) || value.length === 0) return false
+	if(value.every(entry => typeof entry === "string")) return true
+	if(value.every(entry => typeof entry === "number")) return true
+	return false
+}
+
+export function fieldKeys(): OvertimeExemptionCriterionField[] {
 	return Object.keys(FIELD_TYPES).filter(isFieldKey)
 }
 
@@ -65,14 +81,14 @@ export function toNumber(value: string | number): number {
 	return Number.isFinite(parsed) ? parsed : 0
 }
 
-export function stringPair(value: CriterionCondition["value"]): [string, string] {
+export function stringPair(value: OvertimeExemptionCriterionValue): [string, string] {
 	if(Array.isArray(value)) {
 		return [String(value[0] ?? ""), String(value[1] ?? "")]
 	}
 	return ["", ""]
 }
 
-export function numberPair(value: CriterionCondition["value"]): [number, number] {
+export function numberPair(value: OvertimeExemptionCriterionValue): [number, number] {
 	if(Array.isArray(value)) {
 		return [toNumber(value[0] ?? 0), toNumber(value[1] ?? 0)]
 	}

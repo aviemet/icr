@@ -65,7 +65,7 @@ incident_report_types = {
 
 model_category_types = {
   "Contact::Email": ["Work", "Personal", "Other"],
-  "Contact::Address": ["Work", "Personal", "Other"],
+  "Contact::Address": ["Primary", "Shipping", "Work", "Personal", "Other"],
   "Contact::Phone": ["Home", "Mobile", "Office", "Other"],
   "Contact::Website": ["Personal", "Business", "Vendor", "Other"],
   Vendor: [
@@ -103,28 +103,25 @@ model_category_types = {
   ],
 }
 
-if Category.none?
-  model_category_types.each do |type, categories|
-    categories.each do |category|
-      Category.create!({
-        name: category,
-        categorizable_type: type,
-        system: true,
-      })
+model_category_types.each do |type, categories|
+  categories.each do |category|
+    Category.find_or_create_by!(name: category, categorizable_type: type) do |record|
+      record.system = true
     end
   end
-
-  incident_report_types.each do |category, subcategories|
-    parent = Category.find_by(categorizable_type: "IncidentReport", name: category)
-    subcategories.each do |subcategory|
-      Category.create({
-        parent:,
-        categorizable_type: parent.categorizable_type,
-        name: subcategory,
-        system: true,
-      })
-    end
-  end
-
-  Rails.logger.info "[seeds] categories"
 end
+
+incident_report_types.each do |category, subcategories|
+  parent = Category.find_by!(categorizable_type: "IncidentReport", name: category)
+  subcategories.each do |subcategory|
+    Category.find_or_create_by!(
+      name: subcategory,
+      categorizable_type: parent.categorizable_type,
+    ) do |record|
+      record.parent = parent
+      record.system = true
+    end
+  end
+end
+
+Rails.logger.info "[seeds] categories"

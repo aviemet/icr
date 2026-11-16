@@ -2,6 +2,7 @@ import { type DateValue, type DatesRangeValue } from "@mantine/dates"
 
 export { AutocompleteInput, type AutocompleteProps } from "./AutocompleteInput"
 export { Checkbox, type CheckboxProps } from "./Checkbox"
+export { BrandColorInput, type BrandColorInputProps } from "./BrandColorInput"
 export { ColorPickerInput, type ColorPickerInputProps } from "./ColorPickerInput"
 export { CurrencyInput, type CurrencyInputProps } from "./CurrencyInput"
 export { DateInput, type DateInputProps } from "./DateInput"

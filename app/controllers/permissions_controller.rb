@@ -1,6 +1,6 @@
 class PermissionsController < ApplicationController
   expose :groups, -> { Permission::Group.includes(:assignments).order(precedence: :desc) }
-  expose :group, -> { params[:id] ? Permission::Group.find(params[:id]) : Permission::Group.new(group_params) }
+  expose :group, -> { params[:id] ? Permission::Group.find(params.expect(:id)) : Permission::Group.new }
 
   strong_params :permission_group, permit: [
     :name,
@@ -73,6 +73,8 @@ class PermissionsController < ApplicationController
 
   # @route POST /permissions (permissions)
   def create
+    group.assign_attributes(permission_group_params)
+
     if group.save
       redirect_to permissions_path, notice: t("templates.controllers.notices.created", model: "Permission group")
     else
@@ -86,7 +88,7 @@ class PermissionsController < ApplicationController
   # @route PATCH /permissions/:id (permission)
   # @route PUT /permissions/:id (permission)
   def update
-    if group.update(group_params)
+    if group.update(permission_group_params)
       redirect_to permissions_path, notice: t("templates.controllers.notices.updated", model: "Permission group")
     else
       render inertia: "Permissions/Edit", props: {

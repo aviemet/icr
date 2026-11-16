@@ -13,11 +13,6 @@ export const settingsLayout = css`
 		padding: 7px 12px;
 		line-height: 1;
 
-		/* @mixin hover {
-			color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
-			background-color: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-7));
-		} */
-
 		&[data-active] {
 			color: var(--mantine-color-white);
 		}
@@ -31,6 +26,20 @@ export const settingsLayout = css`
 	.indicator {
 		background-color: ${ vars.colors.primaryColors.filled };
 		border-radius: ${ vars.radius.md };
+	}
+`
+
+export const settingsSubNav = css`
+	margin-top: 0;
+	padding: ${ vars.spacing.xs };
+
+	.control {
+		padding: 5px 10px;
+		font-size: ${ vars.fontSizes.sm };
+	}
+
+	.indicator {
+		opacity: 0.85;
 	}
 `
 

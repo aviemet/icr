@@ -2,9 +2,14 @@ if Rails.env.development?
   if Setting.none?
     Setting.company_name = "ICR SLS"
     Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
+    Setting.primary_color = "#228be6"
 
     Rails.logger.info "[seeds] settings"
   end
+
+  company = Company.instance
+  company.update!(name: Setting.company_name) if company.name != Setting.company_name
+  Rails.logger.info "[seeds] company"
 
   dev_password = "Complex1!"
   test_timezone = "America/Los_Angeles"
@@ -28,10 +33,23 @@ if Rails.env.development?
     Rails.logger.info "[seeds] admin user"
   end
 
+  [
+    "Executive",
+    "Administrative",
+    "Hourly",
+    "Legal",
+    "Human Resources",
+    "Support",
+  ].each do |name|
+    Employee::Department.find_or_create_by!(name: name)
+  end
+  Rails.logger.info "[seeds] departments"
+
   if Employee::JobTitle.none?
-    Employee::JobTitle.create({ name: "Attendant" })
-    Employee::JobTitle.create({ name: "Facilitator" })
-    Employee::JobTitle.create({ name: "Director" })
+    department = Employee::Department.find_by!(name: "Support")
+    Employee::JobTitle.create!({ name: "Attendant", department: department })
+    Employee::JobTitle.create!({ name: "Facilitator", department: department })
+    Employee::JobTitle.create!({ name: "Director", department: department })
 
     Rails.logger.info "[seeds] job titles"
   end

@@ -2,21 +2,30 @@ import { Group, MultiSelect, NumberInput, Select } from "@mantine/core"
 import { TimeInput } from "@mantine/dates"
 
 import {
-	CATEGORY_OPTIONS,
+	type OvertimeExemptionCriterionCondition,
+	type OvertimeExemptionCriterionField,
+} from "@/types/OvertimeExemptionCriteria"
+
+import {
+	type CategoryOption,
 	numberPair,
 	stringPair,
 	toNumber,
-	type CriterionCondition,
-	type FieldKey,
 } from "./criterionUtils"
 
 interface CriterionValueInputProps {
-	field: FieldKey
-	condition: CriterionCondition
-	onChange: (value: CriterionCondition) => void
+	field: OvertimeExemptionCriterionField
+	condition: OvertimeExemptionCriterionCondition
+	categoryOptions: CategoryOption[]
+	onChange: (value: OvertimeExemptionCriterionCondition) => void
 }
 
-export function CriterionValueInput({ field, condition, onChange }: CriterionValueInputProps) {
+export function CriterionValueInput({
+	field,
+	condition,
+	categoryOptions,
+	onChange,
+}: CriterionValueInputProps) {
 	if(field === "category") {
 		if(condition.operator === "in") {
 			const selected = Array.isArray(condition.value)
@@ -25,7 +34,7 @@ export function CriterionValueInput({ field, condition, onChange }: CriterionVal
 
 			return (
 				<MultiSelect
-					data={ CATEGORY_OPTIONS }
+					data={ categoryOptions }
 					value={ selected }
 					onChange={ (value) => onChange({ ...condition, value }) }
 					searchable
@@ -38,7 +47,7 @@ export function CriterionValueInput({ field, condition, onChange }: CriterionVal
 
 		return (
 			<Select
-				data={ CATEGORY_OPTIONS }
+				data={ categoryOptions }
 				value={ selected }
 				onChange={ (value) => onChange({ ...condition, value: value || "" }) }
 				searchable

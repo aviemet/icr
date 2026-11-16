@@ -19,7 +19,7 @@ const ShiftTemplatesIndex = ({ shift_templates, pagination }: ShiftTemplateIndex
 				{ label: "New Shift Template", href: Routes.newShiftTemplate(), icon: <NewIcon /> },
 			] }
 		>
-			<ShiftTemplateTable />
+			<ShiftTemplateTable records={ shift_templates } pagination={ pagination } model="shift_templates" />
 		</IndexPageTemplate>
 	)
 }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_14_172954) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_16_193000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -182,6 +182,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_14_172954) do
     t.index ["manager_id"], name: "index_clients_managers_on_manager_id"
   end
 
+  create_table "companies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "contacts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "notes"
     t.string "contactable_type", null: false
@@ -195,6 +201,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_14_172954) do
     t.index ["primary_address_id"], name: "index_contacts_on_primary_address_id"
     t.index ["primary_email_id"], name: "index_contacts_on_primary_email_id"
     t.index ["primary_phone_id"], name: "index_contacts_on_primary_phone_id"
+  end
+
+  create_table "departments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.string "slug", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_departments_on_slug", unique: true
   end
 
   create_table "doctors", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -517,9 +532,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_14_172954) do
   create_table "job_titles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
+    t.uuid "department_id"
     t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["department_id"], name: "index_job_titles_on_department_id"
     t.index ["slug"], name: "index_job_titles_on_slug", unique: true
   end
 
@@ -908,6 +925,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_14_172954) do
   add_foreign_key "interview_participants", "interviews"
   add_foreign_key "interview_participants", "people"
   add_foreign_key "interviews", "employees"
+  add_foreign_key "job_titles", "departments"
   add_foreign_key "pay_rates", "employees"
   add_foreign_key "payroll_adjustments", "employees"
   add_foreign_key "payroll_adjustments", "pay_periods"

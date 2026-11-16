@@ -2,16 +2,22 @@
 #
 # Table name: job_titles
 #
-#  id          :uuid             not null, primary key
-#  description :text
-#  name        :string           not null
-#  slug        :string           not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  id            :uuid             not null, primary key
+#  description   :text
+#  name          :string           not null
+#  slug          :string           not null
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  department_id :uuid
 #
 # Indexes
 #
-#  index_job_titles_on_slug  (slug) UNIQUE
+#  index_job_titles_on_department_id  (department_id)
+#  index_job_titles_on_slug           (slug) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (department_id => departments.id)
 #
 class Employee::JobTitle < ApplicationRecord
   self.table_name = "job_titles"
@@ -25,6 +31,8 @@ class Employee::JobTitle < ApplicationRecord
   resourcify
   rolify role_join_table_name: :job_titles_roles
 
+  belongs_to :department, class_name: "Employee::Department", inverse_of: :job_titles, optional: true
+
   has_many :employees_job_titles,
     class_name: "Employee::EmployeesJobTitle",
     dependent: :nullify
@@ -37,6 +45,7 @@ class Employee::JobTitle < ApplicationRecord
 
   validates :name, presence: true
 
-  scope :includes_associated, -> { includes([:active_employees]) }
+  scope :includes_associated, -> { includes([:active_employees, :department]) }
   scope :with_active_employees, -> { joins(:active_employees_job_titles).distinct }
 end
+

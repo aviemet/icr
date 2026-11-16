@@ -19,6 +19,7 @@ export interface AsyncMultiSelect<T> extends MultiSelectInputProps {
 
 export { CategoriesDropdown } from "./CategoriesDropdownInput"
 export { CurrenciesDropdown } from "./CurrenciesDropdownInput"
+export { DepartmentsDropdown } from "./DepartmentsDropdownInput"
 export { EmployeesDropdown } from "./EmployeesDropdownInput"
 export { JobTitlesDropdown } from "./JobTitlesDropdownInput"
 export { LanguagesDropdown } from "./LanguagesDropdownInput"

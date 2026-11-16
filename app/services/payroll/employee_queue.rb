@@ -21,7 +21,8 @@ module Payroll
     end
 
     def call
-      page_employee_ids = @employees.pluck(:id)
+      page_employees = @employees.load
+      page_employee_ids = page_employees.map(&:id)
       employee_hours = EmployeePeriodHours.call(@period, page_employee_ids)
       page_timesheets = Timesheet.where(pay_period_id: @period.id, employee_id: page_employee_ids)
         .pluck(:employee_id, :id, :approved_at)
@@ -40,7 +41,7 @@ module Payroll
           key = employee_id.to_s
           hash[key] = period_exceptions[key] if period_exceptions[key]
         end,
-        employees: @employees.render(:index),
+        employees: page_employees.render(:index),
         employee_hours: employee_hours,
         pagination: {
           count: @total_count,

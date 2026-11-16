@@ -1,22 +1,29 @@
 import { ActionIcon, Box, Group, Select } from "@mantine/core"
 
 import { TrashIcon } from "@/components/Icons"
-
 import {
-	FIELD_TYPES,
-	type CriterionCondition,
-	type FieldKey,
-} from "./criterionUtils"
+	type OvertimeExemptionCriterionCondition,
+	type OvertimeExemptionCriterionField,
+} from "@/types/OvertimeExemptionCriteria"
+
+import { type CategoryOption, FIELD_TYPES } from "./criterionUtils"
 import { CriterionValueInput } from "./CriterionValueInput"
 
 interface CriterionFieldProps {
-	field: FieldKey
-	condition: CriterionCondition
-	onChange: (value: CriterionCondition) => void
+	field: OvertimeExemptionCriterionField
+	condition: OvertimeExemptionCriterionCondition
+	categoryOptions: CategoryOption[]
+	onChange: (value: OvertimeExemptionCriterionCondition) => void
 	onRemove: () => void
 }
 
-export function CriterionField({ field, condition, onChange, onRemove }: CriterionFieldProps) {
+export function CriterionField({
+	field,
+	condition,
+	categoryOptions,
+	onChange,
+	onRemove,
+}: CriterionFieldProps) {
 	const fieldConfig = FIELD_TYPES[field]
 
 	return (
@@ -29,7 +36,12 @@ export function CriterionField({ field, condition, onChange, onRemove }: Criteri
 				style={ { width: 200 } }
 			/>
 			<Box mt={ 25 }>
-				<CriterionValueInput field={ field } condition={ condition } onChange={ onChange } />
+				<CriterionValueInput
+					field={ field }
+					condition={ condition }
+					categoryOptions={ categoryOptions }
+					onChange={ onChange }
+				/>
 			</Box>
 			<ActionIcon color="red" variant="subtle" onClick={ onRemove } mt={ 25 }>
 				<TrashIcon size={ 16 } />

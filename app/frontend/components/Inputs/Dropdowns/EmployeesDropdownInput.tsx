@@ -20,7 +20,6 @@ export function EmployeesDropdown({
 	...props
 }: ItemsDropdownProps) {
 	const { data, isStale, refetch } = useGetEmployeesAsOptions({
-		enabled: value !== undefined,
 		initialData,
 	})
 

@@ -25,7 +25,7 @@ export function EditButton({ href, label }: EditButtonProps) {
 			aria-label={ usedLabel }
 			color={ primaryColor }
 		>
-			<Link as="button" href={ href } aria-label={ `Edit ${label}` }>
+			<Link as="button" href={ href } aria-label={ usedLabel }>
 				<EditIcon color={ getContrastingColor(primaryColor) } />
 			</Link>
 		</Tooltip>

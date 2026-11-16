@@ -21,6 +21,7 @@ declare global {
       payroll_period_date_2: string
       payroll_period_day: string
       payroll_period_type: PayrollPeriodType
+      primary_color: string
       shift_title_format: string
     }
   }

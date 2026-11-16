@@ -18,8 +18,10 @@ const CALENDAR_EVENT_SHIFT = categorySlug("Calendar::Event", "Shift")
 const CALENDAR_EVENT_OTHER = categorySlug("Calendar::Event", "Other")
 
 export type EventData = {
-	calendar_event: Omit<PartialDeep<Schema.CalendarEventsFormData>, "event_participants"> & {
+	calendar_event: Omit<PartialDeep<Schema.CalendarEventsFormData>, "event_participants" | "starts_at" | "ends_at"> & {
 		category_slug?: string
+		starts_at?: Date | string
+		ends_at?: Date | string
 		shift: PartialDeep<Schema.Shift>
 		event_participants: PartialDeep<Schema.EventParticipantsFormData>[]
 	}
@@ -76,8 +78,8 @@ export function EventForm({
 					category_slug: CALENDAR_EVENT_SHIFT,
 					name: existingEvent.title,
 					all_day: existingEvent.allDay ?? false,
-					starts_at: existingEvent.start,
-					ends_at: existingEvent.end,
+					starts_at: dayjs(existingEvent.start).toISOString(),
+					ends_at: dayjs(existingEvent.end).toISOString(),
 					shift: { employee_id: employeeId },
 					event_participants: baseParticipants,
 				},
@@ -87,8 +89,8 @@ export function EventForm({
 		return {
 			calendar_event: {
 				category_slug: CALENDAR_EVENT_SHIFT,
-				starts_at: start,
-				ends_at: dayjs(start).add(8, "hours").toDate(),
+				starts_at: dayjs(start).toISOString(),
+				ends_at: dayjs(start).add(8, "hours").toISOString(),
 				shift: { employee_id: "" },
 				event_participants: baseParticipants,
 			},

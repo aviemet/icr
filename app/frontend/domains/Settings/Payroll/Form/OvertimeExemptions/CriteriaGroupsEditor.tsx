@@ -1,19 +1,49 @@
+import { useTranslation } from "react-i18next"
+
 import { Button, Text, Title } from "@/components"
 import { useFormField } from "@/components/Form"
 import { PlusIcon } from "@/components/Icons"
+import {
+	type OvertimeExemptionCriteria,
+	type OvertimeExemptionCriterionGroup,
+} from "@/types/OvertimeExemptionCriteria"
 
-import { CriteriaGroup, type CriterionGroup } from "./CriteriaGroup"
+import { CriteriaGroup } from "./CriteriaGroup"
+import { type CategoryOption, isCriterionValue, isFieldKey } from "./criterionUtils"
 
-function criteriaFromField(value: unknown): CriterionGroup[] {
+function criteriaFromField(value: unknown): OvertimeExemptionCriteria {
 	if(!Array.isArray(value)) return [{}]
-	return value
+
+	return value.map(group => {
+		if(typeof group !== "object" || group === null || Array.isArray(group)) return {}
+
+		const nextGroup: OvertimeExemptionCriterionGroup = {}
+		for(const [field, condition] of Object.entries(group)) {
+			if(!isFieldKey(field)) continue
+			if(typeof condition !== "object" || condition === null || Array.isArray(condition)) continue
+			if(!("operator" in condition) || !("value" in condition)) continue
+			if(typeof condition.operator !== "string") continue
+			if(!isCriterionValue(condition.value)) continue
+
+			nextGroup[field] = {
+				operator: condition.operator,
+				value: condition.value,
+			}
+		}
+		return nextGroup
+	})
 }
 
-export function CriteriaGroupsEditor() {
+interface CriteriaGroupsEditorProps {
+	categoryOptions: CategoryOption[]
+}
+
+export function CriteriaGroupsEditor({ categoryOptions }: CriteriaGroupsEditorProps) {
+	const { t } = useTranslation()
 	const [criteriaField, setCriteriaField] = useFormField("overtime_exemption.criteria")
 	const criteria = criteriaFromField(criteriaField)
 
-	const setCriteria = (nextCriteria: CriterionGroup[]) => {
+	const setCriteria = (nextCriteria: OvertimeExemptionCriteria) => {
 		setCriteriaField(nextCriteria)
 	}
 
@@ -21,7 +51,7 @@ export function CriteriaGroupsEditor() {
 		setCriteria([...criteria, {}])
 	}
 
-	const updateGroup = (index: number, group: CriterionGroup) => {
+	const updateGroup = (index: number, group: OvertimeExemptionCriterionGroup) => {
 		const nextCriteria = [...criteria]
 		nextCriteria[index] = group
 		setCriteria(nextCriteria)
@@ -33,15 +63,18 @@ export function CriteriaGroupsEditor() {
 
 	return (
 		<>
-			<Title order={ 3 }>Criteria Groups</Title>
+			<Title order={ 5 }>
+				{ t("views.settings.payroll.overtime_exemptions.criteria_groups") }
+			</Title>
 			<Text size="sm" c="dimmed">
-				Shifts matching ANY of these criteria groups will be exempt from overtime
+				{ t("views.settings.payroll.overtime_exemptions.criteria_groups_help") }
 			</Text>
 
 			{ criteria.map((group, index) => (
 				<CriteriaGroup
 					key={ index }
 					group={ group }
+					categoryOptions={ categoryOptions }
 					onUpdate={ (nextGroup) => updateGroup(index, nextGroup) }
 					onRemove={ () => removeGroup(index) }
 				/>
@@ -52,7 +85,7 @@ export function CriteriaGroupsEditor() {
 				leftSection={ <PlusIcon size={ 16 } /> }
 				onClick={ addGroup }
 			>
-				Add Criteria Group
+				{ t("views.settings.payroll.overtime_exemptions.add_criteria_group") }
 			</Button>
 		</>
 	)

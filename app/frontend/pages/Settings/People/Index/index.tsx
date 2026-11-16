@@ -19,7 +19,7 @@ const PeopleIndex = ({ people, pagination }: PersonIndexProps) => {
 				{ label: "New Person", href: Routes.newSettingsPerson(), icon: <NewIcon /> },
 			] }
 		>
-			<PersonTable />
+			<PersonTable records={ people } pagination={ pagination } model="people" />
 		</IndexPageTemplate>
 	)
 }

@@ -6,7 +6,7 @@ class Settings::JobTitlesController < ApplicationController
 
   sortable_fields %w[name]
 
-  strong_params :job_title, permit: [:name, :description]
+  strong_params :job_title, permit: [:name, :description, :department_id]
 
   # @route GET /settings/job_titles (settings_job_titles)
   def index

@@ -1,36 +1,38 @@
 import { Button, Group, Paper, Select, Stack } from "@mantine/core"
+import { useTranslation } from "react-i18next"
+
+import {
+	type OvertimeExemptionCriterionCondition,
+	type OvertimeExemptionCriterionField,
+	type OvertimeExemptionCriterionGroup,
+} from "@/types/OvertimeExemptionCriteria"
 
 import { CriterionField } from "./CriterionField"
 import {
+	type CategoryOption,
 	FIELD_TYPES,
 	fieldKeys,
 	isFieldKey,
-	type CriterionCondition,
-	type FieldKey,
 } from "./criterionUtils"
 
-export interface CriterionGroup {
-	category?: CriterionCondition
-	start_time?: CriterionCondition
-	end_time?: CriterionCondition
-	duration?: CriterionCondition
-}
-
 interface CriteriaGroupProps {
-	group: CriterionGroup
-	onUpdate: (group: CriterionGroup) => void
+	group: OvertimeExemptionCriterionGroup
+	categoryOptions: CategoryOption[]
+	onUpdate: (group: OvertimeExemptionCriterionGroup) => void
 	onRemove: () => void
 }
 
-const DEFAULT_CONDITIONS: Record<FieldKey, CriterionCondition> = {
+const DEFAULT_CONDITIONS: Record<OvertimeExemptionCriterionField, OvertimeExemptionCriterionCondition> = {
 	category: { operator: "equals", value: "" },
 	start_time: { operator: "equals", value: "" },
 	end_time: { operator: "equals", value: "" },
 	duration: { operator: "equals", value: 0 },
 }
 
-export function CriteriaGroup({ group, onUpdate, onRemove }: CriteriaGroupProps) {
-	const addCriterion = (field: FieldKey | null) => {
+export function CriteriaGroup({ group, categoryOptions, onUpdate, onRemove }: CriteriaGroupProps) {
+	const { t } = useTranslation()
+
+	const addCriterion = (field: OvertimeExemptionCriterionField | null) => {
 		if(field === null) return
 
 		onUpdate({
@@ -39,7 +41,7 @@ export function CriteriaGroup({ group, onUpdate, onRemove }: CriteriaGroupProps)
 		})
 	}
 
-	const removeCriterion = (field: FieldKey) => {
+	const removeCriterion = (field: OvertimeExemptionCriterionField) => {
 		const nextGroup = { ...group }
 		delete nextGroup[field]
 		onUpdate(nextGroup)
@@ -60,6 +62,7 @@ export function CriteriaGroup({ group, onUpdate, onRemove }: CriteriaGroupProps)
 							key={ field }
 							field={ field }
 							condition={ condition }
+							categoryOptions={ categoryOptions }
 							onChange={ (newCondition) => onUpdate({ ...group, [field]: newCondition }) }
 							onRemove={ () => removeCriterion(field) }
 						/>
@@ -69,7 +72,7 @@ export function CriteriaGroup({ group, onUpdate, onRemove }: CriteriaGroupProps)
 				{ unusedFields.length > 0 && (
 					<Group>
 						<Select
-							placeholder="Add criterion"
+							placeholder={ t("views.settings.payroll.overtime_exemptions.add_criterion") }
 							data={ unusedFields.map(field => ({
 								value: field,
 								label: FIELD_TYPES[field].label,
@@ -84,7 +87,7 @@ export function CriteriaGroup({ group, onUpdate, onRemove }: CriteriaGroupProps)
 
 			<Group mt="md">
 				<Button variant="subtle" color="red" onClick={ onRemove }>
-					Remove Group
+					{ t("views.settings.payroll.overtime_exemptions.remove_group") }
 				</Button>
 			</Group>
 		</Paper>

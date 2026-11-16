@@ -25,12 +25,12 @@ class Api::CategoriesController < Api::ApiController
 
   # @route POST /api/categories (api_categories)
   def create
-    category.company = @active_company
+    category.assign_attributes(category_params)
 
     if category.save
       render json: category.render, status: :created
     else
-      render json: { errors: category.errors }, status: :see_other
+      render json: { errors: category.errors }, status: :unprocessable_content
     end
   end
 
@@ -38,9 +38,18 @@ class Api::CategoriesController < Api::ApiController
   # @route PUT /api/categories/:slug (api_category)
   def update
     if category.update(category_params)
-      render json: category.render, status: :created
+      render json: category.render, status: :ok
     else
-      render json: { errors: category.errors }, status: :see_other
+      render json: { errors: category.errors }, status: :unprocessable_content
+    end
+  end
+
+  # @route DELETE /api/categories/:slug (api_category)
+  def destroy
+    if category.destroy
+      head :no_content
+    else
+      render json: { errors: category.errors }, status: :unprocessable_content
     end
   end
 end

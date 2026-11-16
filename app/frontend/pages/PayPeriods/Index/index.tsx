@@ -69,8 +69,8 @@ export default function PayPeriodsIndex({
 					<Stack gap="md">
 						<Stack gap={ 4 }>
 							<Title order={ 2 }>{ t("views.pay_periods.index.title") }</Title>
-							<Group gap="sm" wrap="wrap">
-								<Link href={ reviewHref }>
+							<Group gap="sm" wrap="wrap" align="center">
+								<Link as="button" href={ reviewHref }>
 									{ periodRange }
 								</Link>
 								<Text size="sm" c="dimmed">
@@ -178,7 +178,7 @@ export default function PayPeriodsIndex({
 
 					<Stack gap="sm">
 						<Title order={ 3 }>
-							{ t("views.pay_periods.index.period_archive") }
+							{ t("views.pay_periods.index.periods") }
 						</Title>
 						<PayPeriodsTable
 							periods={ periods }

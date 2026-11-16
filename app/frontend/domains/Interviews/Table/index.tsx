@@ -1,41 +1,56 @@
-import { Table, Link } from "@/components"
+import { Table, Link, type TableColumn } from "@/components"
 import { EditButton } from "@/components/Button"
-import { type TableProps } from "@/components/Table/Table"
 import { Routes } from "@/lib"
 
-export function EmployeeInterviewTable(props: TableProps) {
+export interface EmployeeInterviewTableRecord {
+	id: string
+	scheduled_at?: string | number | Date
+	notes?: string | number | Date
+}
+
+interface EmployeeInterviewTableProps {
+	records: EmployeeInterviewTableRecord[]
+	pagination?: Schema.Pagination
+	model?: string
+}
+
+export function EmployeeInterviewTable({ records, pagination, model }: EmployeeInterviewTableProps) {
+	const columns: TableColumn<EmployeeInterviewTableRecord>[] = [
+		{
+			accessor: "scheduled_at",
+			title: "Scheduled_at",
+			sortable: true,
+			render: (employeeInterview) => (
+				<Link href={ Routes.interview(employeeInterview.id) }>
+					{ String(employeeInterview.scheduled_at ?? "") }
+				</Link>
+			),
+		},
+		{
+			accessor: "notes",
+			title: "Notes",
+			sortable: true,
+			render: (employeeInterview) => (
+				<Link href={ Routes.interview(employeeInterview.id) }>
+					{ String(employeeInterview.notes ?? "") }
+				</Link>
+			),
+		},
+		{
+			accessor: "actions",
+			title: "Actions",
+			sortable: false,
+			render: (employeeInterview) => <EditButton href={ Routes.editInterview(employeeInterview.id) } />,
+		},
+	]
+
 	return (
-		<Table { ...props }>
-			<Table.Head>
-				<Table.Row>
-
-					<Table.HeadCell sort="scheduled_at">Scheduled_at</Table.HeadCell>
-					<Table.HeadCell sort="notes">Notes</Table.HeadCell>
-					<Table.HeadCell className="actions">Actions</Table.HeadCell>
-				</Table.Row>
-			</Table.Head>
-			<Table.Body>
-				<Table.RowIterator render={ (employee_interview: Schema.EmployeeInterviewsIndex) => {
-					const id = employee_interview.id as string
-					const scheduledAt = String(employee_interview.scheduled_at as string | number | Date)
-					const notes = String(employee_interview.notes as string | number | Date)
-
-					return (
-						<Table.Row key={ id }>
-							<Table.Cell>
-								<Link href={ Routes.interview(id) }>{ scheduledAt }</Link>
-							</Table.Cell>
-							<Table.Cell>
-								<Link href={ Routes.interview(id) }>{ notes }</Link>
-							</Table.Cell>
-							<Table.Cell>
-								<EditButton href={ Routes.editInterview(id) } />
-							</Table.Cell>
-						</Table.Row>
-					)
-				} }
-				/>
-			</Table.Body>
-		</Table>
+		<Table.DataTable
+			columns={ columns }
+			records={ records }
+			pagination={ pagination }
+			model={ model }
+			selectable
+		/>
 	)
 }

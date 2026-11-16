@@ -1,9 +1,7 @@
 import { Grid } from "@/components"
 import { NumberInput } from "@/components/Inputs"
 
-import { type PayrollFormSectionProps } from "./Payroll"
-
-export function Overtime(_props: PayrollFormSectionProps) {
+export function Overtime() {
 	return (
 		<>
 			<Grid.Col span={ { xs: 12, sm: 6 } }>

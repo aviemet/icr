@@ -1,5 +1,5 @@
 module Payroll
-  WorkInterval = Struct.new(:employee_id, :starts_at, :ends_at, :category, keyword_init: true) do
+  WorkInterval = Struct.new(:id, :employee_id, :starts_at, :ends_at, :category, keyword_init: true) do
     def start_time
       starts_at
     end

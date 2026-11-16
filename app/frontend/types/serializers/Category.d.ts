@@ -8,6 +8,7 @@ declare global {
       slug?: string
       description?: string
       name: string
+      system: boolean
     }
   }
 }

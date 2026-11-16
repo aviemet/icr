@@ -13,7 +13,8 @@ class OvertimeExemption < ApplicationRecord
   validates :name, presence: true
   validates :criteria, presence: true
 
-  # Validate the structure of the criteria JSON
+  before_validation :normalize_criteria
+
   validate :validate_criteria_structure
 
   # Evaluates if a shift matches this exemption's criteria
@@ -28,6 +29,12 @@ class OvertimeExemption < ApplicationRecord
   end
 
   private
+
+  def normalize_criteria
+    return if criteria.blank?
+
+    self.criteria = OvertimeExemption::CriteriaNormalizer.call(criteria)
+  end
 
   def evaluate_criterion(shift, field, conditions)
     operator = conditions["operator"]
@@ -52,7 +59,7 @@ class OvertimeExemption < ApplicationRecord
     end
   end
 
-  def evaluate_equality(actual, expected, operator)
+  def evaluate_equality(actual, expected, operator) # rubocop:disable Naming/PredicateMethod
     case operator
     when "equals"
       actual == expected
@@ -65,7 +72,7 @@ class OvertimeExemption < ApplicationRecord
     end
   end
 
-  def evaluate_time(actual_time, expected, operator)
+  def evaluate_time(actual_time, expected, operator) # rubocop:disable Naming/PredicateMethod
     case operator
     when "equals"
       actual_time.strftime("%H:%M") == expected
@@ -110,7 +117,7 @@ class OvertimeExemption < ApplicationRecord
     time_str.between?(start_str, end_str)
   end
 
-  def evaluate_numeric(actual, expected, operator)
+  def evaluate_numeric(actual, expected, operator) # rubocop:disable Naming/PredicateMethod
     case operator
     when "equals"
       actual == expected

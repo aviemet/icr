@@ -744,7 +744,7 @@
             "status": "Status"
           },
           "current_badge": "Current",
-          "period_archive": "Period archive",
+          "periods": "Pay periods",
           "summary": {
             "approved": "%{approved} / %{total}",
             "approved_label": "Approved",
@@ -814,6 +814,30 @@
         },
         "new": {
           "title": "New Permission Group"
+        }
+      },
+      "settings": {
+        "payroll": {
+          "overtime_exemptions": {
+            "active": "Active",
+            "add_criteria_group": "Add Criteria Group",
+            "add_criterion": "Add criterion",
+            "cancel_edit": "Cancel",
+            "criteria_groups": "Criteria Groups",
+            "criteria_groups_help": "Shifts matching ANY of these criteria groups will be exempt from overtime",
+            "description": "Shifts that match these rules are excluded from overtime calculation.",
+            "edit": "Edit",
+            "empty": "No overtime exemptions yet.",
+            "form_title_create": "New overtime exemption",
+            "form_title_edit": "Edit overtime exemption",
+            "inactive": "Inactive",
+            "list_title": "Existing exemptions",
+            "name": "Name",
+            "remove_group": "Remove Group",
+            "save_create": "Save Exemption",
+            "save_update": "Update Exemption",
+            "title": "Overtime exemptions"
+          }
         }
       },
       "timesheets": {

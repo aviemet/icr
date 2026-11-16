@@ -1,37 +1,58 @@
-import { Link, Table } from "@/components"
+import { Link, Table, type TableColumn } from "@/components"
 import { EditButton } from "@/components/Button"
-import { type TableProps } from "@/components/Table/Table"
 import { Routes } from "@/lib"
 
-export function JobTitleTable(props: TableProps) {
+interface JobTitleTableProps {
+	records: Schema.EmployeeJobTitlesIndex[]
+	pagination: Schema.Pagination
+	model: string
+}
+
+export function JobTitleTable({ records, pagination, model }: JobTitleTableProps) {
+	const columns: TableColumn<Schema.EmployeeJobTitlesIndex>[] = [
+		{
+			accessor: "name",
+			title: "Title",
+			sortable: true,
+			render: (jobTitle) => (
+				<Link href={ Routes.settingsJobTitle(String(jobTitle.slug)) }>
+					{ String(jobTitle.name ?? "") }
+				</Link>
+			),
+		},
+		{
+			accessor: "department",
+			title: "Department",
+			sortable: false,
+			render: (jobTitle) => String(jobTitle.department?.name ?? "—"),
+		},
+		{
+			accessor: "description",
+			title: "Description",
+			sortable: true,
+			render: (jobTitle) => (
+				<Link href={ Routes.settingsJobTitle(String(jobTitle.slug)) }>
+					{ String(jobTitle.description ?? "") }
+				</Link>
+			),
+		},
+		{
+			accessor: "actions",
+			title: "Actions",
+			sortable: false,
+			render: (jobTitle) => (
+				<EditButton href={ Routes.editSettingsJobTitle(String(jobTitle.slug)) } />
+			),
+		},
+	]
+
 	return (
-		<Table { ...props }>
-			<Table.Head>
-				<Table.Row>
-					<Table.Cell sort="title">Title</Table.Cell>
-					<Table.Cell sort="description">Description</Table.Cell>
-					<Table.HeadCell className="actions">Actions</Table.HeadCell>
-				</Table.Row>
-			</Table.Head>
-			<Table.Body>
-				<Table.RowIterator render={ (job_title: Schema.JobTitlesIndex) => (
-					<Table.Row key={ job_title.id }>
-
-						<Table.Cell>
-							<Link href={ Routes.settingsJobTitle(job_title.slug) }>{ job_title.name }</Link>
-						</Table.Cell>
-
-						<Table.Cell>
-							<Link href={ Routes.settingsJobTitle(job_title.slug) }>{ job_title.description }</Link>
-						</Table.Cell>
-
-						<Table.Cell>
-							<EditButton href={ Routes.editSettingsJobTitle(job_title.slug) } />
-						</Table.Cell>
-
-					</Table.Row>
-				) } />
-			</Table.Body>
-		</Table>
+		<Table.DataTable
+			columns={ columns }
+			records={ records }
+			pagination={ pagination }
+			model={ model }
+			selectable
+		/>
 	)
 }

@@ -12,7 +12,7 @@ export const useGetCategoriesAsOptions: ReactQueryFunction<
 > = (params, options) => {
 	return useQuery({
 		queryKey: ["categories", "options", params?.categoryType],
-		queryFn: async() => {
+		queryFn: async () => {
 			if(!params?.categoryType) return []
 			const res = await axios.get(Routes.apiCategoryOptions(params.categoryType))
 			return res.data
@@ -25,7 +25,7 @@ export const useGetCategoriesAsOptions: ReactQueryFunction<
 export const useGetCategories: ReactQueryFunction<Schema.Category[], { type: string }> = (params, options) => {
 	return useQuery({
 		queryKey: ["shift_types"],
-		queryFn: async() => {
+		queryFn: async () => {
 			const res = await axios.get(Routes.apiCategories(params))
 			return res.data
 		},
@@ -41,10 +41,15 @@ export const useCreateCategory: ReactMutationFunction<Schema.Category, CreateCat
 	options
 ) => {
 	return useMutation({
-		mutationFn: async(variables) => {
+		mutationFn: async (variables) => {
 			const res = await axios.post(
 				Routes.apiCategories(),
-				Object.assign({ type: "Shift" }, variables)
+				{
+					category: {
+						name: variables.name,
+						categorizable_type: "Shift",
+					},
+				}
 			)
 			return res.data
 		},
@@ -54,15 +59,15 @@ export const useCreateCategory: ReactMutationFunction<Schema.Category, CreateCat
 }
 
 type DeleteCategoryParams = {
-	id: number
+	slug: string
 }
 
 export const useDeleteCategory: ReactMutationFunction<void, DeleteCategoryParams> = (
 	options
 ) => {
 	return useMutation({
-		mutationFn: async(variables) => {
-			await axios.delete(Routes.apiCategories({ id: variables.id }))
+		mutationFn: async (variables) => {
+			await axios.delete(Routes.apiCategory(variables.slug))
 		},
 		mutationKey: ["shift_types"],
 		...exclude(options, "params"),

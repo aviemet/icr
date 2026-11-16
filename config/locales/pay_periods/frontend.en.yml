@@ -5,7 +5,7 @@ en:
       index:
         title: Payroll
         current_badge: Current
-        period_archive: Period archive
+        periods: Pay periods
         columns:
           range: Period
           status: Status

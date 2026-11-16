@@ -1,67 +1,47 @@
-import { Group, Stack, Title } from "@/components"
-import { Form, Submit } from "@/components/Form"
-import { Switch, TextInput } from "@/components/Inputs"
+import { useState } from "react"
 
-import { type CriterionGroup } from "./CriteriaGroup"
-import { CriteriaGroupsEditor } from "./CriteriaGroupsEditor"
+import { Divider, Stack } from "@/components"
 
-interface OvertimeExemption {
-	name: string
-	active: boolean
-	criteria: CriterionGroup[]
-}
-
-type OvertimeExemptionFormData = {
-	overtime_exemption: OvertimeExemption
-}
+import { categoryOptionsFromShiftTypes } from "./criterionUtils"
+import { ExemptionForm, toFormValues } from "./ExemptionForm"
+import { ExemptionsList } from "./ExemptionsList"
 
 interface OvertimeExemptionsProps {
-	onSubmit?: (exemption: OvertimeExemption) => void
-	initialValue?: OvertimeExemption
+	overtime_exemptions: Schema.OvertimeExemption[]
+	shift_types: Schema.Category[]
 }
 
-export function OvertimeExemptions({ onSubmit, initialValue }: OvertimeExemptionsProps) {
-	const initialData: OvertimeExemptionFormData = {
-		overtime_exemption: initialValue || {
-			name: "",
-			active: true,
-			criteria: [{}],
-		},
-	}
+export function OvertimeExemptions({ overtime_exemptions, shift_types }: OvertimeExemptionsProps) {
+	const [editingExemption, setEditingExemption] = useState<Schema.OvertimeExemption>()
+	const categoryOptions = categoryOptionsFromShiftTypes(shift_types)
 
-	const submitWith = async (data: OvertimeExemptionFormData) => {
-		onSubmit?.(data.overtime_exemption)
+	const clearEdit = () => {
+		setEditingExemption(undefined)
 	}
 
 	return (
-		<Form<OvertimeExemptionFormData>
-			initialData={ initialData }
-			submitWith={ submitWith }
-			railsAttributes={ false }
-		>
-			<Stack>
-				<Title order={ 2 }>Overtime Exemption</Title>
+		<Stack gap="lg">
+			<ExemptionsList
+				exemptions={ overtime_exemptions }
+				editingId={ editingExemption?.id }
+				onEdit={ setEditingExemption }
+			/>
 
-				<Group>
-					<TextInput
-						name="overtime_exemption.name"
-						label="Name"
-						required
-						style={ { flex: 1 } }
+			<Divider />
+
+			{ editingExemption
+				? (
+					<ExemptionForm
+						key={ editingExemption.id }
+						exemption={ editingExemption }
+						initialValue={ toFormValues(editingExemption) }
+						categoryOptions={ categoryOptions }
+						onCancelEdit={ clearEdit }
 					/>
-					<Switch
-						name="overtime_exemption.active"
-						label="Active"
-						mt={ 25 }
-					/>
-				</Group>
-
-				<CriteriaGroupsEditor />
-
-				<Group>
-					<Submit>Save Exemption</Submit>
-				</Group>
-			</Stack>
-		</Form>
+				)
+				: (
+					<ExemptionForm key="create" categoryOptions={ categoryOptions } />
+				) }
+		</Stack>
 	)
 }

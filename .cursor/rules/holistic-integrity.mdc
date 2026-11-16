@@ -1,0 +1,28 @@
+---
+description: Require whole-feature integrity; local task success is insufficient
+alwaysApply: true
+---
+
+# Holistic Integrity
+
+A change is done when the **feature and the screens that use it tell one coherent truth**. Shipping a locally correct slice that leaves sibling props, queries, counts, or routes inconsistent is a failed change.
+
+## Standard
+
+Before finishing any behavior change:
+
+1. **Trace the full path** for one real record: load → serialize/props → UI lookup keys → related maps (hours, ids, approvals, counts). Confirm every consumer on that screen reads the same identity and the same set.
+2. **One loaded set for one page.** If a screen needs records plus derived maps for those records, load the page set once and derive everything from that set. Separate queries for "the same page" must share a stable order and the same ids; prefer one load.
+3. **Cross-prop lockstep.** When a page ships parallel hashes/arrays keyed by id (employees + hours + timesheets + summaries), add or update a spec that asserts those keys describe the same population.
+4. **Upstream and downstream.** Check the index and the show (or list and detail) that share the same domain numbers. If you fix who belongs in a period on show, the home summary for that period must use the same rule.
+5. **Silent wrong data counts as breakage.** A blank, dash, or stale count that hides a mismatch is a production bug. Prefer a failing spec or an obvious error over a page that looks fine while lying.
+
+## Example (payroll queue)
+
+Bad: `pluck` page ids for hours, then `render` the relation again for the table, with no stable order — two populations on one screen.
+
+Good: `load` the paginated relation once; map hours/timesheets from those ids; render that same relation; spec that hours/timesheet keys match rendered employee ids.
+
+## Mindset
+
+You are responsible for the **product surface the user hits**, not only the file you were asked to touch. Tests that only exercise the happy path of your new function are incomplete if the page that wires that function to other data can drift.

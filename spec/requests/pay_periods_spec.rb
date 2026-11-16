@@ -5,7 +5,7 @@ RSpec.describe "/payroll", type: :request do
   login_user(:admin)
 
   describe "GET /payroll (index)" do
-    it "renders the payroll home with current summary and period archive", :inertia do
+    it "renders the payroll home with current summary and pay periods", :inertia do
       Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
 
       travel_to Time.zone.local(2024, 3, 20, 12, 0, 0) do
@@ -68,8 +68,28 @@ RSpec.describe "/payroll", type: :request do
         pending_employee = create(:employee)
         create(:timesheet, pay_period: pay_period, employee: approved_employee, approved_at: Date.new(2024, 3, 20))
         create(:timesheet, pay_period: pay_period, employee: pending_employee, approved_at: nil)
-        event = create(:calendar_event, starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0), ends_at: Time.zone.local(2024, 3, 15, 17, 0, 0))
-        create(:shift, employee: approved_employee, timesheet: Timesheet.find_by(employee: approved_employee), calendar_event: event)
+        approved_event = create(
+          :calendar_event,
+          starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0),
+          ends_at: Time.zone.local(2024, 3, 15, 17, 0, 0),
+        )
+        pending_event = create(
+          :calendar_event,
+          starts_at: Time.zone.local(2024, 3, 16, 9, 0, 0),
+          ends_at: Time.zone.local(2024, 3, 16, 17, 0, 0),
+        )
+        create(
+          :shift,
+          employee: approved_employee,
+          timesheet: Timesheet.find_by(employee: approved_employee),
+          calendar_event: approved_event,
+        )
+        create(
+          :shift,
+          employee: pending_employee,
+          timesheet: Timesheet.find_by(employee: pending_employee),
+          calendar_event: pending_event,
+        )
 
         get period_url(pay_period)
 
@@ -85,6 +105,47 @@ RSpec.describe "/payroll", type: :request do
           flagged_count: 0,
         )
         expect(inertia.props[:employee_hours][approved_employee.id.to_s][:regular_hours]).to eq(8.0)
+        expect(inertia.props[:employee_hours][pending_employee.id.to_s][:regular_hours]).to eq(8.0)
+        expect(inertia.props[:employees].pluck(:id)).to contain_exactly(
+          approved_employee.id.to_s,
+          pending_employee.id.to_s,
+        )
+      end
+    end
+
+    it "omits employees with no worked shifts for the period", :inertia do
+      Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:bi_weekly]
+      Setting.payroll_period_day = "monday"
+
+      travel_to Time.zone.local(2024, 3, 15, 12, 0, 0) do
+        period_start = Date.new(2024, 3, 11).to_time.beginning_of_day
+        period_end = Date.new(2024, 3, 24).to_time.end_of_day
+        pay_period = PayPeriod.find_or_create_by!(starts_at: period_start, ends_at: period_end)
+        working_employee = create(:employee)
+        create(:employee)
+        create(:timesheet, pay_period: pay_period, employee: working_employee, approved_at: nil)
+        create(:timesheet, pay_period: pay_period, employee: create(:employee), approved_at: nil)
+        event = create(
+          :calendar_event,
+          starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0),
+          ends_at: Time.zone.local(2024, 3, 15, 17, 0, 0),
+        )
+        create(
+          :shift,
+          employee: working_employee,
+          timesheet: Timesheet.find_by(employee: working_employee),
+          calendar_event: event,
+        )
+
+        get period_url(pay_period)
+
+        expect(response).to be_successful
+        expect(inertia.props[:employees].pluck(:id)).to eq([working_employee.id.to_s])
+        expect(inertia.props[:summary]).to include(
+          approved_count: 0,
+          pending_count: 1,
+          total_count: 1,
+        )
       end
     end
   end

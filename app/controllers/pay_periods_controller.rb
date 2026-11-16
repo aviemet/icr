@@ -2,14 +2,21 @@ class PayPeriodsController < ApplicationController
   include Searchable
 
   expose :pay_period
-  expose :employees, -> { search(Employee.includes_associated) }
+  expose :employees, -> {
+    search(
+      Employee.includes_associated
+        .where(id: pay_period.timesheets.joins(:shifts).select(:employee_id))
+        .order("employees.id"),
+    )
+  }
 
   # @route GET /payroll (payroll_periods)
   def index
     authorize PayPeriod
     period_start, period_end = Payroll::Period.period_dates
     current_period = PayPeriod.for_period_dates(period_start, period_end)
-    employee_ids = Employee.pluck(:id)
+    current_period.sync_shifts! unless current_period.finalized?
+    employee_ids = period_employee_ids(current_period)
     current_summary = Payroll::PeriodSummary.call(current_period, employee_ids: employee_ids)
     eligibility = Payroll::FinalizeEligibility.call(current_period, summary: current_summary)
     recent_periods = PayPeriod.recent_first.limit(10)
@@ -21,7 +28,9 @@ class PayPeriodsController < ApplicationController
       finalize_blocked_reason: -> { eligibility[:finalize_blocked_reason] },
       can_export: -> { eligibility[:can_export] },
       periods: -> {
-        recent_periods.map { |period| Payroll::PeriodSummary.archive_row(period, employee_ids: employee_ids) }
+        recent_periods.map { |period|
+          Payroll::PeriodSummary.archive_row(period, employee_ids: period_employee_ids(period))
+        }
       },
     }
   end
@@ -127,5 +136,11 @@ class PayPeriodsController < ApplicationController
     redirect_to period_path(pay_period), notice: t("pay_periods.adjustment_recorded")
   rescue ActiveRecord::RecordInvalid => e
     redirect_to period_path(pay_period), alert: e.record.errors.full_messages.to_sentence.presence || t("pay_periods.adjustment_failed")
+  end
+
+  private
+
+  def period_employee_ids(period)
+    period.timesheets.joins(:shifts).distinct.pluck(:employee_id)
   end
 end

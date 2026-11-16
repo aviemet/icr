@@ -54,7 +54,7 @@ module Payroll
     end
 
     attribute :created_at do
-      adjustment.created_at.iso8601
+      adjustment.created_at&.iso8601
     end
   end
 end

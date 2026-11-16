@@ -57,9 +57,21 @@ Rails.application.routes.draw do
   namespace :settings do
     get "", to: redirect("/settings/general")
     resource :calendars, path: :calendar, only: [:show, :update], as: :calendar
+    get "calendar/shift_types", to: "calendars#shift_types", as: :calendar_shift_types
     resources :people, param: :slug
+    resource :company, only: [:show, :update]
     resources :job_titles, param: :slug
-    resource :payrolls, path: :payroll, only: [:show, :update], as: :payroll
+    resources :departments, param: :slug do
+      delete "", action: :destroy, on: :collection
+    end
+    get "payroll", to: redirect("/settings/payroll/schedule")
+    scope path: "payroll", as: "payroll" do
+      get "schedule", to: "payrolls#schedule"
+      match "schedule", to: "payrolls#update_schedule", via: [:patch, :put]
+      get "overtime", to: "payrolls#overtime"
+      match "overtime", to: "payrolls#update_overtime", via: [:patch, :put]
+    end
+    resources :overtime_exemptions, only: [:create, :update]
   end
   resource :settings, param: :slug, except: [:new, :create, :destroy]
 

@@ -3,6 +3,7 @@ import { Form, Submit } from "@/components/Form"
 import { Select, Switch } from "@/components/Inputs"
 import { Routes, withLayout } from "@/lib"
 
+import { SettingsPageHeader } from "../SettingsPageHeader"
 import ShiftTitleFormatInput from "./ShiftTitleFormatInput"
 
 interface CalendarSettingsProps {
@@ -14,8 +15,13 @@ const splitEventsName = "settings.calendar_split_events_show_original_times"
 const CalendarSettings = ({ settings }: CalendarSettingsProps) => {
 	return (
 		<Box>
+			<SettingsPageHeader
+				title="Calendar Display"
+				description="Control how multi-day events appear on the calendar."
+			/>
+
 			<Form
-				action={ Routes.settings() }
+				action={ Routes.settingsCalendar() }
 				method="patch"
 				initialData={ { settings } }
 			>

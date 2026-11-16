@@ -58,6 +58,7 @@ export * from "./households"
 export * from "./locale"
 export * from "./users"
 export * from "./jobTitles"
+export * from "./departments"
 export * from "./spotlights"
 
 /**
