@@ -69,7 +69,7 @@ export const useCalendarContext = (): CalendarContextValue => {
 
 export const CalendarProvider = (
 	props: React.PropsWithChildren<{ value: CalendarContextValue }>
-): JSX.Element => {
+): React.ReactElement => {
 	return <ContextObject.Provider value={ props.value }>{ props.children }</ContextObject.Provider>
 }
 

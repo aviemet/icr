@@ -88,7 +88,7 @@ export function PayPeriodsTable({ periods, currentPeriodId }: PayPeriodsTablePro
 	]
 
 	return (
-		<Table.TableProvider>
+		<Table.Provider>
 			<Table.DataTable
 				columns={ columns }
 				records={ periods }
@@ -99,6 +99,6 @@ export function PayPeriodsTable({ periods, currentPeriodId }: PayPeriodsTablePro
 						: undefined
 				) }
 			/>
-		</Table.TableProvider>
+		</Table.Provider>
 	)
 }

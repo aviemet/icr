@@ -4,7 +4,7 @@ import { Routes } from "@/lib"
 
 
 interface EditTrainingProps {
-	training: Schema.TrainingsEdit
+	training: Schema.EmployeeTrainingsEdit
 }
 
 const EditTraining = ({ training }: EditTrainingProps) => {

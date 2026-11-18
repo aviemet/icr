@@ -193,7 +193,7 @@ export function ReviewTable({
 				</Group>
 			) }
 
-			<Table.TableProvider>
+			<Table.Provider>
 				<Table { ...props }>
 					<Table.Head>
 						<Table.Row>
@@ -267,7 +267,7 @@ export function ReviewTable({
 						</Table.Footer>
 					) }
 				</Table>
-			</Table.TableProvider>
+			</Table.Provider>
 		</Box>
 	)
 }

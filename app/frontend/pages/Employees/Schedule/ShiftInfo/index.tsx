@@ -1,10 +1,9 @@
-import { type Event } from "react-big-calendar"
-
 import { Box, Text } from "@/components"
+import { type BaseCalendarEvent } from "@/components/Calendar"
 import { DateTimeFormatter } from "@/components/Formatters"
 
 interface ClientShiftInfo {
-	event: Event
+	event: BaseCalendarEvent
 }
 
 const ShiftInfo = ({ event }: ClientShiftInfo) => {

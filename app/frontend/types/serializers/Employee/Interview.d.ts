@@ -4,10 +4,10 @@ export {}
 declare global {
   namespace Schema {
     interface EmployeeInterview {
-      id?: unknown
-      employee_id: unknown
-      notes: unknown
-      scheduled_at: unknown
+      id?: string
+      employee_id: string
+      notes?: string
+      scheduled_at?: Date
     }
   }
 }

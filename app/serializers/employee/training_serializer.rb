@@ -12,7 +12,7 @@
 #  updated_at        :datetime         not null
 #
 class Employee::TrainingSerializer < ApplicationSerializer
-  object_as :training
+  object_as :training, model: "Employee::Training"
 
   attributes(
     :name,

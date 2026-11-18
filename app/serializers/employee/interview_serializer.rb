@@ -18,7 +18,7 @@
 #  fk_rails_...  (employee_id => employees.id)
 #
 class Employee::InterviewSerializer < ApplicationSerializer
-  object_as :employee_interview
+  object_as :employee_interview, model: "Employee::Interview"
 
   attributes(:scheduled_at, :notes, :employee_id)
 end

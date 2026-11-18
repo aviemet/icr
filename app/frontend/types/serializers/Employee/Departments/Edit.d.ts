@@ -4,12 +4,12 @@ export {}
 declare global {
   namespace Schema {
     interface EmployeeDepartmentsEdit {
-      id: unknown
-      created_at: unknown
-      description: unknown
-      name: unknown
-      slug: unknown
-      updated_at: unknown
+      id: string
+      created_at: Date
+      description?: string
+      name: string
+      slug: string
+      updated_at: Date
     }
   }
 }

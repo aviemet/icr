@@ -17,8 +17,8 @@ import {
 } from "@/components"
 import { PreviousIcon } from "@/components/Icons"
 import { AdjustmentForm } from "@/domains/PayPeriods/AdjustmentForm"
-import { WorkQueue } from "@/domains/PayPeriods/WorkQueue"
 import { periodWorkflowLabel } from "@/domains/PayPeriods/workflow"
+import { WorkQueue } from "@/domains/PayPeriods/WorkQueue"
 import { formatter, Routes } from "@/lib"
 
 interface EmployeeHoursMap {
@@ -129,10 +129,9 @@ export default function PayPeriodsShow({
 			] }
 		>
 			<Section>
-				<Table.TableProvider
+				<Table.Provider
 					selectable
 					model="employees"
-					pagination={ pagination }
 				>
 					<Stack gap="lg">
 						<Stack gap={ 4 }>
@@ -271,7 +270,7 @@ export default function PayPeriodsShow({
 							</Link>
 						</Group>
 					</Stack>
-				</Table.TableProvider>
+				</Table.Provider>
 			</Section>
 		</Page>
 	)

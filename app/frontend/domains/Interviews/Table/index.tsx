@@ -10,11 +10,10 @@ export interface EmployeeInterviewTableRecord {
 
 interface EmployeeInterviewTableProps {
 	records: EmployeeInterviewTableRecord[]
-	pagination?: Schema.Pagination
 	model?: string
 }
 
-export function EmployeeInterviewTable({ records, pagination, model }: EmployeeInterviewTableProps) {
+export function EmployeeInterviewTable({ records, model }: EmployeeInterviewTableProps) {
 	const columns: TableColumn<EmployeeInterviewTableRecord>[] = [
 		{
 			accessor: "scheduled_at",
@@ -48,7 +47,6 @@ export function EmployeeInterviewTable({ records, pagination, model }: EmployeeI
 		<Table.DataTable
 			columns={ columns }
 			records={ records }
-			pagination={ pagination }
 			model={ model }
 			selectable
 		/>

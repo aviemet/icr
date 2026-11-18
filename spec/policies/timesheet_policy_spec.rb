@@ -59,11 +59,61 @@ RSpec.describe TimesheetPolicy, type: :policy do
     it "allows admin" do
       expect(described_class.new(@admin_user, Timesheet.new)).to authorize(:index)
     end
+
+    it "allows employee with show permission to open payroll" do
+      @job_title.add_role(:show, Timesheet)
+      @employee_with_permission.reload
+
+      expect(described_class.new(@employee_user_with_permission, Timesheet.new)).to authorize(:index)
+    end
   end
 
   permissions :show? do
     it "allows admin" do
       expect(described_class.new(@admin_user, Timesheet.new)).to authorize(:show)
+    end
+
+    it "allows employee to view own timesheet" do
+      timesheet = create(:timesheet, employee: @employee)
+
+      expect(described_class.new(@employee_user, timesheet)).to authorize(:show)
+    end
+
+    it "allows manager to view managed employee timesheet" do
+      managed = create(:employee, :employed)
+      create(:employees_manager, manager: @employee, employee: managed, starts_at: 1.day.ago)
+      timesheet = create(:timesheet, employee: managed)
+
+      expect(described_class.new(@employee_user, timesheet)).to authorize(:show)
+    end
+  end
+
+  permissions :update? do
+    it "allows update for managed employee when job title has update" do
+      @job_title.add_role(:update, Timesheet)
+      @employee_with_permission.reload
+      managed = create(:employee, :employed)
+      create(:employees_manager, manager: @employee_with_permission, employee: managed, starts_at: 1.day.ago)
+      timesheet = create(:timesheet, employee: managed)
+
+      expect(described_class.new(@employee_user_with_permission, timesheet)).to authorize(:update)
+    end
+
+    it "denies update for unmanaged employee when job title lacks index" do
+      @job_title.add_role(:update, Timesheet)
+      @employee_with_permission.reload
+      timesheet = create(:timesheet)
+
+      expect(described_class.new(@employee_user_with_permission, timesheet)).not_to authorize(:update)
+    end
+
+    it "allows update for any timesheet when job title has index and update" do
+      @job_title.add_role(:index, Timesheet)
+      @job_title.add_role(:update, Timesheet)
+      @employee_with_permission.reload
+      timesheet = create(:timesheet)
+
+      expect(described_class.new(@employee_user_with_permission, timesheet)).to authorize(:update)
     end
   end
 end

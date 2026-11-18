@@ -47,7 +47,7 @@ export const WeekView = createViewComponent(WeekViewComponent, {
 			case NAVIGATION.today:
 				return new Date()
 			case NAVIGATION.previous:
-				return localizer.add(date, - 1, "week")
+				return localizer.add(date, -1, "week")
 			case NAVIGATION.next:
 				return localizer.add(date, 1, "week")
 			default:

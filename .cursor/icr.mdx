@@ -14,9 +14,9 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - [x] User authentication system
 - [x] Role-based authorization using Pundit and Rolify
   - [x] Define core roles (admin, manager, facilitator, employee)
-  - [x] Set up user groups management
+  - [x] Job title permission matrix (Rolify resource roles)
   - [x] Implement authorization policies
-  - [ ] UI visibility controls based on user permissions
+  - [x] UI visibility controls based on user permissions
 - [ ] Basic user profile management
 
 ### Phase 2: Document Management System
@@ -113,9 +113,11 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Root Inertia page loads `dashboard` props from `Dashboard::StatsSerializer.render(Dashboard::Stats#payload)` so the payload matches `Schema.DashboardStats` from TypesFromSerializers. When `user` is nil, `Dashboard::Stats` uses `Client.none`, `Employee.none`, `Calendar::Event.none`, and `Timesheet.none` instead of calling Pundit, so counts and lists collapse to empty without a separate blank payload path. Nested rows are `Struct` instances; use `Payload#to_h` for plain hashes. `Dashboard::StatsSerializer` and its nested serializers subclass `BaseSerializer` (not `ApplicationSerializer`) so the root DTO is not forced through `identifier`/ActiveRecord-oriented hooks. Counts and lists use `Pundit.policy_scope` for `Client`, `Employee`, `Calendar::Event`, and `Timesheet` so the numbers match what that user could list in those areas. Week hours sum shift lengths (calendar event duration) for scoped employees in the current calendar week. Pending timesheets are unapproved rows for the current pay period when that `PayPeriod` row already exists (GET does not create periods). Recent activity is derived from the newest clients and employees in scope, not from the activity table.
 
 ### Permission System
-- Groups define permissions with effects (allow/deny) and conditions. Assignments link groups to users or job titles (optional time bounds). Resolution uses precedence and conditions.
-- Precedence: higher overrides lower. At each level, deny wins over allow.
-- Conditions: owner-only, time-restricted, or custom. Check with permission?(resource, action, context).
+- Single stack: Devise auth, Rolify roles, Pundit policies. Job Titles are the admin-facing permission surface (Settings > Job Titles matrix).
+- Resource x action grants live as Rolify roles on `Employee::JobTitle` (e.g. `job_title.has_role?(:index, Client)`). User-level `:admin` bypasses all checks.
+- Relationship limits stay in Pundit scopes/policies: attendants via `ClientsAttendant`, managers via `ClientsManager` / `Employee::EmployeesManager`, self via own employee/timesheet/shift.
+- Shared Inertia `permissions` hash is built from Pundit policy methods and cached per user; job title role changes invalidate those cache keys.
+- Job-title "Grant all listed actions" checkbox expands to every catalogued resource action; it is not the same as user `:admin`.
 
 ### Payroll Settings
 - Period types: weekly, bi-weekly, semi-monthly, monthly. Weekly/bi-weekly use a start weekday; monthly uses a configurable start date (including last day of month). Semi-monthly is fixed: 1st-15th and 16th-last.
@@ -125,7 +127,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 
 ## Technical Decisions
 ### Authentication & Authorization
-- Devise, Pundit, Rolify; authorization at API and UI. Custom permission system adds fine-grained rules with precedence, conditions (time-based, owner-only), and polymorphic assignments (users, job titles).
+- Devise, Pundit, Rolify. Job title Rolify roles drive resource/action grants; Pundit encodes relationship-scoped access. No separate Permission::Group system.
 
 ### Document Management
 - Active Storage; versioning for important documents; Pundit for access.

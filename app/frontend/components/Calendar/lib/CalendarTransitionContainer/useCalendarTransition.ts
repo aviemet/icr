@@ -7,7 +7,7 @@ import { ensureDate } from "@/lib/dates"
 import { mergeRefs } from "@/lib/mergeRefs"
 
 interface UseCalendarTransitionOptions<T extends HTMLElement = HTMLDivElement> {
-	containerRef?: RefObject<T>
+	containerRef?: RefObject<T | null>
 }
 
 export interface UseCalendarTransitionResult<T extends HTMLElement = HTMLDivElement> {
@@ -29,11 +29,11 @@ export function useCalendarTransition<T extends HTMLElement = HTMLDivElement>(
 
 	const rect = options.containerRef ? options.containerRef.current?.getBoundingClientRect() : containerRect
 
-	const direction = localizer.isBefore(date, ensureDate(prevDate)) ? - 1 : 1
+	const direction = localizer.isBefore(date, ensureDate(prevDate)) ? -1 : 1
 
 	const variants: Variants = {
 		enter: (direction: number) => ({
-			x: direction > 0 ? (rect?.width || 0) + 100 : - ((rect?.width || 0) + 100),
+			x: direction > 0 ? (rect?.width || 0) + 100 : -((rect?.width || 0) + 100),
 			opacity: 0,
 		}),
 		center: {
@@ -43,7 +43,7 @@ export function useCalendarTransition<T extends HTMLElement = HTMLDivElement>(
 		},
 		exit: (direction: number) => ({
 			zIndex: 0,
-			x: direction < 0 ? (rect?.width || 0) + 100 : - ((rect?.width || 0) + 100),
+			x: direction < 0 ? (rect?.width || 0) + 100 : -((rect?.width || 0) + 100),
 			opacity: 0,
 		}),
 	}

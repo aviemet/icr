@@ -94,6 +94,118 @@ RSpec.describe Searchable do
     end
   end
 
+  describe "filterable_fields" do
+    let(:filterable_controller_class) do
+      Class.new(ApplicationController) do
+        include Searchable
+
+        filterable_fields :number, :created_at,
+          first_name: { column: "people.first_name" },
+          statuses: {
+            column: :status,
+            type: :in,
+            values: -> { Employee.statuses.keys },
+            default: "employed",
+          },
+          job_title: { column: "job_titles.name", joins: :job_title },
+          job_titles: { column: "job_titles.name", joins: :job_title, type: :in }
+      end
+    end
+
+    let(:filterable_controller) do
+      stub_const("FilterableTestController", filterable_controller_class)
+      filterable_controller_class.new
+    end
+
+    let!(:employed) { create(:employee, :employed, number: "EMP-100") }
+    let!(:applicant) { create(:employee, number: "EMP-200") }
+
+    before do
+      allow(filterable_controller).to receive_messages(
+        params: ActionController::Parameters.new({}),
+        request: instance_double(ActionDispatch::Request, query_parameters: {}, path: "/test"),
+        current_user: instance_double(User, limit: 10),
+      )
+      employed.person.update!(first_name: "Ada")
+      applicant.person.update!(first_name: "Grace")
+    end
+
+    it "auto-permits scalar, array, and created_at params" do
+      allow(filterable_controller).to receive(:params).and_return(
+        ActionController::Parameters.new({
+          adv: "true",
+          number: "EMP-100",
+          statuses: ["employed"],
+          job_titles: ["Attendant"],
+          created_at: { type: "after", start: "2024-01-01" },
+        }),
+      )
+
+      permitted = filterable_controller.advanced_search_params
+      expect(permitted[:number]).to eq("EMP-100")
+      expect(permitted[:statuses]).to eq(["employed"])
+      expect(permitted[:job_titles]).to eq(["Attendant"])
+      expect(permitted[:created_at][:type]).to eq("after")
+    end
+
+    it "applies default when the key is absent" do
+      allow(filterable_controller).to receive(:params).and_return(ActionController::Parameters.new({}))
+
+      result = filterable_controller.search(Employee.includes_associated.left_joins(:person))
+      expect(result).to include(employed)
+      expect(result).not_to include(applicant)
+    end
+
+    it "skips default when the key is present but empty" do
+      allow(filterable_controller).to receive(:params).and_return(
+        ActionController::Parameters.new({ adv: "true", statuses: [""] }),
+      )
+
+      result = filterable_controller.search(Employee.includes_associated.left_joins(:person))
+      expect(result).to include(employed, applicant)
+    end
+
+    it "filters with :in values" do
+      allow(filterable_controller).to receive(:params).and_return(
+        ActionController::Parameters.new({ adv: "true", statuses: ["applicant"] }),
+      )
+
+      result = filterable_controller.search(Employee.includes_associated.left_joins(:person))
+      expect(result).to include(applicant)
+      expect(result).not_to include(employed)
+    end
+
+    it "filters with ilike on an associated column" do
+      allow(filterable_controller).to receive(:params).and_return(
+        ActionController::Parameters.new({ adv: "true", first_name: "Ada" }),
+      )
+
+      result = filterable_controller.search(Employee.includes_associated.left_joins(:person))
+      expect(result).to include(employed)
+      expect(result).not_to include(applicant)
+    end
+
+    it "filters with joins and job_titles :in" do
+      attendant = create(:job_title, name: "Attendant")
+      manager = create(:job_title, name: "Manager")
+      create(:employees_job_title, employee: employed, job_title: attendant)
+      create(:employees_job_title, employee: applicant, job_title: manager)
+
+      allow(filterable_controller).to receive(:params).and_return(
+        ActionController::Parameters.new({
+          adv: "true",
+          statuses: [""],
+          job_title: "Att",
+          job_titles: ["Attendant"],
+        }),
+      )
+
+      result = filterable_controller.search(Employee.includes_associated.left_joins(:person))
+      expect(result).to include(employed)
+      expect(result).not_to include(applicant)
+    end
+  end
+
   describe "#paginate" do
     it "paginates results with user limit" do
       result = controller.paginate(Person.all, :people)
@@ -146,6 +258,17 @@ RSpec.describe Searchable do
 
       controller.send(:remove_empty_query_parameters)
       expect(controller).to have_received(:redirect_to).with("/test")
+    end
+
+    it "keeps empty :in filter arrays so any-status encoding survives" do
+      allow(controller).to receive(:request).and_return(
+        instance_double(ActionDispatch::Request,
+          query_parameters: { "adv" => "true", "statuses" => [""] },
+          path: "/test",),
+      )
+
+      controller.send(:remove_empty_query_parameters)
+      expect(controller).not_to have_received(:redirect_to)
     end
   end
 end

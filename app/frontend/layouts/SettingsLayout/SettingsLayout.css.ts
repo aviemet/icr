@@ -7,7 +7,7 @@ export const settingsLayout = css`
 
 	position: relative;
 	border-radius: ${ vars.radius.md };
-	padding: ${ vars.spacing.xs };
+	padding: ${ vars.spacing.sm };
 	margin-top: ${ vars.spacing.sm };
 	margin-bottom: ${ vars.spacing.sm };
 	display: flex;
@@ -33,15 +33,8 @@ export const settingsLayout = css`
 
 	.childRow {
 		z-index: 1;
-		padding: 4px;
-		border-radius: ${ vars.radius.sm };
-		background-color: light-dark(
-			${ vars.colors.white },
-			${ vars.colors.dark[6] }
-		);
-		box-shadow:
-			inset 0 0 0 1px light-dark(${ vars.colors.gray[3] }, ${ vars.colors.dark[4] }),
-			inset 3px 0 0 0 ${ vars.colors.primaryColors.filled };
+		padding-top: 6px;
+		border-top: 1px solid light-dark(${ vars.colors.gray[3] }, ${ vars.colors.dark[4] });
 	}
 
 	.control {
@@ -63,12 +56,35 @@ export const settingsLayout = css`
 	}
 
 	.childRow .control {
-		padding: 5px 10px;
+		padding: 8px 12px 4px;
 		font-size: ${ vars.fontSizes.sm };
+		border-radius: 0;
+		background-color: transparent;
+		transition: color 120ms ease;
 	}
 
 	.childRow .control[data-active] {
 		color: light-dark(${ vars.colors.primaryColors[9] }, ${ vars.colors.white });
+		background-color: transparent;
+	}
+
+	.childRow .control:not([data-active]):hover {
+		background-color: transparent;
+	}
+
+	.childRow .control .controlLabel {
+		display: inline-block;
+		padding-bottom: 4px;
+		box-shadow: inset 0 -2px 0 0 transparent;
+		transition: box-shadow 120ms ease;
+	}
+
+	.childRow .control[data-active] .controlLabel {
+		box-shadow: inset 0 -2px 0 0 ${ vars.colors.primaryColors.filled };
+	}
+
+	.childRow .control:not([data-active]):hover .controlLabel {
+		box-shadow: inset 0 -2px 0 0 light-dark(${ vars.colors.gray[4] }, ${ vars.colors.dark[3] });
 	}
 
 	.controlLabel {
@@ -81,14 +97,4 @@ export const settingsLayout = css`
 		border-radius: ${ vars.radius.sm };
 	}
 
-	.childRow .indicator {
-		background-color: light-dark(
-			${ vars.colors.primaryColors[1] },
-			color-mix(in srgb, ${ vars.colors.primaryColors[5] } 40%, transparent)
-		);
-		box-shadow: inset 0 0 0 1px light-dark(
-			${ vars.colors.primaryColors[3] },
-			color-mix(in srgb, ${ vars.colors.primaryColors[4] } 70%, transparent)
-		);
-	}
 `

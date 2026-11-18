@@ -4,12 +4,12 @@ export {}
 declare global {
   namespace Schema {
     interface EmployeeInterviewsShow {
-      id: unknown
-      created_at: unknown
-      employee_id: unknown
-      notes: unknown
-      scheduled_at: unknown
-      updated_at: unknown
+      id: string
+      created_at: Date
+      employee_id: string
+      notes?: string
+      scheduled_at?: Date
+      updated_at: Date
     }
   }
 }

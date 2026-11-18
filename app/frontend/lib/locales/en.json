@@ -718,7 +718,18 @@
           "first_name": "First Name",
           "hire_date": "Hire Date",
           "job_title": "Job Title",
-          "last_name": "Last Name"
+          "job_title_select_all": "Select All",
+          "last_name": "Last Name",
+          "number": "Employee #",
+          "status": "Status",
+          "status_select_all": "Select All",
+          "statuses": {
+            "applicant": "Applicant",
+            "declined": "Declined",
+            "employed": "Employed",
+            "offered": "Offered",
+            "terminated": "Terminated"
+          }
         }
       },
       "households": {
@@ -953,6 +964,11 @@
           "total": "Total",
           "vacation": "Vacation"
         }
+      },
+      "index_template": {
+        "clear_selection": "Clear",
+        "delete_selected": "Delete",
+        "selected_count": "%{count} selected"
       }
     }
   }

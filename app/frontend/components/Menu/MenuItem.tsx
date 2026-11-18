@@ -9,7 +9,7 @@ interface IMenuItemProps extends MenuItemProps {
 	ref?: React.Ref<HTMLButtonElement | HTMLAnchorElement>
 	disabled?: boolean
 	href?: string
-	icon?: JSX.Element
+	icon?: React.ReactElement
 }
 
 const MenuItemInner = ({

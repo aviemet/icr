@@ -71,6 +71,8 @@ Lint/MissingSuper:
   Enabled: false
 Layout/EmptyLinesAroundClassBody:
   Enabled: false
+Layout/EmptyLinesAfterModuleInclusion:
+  Enabled: false
 Layout/FirstHashElementIndentation:
   Enabled: false
 Layout/EmptyLinesAroundAttributeAccessor:

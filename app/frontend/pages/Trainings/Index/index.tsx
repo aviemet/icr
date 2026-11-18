@@ -5,7 +5,7 @@ import { Routes } from "@/lib"
 
 
 interface TrainingIndexProps {
-	trainings: Schema.TrainingsIndex[]
+	trainings: Schema.EmployeeTrainingsIndex[]
 	pagination: Schema.Pagination
 }
 
@@ -15,11 +15,11 @@ const TrainingsIndex = ({ trainings, pagination }: TrainingIndexProps) => {
 			title="Trainings"
 			model="trainings"
 			pagination={ pagination }
-			menuOptions={ [
+			actions={ [
 				{ label: "New Training", href: Routes.newTraining(), icon: <NewIcon /> },
 			] }
 		>
-			<TrainingTable records={ trainings } pagination={ pagination } model="trainings" />
+			<TrainingTable records={ trainings } model="trainings" />
 		</IndexPageTemplate>
 	)
 }

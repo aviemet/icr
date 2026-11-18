@@ -1,6 +1,7 @@
-import { MantineColor, MantineColorsTuple } from "@mantine/core"
-import { MantineVars } from "@mantine/vanilla-extract"
-import { Colors } from "@mantine/vanilla-extract/lib/types"
+import { MantineColor } from "@mantine/core"
+import { type MantineVars } from "@mantine/vanilla-extract"
+
+type Colors = MantineVars["colors"]
 
 type OverriddenColors = {
 	[key in keyof Colors]: key extends "primary"
@@ -25,8 +26,6 @@ type OverriddenColors = {
 		}
 		: Colors[key]
 }
-
-const thing: OverriddenColors
 
 declare module "@mantine/vanilla-extract/lib/types" {
 	type Colors = OverriddenColors

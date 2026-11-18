@@ -17,11 +17,10 @@ const personLink = (person: Schema.PeopleIndex) => {
 
 interface PersonTableProps {
 	records: Schema.PeopleIndex[]
-	pagination?: Schema.Pagination
 	model?: string
 }
 
-export function PersonTable({ records, pagination, model }: PersonTableProps) {
+export function PersonTable({ records, model }: PersonTableProps) {
 	const columns: TableColumn<Schema.PeopleIndex>[] = [
 		{
 			accessor: "first_name",
@@ -77,7 +76,6 @@ export function PersonTable({ records, pagination, model }: PersonTableProps) {
 		<Table.DataTable
 			columns={ columns }
 			records={ records }
-			pagination={ pagination }
 			model={ model }
 			selectable
 		/>

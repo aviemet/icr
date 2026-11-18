@@ -24,7 +24,8 @@ export function PayrollTableFooter({
 }: PayrollTableFooterProps) {
 	const { t } = useTranslation()
 
-	const { selectedRecordIds } = useTableContext()
+	const tableContext = useTableContext(false)
+	const selectedRecordIds = tableContext?.selectedRecordIds ?? []
 	const selectedCount = selectedRecordIds.length
 	const selectedTimesheetIds = selectedRecordIds
 		.map(employeeId => timesheetIdsByEmployee[employeeId])

@@ -4,11 +4,10 @@ import { Routes } from "@/lib"
 
 interface ShiftTemplateTableProps {
 	records: Schema.ShiftTemplatesIndex[]
-	pagination?: Schema.Pagination
 	model?: string
 }
 
-export function ShiftTemplateTable({ records, pagination, model }: ShiftTemplateTableProps) {
+export function ShiftTemplateTable({ records, model }: ShiftTemplateTableProps) {
 	const columns: TableColumn<Schema.ShiftTemplatesIndex>[] = [
 		{
 			accessor: "name",
@@ -28,7 +27,6 @@ export function ShiftTemplateTable({ records, pagination, model }: ShiftTemplate
 		<Table.DataTable
 			columns={ columns }
 			records={ records }
-			pagination={ pagination }
 			model={ model }
 			selectable
 		/>

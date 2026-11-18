@@ -7,7 +7,7 @@ import { type CategoryType } from "@/types/CategoryType"
 import { type ReactQueryFunction, type ReactMutationFunction } from ".."
 
 export const useGetCategoriesAsOptions: ReactQueryFunction<
-	Schema.Category[],
+	Schema.CategoriesOptions[],
 	{ categoryType: CategoryType }
 > = (params, options) => {
 	return useQuery({

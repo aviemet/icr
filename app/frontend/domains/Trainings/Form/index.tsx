@@ -4,13 +4,13 @@ import { TextInput } from "@/components/Inputs"
 import { type HTTPVerb } from "@/lib"
 
 type TrainingFormData = {
-	training: Schema.TrainingsFormData
+	training: Schema.EmployeeTrainingsFormData
 }
 
 export interface TrainingFormProps {
 	to: string
 	method?: HTTPVerb
-	training: Schema.TrainingsFormData
+	training: Schema.EmployeeTrainingsFormData
 }
 
 export function TrainingForm({ method = "post", to, training, ...props }: TrainingFormProps) {

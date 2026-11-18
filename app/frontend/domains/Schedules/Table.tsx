@@ -4,11 +4,10 @@ import { Routes } from "@/lib"
 
 interface ScheduleTableProps {
 	records: Schema.ClientsIndex[]
-	pagination?: Schema.Pagination
 	model?: string
 }
 
-export function ScheduleTable({ records, pagination, model }: ScheduleTableProps) {
+export function ScheduleTable({ records, model }: ScheduleTableProps) {
 	const columns: TableColumn<Schema.ClientsIndex>[] = [
 		{
 			accessor: "first_name",
@@ -32,7 +31,6 @@ export function ScheduleTable({ records, pagination, model }: ScheduleTableProps
 		<Table.DataTable
 			columns={ columns }
 			records={ records }
-			pagination={ pagination }
 			model={ model }
 			selectable
 		/>

@@ -1,7 +1,7 @@
 import React, { useCallback } from "react"
 
 import { Table } from "@/components"
-import { useFormFieldContext } from "@/components/Form"
+import { useFormField, useFormFieldContext } from "@/components/Form"
 import { Checkbox, Switch } from "@/components/Inputs"
 import { useCheckboxState } from "@/lib/hooks"
 
@@ -13,7 +13,7 @@ export interface SwitchRowProps {
 
 export function SwitchRow({ label, model, permissions }: SwitchRowProps) {
 	const { getValue, setValue } = useFormFieldContext()
-	const isCompanyAdmin = false
+	const [isAdmin] = useFormField("permissions.admin")
 
 	const columnProperties = useCallback(() => {
 		return permissions.reduce(({ length, selected }, permission) => {
@@ -41,7 +41,7 @@ export function SwitchRow({ label, model, permissions }: SwitchRowProps) {
 					onChange={ (e) => setRow(e.target.checked) }
 					checked={ allChecked }
 					indeterminate={ indeterminate }
-					disabled={ isCompanyAdmin }
+					disabled={ Boolean(isAdmin) }
 				/>
 			</Table.Cell>
 			<Table.Cell>{ label }</Table.Cell>
@@ -49,12 +49,10 @@ export function SwitchRow({ label, model, permissions }: SwitchRowProps) {
 				<Table.Cell key={ `${model}_${permission}` }>
 					<Switch
 						name={ `permissions.${model}.${permission}` }
-						disabled={ isCompanyAdmin }
+						disabled={ Boolean(isAdmin) }
 					/>
 				</Table.Cell>
 			)) }
 		</Table.Row>
 	)
 }
-
-

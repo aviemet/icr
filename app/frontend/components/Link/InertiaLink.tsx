@@ -54,12 +54,12 @@ export function InertiaLink({
 	if((method !== undefined && method !== "get")) {
 		return <Button
 			ref={ ref }
-			component={ AnchorLink }
 			href={ processedHref }
 			onClick={ handleHTTP }
 			style={ [{ "&:hover": { textDecoration: "none" } }, style] }
 			c="bright"
 			{ ...mergedButtonProps }
+			component={ AnchorLink }
 		>
 			{ children }
 		</Button>
@@ -68,12 +68,12 @@ export function InertiaLink({
 	if(as === "button") {
 		return <Button
 			ref={ ref }
-			component={ AnchorLink }
 			href={ processedHref }
 			onClick={ onClick }
 			style={ [{ "&:hover": { textDecoration: "none" } }, style] }
 			c="bright"
 			{ ...mergedButtonProps }
+			component={ AnchorLink }
 		>
 			{ children }
 		</Button>

@@ -4,14 +4,14 @@ export {}
 declare global {
   namespace Schema {
     interface RequirementRequirementsEdit {
-      id: unknown
-      created_at: unknown
-      description: unknown
-      name: unknown
-      requirement_type_id: unknown
-      scope_id: unknown
-      scope_type: unknown
-      updated_at: unknown
+      id: string
+      created_at: Date
+      description?: string
+      name?: string
+      requirement_type_id: string
+      scope_id?: number
+      scope_type?: string
+      updated_at: Date
     }
   }
 }

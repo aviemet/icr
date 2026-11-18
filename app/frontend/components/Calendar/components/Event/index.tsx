@@ -9,15 +9,15 @@ import { BaseDisplayProperties } from "../../lib/displayStrategies"
 import { CalendarLocalizer } from "../../lib/localizers"
 
 
-export interface EventProps extends
+export interface EventProps<TEventResources extends EventResources = EventResources> extends
 	Omit<HTMLAttributes<HTMLDivElement>, "onClick"> {
-	event: BaseCalendarEvent<EventResources>
-	onClick?: (event: BaseCalendarEvent<EventResources>, element: HTMLElement) => void
+	event: BaseCalendarEvent<TEventResources>
+	onClick?: (event: BaseCalendarEvent<TEventResources>, element: HTMLElement) => void
 	localizer: CalendarLocalizer
 	displayProperties: BaseDisplayProperties
 }
 
-const CalendarEvent = ({
+export function CalendarEvent<TEventResources extends EventResources>({
 	children,
 	className,
 	event,
@@ -25,7 +25,7 @@ const CalendarEvent = ({
 	displayProperties,
 	style,
 	...props
-}: EventProps) => {
+}: EventProps<TEventResources>) {
 	const { onClick: onClickFromContext } = useCalendarContext()
 	const { getContrastingColor } = useStore()
 
@@ -67,5 +67,3 @@ const CalendarEvent = ({
 		</div>
 	)
 }
-
-export { CalendarEvent }

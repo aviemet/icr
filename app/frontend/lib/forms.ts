@@ -3,7 +3,7 @@
  * @param v Variable to test whether is an "unset" value
  * @returns boolean
  */
-export const isUnset = <T extends any>(v: T): v is T => {
+export const isUnset = (v: unknown): boolean => {
 	if(
 		v === null ||
 		v === undefined ||

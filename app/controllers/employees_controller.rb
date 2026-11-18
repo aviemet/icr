@@ -4,7 +4,19 @@ class EmployeesController < ApplicationController
   expose :employees, -> { search(Employee.includes_associated.left_joins(:person)) }
   expose :employee, id: -> { params[:slug] }, find_by: :slug, scope: -> { Employee.includes_associated }
 
-  sortable_fields %w(active_at inactive_at number people.first_name people.last_name)
+  sortable_fields %w(active_at inactive_at number status people.first_name people.last_name)
+
+  filterable_fields :number, :active_at, :created_at,
+    first_name: { column: "people.first_name" },
+    last_name: { column: "people.last_name" },
+    job_title: { column: "job_titles.name", joins: :job_title },
+    job_titles: { column: "job_titles.name", joins: :job_title, type: :in },
+    statuses: {
+      column: :status,
+      type: :in,
+      values: -> { Employee.statuses.keys },
+      default: "employed",
+    }
 
   strong_params :employee, permit: [
     :person_id, :active_at, :inactive_at, :number, :status, :ineligibility_reason, :termination_reason,
@@ -22,7 +34,8 @@ class EmployeesController < ApplicationController
       pagination: -> { {
         count: employees.count,
         **pagination_data(paginated_employees)
-      } }
+      } },
+      job_title_options: -> { Employee::JobTitle.order(:name).distinct.pluck(:name) },
     }
   end
 
@@ -120,5 +133,4 @@ class EmployeesController < ApplicationController
     employee.destroy!
     redirect_to employees_url, notice: t("templates.controllers.notices.destroyed", model: "Employee")
   end
-
 end

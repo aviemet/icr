@@ -1,10 +1,8 @@
 import { isEmpty } from "es-toolkit/compat"
-import React from "react"
 
 import { Select as FormSelect } from "@/components/Inputs"
+import { type FormAsyncDropdown } from "@/components/Inputs/Dropdowns"
 import { useGetPayPeriodTypes } from "@/queries/locale"
-
-import { type FormAsyncDropdown } from ".."
 
 export interface FormPayPeriodsDropdownProps extends Omit<FormAsyncDropdown<Schema.PayPeriodOption>, "name"> {
 	name?: string

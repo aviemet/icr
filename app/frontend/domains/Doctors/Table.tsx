@@ -4,11 +4,10 @@ import { Routes } from "@/lib"
 
 interface DoctorTableProps {
 	records: Schema.DoctorsIndex[]
-	pagination: Schema.Pagination
 	model: string
 }
 
-export function DoctorTable({ records, pagination, model }: DoctorTableProps) {
+export function DoctorTable({ records, model }: DoctorTableProps) {
 	const columns: TableColumn<Schema.DoctorsIndex>[] = [
 		{
 			accessor: "first_name",
@@ -34,7 +33,6 @@ export function DoctorTable({ records, pagination, model }: DoctorTableProps) {
 		<Table.DataTable
 			columns={ columns }
 			records={ records }
-			pagination={ pagination }
 			model={ model }
 			selectable
 		/>

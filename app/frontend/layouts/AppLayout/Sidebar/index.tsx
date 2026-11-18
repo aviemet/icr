@@ -11,7 +11,7 @@ import {
 import { ClientIcon, ClockIcon, DashboardIcon, EmployeeIcon, HelpingIcon, SettingsIcon } from "@/components/Icons"
 import { IconProvider } from "@/layouts/Providers/IconProvider"
 import { matchesAtPosition, Routes } from "@/lib"
-import { useLocation, usePageProps } from "@/lib/hooks"
+import { useLocation, usePageProps, usePermissions } from "@/lib/hooks"
 import { useStore } from "@/lib/store"
 
 import { ToggleSidebarButton } from "../ToggleSidebarButton"
@@ -20,7 +20,8 @@ import * as classes from "../AppLayout.css"
 import { UserMenu } from "./UserMenu"
 
 export function Sidebar() {
-	const { auth: { user }, permissions } = usePageProps()
+	const { auth: { user } } = usePageProps()
+	const { can } = usePermissions()
 	const { sidebarOpen, siteTitle } = useStore()
 	const { paths } = useLocation()
 
@@ -61,62 +62,78 @@ export function Sidebar() {
 							leftSection={ <DashboardIcon /> }
 							active={ matchesAtPosition(paths, [0, ""]) }
 						/>
-						{ permissions?.clients?.index && (
+						{ can("clients", "index") && (
 							<MenuLink
 								label="Clients"
 								href={ Routes.clients() }
 								leftSection={ <ClientIcon /> }
 								active={ matchesAtPosition(paths, [0, "clients"]) }
 							>
-								<MenuLink
-									label="Households"
-									href={ Routes.households() }
-								/>
-								<MenuLink
-									label="Doctors"
-									href={ Routes.doctors() }
-								/>
+								{ can("households", "index") && (
+									<MenuLink
+										label="Households"
+										href={ Routes.households() }
+									/>
+								) }
+								{ can("doctors", "index") && (
+									<MenuLink
+										label="Doctors"
+										href={ Routes.doctors() }
+									/>
+								) }
 							</MenuLink>
 						) }
-						<MenuLink
-							label="Employees"
-							href={ Routes.employees() }
-							leftSection={ <EmployeeIcon /> }
-							active={ matchesAtPosition(paths, [0, "employees"]) }
-						>
+						{ can("employees", "index") && (
 							<MenuLink
-								label="Requirements"
-								href={ Routes.requirements() }
-							/>
+								label="Employees"
+								href={ Routes.employees() }
+								leftSection={ <EmployeeIcon /> }
+								active={ matchesAtPosition(paths, [0, "employees"]) }
+							>
+								{ can("requirement/requirements", "index") && (
+									<MenuLink
+										label="Documents"
+										href={ Routes.requirements() }
+									/>
+								) }
+								{ can("employee/trainings", "index") && (
+									<MenuLink
+										label="Training"
+										href={ Routes.trainings() }
+									/>
+								) }
+							</MenuLink>
+						) }
+						{ can("timesheets", "index") && (
 							<MenuLink
-								label="Training"
-								href={ Routes.trainings() }
+								label="Payroll"
+								href={ Routes.payrollPeriods() }
+								leftSection={ <ClockIcon /> }
+								active={ matchesAtPosition(paths, [0, "payroll"]) }
 							/>
-						</MenuLink>
-						<MenuLink
-							label="Payroll"
-							href={ Routes.payrollPeriods() }
-							leftSection={ <ClockIcon /> }
-							active={ matchesAtPosition(paths, [0, "payroll"]) }
-						/>
-						<MenuLink
-							label="Vendors"
-							href={ Routes.vendors() }
-							leftSection={ <HelpingIcon /> }
-							active={ matchesAtPosition(paths, [0, "vendors"]) }
-						/>
+						) }
+						{ can("vendors", "index") && (
+							<MenuLink
+								label="Vendors"
+								href={ Routes.vendors() }
+								leftSection={ <HelpingIcon /> }
+								active={ matchesAtPosition(paths, [0, "vendors"]) }
+							/>
+						) }
 					</ul>
 				</AppShell.Section>
-				<AppShell.Section>
-					<ul>
-						<MenuLink
-							label="Settings"
-							href={ Routes.settings() }
-							leftSection={ <SettingsIcon /> }
-							active={ matchesAtPosition(paths, [0, "settings"]) }
-						/>
-					</ul>
-				</AppShell.Section>
+				{ can("settings", "index") && (
+					<AppShell.Section>
+						<ul>
+							<MenuLink
+								label="Settings"
+								href={ Routes.settings() }
+								leftSection={ <SettingsIcon /> }
+								active={ matchesAtPosition(paths, [0, "settings"]) }
+							/>
+						</ul>
+					</AppShell.Section>
+				) }
 
 			</AppShell.Navbar>
 		</IconProvider>

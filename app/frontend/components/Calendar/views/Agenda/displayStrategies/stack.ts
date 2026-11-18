@@ -41,7 +41,7 @@ export class AgendaStackStrategy<TEventResources extends EventResources>
 	compare(a: EventDisplayDetails<TEventResources, AgendaDisplayProperties>, b: EventDisplayDetails<TEventResources, AgendaDisplayProperties>): number {
 		// All-day events come first
 		if(a.event.allDay !== b.event.allDay) {
-			return a.event.allDay ? - 1 : 1
+			return a.event.allDay ? -1 : 1
 		}
 
 		// Sort by start time

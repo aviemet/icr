@@ -94,7 +94,7 @@ const AgendaViewComponent = <TEventResources extends EventResources>({
 				const sortedEvents = [...dayEvents].sort((a, b) => {
 					// All day events first
 					if(!!a.event.allDay !== !!b.event.allDay) {
-						return !!a.event.allDay ? - 1 : 1
+						return !!a.event.allDay ? -1 : 1
 					}
 					// Then by start time
 					return a.event.start.getTime() - b.event.start.getTime()
@@ -132,7 +132,7 @@ export const AgendaView = createViewComponent<EventResources, "agenda">(AgendaVi
 			case NAVIGATION.today:
 				return new Date()
 			case NAVIGATION.previous:
-				return localizer.add(date, - 1, "month")
+				return localizer.add(date, -1, "month")
 			case NAVIGATION.next:
 				return localizer.add(date, 1, "month")
 			default:

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import * as classes from "./TimeIndicator.css"
 
 interface TimeIndicatorProps {
-	containerRef: React.RefObject<HTMLDivElement>
+	containerRef: React.RefObject<HTMLDivElement | null>
 }
 
 export const TimeIndicator = ({ containerRef }: TimeIndicatorProps) => {

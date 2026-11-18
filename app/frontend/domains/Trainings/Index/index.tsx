@@ -3,13 +3,12 @@ import { EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
 interface TrainingTableProps {
-	records: Schema.TrainingsIndex[]
-	pagination: Schema.Pagination
+	records: Schema.EmployeeTrainingsIndex[]
 	model: string
 }
 
-export function TrainingTable({ records, pagination, model }: TrainingTableProps) {
-	const columns: TableColumn<Schema.TrainingsIndex>[] = [
+export function TrainingTable({ records, model }: TrainingTableProps) {
+	const columns: TableColumn<Schema.EmployeeTrainingsIndex>[] = [
 		{
 			accessor: "name",
 			title: "Name",
@@ -44,7 +43,6 @@ export function TrainingTable({ records, pagination, model }: TrainingTableProps
 		<Table.DataTable
 			columns={ columns }
 			records={ records }
-			pagination={ pagination }
 			model={ model }
 			selectable
 		/>

@@ -17,4 +17,8 @@ class UserPolicy < ApplicationPolicy
       end
     end
   end
+
+  def update?
+    record.id == user.id || standard_auth(:update)
+  end
 end

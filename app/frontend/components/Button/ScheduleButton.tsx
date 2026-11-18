@@ -1,19 +1,14 @@
-import { useMantineTheme } from "@mantine/core"
-
-import { Link, Tooltip } from "@/components"
+import { ActionIcon, Link, Tooltip } from "@/components"
 import { CalendarIcon } from "@/components/Icons"
-import { useStore } from "@/lib/store"
 
-import { LinkProps } from "../Link"
+import * as classes from "./IconActionButton.css"
 
-interface ScheduleButtonProps extends Omit<LinkProps, "children"> {
+interface ScheduleButtonProps {
+	href: string
 	label?: string
 }
 
 export function ScheduleButton({ href, label }: ScheduleButtonProps) {
-	const { primaryColor } = useMantineTheme()
-	const { getContrastingColor } = useStore()
-
 	const usedLabel = `Schedule${label ? ` ${label}` : ""}`
 
 	return (
@@ -22,12 +17,16 @@ export function ScheduleButton({ href, label }: ScheduleButtonProps) {
 			label={ usedLabel }
 			position="left"
 			transitionProps={ { transition: "fade" } }
-			aria-label={ usedLabel }
-			color={ primaryColor }
 		>
-			<Link as="button" href={ href } aria-label={ `Schedule ${label}` }>
-				<CalendarIcon color={ getContrastingColor(primaryColor) } />
-			</Link>
+			<ActionIcon
+				component={ Link }
+				href={ href }
+				variant="transparent"
+				aria-label={ usedLabel }
+				className={ classes.iconAction }
+			>
+				<CalendarIcon size={ 14 } />
+			</ActionIcon>
 		</Tooltip>
 	)
 }

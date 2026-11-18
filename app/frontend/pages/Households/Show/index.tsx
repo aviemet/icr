@@ -2,11 +2,11 @@ import { Box, Group, Link, Menu, Page, Section, Table, Text, Title } from "@/com
 import { ScheduleButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
-interface IShowHouseholdProps {
+interface ShowHouseholdProps {
 	household: Schema.HouseholdsShow
 }
 
-const ShowHousehold = ({ household }: IShowHouseholdProps) => {
+const ShowHousehold = ({ household }: ShowHouseholdProps) => {
 	const title = household.name || "Household"
 
 	return (
@@ -46,7 +46,7 @@ const ShowHousehold = ({ household }: IShowHouseholdProps) => {
 							<Table>
 								<Table.Head>
 									<Table.Row>
-										<Table.Cell sort="client.last_name">Client</Table.Cell>
+										<Table.Cell>Client</Table.Cell>
 										<Table.Cell className="actions">Actions</Table.Cell>
 									</Table.Row>
 								</Table.Head>

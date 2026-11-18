@@ -14,6 +14,22 @@ class ApplicationPolicy
     private
 
     attr_reader :user, :scope
+
+    def admin?
+      user&.has_role?(:admin) || false
+    end
+
+    def employee
+      user&.person&.employee
+    end
+
+    def job_title
+      employee&.job_title
+    end
+
+    def job_title_allows?(action, resource_class)
+      job_title&.has_role?(action, resource_class) || false
+    end
   end
 
   def initialize(user, record)
@@ -74,30 +90,44 @@ class ApplicationPolicy
     user.person&.employee&.active?
   end
 
+  def job_title_allows?(action, resource_class = resource_class_for_record)
+    @job_title&.has_role?(action, resource_class) || false
+  end
+
+  def current_employee
+    @employee
+  end
+
+  def current_attendant?(client_record = record)
+    return false unless current_employee
+    return false unless client_record.is_a?(Client)
+
+    client_record.clients_attendants.current.exists?(attendant: current_employee)
+  end
+
+  def manages_client?(client_record = record)
+    return false unless current_employee
+    return false unless client_record.is_a?(Client)
+
+    client_record.clients_managers.current.exists?(manager: current_employee)
+  end
+
+  def manages_employee?(employee_record = record)
+    return false unless current_employee
+    return false unless employee_record.is_a?(Employee)
+
+    current_employee.managed_employees_managers.current.exists?(employee: employee_record)
+  end
+
+  def resource_class_for_record
+    record.is_a?(Class) ? record : record.class
+  end
+
   private
 
   def standard_auth(action)
     return true if admin?
 
-    permission_context = build_permission_context
-    user.permission?(resource_name, action, permission_context)
-  end
-
-  def resource_name
-    @resource_name ||= record.class.name.underscore.pluralize
-  end
-
-  def build_permission_context
-    {
-      user_id: user.id,
-      record_user_id: record_owner_id
-    }
-  end
-
-  def record_owner_id
-    return nil unless record.respond_to?(:person_id)
-    return nil unless user.person
-
-    record.person_id == user.person.id ? user.id : nil
+    job_title_allows?(action, resource_class_for_record)
   end
 end

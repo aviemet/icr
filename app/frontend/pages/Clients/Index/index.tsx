@@ -19,7 +19,7 @@ const ClientsIndex = ({ clients, pagination }: ClientIndexProps) => {
 			pagination={ pagination }
 			deleteRoute={ Routes.clients() }
 		>
-			<ClientTable records={ clients } pagination={ pagination } model="clients" />
+			<ClientTable records={ clients } model="clients" />
 		</IndexPageTemplate>
 	)
 }

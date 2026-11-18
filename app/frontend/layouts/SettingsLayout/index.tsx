@@ -92,9 +92,6 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
 
 	const [rootRef, setRootRef] = useState<HTMLElement | null>(null)
 	const [controlsRefs, setControlsRefs] = useState<Record<string, HTMLAnchorElement | null>>({})
-	const [subRootRef, setSubRootRef] = useState<HTMLElement | null>(null)
-	const [subControlsRefs, setSubControlsRefs] = useState<Record<string, HTMLAnchorElement | null>>({})
-
 	const active = linkIndex(pathname)
 	const activeLink = links[active]
 	const subLinks = activeLink?.children
@@ -105,17 +102,11 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
 		setControlsRefs(controlsRefs)
 	}
 
-	const setSubControlRef = (index: number) => (node: HTMLAnchorElement) => {
-		subControlsRefs[index] = node
-		setSubControlsRefs(subControlsRefs)
-	}
-
 	return (
 		<AppLayout>
 			<Portal target="#above-content-portal">
 				<Container>
 					<Paper
-						withBorder
 						component="nav"
 						shadow="xs"
 						className={ classes.settingsLayout }
@@ -141,10 +132,9 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
 						</Box>
 
 						{ subLinks && (
-							<Box className="childRow" ref={ setSubRootRef }>
+							<Box className="childRow">
 								{ subLinks.map((link, index) => (
 									<SettingsNavLink
-										ref={ setSubControlRef(index) }
 										key={ link.label }
 										href={ link.href }
 										className={ clsx("control") }
@@ -153,12 +143,6 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
 										{ link.label }
 									</SettingsNavLink>
 								)) }
-
-								<FloatingIndicator
-									target={ subControlsRefs[activeSubIndex] }
-									parent={ subRootRef }
-									className={ clsx("indicator") }
-								/>
 							</Box>
 						) }
 					</Paper>

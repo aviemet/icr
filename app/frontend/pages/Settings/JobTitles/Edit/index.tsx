@@ -1,12 +1,13 @@
 import { Title, Page, Section } from "@/components"
-import { JobTitleForm } from "@/domains/Settings/JobTitles/Form"
+import { JobTitleForm, type JobTitleFormProps } from "@/domains/Settings/JobTitles/Form"
 import { Routes, withLayout } from "@/lib"
 
 interface EditJobTitleProps {
 	job_title: Schema.EmployeeJobTitlesEdit
+	permissions: NonNullable<JobTitleFormProps["permissions"]>
 }
 
-const EditJobTitle = ({ job_title }: EditJobTitleProps) => {
+const EditJobTitle = ({ job_title, permissions }: EditJobTitleProps) => {
 	const title = `Edit ${String(job_title.name || "Job Title")}`
 
 	return (
@@ -22,6 +23,7 @@ const EditJobTitle = ({ job_title }: EditJobTitleProps) => {
 					method="put"
 					to={ Routes.settingsJobTitle(String(job_title.slug)) }
 					job_title={ job_title }
+					permissions={ permissions }
 				/>
 			</Section>
 		</Page>
