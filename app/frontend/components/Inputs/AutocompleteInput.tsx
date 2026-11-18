@@ -1,6 +1,8 @@
 import { Autocomplete, type AutocompleteProps as MantineAutocompleteProps } from "@mantine/core"
 import React from "react"
 
+import { useFormFieldError } from "@/components/Form"
+
 import { InputWrapper } from "./InputWrapper"
 
 import { withInjectedProps, type BaseInputProps } from "."
@@ -15,9 +17,11 @@ export function AutocompleteInput({
 	wrapper,
 	wrapperProps,
 	disableAutofill = true,
+	error,
 	ref,
 	...props
 }: AutocompleteProps) {
+	const fieldError = useFormFieldError(name)
 	const inputId = id ?? name
 
 	return (
@@ -26,6 +30,7 @@ export function AutocompleteInput({
 				ref={ ref }
 				id={ inputId }
 				name={ name }
+				error={ error ?? fieldError }
 				wrapperProps={ wrapper ? undefined : wrapperProps }
 				{ ...withInjectedProps(props, {
 					disableAutofill,

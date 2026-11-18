@@ -1,37 +1,89 @@
-import { Link, Table } from "@/components"
-import { EditButton } from "@/components/Button"
-import { type TableProps } from "@/components/Table/Table"
+import { Group, Link, Paper, Table, Text } from "@/components"
+import { DeleteButton, EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
-export function JobTitleTable(props: TableProps) {
+import * as classes from "./JobTitlesTable.css"
+
+interface JobTitleTableProps {
+	records: Schema.EmployeeJobTitlesIndex[]
+}
+
+export function JobTitleTable({ records }: JobTitleTableProps) {
 	return (
-		<Table { ...props }>
-			<Table.Head>
-				<Table.Row>
-					<Table.Cell sort="title">Title</Table.Cell>
-					<Table.Cell sort="description">Description</Table.Cell>
-					<Table.HeadCell className="actions">Actions</Table.HeadCell>
-				</Table.Row>
-			</Table.Head>
-			<Table.Body>
-				<Table.RowIterator render={ (job_title: Schema.JobTitlesIndex) => (
-					<Table.Row key={ job_title.id }>
-
-						<Table.Cell>
-							<Link href={ Routes.settingsJobTitle(job_title.slug) }>{ job_title.name }</Link>
-						</Table.Cell>
-
-						<Table.Cell>
-							<Link href={ Routes.settingsJobTitle(job_title.slug) }>{ job_title.description }</Link>
-						</Table.Cell>
-
-						<Table.Cell>
-							<EditButton href={ Routes.editSettingsJobTitle(job_title.slug) } />
-						</Table.Cell>
-
+		<Paper
+			withBorder
+			radius="md"
+			shadow="xs"
+			className={ classes.panel }
+			style={ { overflow: "hidden" } }
+		>
+			<Table
+				className={ classes.table }
+				horizontalSpacing="md"
+				verticalSpacing="sm"
+				withRowBorders
+			>
+				<Table.Head>
+					<Table.Row>
+						<Table.HeadCell>Title</Table.HeadCell>
+						<Table.HeadCell>Department</Table.HeadCell>
+						<Table.HeadCell>Description</Table.HeadCell>
+						<Table.HeadCell style={ { width: 96, textAlign: "right" } }>
+							Actions
+						</Table.HeadCell>
 					</Table.Row>
-				) } />
-			</Table.Body>
-		</Table>
+				</Table.Head>
+				<Table.Body>
+					{ records.length === 0 && (
+						<Table.Row>
+							<Table.Cell colSpan={ 4 }>
+								<Text size="sm" c="dimmed">
+									No job titles yet. Create one to get started.
+								</Text>
+							</Table.Cell>
+						</Table.Row>
+					) }
+
+					{ records.map(jobTitle => {
+						const slug = String(jobTitle.slug ?? "")
+						const name = String(jobTitle.name ?? "")
+						const description = String(jobTitle.description ?? "")
+						const departmentName = String(jobTitle.department?.name ?? "")
+
+						return (
+							<Table.Row key={ slug || name }>
+								<Table.Cell>
+									<Link href={ Routes.settingsJobTitle(slug) }>
+										<Text fw={ 500 } span>{ name }</Text>
+									</Link>
+								</Table.Cell>
+								<Table.Cell>
+									<Text size="sm" c={ departmentName ? undefined : "dimmed" }>
+										{ departmentName || "—" }
+									</Text>
+								</Table.Cell>
+								<Table.Cell>
+									<Text size="sm" c={ description ? undefined : "dimmed" } lineClamp={ 2 }>
+										{ description || "—" }
+									</Text>
+								</Table.Cell>
+								<Table.Cell style={ { textAlign: "right" } }>
+									<Group gap="xs" justify="flex-end" wrap="nowrap">
+										<EditButton
+											href={ Routes.editSettingsJobTitle(slug) }
+											label={ name }
+										/>
+										<DeleteButton
+											href={ Routes.settingsJobTitle(slug) }
+											label={ name }
+										/>
+									</Group>
+								</Table.Cell>
+							</Table.Row>
+						)
+					}) }
+				</Table.Body>
+			</Table>
+		</Paper>
 	)
 }

@@ -1,6 +1,8 @@
 import { PasswordInput as MantinePasswordInput, type PasswordInputProps as MantinePasswordInputProps } from "@mantine/core"
 import React from "react"
 
+import { useFormFieldError } from "@/components/Form"
+
 import { InputWrapper } from "./InputWrapper"
 import { Label } from "./Label"
 
@@ -21,9 +23,11 @@ export function PasswordInput({
 	id,
 	wrapper,
 	wrapperProps,
+	error,
 	ref,
 	...props
 }: PasswordInputProps) {
+	const fieldError = useFormFieldError(name)
 	const inputId = id || name
 
 	return (
@@ -35,6 +39,7 @@ export function PasswordInput({
 				id={ inputId }
 				name={ name }
 				required={ required }
+				error={ error ?? fieldError }
 				ref={ ref }
 				{ ...props }
 			/>

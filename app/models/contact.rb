@@ -37,6 +37,8 @@ class Contact < ApplicationRecord
 
   belongs_to :contactable, polymorphic: true
 
+  accepts_nested_attributes_for :addresses, :phones, allow_destroy: true
+
   def primary_address
     super || calculate_primary(:addresses)
   end

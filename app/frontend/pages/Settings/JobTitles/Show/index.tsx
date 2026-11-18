@@ -3,12 +3,12 @@ import { EmployeeTable } from "@/domains/Employees/Table"
 import { Routes, withLayout } from "@/lib"
 
 interface ShowJobTitleProps {
-	job_title: Schema.JobTitlesShow
+	job_title: Schema.EmployeeJobTitlesShow
 	employees: Schema.EmployeesIndex[]
 }
 
 const ShowJobTitle = ({ job_title, employees }: ShowJobTitleProps) => {
-	const title = job_title.name || "Job Title"
+	const title = String(job_title.name || "Job Title")
 
 	return (
 		<Page title={ title } breadcrumbs={ [
@@ -22,21 +22,20 @@ const ShowJobTitle = ({ job_title, employees }: ShowJobTitleProps) => {
 					<Menu position="bottom-end">
 						<Menu.Target />
 						<Menu.Dropdown>
-							<Menu.Link href={ Routes.editSettingsJobTitle(job_title.slug) }>
+							<Menu.Link href={ Routes.editSettingsJobTitle(String(job_title.slug)) }>
 								Edit Job Title
 							</Menu.Link>
 						</Menu.Dropdown>
 					</Menu>
 				</Group>
 
-
 				<Table.Section>
 					<Table.TableProvider
 						selectable
 						model="employees"
-						rows={ employees }
+						records={ employees }
 					>
-						<EmployeeTable />
+						<EmployeeTable records={ employees } model="employees" />
 
 						<Table.Pagination />
 					</Table.TableProvider>

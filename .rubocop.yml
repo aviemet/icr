@@ -53,6 +53,8 @@ Style/SafeNavigation:
   Enabled: true
   Exclude:
     - "/app/views/**/*.slim"
+Style/SafeNavigationChainLength:
+  Max: 3
 Metrics/AbcSize:
   Enabled: false
 Metrics/MethodLength:

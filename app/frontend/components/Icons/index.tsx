@@ -22,7 +22,7 @@ export {
 	MdMenu as MenuBarsIcon,
 	MdMoreVert as MenuDotsIcon,
 	MdExpandMore as ExpandIcon,
-	MdEdit as EditIcon,
+	MdOutlineEdit as EditIcon,
 	MdOutlineSearch as SearchIcon,
 	MdViewColumn as ColumnsIcon,
 	MdAdd as NewIcon,

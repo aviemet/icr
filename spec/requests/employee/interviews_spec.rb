@@ -29,6 +29,7 @@ RSpec.describe "/employee/interviews", type: :request do
       create(:interview)
       get interviews_url
       expect(response).to be_successful
+      expect_inertia.to render_component "Interviews/Index"
     end
   end
 
@@ -37,6 +38,7 @@ RSpec.describe "/employee/interviews", type: :request do
       interview = create(:interview)
       get interview_url(interview)
       expect(response).to be_successful
+      expect_inertia.to render_component "Interviews/Show"
     end
   end
 
@@ -44,6 +46,7 @@ RSpec.describe "/employee/interviews", type: :request do
     it "renders a successful response" do
       get new_interview_url
       expect(response).to be_successful
+      expect_inertia.to render_component "Interviews/New"
     end
   end
 
@@ -52,6 +55,7 @@ RSpec.describe "/employee/interviews", type: :request do
       interview = create(:interview)
       get edit_interview_url(interview)
       expect(response).to be_successful
+      expect_inertia.to render_component "Interviews/Edit"
     end
   end
 

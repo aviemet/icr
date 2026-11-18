@@ -14,7 +14,7 @@ class InterviewsController < ApplicationController
 
     paginated_employee_interviews = paginate(employee_interviews, :employee_interviews)
 
-    render inertia: "Employee/Interviews/Index", props: {
+    render inertia: "Interviews/Index", props: {
       employee_interviews: -> { paginated_employee_interviews.render(:index) },
       pagination: -> { {
         count: employee_interviews.size,
@@ -27,7 +27,7 @@ class InterviewsController < ApplicationController
   def show
     authorize employee_interview
 
-    render inertia: "Employee/Interviews/Show", props: {
+    render inertia: "Interviews/Show", props: {
       employee_interview: -> { employee_interview.render(:show) }
     }
   end
@@ -36,7 +36,7 @@ class InterviewsController < ApplicationController
   def new
     authorize Employee::Interview.new
 
-    render inertia: "Employee/Interviews/New", props: {
+    render inertia: "Interviews/New", props: {
       employee_interview: Employee::Interview.new.render(:form_data)
     }
   end
@@ -45,7 +45,7 @@ class InterviewsController < ApplicationController
   def edit
     authorize employee_interview
 
-    render inertia: "Employee/Interviews/Edit", props: {
+    render inertia: "Interviews/Edit", props: {
       employee_interview: employee_interview.render(:edit)
     }
   end

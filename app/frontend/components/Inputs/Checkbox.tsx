@@ -1,6 +1,8 @@
 import { Checkbox as MantineCheckbox, type CheckboxProps as MantineCheckboxProps } from "@mantine/core"
 import React from "react"
 
+import { useFormFieldError } from "@/components/Form"
+
 import { InputWrapper } from "./InputWrapper"
 
 import { withInjectedProps, type BaseInputProps } from "."
@@ -20,9 +22,11 @@ const Checkbox: CheckboxComponentType = ({
 	wrapper,
 	wrapperProps,
 	disableAutofill = true,
+	error,
 	ref,
 	...props
-}: CheckboxProps) => {
+}) => {
+	const fieldError = useFormFieldError(name)
 	const inputId = id ?? name
 
 	return (
@@ -31,6 +35,7 @@ const Checkbox: CheckboxComponentType = ({
 				ref={ ref }
 				id={ inputId }
 				name={ name }
+				error={ error ?? fieldError }
 				{ ...withInjectedProps(props, {
 					disableAutofill,
 				}) }

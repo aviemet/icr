@@ -54,8 +54,16 @@ function slotStateEqual(
 	return isEqual(pick(a, SLOT_STATE_KEYS), pick(b, SLOT_STATE_KEYS))
 }
 
-export function FormFieldProvider({ children }: { children: React.ReactNode }) {
-	const storeRef = useRef<Record<string, unknown>>({})
+export function FormFieldProvider({
+	children,
+	initialStoreData,
+}: {
+	children: React.ReactNode
+	initialStoreData?: Record<string, unknown>
+}) {
+	const storeRef = useRef<Record<string, unknown>>(
+		initialStoreData ? Object.fromEntries(flattenToPaths(initialStoreData)) : {}
+	)
 	const subscriptionsRef = useRef<Map<string, Set<(value: unknown) => void>>>(new Map())
 	const formDataSubscriptionsRef = useRef<Set<(data: Record<string, unknown>) => void>>(new Set())
 	const formRef = useRef<HTMLFormElement | null>(null)

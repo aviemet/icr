@@ -85,7 +85,7 @@ export function Sidebar() {
 							active={ matchesAtPosition(paths, [0, "employees"]) }
 						>
 							<MenuLink
-								label="Documents"
+								label="Requirements"
 								href={ Routes.requirements() }
 							/>
 							<MenuLink
@@ -95,9 +95,9 @@ export function Sidebar() {
 						</MenuLink>
 						<MenuLink
 							label="Payroll"
-							href={ Routes.timesheets() }
+							href={ Routes.payrollPeriods() }
 							leftSection={ <ClockIcon /> }
-							active={ matchesAtPosition(paths, [0, "timesheets"]) }
+							active={ matchesAtPosition(paths, [0, "payroll"]) }
 						/>
 						<MenuLink
 							label="Vendors"

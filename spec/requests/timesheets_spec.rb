@@ -6,7 +6,7 @@ RSpec.describe "/timesheets", type: :request do
 
   def valid_attributes
     employee = create(:employee)
-    pay_period = create(:pay_period)
+    pay_period = create(:pay_period, finalized_at: nil, approved_at: nil)
     {
       timesheet: {
         employee_id: employee.id,
@@ -22,44 +22,22 @@ RSpec.describe "/timesheets", type: :request do
   end
 
   def new_attributes
-    { pay_period_id: create(:pay_period).id, employee_id: create(:employee).id }
+    { pay_period_id: create(:pay_period, finalized_at: nil, approved_at: nil).id, employee_id: create(:employee).id }
   end
 
-  describe "GET /index" do
-    it "renders a successful response" do
-      create(:timesheet)
-      get timesheets_url
-      expect(response).to be_successful
-    end
-
-    it "includes non-zero employee_hours when pay period has shifts with hours", :inertia do
-      Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:bi_weekly]
-      Setting.payroll_period_day = "monday"
-      travel_to Time.zone.local(2024, 3, 15, 12, 0, 0) do
-        period_start = Date.new(2024, 3, 11).to_time.beginning_of_day
-        period_end = Date.new(2024, 3, 24).to_time.end_of_day
-        pay_period = PayPeriod.find_or_create_by!(starts_at: period_start, ends_at: period_end)
-        employee = create(:employee)
-        timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
-        event = create(:calendar_event, starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0), ends_at: Time.zone.local(2024, 3, 15, 17, 0, 0))
-        create(:shift, employee: employee, timesheet: timesheet, calendar_event: event)
-
-        get timesheets_url
-
-        expect(response).to be_successful
-        expect_inertia.to render_component "Timesheets/Index"
-        expect(inertia.props[:employee_hours]).to have_key(employee.id.to_s)
-        expect(inertia.props[:employee_hours][employee.id.to_s][:regular_hours]).to eq(8.0)
-        expect(inertia.props[:employee_hours][employee.id.to_s][:ot_hours]).to eq(0.0)
-      end
-    end
-  end
-
-  describe "GET /payroll/employees/:employee_id (employee_review)" do
-    it "renders a successful response" do
+  describe "GET /payroll/periods/:period_id/employees/:employee_id (employee_review)" do
+    it "renders a successful response with approve controls enabled", :inertia do
+      pay_period = create(:pay_period, finalized_at: nil, approved_at: nil)
       employee = create(:employee)
-      get payroll_employee_review_path(employee_id: employee.id)
+      timesheet = create(:timesheet, pay_period: pay_period, employee: employee, approved_at: nil)
+
+      get period_employee_review_path(period_id: pay_period.id, employee_id: employee.id)
+
       expect(response).to have_http_status(:success)
+      expect_inertia.to render_component "Timesheets/EmployeeReview"
+      expect(inertia.props[:can_approve]).to be(true)
+      expect(inertia.props[:finalized]).to be(false)
+      expect(inertia.props[:timesheet][:id]).to eq(timesheet.id.to_s)
     end
   end
 
@@ -117,7 +95,7 @@ RSpec.describe "/timesheets", type: :request do
   describe "PATCH /update" do
     context "with valid parameters" do
       it "updates the requested timesheet" do
-        timesheet = create(:timesheet)
+        timesheet = create(:timesheet, pay_period: create(:pay_period, finalized_at: nil, approved_at: nil))
         attributes = new_attributes
         patch timesheet_url(timesheet), params: { timesheet: attributes }
         timesheet.reload
@@ -125,7 +103,7 @@ RSpec.describe "/timesheets", type: :request do
       end
 
       it "redirects to the timesheet" do
-        timesheet = create(:timesheet)
+        timesheet = create(:timesheet, pay_period: create(:pay_period, finalized_at: nil, approved_at: nil))
         patch timesheet_url(timesheet), params: { timesheet: new_attributes }
         timesheet.reload
         expect(response).to redirect_to(timesheet_url(timesheet))
@@ -134,25 +112,126 @@ RSpec.describe "/timesheets", type: :request do
 
     context "with invalid parameters" do
       it "redirects back to the edit timesheet page" do
-        timesheet = create(:timesheet)
+        timesheet = create(:timesheet, pay_period: create(:pay_period, finalized_at: nil, approved_at: nil))
         patch timesheet_url(timesheet), params: invalid_attributes
         expect(response).to redirect_to(edit_timesheet_url(timesheet))
       end
+    end
+
+    it "rejects updates when the pay period is finalized" do
+      pay_period = create(:pay_period, finalized_at: Time.current, approved_at: nil)
+      timesheet = create(:timesheet, pay_period: pay_period)
+      other_period = create(:pay_period, finalized_at: nil, approved_at: nil)
+
+      patch timesheet_url(timesheet), params: { timesheet: { pay_period_id: other_period.id } }
+
+      expect(response).to redirect_to(timesheet_url(timesheet))
+      expect(timesheet.reload.pay_period_id).to eq(pay_period.id)
     end
   end
 
   describe "DELETE /destroy" do
     it "destroys the requested timesheet" do
-      timesheet = create(:timesheet)
+      timesheet = create(:timesheet, pay_period: create(:pay_period, finalized_at: nil, approved_at: nil))
       expect {
         delete timesheet_url(timesheet)
       }.to change(Timesheet, :count).by(-1)
     end
 
-    it "redirects to the timesheets list" do
-      timesheet = create(:timesheet)
+    it "redirects to the payroll periods list" do
+      timesheet = create(:timesheet, pay_period: create(:pay_period, finalized_at: nil, approved_at: nil))
       delete timesheet_url(timesheet)
-      expect(response).to redirect_to(timesheets_url)
+      expect(response).to redirect_to(payroll_periods_url)
+    end
+  end
+
+  describe "POST /approve" do
+    it "approves a timesheet when the period is not finalized" do
+      pay_period = create(
+        :pay_period,
+        starts_at: 40.days.ago.beginning_of_day,
+        ends_at: 20.days.ago.end_of_day,
+        finalized_at: nil,
+        approved_at: nil,
+      )
+      timesheet = create(:timesheet, pay_period: pay_period, approved_at: nil)
+
+      post approve_timesheet_url(timesheet)
+
+      expect(response).to redirect_to(period_url(pay_period))
+      expect(timesheet.reload.approved_at).to be_present
+    end
+
+    it "rejects approve when the pay period is finalized" do
+      pay_period = create(
+        :pay_period,
+        starts_at: 20.days.ago.beginning_of_day,
+        ends_at: 6.days.ago.end_of_day,
+        finalized_at: 1.day.ago,
+        approved_at: nil,
+      )
+      timesheet = create(:timesheet, pay_period: pay_period, approved_at: nil)
+
+      post approve_timesheet_url(timesheet)
+
+      expect(response).to redirect_to(period_url(pay_period))
+      expect(timesheet.reload.approved_at).to be_nil
+    end
+  end
+
+  describe "POST /unapprove" do
+    it "clears approval when the period is not finalized" do
+      pay_period = create(
+        :pay_period,
+        starts_at: 40.days.ago.beginning_of_day,
+        ends_at: 20.days.ago.end_of_day,
+        finalized_at: nil,
+        approved_at: nil,
+      )
+      timesheet = create(:timesheet, pay_period: pay_period, approved_at: Date.current)
+
+      post unapprove_timesheet_url(timesheet)
+
+      expect(response).to redirect_to(period_url(pay_period))
+      expect(timesheet.reload.approved_at).to be_nil
+    end
+
+    it "rejects unapprove when the pay period is finalized" do
+      pay_period = create(
+        :pay_period,
+        starts_at: 20.days.ago.beginning_of_day,
+        ends_at: 6.days.ago.end_of_day,
+        finalized_at: 1.day.ago,
+        approved_at: nil,
+      )
+      timesheet = create(:timesheet, pay_period: pay_period, approved_at: Date.current)
+
+      post unapprove_timesheet_url(timesheet)
+
+      expect(response).to redirect_to(period_url(pay_period))
+      expect(timesheet.reload.approved_at).to be_present
+    end
+  end
+
+  describe "POST /bulk_approve" do
+    it "approves pending timesheets after the due date when the period is open" do
+      pay_period = create(
+        :pay_period,
+        starts_at: 40.days.ago.beginning_of_day,
+        ends_at: 20.days.ago.end_of_day,
+        finalized_at: nil,
+        approved_at: nil,
+      )
+      pending_timesheet = create(:timesheet, pay_period: pay_period, approved_at: nil)
+      create(:timesheet, pay_period: pay_period, approved_at: Date.current)
+
+      post bulk_approve_timesheets_url, params: {
+        pay_period_id: pay_period.id,
+        approve_all: true,
+      }
+
+      expect(response).to redirect_to(period_url(pay_period))
+      expect(pending_timesheet.reload.approved_at).to be_present
     end
   end
 end

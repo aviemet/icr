@@ -44,15 +44,24 @@ export function useFormFieldError(name?: string): string | undefined {
 	return formFieldErrorMessage(context.slotProps?.errors, name)
 }
 
-export function useFormField(path: string): [unknown, (value: unknown) => void] {
-	const { subscribe, getValue, setValue } = useFormFieldContext()
-	const [value, setState] = useState(() => getValue(path))
+export function useFormField(path?: string): [unknown, (value: unknown) => void] {
+	const context = useFormFieldContext(false)
+	const [value, setState] = useState(() => {
+		if(path === undefined || context === null) return undefined
+		return context.getValue(path)
+	})
 
-	useEffect(() => subscribe(path, setState), [path, subscribe])
+	useEffect(() => {
+		if(path === undefined || context === null) return
+		return context.subscribe(path, setState)
+	}, [path, context])
 
 	const setValueForPath = useCallback(
-		(newValue: unknown) => setValue(path, newValue),
-		[path, setValue]
+		(newValue: unknown) => {
+			if(path === undefined || context === null) return
+			context.setValue(path, newValue)
+		},
+		[path, context]
 	)
 
 	return [value, setValueForPath]

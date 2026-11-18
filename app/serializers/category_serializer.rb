@@ -28,5 +28,6 @@ class CategorySerializer < ApplicationSerializer
   attributes(
     :name,
     :description,
+    :system,
   )
 end

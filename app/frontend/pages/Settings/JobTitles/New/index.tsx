@@ -3,7 +3,7 @@ import { JobTitleForm } from "@/domains/Settings/JobTitles/Form"
 import { Routes, withLayout } from "@/lib"
 
 interface NewJobTitleProps {
-	job_title: Schema.JobTitlesFormData
+	job_title: Schema.EmployeeJobTitlesFormData
 }
 
 const NewJobTitle = ({ ...data }: NewJobTitleProps) => {

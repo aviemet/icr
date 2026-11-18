@@ -96,6 +96,6 @@ export default defineConfig({
 			reporter: ["text-summary", "json-summary", "lcov", "html"],
 			reportsDirectory: path.resolve(__dirname, "coverage", "frontend"),
 		},
-		setupFiles: ["tests/helpers/mockServer.ts"],
+		setupFiles: ["tests/helpers/setup.ts", "tests/helpers/mockServer.ts"],
 	},
 })

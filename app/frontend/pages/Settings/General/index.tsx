@@ -1,12 +1,15 @@
 import { Box, Grid } from "@/components"
 import { Form, Submit } from "@/components/Form"
-import { TextInput } from "@/components/Inputs"
+import { BrandColorInput } from "@/components/Inputs/BrandColorInput"
 import {
 	CurrenciesDropdown,
 	LanguagesDropdown,
 	TimezonesDropdown,
 } from "@/components/Inputs/Dropdowns"
 import { Routes, withLayout } from "@/lib"
+import { DEFAULT_BRAND_COLOR } from "@/lib/brandColor"
+
+import { SettingsPageHeader } from "../SettingsPageHeader"
 
 interface GeneralSettingsProps {
 	settings: Schema.Setting
@@ -15,19 +18,17 @@ interface GeneralSettingsProps {
 const GeneralSettings = ({ settings }: GeneralSettingsProps) => {
 	return (
 		<Box>
+			<SettingsPageHeader
+				title="General"
+				description="Locale defaults and site brand color."
+			/>
+
 			<Form
 				action={ Routes.settings() }
 				method="patch"
 				initialData={ { settings } }
 			>
 				<Grid>
-					<Grid.Col>
-						<TextInput
-							label="Company Name"
-							name="settings.company_name"
-						/>
-					</Grid.Col>
-
 					<Grid.Col>
 						<LanguagesDropdown
 							label="Default Language"
@@ -46,6 +47,14 @@ const GeneralSettings = ({ settings }: GeneralSettingsProps) => {
 						<TimezonesDropdown
 							label="Default Timezone"
 							name="settings.default_timezone"
+						/>
+					</Grid.Col>
+
+					<Grid.Col>
+						<BrandColorInput
+							label="Primary color"
+							name="settings.primary_color"
+							initialValue={ settings.primary_color || DEFAULT_BRAND_COLOR }
 						/>
 					</Grid.Col>
 

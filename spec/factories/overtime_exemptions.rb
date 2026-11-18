@@ -13,6 +13,11 @@ FactoryBot.define do
   factory :overtime_exemption do
     name { "Overtime Exemption" }
     active { true }
-    criteria { [] }
+    criteria do
+      [{
+        "category" => { "operator" => "equals", "value" => "sleep_shift" }
+      }]
+    end
   end
 end
+

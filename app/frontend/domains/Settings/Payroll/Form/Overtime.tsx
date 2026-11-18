@@ -1,0 +1,27 @@
+import { Grid } from "@/components"
+import { NumberInput } from "@/components/Inputs"
+
+export function Overtime() {
+	return (
+		<>
+			<Grid.Col span={ { xs: 12, sm: 6 } }>
+				<NumberInput
+					name="settings.overtime_weekly_hours"
+					label="Weekly threshold (hours)"
+					description="Hours over this in a week are overtime"
+					min={ 0 }
+					max={ 168 }
+				/>
+			</Grid.Col>
+			<Grid.Col span={ { xs: 12, sm: 6 } }>
+				<NumberInput
+					name="settings.overtime_daily_hours"
+					label="Daily threshold (hours)"
+					description="Hours over this in a day are overtime"
+					min={ 0 }
+					max={ 24 }
+				/>
+			</Grid.Col>
+		</>
+	)
+}

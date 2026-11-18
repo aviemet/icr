@@ -1,0 +1,14 @@
+---
+description: Keep Inertia pages thin; domain UI lives under domains/
+alwaysApply: true
+---
+
+# Frontend folder placement
+
+`app/frontend/pages/**` holds Inertia route entrypoints only (usually `index.tsx`).
+
+Put tables, forms, form sections, work queues, review tables, filters, and related helpers in `app/frontend/domains/<Domain>/`.
+
+Put cross-cutting shells (auth paper, index templates, spotlight) in `app/frontend/features/`.
+
+Do not create `FormInputs/`, `ReviewTable/`, `WorkQueue.tsx`, or similar component trees under `pages/`. Import them into the page from `@/domains/...`.

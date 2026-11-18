@@ -23,7 +23,6 @@ module Permission
     include PgSearchable
     pg_search_config(against: [:name, :description])
 
-    tracked
     resourcify
 
     has_many :assignments,

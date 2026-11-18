@@ -21,6 +21,7 @@ en:
           title: Forgot your password?
       register:
         confirm_password: Confirm Password
+        email: Email
         errors:
           passwords_must_match: Passwords must match
         password: Password

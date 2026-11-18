@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": ".cursor/hooks/block-dev-db-wipe.sh",
+        "failClosed": true
+      }
+    ]
+  }
+}

@@ -1,6 +1,5 @@
 import {
 	SegmentedControl as MantineSegmentedControl,
-	useMantineTheme,
 	type SegmentedControlProps as MantineSegmentedControlProps,
 	type SegmentedControlItem,
 } from "@mantine/core"
@@ -10,7 +9,6 @@ import { InputWrapper } from "./InputWrapper"
 import { Label } from "./Label"
 
 import { type BaseInputProps } from "."
-
 
 export interface SegmentedControlProps
 	extends
@@ -36,27 +34,27 @@ export function SegmentedControl({
 	onChange,
 	wrapper,
 	ref,
+	color,
 	...props
 }: SegmentedControlProps) {
-	const theme = useMantineTheme()
+	const inputId = id || name
 
 	return (
 		<InputWrapper wrapper={ wrapper }>
 			{ label && labelPosition === "start" &&
-				<Label required={ required } htmlFor={ id }>{ label }</Label>
+				<Label required={ required } htmlFor={ inputId }>{ label }</Label>
 			}
 			<MantineSegmentedControl
 				ref={ ref }
+				name={ name }
 				value={ value }
-				onChange={ (choice: string) => {
-					onChange?.(choice)
-				} }
+				onChange={ onChange }
 				data={ options }
-				color={ theme.primaryColor }
+				color={ color }
 				{ ...props }
 			/>
 			{ label && labelPosition === "end" &&
-				<Label required={ required } htmlFor={ id }>{ label }</Label>
+				<Label required={ required } htmlFor={ inputId }>{ label }</Label>
 			}
 		</InputWrapper>
 	)

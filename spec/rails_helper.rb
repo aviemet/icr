@@ -93,8 +93,10 @@ RSpec.configure do |config|
   end
 
   # Reset so other non-request specs don't have to deal with slow truncation.
+  # Truncation wipes seeded system rows; restore required seed data afterward.
   config.after type: :request  do
     DatabaseCleaner.strategy = :transaction
+    load Rails.root.join("db/seeds/01_required.rb")
   end
 
   config.before do

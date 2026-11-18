@@ -29,4 +29,33 @@ RSpec.describe "Api::CalendarEvents", type: :request do
       expect(created_event.category_id).to eq(category.id)
     end
   end
+
+  describe "DELETE /api/calendar_events/:id" do
+    it "destroys a shift event and its shift while the period is open" do
+      employee = create(:employee)
+      shift = create(:shift, employee: employee)
+      event = Calendar::Event.find(shift.calendar_event_id)
+
+      expect {
+        delete api_calendar_event_url(event)
+      }.to change(Calendar::Event, :count).by(-1)
+        .and change(Shift, :count).by(-1)
+
+      expect(response).to have_http_status(:no_content)
+    end
+
+    it "rejects destroy when the pay period is finalized" do
+      employee = create(:employee)
+      shift = create(:shift, employee: employee)
+      event = Calendar::Event.find(shift.calendar_event_id)
+      shift.timesheet.pay_period.update!(finalized_at: Time.current)
+
+      expect {
+        delete api_calendar_event_url(event)
+      }.not_to change(Calendar::Event, :count)
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(Shift.exists?(shift.id)).to be(true)
+    end
+  end
 end

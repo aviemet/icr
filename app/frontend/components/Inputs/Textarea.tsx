@@ -4,6 +4,8 @@ import {
 } from "@mantine/core"
 import React from "react"
 
+import { useFormFieldError } from "@/components/Form"
+
 import { InputWrapper } from "./InputWrapper"
 import { Label } from "./Label"
 
@@ -22,9 +24,11 @@ export function Textarea({
 	wrapper,
 	wrapperProps,
 	disableAutofill = true,
+	error,
 	ref,
 	...props
 }: TextareaProps) {
+	const fieldError = useFormFieldError(name)
 	const inputId = id || name
 
 	return (
@@ -37,6 +41,7 @@ export function Textarea({
 				id={ inputId }
 				name={ name }
 				required={ required }
+				error={ error ?? fieldError }
 				{ ...withInjectedProps(props, {
 					disableAutofill,
 				}) }

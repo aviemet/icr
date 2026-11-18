@@ -193,11 +193,21 @@ function FormInner<TFormData extends Record<string, unknown>>({
 
 function FormContextWrapper<TFormData extends Record<string, unknown>>({
 	children,
+	initialData,
+	rememberKey,
 	...props
 }: FormProps<TFormData>) {
+	const seededStoreDataRef = useRef<Record<string, unknown> | undefined>(
+		rememberKey ? (loadRememberedData(rememberKey) ?? initialData) : initialData
+	)
+
 	return (
-		<FormFieldProvider>
-			<FormInner<TFormData> { ...props }>
+		<FormFieldProvider initialStoreData={ seededStoreDataRef.current }>
+			<FormInner<TFormData>
+				initialData={ initialData }
+				rememberKey={ rememberKey }
+				{ ...props }
+			>
 				{ children }
 			</FormInner>
 		</FormFieldProvider>

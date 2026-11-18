@@ -6,6 +6,7 @@ import {
 } from "@mantine/core"
 import React from "react"
 
+import { useFormField, useFormFieldError } from "@/components/Form"
 import { coerceArray } from "@/lib"
 
 import { InputWrapper } from "./InputWrapper"
@@ -19,6 +20,14 @@ export interface MultiSelectInputProps extends Omit<MantineMultiSelectInputProps
 	fetchOnOpen?: string
 }
 
+function multiSelectValueFromField(value: unknown) {
+	if(value === undefined) return undefined
+	if(value === null || value === "") return []
+	if(Array.isArray(value)) return value.map(String)
+
+	return [String(value)]
+}
+
 export function MultiSelect({
 	options = [],
 	label,
@@ -30,11 +39,19 @@ export function MultiSelect({
 	wrapperProps,
 	fetchOnOpen,
 	onDropdownOpen,
+	onChange,
+	value,
 	disableAutofill = true,
+	error,
 	ref,
 	...props
 }: MultiSelectInputProps) {
+	const fieldError = useFormFieldError(name)
+	const [fieldValue, setFieldValue] = useFormField(name)
 	const inputId = id || name
+	const resolvedValue = value !== undefined
+		? value
+		: multiSelectValueFromField(fieldValue)
 
 	const handleDropdownOpen = () => {
 		if(fetchOnOpen) {
@@ -46,7 +63,7 @@ export function MultiSelect({
 
 	return (
 		<InputWrapper wrapper={ wrapper } wrapperProps={ wrapperProps }>
-			{ label && <Label required={ required } htmlFor={ inputId }>
+			{ label && <Label required={ required } htmlFor={ `${inputId}-search` }>
 				{ label }
 			</Label> }
 			<MantineMultiSelect
@@ -57,9 +74,15 @@ export function MultiSelect({
 				name={ name }
 				data={ options }
 				required={ required }
+				value={ resolvedValue }
+				error={ error ?? fieldError }
 				maxDropdownHeight={ maxDropdownHeight }
 				onDropdownOpen={ handleDropdownOpen }
 				nothingFoundMessage="No Results"
+				onChange={ (nextValue) => {
+					setFieldValue(nextValue)
+					onChange?.(nextValue)
+				} }
 				{ ...withInjectedProps(props, {
 					disableAutofill,
 				}) }

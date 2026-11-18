@@ -1,0 +1,27 @@
+---
+description: Prefer positive framing; do not define by listing what something is not
+alwaysApply: true
+---
+
+# No Negative Assertions
+
+State what a thing is, does, or should do. Do not clarify by listing what it is not.
+
+Negative assertions introduce competing ideas into the reader's head, then ask them to discard those ideas. That muddies the subject instead of sharpening it.
+
+## Forbidden Pattern
+
+Do not write lists or chains of "not X, not Y, not Z" to narrow a subject.
+
+Bad:
+> Pick: make /payroll tell the truth. Not documents, not IHSS, not historical payroll, not due-date settings, not overtime-exemption persist.
+
+Good:
+> Pick: make /payroll tell the truth about current pay-period totals and approval state.
+
+## Rules
+
+- Lead with the affirmative claim: what exists, what changes, what the goal is.
+- If scope must be narrowed, name the included scope. Do not name the excluded neighbors.
+- Exception: a single contrast is fine when it resolves a real ambiguity the reader already has (e.g. "update the serializer, not the model"). Do not stack multiple exclusions.
+- Applies to chat replies, commit messages, plan docs, and any other agent-authored prose.

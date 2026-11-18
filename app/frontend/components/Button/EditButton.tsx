@@ -1,19 +1,15 @@
-import { useMantineTheme } from "@mantine/core"
-
-import { Link, Tooltip } from "@/components"
+import { ActionIcon, Link, Tooltip } from "@/components"
 import { EditIcon } from "@/components/Icons"
-import { useStore } from "@/lib/store"
 
-import { LinkProps } from "../Link"
+import * as classes from "./IconActionButton.css"
 
-interface EditButtonProps extends Omit<LinkProps, "children"> {
+interface EditButtonProps {
+	href?: string
 	label?: string
+	onClick?: () => void
 }
 
-export function EditButton({ href, label }: EditButtonProps) {
-	const { primaryColor } = useMantineTheme()
-	const { getContrastingColor } = useStore()
-
+export function EditButton({ href, label, onClick }: EditButtonProps) {
 	const usedLabel = `Edit${label ? ` ${label}` : ""}`
 
 	return (
@@ -22,12 +18,29 @@ export function EditButton({ href, label }: EditButtonProps) {
 			label={ usedLabel }
 			position="left"
 			transitionProps={ { transition: "fade" } }
-			aria-label={ usedLabel }
-			color={ primaryColor }
 		>
-			<Link as="button" href={ href } aria-label={ `Edit ${label}` }>
-				<EditIcon color={ getContrastingColor(primaryColor) } />
-			</Link>
+			{ href
+				? (
+					<ActionIcon
+						component={ Link }
+						href={ href }
+						variant="transparent"
+						aria-label={ usedLabel }
+						className={ classes.iconAction }
+					>
+						<EditIcon size={ 14 } />
+					</ActionIcon>
+				)
+				: (
+					<ActionIcon
+						variant="transparent"
+						aria-label={ usedLabel }
+						className={ classes.iconAction }
+						onClick={ onClick }
+					>
+						<EditIcon size={ 14 } />
+					</ActionIcon>
+				) }
 		</Tooltip>
 	)
 }

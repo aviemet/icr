@@ -6,6 +6,7 @@
 #  approved_at     :datetime
 #  config_snapshot :jsonb
 #  ends_at         :datetime
+#  finalized_at    :datetime
 #  period_type     :integer
 #  starts_at       :datetime
 #  status          :integer
@@ -28,5 +29,6 @@ class PayPeriodSerializer < ApplicationSerializer
     :approved_at,
     :period_type,
     :config_snapshot,
+    :finalized_at,
   )
 end

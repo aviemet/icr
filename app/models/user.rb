@@ -62,7 +62,25 @@ class User < ApplicationRecord
 
   resourcify
   rolify
-  tracked except: [:reset_password_token, :remember_created_at, :sign_in_count, :last_sign_in_at, :last_sign_in_ip, :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email, :unlock_token, :active_company]
+
+  self.paper_trail_options = paper_trail_options.deep_dup
+  paper_trail_options[:ignore] = [
+    :reset_password_token,
+    :remember_created_at,
+    :sign_in_count,
+    :last_sign_in_at,
+    :last_sign_in_ip,
+    :current_sign_in_at,
+    :current_sign_in_ip,
+    :confirmation_token,
+    :confirmed_at,
+    :confirmation_sent_at,
+    :unconfirmed_email,
+    :unlock_token,
+    :encrypted_password,
+    :failed_attempts,
+    :locked_at,
+  ]
 
   # Include default devise modules. Others available are:
   #  and :omniauthable

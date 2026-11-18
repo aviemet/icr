@@ -3,13 +3,29 @@ en:
   views:
     timesheets:
       employee_review:
-        approve: Approve
+        actions: Actions
+        approve: Approve timesheet
+        unapprove: Remove approval
         back: Back
         back_to_payroll: Back to Payroll
         break: Break
-        category: Category
         client: Client
+        client_calendar: Client calendar
         date: Date
+        delete_shift: Delete shift
+        delete_shift_confirm: This removes the shift from the timesheet and the calendar. This cannot be undone.
+        delete_shift_confirm_button: Delete
+        delete_shift_cancel: Cancel
+        delete_selected: Delete selected
+        delete_selected_confirm: This removes %{count} shift(s) from the timesheet and the calendar. This cannot be undone.
+        select_all: Select all shifts
+        select_shift: Select shift
+        selected_count: "%{count} selected"
+        bulk_actions: Actions
+        clear_selection: Clear selection
+        open_employee_calendar: Open employee calendar
+        open_client_calendar: Open client calendar
+        employee_calendar: Employee calendar
         employee_label: Employee
         exception: Exception
         footer_overtime: Overtime
@@ -20,7 +36,6 @@ en:
         ot: OT
         ot_hours: OT Hours
         overtime: Overtime
-        period_bi_weekly: Bi-Weekly Period
         period_label: Period
         pto_hours: PTO Hours
         regular_hours: Regular Hours
@@ -36,13 +51,14 @@ en:
         title: Timesheet Review
         total: Total
       index:
-        approve_all_clean: Approve All Clean
-        approve_selected: Approve Selected
+        approve_all_clean: Approve all pending
+        approve_selected: Approve selected
         approved_count: "%{approved} / %{total} Approved"
         due_in_days: Due in %{count} days
         employees:
           actions: Action
           approve: Approve
+          unapprove: Unapprove
           employee: Employee
           exceptions: Exceptions
           ot_hours: OT Hours

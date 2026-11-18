@@ -22,7 +22,6 @@
 #  fk_rails_...  (shift_template_id => shift_templates.id)
 #
 class ShiftTemplateEntry < ApplicationRecord
-  tracked
   resourcify
 
   belongs_to :shift_template

@@ -19,7 +19,7 @@ const IncidentReportsIndex = ({ incident_reports, pagination }: IncidentReportIn
 				{ label: "New Incident Report", href: Routes.newIncidentReport(), icon: <NewIcon /> },
 			] }
 		>
-			<IncidentReportTable />
+			<IncidentReportTable records={ incident_reports } pagination={ pagination } model="incident_reports" />
 		</IndexPageTemplate>
 	)
 }

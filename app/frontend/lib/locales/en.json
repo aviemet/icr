@@ -252,7 +252,7 @@
           "zero": "entries"
         },
         "more_pages": {
-          "display_entries": "Displaying %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> of <b>%{total}</b> in total"
+          "display_entries": "Displaying %{entry_name} <b>%{first}–%{last}</b> of <b>%{total}</b> in total"
         },
         "one_page": {
           "display_entries": {
@@ -457,6 +457,17 @@
         }
       }
     },
+    "pay_periods": {
+      "adjustment_change_set_required": "Adjustment must include the values that changed.",
+      "adjustment_failed": "Could not record adjustment.",
+      "adjustment_recorded": "Adjustment recorded.",
+      "adjustments_require_finalized": "Adjustments are only allowed on finalized pay periods.",
+      "already_finalized": "This pay period is already finalized.",
+      "export_requires_finalized": "Export is available after the pay period is finalized.",
+      "finalize_before_period_end": "Close is available after the pay period ends.",
+      "finalized": "Pay period closed.",
+      "finalized_locked": "This pay period is finalized. Record an adjustment to change values."
+    },
     "payroll": {
       "shift_exceptions": {
         "overlap": "Overlaps with shift on %{time}"
@@ -532,7 +543,8 @@
     "timesheets": {
       "approval_window_closed": "Approval is only allowed after the period has closed and before the payroll due date.",
       "approved": "Timesheet approved.",
-      "bulk_approved": "%{count} timesheet(s) approved."
+      "bulk_approved": "%{count} timesheet(s) approved.",
+      "unapproved": "Timesheet approval removed."
     },
     "users": null,
     "views": {
@@ -721,6 +733,55 @@
         "previous": "&lsaquo; Prev",
         "truncate": "&hellip;"
       },
+      "pay_periods": {
+        "index": {
+          "columns": {
+            "approved": "Approved",
+            "due": "Due",
+            "flagged": "Flagged",
+            "overtime": "Overtime",
+            "range": "Period",
+            "status": "Status"
+          },
+          "current_badge": "Current",
+          "periods": "Pay periods",
+          "summary": {
+            "approved": "%{approved} / %{total}",
+            "approved_label": "Approved",
+            "due_in_days": "Due in %{count} days",
+            "finalized_on": "Finalized %{date}",
+            "flagged": "Flagged",
+            "overtime": "Overtime",
+            "pending": "Pending"
+          },
+          "title": "Payroll",
+          "workflow": {
+            "approved": "Approved",
+            "closed": "Closed",
+            "current": "Current",
+            "open": "Open",
+            "pending": "Pending"
+          }
+        },
+        "show": {
+          "adjustment_approved_at": "Approved at (ISO date or blank to clear)",
+          "adjustment_reason": "Reason",
+          "adjustment_submit": "Record adjustment",
+          "adjustment_timesheet_id": "Timesheet ID",
+          "adjustments_title": "Adjustments",
+          "back_to_payroll": "Back to Payroll",
+          "export": "Export",
+          "finalize": "Close period",
+          "finalize_blocked_before_period_end": "Close is available after the period ends.",
+          "finalize_blocked_no_timesheets": "No employee timesheets to close.",
+          "finalize_blocked_pending": "Approve all timesheets before closing.",
+          "finalized_stamp": "Closed %{date}",
+          "hours": "%{count} hrs",
+          "no_adjustments": "No adjustments recorded",
+          "title": "Pay period",
+          "workflow_help": "Review and approve each employee timesheet, then close the period to lock it."
+        }
+      },
       "permissions": {
         "edit": {
           "title": "Edit Permission Group"
@@ -755,15 +816,49 @@
           "title": "New Permission Group"
         }
       },
+      "settings": {
+        "payroll": {
+          "overtime_exemptions": {
+            "active": "Active",
+            "add_criteria_group": "Add Criteria Group",
+            "add_criterion": "Add criterion",
+            "cancel_edit": "Cancel",
+            "criteria_groups": "Criteria Groups",
+            "criteria_groups_help": "Shifts matching ANY of these criteria groups will be exempt from overtime",
+            "description": "Shifts that match these rules are excluded from overtime calculation.",
+            "edit": "Edit",
+            "empty": "No overtime exemptions yet.",
+            "form_title_create": "New overtime exemption",
+            "form_title_edit": "Edit overtime exemption",
+            "inactive": "Inactive",
+            "list_title": "Existing exemptions",
+            "name": "Name",
+            "remove_group": "Remove Group",
+            "save_create": "Save Exemption",
+            "save_update": "Update Exemption",
+            "title": "Overtime exemptions"
+          }
+        }
+      },
       "timesheets": {
         "employee_review": {
-          "approve": "Approve",
+          "actions": "Actions",
+          "approve": "Approve timesheet",
           "back": "Back",
           "back_to_payroll": "Back to Payroll",
           "break": "Break",
-          "category": "Category",
+          "bulk_actions": "Actions",
+          "clear_selection": "Clear selection",
           "client": "Client",
+          "client_calendar": "Client calendar",
           "date": "Date",
+          "delete_selected": "Delete selected",
+          "delete_selected_confirm": "This removes %{count} shift(s) from the timesheet and the calendar. This cannot be undone.",
+          "delete_shift": "Delete shift",
+          "delete_shift_cancel": "Cancel",
+          "delete_shift_confirm": "This removes the shift from the timesheet and the calendar. This cannot be undone.",
+          "delete_shift_confirm_button": "Delete",
+          "employee_calendar": "Employee calendar",
           "employee_label": "Employee",
           "exception": "Exception",
           "footer_overtime": "Overtime",
@@ -771,15 +866,19 @@
           "hours": "Hours",
           "in_out_times": "In / Out Times",
           "no_shifts": "No shifts in this period",
+          "open_client_calendar": "Open client calendar",
+          "open_employee_calendar": "Open employee calendar",
           "ot": "OT",
           "ot_hours": "OT Hours",
           "overtime": "Overtime",
-          "period_bi_weekly": "Bi-Weekly Period",
           "period_label": "Period",
           "pto_hours": "PTO Hours",
           "regular_hours": "Regular Hours",
           "request_changes": "Request Changes",
           "save_times": "Save times",
+          "select_all": "Select all shifts",
+          "select_shift": "Select shift",
+          "selected_count": "%{count} selected",
           "shift": "Shift",
           "sick_hours": "Sick",
           "status_approved": "Approved",
@@ -788,11 +887,12 @@
           "tab_date": "Date",
           "tab_day": "Day",
           "title": "Timesheet Review",
-          "total": "Total"
+          "total": "Total",
+          "unapprove": "Remove approval"
         },
         "index": {
-          "approve_all_clean": "Approve All Clean",
-          "approve_selected": "Approve Selected",
+          "approve_all_clean": "Approve all pending",
+          "approve_selected": "Approve selected",
           "approved_count": "%{approved} / %{total} Approved",
           "due_in_days": "Due in %{count} days",
           "employees": {
@@ -804,7 +904,8 @@
             "pto_sick": "PTO / Sick",
             "regular_hours": "Regular Hours",
             "review": "Review",
-            "status": "Status"
+            "status": "Status",
+            "unapprove": "Unapprove"
           },
           "exception_missing_punch": "Missing Punch",
           "exception_overlapping": "Overlapping Shifts",

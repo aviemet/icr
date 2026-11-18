@@ -4,9 +4,9 @@ require "rails_helper"
 require_relative "../support/devise"
 
 RSpec.describe "Pages", :inertia do
-  describe "GET /" do
-    login_user(:admin)
+  login_user(:admin)
 
+  describe "GET /" do
     it "renders the Dashboard with dashboard props" do
       get root_url
       expect(response).to have_http_status(:ok)
@@ -23,6 +23,17 @@ RSpec.describe "Pages", :inertia do
           pending_timesheet_count: kind_of(Integer),
         ),
       )
+    end
+  end
+
+  describe "GET /home" do
+    it "renders a successful response" do
+      create(:client)
+
+      get home_url
+
+      expect(response).to be_successful
+      expect_inertia.to render_component "Home"
     end
   end
 end

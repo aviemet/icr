@@ -30,7 +30,6 @@ class Employee::InterviewParticipant < ApplicationRecord
     },
   )
 
-  tracked
   resourcify
 
   belongs_to :interview, class_name: "Employee::Interview"

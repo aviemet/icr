@@ -5,6 +5,8 @@ RSpec.describe "Errors", type: :request do
 
   it "renders the error page" do
     get "/error/404"
+
     expect(response).to be_successful
+    expect_inertia.to render_component "Errors/Show"
   end
 end

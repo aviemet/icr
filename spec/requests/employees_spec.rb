@@ -63,6 +63,19 @@ RSpec.describe "/employees", :inertia do
     end
   end
 
+  describe "GET /schedule" do
+    login_user(:admin)
+
+    it "renders a successful response" do
+      employee = create(:employee)
+
+      get schedule_employee_url(employee)
+
+      expect(response).to be_successful
+      expect_inertia.to render_component "Employees/Schedule"
+    end
+  end
+
   describe "POST /create" do
     login_user(:admin)
 

@@ -7,8 +7,10 @@ import { Routes, exclude, assertStatus, HTTP_STATUS } from "@/lib"
 import { ReactMutationFunction } from ".."
 
 export type CalendarEventData = {
-	calendar_event: Omit<PartialDeep<Schema.CalendarEventsFormData>, "event_participants"> & {
+	calendar_event: Omit<PartialDeep<Schema.CalendarEventsFormData>, "event_participants" | "starts_at" | "ends_at"> & {
 		category_slug?: string
+		starts_at?: Date | string
+		ends_at?: Date | string
 		shift: PartialDeep<Schema.Shift>
 		event_participants: PartialDeep<Schema.EventParticipantsFormData>[]
 	}
@@ -16,7 +18,7 @@ export type CalendarEventData = {
 
 
 export const useCreateCalendarEvent: ReactMutationFunction<Schema.CalendarEventsShow, CalendarEventData> = (
-	options
+	options = {}
 ) => {
 	const queryClient = useQueryClient()
 

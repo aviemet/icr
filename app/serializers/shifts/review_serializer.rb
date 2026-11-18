@@ -12,4 +12,9 @@ class Shifts::ReviewSerializer < ShiftSerializer
 
     clients.map(&:full_name).compact.join(", ")
   end
+
+  type :string
+  def client_slug
+    shift.calendar_event&.clients&.first&.slug
+  end
 end
