@@ -43,9 +43,11 @@ export type ReactMutationFunction<
 	O extends Record<string, unknown> = {}, // Optional parameters for setting up hook
 	E = Error,
 	C = unknown
-> = (
-	options: MutationOptions<T, P, O, E>
-) => UseMutationResult<T, E, P, C>
+> = IfEmpty<
+	O,
+	(options?: MutationOptions<T, P, O, E>) => UseMutationResult<T, E, P, C>,
+	(options: MutationOptions<T, P, O, E>) => UseMutationResult<T, E, P, C>
+>
 
 /**
  * Folder exports

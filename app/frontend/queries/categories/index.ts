@@ -38,7 +38,7 @@ type CreateCategoryParams = {
 }
 
 export const useCreateCategory: ReactMutationFunction<Schema.Category, CreateCategoryParams> = (
-	options
+	options = {}
 ) => {
 	return useMutation({
 		mutationFn: async (variables) => {
@@ -63,7 +63,7 @@ type DeleteCategoryParams = {
 }
 
 export const useDeleteCategory: ReactMutationFunction<void, DeleteCategoryParams> = (
-	options
+	options = {}
 ) => {
 	return useMutation({
 		mutationFn: async (variables) => {

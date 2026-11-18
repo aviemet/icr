@@ -1,26 +1,32 @@
-import { NewIcon } from "@/components/Icons"
+import { Box, Button, Link } from "@/components"
+import { PlusIcon } from "@/components/Icons"
 import { JobTitleTable } from "@/domains/Settings/JobTitles/Table"
-import { IndexPageTemplate } from "@/features"
 import { Routes, withLayout } from "@/lib"
+
+import { SettingsPageHeader } from "../../SettingsPageHeader"
 
 interface JobTitleIndexProps {
 	job_titles: Schema.EmployeeJobTitlesIndex[]
-	pagination: Schema.Pagination
 }
 
-const JobTitlesIndex = ({ job_titles, pagination }: JobTitleIndexProps) => {
+const JobTitlesIndex = ({ job_titles }: JobTitleIndexProps) => {
 	return (
-		<IndexPageTemplate
-			title="JobTitles"
-			model="job_titles"
-			pagination={ pagination }
-			deleteRoute={ Routes.settingsJobTitles() }
-			menuOptions={ [
-				{ label: "New Job Title", href: Routes.newSettingsJobTitle(), icon: <NewIcon /> },
-			] }
-		>
-			<JobTitleTable records={ job_titles } pagination={ pagination } model="job_titles" />
-		</IndexPageTemplate>
+		<Box>
+			<SettingsPageHeader
+				title="Job Titles"
+				description="Roles used when assigning employees and permissions."
+				actions={
+					<Button
+						component={ Link }
+						href={ Routes.newSettingsJobTitle() }
+						leftSection={ <PlusIcon size={ 16 } /> }
+					>
+						New Job Title
+					</Button>
+				}
+			/>
+			<JobTitleTable records={ job_titles } />
+		</Box>
 	)
 }
 

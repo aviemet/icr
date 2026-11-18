@@ -1,26 +1,32 @@
-import { NewIcon } from "@/components/Icons"
+import { Box, Button, Link } from "@/components"
+import { PlusIcon } from "@/components/Icons"
 import { DepartmentTable } from "@/domains/Settings/Departments/Table"
-import { IndexPageTemplate } from "@/features"
 import { Routes, withLayout } from "@/lib"
+
+import { SettingsPageHeader } from "../../SettingsPageHeader"
 
 interface DepartmentIndexProps {
 	departments: Schema.EmployeeDepartmentsIndex[]
-	pagination: Schema.Pagination
 }
 
-const DepartmentsIndex = ({ departments, pagination }: DepartmentIndexProps) => {
+const DepartmentsIndex = ({ departments }: DepartmentIndexProps) => {
 	return (
-		<IndexPageTemplate
-			title="Departments"
-			model="departments"
-			pagination={ pagination }
-			deleteRoute={ Routes.settingsDepartments() }
-			menuOptions={ [
-				{ label: "New Department", href: Routes.newSettingsDepartment(), icon: <NewIcon /> },
-			] }
-		>
-			<DepartmentTable records={ departments } pagination={ pagination } model="departments" />
-		</IndexPageTemplate>
+		<Box>
+			<SettingsPageHeader
+				title="Departments"
+				description="Groups for organizing job titles and employees."
+				actions={
+					<Button
+						component={ Link }
+						href={ Routes.newSettingsDepartment() }
+						leftSection={ <PlusIcon size={ 16 } /> }
+					>
+						New Department
+					</Button>
+				}
+			/>
+			<DepartmentTable records={ departments } />
+		</Box>
 	)
 }
 

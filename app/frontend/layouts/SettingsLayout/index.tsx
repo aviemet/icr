@@ -2,7 +2,7 @@ import { FloatingIndicator, Portal } from "@mantine/core"
 import clsx from "clsx"
 import { useState } from "react"
 
-import { Box, Paper, Container, Stack } from "@/components"
+import { Box, Paper, Container } from "@/components"
 import { Routes } from "@/lib"
 import { useLocation } from "@/lib/hooks"
 
@@ -114,14 +114,13 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
 		<AppLayout>
 			<Portal target="#above-content-portal">
 				<Container>
-					<Stack gap="xs">
-						<Paper
-							ref={ setRootRef }
-							withBorder
-							component="nav"
-							shadow="xs"
-							className={ clsx(classes.settingsLayout) }
-						>
+					<Paper
+						withBorder
+						component="nav"
+						shadow="xs"
+						className={ classes.settingsLayout }
+					>
+						<Box className="parentRow" ref={ setRootRef }>
 							{ links.map((link, index) => (
 								<SettingsNavLink
 									ref={ setControlRef(index) }
@@ -139,16 +138,10 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
 								parent={ rootRef }
 								className={ clsx("indicator") }
 							/>
-						</Paper>
+						</Box>
 
 						{ subLinks && (
-							<Paper
-								ref={ setSubRootRef }
-								withBorder
-								component="nav"
-								shadow="xs"
-								className={ clsx(classes.settingsLayout, classes.settingsSubNav) }
-							>
+							<Box className="childRow" ref={ setSubRootRef }>
 								{ subLinks.map((link, index) => (
 									<SettingsNavLink
 										ref={ setSubControlRef(index) }
@@ -166,9 +159,9 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
 									parent={ subRootRef }
 									className={ clsx("indicator") }
 								/>
-							</Paper>
+							</Box>
 						) }
-					</Stack>
+					</Paper>
 				</Container>
 			</Portal>
 

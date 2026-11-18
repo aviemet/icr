@@ -1,6 +1,5 @@
 import dayjs from "dayjs"
 import { useMemo, useState } from "react"
-import { type PartialDeep } from "type-fest"
 
 import { Box, Button, Grid, Group } from "@/components"
 import { BaseCalendarEvent } from "@/components/Calendar"
@@ -10,6 +9,7 @@ import { CategoriesDropdown, EmployeesDropdown } from "@/components/Inputs/Dropd
 import { categorySlug, isSystemCategorySlug, isNonEmptyString } from "@/lib"
 import { type SystemCategorySlugsFor } from "@/lib/categories"
 import { nearestHalfHour } from "@/lib/dates"
+import { type CalendarEventData } from "@/queries/calendarEvents"
 import { useCreateClientCalendarEvent, useUpdateClientCalendarEvent } from "@/queries/clients"
 
 import { EventTotalHours } from "./EventTotalHours"
@@ -17,15 +17,7 @@ import { EventTotalHours } from "./EventTotalHours"
 const CALENDAR_EVENT_SHIFT = categorySlug("Calendar::Event", "Shift")
 const CALENDAR_EVENT_OTHER = categorySlug("Calendar::Event", "Other")
 
-export type EventData = {
-	calendar_event: Omit<PartialDeep<Schema.CalendarEventsFormData>, "event_participants" | "starts_at" | "ends_at"> & {
-		category_slug?: string
-		starts_at?: Date | string
-		ends_at?: Date | string
-		shift: PartialDeep<Schema.Shift>
-		event_participants: PartialDeep<Schema.EventParticipantsFormData>[]
-	}
-}
+export type EventData = CalendarEventData
 
 function isEventData(value: Record<string, unknown>): value is EventData {
 	if(!Object.prototype.hasOwnProperty.call(value, "calendar_event")) return false
@@ -108,10 +100,19 @@ export function EventForm({
 		onChange?.(data)
 	}
 
-	const submitWith = (data: EventData) =>
-		isEdit
-			? updateEvent.mutateAsync(data).then(() => undefined)
-			: createEvent.mutateAsync(data).then(() => undefined)
+	const submitWith = (data: EventData) => {
+		const mutation = isEdit ? updateEvent.mutateAsync(data) : createEvent.mutateAsync(data)
+
+		return mutation
+			.then(() => {
+				onSuccess?.()
+				return undefined
+			})
+			.catch((error: unknown) => {
+				onError?.()
+				throw error
+			})
+	}
 
 	return (
 		<Form<EventData>

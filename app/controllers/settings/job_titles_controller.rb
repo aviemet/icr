@@ -1,10 +1,10 @@
 class Settings::JobTitlesController < ApplicationController
-  include Searchable
-
-  expose :job_titles, -> { search(Employee::JobTitle.includes_associated) }
-  expose :job_title, -> { Employee::JobTitle.includes_associated.find_by!(slug: params[:slug]) }
-
-  sortable_fields %w[name]
+  expose :job_titles, -> { Employee::JobTitle.includes_associated.order(:name) }
+  expose :job_title,
+    model: Employee::JobTitle,
+    id: -> { params[:slug] },
+    scope: -> { Employee::JobTitle.includes_associated },
+    find_by: :slug
 
   strong_params :job_title, permit: [:name, :description, :department_id]
 
@@ -12,14 +12,8 @@ class Settings::JobTitlesController < ApplicationController
   def index
     authorize job_titles
 
-    paginated_job_titles = paginate(job_titles, :job_titles)
-
     render inertia: "Settings/JobTitles/Index", props: {
-      job_titles: -> { paginated_job_titles.render(:index) },
-      pagination: -> { {
-        count: job_titles.count,
-        **pagination_data(paginated_job_titles)
-      } }
+      job_titles: -> { job_titles.render(:index) }
     }
   end
 
@@ -56,7 +50,7 @@ class Settings::JobTitlesController < ApplicationController
     authorize Employee::JobTitle.new
 
     if job_title.save
-      redirect_to settings_job_title_path(job_title.slug), notice: "Job title created"
+      redirect_to settings_job_titles_path, notice: "Job title created"
     else
       render inertia: "Settings/JobTitles/New", props: {
         job_title: job_title.render(:form_data)
@@ -70,7 +64,7 @@ class Settings::JobTitlesController < ApplicationController
     authorize job_title
 
     if job_title.update(job_title_params)
-      redirect_to settings_job_title_path(job_title.slug), notice: "Job title updated"
+      redirect_to settings_job_titles_path, notice: "Job title updated"
     else
       render inertia: "Settings/JobTitles/Edit", props: {
         job_title: job_title.render(:edit)

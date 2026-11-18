@@ -5,13 +5,16 @@ RSpec.describe "Settings::Departments", type: :request do
   login_user(:admin)
 
   describe "GET /index" do
-    it "renders a successful response" do
-      create(:department)
+    it "renders all departments without pagination" do
+      create(:department, name: "Operations")
+      create(:department, name: "Support")
 
       get settings_departments_url
 
       expect(response).to be_successful
       expect_inertia.to render_component "Settings/Departments/Index"
+      expect(inertia.props[:departments].map { |department| department[:name] }).to eq(["Operations", "Support"])
+      expect(inertia.props).not_to have_key(:pagination)
     end
   end
 
@@ -43,6 +46,37 @@ RSpec.describe "Settings::Departments", type: :request do
 
       expect(response).to be_successful
       expect_inertia.to render_component "Settings/Departments/Edit"
+    end
+  end
+
+  describe "POST /settings/departments" do
+    it "creates a department and redirects to the index" do
+      expect {
+        post settings_departments_url, params: {
+          department: {
+            name: "Clinical",
+            description: "Clinical services",
+          },
+        }
+      }.to change(Employee::Department, :count).by(1)
+
+      expect(response).to redirect_to(settings_departments_path)
+    end
+  end
+
+  describe "PATCH /settings/departments/:slug" do
+    it "updates a department and redirects to the index" do
+      department = create(:department, name: "Support")
+
+      patch settings_department_url(department), params: {
+        department: {
+          name: "Client Support",
+          description: department.description,
+        },
+      }
+
+      expect(response).to redirect_to(settings_departments_path)
+      expect(department.reload.name).to eq("Client Support")
     end
   end
 

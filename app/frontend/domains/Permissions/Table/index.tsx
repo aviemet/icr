@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next"
 
-import { Group, Link, Table, type TableColumn } from "@/components"
+import { Group, Table, type TableColumn } from "@/components"
+import { DeleteButton, EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 import { usePermissions } from "@/lib/hooks"
 
@@ -67,21 +68,18 @@ export function PermissionTable({ records, pagination, model }: PermissionTableP
 			title: t("views.permissions.index.table.actions"),
 			sortable: false,
 			render: (group) => (
-				<Group wrap="nowrap" gap="xs">
+				<Group wrap="nowrap" gap="xs" justify="flex-end">
 					{ can("update", "permission_groups") && (
-						<Link href={ Routes.editPermission(group.id) } as="button" buttonProps={ { variant: "secondary" } }>
-							Edit
-						</Link>
+						<EditButton
+							href={ Routes.editPermission(group.id) }
+							label={ group.name }
+						/>
 					) }
 					{ can("destroy", "permission_groups") && (
-						<Link
+						<DeleteButton
 							href={ Routes.permission(group.id) }
-							method="delete"
-							as="button"
-							buttonProps={ { variant: "danger" } }
-						>
-							Delete
-						</Link>
+							label={ group.name }
+						/>
 					) }
 				</Group>
 			),

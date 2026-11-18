@@ -1,14 +1,10 @@
 class Settings::DepartmentsController < ApplicationController
-  include Searchable
-
-  expose :departments, -> { search(Employee::Department.includes_associated) }
+  expose :departments, -> { Employee::Department.includes_associated.order(:name) }
   expose :department,
     model: Employee::Department,
     id: -> { params[:slug] },
     scope: -> { Employee::Department.includes_associated },
     find_by: :slug
-
-  sortable_fields %w[name]
 
   strong_params :department, permit: [:name, :description]
 
@@ -16,14 +12,8 @@ class Settings::DepartmentsController < ApplicationController
   def index
     authorize departments
 
-    paginated_departments = paginate(departments, :departments)
-
     render inertia: "Settings/Departments/Index", props: {
-      departments: -> { paginated_departments.render(:index) },
-      pagination: -> { {
-        count: departments.count,
-        **pagination_data(paginated_departments)
-      } }
+      departments: -> { departments.render(:index) }
     }
   end
 
@@ -60,7 +50,7 @@ class Settings::DepartmentsController < ApplicationController
     authorize Employee::Department.new
 
     if department.save
-      redirect_to settings_department_path(department.slug), notice: "Department created"
+      redirect_to settings_departments_path, notice: "Department created"
     else
       render inertia: "Settings/Departments/New", props: {
         department: department.render(:form_data),
@@ -74,7 +64,7 @@ class Settings::DepartmentsController < ApplicationController
     authorize department
 
     if department.update(department_params)
-      redirect_to settings_department_path(department.slug), notice: "Department updated"
+      redirect_to settings_departments_path, notice: "Department updated"
     else
       render inertia: "Settings/Departments/Edit", props: {
         department: department.render(:edit),

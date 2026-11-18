@@ -2,9 +2,10 @@ import { MantineProvider } from "@mantine/core"
 import { DatesProvider } from "@mantine/dates"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { cleanup, render, screen, waitFor } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import dayjs from "dayjs"
 import { http, HttpResponse } from "msw"
-import { beforeEach, describe, expect, it } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { EventForm } from "@/domains/Clients/schedule/EventForm"
 import { Routes } from "@/lib"
@@ -73,10 +74,14 @@ beforeEach(() => {
 				},
 			])
 		}),
+		http.patch(Routes.apiCalendarEvent("event-1"), async({ request }) => {
+			const body = await request.json().catch(() => ({}))
+			return HttpResponse.json({ id: "event-1", ...(typeof body === "object" && body ? body : {}) }, { status: 200 })
+		}),
 	)
 })
 
-function renderEditForm() {
+function renderEditForm(onSuccess?: () => void) {
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: { retry: false },
@@ -105,6 +110,7 @@ function renderEditForm() {
 								client,
 							},
 						} }
+						onSuccess={ onSuccess }
 					/>
 				</DatesProvider>
 			</MantineProvider>
@@ -135,6 +141,22 @@ describe("EventForm edit population", () => {
 		await waitFor(() => {
 			expect(screen.getByLabelText("Start date")).toHaveTextContent(dayjs(start).format("L"))
 			expect(screen.getByLabelText("End date")).toHaveTextContent(dayjs(end).format("L"))
+		})
+	})
+
+	it("calls onSuccess after a successful save", async () => {
+		const onSuccess = vi.fn()
+		const user = userEvent.setup()
+		renderEditForm(onSuccess)
+
+		await waitFor(() => {
+			expect(screen.getByRole("combobox", { name: "Employee" })).toHaveValue(employeeName)
+		})
+
+		await user.click(screen.getByRole("button", { name: "Save Shift" }))
+
+		await waitFor(() => {
+			expect(onSuccess).toHaveBeenCalledTimes(1)
 		})
 	})
 })
