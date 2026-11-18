@@ -15,11 +15,11 @@ const HouseholdsIndex = ({ households, pagination }: IHouseholdIndexProps) => {
 			model="households"
 			pagination={ pagination }
 			deleteRoute={ Routes.households() }
-			menuOptions={ [
+			actions={ [
 				{ label: "New Household", href: Routes.newHousehold(), icon: <NewIcon /> },
 			] }
 		>
-			<HouseholdTable records={ households } pagination={ pagination } model="households" />
+			<HouseholdTable records={ households } model="households" />
 		</IndexPageTemplate>
 	)
 }

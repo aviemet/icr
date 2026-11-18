@@ -37,12 +37,14 @@ Consider the keyword `any` to be forbidden, with NO EXCEPTIONS!
 - Consider edge cases and error scenarios, for simple edge cases, use the "return early" pattern to avoid nesting.
 - Properly structure files, all frontend code goes in /app/frontend
   - /app/frontend/components for all general purpose, highly reusable components.
-  - /app/frontend/features for all feature specific components.
+  - /app/frontend/domains for domain UI: tables, forms, work queues, filters, workflow helpers (e.g. PayPeriods, TimeSheets, Settings/Payroll). Prefer domains over nesting these under pages.
+  - /app/frontend/features for cross-cutting UI shells (e.g. AuthPaperLayout, IndexPageTemplate, Spotlight), not domain tables/forms.
   - /app/frontend/layouts for all layout components.
   - /app/frontend/lib for all non-react code.
-  - /app/frontend/pages for all top-level Inertia pages. These components are the entry point for each route from the server.
+  - /app/frontend/pages for Inertia page entrypoints only (typically `index.tsx` per route). Pages import from domains/features; do not add FormInputs, Tables, ReviewTable, WorkQueue, or similar co-located component trees under pages.
   - /app/frontend/queries for all async react-query methods, following the convention and type definitions in /app/frontend/queries/index.ts.
   - /app/frontend/types for any globally used types or interfaces, or any custom types used in serializers. (Do no modify anything in types/serializers as it is all auto generated)
+- When adding UI for a route, put reusable/domain pieces in domains first; leave only the page shell under pages.
 - Avoid default exports.
 
   ### React Component Architecture

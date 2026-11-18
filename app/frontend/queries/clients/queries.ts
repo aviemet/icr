@@ -9,7 +9,7 @@ import { CALENDAR_SCHEDULE_STALE_TIME_MS, ReactQueryFunction } from ".."
 export const useGetClientsAsOptions: ReactQueryFunction<Schema.ClientsOptions[]> = (options) => {
 	return useQuery({
 		queryKey: ["clients"],
-		queryFn: async() => {
+		queryFn: async () => {
 			const res = await axios.get(Routes.apiClientsOptions())
 			return res.data
 		},
@@ -25,7 +25,7 @@ export const useGetClientSchedules: ReactQueryFunction<Schema.CalendarEventsClie
 }> = ({ slug, ...params }, options) => {
 	return useQuery({
 		queryKey: [`clients/${slug}/schedule`, params],
-		queryFn: async() => {
+		queryFn: async () => {
 			const res = await axios.get(Routes.apiClientSchedule(slug, params))
 			return res.data
 		},

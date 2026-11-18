@@ -43,7 +43,7 @@ export class SortedArray<T> implements Iterable<T> {
 	 * ```
 	 */
 	static defaultCompare<U extends string | number>(a: U, b: U): number {
-		if(a < b) return - 1
+		if(a < b) return -1
 		if(a > b) return 1
 		return 0
 	}

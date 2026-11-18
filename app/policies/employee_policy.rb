@@ -3,28 +3,64 @@ class EmployeePolicy < ApplicationPolicy
     show?
   end
 
+  def show?
+    return true if admin?
+    return false unless user.person
+
+    case user.person.agency_role
+    when "Employee"
+      return true if job_title_allows?(:show, Employee)
+      return true if record.id == current_employee.id
+
+      manages_employee?
+    when "Client"
+      attendant_for_client?
+    else
+      false
+    end
+  end
+
+  def update?
+    return true if admin?
+    return false unless user.person&.employee?
+
+    return true if job_title_allows?(:update, Employee)
+
+    manages_employee?
+  end
+
+  def edit?
+    update?
+  end
+
   class Scope < ApplicationPolicy::Scope
     def resolve
-      # Admins can see all employees
-      return scope.all if user.has_role?(:admin)
+      return scope.all if admin?
 
       case user.person&.agency_role
       when "Employee"
-        if user.person.employee&.job_title&.has_role?(:index, Employee)
+        if job_title_allows?(:index, Employee)
           scope.all
         else
-          # Return only the employee's own record
-          scope.where(id: user.person.employee.id)
+          managed_ids = employee.managed_employees_managers.current.select(:employee_id)
+          scope.where(id: employee.id).or(scope.where(id: managed_ids))
         end
       when "Client"
-        # Clients can see their current attendants
         scope.joins(:clients_attendants)
           .where(clients_attendants: { client_id: user.person.client.id })
-          .where("clients_attendants.starts_at <= ? AND (clients_attendants.ends_at IS NULL OR clients_attendants.ends_at >= ?)", Time.current, Time.current)
+          .merge(ClientsAttendant.current)
           .distinct
       else
         scope.none
       end
     end
+  end
+
+  private
+
+  def attendant_for_client?
+    return false unless user.person&.client
+
+    record.clients_attendants.current.exists?(client: user.person.client)
   end
 end

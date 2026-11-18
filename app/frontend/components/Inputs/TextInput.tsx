@@ -2,7 +2,10 @@ import {
 	TextInput as MantineTextInput,
 	type TextInputProps as MantineTextInputProps,
 } from "@mantine/core"
-import React from "react"
+import React, { useRef } from "react"
+
+import { useFormFieldError } from "@/components/Form"
+import { mergeRefs } from "@/lib/mergeRefs"
 
 import { InputWrapper } from "./InputWrapper"
 import { Label } from "./Label"
@@ -27,20 +30,32 @@ export function TextInput({
 	onChange,
 	readOnly,
 	disableAutofill = true,
+	error,
 	ref,
 	...props
 }: TextInputProps) {
+	const fieldError = useFormFieldError(name)
+	const inputRef = useRef<HTMLInputElement>(null)
+	const resolvedRef = mergeRefs([ref, inputRef])
+
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		onChange?.(e)
 	}
 
 	const handleClear = () => {
-		const fakeEvent = {
-			target: {
-				value: "",
-			},
-		} as React.ChangeEvent<HTMLInputElement>
-		handleChange(fakeEvent)
+		const input = inputRef.current
+		if(input === null) {
+			return
+		}
+
+		const nativeValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value")?.set
+		if(nativeValueSetter === undefined) {
+			input.value = ""
+		} else {
+			nativeValueSetter.call(input, "")
+		}
+
+		input.dispatchEvent(new Event("input", { bubbles: true }))
 	}
 
 	const inputId = id || name
@@ -51,13 +66,17 @@ export function TextInput({
 				{ label }
 			</Label> }
 			<MantineTextInput
-				ref={ ref }
+				ref={ resolvedRef }
 				name={ name }
 				id={ inputId }
 				{ ...(value !== undefined && { value }) }
 				onChange={ handleChange }
 				required={ required }
-				rightSection={ !readOnly && clearable && value !== "" && value !== undefined && <CrossIcon onClick={ handleClear } /> }
+				error={ error ?? fieldError }
+				rightSection={
+					!readOnly && clearable && value !== "" && value !== undefined &&
+					<CrossIcon onClick={ handleClear } />
+				}
 				{ ...withInjectedProps(props, {
 					disableAutofill,
 				}) }

@@ -28,7 +28,7 @@ export class MonthSplitStrategy<TEventResources extends EventResources>
 			? this.splitAtWeekBoundaries(event)
 			: [{ ...event }]
 
-		type DaySegment = { event: BaseCalendarEvent<EventResources>, displayStart: Date, displayEnd: Date };
+		type DaySegment = { event: BaseCalendarEvent<EventResources>, displayStart: Date, displayEnd: Date }
 
 		const daySegments: DaySegment[] = weekSegments.flatMap((weekSegment: BaseCalendarEvent<EventResources>) =>
 			this.splitAtDayBoundaries(weekSegment)
@@ -72,7 +72,7 @@ export class MonthSplitStrategy<TEventResources extends EventResources>
 	 */
 	compare(a: EventDisplayDetails<TEventResources, GridDisplayProperties>, b: EventDisplayDetails<TEventResources, GridDisplayProperties>): number {
 		// All-day events should always be at the top
-		if(a.event.allDay && !b.event.allDay) return - 1
+		if(a.event.allDay && !b.event.allDay) return -1
 		if(!a.event.allDay && b.event.allDay) return 1
 		if(a.event.allDay && b.event.allDay) {
 			// For all-day events, sort by duration then start time

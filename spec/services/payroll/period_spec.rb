@@ -55,32 +55,26 @@ RSpec.describe Payroll::Period do
     context "with semi-monthly periods" do
       before do
         Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
-        Setting.payroll_period_date = "1"
-        Setting.payroll_period_date_2 = "15"
       end
 
-      it "returns correct period for date in first half" do
-        test_date = Date.new(2024, 3, 7)
-        start_date, end_date = described_class.period_dates(test_date)
+      it "returns 1st through 15th for dates in the first half" do
+        start_date, end_date = described_class.period_dates(Date.new(2024, 3, 7))
 
         expect(start_date).to eq(Date.new(2024, 3, 1))
-        expect(end_date).to eq(Date.new(2024, 3, 14))
+        expect(end_date).to eq(Date.new(2024, 3, 15))
       end
 
-      it "returns correct period for date in second half" do
-        test_date = Date.new(2024, 3, 20)
-        start_date, end_date = described_class.period_dates(test_date)
+      it "includes the 15th in the first half" do
+        start_date, end_date = described_class.period_dates(Date.new(2024, 3, 15))
 
-        expect(start_date).to eq(Date.new(2024, 3, 15))
-        expect(end_date).to eq(Date.new(2024, 3, 31))
+        expect(start_date).to eq(Date.new(2024, 3, 1))
+        expect(end_date).to eq(Date.new(2024, 3, 15))
       end
 
-      it "handles last day of month setting" do
-        Setting.payroll_period_date_2 = "-1"
-        test_date = Date.new(2024, 3, 20)
-        start_date, end_date = described_class.period_dates(test_date)
+      it "returns 16th through last for dates in the second half" do
+        start_date, end_date = described_class.period_dates(Date.new(2024, 3, 20))
 
-        expect(start_date).to eq(Date.new(2024, 3, 15))
+        expect(start_date).to eq(Date.new(2024, 3, 16))
         expect(end_date).to eq(Date.new(2024, 3, 31))
       end
     end

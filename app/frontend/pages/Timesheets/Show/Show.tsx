@@ -1,6 +1,6 @@
-import { ActionIcon, Badge, Button, Container, Grid, Group, Paper, Stack, Text, Title } from "@mantine/core"
 import { useTranslation } from "react-i18next"
 
+import { Button, Container, Grid, Group, Paper, Stack, Text, Title } from "@/components"
 import { CheckIcon, CrossIcon } from "@/components/Icons"
 
 import { WeeklyTimesheet } from "./WeeklyTimesheet"

@@ -4,14 +4,20 @@ require "rails_helper"
 
 RSpec.describe Payroll::EmployeePeriodHours do
   before do
+    Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:weekly]
     Setting.payroll_period_day = "monday"
     Setting.overtime_weekly_hours = 40
     Setting.overtime_daily_hours = 8
   end
 
+  def pay_period_for(date)
+    period_start, period_end = Payroll::Period.period_dates(date)
+    PayPeriod.for_period_dates(period_start, period_end)
+  end
+
   describe ".call" do
     it "returns empty hash when employee_ids is empty" do
-      pay_period = create(:pay_period, starts_at: Time.zone.local(2024, 3, 11, 0, 0, 0), ends_at: Time.zone.local(2024, 3, 24, 23, 59, 59))
+      pay_period = pay_period_for(Date.new(2024, 3, 15))
 
       result = described_class.call(pay_period, [])
 
@@ -19,9 +25,7 @@ RSpec.describe Payroll::EmployeePeriodHours do
     end
 
     it "returns regular_hours, ot_hours, and shift_ot_hours for an employee with one same-day shift" do
-      period_start = Time.zone.local(2024, 3, 11, 0, 0, 0)
-      period_end = Time.zone.local(2024, 3, 24, 23, 59, 59)
-      pay_period = create(:pay_period, starts_at: period_start, ends_at: period_end)
+      pay_period = pay_period_for(Date.new(2024, 3, 15))
       employee = create(:employee)
       timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
       event = create(:calendar_event, starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0), ends_at: Time.zone.local(2024, 3, 15, 17, 0, 0))
@@ -35,10 +39,8 @@ RSpec.describe Payroll::EmployeePeriodHours do
       expect(result[employee.id.to_s][:shift_ot_hours]).to eq(shift.id.to_s => 0.0)
     end
 
-    it "splits overnight shift across two days and calculates threshold OT correctly for same-day total under 8" do
-      period_start = Time.zone.local(2024, 3, 11, 0, 0, 0)
-      period_end = Time.zone.local(2024, 3, 24, 23, 59, 59)
-      pay_period = create(:pay_period, starts_at: period_start, ends_at: period_end)
+    it "splits overnight shift across two days and applies threshold OT only after daily totals exceed 8" do
+      pay_period = pay_period_for(Date.new(2024, 3, 15))
       employee = create(:employee)
       timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
       event = create(:calendar_event, starts_at: Time.zone.local(2024, 3, 15, 22, 0, 0), ends_at: Time.zone.local(2024, 3, 16, 6, 0, 0))
@@ -46,15 +48,49 @@ RSpec.describe Payroll::EmployeePeriodHours do
 
       result = described_class.call(pay_period, [employee.id])
 
-      expect(result[employee.id.to_s][:regular_hours]).to eq(0.0)
-      expect(result[employee.id.to_s][:ot_hours]).to eq(8.0)
-      expect(result[employee.id.to_s][:shift_ot_hours][shift.id.to_s]).to eq(8.0)
+      expect(result[employee.id.to_s][:regular_hours]).to eq(8.0)
+      expect(result[employee.id.to_s][:ot_hours]).to eq(0.0)
+      expect(result[employee.id.to_s][:shift_ot_hours][shift.id.to_s]).to eq(0.0)
+    end
+
+    it "attributes daily OT on the morning side of an overnight shift that exceeds the daily threshold" do
+      pay_period = pay_period_for(Date.new(2024, 3, 15))
+      employee = create(:employee)
+      timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
+      event = create(
+        :calendar_event,
+        starts_at: Time.zone.local(2024, 3, 15, 20, 0, 0),
+        ends_at: Time.zone.local(2024, 3, 16, 10, 0, 0),
+      )
+      shift = create(:shift, employee: employee, timesheet: timesheet, calendar_event: event)
+
+      result = described_class.call(pay_period, [employee.id])
+
+      expect(result[employee.id.to_s][:regular_hours]).to eq(12.0)
+      expect(result[employee.id.to_s][:ot_hours]).to eq(2.0)
+      expect(result[employee.id.to_s][:shift_ot_hours][shift.id.to_s]).to eq(2.0)
+    end
+
+    it "treats an evening shift that ends at midnight as regular when the day stays at 8 hours" do
+      pay_period = pay_period_for(Date.new(2024, 3, 15))
+      employee = create(:employee)
+      timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
+      event = create(
+        :calendar_event,
+        starts_at: Time.zone.local(2024, 3, 15, 16, 0, 0),
+        ends_at: Time.zone.local(2024, 3, 16, 0, 0, 0),
+      )
+      shift = create(:shift, employee: employee, timesheet: timesheet, calendar_event: event)
+
+      result = described_class.call(pay_period, [employee.id])
+
+      expect(result[employee.id.to_s][:regular_hours]).to eq(8.0)
+      expect(result[employee.id.to_s][:ot_hours]).to eq(0.0)
+      expect(result[employee.id.to_s][:shift_ot_hours][shift.id.to_s]).to eq(0.0)
     end
 
     it "includes shift_ot_hours for the shift when daily threshold is exceeded" do
-      period_start = Time.zone.local(2024, 3, 11, 0, 0, 0)
-      period_end = Time.zone.local(2024, 3, 24, 23, 59, 59)
-      pay_period = create(:pay_period, starts_at: period_start, ends_at: period_end)
+      pay_period = pay_period_for(Date.new(2024, 3, 15))
       employee = create(:employee)
       timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
       event = create(:calendar_event, starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0), ends_at: Time.zone.local(2024, 3, 15, 19, 0, 0))
@@ -66,9 +102,7 @@ RSpec.describe Payroll::EmployeePeriodHours do
     end
 
     it "splits shift_ot_hours proportionally when multiple shifts exceed daily threshold the same day" do
-      period_start = Time.zone.local(2024, 3, 11, 0, 0, 0)
-      period_end = Time.zone.local(2024, 3, 24, 23, 59, 59)
-      pay_period = create(:pay_period, starts_at: period_start, ends_at: period_end)
+      pay_period = pay_period_for(Date.new(2024, 3, 15))
       employee = create(:employee)
       timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
       event1 = create(:calendar_event, starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0), ends_at: Time.zone.local(2024, 3, 15, 14, 0, 0))
@@ -83,9 +117,7 @@ RSpec.describe Payroll::EmployeePeriodHours do
     end
 
     it "does not infinite loop when processing shifts" do
-      period_start = Time.zone.local(2024, 3, 11, 0, 0, 0)
-      period_end = Time.zone.local(2024, 3, 24, 23, 59, 59)
-      pay_period = create(:pay_period, starts_at: period_start, ends_at: period_end)
+      pay_period = pay_period_for(Date.new(2024, 3, 15))
       employee = create(:employee)
       timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
       event = create(:calendar_event, starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0), ends_at: Time.zone.local(2024, 3, 15, 17, 0, 0))
@@ -98,9 +130,7 @@ RSpec.describe Payroll::EmployeePeriodHours do
     end
 
     it "can compute hours from a collector without timesheets or shifts" do
-      period_start = Time.zone.local(2024, 3, 11, 0, 0, 0)
-      period_end = Time.zone.local(2024, 3, 24, 23, 59, 59)
-      pay_period = create(:pay_period, starts_at: period_start, ends_at: period_end)
+      pay_period = pay_period_for(Date.new(2024, 3, 15))
       employee = create(:employee)
 
       interval = Payroll::WorkInterval.new(

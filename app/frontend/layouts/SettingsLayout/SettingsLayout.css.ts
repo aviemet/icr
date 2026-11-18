@@ -3,24 +3,88 @@ import { css } from "@linaria/core"
 import { vars } from "@/lib/theme"
 
 export const settingsLayout = css`
+	--settings-nav-gap: 4px;
+
 	position: relative;
 	border-radius: ${ vars.radius.md };
 	padding: ${ vars.spacing.sm };
 	margin-top: ${ vars.spacing.sm };
 	margin-bottom: ${ vars.spacing.sm };
+	display: flex;
+	flex-direction: column;
+	gap: var(--settings-nav-gap);
+	background-color: light-dark(
+		${ vars.colors.gray[0] },
+		${ vars.colors.dark[7] }
+	);
+
+	.parentRow,
+	.childRow {
+		position: relative;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 2px;
+	}
+
+	.parentRow {
+		z-index: 2;
+	}
+
+	.childRow {
+		z-index: 1;
+		padding-top: 6px;
+		border-top: 1px solid light-dark(${ vars.colors.gray[3] }, ${ vars.colors.dark[4] });
+	}
 
 	.control {
 		padding: 7px 12px;
 		line-height: 1;
+		border-radius: ${ vars.radius.sm };
+		transition: color 120ms ease, background-color 120ms ease;
 
-		/* @mixin hover {
-			color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
-			background-color: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-7));
-		} */
+		&:not([data-active]):hover {
+			background-color: light-dark(
+				${ vars.colors.gray[2] },
+				color-mix(in srgb, ${ vars.colors.white } 8%, transparent)
+			);
+		}
 
 		&[data-active] {
 			color: var(--mantine-color-white);
 		}
+	}
+
+	.childRow .control {
+		padding: 8px 12px 4px;
+		font-size: ${ vars.fontSizes.sm };
+		border-radius: 0;
+		background-color: transparent;
+		transition: color 120ms ease;
+	}
+
+	.childRow .control[data-active] {
+		color: light-dark(${ vars.colors.primaryColors[9] }, ${ vars.colors.white });
+		background-color: transparent;
+	}
+
+	.childRow .control:not([data-active]):hover {
+		background-color: transparent;
+	}
+
+	.childRow .control .controlLabel {
+		display: inline-block;
+		padding-bottom: 4px;
+		box-shadow: inset 0 -2px 0 0 transparent;
+		transition: box-shadow 120ms ease;
+	}
+
+	.childRow .control[data-active] .controlLabel {
+		box-shadow: inset 0 -2px 0 0 ${ vars.colors.primaryColors.filled };
+	}
+
+	.childRow .control:not([data-active]):hover .controlLabel {
+		box-shadow: inset 0 -2px 0 0 light-dark(${ vars.colors.gray[4] }, ${ vars.colors.dark[3] });
 	}
 
 	.controlLabel {
@@ -30,7 +94,7 @@ export const settingsLayout = css`
 
 	.indicator {
 		background-color: ${ vars.colors.primaryColors.filled };
-		border-radius: ${ vars.radius.md };
+		border-radius: ${ vars.radius.sm };
 	}
-`
 
+`

@@ -16,11 +16,11 @@ const RequirementsIndex = ({ requirements, pagination }: RequirementIndexProps) 
 			model="requirements"
 			pagination={ pagination }
 			deleteRoute={ Routes.requirements() }
-			menuOptions={ [
+			actions={ [
 				{ label: "New Requirement", href: Routes.newRequirement(), icon: <NewIcon /> },
 			] }
 		>
-			<RequirementRequirementTable records={ requirements } pagination={ pagination } model="requirements" />
+			<RequirementRequirementTable records={ requirements } model="requirements" />
 		</IndexPageTemplate>
 	)
 }

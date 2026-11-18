@@ -4,11 +4,10 @@ import { Routes } from "@/lib"
 
 interface RequirementRequirementTableProps {
 	records: Schema.RequirementRequirementsIndex[]
-	pagination: Schema.Pagination
 	model: string
 }
 
-export function RequirementRequirementTable({ records, pagination, model }: RequirementRequirementTableProps) {
+export function RequirementRequirementTable({ records, model }: RequirementRequirementTableProps) {
 	const columns: TableColumn<Schema.RequirementRequirementsIndex>[] = [
 		{
 			accessor: "name",
@@ -50,7 +49,6 @@ export function RequirementRequirementTable({ records, pagination, model }: Requ
 		<Table.DataTable
 			columns={ columns }
 			records={ records }
-			pagination={ pagination }
 			model={ model }
 			selectable
 		/>

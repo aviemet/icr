@@ -10,7 +10,7 @@ const ShowTimesheet = ({ timesheet }: ShowTimesheetProps) => {
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: "Timesheet", href: Routes.timesheets() },
+			{ title: "Payroll", href: Routes.payrollPeriods() },
 			{ title, href: window.location.href },
 		] }>
 			<Section>

@@ -57,9 +57,21 @@ Rails.application.routes.draw do
   namespace :settings do
     get "", to: redirect("/settings/general")
     resource :calendars, path: :calendar, only: [:show, :update], as: :calendar
+    get "calendar/shift_types", to: "calendars#shift_types", as: :calendar_shift_types
     resources :people, param: :slug
+    resource :company, only: [:show, :update]
     resources :job_titles, param: :slug
-    resource :payrolls, path: :payroll, only: [:show, :update], as: :payroll
+    resources :departments, param: :slug do
+      delete "", action: :destroy, on: :collection
+    end
+    get "payroll", to: redirect("/settings/payroll/schedule")
+    scope path: "payroll", as: "payroll" do
+      get "schedule", to: "payrolls#schedule"
+      match "schedule", to: "payrolls#update_schedule", via: [:patch, :put]
+      get "overtime", to: "payrolls#overtime"
+      match "overtime", to: "payrolls#update_overtime", via: [:patch, :put]
+    end
+    resources :overtime_exemptions, only: [:create, :update]
   end
   resource :settings, param: :slug, except: [:new, :create, :destroy]
 
@@ -84,10 +96,21 @@ Rails.application.routes.draw do
   resources :shift_templates
 
   scope path: "payroll" do
-    get "employees/:employee_id", to: "timesheets#employee_review", as: :payroll_employee_review
-    resources :timesheets, path: "" do
+    get "/", to: "pay_periods#index", as: :payroll_periods
+
+    resources :periods, controller: "pay_periods", only: [:show] do
+      member do
+        post :finalize
+        get :export
+      end
+      post :adjustments, on: :member, action: :create_adjustment, as: :adjustments
+      get "employees/:employee_id", to: "timesheets#employee_review", as: :employee_review
+    end
+
+    resources :timesheets, only: [:show, :new, :edit, :create, :update, :destroy] do
       member do
         post :approve
+        post :unapprove
       end
 
       collection do
@@ -103,8 +126,6 @@ Rails.application.routes.draw do
   resources :doctors, param: :slug
 
   resources :requirements
-
-  resources :permissions
 
   draw(:api)
 end

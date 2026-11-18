@@ -12,7 +12,7 @@ const NewTimesheet = ({ ...data }: NewTimesheetProps) => {
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: "Timesheets", href: Routes.timesheets() },
+			{ title: "Payroll", href: Routes.payrollPeriods() },
 			{ title: "New Timesheet", href: window.location.href },
 		] }>
 

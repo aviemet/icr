@@ -31,7 +31,6 @@ module Requirement
       },
     )
 
-    tracked
     resourcify
 
     belongs_to :requirement, class_name: "Requirement::Requirement"

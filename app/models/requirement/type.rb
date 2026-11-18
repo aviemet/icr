@@ -14,7 +14,6 @@ module Requirement
 
     pg_search_config(against: [:name, :description])
 
-    tracked
     resourcify
 
     has_many(

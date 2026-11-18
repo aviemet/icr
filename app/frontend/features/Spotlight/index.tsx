@@ -3,13 +3,13 @@ import { Loader } from "@mantine/core"
 import { Spotlight, type SpotlightActionData } from "@mantine/spotlight"
 import React, { useMemo, useState } from "react"
 
-import { SearchIcon, DashboardIcon, ClientIcon, EmployeeIcon, SettingsIcon } from "@/components/Icons"
+import { SearchIcon, DashboardIcon, ClientIcon, EmployeeIcon, SettingsIcon, ClockIcon, HelpingIcon } from "@/components/Icons"
 import { Routes } from "@/lib"
-import { useDebouncedValue, usePageProps } from "@/lib/hooks"
+import { useDebouncedValue, usePermissions } from "@/lib/hooks"
 import { useGetSpotlights } from "@/queries"
 
 export function SpotlightComponent() {
-	const { permissions } = usePageProps()
+	const { can } = usePermissions()
 
 	const [query, setQuery] = useState("")
 	const [debouncedQuery] = useDebouncedValue(query, 400)
@@ -33,7 +33,7 @@ export function SpotlightComponent() {
 			},
 		]
 
-		if(permissions?.clients?.index) {
+		if(can("clients", "index")) {
 			spotlightStaticActions.push({
 				id: "clients",
 				label: "Clients",
@@ -43,31 +43,57 @@ export function SpotlightComponent() {
 			})
 		}
 
-		spotlightStaticActions.push(
-			{
+		if(can("employees", "index")) {
+			spotlightStaticActions.push({
 				id: "employees",
 				label: "Employees",
 				description: "View employees",
 				onClick: () => router.visit(Routes.employees()),
 				leftSection: <EmployeeIcon />,
-			},
-			{
+			})
+		}
+
+		if(can("employee/trainings", "index")) {
+			spotlightStaticActions.push({
 				id: "trainings",
 				label: "Employee trainings",
 				description: "View employee trainings",
 				onClick: () => router.visit(Routes.trainings()),
-			},
-			{
+			})
+		}
+
+		if(can("timesheets", "index")) {
+			spotlightStaticActions.push({
+				id: "payroll",
+				label: "Payroll",
+				description: "View payroll",
+				onClick: () => router.visit(Routes.payrollPeriods()),
+				leftSection: <ClockIcon />,
+			})
+		}
+
+		if(can("vendors", "index")) {
+			spotlightStaticActions.push({
+				id: "vendors",
+				label: "Vendors",
+				description: "View vendors",
+				onClick: () => router.visit(Routes.vendors()),
+				leftSection: <HelpingIcon />,
+			})
+		}
+
+		if(can("settings", "index")) {
+			spotlightStaticActions.push({
 				id: "settings",
 				label: "Settings",
 				description: "Application settings",
 				onClick: () => router.visit(Routes.settings()),
 				leftSection: <SettingsIcon />,
-			},
-		)
+			})
+		}
 
 		return spotlightStaticActions
-	}, [permissions])
+	}, [can])
 
 	const handleQueryChange = (value: string) => {
 		setQuery(value)
@@ -159,4 +185,3 @@ export function SpotlightComponent() {
 		/>
 	)
 }
-

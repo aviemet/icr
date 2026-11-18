@@ -83,7 +83,7 @@ describe("parseTimeString (SplitDateTimeInput)", () => {
 })
 
 describe("EventTotalHours", () => {
-	it("shows duration from initial form data", async() => {
+	it("shows duration from initial form data", async () => {
 		const base = dayjs().startOf("day")
 		const initialData = {
 			calendar_event: {
@@ -99,7 +99,7 @@ describe("EventTotalHours", () => {
 		})
 	})
 
-	it("updates duration when form data calendar_event.starts_at and ends_at change", async() => {
+	it("updates duration when form data calendar_event.starts_at and ends_at change", async () => {
 		const base = dayjs().startOf("day")
 		const initialData = {
 			calendar_event: {

@@ -1,65 +1,131 @@
 import { router } from "@inertiajs/react"
-import { LoadingOverlay } from "@mantine/core"
+import { Avatar, Box, LoadingOverlay, type CheckboxProps } from "@mantine/core"
 import clsx from "clsx"
-import { DataTable as MantineDataTable, type DataTableProps, type DataTableSortStatus } from "mantine-datatable"
-import { useCallback, useMemo, useState } from "react"
+import {
+	DataTable as MantineDataTable,
+	type DataTableColumn,
+	type DataTableProps,
+	type DataTableSortStatus,
+} from "mantine-datatable"
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react"
 
-import { useLocation } from "@/lib/hooks"
+import { CheckIcon } from "@/components/Icons"
+import { useLocation } from "@/lib/hooks/useLocation"
 
 import * as classes from "./DataTable.css"
-import { Pagination } from "../Pagination"
-import { useTableContext } from "../Provider"
-
-type TableRowWithId = object & { id: string | number }
-
-type DefaultTableRow = TableRowWithId & Record<string, unknown>
+import { withActionsColumnSizing } from "./withActionsColumnSizing"
+import { useTableContext, type TableContextColumn } from "../Provider"
 
 const isValidDirection = (value: string | undefined): value is "asc" | "desc" => {
 	return value === "asc" || value === "desc"
 }
 
-export type TableDataTableProps<T extends TableRowWithId = DefaultTableRow> = Omit<DataTableProps<T>, "selectedRecords" | "onSelectedRecordsChange"> & {
-	pagination?: Schema.Pagination
+const recordId = (record: object): string => {
+	if("id" in record && record.id !== null && record.id !== undefined) {
+		return String(record.id)
+	}
+
+	return ""
+}
+
+export type SelectionAvatarProps = {
+	color?: string
+	initials: string
+}
+
+export type TableDataTableProps<T extends object = Record<string, unknown>> = {
+	columns?: DataTableColumn<T>[]
+	records?: T[]
 	model?: string
 	selectable?: boolean
+	selectionAvatar?: (record: T) => SelectionAvatarProps
+	height?: DataTableProps<T>["height"]
+	emptyState?: ReactNode
+	classNames?: DataTableProps<T>["classNames"]
+	withTableBorder?: boolean
+	withColumnBorders?: boolean
+	rowBackgroundColor?: DataTableProps<T>["rowBackgroundColor"]
 	onSortChange?: (field: string | null, direction: "asc" | "desc" | null) => void
 	onSelectedRecordsChange?: (records: T[]) => void
 }
 
-export function DataTable<T extends TableRowWithId = DefaultTableRow>({
+export function DataTable<T extends object = Record<string, unknown>>({
 	columns = [],
 	records,
-	pagination,
-	model,
+	model: modelProp,
 	selectable = false,
+	selectionAvatar,
 	onSortChange,
 	onSelectedRecordsChange,
 	classNames,
 	withTableBorder = true,
 	withColumnBorders = true,
-	...props
+	emptyState = <></>,
+	height = "100%",
+	rowBackgroundColor,
 }: TableDataTableProps<T>) {
 	const context = useTableContext(false)
 	const searching = context?.searching ?? false
+	const model = modelProp ?? context?.model
 
 	const [selectedRecords, setSelectedRecords] = useState<T[]>([])
 
 	const location = useLocation()
 
+	const setColumns = context?.setColumns
 
-	const sortStatus = useMemo<DataTableSortStatus<T> | undefined>(() => {
-		if(!pagination || !model) return undefined
+	useEffect(() => {
+		if(!setColumns) return
+
+		const nextColumns: TableContextColumn[] = columns.flatMap(column => {
+			const accessor = column.accessor
+			if(accessor === undefined || accessor === null) return []
+
+			const title = typeof column.title === "string" ? column.title : String(column.title ?? "")
+			return [{
+				accessor: String(accessor),
+				title,
+				hideable: column.accessor !== "actions" && title.trim() !== "",
+			}]
+		})
+
+		setColumns(nextColumns)
+	}, [columns, setColumns])
+
+	const visibleColumns = useMemo(() => {
+		const columnHide = context?.columnHide ?? {}
+		const shownColumns = columns.filter(column => {
+			const accessor = column.accessor
+			if(accessor === undefined || accessor === null) return true
+			return !columnHide[String(accessor)]
+		})
+
+		return withActionsColumnSizing(shownColumns)
+	}, [columns, context?.columnHide])
+
+	const sortStatus = useMemo<DataTableSortStatus<T>>(() => {
+		if(!model) {
+			return {
+				columnAccessor: "",
+				direction: "asc",
+			}
+		}
 
 		const sort = location.paramsAsJson.sort
 		const direction = location.paramsAsJson.direction
 
-		if(!sort || !isValidDirection(direction)) return undefined
+		if(!sort || !isValidDirection(direction)) {
+			return {
+				columnAccessor: "",
+				direction: "asc",
+			}
+		}
 
 		return {
 			columnAccessor: sort,
 			direction: direction,
 		}
-	}, [location.paramsAsJson.sort, location.paramsAsJson.direction, pagination, model])
+	}, [location.paramsAsJson.sort, location.paramsAsJson.direction, model])
 
 	const handleSortStatusChange = useCallback((status: DataTableSortStatus<T>) => {
 		if(onSortChange) {
@@ -67,39 +133,79 @@ export function DataTable<T extends TableRowWithId = DefaultTableRow>({
 			return
 		}
 
-		if(pagination && model) {
-			const url = new URL(window.location.href)
-			if(status.direction) {
-				url.searchParams.set("sort", String(status.columnAccessor))
-				url.searchParams.set("direction", status.direction)
-			} else {
-				url.searchParams.delete("sort")
-				url.searchParams.delete("direction")
-			}
+		if(!model) return
 
-			router.get(url.toString(), {}, {
-				preserveState: true,
-				preserveScroll: true,
-				replace: true,
-			})
+		const url = new URL(window.location.href)
+		if(status.direction) {
+			url.searchParams.set("sort", String(status.columnAccessor))
+			url.searchParams.set("direction", status.direction)
+		} else {
+			url.searchParams.delete("sort")
+			url.searchParams.delete("direction")
 		}
-	}, [onSortChange, pagination, model])
+
+		router.get(url.toString(), {}, {
+			preserveState: true,
+			preserveScroll: true,
+			replace: true,
+		})
+	}, [onSortChange, model])
 
 	const handleSelectedRecordsChange = useCallback((newSelected: T[]) => {
 		setSelectedRecords(newSelected)
 		onSelectedRecordsChange?.(newSelected)
-		context?.setSelectedRecordIds(newSelected.map((record) => String(record.id)))
+		context?.setSelectedRecordIds(newSelected.map(recordId))
 	}, [context, onSelectedRecordsChange])
 
+	if(context && context.selectedRecordIds.length === 0 && selectedRecords.length > 0) {
+		setSelectedRecords([])
+	}
+
+	const getRecordSelectionCheckboxProps = useCallback((record: T): CheckboxProps => {
+		if(!selectionAvatar) {
+			return {
+				"aria-label": `Select record ${recordId(record)}`,
+			}
+		}
+
+		const { color, initials } = selectionAvatar(record)
+		const selected = selectedRecords.some(selectedRecord => recordId(selectedRecord) === recordId(record))
+
+		return {
+			"aria-label": `Select ${initials}`,
+			className: classes.avatarCheckbox,
+			label: (
+				<Avatar
+					radius="xl"
+					size="sm"
+					color={ color ?? "gray" }
+					className={ clsx(classes.selectionAvatar, selected && classes.selectionAvatarSelected) }
+				>
+					{ selected ? <CheckIcon size={ 14 } /> : <span className={ classes.selectionAvatarInitials }>{ initials }</span> }
+				</Avatar>
+			),
+			styles: {
+				body: { alignItems: "center", gap: 0 },
+				inner: { display: "none" },
+				input: {
+					position: "absolute",
+					opacity: 0,
+					width: 0,
+					height: 0,
+					margin: 0,
+					padding: 0,
+				},
+				label: { padding: 0, cursor: "pointer" },
+			},
+		}
+	}, [selectionAvatar, selectedRecords])
+
 	return (
-		<div style={ { position: "relative", flex: 1, display: "flex", flexDirection: "column", minHeight: 0 } }>
+		<Box style={ { position: "relative", flex: 1, display: "flex", flexDirection: "column", minHeight: 0 } }>
 			{ searching && (
 				<LoadingOverlay visible={ searching } overlayProps={ { blur: 1 } } />
 			) }
-			{ /* @ts-ignore - MantineDataTable interface doesn't support safe prop proxying */ }
 			<MantineDataTable
-				// @ts-ignore - MantineDataTable interface doesn't support safe prop proxying
-				stickyHeader
 				classNames={ {
 					table: clsx(classes.table, classNames?.table),
 					root: clsx(classes.root, classNames?.root),
@@ -107,29 +213,34 @@ export function DataTable<T extends TableRowWithId = DefaultTableRow>({
 					footer: classNames?.footer,
 					pagination: classNames?.pagination,
 				} }
-				columns={ columns }
+				columns={ visibleColumns }
 				records={ records }
-				onSortStatusChange={ handleSortStatusChange }
 				sortStatus={ sortStatus }
-				emptyState={ <></> }
-				height="100%"
+				onSortStatusChange={ handleSortStatusChange }
+				emptyState={ emptyState }
+				height={ height }
 				scrollAreaProps={ {
 					offsetScrollbars: false,
 				} }
-				renderPagination={ pagination && model
-					? () => <Pagination pagination={ pagination } model={ model } />
-					: undefined
-				}
+				verticalAlign="center"
+				withTableBorder={ withTableBorder }
+				withColumnBorders={ withColumnBorders }
+				rowBackgroundColor={ rowBackgroundColor }
+
 				{ ...(selectable
 					? {
 						selectedRecords,
 						onSelectedRecordsChange: handleSelectedRecordsChange,
 						idAccessor: "id",
+						selectionColumnClassName: selectionAvatar ? classes.avatarSelectionColumn : undefined,
+						getRecordSelectionCheckboxProps,
+						allRecordsSelectionCheckboxProps: {
+							"aria-label": "Select all records",
+						},
 					}
 					: {}
 				) }
-				{ ...props }
 			/>
-		</div>
+		</Box>
 	)
 }

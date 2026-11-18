@@ -31,9 +31,13 @@ FactoryBot.define do
 
     after(:build) do |shift|
       if shift.calendar_event
-        shift.calendar_event.category_id = Category.type("Calendar::Event").find_by!(name: "Shift").id
+        shift.calendar_event.category_id = Category.type("Calendar::Event").find_or_create_by!(name: "Shift") { |category|
+          category.system = true
+        }.id
       end
-      shift.category_id = Category.type("Shift").find_by!(name: "Regular").id
+      shift.category_id = Category.type("Shift").find_or_create_by!(name: "Regular") { |category|
+        category.system = true
+      }.id
     end
   end
 end

@@ -118,6 +118,6 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 
   config.before(:suite) do
-    load Rails.root.join("db/seeds/01_required.rb")
+    Dir[Rails.root.join("db/seeds/*required*.rb")].sort.each { |seed| load seed }
   end
 end

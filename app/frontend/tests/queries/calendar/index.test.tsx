@@ -33,7 +33,7 @@ describe("Calendar Event Mutations", () => {
 			},
 		}
 
-		it("should create a calendar event", async() => {
+		it("should create a calendar event", async () => {
 			const { result } = renderHook(
 				() => useCreateCalendarEvent({
 					onSuccess: vi.fn(),
@@ -45,7 +45,7 @@ describe("Calendar Event Mutations", () => {
 			expect(response.id).toBe("123")
 		})
 
-		it("should handle creation errors", async() => {
+		it("should handle creation errors", async () => {
 			server.use(
 				http.post(Routes.apiCalendarEvents(), () => HttpResponse.json({ error: "nope" }, { status: 500 }))
 			)
@@ -74,7 +74,7 @@ describe("Calendar Event Mutations", () => {
 			},
 		}
 
-		it("should update a calendar event", async() => {
+		it("should update a calendar event", async () => {
 			const { result } = renderHook(
 				() => useUpdateCalendarEvent({
 					params: { id: eventId },
@@ -87,7 +87,7 @@ describe("Calendar Event Mutations", () => {
 			expect(response.id).toBe(eventId)
 		})
 
-		it("should invalidate queries on successful update", async() => {
+		it("should invalidate queries on successful update", async () => {
 			const onSuccess = vi.fn()
 			const { result } = renderHook(
 				() => useUpdateCalendarEvent({

@@ -1,7 +1,5 @@
 import { css } from "@linaria/core"
 
-import { vars } from "@/lib/theme"
-
 export const external = css`
 	display: inline-block;
 

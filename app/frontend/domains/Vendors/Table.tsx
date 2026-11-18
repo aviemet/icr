@@ -4,11 +4,10 @@ import { Routes } from "@/lib"
 
 interface VendorTableProps {
 	records: Schema.VendorsIndex[]
-	pagination: Schema.Pagination
 	model: string
 }
 
-export function VendorTable({ records, pagination, model }: VendorTableProps) {
+export function VendorTable({ records, model }: VendorTableProps) {
 	const columns: TableColumn<Schema.VendorsIndex>[] = [
 		{
 			accessor: "name",
@@ -34,7 +33,6 @@ export function VendorTable({ records, pagination, model }: VendorTableProps) {
 		<Table.DataTable
 			columns={ columns }
 			records={ records }
-			pagination={ pagination }
 			model={ model }
 			selectable
 		/>

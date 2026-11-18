@@ -2,9 +2,14 @@ if Rails.env.development?
   if Setting.none?
     Setting.company_name = "ICR SLS"
     Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
+    Setting.primary_color = "#228be6"
 
     Rails.logger.info "[seeds] settings"
   end
+
+  company = Company.instance
+  company.update!(name: Setting.company_name) if company.name != Setting.company_name
+  Rails.logger.info "[seeds] company"
 
   dev_password = "Complex1!"
   test_timezone = "America/Los_Angeles"
@@ -28,14 +33,6 @@ if Rails.env.development?
     Rails.logger.info "[seeds] admin user"
   end
 
-  if Employee::JobTitle.none?
-    Employee::JobTitle.create({ name: "Attendant" })
-    Employee::JobTitle.create({ name: "Facilitator" })
-    Employee::JobTitle.create({ name: "Director" })
-
-    Rails.logger.info "[seeds] job titles"
-  end
-
   if Client.none?
     4.times do
       client = FactoryBot.create :client
@@ -48,7 +45,6 @@ if Rails.env.development?
     h.clients << Client.second
     h.clients << Client.third
 
-    # Test client User
     User.create({
       email: "client@gmail.com",
       password: dev_password,
@@ -80,7 +76,6 @@ if Rails.env.development?
       FactoryBot.create(:address, contact: facilitator.person.contact, category: Category.type("Contact::Address").sample)
       FactoryBot.create(:phone, contact: facilitator.person.contact, category: Category.type("Contact::Phone").sample)
 
-      # Test facilitator User
       director_user = User.create({
         email: "director@gmail.com",
         password: dev_password,
@@ -97,9 +92,24 @@ if Rails.env.development?
 
       FactoryBot.create(:address, contact: director.person.contact, category: Category.type("Contact::Address").sample)
       FactoryBot.create(:phone, contact: director.person.contact, category: Category.type("Contact::Phone").sample)
+
+      attendant_user = User.create({
+        email: "attendant@gmail.com",
+        password: dev_password,
+        confirmed_at: Time.zone.now,
+        time_zone: test_timezone,
+        person: FactoryBot.create(:person)
+      })
+
+      attendant = FactoryBot.create(:employee, {
+        person: attendant_user.person,
+        status: :employed
+      })
+
+      attendant.assign_job_title(Employee::JobTitle.find_by(slug: "attendant"))
     end
 
-    Rails.logger.info "[seeds] employees + facilitator/director users"
+    Rails.logger.info "[seeds] employees + facilitator/director/attendant users"
   end
 
 end

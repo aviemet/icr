@@ -2,11 +2,12 @@ import { DateTimePicker, DateTimePickerProps } from "@mantine/dates"
 import dayjs from "dayjs"
 import React from "react"
 
+import { useFormFieldError } from "@/components/Form"
 import { isUnset } from "@/lib"
 
+import { InputWrapper } from "./InputWrapper"
 import { Label } from "./Label"
 import { CalendarIcon } from "../Icons"
-import { InputWrapper } from "./InputWrapper"
 
 import { type BaseInputProps } from "."
 
@@ -32,9 +33,11 @@ export function DateTimeInput({
 	valueFormat = "L LT",
 	wrapper,
 	wrapperProps,
+	error,
 	ref,
 	...props
 }: DateTimeProps) {
+	const fieldError = useFormFieldError(name)
 	const inputId = id || name
 
 	return (
@@ -51,6 +54,7 @@ export function DateTimeInput({
 				valueFormat={ valueFormat }
 				leftSection={ <CalendarIcon /> }
 				leftSectionPointerEvents="none"
+				error={ error ?? fieldError }
 				timePickerProps={ {
 					withDropdown: true,
 					popoverProps: { withinPortal: false },

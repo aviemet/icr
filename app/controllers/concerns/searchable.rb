@@ -3,9 +3,12 @@
 module Searchable
   extend ActiveSupport::Concern
 
+  CAST_ILIKE_TYPES = %i[date datetime time datetimetz decimal integer float boolean].freeze
+
   included do
     class_attribute :internal_sortable_fields
     class_attribute :internal_advanced_search_methods
+    class_attribute :internal_filterable_fields
 
     before_action :remove_empty_query_parameters
 
@@ -19,10 +22,10 @@ module Searchable
     # Sortable fields in nested models use dot-notation: "related_model.field"
     # To sort by a method on the model class which is not a database field, use `self`: "self.calculated_number"
     def search(model)
-      sort(
-        advanced_search(basic_search(model)),
-        model,
-      )
+      relation = basic_search(model)
+      relation = advanced_search(relation)
+      relation = apply_filterable_defaults(relation)
+      sort(relation, model)
     end
 
     self.internal_advanced_search_methods = {
@@ -53,6 +56,7 @@ module Searchable
 
       end,
     }
+    self.internal_filterable_fields = {}
 
     ##
     # @param [ActiveRecord::Relation] resource The relation to paginate
@@ -86,6 +90,41 @@ module Searchable
     def sortable_fields(fields)
       self.internal_sortable_fields = fields
     end
+
+    def filterable_fields(*args, **kwargs)
+      fields = (internal_filterable_fields || {}).dup
+
+      args.each do |name|
+        name_sym = name.to_sym
+        fields[name_sym] = if name_sym == :created_at
+                             { type: :created_at }
+                           else
+                             { type: :ilike }
+                           end
+      end
+
+      kwargs.each do |name, config|
+        fields[name.to_sym] = normalize_filterable_config(config)
+      end
+
+      self.internal_filterable_fields = fields
+
+      unless method_defined?(:advanced_search_params)
+        define_method(:advanced_search_params) do
+          permit_filterable_fields
+        end
+      end
+    end
+
+    def advanced_search_method(name, callable)
+      self.internal_advanced_search_methods = internal_advanced_search_methods.merge(name.to_sym => callable)
+    end
+
+    def normalize_filterable_config(config)
+      normalized = config.to_h.symbolize_keys
+      normalized[:type] ||= :ilike
+      normalized
+    end
   end
 
   private
@@ -103,11 +142,20 @@ module Searchable
   # Filters ActiveRecord relation by advanced search params
   ##
   def advanced_search(model)
-    return model unless defined?(advanced_search_params) == "method" && params[:adv] == "true"
+    return model unless params[:adv] == "true"
+    return model unless defined?(advanced_search_params) == "method"
 
     advanced_search_params.each do |key, value|
+      key_sym = key.to_sym
+      config = self.class.internal_filterable_fields&.[](key_sym)
+
+      if config
+        model = apply_filterable_field(model, key_sym, value, config)
+        next
+      end
+
       methods = internal_advanced_search_methods || {}
-      apply_search = methods[key.to_sym] ||
+      apply_search = methods[key_sym] ||
         (nested_key_with_id?(advanced_search_params[key]) && methods[:id]) ||
         methods[:default]
       next unless apply_search
@@ -116,6 +164,113 @@ module Searchable
     end
 
     model
+  end
+
+  def apply_filterable_defaults(relation)
+    fields = self.class.internal_filterable_fields || {}
+    return relation if fields.empty?
+
+    fields.each do |key, config|
+      next if config[:default].nil?
+      next if params.key?(key) || params.key?(key.to_s)
+
+      default_value = config[:default]
+      default_value = default_value.call if default_value.respond_to?(:call)
+      relation = apply_filterable_field(relation, key, Array(default_value), config.merge(type: :in))
+    end
+
+    relation
+  end
+
+  def apply_filterable_field(relation, key, value, config)
+    relation = relation.joins(config[:joins]) if config[:joins].present?
+
+    case config[:type]
+    when :created_at
+      created_at_handler = (internal_advanced_search_methods || {})[:created_at]
+      return relation unless created_at_handler
+
+      created_at_handler.call(relation, key, value)
+    when :in
+      apply_in_filter(relation, key, value, config)
+    when :cast_ilike
+      return relation if value.blank?
+
+      column = resolve_filter_column(relation, key, config)
+      relation.where("CAST(#{column} AS TEXT) ILIKE ?", "%#{value}%")
+    else
+      return relation if value.blank?
+
+      column = resolve_filter_column(relation, key, config)
+      apply_ilike_filter(relation, key, column, value)
+    end
+  end
+
+  def apply_in_filter(relation, key, value, config)
+    list = Array(value).filter_map { |entry| entry.to_s.presence }
+    allowed = resolve_filter_values(config[:values])
+    list = list.select { |entry| allowed.include?(entry) } if allowed
+    return relation if list.empty?
+
+    column = resolve_filter_column(relation, key, config)
+    if column.include?(".")
+      relation.where("#{column} IN (?)", list)
+    else
+      relation.where(column => list)
+    end
+  end
+
+  def apply_ilike_filter(relation, key, column, value)
+    field_type = filter_column_type(relation, key, column)
+    if CAST_ILIKE_TYPES.include?(field_type)
+      relation.where("CAST(#{column} AS TEXT) ILIKE ?", "%#{value}%")
+    else
+      relation.where("#{column} ILIKE ?", "%#{value}%")
+    end
+  end
+
+  def resolve_filter_column(relation, key, config)
+    return config[:column].to_s if config[:column].present?
+
+    table_name = relation.klass.table_name
+    "#{table_name}.#{key}"
+  end
+
+  def resolve_filter_values(values)
+    return if values.nil?
+
+    resolved = values.respond_to?(:call) ? values.call : values
+    Array(resolved).map(&:to_s)
+  end
+
+  def filter_column_type(relation, key, column)
+    if column.include?(".")
+      table_name, column_name = column.split(".", 2)
+      schema_cache = ActiveRecord::Base.connection.schema_cache
+      return schema_cache.columns_hash(table_name)&.[](column_name)&.type
+    end
+
+    relation.klass.column_for_attribute(key).type
+  end
+
+  def permit_filterable_fields
+    fields = self.class.internal_filterable_fields || {}
+    scalars = []
+    arrays = {}
+    nested = {}
+
+    fields.each do |name, config|
+      case config[:type]
+      when :in
+        arrays[name] = []
+      when :created_at
+        nested[name] = [:start, :end, :type]
+      else
+        scalars << name
+      end
+    end
+
+    params.permit(*scalars, **arrays, **nested)
   end
 
   def nested_key_with_id?(nested_param)

@@ -1,12 +1,13 @@
 import { Title, Page, Section } from "@/components"
-import { JobTitleForm } from "@/domains/Settings/JobTitles/Form"
+import { JobTitleForm, type JobTitleFormProps } from "@/domains/Settings/JobTitles/Form"
 import { Routes, withLayout } from "@/lib"
 
 interface NewJobTitleProps {
-	job_title: Schema.JobTitlesFormData
+	job_title: Schema.EmployeeJobTitlesFormData
+	permissions: NonNullable<JobTitleFormProps["permissions"]>
 }
 
-const NewJobTitle = ({ ...data }: NewJobTitleProps) => {
+const NewJobTitle = ({ job_title, permissions }: NewJobTitleProps) => {
 	const title = "New Job Title"
 
 	return (
@@ -20,7 +21,8 @@ const NewJobTitle = ({ ...data }: NewJobTitleProps) => {
 
 				<JobTitleForm
 					to={ Routes.settingsJobTitles() }
-					{ ...data }
+					job_title={ job_title }
+					permissions={ permissions }
 				/>
 			</Section>
 

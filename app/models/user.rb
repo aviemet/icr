@@ -62,7 +62,25 @@ class User < ApplicationRecord
 
   resourcify
   rolify
-  tracked except: [:reset_password_token, :remember_created_at, :sign_in_count, :last_sign_in_at, :last_sign_in_ip, :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email, :unlock_token, :active_company]
+
+  self.paper_trail_options = paper_trail_options.deep_dup
+  paper_trail_options[:ignore] = [
+    :reset_password_token,
+    :remember_created_at,
+    :sign_in_count,
+    :last_sign_in_at,
+    :last_sign_in_ip,
+    :current_sign_in_at,
+    :current_sign_in_ip,
+    :confirmation_token,
+    :confirmed_at,
+    :confirmation_sent_at,
+    :unconfirmed_email,
+    :unlock_token,
+    :encrypted_password,
+    :failed_attempts,
+    :locked_at,
+  ]
 
   # Include default devise modules. Others available are:
   #  and :omniauthable
@@ -93,27 +111,6 @@ class User < ApplicationRecord
 
   def active?
     active
-  end
-
-  # Permission Groups
-  has_many :permission_assignments,
-    class_name: "Permission::Assignment",
-    as: :permissionable,
-    dependent: :destroy
-  has_many :permission_groups,
-    through: :permission_assignments,
-    source: :group
-
-  def permissionable_associations
-    [
-      self,
-      person&.employee&.job_title
-    ].compact
-  end
-
-  def permission?(resource, action, context = {})
-    @permission_resolver ||= Permission::Resolver.new(self)
-    @permission_resolver.can?(resource, action, context)
   end
 
   private

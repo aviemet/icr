@@ -24,8 +24,10 @@ export function CurrencyFormatter({
 }: CurrencyFormatterProps) {
 	const [inTable, setInTable] = useState(false)
 
-	const useCurrencyOptions: UseCurrencyOptions = options
-	useCurrencyOptions.signDisplay = accounting ? "never" : "auto"
+	const useCurrencyOptions: UseCurrencyOptions = {
+		...options,
+		signDisplay: accounting ? "never" : "auto",
+	}
 
 	const [amount, formatter] = useCurrency({
 		amount: children ?? 0,
@@ -39,7 +41,8 @@ export function CurrencyFormatter({
 		// (when used in a table cell, always use FlexCurrency. Throwing is easiest way to check context)
 		useTableSectionContext()
 		if(!inTable) setInTable(true)
-	} catch(e) {}
+	} catch{
+	}
 
 	if(accounting || (inTable && accounting === undefined)) {
 		return (

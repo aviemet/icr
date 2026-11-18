@@ -12,7 +12,7 @@ const EditTimesheet = ({ timesheet }: EditTimesheetProps) => {
 
 	return (
 		<Page title={ title } breadcrumbs={ [
-			{ title: "Timesheets", href: Routes.timesheets() },
+			{ title: "Payroll", href: Routes.payrollPeriods() },
 			{ title: "Timesheet", href: Routes.timesheet(timesheet.id) },
 			{ title, href: window.location.href },
 		] }>

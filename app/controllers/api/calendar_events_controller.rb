@@ -10,8 +10,6 @@ class Api::CalendarEventsController < Api::ApiController
   def create
     authorize Calendar::Event.new
 
-    calendar_event.created_by = current_user
-
     if calendar_event.save
       render json: calendar_event.render, status: :created
     else
@@ -35,15 +33,16 @@ class Api::CalendarEventsController < Api::ApiController
   def destroy
     authorize calendar_event
 
-    if calendar_event.destroy!
+    if calendar_event.destroy
       head :no_content
     else
-      render json: { errors: }
+      render json: { errors: calendar_event.errors }, status: :unprocessable_content
     end
   end
 
   private
 
+  # rubocop:disable-next Rails/StrongParametersExpect
   def resolve_category_slug
     slug = params.dig(:calendar_event, :category_slug)
     if slug.present?

@@ -7,7 +7,7 @@ import { useCalendarTransition } from "./useCalendarTransition"
 
 interface CalendarTransitionContainerProps<T extends HTMLElement = HTMLDivElement> extends PropsWithChildren {
 	className?: string
-	containerRef?: RefObject<T>
+	containerRef?: RefObject<T | null>
 }
 
 const defaultStyles: React.CSSProperties = {

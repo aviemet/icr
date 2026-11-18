@@ -14,7 +14,7 @@ export const useGetHouseholdSchedules: ReactQueryFunction<Schema.CalendarEventsH
 }> = ({ slug, ...params }, options) => {
 	return useQuery({
 		queryKey: [`households/${slug}/schedule`, params],
-		queryFn: async() => {
+		queryFn: async () => {
 			const res = await axios.get(Routes.apiHouseholdSchedule(slug, params))
 			return res.data
 		},

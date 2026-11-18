@@ -1,55 +1,69 @@
-import { Table, Link } from "@/components"
+import { Table, Link, type TableColumn } from "@/components"
 import { EditButton } from "@/components/Button"
 import { DateTimeFormatter } from "@/components/Formatters"
-import { type TableProps } from "@/components/Table/Table"
 import { Routes } from "@/lib"
 
-export function IncidentReportTable(props: TableProps) {
+interface IncidentReportTableProps {
+	records: Schema.IncidentReportsIndex[]
+	model?: string
+}
+
+export function IncidentReportTable({ records, model }: IncidentReportTableProps) {
+	const columns: TableColumn<Schema.IncidentReportsIndex>[] = [
+		{
+			accessor: "occurred_at",
+			title: "Occurred_at",
+			sortable: true,
+			render: (incidentReport) => (
+				<Link href={ Routes.incidentReport(incidentReport.id) }>
+					<DateTimeFormatter>{ incidentReport.occurred_at }</DateTimeFormatter>
+				</Link>
+			),
+		},
+		{
+			accessor: "reported_at",
+			title: "Reported_at",
+			sortable: true,
+			render: (incidentReport) => (
+				<Link href={ Routes.incidentReport(incidentReport.id) }>
+					<DateTimeFormatter>{ incidentReport.reported_at }</DateTimeFormatter>
+				</Link>
+			),
+		},
+		{
+			accessor: "agency_notified_at",
+			title: "Agency_notified_at",
+			sortable: true,
+			render: (incidentReport) => (
+				<Link href={ Routes.incidentReport(incidentReport.id) }>
+					<DateTimeFormatter>{ incidentReport.agency_notified_at }</DateTimeFormatter>
+				</Link>
+			),
+		},
+		{
+			accessor: "location",
+			title: "Location",
+			sortable: true,
+			render: (incidentReport) => (
+				<Link href={ Routes.incidentReport(incidentReport.id) }>
+					{ incidentReport.location }
+				</Link>
+			),
+		},
+		{
+			accessor: "actions",
+			title: "Actions",
+			sortable: false,
+			render: (incidentReport) => <EditButton href={ Routes.editIncidentReport(incidentReport.id) } />,
+		},
+	]
+
 	return (
-		<Table { ...props }>
-			<Table.Head>
-				<Table.Row>
-					<Table.HeadCell sort="occurred_at">Occurred_at</Table.HeadCell>
-					<Table.HeadCell sort="reported_at">Reported_at</Table.HeadCell>
-					<Table.HeadCell sort="agency_notified_at">Agency_notified_at</Table.HeadCell>
-					<Table.HeadCell sort="location">Location</Table.HeadCell>
-					<Table.HeadCell className="actions">Actions</Table.HeadCell>
-				</Table.Row>
-			</Table.Head>
-			<Table.Body>
-				<Table.RowIterator render={ (incident_report: Schema.IncidentReportsIndex) => (
-					<Table.Row key={ incident_report.id }>
-
-						<Table.Cell>
-							<Link href={ Routes.incidentReport(incident_report.id) }>
-								<DateTimeFormatter>{ incident_report?.occurred_at }</DateTimeFormatter>
-							</Link>
-						</Table.Cell>
-
-						<Table.Cell>
-							<Link href={ Routes.incidentReport(incident_report.id) }>
-								<DateTimeFormatter>{ incident_report?.reported_at }</DateTimeFormatter>
-							</Link>
-						</Table.Cell>
-
-						<Table.Cell>
-							<Link href={ Routes.incidentReport(incident_report.id) }>
-								<DateTimeFormatter>{ incident_report?.agency_notified_at }</DateTimeFormatter>
-							</Link>
-						</Table.Cell>
-
-						<Table.Cell>
-							<Link href={ Routes.incidentReport(incident_report.id) }>
-								{ incident_report.location }
-							</Link>
-						</Table.Cell>
-
-						<Table.Cell>
-							<EditButton href={ Routes.editIncidentReport(incident_report.id) } />
-						</Table.Cell>
-					</Table.Row>
-				) } />
-			</Table.Body>
-		</Table>
+		<Table.DataTable
+			columns={ columns }
+			records={ records }
+			model={ model }
+			selectable
+		/>
 	)
 }

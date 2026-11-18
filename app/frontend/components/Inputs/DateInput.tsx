@@ -5,6 +5,7 @@ import {
 import dayjs from "dayjs"
 import React, { useEffect, useState } from "react"
 
+import { useFormFieldError } from "@/components/Form"
 import { CalendarIcon } from "@/components/Icons"
 import { isUnset } from "@/lib"
 import { isDate } from "@/lib/dates"
@@ -21,9 +22,22 @@ export interface DateInputProps
 	ref?: React.Ref<HTMLButtonElement>
 	name?: string
 	id?: string
-	value: DateInputValue
+	value?: DateInputValue
 	error?: string | string[]
 	onChange?: (date: DateInputValue) => void
+}
+
+function toLocalDateInputValue(value: DateInputValue, valueFormat: string): DateInputValue {
+	if(isUnset(value)) return undefined
+	if(isDate(value)) return dayjs(value).format(valueFormat)
+	if(Array.isArray(value)) {
+		return value.map((entry) => {
+			if(isDate(entry)) return dayjs(entry).format(valueFormat)
+			if(typeof entry === "string") return entry
+			return ""
+		})
+	}
+	return value
 }
 
 export function DateInput({
@@ -37,26 +51,23 @@ export function DateInput({
 	wrapperProps,
 	value,
 	onChange,
+	error,
 	ref,
 	...props
 }: DateInputProps) {
+	const fieldError = useFormFieldError(name)
 	const inputId = id || name
 
-	const [localValue, setLocalValue] = useState<DateInputValue>(() => {
-		if(isUnset(value)) return undefined
-		if(isDate(value)) return dayjs(value).format(valueFormat)
-		if(Array.isArray(value)) {
-			const formattedValues = (value as Array<unknown>).map((v) => {
-				if(isDate(v)) return dayjs(v).format(valueFormat)
-				if(typeof v === "string") return v
-				return ""
-			})
-
-			return formattedValues as string[]
-		}
-		return value
-	})
+	const [localValue, setLocalValue] = useState<DateInputValue>(() => toLocalDateInputValue(value, valueFormat))
+	const [trackedValue, setTrackedValue] = useState(value)
+	const [trackedFormat, setTrackedFormat] = useState(valueFormat)
 	const [datePickerType, setDatePickerType] = useState(type)
+
+	if(value !== trackedValue || valueFormat !== trackedFormat) {
+		setTrackedValue(value)
+		setTrackedFormat(valueFormat)
+		setLocalValue(toLocalDateInputValue(value, valueFormat))
+	}
 
 	const handleChange = (changeValue: DateInputValue | undefined) => {
 		setLocalValue(changeValue)
@@ -101,9 +112,9 @@ export function DateInput({
 				leftSection={ <CalendarIcon /> }
 				leftSectionPointerEvents="none"
 				clearable
+				error={ error ?? fieldError }
 				{ ...props }
 			/>
 		</InputWrapper>
 	)
 }
-

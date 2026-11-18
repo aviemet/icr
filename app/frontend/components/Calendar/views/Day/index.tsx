@@ -67,7 +67,7 @@ export const DayView = createViewComponent<EventResources, "day">(DayViewCompone
 			case NAVIGATION.today:
 				return new Date()
 			case NAVIGATION.previous:
-				return localizer.add(date, - 1, "day")
+				return localizer.add(date, -1, "day")
 			case NAVIGATION.next:
 				return localizer.add(date, 1, "day")
 			default:

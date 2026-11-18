@@ -1,11 +1,11 @@
 import { NewIcon } from "@/components/Icons"
-import { EmployeeInterviewTable } from "@/domains/Interviews/Table"
+import { EmployeeInterviewTable, type EmployeeInterviewTableRecord } from "@/domains/Interviews/Table"
 import { IndexPageTemplate } from "@/features"
 import { Routes } from "@/lib"
 
 
 interface EmployeeInterviewIndexProps {
-	employee_interviews: Schema.EmployeeInterviewsIndex[]
+	employee_interviews: EmployeeInterviewTableRecord[]
 	pagination: Schema.Pagination
 }
 
@@ -16,11 +16,11 @@ const EmployeeInterviewsIndex = ({ employee_interviews, pagination }: EmployeeIn
 			model="employee_interviews"
 			pagination={ pagination }
 			deleteRoute={ Routes.interviews() }
-			menuOptions={ [
+			actions={ [
 				{ label: "New Interview", href: Routes.newInterview(), icon: <NewIcon /> },
 			] }
 		>
-			<EmployeeInterviewTable />
+			<EmployeeInterviewTable records={ employee_interviews } model="employee_interviews" />
 		</IndexPageTemplate>
 	)
 }

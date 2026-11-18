@@ -1,22 +1,32 @@
 import { DataTable, type TableDataTableProps } from "./DataTable"
 import { Pagination } from "./Pagination"
 import { TableProvider, useTableContext, useTableSectionContext } from "./Provider"
-import { SearchInput, AdvancedSearch, useAdvancedSearch, SearchDateInput, SearchDateTypeInput } from "./SearchInput"
+import { SearchInput } from "./SearchInput"
 import { Section } from "./Section"
+import {
+	defaultServerTableFilterValues,
+	readServerTableFilters,
+	writeServerTableFilters,
+	type ServerTableFilterField,
+	type ServerTableFilterValues,
+} from "./serverTableFilters"
 import { Table as TableBase, Head, Body, Footer, Row, Cell, HeadCell, type TableProps } from "./Table"
+import { useServerTableFilters } from "./useServerTableFilters"
 
 export {
 	DataTable, type TableDataTableProps,
 	Section,
 	SearchInput,
-	AdvancedSearch,
-	useAdvancedSearch,
-	SearchDateInput,
-	SearchDateTypeInput,
 	useTableSectionContext,
 	Pagination,
 	TableProvider,
 	useTableContext,
+	readServerTableFilters,
+	writeServerTableFilters,
+	defaultServerTableFilterValues,
+	useServerTableFilters,
+	type ServerTableFilterField,
+	type ServerTableFilterValues,
 }
 
 export const Table = Object.assign(TableBase, {
@@ -31,7 +41,6 @@ export const Table = Object.assign(TableBase, {
 	Cell,
 	HeadCell,
 	Provider: TableProvider,
-	TableProvider,
 })
 
 export { type DataTableColumn as TableColumn } from "mantine-datatable"

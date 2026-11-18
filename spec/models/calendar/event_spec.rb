@@ -2,27 +2,24 @@
 #
 # Table name: calendar_events
 #
-#  id            :uuid             not null, primary key
-#  all_day       :boolean          default(FALSE), not null
-#  ends_at       :datetime
-#  name          :string
-#  starts_at     :datetime
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  category_id   :uuid             not null
-#  created_by_id :uuid
-#  parent_id     :uuid
+#  id          :uuid             not null, primary key
+#  all_day     :boolean          default(FALSE), not null
+#  ends_at     :datetime
+#  name        :string
+#  starts_at   :datetime
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  category_id :uuid             not null
+#  parent_id   :uuid
 #
 # Indexes
 #
-#  index_calendar_events_on_category_id    (category_id)
-#  index_calendar_events_on_created_by_id  (created_by_id)
-#  index_calendar_events_on_parent_id      (parent_id)
+#  index_calendar_events_on_category_id  (category_id)
+#  index_calendar_events_on_parent_id    (parent_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (category_id => categories.id)
-#  fk_rails_...  (created_by_id => users.id)
 #  fk_rails_...  (parent_id => calendar_events.id)
 #
 require "rails_helper"
@@ -49,13 +46,35 @@ RSpec.describe Calendar::Event do
 
   describe "Associations" do
     it { is_expected.to belong_to(:parent).optional }
-    it { is_expected.to belong_to(:created_by).optional }
 
     it { is_expected.to have_one(:shift) }
 
     it { is_expected.to have_many(:recurring_patterns) }
     it { is_expected.to have_many(:clients).through(:event_participants) }
     it { is_expected.to have_many(:households).through(:event_participants) }
+  end
+
+  describe "destroy" do
+    it "destroys the linked shift when the period is open" do
+      employee = create(:employee)
+      shift = create(:shift, employee: employee)
+      event = Calendar::Event.find(shift.calendar_event_id)
+
+      expect { event.destroy }.to change(Shift, :count).by(-1)
+      expect(Calendar::Event.exists?(event.id)).to be(false)
+    end
+
+    it "does not destroy when the pay period is finalized" do
+      employee = create(:employee)
+      shift = create(:shift, employee: employee)
+      event = Calendar::Event.find(shift.calendar_event_id)
+      shift.timesheet.pay_period.update!(finalized_at: Time.current)
+
+      expect(event.destroy).to be(false)
+      expect(event.errors[:base]).to include(I18n.t("pay_periods.finalized_locked"))
+      expect(Calendar::Event.exists?(event.id)).to be(true)
+      expect(Shift.exists?(shift.id)).to be(true)
+    end
   end
 
   describe "Scopes" do

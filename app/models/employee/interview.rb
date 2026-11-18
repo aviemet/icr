@@ -29,7 +29,6 @@ class Employee::Interview < ApplicationRecord
     },
   )
 
-  tracked
   resourcify
 
   belongs_to :employee # Interviewee

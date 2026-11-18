@@ -22,7 +22,7 @@ interface CalendarPopoverProps {
 	className: string
 	popoverContent?: Partial<PopoverContentMap>
 	localizer: CalendarLocalizer
-	popoverRef: React.RefObject<HTMLDivElement>
+	popoverRef: React.RefObject<HTMLDivElement | null>
 }
 
 export function CalendarPopover({

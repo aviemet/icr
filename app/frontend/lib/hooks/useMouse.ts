@@ -1,12 +1,12 @@
-import { MouseEvent, useCallback, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
-type UseMouseArgs<T extends HTMLElement = any> = {
+type UseMouseArgs<T extends HTMLElement = HTMLElement> = {
 	resetOnExit?: boolean
 	ref?: React.MutableRefObject<T> | null
 }
 
-export function useMouse<T extends HTMLElement = any>(
-	options: UseMouseArgs = {
+export function useMouse<T extends HTMLElement = HTMLElement>(
+	options: UseMouseArgs<T> = {
 		resetOnExit: false,
 		ref: null,
 	}
@@ -17,41 +17,35 @@ export function useMouse<T extends HTMLElement = any>(
 
 	const usedRef = options.ref ?? innerRef
 
-	const setMousePosition = (event: MouseEvent<HTMLElement>) => {
-		if(usedRef.current) {
-			const rect = event.currentTarget.getBoundingClientRect()
-
-			const x = Math.max(
-				0,
-				Math.round(event.pageX - rect.left - (window.pageXOffset || window.scrollX))
-			)
-
-			const y = Math.max(
-				0,
-				Math.round(event.pageY - rect.top - (window.pageYOffset || window.scrollY))
-			)
-
-			setPosition({ x, y })
-		} else {
-			setPosition({ x: event.clientX, y: event.clientY })
-		}
-	}
-
-	const resetMousePosition = useCallback(() => {
-		setPosition({ x: null, y: null })
-	}, [])
-
-	const removeListeners = (element: any) => {
-		element.removeEventListener("mousemove", setMousePosition)
-		if(options.resetOnExit) {
-			element.removeEventListener("mouseleave", resetMousePosition)
-		}
-	}
-
 	useEffect(() => {
-		const element = usedRef?.current ? usedRef.current : document
+		const element: Document | T = usedRef.current ? usedRef.current : document
 
-		removeListeners(element)
+		const setMousePosition = (event: Event) => {
+			const mouseEvent = event as MouseEvent
+			const target = mouseEvent.currentTarget as HTMLElement | Document
+
+			if(usedRef.current && target instanceof HTMLElement) {
+				const rect = target.getBoundingClientRect()
+
+				const x = Math.max(
+					0,
+					Math.round(mouseEvent.pageX - rect.left - (window.pageXOffset || window.scrollX))
+				)
+
+				const y = Math.max(
+					0,
+					Math.round(mouseEvent.pageY - rect.top - (window.pageYOffset || window.scrollY))
+				)
+
+				setPosition({ x, y })
+			} else {
+				setPosition({ x: mouseEvent.clientX, y: mouseEvent.clientY })
+			}
+		}
+
+		const resetMousePosition = () => {
+			setPosition({ x: null, y: null })
+		}
 
 		element.addEventListener("mousemove", setMousePosition)
 		if(options.resetOnExit) {
@@ -59,7 +53,10 @@ export function useMouse<T extends HTMLElement = any>(
 		}
 
 		return () => {
-			removeListeners(element)
+			element.removeEventListener("mousemove", setMousePosition)
+			if(options.resetOnExit) {
+				element.removeEventListener("mouseleave", resetMousePosition)
+			}
 		}
 	}, [options.resetOnExit, usedRef])
 

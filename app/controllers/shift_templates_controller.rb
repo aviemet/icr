@@ -4,7 +4,7 @@ class ShiftTemplatesController < ApplicationController
 
   sortable_fields %w(name)
 
-  strong_params :shift_template, permit: [:name, :client_id, :created_by_id]
+  strong_params :shift_template, permit: [:name, :client_id]
 
   # @route GET /shift_templates (shift_templates)
   def index

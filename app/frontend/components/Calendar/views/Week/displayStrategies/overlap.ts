@@ -51,13 +51,13 @@ export class WeekOverlapStrategy<TEventResources extends EventResources>
 					localizer.isSame(heading.date, segmentEndDay, "day")
 				)
 
-				if(startColumnIndex === - 1) {
+				if(startColumnIndex === -1) {
 					// eslint-disable-next-line no-console
 					console.warn("Segment start date not found in columnHeadings for event", event.id, segment)
 					return null
 				}
 
-				const columnSpan = endColumnIndex === - 1
+				const columnSpan = endColumnIndex === -1
 					? columnHeadings.length - startColumnIndex
 					: endColumnIndex - startColumnIndex + 1
 
@@ -96,7 +96,7 @@ export class WeekOverlapStrategy<TEventResources extends EventResources>
 				localizer.isSame(heading.date, segmentStartDay, "day")
 			)
 
-			if(columnIndex === - 1) {
+			if(columnIndex === -1) {
 				// eslint-disable-next-line no-console
 				console.warn("Segment start date not found in columnHeadings for event", event.id, segment)
 				continue

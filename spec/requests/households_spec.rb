@@ -2,9 +2,51 @@ require "rails_helper"
 require_relative "../support/devise"
 
 RSpec.describe "/households", :inertia do
-  describe "GET /schedule" do
-    login_user(:admin)
+  login_user(:admin)
 
+  describe "GET /index" do
+    it "renders a successful response" do
+      create(:household)
+
+      get households_url
+
+      expect(response).to be_successful
+      expect_inertia.to render_component "Households/Index"
+    end
+  end
+
+  describe "GET /show" do
+    it "renders a successful response" do
+      household = create(:household)
+
+      get household_url(household)
+
+      expect(response).to be_successful
+      expect_inertia.to render_component "Households/Show"
+    end
+  end
+
+  describe "GET /new" do
+    it "renders a successful response" do
+      get new_household_url
+
+      expect(response).to be_successful
+      expect_inertia.to render_component "Households/New"
+    end
+  end
+
+  describe "GET /edit" do
+    it "renders a successful response" do
+      household = create(:household)
+
+      get edit_household_url(household)
+
+      expect(response).to be_successful
+      expect_inertia.to render_component "Households/Edit"
+    end
+  end
+
+  describe "GET /schedule" do
     it "renders a successful response" do
       household = create(:household)
 

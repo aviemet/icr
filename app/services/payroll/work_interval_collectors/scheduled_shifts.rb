@@ -15,6 +15,7 @@ module Payroll
           next if starts_at.blank? || ends_at.blank?
 
           WorkInterval.new(
+            id: shift.id,
             employee_id: shift.employee_id,
             starts_at: starts_at,
             ends_at: ends_at,

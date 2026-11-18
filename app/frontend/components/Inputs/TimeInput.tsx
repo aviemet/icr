@@ -5,6 +5,7 @@ import {
 import dayjs from "dayjs"
 import React from "react"
 
+import { useFormFieldError } from "@/components/Form"
 import { ClockIcon } from "@/components/Icons"
 
 import { InputWrapper } from "./InputWrapper"
@@ -39,9 +40,11 @@ export function TimeInput({
 	value,
 	withDropdown = true,
 	popoverProps,
+	error,
 	ref,
 	...props
 }: TimeInputProps) {
+	const fieldError = useFormFieldError(name)
 	const inputId = id || name
 	const pickerValue = normalizeTimeValue(value)
 
@@ -58,6 +61,7 @@ export function TimeInput({
 				format={ format }
 				leftSection={ <ClockIcon /> }
 				leftSectionPointerEvents="none"
+				error={ error ?? fieldError }
 				hiddenInputProps={ { id: inputId, required } }
 				popoverProps={ { withinPortal: false, ...popoverProps } }
 				{ ...props }

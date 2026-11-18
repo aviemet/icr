@@ -46,7 +46,9 @@ const Login = () => {
 								name="user.email"
 								placeholder={ t("views.devise.shared.email") }
 								autoFocus
-								autoComplete="Email"
+								type="email"
+								autoComplete="username"
+								disableAutofill={ false }
 								required
 								pattern=".+@.+\..+"
 							/>

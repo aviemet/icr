@@ -28,9 +28,6 @@ export function ShiftTemplateForm({ method = "post", to, shift_template, ...prop
 				<Grid.Col>
 					<TextInput name="shift_template.client" label="Client" />
 				</Grid.Col>
-				<Grid.Col>
-					<TextInput name="shift_template.created_by" label="Created_by" />
-				</Grid.Col>
 
 				<Grid.Col>
 					<Submit>{ shift_template.id ? "Update" : "Create" } ShiftTemplate</Submit>

@@ -9,7 +9,7 @@ import { coerceArray } from "@/lib"
 import { ITabsComponentProps } from "."
 
 export function UrlTabs({ children, onChange, defaultValue, dependencies, ...props }: ITabsComponentProps) {
-	const navigateTab = (value: string | null, options?: VisitOptions) => {
+	const navigateTab = useCallback((value: string | null, options?: VisitOptions) => {
 		let only: string[] = []
 		if(value && dependencies?.[value]) {
 			only = coerceArray(dependencies[value])
@@ -21,15 +21,14 @@ export function UrlTabs({ children, onChange, defaultValue, dependencies, ...pro
 			data: { tab: value },
 			only,
 		}, options || {}))
-	}
+	}, [dependencies])
 
 	const activeTab = useCallback(() => {
 		const url = new URL(window.location.href)
 
 		return url.searchParams.get("tab")
-	}, [window.location.href])
+	}, [])
 
-	// Handle direct navigation to tabbed page
 	useEffect(() => {
 		if(!activeTab() && defaultValue) {
 			navigateTab(defaultValue, { replace: true })
@@ -39,7 +38,7 @@ export function UrlTabs({ children, onChange, defaultValue, dependencies, ...pro
 				document.removeEventListener("inertia:navigate", reloadActiveTab)
 			})
 		}
-	}, [])
+	}, [activeTab, defaultValue, navigateTab])
 
 	const handleTabChange = (value: string | null) => {
 		navigateTab(value || activeTab())

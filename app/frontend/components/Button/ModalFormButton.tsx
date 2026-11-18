@@ -1,10 +1,10 @@
+import { type FormDataConvertible } from "@inertiajs/core"
 import { useMantineTheme, type ModalProps, type ButtonProps } from "@mantine/core"
 import axios, { type Method } from "axios"
 import React from "react"
-import { type FormDataConvertible } from "@inertiajs/core"
 
-import { type FormProps } from "@/components/Form"
 import { Modal } from "@/components"
+import { type FormProps } from "@/components/Form"
 
 import { Button } from "./index"
 
@@ -34,7 +34,11 @@ function buildAxiosSubmitWith(
 		if(typeof action !== "string" || !action) return
 		const rawMethod = (form.props.method ?? "post").toString().toLowerCase()
 		const httpMethod = methodToAxios[rawMethod] ?? "post"
-		const response = await axios[httpMethod](action, { ...data, redirect: false })
+		const response = await axios.request({
+			url: action,
+			method: httpMethod,
+			data: { ...data, redirect: false },
+		})
 		if((response.statusText === "OK" || response.statusText === "Created") && onSuccess) {
 			onSuccess(response.data)
 		}

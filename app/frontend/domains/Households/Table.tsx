@@ -4,11 +4,10 @@ import { Routes } from "@/lib"
 
 interface HouseholdTableProps {
 	records: Schema.HouseholdsIndex[]
-	pagination: Schema.Pagination
 	model: string
 }
 
-export function HouseholdTable({ records, pagination, model }: HouseholdTableProps) {
+export function HouseholdTable({ records, model }: HouseholdTableProps) {
 	const columns: TableColumn<Schema.HouseholdsIndex>[] = [
 		{
 			accessor: "name",
@@ -47,7 +46,6 @@ export function HouseholdTable({ records, pagination, model }: HouseholdTablePro
 		<Table.DataTable
 			columns={ columns }
 			records={ records }
-			pagination={ pagination }
 			model={ model }
 			selectable
 		/>

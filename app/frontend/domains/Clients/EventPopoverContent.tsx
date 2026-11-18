@@ -1,11 +1,10 @@
-import { useModals } from "@mantine/modals"
 import clsx from "clsx"
 import { useState } from "react"
 
-import { ActionIcon, Box, Group, Link, Stack, Text, Title } from "@/components"
+import { Box, Group, Link, Stack, Text, Title } from "@/components"
+import { DeleteButton, EditButton } from "@/components/Button"
 import { BaseCalendarEvent } from "@/components/Calendar"
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
-import { EditIcon, TrashIcon } from "@/components/Icons"
 import { EventForm } from "@/domains/Clients/schedule/EventForm"
 import { Routes } from "@/lib"
 import { useDeleteClientCalendarEvent } from "@/queries/clients"
@@ -35,8 +34,6 @@ function isClientResource(value: unknown): value is Schema.ClientsPersisted {
 export function EventPopoverContent({ event, localizer, primaryResource = "employee" }: EventPopoverContentProps) {
 	const [editing, setEditing] = useState(false)
 
-	const modals = useModals()
-
 	const color = event.color || "#000000"
 
 	const employee = isEmployeeResource(event.resources?.employee) ? event.resources?.employee : undefined
@@ -59,20 +56,6 @@ export function EventPopoverContent({ event, localizer, primaryResource = "emplo
 	const deleteEvent = useDeleteClientCalendarEvent({
 		params: { slug: client?.slug ?? "", id: String(event.id) },
 	})
-
-	const handleDeleteClick = () => {
-		modals.openConfirmModal({
-			title: "Delete shift",
-			children: (
-				<Text size="sm">
-					This shift will be permanently removed. This cannot be undone.
-				</Text>
-			),
-			labels: { confirm: "Delete", cancel: "Cancel" },
-			confirmProps: { color: "red" },
-			onConfirm: () => deleteEvent.mutate(),
-		})
-	}
 
 	if(editing && client) {
 		return (
@@ -101,12 +84,11 @@ export function EventPopoverContent({ event, localizer, primaryResource = "emplo
 				</Group>
 				{ client && (
 					<Group gap="xs">
-						<ActionIcon variant="subtle" onClick={ () => setEditing(true) }>
-							<EditIcon />
-						</ActionIcon>
-						<ActionIcon variant="subtle" color="gray.9" onClick={ handleDeleteClick }>
-							<TrashIcon />
-						</ActionIcon>
+						<EditButton label="shift" onClick={ () => setEditing(true) } />
+						<DeleteButton
+							label="shift"
+							onDelete={ () => deleteEvent.mutate() }
+						/>
 					</Group>
 				) }
 			</Group>

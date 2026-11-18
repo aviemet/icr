@@ -120,7 +120,7 @@ export default function Dashboard({ dashboard }: DashboardPageProps) {
 										) }
 								</Stack>
 								<Group mt="md">
-									<Link href={ Routes.timesheets() }>{ t("views.dashboard.schedule.view") }</Link>
+									<Link href={ Routes.payrollPeriods() }>{ t("views.dashboard.schedule.view") }</Link>
 									<Link href={ Routes.newTimesheet() }>{ t("views.dashboard.schedule.add") }</Link>
 								</Group>
 							</Stack>
@@ -170,7 +170,7 @@ export default function Dashboard({ dashboard }: DashboardPageProps) {
 									<Text color="dimmed">{ t("views.dashboard.time.total_hours_week") }</Text>
 									<Text color="blue">{ t("views.dashboard.time.pending_timesheets", { count: dashboard.pending_timesheet_count }) }</Text>
 								</div>
-								<Link href={ Routes.timesheets() }>{ t("views.dashboard.time.view") }</Link>
+								<Link href={ Routes.payrollPeriods() }>{ t("views.dashboard.time.view") }</Link>
 							</Stack>
 						</Card>
 					</Grid.Col>

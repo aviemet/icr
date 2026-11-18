@@ -1,7 +1,5 @@
 import { css } from "@linaria/core"
 
-import { vars } from "@/lib/theme"
-
 export const tabs = css`
 	height: 100%;
 

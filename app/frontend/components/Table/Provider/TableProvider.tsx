@@ -1,44 +1,37 @@
 import React, { useState, useCallback } from "react"
 
-import { createContext } from "@/lib/hooks"
+import {
+	TableContextProvider,
+	type TableContextColumn,
+} from "./TableContext"
 
-interface TableContextValue<T extends Record<string, unknown> = Record<string, unknown>> {
-	model?: string
-	searching: boolean
-	setSearching: (searching: boolean) => void
-	selectable: boolean
-	selectedRecordIds: string[]
-	setSelectedRecordIds: (recordIds: string[]) => void
-	records?: readonly T[]
-	columns?: Array<{ accessor: string, title: string }>
-	pagination?: Schema.Pagination
-}
-
-const [useTableContext, TableContextProvider] = createContext<TableContextValue>()
-export { useTableContext }
-
-interface TableProviderProps<T extends Record<string, unknown> = Record<string, unknown>> {
+interface TableProviderProps {
 	children: React.ReactNode
 	model?: string
 	selectable?: boolean
-	records?: readonly T[]
-	columns?: Array<{ accessor: string, title: string }>
+	columns?: TableContextColumn[]
+	columnHide?: Record<string, boolean>
 	pagination?: Schema.Pagination
 }
 
-export function TableProvider<T extends Record<string, unknown> = Record<string, unknown>>({
+export function TableProvider({
 	children,
 	model,
 	selectable = false,
-	records,
-	columns,
+	columns: columnsProp,
+	columnHide = {},
 	pagination,
-}: TableProviderProps<T>) {
+}: TableProviderProps) {
 	const [searching, setSearching] = useState(false)
 	const [selectedRecordIds, setSelectedRecordIds] = useState<string[]>([])
+	const [columns, setColumnsState] = useState<TableContextColumn[]>(columnsProp ?? [])
 
 	const handleSetSearching = useCallback((value: boolean) => {
 		setSearching(value)
+	}, [])
+
+	const setColumns = useCallback((nextColumns: TableContextColumn[]) => {
+		setColumnsState(nextColumns)
 	}, [])
 
 	return (
@@ -49,8 +42,9 @@ export function TableProvider<T extends Record<string, unknown> = Record<string,
 			selectable,
 			selectedRecordIds,
 			setSelectedRecordIds,
-			records,
 			columns,
+			setColumns,
+			columnHide,
 			pagination,
 		} }>
 			{ children }

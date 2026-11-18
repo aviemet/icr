@@ -33,7 +33,6 @@ class Employee::EmployeesTraining < ApplicationRecord
     },
   )
 
-  tracked
   resourcify
 
   belongs_to :employee

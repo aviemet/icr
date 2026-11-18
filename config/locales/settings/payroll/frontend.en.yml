@@ -1,0 +1,24 @@
+---
+en:
+  views:
+    settings:
+      payroll:
+        overtime_exemptions:
+          title: Overtime exemptions
+          description: Shifts that match these rules are excluded from overtime calculation.
+          list_title: Existing exemptions
+          empty: No overtime exemptions yet.
+          name: Name
+          active: Active
+          inactive: Inactive
+          edit: Edit
+          cancel_edit: Cancel
+          form_title_create: New overtime exemption
+          form_title_edit: Edit overtime exemption
+          criteria_groups: Criteria Groups
+          criteria_groups_help: Shifts matching ANY of these criteria groups will be exempt from overtime
+          add_criteria_group: Add Criteria Group
+          remove_group: Remove Group
+          add_criterion: Add criterion
+          save_create: Save Exemption
+          save_update: Update Exemption

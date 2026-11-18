@@ -1,26 +1,10 @@
-import { useState, useEffect } from "react"
-
 export function useCheckboxState(length: number, selected: number) {
-	const [allChecked, setAllChecked] = useState(false)
-	const [indeterminate, setIndeterminate] = useState(false)
+	if(length === 0) {
+		return { allChecked: false, indeterminate: false }
+	}
 
-	// Set the status of the table head checkbox
-	useEffect(() => {
-		if(length === 0) return
-
-		switch(selected) {
-			case length: // All checked
-				setAllChecked(true)
-				setIndeterminate(false)
-				break
-			case 0: // None checked
-				setAllChecked(false)
-				setIndeterminate(false)
-				break
-			default: // Some checked
-				if(!indeterminate) setIndeterminate(true)
-		}
-	}, [selected])
+	const allChecked = selected === length
+	const indeterminate = selected > 0 && selected < length
 
 	return { allChecked, indeterminate }
 }

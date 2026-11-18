@@ -1,14 +1,31 @@
-import { Group, Title, Menu, Page, Section, Table } from "@/components"
+import { Badge, Group, Stack, Text, Title, Menu, Page, Section, Table } from "@/components"
 import { EmployeeTable } from "@/domains/Employees/Table"
+import { tableRows, type JobTitleFormData, type Permissions } from "@/domains/Settings/JobTitles/Form/formData"
 import { Routes, withLayout } from "@/lib"
 
 interface ShowJobTitleProps {
-	job_title: Schema.JobTitlesShow
+	job_title: Schema.EmployeeJobTitlesShow
+	permissions: JobTitleFormData["permissions"]
 	employees: Schema.EmployeesIndex[]
 }
 
-const ShowJobTitle = ({ job_title, employees }: ShowJobTitleProps) => {
-	const title = job_title.name || "Job Title"
+const actionLabels: Record<keyof Permissions, string> = {
+	index: "List",
+	show: "View",
+	create: "Create",
+	update: "Edit",
+	delete: "Delete",
+}
+
+function grantedActions(resourcePermissions: Permissions) {
+	return (Object.keys(actionLabels) as (keyof Permissions)[]).filter(
+		(action) => resourcePermissions[action]
+	)
+}
+
+const ShowJobTitle = ({ job_title, permissions, employees }: ShowJobTitleProps) => {
+	const title = String(job_title.name || "Job Title")
+	const description = typeof job_title.description === "string" ? job_title.description : null
 
 	return (
 		<Page title={ title } breadcrumbs={ [
@@ -22,24 +39,51 @@ const ShowJobTitle = ({ job_title, employees }: ShowJobTitleProps) => {
 					<Menu position="bottom-end">
 						<Menu.Target />
 						<Menu.Dropdown>
-							<Menu.Link href={ Routes.editSettingsJobTitle(job_title.slug) }>
+							<Menu.Link href={ Routes.editSettingsJobTitle(String(job_title.slug)) }>
 								Edit Job Title
 							</Menu.Link>
 						</Menu.Dropdown>
 					</Menu>
 				</Group>
 
+				{ description && (
+					<Text mt="sm">{ description }</Text>
+				) }
+
+				<Stack gap="sm" mt="lg">
+					<Title order={ 4 }>Permissions</Title>
+					{ permissions.admin
+						? (
+							<Text size="sm">All listed actions granted.</Text>
+						)
+						: (
+							tableRows.map((row) => {
+								const actions = grantedActions(permissions[row.model])
+								if(actions.length === 0) return null
+
+								return (
+									<Group key={ row.model } gap="xs" align="center">
+										<Text size="sm" fw={ 600 } w={ 140 }>{ row.label }</Text>
+										{ actions.map((action) => (
+											<Badge key={ `${row.model}-${action}` } variant="light">
+												{ actionLabels[action] }
+											</Badge>
+										)) }
+									</Group>
+								)
+							})
+						) }
+				</Stack>
 
 				<Table.Section>
-					<Table.TableProvider
+					<Table.Provider
 						selectable
 						model="employees"
-						rows={ employees }
 					>
-						<EmployeeTable />
+						<EmployeeTable records={ employees } model="employees" />
 
 						<Table.Pagination />
-					</Table.TableProvider>
+					</Table.Provider>
 				</Table.Section>
 			</Section>
 		</Page>

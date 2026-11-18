@@ -1,18 +1,19 @@
 import { Title, Page, Section } from "@/components"
-import { JobTitleForm } from "@/domains/Settings/JobTitles/Form"
+import { JobTitleForm, type JobTitleFormProps } from "@/domains/Settings/JobTitles/Form"
 import { Routes, withLayout } from "@/lib"
 
 interface EditJobTitleProps {
-	job_title: Schema.JobTitlesEdit
+	job_title: Schema.EmployeeJobTitlesEdit
+	permissions: NonNullable<JobTitleFormProps["permissions"]>
 }
 
-const EditJobTitle = ({ job_title }: EditJobTitleProps) => {
-	const title = `Edit ${job_title.name || "Job Title"}`
+const EditJobTitle = ({ job_title, permissions }: EditJobTitleProps) => {
+	const title = `Edit ${String(job_title.name || "Job Title")}`
 
 	return (
 		<Page title={ title } breadcrumbs={ [
 			{ title: "Job Titles", href: Routes.settingsJobTitles() },
-			{ title: "Job Title", href: Routes.settingsJobTitle(job_title.id) },
+			{ title: "Job Title", href: Routes.settingsJobTitle(String(job_title.slug)) },
 			{ title, href: window.location.href },
 		] }>
 			<Section>
@@ -20,8 +21,9 @@ const EditJobTitle = ({ job_title }: EditJobTitleProps) => {
 
 				<JobTitleForm
 					method="put"
-					to={ Routes.settingsJobTitle(job_title.slug) }
+					to={ Routes.settingsJobTitle(String(job_title.slug)) }
 					job_title={ job_title }
+					permissions={ permissions }
 				/>
 			</Section>
 		</Page>

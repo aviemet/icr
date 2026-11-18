@@ -11,7 +11,6 @@ class CreateTimesheets < ActiveRecord::Migration[7.2]
       t.jsonb :approval_snapshot, null: false, default: {}
 
       t.date :approved_at
-      t.belongs_to :approved_by, null: true, foreign_key: { to_table: :users }, type: :uuid
 
       t.belongs_to :pay_period, null: false, foreign_key: true, type: :uuid
       t.belongs_to :employee, null: false, foreign_key: true, type: :uuid

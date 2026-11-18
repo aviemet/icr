@@ -16,6 +16,7 @@ interface InertiaLinkProps extends AnchorLinkProps {
 	visit?: Omit<Visit, "method">
 	buttonProps?: ButtonProps
 	disabled?: boolean
+	onClick?: React.MouseEventHandler<Element>
 }
 
 export function InertiaLink({
@@ -27,12 +28,15 @@ export function InertiaLink({
 	buttonProps,
 	style,
 	disabled,
+	onClick,
 	ref,
 	...props
 }: InertiaLinkProps) {
-	const handleHTTP = (e: React.MouseEvent<Element, MouseEvent>) => {
-		e.preventDefault()
+	const handleHTTP = (event: React.MouseEvent<Element, MouseEvent>) => {
+		onClick?.(event)
+		if(event.defaultPrevented) return
 
+		event.preventDefault()
 		router.visit(href, {
 			method,
 			...visit,
@@ -50,12 +54,12 @@ export function InertiaLink({
 	if((method !== undefined && method !== "get")) {
 		return <Button
 			ref={ ref }
-			component={ AnchorLink }
 			href={ processedHref }
 			onClick={ handleHTTP }
 			style={ [{ "&:hover": { textDecoration: "none" } }, style] }
 			c="bright"
 			{ ...mergedButtonProps }
+			component={ AnchorLink }
 		>
 			{ children }
 		</Button>
@@ -64,17 +68,25 @@ export function InertiaLink({
 	if(as === "button") {
 		return <Button
 			ref={ ref }
-			component={ AnchorLink }
 			href={ processedHref }
+			onClick={ onClick }
 			style={ [{ "&:hover": { textDecoration: "none" } }, style] }
 			c="bright"
 			{ ...mergedButtonProps }
+			component={ AnchorLink }
 		>
 			{ children }
 		</Button>
 	}
 
 	return (
-		<AnchorLink href={ processedHref } ref={ ref } { ...props }>{ children }</AnchorLink>
+		<AnchorLink
+			href={ processedHref }
+			ref={ ref }
+			onClick={ onClick }
+			{ ...props }
+		>
+			{ children }
+		</AnchorLink>
 	)
 }
