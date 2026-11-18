@@ -5,11 +5,10 @@ import { Routes } from "@/lib"
 
 interface ClientTableProps {
 	records: Schema.ClientsIndex[]
-	pagination: Schema.Pagination
 	model: string
 }
 
-export function ClientTable({ records, pagination, model }: ClientTableProps) {
+export function ClientTable({ records, model }: ClientTableProps) {
 	const columns: TableColumn<Schema.ClientsIndex>[] = [
 		{
 			accessor: "people.first_name",
@@ -52,7 +51,6 @@ export function ClientTable({ records, pagination, model }: ClientTableProps) {
 		<Table.DataTable
 			columns={ columns }
 			records={ records }
-			pagination={ pagination }
 			model={ model }
 			selectable
 		/>

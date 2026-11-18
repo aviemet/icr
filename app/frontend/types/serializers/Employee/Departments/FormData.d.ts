@@ -4,10 +4,10 @@ export {}
 declare global {
   namespace Schema {
     interface EmployeeDepartmentsFormData {
-      id?: unknown
-      slug?: unknown
-      description: unknown
-      name: unknown
+      id?: string
+      description?: string
+      name: string
+      slug?: string
     }
   }
 }

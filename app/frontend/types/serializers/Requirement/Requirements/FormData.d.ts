@@ -4,12 +4,12 @@ export {}
 declare global {
   namespace Schema {
     interface RequirementRequirementsFormData {
-      id?: unknown
-      description: unknown
-      name: unknown
-      requirement_type_id: unknown
-      scope_id: unknown
-      scope_type: unknown
+      id?: string
+      description?: string
+      name?: string
+      requirement_type_id: string
+      scope_id?: number
+      scope_type?: string
     }
   }
 }

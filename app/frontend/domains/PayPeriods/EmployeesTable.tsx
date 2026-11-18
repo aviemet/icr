@@ -23,7 +23,6 @@ interface EmployeesTableProps {
 	timesheetIdsByEmployee: Record<string, string>
 	approvedAtByEmployee: Record<string, string>
 	employeeExceptions: Record<string, EmployeeExceptionsMap>
-	pagination: Schema.Pagination
 }
 
 export function EmployeesTable({
@@ -34,7 +33,6 @@ export function EmployeesTable({
 	timesheetIdsByEmployee,
 	approvedAtByEmployee,
 	employeeExceptions,
-	pagination,
 }: EmployeesTableProps) {
 	const { t } = useTranslation()
 	const noValue = t("views.timesheets.index.no_value")
@@ -152,7 +150,6 @@ export function EmployeesTable({
 		<Table.DataTable
 			columns={ columns }
 			records={ employees }
-			pagination={ pagination }
 			model="employees"
 			selectable
 		/>

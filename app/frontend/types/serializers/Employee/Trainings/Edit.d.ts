@@ -4,14 +4,14 @@ export {}
 declare global {
   namespace Schema {
     interface EmployeeTrainingsEdit {
-      id: unknown
-      active_on: unknown
-      created_at: unknown
-      description: unknown
-      estimated_minutes: unknown
-      inactive_on: unknown
-      name: unknown
-      updated_at: unknown
+      id: string
+      active_on?: Date
+      created_at: Date
+      description?: string
+      estimated_minutes?: number
+      inactive_on?: Date
+      name?: string
+      updated_at: Date
     }
   }
 }

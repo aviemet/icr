@@ -14,6 +14,8 @@
 #  index_departments_on_slug  (slug) UNIQUE
 #
 class Employee::DepartmentSerializer < ApplicationSerializer
+  object_as :department, model: "Employee::Department"
+
   identifier :slug
 
   attributes(

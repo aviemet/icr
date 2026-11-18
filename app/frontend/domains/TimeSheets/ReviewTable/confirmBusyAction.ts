@@ -1,5 +1,5 @@
-import type { useModals } from "@mantine/modals"
-import type { ReactNode } from "react"
+import { type useModals } from "@mantine/modals"
+import { type ReactNode } from "react"
 
 type ModalsClient = ReturnType<typeof useModals>
 

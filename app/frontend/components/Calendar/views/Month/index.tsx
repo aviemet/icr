@@ -1,6 +1,6 @@
 import clsx from "clsx"
 import { chunk } from "es-toolkit"
-import { CSSProperties, useMemo, useRef, useState } from "react"
+import { type CSSProperties, type ReactElement, useMemo, useRef, useState } from "react"
 
 import { useCalendarContext, EventResources } from "@/components/Calendar"
 import { calculateDailyHours } from "@/components/Calendar/lib/calculateDailyHours"
@@ -14,14 +14,14 @@ import {
 import { DailyTotals } from "./components/DailyTotals"
 import { DaysHeading } from "./components/DaysHeading"
 import { EventWrapper, MonthEvent } from "./components/Event"
+import { ShowMore } from "./components/Event/ShowMore"
 import * as classes from "./MonthView.css"
 import { useDynamicHoverStyles } from "./useDynamicHoverStyles"
+import { CalendarTransitionContainer } from "../../lib/CalendarTransitionContainer"
 import {
 	useDisplayStrategy,
 	GridDisplayProperties,
 } from "../../lib/displayStrategies"
-import { ShowMore } from "./components/Event/ShowMore"
-import { CalendarTransitionContainer } from "../../lib/CalendarTransitionContainer"
 
 interface MonthViewProps<TEventResources extends EventResources> extends BaseViewProps<TEventResources, "month"> {
 	showDailyTotals?: boolean
@@ -119,8 +119,8 @@ const MonthViewComponent = <TEventResources extends EventResources>({
 							const dayEvents = eventsByDay?.get(dayMapKey)
 
 							if(dayEvents) {
-								const visibleEvents: JSX.Element[] = []
-								const overflowEvents: JSX.Element[] = []
+								const visibleEvents: ReactElement[] = []
+								const overflowEvents: ReactElement[] = []
 
 								// Build and sort each event based on maxEvents prop
 								dayEvents.forEach(({ event, displayProperties }, dayEventsIndex) => {
@@ -241,7 +241,7 @@ export const MonthView = createViewComponent<EventResources, "month">(MonthViewC
 			case NAVIGATION.today:
 				return new Date()
 			case NAVIGATION.previous:
-				return localizer.add(date, - 1, "month")
+				return localizer.add(date, -1, "month")
 			case NAVIGATION.next:
 				return localizer.add(date, 1, "month")
 			default:

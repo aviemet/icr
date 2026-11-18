@@ -23,6 +23,7 @@ class Settings::JobTitlesController < ApplicationController
 
     render inertia: "Settings/JobTitles/Show", props: {
       job_title: -> { job_title.render(:show) },
+      permissions: -> { job_title.permissions_hash },
       employees: -> { job_title.active_employees.render(:index) }
     }
   end
@@ -32,7 +33,8 @@ class Settings::JobTitlesController < ApplicationController
     authorize Employee::JobTitle.new
 
     render inertia: "Settings/JobTitles/New", props: {
-      job_title: Employee::JobTitle.new.render(:form_data)
+      job_title: Employee::JobTitle.new.render(:form_data),
+      permissions: Employee::JobTitle::PermissionsCatalog.empty_permissions
     }
   end
 
@@ -41,7 +43,8 @@ class Settings::JobTitlesController < ApplicationController
     authorize job_title
 
     render inertia: "Settings/JobTitles/Edit", props: {
-      job_title: -> { job_title.render(:edit) }
+      job_title: -> { job_title.render(:edit) },
+      permissions: -> { job_title.permissions_hash }
     }
   end
 
@@ -50,10 +53,12 @@ class Settings::JobTitlesController < ApplicationController
     authorize Employee::JobTitle.new
 
     if job_title.save
-      redirect_to settings_job_titles_path, notice: "Job title created"
+      job_title.sync_permissions!(permissions_params)
+      redirect_to settings_job_titles_path, notice: t("templates.controllers.notices.created", model: "Job title")
     else
       render inertia: "Settings/JobTitles/New", props: {
-        job_title: job_title.render(:form_data)
+        job_title: job_title.render(:form_data),
+        permissions: permissions_params.presence || Employee::JobTitle::PermissionsCatalog.empty_permissions
       }
     end
   end
@@ -64,10 +69,12 @@ class Settings::JobTitlesController < ApplicationController
     authorize job_title
 
     if job_title.update(job_title_params)
-      redirect_to settings_job_titles_path, notice: "Job title updated"
+      job_title.sync_permissions!(permissions_params)
+      redirect_to settings_job_titles_path, notice: t("templates.controllers.notices.updated", model: "Job title")
     else
       render inertia: "Settings/JobTitles/Edit", props: {
-        job_title: job_title.render(:edit)
+        job_title: job_title.render(:edit),
+        permissions: permissions_params.presence || job_title.permissions_hash
       }
     end
   end
@@ -76,6 +83,18 @@ class Settings::JobTitlesController < ApplicationController
   def destroy
     authorize job_title
     job_title.destroy!
-    redirect_to settings_job_titles_path, notice: "Job title deleted"
+    redirect_to settings_job_titles_path, notice: t("templates.controllers.notices.destroyed", model: "Job title")
+  end
+
+  private
+
+  def permissions_params
+    permitted = params.fetch(:permissions, {}).permit(
+      :admin,
+      **Employee::JobTitle::PermissionsCatalog.resource_keys.index_with do
+        [:index, :show, :create, :update, :delete]
+      end,
+    )
+    permitted.to_h
   end
 end

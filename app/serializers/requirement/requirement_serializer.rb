@@ -20,7 +20,7 @@
 #  fk_rails_...  (requirement_type_id => requirement_types.id)
 #
 class Requirement::RequirementSerializer < ::ApplicationSerializer
-  object_as :requirement
+  object_as :requirement, model: "Requirement::Requirement"
 
   attributes(
     :name,

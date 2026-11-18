@@ -16,11 +16,11 @@ const EmployeeInterviewsIndex = ({ employee_interviews, pagination }: EmployeeIn
 			model="employee_interviews"
 			pagination={ pagination }
 			deleteRoute={ Routes.interviews() }
-			menuOptions={ [
+			actions={ [
 				{ label: "New Interview", href: Routes.newInterview(), icon: <NewIcon /> },
 			] }
 		>
-			<EmployeeInterviewTable records={ employee_interviews } pagination={ pagination } model="employee_interviews" />
+			<EmployeeInterviewTable records={ employee_interviews } model="employee_interviews" />
 		</IndexPageTemplate>
 	)
 }

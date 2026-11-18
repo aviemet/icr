@@ -620,31 +620,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_16_193000) do
     t.index ["user_id"], name: "index_people_on_user_id"
   end
 
-  create_table "permission_assignments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "permission_group_id", null: false
-    t.string "permissionable_type", null: false
-    t.uuid "permissionable_id", null: false
-    t.datetime "starts_at"
-    t.datetime "ends_at"
-    t.jsonb "conditions"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["permission_group_id"], name: "index_permission_assignments_on_permission_group_id"
-    t.index ["permissionable_type", "permissionable_id"], name: "index_permission_assignments_on_permissionable"
-  end
-
-  create_table "permission_groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name"
-    t.text "description"
-    t.jsonb "permissions"
-    t.string "slug"
-    t.integer "precedence"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_permission_groups_on_name", unique: true
-    t.index ["slug"], name: "index_permission_groups_on_slug", unique: true
-  end
-
   create_table "pg_search_documents", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "content"
     t.text "label"
@@ -932,7 +907,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_16_193000) do
   add_foreign_key "payroll_adjustments", "timesheets"
   add_foreign_key "payroll_adjustments", "users"
   add_foreign_key "people", "users"
-  add_foreign_key "permission_assignments", "permission_groups"
   add_foreign_key "phones", "categories"
   add_foreign_key "phones", "contacts"
   add_foreign_key "prescriptions", "clients"

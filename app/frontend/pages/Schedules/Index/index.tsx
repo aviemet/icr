@@ -15,7 +15,7 @@ const Index = ({ clients, pagination }: ScheduleIndexProps) => {
 			pagination={ pagination }
 			deleteRoute={ Routes.clients() }
 		>
-			<ScheduleTable records={ clients } pagination={ pagination } model="clients" />
+			<ScheduleTable records={ clients } model="clients" />
 		</IndexPageTemplate>
 	)
 }

@@ -15,11 +15,11 @@ const DoctorsIndex = ({ doctors, pagination }: DoctorIndexProps) => {
 			model="doctors"
 			pagination={ pagination }
 			deleteRoute={ Routes.doctors() }
-			menuOptions={ [
+			actions={ [
 				{ label: "New Doctor", href: Routes.newDoctor(), icon: <NewIcon /> },
 			] }
 		>
-			<DoctorTable records={ doctors } pagination={ pagination } model="doctors" />
+			<DoctorTable records={ doctors } model="doctors" />
 		</IndexPageTemplate>
 	)
 }

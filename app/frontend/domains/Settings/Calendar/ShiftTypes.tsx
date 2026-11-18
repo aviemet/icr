@@ -12,6 +12,7 @@ import {
 	Table,
 	Text,
 	Title,
+	type TableColumn,
 } from "@/components"
 import { DeleteButton } from "@/components/Button"
 import { PlusIcon } from "@/components/Icons"
@@ -49,6 +50,53 @@ export function ShiftTypes({ shift_types }: ShiftTypesProps) {
 		})
 	}
 
+	const columns: TableColumn<Schema.Category>[] = [
+		{
+			accessor: "name",
+			title: "Shift Type",
+			render: (shiftType) => (
+				<Group gap="sm">
+					<Text fw={ 500 }>{ shiftType.name }</Text>
+					{ Boolean(shiftType.system) && (
+						<Badge size="sm" variant="light" color="gray">
+							System
+						</Badge>
+					) }
+				</Group>
+			),
+		},
+		{
+			accessor: "actions",
+			title: "Actions",
+			textAlign: "right",
+			width: 120,
+			render: (shiftType) => {
+				const slug = shiftType.slug || shiftType.id
+				const isSystem = Boolean(shiftType.system)
+
+				if(isSystem) {
+					return (
+						<Text size="sm" c="dimmed">
+							Protected
+						</Text>
+					)
+				}
+
+				return (
+					<DeleteButton
+						label={ shiftType.name }
+						disabled={ !slug || deleteCategory.isPending }
+						loading={ deleteCategory.isPending }
+						onDelete={ () => {
+							if(!slug) return
+							handleDelete(slug)
+						} }
+					/>
+				)
+			},
+		},
+	]
+
 	return (
 		<Stack gap="xl">
 			<Stack gap="md">
@@ -66,71 +114,20 @@ export function ShiftTypes({ shift_types }: ShiftTypesProps) {
 					className={ classes.panel }
 					style={ { overflow: "hidden" } }
 				>
-					<Table
-						className={ classes.table }
-						horizontalSpacing="md"
-						verticalSpacing="sm"
-						withRowBorders
-					>
-						<Table.Head>
-							<Table.Row>
-								<Table.HeadCell>Shift Type</Table.HeadCell>
-								<Table.HeadCell style={ { width: 120, textAlign: "right" } }>
-									Actions
-								</Table.HeadCell>
-							</Table.Row>
-						</Table.Head>
-						<Table.Body>
-							{ shift_types.length === 0 && (
-								<Table.Row>
-									<Table.Cell colSpan={ 2 }>
-										<Text size="sm" c="dimmed">
-											No shift types yet. Add one below.
-										</Text>
-									</Table.Cell>
-								</Table.Row>
+					<Table.Provider>
+						<Table.DataTable
+							classNames={ { table: classes.table } }
+							columns={ columns }
+							records={ shift_types }
+							selectable={ false }
+							height="auto"
+							emptyState={ (
+								<Text size="sm" c="dimmed">
+									No shift types yet. Add one below.
+								</Text>
 							) }
-
-							{ shift_types.map(shiftType => {
-								const slug = shiftType.slug || shiftType.id
-								const isSystem = Boolean(shiftType.system)
-
-								return (
-									<Table.Row key={ slug || shiftType.name }>
-										<Table.Cell>
-											<Group gap="sm">
-												<Text fw={ 500 }>{ shiftType.name }</Text>
-												{ isSystem && (
-													<Badge size="sm" variant="light" color="gray">
-														System
-													</Badge>
-												) }
-											</Group>
-										</Table.Cell>
-										<Table.Cell style={ { textAlign: "right" } }>
-											{ isSystem
-												? (
-													<Text size="sm" c="dimmed">
-														Protected
-													</Text>
-												)
-												: (
-													<DeleteButton
-														label={ shiftType.name }
-														disabled={ !slug || deleteCategory.isPending }
-														loading={ deleteCategory.isPending }
-														onDelete={ () => {
-															if(!slug) return
-															handleDelete(slug)
-														} }
-													/>
-												) }
-										</Table.Cell>
-									</Table.Row>
-								)
-							}) }
-						</Table.Body>
-					</Table>
+						/>
+					</Table.Provider>
 				</Paper>
 			</Stack>
 

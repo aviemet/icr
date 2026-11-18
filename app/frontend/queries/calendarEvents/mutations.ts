@@ -23,7 +23,7 @@ export const useCreateCalendarEvent: ReactMutationFunction<Schema.CalendarEvents
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async(data) => {
+		mutationFn: async (data) => {
 			const res = await axios.post(Routes.apiCalendarEvents(), data)
 			assertStatus(res, HTTP_STATUS.CREATED)
 			return res.data
@@ -50,7 +50,7 @@ export const useUpdateCalendarEvent: ReactMutationFunction<Schema.CalendarEvents
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async(data) => {
+		mutationFn: async (data) => {
 			const res = await axios.patch(Routes.apiCalendarEvent(options.params.id), data)
 			assertStatus(res, [HTTP_STATUS.OK, HTTP_STATUS.CREATED])
 			return res.data
@@ -68,7 +68,7 @@ export const useDeleteCalendarEvent: ReactMutationFunction<void, void, { id: str
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async() => {
+		mutationFn: async () => {
 			const res = await axios.delete(Routes.apiCalendarEvent(options.params.id))
 			assertStatus(res, HTTP_STATUS.NO_CONTENT)
 		},

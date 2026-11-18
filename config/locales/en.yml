@@ -45,7 +45,6 @@ en:
   payroll:
     shift_exceptions:
       overlap: Overlaps with shift on %{time}
-  permission_group: Permission Group
   pundit:
     not_authorized: You are not authorized to access this page.
   role: Role

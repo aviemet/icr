@@ -1,14 +1,14 @@
 class Calendar::EventPolicy < ApplicationPolicy
   class Scope < ApplicationPolicy::Scope
     def resolve
-      return scope.all if user.has_role?(:admin)
+      return scope.all if admin?
 
       case user.person&.agency_role
       when "Employee"
-        if user.person.employee&.job_title&.has_role?(:index, Calendar::Event)
+        if job_title_allows?(:index, Calendar::Event)
           scope.all
         else
-          employee_id = user.person.employee.id
+          employee_id = employee.id
           shift_sql = scope.joins(:shift).where(shifts: { employee_id: employee_id }).select(:id).to_sql
           participant_sql = scope.joins(:event_participants)
             .joins("INNER JOIN clients_attendants ON event_participants.participant_id = clients_attendants.client_id")
@@ -28,5 +28,45 @@ class Calendar::EventPolicy < ApplicationPolicy
         scope.none
       end
     end
+  end
+
+  def show?
+    return true if admin?
+    return false unless user.person
+
+    case user.person.agency_role
+    when "Employee"
+      return true if job_title_allows?(:show, Calendar::Event)
+      return true if own_shift?
+      return true if attended_client_participant?
+
+      false
+    when "Client"
+      client_participant?
+    else
+      false
+    end
+  end
+
+  private
+
+  def own_shift?
+    record.shift&.employee_id == current_employee&.id
+  end
+
+  def attended_client_participant?
+    return false unless current_employee
+
+    client_ids = record.event_participants.where(participant_type: "Client").select(:participant_id)
+    ClientsAttendant.current.exists?(attendant: current_employee, client_id: client_ids)
+  end
+
+  def client_participant?
+    return false unless user.person&.client
+
+    record.event_participants.exists?(
+      participant_type: "Client",
+      participant_id: user.person.client.id,
+    )
   end
 end

@@ -5,11 +5,10 @@ import { Routes } from "@/lib"
 
 interface IncidentReportTableProps {
 	records: Schema.IncidentReportsIndex[]
-	pagination?: Schema.Pagination
 	model?: string
 }
 
-export function IncidentReportTable({ records, pagination, model }: IncidentReportTableProps) {
+export function IncidentReportTable({ records, model }: IncidentReportTableProps) {
 	const columns: TableColumn<Schema.IncidentReportsIndex>[] = [
 		{
 			accessor: "occurred_at",
@@ -63,7 +62,6 @@ export function IncidentReportTable({ records, pagination, model }: IncidentRepo
 		<Table.DataTable
 			columns={ columns }
 			records={ records }
-			pagination={ pagination }
 			model={ model }
 			selectable
 		/>

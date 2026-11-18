@@ -4,21 +4,31 @@ import { RichText, TextInput } from "@/components/Inputs"
 import { DepartmentsDropdown } from "@/components/Inputs/Dropdowns"
 import { type HTTPVerb } from "@/lib"
 
-import { emptyPermissions } from "./formData"
+import { emptyPermissions, type JobTitleFormData } from "./formData"
 import { PermissionsSection } from "./PermissionsSection"
 
 export interface JobTitleFormProps {
 	to: string
 	method?: HTTPVerb
 	job_title: Schema.EmployeeJobTitlesFormData | Schema.EmployeeJobTitlesEdit
+	permissions?: JobTitleFormData["permissions"]
 }
 
-export function JobTitleForm({ method = "post", job_title, to, ...props }: JobTitleFormProps) {
+export function JobTitleForm({
+	method = "post",
+	job_title,
+	permissions,
+	to,
+	...props
+}: JobTitleFormProps) {
 	return (
 		<Form
 			action={ to }
 			method={ method }
-			initialData={ { job_title, ...emptyPermissions } }
+			initialData={ {
+				job_title,
+				permissions: permissions ?? emptyPermissions.permissions,
+			} }
 			{ ...props }
 		>
 			<Grid>

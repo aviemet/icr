@@ -100,4 +100,4 @@ export function assertStatus(response: ResponseLike, expected: ExpectedStatus): 
 	}
 }
 
-export type HTTPVerb = "post" | "put" | "get" | "patch" | "delete";
+export type HTTPVerb = "post" | "put" | "get" | "patch" | "delete"

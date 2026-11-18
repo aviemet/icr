@@ -37,7 +37,7 @@ export function Inputs({ employee, jobTitles = [] }: EmployeeInputProps) {
 	return (
 		<Stack gap="xl">
 			<Stack gap="md">
-				<Grid gutter="lg">
+				<Grid gap="lg">
 					<Grid.Col span={ { xxs: 12, sm: 6 } }>
 						<Select
 							name="employee.status"
@@ -52,7 +52,7 @@ export function Inputs({ employee, jobTitles = [] }: EmployeeInputProps) {
 
 			<Stack gap="md">
 				<Text size="sm" fw={ 500 } c="dimmed">Personal Information</Text>
-				<Grid gutter="lg">
+				<Grid gap="lg">
 					<Grid.Col span={ { xs: 12, sm: 6, md: 4 } }>
 						<TextInput name="employee.person.first_name" label="First Name" />
 					</Grid.Col>
@@ -69,7 +69,7 @@ export function Inputs({ employee, jobTitles = [] }: EmployeeInputProps) {
 
 			<Stack gap="md">
 				<Text size="sm" fw={ 500 } c="dimmed">Employment Details</Text>
-				<Grid gutter="lg">
+				<Grid gap="lg">
 					{ status === "employed" && (
 						<Grid.Col span={ { xs: 12, sm: 6 } }>
 							<TextInput name="employee.number" label="Employee Number" />

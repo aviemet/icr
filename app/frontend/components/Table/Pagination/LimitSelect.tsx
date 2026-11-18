@@ -2,7 +2,8 @@ import { router } from "@inertiajs/react"
 import { Select, type SelectProps } from "@mantine/core"
 import clsx from "clsx"
 
-import { useLocation, usePageProps } from "@/lib/hooks"
+import { useLocation } from "@/lib/hooks/useLocation"
+import { usePageProps } from "@/lib/hooks/usePageProps"
 import { useStore } from "@/lib/store"
 import { useUpdateTablePreferences } from "@/queries"
 
@@ -17,7 +18,7 @@ export function LimitSelect({ pagination, model, className }: LimitSelectProps) 
 	const { auth: { user } } = usePageProps()
 	const location = useLocation()
 	const defaultLimit = useStore(state => state.defaults.tableRecordsLimit)
-	const mutate = useUpdateTablePreferences({ params: { userId: String(user.id) } })
+	const mutate = useUpdateTablePreferences({ params: { userId: String(user.slug) } })
 
 	const handleLimitChange = (limit: string | null) => {
 		if(!model || !user) return

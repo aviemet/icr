@@ -5,6 +5,11 @@ export const table = css`
 		white-space: nowrap;
 	}
 
+	th,
+	td {
+		vertical-align: middle;
+	}
+
 	th:last-child,
 	td:last-child {
 		padding-right: 14px;
@@ -23,4 +28,33 @@ export const root = css`
 	min-height: 0;
 	display: flex;
 	flex-direction: column;
+`
+
+export const avatarSelectionColumn = css`
+	width: 1%;
+	white-space: nowrap;
+	padding-inline: 8px;
+`
+
+export const avatarCheckbox = css`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+`
+
+export const selectionAvatar = css`
+	cursor: pointer;
+	width: 2rem;
+	height: 2rem;
+	min-width: 2rem;
+	transition: box-shadow 120ms ease;
+`
+
+export const selectionAvatarInitials = css`
+	display: block;
+	transform: translateY(1px);
+`
+
+export const selectionAvatarSelected = css`
+	box-shadow: 0 0 0 2px var(--mantine-primary-color-filled);
 `

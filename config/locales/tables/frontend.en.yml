@@ -1,0 +1,7 @@
+---
+en:
+  views:
+    index_template:
+      clear_selection: Clear
+      delete_selected: Delete
+      selected_count: "%{count} selected"

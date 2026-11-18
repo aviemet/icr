@@ -127,7 +127,5 @@ Rails.application.routes.draw do
 
   resources :requirements
 
-  resources :permissions
-
   draw(:api)
 end

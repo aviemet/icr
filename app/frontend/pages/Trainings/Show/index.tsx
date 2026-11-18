@@ -2,7 +2,7 @@ import { Group, Title, Menu, Page, Section } from "@/components"
 import { Routes } from "@/lib"
 
 interface ShowTrainingProps {
-	training: Schema.TrainingsShow
+	training: Schema.EmployeeTrainingsShow
 }
 
 const ShowTraining = ({ training }: ShowTrainingProps) => {

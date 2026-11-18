@@ -18,4 +18,27 @@ RSpec.describe "Api::Users", type: :request do
       expect(response).to have_http_status(:unprocessable_entity)
     end
   end
+
+  describe "PATCH /update_table_preferences" do
+    it "replaces hide preferences for a model" do
+      user = @user
+      user.update!(table_preferences: {
+        "employees" => { "hide" => { "active_at" => true }, "limit" => "25" }
+      })
+
+      patch api_update_table_preferences_url(user), params: {
+        user: {
+          table_preferences: {
+            employees: { hide: { "number" => true }, limit: "25" }
+          }
+        }
+      }
+
+      expect(response).to have_http_status(:ok)
+      expect(user.reload.table_preferences["employees"]).to eq(
+        "hide" => { "number" => true },
+        "limit" => "25",
+      )
+    end
+  end
 end

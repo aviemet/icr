@@ -8,7 +8,7 @@ import { ReactQueryFunction } from ".."
 export const useGetJobTitlesAsOptions: ReactQueryFunction<Schema.EmployeeJobTitlesOptions[]> = (options) => {
 	return useQuery({
 		queryKey: ["job_titles"],
-		queryFn: async() => {
+		queryFn: async () => {
 			const res = await axios.get(Routes.apiJobTitlesOptions())
 			if(res.statusText !== "OK") {
 				throw new Error("Failed to fetch job titles")

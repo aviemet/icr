@@ -24,7 +24,7 @@ export const withRenderTracking = <P extends object>(
 		})
 
 		// Track specific prop changes
-		const prevPropsRef = useRef<P>()
+		const prevPropsRef = useRef<P>(null)
 		useEffect(() => {
 			if(prevPropsRef.current) {
 				const changes: Record<string, { previous: unknown, current: unknown }> = {}

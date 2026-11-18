@@ -10,16 +10,16 @@ interface PopoverPosition {
 
 const defaultPopoverPosition = { top: 0, left: 0 }
 
-interface UseCalendarPopoverReturn {
+export interface UseCalendarPopoverReturn {
 	popoverOpen: boolean
 	target: CalendarClickTarget | null
 	popoverPosition: PopoverPosition
-	popoverRef: React.RefObject<HTMLDivElement>
+	popoverRef: React.RefObject<HTMLDivElement | null>
 	handleClick: (target: CalendarClickTarget) => void
 	close: () => void
 }
 
-const useCalendarPopover = (): UseCalendarPopoverReturn => {
+export function useCalendarPopover(): UseCalendarPopoverReturn {
 	const [target, setTarget] = useState<CalendarClickTarget | null>(null)
 	const [popoverPosition, setPopoverPosition] = useState<PopoverPosition>(defaultPopoverPosition)
 	const [clickedElement, setClickedElement] = useState<HTMLElement | null>(null)
@@ -165,6 +165,3 @@ const useCalendarPopover = (): UseCalendarPopoverReturn => {
 		close: closePopover,
 	}
 }
-
-export { useCalendarPopover }
-export type { UseCalendarPopoverReturn }

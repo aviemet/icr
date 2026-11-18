@@ -2,7 +2,7 @@ import { router, usePage } from "@inertiajs/react"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
-import { Box, Button, Group } from "@/components"
+import { Box, Button, Group, Table } from "@/components"
 
 import { EmployeesTable } from "./EmployeesTable"
 import {
@@ -121,8 +121,9 @@ export function WorkQueue({
 				timesheetIdsByEmployee={ timesheetIdsByEmployee }
 				approvedAtByEmployee={ approvedAtByEmployee }
 				employeeExceptions={ employeeExceptions }
-				pagination={ pagination }
 			/>
+
+			<Table.Pagination pagination={ pagination } model="employees" />
 
 			<PayrollTableFooter
 				payPeriodId={ payPeriodId }

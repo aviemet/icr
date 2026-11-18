@@ -3,13 +3,13 @@ import { Anchor, type AnchorProps } from "@mantine/core"
 import React from "react"
 
 export interface AnchorLinkProps
-	extends Omit<InertiaLinkProps, "color" | "size" | "span" | "style">,
-	Omit<AnchorProps, "href"> {
+	extends Omit<InertiaLinkProps, "color" | "size" | "span" | "style" | "component">,
+	Omit<AnchorProps, "href" | "component"> {
 	ref?: React.Ref<HTMLAnchorElement>
 }
 
 export function AnchorLink({ ref, ...props }: AnchorLinkProps) {
 	return (
-		<Anchor ref={ ref } component={ Link } { ...props } />
+		<Anchor ref={ ref } { ...props } component={ Link } />
 	)
 }

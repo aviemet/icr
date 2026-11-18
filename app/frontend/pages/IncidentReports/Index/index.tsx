@@ -15,11 +15,11 @@ const IncidentReportsIndex = ({ incident_reports, pagination }: IncidentReportIn
 			model="incident_reports"
 			pagination={ pagination }
 			deleteRoute={ Routes.incidentReports() }
-			menuOptions={ [
+			actions={ [
 				{ label: "New Incident Report", href: Routes.newIncidentReport(), icon: <NewIcon /> },
 			] }
 		>
-			<IncidentReportTable records={ incident_reports } pagination={ pagination } model="incident_reports" />
+			<IncidentReportTable records={ incident_reports } model="incident_reports" />
 		</IndexPageTemplate>
 	)
 }

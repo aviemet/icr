@@ -47,5 +47,12 @@ class Employee::JobTitle < ApplicationRecord
 
   scope :includes_associated, -> { includes([:active_employees, :department]) }
   scope :with_active_employees, -> { joins(:active_employees_job_titles).distinct }
-end
 
+  def permissions_hash
+    Employee::JobTitle::PermissionsReader.call(self)
+  end
+
+  def sync_permissions!(permissions)
+    Employee::JobTitle::SyncPermissions.call(self, permissions)
+  end
+end

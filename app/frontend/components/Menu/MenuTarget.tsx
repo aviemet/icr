@@ -4,7 +4,7 @@ import React from "react"
 import { DotsIcon } from "@/components/Icons"
 
 interface IMenuTargetProps extends Omit<MenuTargetProps, "children"> {
-	ref?: React.Ref<HTMLDivElement>
+	ref?: React.Ref<HTMLButtonElement>
 	children?: React.ReactNode
 	icon?: React.ReactNode
 	variant?: "gradient" | "subtle" | "filled" | "outline" | "light" | "default" | "transparent"
@@ -14,8 +14,8 @@ interface IMenuTargetProps extends Omit<MenuTargetProps, "children"> {
 export function MenuTarget({ children, icon, variant, color, ref, ...props }: IMenuTargetProps) {
 	if(!children) {
 		return (
-			<Menu.Target ref={ ref } { ...props }>
-				<ActionIcon color={ color } variant={ variant } >
+			<Menu.Target { ...props }>
+				<ActionIcon ref={ ref } color={ color } variant={ variant } size={ 36 }>
 					{ icon || <DotsIcon /> }
 				</ActionIcon>
 			</Menu.Target>

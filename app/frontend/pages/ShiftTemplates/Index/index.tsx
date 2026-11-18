@@ -15,11 +15,11 @@ const ShiftTemplatesIndex = ({ shift_templates, pagination }: ShiftTemplateIndex
 			model="shift_templates"
 			pagination={ pagination }
 			deleteRoute={ Routes.shiftTemplates() }
-			menuOptions={ [
+			actions={ [
 				{ label: "New Shift Template", href: Routes.newShiftTemplate(), icon: <NewIcon /> },
 			] }
 		>
-			<ShiftTemplateTable records={ shift_templates } pagination={ pagination } model="shift_templates" />
+			<ShiftTemplateTable records={ shift_templates } model="shift_templates" />
 		</IndexPageTemplate>
 	)
 }

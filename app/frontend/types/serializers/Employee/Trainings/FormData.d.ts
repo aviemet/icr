@@ -4,12 +4,12 @@ export {}
 declare global {
   namespace Schema {
     interface EmployeeTrainingsFormData {
-      id?: unknown
-      active_on: unknown
-      description: unknown
-      estimated_minutes: unknown
-      inactive_on: unknown
-      name: unknown
+      active_on?: Date
+      description?: string
+      estimated_minutes?: number
+      id?: string
+      inactive_on?: Date
+      name?: string
     }
   }
 }

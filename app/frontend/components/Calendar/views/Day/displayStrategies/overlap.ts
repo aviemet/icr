@@ -59,7 +59,7 @@ export class DayOverlapStrategy<TEventResources extends EventResources>
 				localizer.isSame(heading.date, segmentStartDay, "day")
 			)
 
-			if(columnIndex === - 1) {
+			if(columnIndex === -1) {
 				// eslint-disable-next-line no-console
 				console.warn("Segment start date not found in columnHeadings for event", event.id, segment)
 				continue
@@ -106,7 +106,7 @@ export class DayOverlapStrategy<TEventResources extends EventResources>
 	 */
 	compare(a: EventDisplayDetails<TEventResources, TimeGridDisplayProperties>, b: EventDisplayDetails<TEventResources, TimeGridDisplayProperties>): number {
 		// All-day events should always be at the top
-		if(a.event.allDay && !b.event.allDay) return - 1
+		if(a.event.allDay && !b.event.allDay) return -1
 		if(!a.event.allDay && b.event.allDay) return 1
 		if(a.event.allDay && b.event.allDay) {
 			return a.displayProperties.displayStart.valueOf() - b.displayProperties.displayStart.valueOf()

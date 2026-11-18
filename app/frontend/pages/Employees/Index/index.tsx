@@ -8,9 +8,10 @@ import { Routes } from "@/lib"
 interface EmployeeIndexProps {
 	employees: Schema.EmployeesIndex[]
 	pagination: Schema.Pagination
+	job_title_options: string[]
 }
 
-const EmployeesIndex = ({ employees, pagination }: EmployeeIndexProps) => {
+const EmployeesIndex = ({ employees, pagination, job_title_options }: EmployeeIndexProps) => {
 	const { t } = useTranslation()
 
 	return (
@@ -19,11 +20,16 @@ const EmployeesIndex = ({ employees, pagination }: EmployeeIndexProps) => {
 			model="employees"
 			pagination={ pagination }
 			deleteRoute={ Routes.employees() }
-			menuOptions={ [
+			actions={ [
 				{ label: t("views.employees.index.new"), href: Routes.newEmployee(), icon: <NewIcon /> },
 			] }
 		>
-			<EmployeeTable records={ employees } pagination={ pagination } model="employees" />
+			<EmployeeTable
+				records={ employees }
+				model="employees"
+				jobTitleOptions={ job_title_options }
+				serverFiltered
+			/>
 		</IndexPageTemplate>
 	)
 }

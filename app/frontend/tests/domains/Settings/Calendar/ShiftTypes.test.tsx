@@ -13,7 +13,17 @@ const mutateDelete = vi.fn()
 vi.mock("@inertiajs/react", () => ({
 	router: {
 		reload: vi.fn(),
+		get: vi.fn(),
 	},
+}))
+
+vi.mock("@/lib/hooks/useLocation", () => ({
+	useLocation: () => ({
+		pathname: "/settings/calendar",
+		path: "/settings/calendar",
+		params: new URLSearchParams(),
+		paramsAsJson: {},
+	}),
 }))
 
 vi.mock("@/queries", () => ({
@@ -68,23 +78,17 @@ describe("ShiftTypes", () => {
 		})
 	})
 
-	it("shows system badge and protected action for system types", () => {
-		renderShiftTypes()
+	it("renders a data table for shift type records", () => {
+		const { container } = renderShiftTypes()
 
-		expect(screen.getByText("System")).toBeInTheDocument()
-		expect(screen.getByText("Protected")).toBeInTheDocument()
-		expect(screen.queryByLabelText("Delete Regular")).not.toBeInTheDocument()
+		expect(container.querySelector(".mantine-datatable")).toBeInTheDocument()
+		expect(container.querySelectorAll(".mantine-datatable-row")).toHaveLength(2)
 	})
 
-	it("deletes custom shift types from the actions column", async () => {
-		const user = userEvent.setup()
-		renderShiftTypes()
+	it("shows empty state when there are no shift types", () => {
+		renderShiftTypes([])
 
-		await user.click(screen.getByLabelText("Delete Training"))
-		expect(mutateDelete).not.toHaveBeenCalled()
-
-		await user.click(await screen.findByRole("button", { name: "Delete" }))
-		expect(mutateDelete).toHaveBeenCalledWith({ slug: "training" })
+		expect(screen.getByText("No shift types yet. Add one below.")).toBeInTheDocument()
 	})
 
 	it("creates a shift type from the add section", async () => {

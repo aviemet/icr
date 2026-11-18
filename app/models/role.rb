@@ -16,6 +16,9 @@
 #
 class Role < ApplicationRecord
   has_and_belongs_to_many :users, join_table: :users_roles
+  has_and_belongs_to_many :job_titles,
+    class_name: "Employee::JobTitle",
+    join_table: :job_titles_roles
 
   belongs_to :resource,
     polymorphic: true,
@@ -41,7 +44,6 @@ class Role < ApplicationRecord
 
   scope :includes_associated, -> { includes([]) }
 
-  # Define role groups
   scope :employee_roles, -> { where(resource_type: "JobTitle") }
   scope :client_roles, -> { where(resource_type: "Client") }
   scope :doctor_roles, -> { where(resource_type: "Doctor") }

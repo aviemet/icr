@@ -1,12 +1,16 @@
-import { useAuth } from "./useAuth"
+import { useCallback } from "react"
+
+import { usePageProps } from "./usePageProps"
 
 export function usePermissions() {
-	const { currentUser } = useAuth()
+	const { permissions } = usePageProps()
 
-	const can = (action: string, resource: string) => {
-		// TODO: Implement actual permission checking logic
-		return true // Temporary return until we implement the actual logic
-	}
+	const can = useCallback((resource: string, action: string) => {
+		const resourcePermissions = permissions?.[resource]
+		if(!resourcePermissions) return false
 
-	return { can }
+		return Boolean(resourcePermissions[action])
+	}, [permissions])
+
+	return { can, permissions }
 }

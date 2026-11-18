@@ -4,7 +4,7 @@ import { Routes } from "@/lib"
 
 
 interface NewTrainingProps {
-	training: Schema.TrainingsFormData
+	training: Schema.EmployeeTrainingsFormData
 }
 
 const NewTraining = ({ ...data }: NewTrainingProps) => {

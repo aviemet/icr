@@ -4,11 +4,10 @@ import { Routes } from "@/lib"
 
 interface TimesheetTableProps {
 	records: Schema.TimesheetsIndex[]
-	pagination?: Schema.Pagination
 	model?: string
 }
 
-export function TimesheetTable({ records, pagination, model }: TimesheetTableProps) {
+export function TimesheetTable({ records, model }: TimesheetTableProps) {
 	const columns: TableColumn<Schema.TimesheetsIndex>[] = [
 		{
 			accessor: "actions",
@@ -22,7 +21,6 @@ export function TimesheetTable({ records, pagination, model }: TimesheetTablePro
 		<Table.DataTable
 			columns={ columns }
 			records={ records }
-			pagination={ pagination }
 			model={ model }
 			selectable
 		/>

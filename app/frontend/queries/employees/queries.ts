@@ -9,7 +9,7 @@ import { CALENDAR_SCHEDULE_STALE_TIME_MS, ReactQueryFunction } from ".."
 export const useGetEmployeesAsOptions: ReactQueryFunction<Schema.EmployeesOptions[]> = (options) => {
 	return useQuery({
 		queryKey: ["employees"],
-		queryFn: async() => {
+		queryFn: async () => {
 			const res = await axios.get(Routes.apiEmployeesOptions())
 			return res.data
 		},
@@ -25,7 +25,7 @@ export const useGetEmployeeSchedules: ReactQueryFunction<Schema.CalendarEventsEm
 }> = ({ slug, ...params }, options) => {
 	return useQuery({
 		queryKey: [`employees/${slug}/schedule`, params],
-		queryFn: async() => {
+		queryFn: async () => {
 			const res = await axios.get(Routes.apiEmployeeSchedule(slug, params))
 			return res.data
 		},

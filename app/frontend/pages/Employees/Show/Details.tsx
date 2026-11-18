@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 
-import { Text, Title } from "@/components"
+import { Text } from "@/components"
 
 import { type ShowEmployeeProps } from "."
 

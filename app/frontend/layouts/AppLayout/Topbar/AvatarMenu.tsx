@@ -1,12 +1,8 @@
 import { Avatar, UnstyledButton } from "@mantine/core"
 
 import { Menu } from "@/components"
-import { Routes } from "@/lib"
-import { usePageProps } from "@/lib/hooks"
 
 export function AvatarMenu() {
-	const props = usePageProps()
-
 	return (
 		<Menu>
 			<Menu.Target>

@@ -21,7 +21,7 @@ export const useGetSpotlights: ReactQueryFunction<
 
 	return useQuery({
 		queryKey: ["spotlights", q],
-		queryFn: async() => {
+		queryFn: async () => {
 			const res = await axios.get<SpotlightResult[]>(Routes.apiSpotlights(), {
 				params: { q },
 			})

@@ -74,7 +74,7 @@ beforeEach(() => {
 				},
 			])
 		}),
-		http.patch(Routes.apiCalendarEvent("event-1"), async({ request }) => {
+		http.patch(Routes.apiCalendarEvent("event-1"), async ({ request }) => {
 			const body = await request.json().catch(() => ({}))
 			return HttpResponse.json({ id: "event-1", ...(typeof body === "object" && body ? body : {}) }, { status: 200 })
 		}),

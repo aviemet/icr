@@ -7,8 +7,8 @@ export interface OvertimeExemptionCriterionCondition {
 
 export type OvertimeExemptionCriterionField = "category" | "start_time" | "end_time" | "duration"
 
-export type OvertimeExemptionCriterionGroup = {
-	[Field in OvertimeExemptionCriterionField]?: OvertimeExemptionCriterionCondition
-}
+export type OvertimeExemptionCriterionGroup = Partial<
+	Record<OvertimeExemptionCriterionField, OvertimeExemptionCriterionCondition>
+>
 
 export type OvertimeExemptionCriteria = OvertimeExemptionCriterionGroup[]

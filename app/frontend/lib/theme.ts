@@ -58,6 +58,13 @@ export const themeObject: Partial<CustomMantineTheme> = {
 		xl: "calc(1.25rem * var(--mantine-scale))",
 	},
 	components: {
+		Badge: {
+			styles: {
+				label: {
+					transform: "translateY(1px)",
+				},
+			},
+		},
 		Card: {
 			styles: (theme: MantineTheme) => ({
 				root: {

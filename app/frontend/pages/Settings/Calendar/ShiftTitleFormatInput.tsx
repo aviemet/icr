@@ -96,7 +96,7 @@ const ShiftTitleFormatInput = ({ settings }: SettingIndexProps) => {
 					<Badge
 						key={ format }
 						m="sm"
-						onClick={ () => insertVariable(format.slice(1, - 1)) }
+						onClick={ () => insertVariable(format.slice(1, -1)) }
 						className={ clsx(classes.templateBadge) }
 					>
 						{ format }

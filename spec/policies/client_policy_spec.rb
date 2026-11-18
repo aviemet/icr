@@ -215,10 +215,16 @@ RSpec.describe ClientPolicy, type: :policy do
       expect(described_class.new(@employee_user_with_permission, @client)).to authorize(:edit)
     end
 
-    it "allows employee who is current attendant" do
-      create(:clients_attendant, client: @client, attendant: @employee, starts_at: 1.day.ago)
+    it "allows employee who currently manages the client" do
+      create(:clients_manager, client: @client, manager: @employee, starts_at: 1.day.ago)
 
       expect(described_class.new(@employee_user, @client)).to authorize(:edit)
+    end
+
+    it "denies employee who is only a current attendant" do
+      create(:clients_attendant, client: @client, attendant: @employee, starts_at: 1.day.ago)
+
+      expect(described_class.new(@employee_user, @client)).not_to authorize(:edit)
     end
 
     it "allows client with update permission for own client" do
