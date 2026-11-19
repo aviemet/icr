@@ -1,4 +1,5 @@
-import { Badge, Group, Stack, Text, Title, Menu, Page, Section, Table } from "@/components"
+import { Badge, Group, Stack, Text, Title, Page, Section, Table } from "@/components"
+import { EditButton } from "@/components/Button"
 import { EmployeeTable } from "@/domains/Employees/Table"
 import { tableRows, type JobTitleFormData, type Permissions } from "@/domains/Settings/JobTitles/Form/formData"
 import { Routes, withLayout } from "@/lib"
@@ -35,15 +36,7 @@ const ShowJobTitle = ({ job_title, permissions, employees }: ShowJobTitleProps) 
 			<Section>
 				<Group justify="space-between">
 					<Title>{ title }</Title>
-
-					<Menu position="bottom-end">
-						<Menu.Target />
-						<Menu.Dropdown>
-							<Menu.Link href={ Routes.editSettingsJobTitle(String(job_title.slug)) }>
-								Edit Job Title
-							</Menu.Link>
-						</Menu.Dropdown>
-					</Menu>
+					<EditButton href={ Routes.editSettingsJobTitle(String(job_title.slug)) } label={ title } />
 				</Group>
 
 				{ description && (

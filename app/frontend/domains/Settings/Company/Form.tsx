@@ -1,17 +1,45 @@
-import { Divider, Grid, Stack, Text, Title } from "@/components"
-import { DynamicFields, Form, Submit } from "@/components/Form"
-import { TextInput } from "@/components/Inputs"
-import { CategoriesDropdown } from "@/components/Inputs/Dropdowns"
+import { Stack } from "@/components"
+import { Form, Submit } from "@/components/Form"
+import { HiddenInput, TextInput } from "@/components/Inputs"
+import { FormBand, FormBandStack } from "@/features"
 import { Routes } from "@/lib"
+
+import {
+	AddressDraftFields,
+	AddressFields,
+	ContactAttributesList,
+	PhoneDraftFields,
+	PhoneFields,
+} from "./ContactAttributesList"
 
 interface CompanyFormProps {
 	company: Schema.CompaniesShow
 }
 
+const emptyAddress = {
+	name: "",
+	address: "",
+	address_2: "",
+	city: "",
+	region: "",
+	postal: "",
+	country: "",
+	notes: "",
+	category_id: "",
+}
+
+const emptyPhone = {
+	name: "",
+	number: "",
+	extension: "",
+	notes: "",
+	category_id: "",
+}
+
 export function CompanyForm({ company }: CompanyFormProps) {
 	const contact = company.contact
-	const addresses = company.addresses?.length ? company.addresses : (contact?.addresses || [])
-	const phones = company.phones?.length ? company.phones : (contact?.phones || [])
+	const addresses = (company.addresses?.length ? company.addresses : (contact?.addresses || [])) as Record<string, unknown>[]
+	const phones = (company.phones?.length ? company.phones : (contact?.phones || [])) as Record<string, unknown>[]
 
 	return (
 		<Form
@@ -28,112 +56,49 @@ export function CompanyForm({ company }: CompanyFormProps) {
 				},
 			} }
 		>
-			<Stack gap="xl">
-				<Grid>
-					<Grid.Col span={ { xs: 12, sm: 6 } }>
-						<TextInput
-							name="company.name"
-							label="Company Name"
-							required
-						/>
-					</Grid.Col>
-				</Grid>
+			{ contact?.id != null && (
+				<HiddenInput name="company.contact_attributes.id" defaultValue={ String(contact.id) } />
+			) }
+			<FormBandStack>
+				<FormBand
+					title="Company"
+					description="Legal or display name for the organization."
+				>
+					<TextInput
+						name="company.name"
+						label="Company Name"
+						required
+					/>
+				</FormBand>
 
-				<Divider />
+				<ContactAttributesList
+					basePath="company.contact_attributes.addresses_attributes"
+					title="Addresses"
+					addLabel="Add address"
+					emptyLabel="No addresses yet."
+					initialItems={ addresses }
+					emptyData={ emptyAddress }
+					draftFields={ AddressDraftFields }
+				>
+					{ (_index, namePrefix) => <AddressFields namePrefix={ namePrefix } /> }
+				</ContactAttributesList>
 
-				<Stack gap="md">
-					<Title order={ 4 }>Addresses</Title>
-					<Text size="sm" c="dimmed">Business locations for the company.</Text>
-					<DynamicFields
-						basePath="company.contact_attributes.addresses_attributes"
-						initialCount={ addresses.length }
-						label="Addresses"
-						emptyData={ {
-							name: "",
-							address: "",
-							address_2: "",
-							city: "",
-							region: "",
-							postal: "",
-							country: "",
-							notes: "",
-							category_id: "",
-						} }
-					>
-						{ (_index, namePrefix) => (
-							<Grid>
-								<Grid.Col span={ { xs: 12, sm: 6 } }>
-									<TextInput name={ `${namePrefix}.address` } label="Address" required />
-								</Grid.Col>
-								<Grid.Col span={ { xs: 12, sm: 6 } }>
-									<TextInput name={ `${namePrefix}.address_2` } label="Address line 2" />
-								</Grid.Col>
-								<Grid.Col span={ { xs: 12, sm: 4 } }>
-									<TextInput name={ `${namePrefix}.city` } label="City" />
-								</Grid.Col>
-								<Grid.Col span={ { xs: 12, sm: 4 } }>
-									<TextInput name={ `${namePrefix}.region` } label="State / Region" />
-								</Grid.Col>
-								<Grid.Col span={ { xs: 12, sm: 4 } }>
-									<TextInput name={ `${namePrefix}.postal` } label="Postal code" />
-								</Grid.Col>
-								<Grid.Col span={ { xs: 12, sm: 6 } }>
-									<CategoriesDropdown
-										name={ `${namePrefix}.category_id` }
-										categoryType="Contact::Address"
-										label="Category"
-									/>
-								</Grid.Col>
-								<Grid.Col span={ { xs: 12, sm: 6 } }>
-									<TextInput name={ `${namePrefix}.name` } label="Label" />
-								</Grid.Col>
-							</Grid>
-						) }
-					</DynamicFields>
+				<ContactAttributesList
+					basePath="company.contact_attributes.phones_attributes"
+					title="Phone numbers"
+					addLabel="Add phone"
+					emptyLabel="No phone numbers yet."
+					initialItems={ phones }
+					emptyData={ emptyPhone }
+					draftFields={ PhoneDraftFields }
+				>
+					{ (_index, namePrefix) => <PhoneFields namePrefix={ namePrefix } /> }
+				</ContactAttributesList>
+
+				<Stack>
+					<Submit>Update company</Submit>
 				</Stack>
-
-				<Divider />
-
-				<Stack gap="md">
-					<Title order={ 4 }>Phone numbers</Title>
-					<Text size="sm" c="dimmed">Main phone contacts for the company.</Text>
-					<DynamicFields
-						basePath="company.contact_attributes.phones_attributes"
-						initialCount={ phones.length }
-						label="Phones"
-						emptyData={ {
-							name: "",
-							number: "",
-							extension: "",
-							notes: "",
-							category_id: "",
-						} }
-					>
-						{ (_index, namePrefix) => (
-							<Grid>
-								<Grid.Col span={ { xs: 12, sm: 5 } }>
-									<TextInput name={ `${namePrefix}.number` } label="Number" required />
-								</Grid.Col>
-								<Grid.Col span={ { xs: 12, sm: 3 } }>
-									<TextInput name={ `${namePrefix}.extension` } label="Extension" />
-								</Grid.Col>
-								<Grid.Col span={ { xs: 12, sm: 4 } }>
-									<CategoriesDropdown
-										name={ `${namePrefix}.category_id` }
-										categoryType="Contact::Phone"
-										label="Category"
-									/>
-								</Grid.Col>
-								<Grid.Col span={ { xs: 12, sm: 6 } }>
-									<TextInput name={ `${namePrefix}.name` } label="Label" />
-								</Grid.Col>
-							</Grid>
-						) }
-					</DynamicFields>
-				</Stack>
-
-				<Submit>Update company</Submit>
-			</Stack>
+			</FormBandStack>
 		</Form>
 	)
 }

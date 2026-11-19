@@ -6,9 +6,13 @@ import { vars, theme } from "@/lib/theme"
  * AppShell
  */
 export const wrapper = css`
+	--icr-field-bg: light-dark(${ vars.colors.gray[0] }, ${ vars.colors.dark[8] });
+	--icr-field-border: light-dark(${ vars.colors.gray[4] }, ${ vars.colors.dark[3] });
+
 	overflow: auto;
 	height: calc(100vh - ${ theme.other.footer.height }px);
-	padding: ${ vars.spacing.xs };
+	padding: ${ vars.spacing.sm };
+	background-color: light-dark(${ vars.colors.gray[1] }, ${ vars.colors.dark[8] });
 `
 
 /**
@@ -132,6 +136,8 @@ export const navLink = css`
 
 	&.active {
 		background-color: light-dark(${ vars.colors.primaryColors[1] }, ${ vars.colors.primaryColors[9] });
+		box-shadow: inset 3px 0 0 0 ${ vars.colors.primaryColors.filled };
+		color: light-dark(${ vars.colors.primaryColors[9] }, ${ vars.colors.white });
 	}
 `
 

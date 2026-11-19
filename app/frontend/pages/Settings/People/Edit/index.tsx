@@ -1,30 +1,33 @@
-import { Page, Section, Title } from "@/components"
+import { Box } from "@/components"
 import { PersonForm } from "@/domains/Settings/People/Form"
+import { FormBand, FormBandStack } from "@/features"
 import { Routes, withLayout } from "@/lib"
 
+import { SettingsPageHeader } from "../../SettingsPageHeader"
+
 interface EditPersonProps {
-	person: Schema.PeopleEdit
+	person: Schema.PeopleFormData
 }
 
 const EditPerson = ({ person }: EditPersonProps) => {
-	const title = "Edit Person"
+	const name = person.name || "Person"
 
 	return (
-		<Page title={ title } breadcrumbs={ [
-			{ title: "People", href: Routes.settingsPeople() },
-			{ title: "Person", href: Routes.settingsPerson(person.slug) },
-			{ title, href: window.location.href },
-		] }>
-			<Section>
-				<Title>{ title }</Title>
-
-				<PersonForm
-					method="put"
-					to={ Routes.settingsPerson(person.slug) }
-					person={ person }
-				/>
-			</Section>
-		</Page>
+		<Box>
+			<SettingsPageHeader
+				title={ `Edit ${name}` }
+				description="Update name details for this person."
+			/>
+			<FormBandStack>
+				<FormBand title="Identity" description="Legal and preferred names.">
+					<PersonForm
+						method="put"
+						to={ Routes.settingsPerson(person.slug!) }
+						person={ person }
+					/>
+				</FormBand>
+			</FormBandStack>
+		</Box>
 	)
 }
 

@@ -55,6 +55,7 @@ en:
         approve_selected: Approve selected
         approved_count: "%{approved} / %{total} Approved"
         due_in_days: Due in %{count} days
+        overdue_by_days: Overdue by %{count} days
         employees:
           actions: Action
           approve: Approve

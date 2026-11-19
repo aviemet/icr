@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next"
 
-import { Group, Link, Section, Stack, Text, Title } from "@/components"
+import { Link } from "@/components"
 import { DateTimeFormatter } from "@/components/Formatters"
+import { CollectionPanel, RecordRow } from "@/features"
 import { Routes } from "@/lib"
 
 interface ClientIncidentsProps {
@@ -12,32 +13,30 @@ export function ClientIncidents({ client }: ClientIncidentsProps) {
 	const { t } = useTranslation()
 
 	return (
-		<Section>
-			<Title order={ 3 } mb="md">{ t("views.clients.show.incidents.title") }</Title>
-			{ client.incident_reports.length === 0
-				? (
-					<Text c="dimmed">{ t("views.clients.show.incidents.empty") }</Text>
-				)
-				: (
-					<Stack gap="md">
-						{ client.incident_reports.map(incident => (
-							<Group key={ incident.id } justify="space-between" align="flex-start">
-								<Stack gap={ 2 }>
-									<Text fw={ 600 }>
-										{ incident.occurred_at
-											? <DateTimeFormatter>{ incident.occurred_at }</DateTimeFormatter>
-											: "-" }
-									</Text>
-									<Text size="sm">{ incident.location || "-" }</Text>
-									<Text size="sm" lineClamp={ 2 }>{ incident.description }</Text>
-								</Stack>
-								<Link href={ Routes.incidentReport(incident.id) }>
-									{ t("views.clients.show.incidents.view") }
-								</Link>
-							</Group>
-						)) }
-					</Stack>
-				) }
-		</Section>
+		<CollectionPanel
+			title={ t("views.clients.show.incidents.title") }
+			count={ client.incident_reports.length }
+			emptyLabel={ t("views.clients.show.incidents.empty") }
+		>
+			{ client.incident_reports.map(incident => (
+				<RecordRow
+					key={ incident.id }
+					title={ incident.occurred_at
+						? <DateTimeFormatter>{ incident.occurred_at }</DateTimeFormatter>
+						: "-" }
+					meta={ (
+						<>
+							<span>{ incident.location || "-" }</span>
+							<span>{ incident.description }</span>
+						</>
+					) }
+					actions={ (
+						<Link href={ Routes.incidentReport(incident.id) }>
+							{ t("views.clients.show.incidents.view") }
+						</Link>
+					) }
+				/>
+			)) }
+		</CollectionPanel>
 	)
 }

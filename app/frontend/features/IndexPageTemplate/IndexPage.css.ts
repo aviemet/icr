@@ -35,3 +35,24 @@ export const content = css`
 		max-width: ${ maxSearchWidth };
 	}
 `
+
+export const denseShell = css`
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	min-height: 0;
+	padding: ${ vars.spacing.sm };
+	border-radius: ${ vars.radius.md };
+	border: 1px solid light-dark(${ vars.colors.gray[3] }, ${ vars.colors.dark[4] });
+	background-color: light-dark(${ vars.colors.white }, ${ vars.colors.dark[8] });
+	gap: ${ vars.spacing.xs };
+
+	h1 {
+		font-size: ${ vars.fontSizes.xl };
+		letter-spacing: -0.01em;
+	}
+
+	.mantine-datatable-header {
+		background-color: light-dark(${ vars.colors.gray[0] }, ${ vars.colors.dark[7] });
+	}
+`

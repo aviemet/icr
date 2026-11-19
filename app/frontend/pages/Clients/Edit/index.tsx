@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 
-import { Title, Page, Section } from "@/components"
 import { ClientForm } from "@/domains/Clients/Form"
+import { RecordFormPage } from "@/features"
 import { Routes } from "@/lib"
 
 interface EditClientProps {
@@ -13,21 +13,21 @@ const EditClient = ({ client }: EditClientProps) => {
 	const title = t("views.clients.edit.title", { name: client.name })
 
 	return (
-		<Page title={ title } breadcrumbs={ [
-			{ title: t("views.clients.index.title"), href: Routes.clients() },
-			{ title: client.name, href: Routes.client(client.id) },
-			{ title: t("views.clients.edit.action") },
-		] }>
-			<Section>
-				<Title>{ title }</Title>
-
-				<ClientForm
-					method="put"
-					to={ Routes.client(client.slug) }
-					client={ client }
-				/>
-			</Section>
-		</Page>
+		<RecordFormPage
+			title={ title }
+			description="Update demographics, funding, and communication preferences."
+			breadcrumbs={ [
+				{ title: t("views.clients.index.title"), href: Routes.clients() },
+				{ title: client.name, href: Routes.client(client.id) },
+				{ title: t("views.clients.edit.action") },
+			] }
+		>
+			<ClientForm
+				method="put"
+				to={ Routes.client(client.slug) }
+				client={ client }
+			/>
+		</RecordFormPage>
 	)
 }
 

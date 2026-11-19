@@ -13,9 +13,8 @@ export function ResignationForm({ employee }: ResignationFormProps) {
 			action={ Routes.statusEmployee(employee.slug) }
 			initialData={ {
 				employee: {
-					status: "terminated",
+					event: "terminate",
 					inactive_at: new Date(),
-					resignation: true,
 				},
 			} }
 			method="put"

@@ -154,6 +154,114 @@ RSpec.describe "/employees" do
       expect_inertia.to render_component "Employees/Show"
       expect(inertia.props[:employee][:slug]).to eq(employee.slug)
     end
+
+    it "ships overview props in lockstep for related collections" do
+      employee = create(:employee, :employed)
+      support_contact = create(:employee_support_contact, employee: employee, is_emergency: true)
+      credential = create(:employee_credential, employee: employee, expires_on: 10.days.from_now)
+      clearance = create(:employee_clearance, employee: employee, expires_on: 10.days.from_now)
+      manager = create(:employee, :employed)
+      create(:employees_manager, employee: employee, manager: manager, primary: true)
+      client = create(:client)
+      create(:clients_attendant, attendant: employee, client: client)
+      training = create(:training)
+      create(:employees_training, employee: employee, training: training, completed_at: nil, started_at: Time.current)
+      create(:pay_rate, :active, employee: employee)
+
+      get employee_url(employee)
+
+      expect(response).to have_http_status(:ok)
+      props = inertia.props[:employee]
+      expect(props[:support_contacts].pluck(:id)).to eq([support_contact.id])
+      expect(props[:credentials].pluck(:id)).to eq([credential.id])
+      expect(props[:clearances].pluck(:id)).to eq([clearance.id])
+      expect(props[:attended_clients].pluck(:id)).to eq([client.id])
+      expect(props[:employees_trainings].pluck(:training_id)).to eq([training.id])
+      expect(props[:emergency_contacts_count]).to eq(1)
+      expect(props[:expiring_credentials_count]).to eq(1)
+      expect(props[:expiring_clearances_count]).to eq(1)
+      expect(props[:incomplete_trainings_count]).to eq(1)
+      expect(props[:assigned_clients_count]).to eq(1)
+      expect(props[:primary_manager][:id]).to eq(manager.id)
+      expect(props[:pay_rates].size).to eq(1)
+    end
+  end
+
+  describe "GET /status" do
+    login_user(:admin)
+
+    it "renders the status page" do
+      employee = create(:employee)
+      get status_employee_url(employee)
+      expect(response).to have_http_status(:ok)
+      expect_inertia.to render_component "Employees/Status"
+      expect(inertia.props[:employee][:slug]).to eq(employee.slug)
+    end
+  end
+
+  describe "PUT /status" do
+    login_user(:admin)
+
+    it "begins employment via AASM" do
+      employee = create(:employee)
+      put status_employee_url(employee), params: {
+        employee: { event: "begin_employment", active_at: Date.current }
+      }
+      expect(response).to redirect_to(employee_url(employee))
+      expect(employee.reload).to be_employed
+      expect(employee.active_at).to eq(Date.current)
+    end
+
+    it "closes an application via AASM" do
+      employee = create(:employee)
+      put status_employee_url(employee), params: {
+        employee: { event: "close_application", ineligibility_reason: "Not a fit" }
+      }
+      expect(response).to redirect_to(employee_url(employee))
+      expect(employee.reload).to be_application_withdrawn
+      expect(employee.ineligibility_reason).to eq("Not a fit")
+    end
+
+    it "terminates employment via AASM" do
+      employee = create(:employee, :employed)
+      put status_employee_url(employee), params: {
+        employee: {
+          event: "terminate",
+          inactive_at: Date.current,
+          termination_reason: "Performance"
+        }
+      }
+      expect(response).to redirect_to(employee_url(employee))
+      expect(employee.reload).to be_terminated
+      expect(employee.termination_reason).to eq("Performance")
+    end
+
+    it "accepts an offer via AASM" do
+      employee = create(:employee, :offered)
+      put status_employee_url(employee), params: {
+        employee: { event: "accept_offer", active_at: Date.current }
+      }
+      expect(response).to redirect_to(employee_url(employee))
+      expect(employee.reload).to be_employed
+    end
+
+    it "rejects an offer via AASM" do
+      employee = create(:employee, :offered)
+      put status_employee_url(employee), params: {
+        employee: { event: "reject_offer" }
+      }
+      expect(response).to redirect_to(employee_url(employee))
+      expect(employee.reload).to be_declined
+    end
+
+    it "reconsiders a withdrawn application via AASM" do
+      employee = create(:employee, :application_withdrawn)
+      put status_employee_url(employee), params: {
+        employee: { event: "reconsider", eligible_for_hire: true }
+      }
+      expect(response).to redirect_to(employee_url(employee))
+      expect(employee.reload).to be_applicant
+    end
   end
 
   describe "GET /new" do
@@ -232,11 +340,21 @@ RSpec.describe "/employees" do
         expect(employee.number).to eq("CHANGED")
       end
 
-      it "redirects to the employee" do
+      it "redirects to the employee profile tab" do
         employee = create(:employee)
         patch employee_url(employee), params: { employee: { number: "CHANGED" } }
         employee.reload
-        expect(response).to redirect_to(employee_url(employee))
+        expect(response).to redirect_to(employee_url(employee, tab: "profile"))
+      end
+
+      it "persists color and preferred language" do
+        employee = create(:employee)
+        patch employee_url(employee), params: {
+          employee: { color: "#112233", preferred_language: "Spanish" }
+        }
+        employee.reload
+        expect(employee.color).to eq("#112233")
+        expect(employee.preferred_language).to eq("Spanish")
       end
     end
 

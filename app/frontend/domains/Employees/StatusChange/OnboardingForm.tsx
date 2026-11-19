@@ -13,7 +13,7 @@ export function OnboardingForm({ employee }: OnboardingFormProps) {
 			action={ Routes.statusEmployee(employee.slug) }
 			initialData={ {
 				employee: {
-					status: "employed",
+					event: "begin_employment",
 					active_at: new Date(),
 				},
 			} }

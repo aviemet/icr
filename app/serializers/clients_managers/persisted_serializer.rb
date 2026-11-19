@@ -10,4 +10,5 @@ class ClientsManagers::PersistedSerializer < ApplicationSerializer
   )
 
   belongs_to :manager, serializer: Employees::PersistedSerializer
+  belongs_to :client, serializer: Clients::PersistedSerializer
 end
