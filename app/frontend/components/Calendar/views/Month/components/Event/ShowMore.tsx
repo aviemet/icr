@@ -8,7 +8,7 @@ interface ShowMoreProps {
 	column: number
 }
 
-const ShowMore = ({ children, column }: ShowMoreProps) => {
+export function ShowMore({ children, column }: ShowMoreProps) {
 	return (
 		<div
 			className={ clsx(classes.showMore, classes.monthEventWrapper) }
@@ -24,5 +24,3 @@ const ShowMore = ({ children, column }: ShowMoreProps) => {
 		</div>
 	)
 }
-
-export { ShowMore }

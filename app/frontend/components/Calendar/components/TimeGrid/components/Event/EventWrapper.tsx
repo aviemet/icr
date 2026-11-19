@@ -12,12 +12,12 @@ interface EventWrapperProps<P extends TimeGridDisplayProperties = TimeGridDispla
 	displayProperties: P
 }
 
-const EventWrapper = <P extends TimeGridDisplayProperties = TimeGridDisplayProperties>({
+export function EventWrapper<P extends TimeGridDisplayProperties = TimeGridDisplayProperties>({
 	children,
 	event,
 	style,
 	displayProperties,
-}: EventWrapperProps<P>) => {
+}: EventWrapperProps<P>) {
 	const groupSize = displayProperties.groupSize ?? 1
 	const slotIndex = displayProperties.slotIndex ?? 0
 
@@ -57,5 +57,3 @@ const EventWrapper = <P extends TimeGridDisplayProperties = TimeGridDisplayPrope
 		</div>
 	)
 }
-
-export { EventWrapper }

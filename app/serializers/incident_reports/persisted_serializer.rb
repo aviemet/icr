@@ -1,6 +1,5 @@
 class IncidentReports::PersistedSerializer < IncidentReportSerializer
   include Persisted
 
-  attributes(
-  )
+  attributes
 end

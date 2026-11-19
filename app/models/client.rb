@@ -2,15 +2,27 @@
 #
 # Table name: clients
 #
-#  id          :uuid             not null, primary key
-#  active_at   :date
-#  color       :string
-#  inactive_at :date
-#  number      :string
-#  slug        :string           not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  person_id   :uuid             not null
+#  id                    :uuid             not null, primary key
+#  active_at             :date
+#  color                 :string
+#  communication_notes   :text
+#  ihss_authorized_hours :decimal(8, 2)
+#  ihss_notes            :text
+#  ihss_share_of_cost    :decimal(10, 2)
+#  inactive_at           :date
+#  ipp_ends_on           :date
+#  ipp_review_on         :date
+#  ipp_starts_on         :date
+#  medi_cal_number       :string
+#  number                :string
+#  preferred_hospital    :string
+#  preferred_language    :string
+#  regional_center       :string
+#  slug                  :string           not null
+#  uci_number            :string
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  person_id             :uuid             not null
 #
 # Indexes
 #
@@ -32,7 +44,7 @@ class Client < ApplicationRecord
   include PgSearchable
 
   pg_search_config(
-    against: [:active_at, :inactive_at, :number],
+    against: [:active_at, :inactive_at, :number, :uci_number],
     associated_against: {
       person: [:first_name, :middle_name, :last_name]
     },
@@ -53,26 +65,74 @@ class Client < ApplicationRecord
 
   has_many :clients_managers,
     class_name: "ClientsManager",
-    dependent: :destroy
+    dependent: :destroy,
+    inverse_of: :client
   has_many :managers,
     class_name: "Employee",
     through: :clients_managers,
     source: :manager
 
   has_one :active_client_manager, -> {
-    where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Date.current, Date.current)
-  }, class_name: "ClientManager", dependent: nil, inverse_of: :client
+    merge(ClientsManager.current)
+  }, class_name: "ClientsManager", dependent: nil, inverse_of: :client
   has_one :current_manager, through: :active_client_manager, source: :manager
 
   has_many :clients_attendants,
     class_name: "ClientsAttendant",
-    dependent: :destroy
+    dependent: :destroy,
+    inverse_of: :client
   has_many :attendants,
     class_name: "Employee",
     through: :clients_attendants,
     source: :attendant
 
-  scope :includes_associated, -> { includes([:person, :calendar_customization]) }
+  has_many :current_clients_attendants, -> { merge(ClientsAttendant.current) },
+    class_name: "ClientsAttendant",
+    dependent: nil,
+    inverse_of: :client
+  has_many :current_attendants,
+    class_name: "Employee",
+    through: :current_clients_attendants,
+    source: :attendant
+
+  has_many :support_contacts, class_name: "Client::SupportContact", dependent: :destroy, inverse_of: :client
+  has_many :allergies, class_name: "Client::Allergy", dependent: :destroy, inverse_of: :client
+  has_many :diagnoses, class_name: "Client::Diagnosis", dependent: :destroy, inverse_of: :client
+  has_one :life_detail, class_name: "Client::LifeDetail", dependent: :destroy, inverse_of: :client
+  has_many :enrollments, class_name: "Client::Enrollment", dependent: :destroy, inverse_of: :client
+  has_many :incident_reports, dependent: :nullify
+
+  accepts_nested_attributes_for :life_detail
+  accepts_nested_attributes_for :support_contacts, allow_destroy: true
+  accepts_nested_attributes_for :allergies, allow_destroy: true
+  accepts_nested_attributes_for :diagnoses, allow_destroy: true
+
+  scope :includes_associated, -> {
+    includes(
+      :calendar_customization,
+      :household,
+      :life_detail,
+      :current_manager,
+      :current_attendants,
+      person: { contact: { addresses: :category, emails: :category, phones: :category } },
+    )
+  }
+
+  scope :includes_show, -> {
+    includes_associated.includes(
+      :doctors,
+      :clients_managers,
+      :clients_attendants,
+      :managers,
+      :attendants,
+      support_contacts: { person: { contact: [:phones, :emails, :addresses] } },
+      allergies: [],
+      diagnoses: [],
+      enrollments: :vendor,
+      prescriptions: [:medication, :dosage, :doctor],
+      incident_reports: [:category, :reported_by, :reported_to],
+    )
+  }
 
   def schedule_events_between(start_time, end_time)
     calendar_events

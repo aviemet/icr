@@ -5,9 +5,9 @@ declare global {
   namespace Schema {
     interface EmployeeDepartmentsFormData {
       id?: string
+      slug?: string
       description?: string
       name: string
-      slug?: string
     }
   }
 }

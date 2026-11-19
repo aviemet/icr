@@ -41,7 +41,7 @@ module Payroll
       intervals
         .group_by(&:employee_id)
         .each_with_object({}) do |(employee_id, employee_intervals), hash|
-          hash[employee_id.to_s] = hours_for_intervals(employee_intervals)
+        hash[employee_id.to_s] = hours_for_intervals(employee_intervals)
       end
     end
 

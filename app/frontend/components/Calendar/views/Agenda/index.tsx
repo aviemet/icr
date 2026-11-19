@@ -16,12 +16,12 @@ interface AgendaViewProps<TEventResources extends EventResources> extends BaseVi
 	titleBuilder?: (event: BaseCalendarEvent<EventResources>, displayProperties: AgendaDisplayProperties) => string
 }
 
-const AgendaViewComponent = <TEventResources extends EventResources>({
+function AgendaViewComponent<TEventResources extends EventResources>({
 	className,
 	style,
 	displayStrategy,
 	titleBuilder,
-}: AgendaViewProps<TEventResources>) => {
+}: AgendaViewProps<TEventResources>) {
 	const { getEventTitle } = useCalendarContext()
 	const eventsByDay = useDisplayStrategy<TEventResources, "agenda", AgendaDisplayProperties>(
 		VIEWS.agenda,

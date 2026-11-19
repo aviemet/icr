@@ -1,7 +1,7 @@
 require "rails_helper"
 require_relative "../support/devise"
 
-RSpec.describe "/clients", :inertia do
+RSpec.describe "/clients" do
   def valid_attributes
     {
       client: {
@@ -54,6 +54,42 @@ RSpec.describe "/clients", :inertia do
 
       expect(response).to have_http_status(:ok)
       expect_inertia.to render_component "Clients/Show"
+    end
+
+    it "ships overview props in lockstep for related collections" do
+      client = create(:client, :with_profile)
+      allergy = create(:client_allergy, client: client)
+      diagnosis = create(:client_diagnosis, client: client)
+      support_contact = create(:client_support_contact, client: client, is_emergency: true)
+      create(:client_life_detail, client: client)
+      manager = create(:employee)
+      create(:clients_manager, client: client, manager: manager)
+      attendant = create(:employee)
+      create(:clients_attendant, client: client, attendant: attendant)
+      doctor = create(:doctor)
+      client.doctors << doctor
+      medication = create(:medication)
+      dosage = create(:dosage)
+      prescription = create(:prescription, client: client, doctor: doctor, medication: medication, dosage: dosage, starts_at: Date.current, ends_at: nil)
+      vendor = create(:vendor)
+      enrollment = create(:client_enrollment, client: client, vendor: vendor)
+
+      get client_url(client)
+
+      expect(response).to have_http_status(:ok)
+      props = inertia.props[:client]
+      expect(props[:allergies].pluck(:id)).to eq([allergy.id])
+      expect(props[:diagnoses].pluck(:id)).to eq([diagnosis.id])
+      expect(props[:support_contacts].pluck(:id)).to eq([support_contact.id])
+      expect(props[:prescriptions].pluck(:id)).to eq([prescription.id])
+      expect(props[:enrollments].pluck(:id)).to eq([enrollment.id])
+      expect(props[:current_attendants].pluck(:id)).to eq([attendant.id])
+      expect(props[:current_manager][:id]).to eq(manager.id)
+      expect(props[:active_allergies_count]).to eq(1)
+      expect(props[:active_prescriptions_count]).to eq(1)
+      expect(props[:emergency_contacts_count]).to eq(1)
+      expect(props[:uci_number]).to eq(client.uci_number)
+      expect(props[:life_detail][:adls]).to be_present
     end
   end
 
@@ -126,13 +162,37 @@ RSpec.describe "/clients", :inertia do
         expect(client.number).to eq("changed")
       end
 
-      it "redirects to the client" do
+      it "redirects to the client profile tab" do
         client = create(:client)
 
         patch client_url(client), params: { client: { number: "changed" } }
         client.reload
 
-        expect(response).to redirect_to(client_url(client))
+        expect(response).to redirect_to(client_url(client, tab: "profile"))
+      end
+
+      it "updates CA and IHSS profile fields" do
+        client = create(:client)
+
+        patch client_url(client), params: {
+          client: {
+            uci_number: "1234567",
+            regional_center: "RCEB",
+            ihss_authorized_hours: 40.5,
+            ihss_share_of_cost: 12.0,
+            life_detail_attributes: {
+              adls: "Needs meal support",
+              risk_flags: "Elopement",
+            },
+          },
+        }
+        client.reload
+
+        expect(client.uci_number).to eq("1234567")
+        expect(client.regional_center).to eq("RCEB")
+        expect(client.ihss_authorized_hours).to eq(40.5)
+        expect(client.life_detail.adls).to eq("Needs meal support")
+        expect(client.life_detail.risk_flags).to eq("Elopement")
       end
     end
 

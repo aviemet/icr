@@ -22,7 +22,7 @@ interface BreadcrumbsProps extends Omit<MantineBreadcrumbsProps, "children"> {
 	children?: React.ReactNode
 }
 
-export const Breadcrumbs = ({ crumbs, children, separator = ">", ...props }: BreadcrumbsProps) => {
+export function Breadcrumbs({ crumbs, children, separator = ">", ...props }: BreadcrumbsProps) {
 	return (
 		<Portal target="#footer-portal">
 			<MantineBreadcrumbs separator={ separator } { ...props }>

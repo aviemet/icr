@@ -10,7 +10,7 @@ interface EventDetailsProps<TEventResources extends EventResources> {
 	event: BaseCalendarEvent<TEventResources>
 }
 
-const EventDetails = <TEventResources extends EventResources>({ event }: EventDetailsProps<TEventResources>) => {
+export function EventDetails<TEventResources extends EventResources>({ event }: EventDetailsProps<TEventResources>) {
 	const { localizer, getEventTitle } = useCalendarContext()
 	const color = event.color || vars.colors.primaryColors.filled
 
@@ -51,5 +51,3 @@ const EventDetails = <TEventResources extends EventResources>({ event }: EventDe
 		</Stack>
 	)
 }
-
-export { EventDetails }

@@ -34,6 +34,9 @@ class Prescription < ApplicationRecord
   belongs_to :doctor
   belongs_to :dosage
 
+  accepts_nested_attributes_for :dosage
+  accepts_nested_attributes_for :medication
+
   scope :active, -> { where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current) }
   scope :historical, -> { where.not(ends_at: nil).where(ends_at: ...Time.current) }
 

@@ -1,12 +1,14 @@
 import { Table, type TableTbodyProps } from "@mantine/core"
-import { forwardRef } from "react"
+import { type Ref } from "react"
 
-export const Body = forwardRef<HTMLTableSectionElement, TableTbodyProps>(({ children, ...props }, ref) => {
+export interface BodyProps extends TableTbodyProps {
+	ref?: Ref<HTMLTableSectionElement>
+}
+
+export function Body({ children, ref, ...props }: BodyProps) {
 	return (
 		<Table.Tbody { ...props } ref={ ref }>
 			{ children }
 		</Table.Tbody>
 	)
-})
-
-Body.displayName = "Table.Body"
+}

@@ -1,5 +1,5 @@
 class Employees::SpotlightSerializer < SpotlightSerializer
-  SPOTLIGHT_TYPE = "employee"
+  SPOTLIGHT_TYPE = "employee".freeze
 
   object_as :employee, model: :Employee
 
@@ -7,4 +7,3 @@ class Employees::SpotlightSerializer < SpotlightSerializer
 
   attributes(:slug)
 end
-

@@ -2,7 +2,7 @@ class TrainingsController < ApplicationController
   include Searchable
 
   expose :trainings, -> { policy_scope(search(Employee::Training.includes_associated)) }
-  expose :training, -> { policy_scope(Employee::Training.includes_associated).find(params[:id]) }
+  expose :training, -> { policy_scope(Employee::Training.includes_associated).find(params.expect(:id)) }
 
   sortable_fields %w(name description estimated_minutes active_on inactive_on)
 

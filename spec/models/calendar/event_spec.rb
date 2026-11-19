@@ -40,7 +40,7 @@ RSpec.describe Calendar::Event do
       expect(build(:calendar_event, {
         starts_at: Time.zone.now,
         ends_at: 1.hour.ago,
-      },)).not_to be_valid
+      })).not_to be_valid
     end
   end
 
@@ -58,21 +58,21 @@ RSpec.describe Calendar::Event do
     it "destroys the linked shift when the period is open" do
       employee = create(:employee)
       shift = create(:shift, employee: employee)
-      event = Calendar::Event.find(shift.calendar_event_id)
+      event = described_class.find(shift.calendar_event_id)
 
       expect { event.destroy }.to change(Shift, :count).by(-1)
-      expect(Calendar::Event.exists?(event.id)).to be(false)
+      expect(described_class.exists?(event.id)).to be(false)
     end
 
     it "does not destroy when the pay period is finalized" do
       employee = create(:employee)
       shift = create(:shift, employee: employee)
-      event = Calendar::Event.find(shift.calendar_event_id)
+      event = described_class.find(shift.calendar_event_id)
       shift.timesheet.pay_period.update!(finalized_at: Time.current)
 
       expect(event.destroy).to be(false)
       expect(event.errors[:base]).to include(I18n.t("pay_periods.finalized_locked"))
-      expect(Calendar::Event.exists?(event.id)).to be(true)
+      expect(described_class.exists?(event.id)).to be(true)
       expect(Shift.exists?(shift.id)).to be(true)
     end
   end
@@ -83,27 +83,27 @@ RSpec.describe Calendar::Event do
       @event1 = create(:calendar_event, {
         starts_at: 1.day.ago,
         ends_at: 1.hour.ago
-      },)
+      })
       @event2 = create(:calendar_event, {
         starts_at: 3.days.ago,
         ends_at: 2.days.ago
-      },)
+      })
       @event3 = create(:calendar_event, {
         starts_at: 7.days.ago,
         ends_at: 6.days.ago
-      },)
+      })
       @event4 = create(:calendar_event, {
         starts_at: 1.hour.from_now,
         ends_at: 2.hours.from_now
-      },)
+      })
       @event5 = create(:calendar_event, {
         starts_at: 2.days.from_now,
         ends_at: 3.days.from_now
-      },)
+      })
       @event6 = create(:calendar_event, {
         starts_at: 1.week.from_now,
         ends_at: 1.week.from_now + 1.day
-      },)
+      })
     end
 
     describe ".before" do

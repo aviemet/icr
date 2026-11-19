@@ -13,7 +13,7 @@ RSpec.describe "Settings::JobTitles", type: :request do
 
       expect(response).to be_successful
       expect_inertia.to render_component "Settings/JobTitles/Index"
-      names = inertia.props[:job_titles].map { |job_title| job_title[:name] }
+      names = inertia.props[:job_titles].pluck(:name)
       expect(names).to include("Coordinator", "Specialist")
       expect(names).to eq(names.sort)
       expect(inertia.props).not_to have_key(:pagination)

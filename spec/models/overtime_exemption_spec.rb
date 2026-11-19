@@ -160,8 +160,8 @@ RSpec.describe OvertimeExemption, type: :model do
     start_time = Time.zone.parse(attributes[:start_time])
     end_time = Time.zone.parse(attributes[:end_time])
 
-    double(
-      "Shift",
+    instance_double(
+      Shift,
       category: attributes[:category],
       start_time: start_time,
       end_time: end_time,

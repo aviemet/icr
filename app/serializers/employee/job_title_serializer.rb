@@ -30,4 +30,3 @@ class Employee::JobTitleSerializer < ApplicationSerializer
 
   belongs_to :department, serializer: Employee::DepartmentSerializer
 end
-

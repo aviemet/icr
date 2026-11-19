@@ -15,7 +15,7 @@ module Serializer
       end
 
       def copy_view_files
-        ap "SERIALIZERS"
+        Rails.logger.debug "SERIALIZERS"
       end
 
       private

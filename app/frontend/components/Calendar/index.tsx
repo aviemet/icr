@@ -67,9 +67,9 @@ export const useCalendarContext = (): CalendarContextValue => {
 	return context
 }
 
-export const CalendarProvider = (
+export function CalendarProvider(
 	props: React.PropsWithChildren<{ value: CalendarContextValue }>
-): React.ReactElement => {
+): React.ReactElement {
 	return <ContextObject.Provider value={ props.value }>{ props.children }</ContextObject.Provider>
 }
 

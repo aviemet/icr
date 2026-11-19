@@ -253,7 +253,7 @@ RSpec.describe PayPeriod, type: :model do
       employee = create(:employee)
       event = create(:calendar_event, starts_at: period_start + 1.day, ends_at: period_start + 1.day + 8.hours)
       shift = create(:shift, employee: employee, calendar_event: event, timesheet: nil)
-      shift.update_column(:timesheet_id, nil)
+      shift.update_column(:timesheet_id, nil) # rubocop:disable Rails/SkipsModelValidations
 
       pay_period.sync_shifts!
 
@@ -313,7 +313,7 @@ RSpec.describe PayPeriod, type: :model do
             ends_at: Time.zone.local(2024, 3, 20, 17, 0, 0),
           ),
         )
-        future_shift.update_column(:timesheet_id, wrong_timesheet.id)
+        future_shift.update_column(:timesheet_id, wrong_timesheet.id) # rubocop:disable Rails/SkipsModelValidations
 
         first_half.reattach_out_of_range_shifts!
 
@@ -336,7 +336,7 @@ RSpec.describe PayPeriod, type: :model do
             ends_at: Time.zone.local(2024, 3, 20, 17, 0, 0),
           ),
         )
-        future_shift.update_column(:timesheet_id, wrong_timesheet.id)
+        future_shift.update_column(:timesheet_id, wrong_timesheet.id) # rubocop:disable Rails/SkipsModelValidations
 
         described_class.for_period_dates(Date.new(2024, 3, 1), Date.new(2024, 3, 15))
 

@@ -137,7 +137,7 @@ RSpec.describe Payroll::EmployeePeriodHours do
         employee_id: employee.id,
         starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0),
         ends_at: Time.zone.local(2024, 3, 15, 18, 0, 0),
-        category: nil
+        category: nil,
       )
 
       collector = Class.new(Payroll::WorkIntervalCollector) do
@@ -145,7 +145,7 @@ RSpec.describe Payroll::EmployeePeriodHours do
           @intervals = intervals
         end
 
-        def intervals_for(pay_period:, employee_ids:)
+        def intervals_for(pay_period:, employee_ids:) # rubocop:disable Lint/UnusedMethodArgument
           @intervals.select { |work_interval| employee_ids.include?(work_interval.employee_id) }
         end
       end.new([interval])

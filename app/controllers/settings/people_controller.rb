@@ -54,7 +54,7 @@ class Settings::PeopleController < ApplicationController
   def create
     authorize Person.new
     if person.save
-      redirect_to person, notice: "Person was successfully created."
+      redirect_to person, notice: t("templates.controllers.notices.created", model: "Person")
     else
       redirect_to new_person_path, inertia: { errors: person.errors }
     end
@@ -65,7 +65,7 @@ class Settings::PeopleController < ApplicationController
   def update
     authorize person
     if person.update(person_params)
-      redirect_to person, notice: "Person was successfully updated."
+      redirect_to person, notice: t("templates.controllers.notices.updated", model: "Person")
     else
       redirect_to edit_person_path, inertia: { errors: person.errors }
     end
@@ -75,6 +75,6 @@ class Settings::PeopleController < ApplicationController
   def destroy
     authorize person
     person.destroy!
-    redirect_to people_url, notice: "Person was successfully destroyed."
+    redirect_to people_url, notice: t("templates.controllers.notices.destroyed", model: "Person")
   end
 end

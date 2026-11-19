@@ -5,6 +5,7 @@ This is a single-instance Rails application designed to run for a single company
 
 ### Model Organization
 - Employee-related models live under the `Employee::` namespace and use explicit `class_name` in associations (required for the namespace to resolve). Serializers mirror the same namespace.
+- Client care-domain models live under the `Client::` namespace (`SupportContact`, `Allergy`, `Diagnosis`, `LifeDetail`, `Enrollment`) with `self.table_name` and explicit `class_name` on `Client` associations. Decent Exposure in nested `Clients::*` controllers must pass `model: Client::...` or it resolves the un-namespaced constant.
 
 ## Project Milestones
 
@@ -44,13 +45,14 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
   - [ ] Track requirement fulfillment status per employee
 
 ### Phase 4: Client Management
-- [ ] Client onboarding workflow
-  - [ ] Personal and medical information
-  - [ ] Care requirements documentation
-  - [ ] Emergency contact management
-- [ ] Client profile management
-  - [ ] Service history tracking
-  - [ ] Document management for client-specific files
+- [x] Client onboarding workflow
+  - [x] Personal and medical information
+  - [x] Care requirements documentation
+  - [x] Emergency contact management
+- [x] Client profile management
+  - [x] Service history tracking
+  - [x] Document management for client-specific files
+- [ ] MAR / controlled-substance logs (Future Feature)
 
 ### Phase 5: Calendar and Scheduling
 - [ ] Core calendar functionality
@@ -105,12 +107,16 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - When checking HTTP response status, use exact status equality (e.g. 201), not range checks.
 - TypeScript: strict types, prefer existing types and generics over inline types. Do not use type assertions (as, as unknown as). Do not add explicit return type annotations when TypeScript can infer them; only annotate when intent is genuinely ambiguous. Fix type errors by correcting the types (e.g. union types, generics), not by casting.
 - Nested ternaries are disallowed; use `if`/`else` or early returns.
+- ASCII punctuation only in all generated or edited text (code, UI copy, docs, commits, locales). Use `'` not curly apostrophes/quotes; use `-` not en-dash (`–`) or em-dash (`—`); use `...` not ellipsis (`…`). Empty/missing display values use `-`, not `—`.
 
 ## Feature Documentation
 *Document completed features and their core functionality here*
 
 ### Dashboard
 - Root Inertia page loads `dashboard` props from `Dashboard::StatsSerializer.render(Dashboard::Stats#payload)` so the payload matches `Schema.DashboardStats` from TypesFromSerializers. When `user` is nil, `Dashboard::Stats` uses `Client.none`, `Employee.none`, `Calendar::Event.none`, and `Timesheet.none` instead of calling Pundit, so counts and lists collapse to empty without a separate blank payload path. Nested rows are `Struct` instances; use `Payload#to_h` for plain hashes. `Dashboard::StatsSerializer` and its nested serializers subclass `BaseSerializer` (not `ApplicationSerializer`) so the root DTO is not forced through `identifier`/ActiveRecord-oriented hooks. Counts and lists use `Pundit.policy_scope` for `Client`, `Employee`, `Calendar::Event`, and `Timesheet` so the numbers match what that user could list in those areas. Week hours sum shift lengths (calendar event duration) for scoped employees in the current calendar week. Pending timesheets are unapproved rows for the current pay period when that `PayPeriod` row already exists (GET does not create periods). Recent activity is derived from the newest clients and employees in scope, not from the activity table.
+
+### Client Show
+- Client show is URL-tabbed (Overview, Profile, Contacts, Health, Medications, Care and Services, Documents, Incidents). Schedule stays a member route. Nested writes live under `/clients/:client_slug/...` and authorize through `ClientPolicy#update?` (show for read). Overview counts and sibling collections come from one `Client.includes_show` load via `Clients::ShowSerializer` so allergy/prescription/support-contact/enrollment/attendant ids stay lockstep. CA-aware profile fields and IHSS profile fields live on `clients`; day programs are `Client::Enrollment` rows linked to `Vendor`. Support contacts use Personable (name and Contactable phones/emails/addresses live on Person). Document/image UI uses ActiveStorage `HasDocuments`/`HasImages` list/upload/purge (Phase 2 versioning still open).
 
 ### Permission System
 - Single stack: Devise auth, Rolify roles, Pundit policies. Job Titles are the admin-facing permission surface (Settings > Job Titles matrix).
@@ -224,7 +230,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 ## Payroll Periods
 
 ### Semi-Monthly
-- With “last day of month” setting: first period 1st-14th, second 15th-last day. Otherwise two configurable dates; each period ends the day before the next starts.
+- With "last day of month" setting: first period 1st-14th, second 15th-last day. Otherwise two configurable dates; each period ends the day before the next starts.
 
 ### Bi-Weekly
 - Fixed reference date for boundaries; 14-day periods; configurable start day of week.
@@ -233,4 +239,4 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Configurable start day of week; 7-day periods.
 
 ### Monthly
-- Configurable start date or “last day of month.” When last day: period is last day of prior month through second-to-last day of current month. Otherwise ends day before next period's start.
+- Configurable start date or "last day of month." When last day: period is last day of prior month through second-to-last day of current month. Otherwise ends day before next period's start.

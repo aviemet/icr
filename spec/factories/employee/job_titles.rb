@@ -23,7 +23,6 @@ FactoryBot.define do
   factory :job_title, class: "Employee::JobTitle" do
     name { Faker::Job.title }
     description { Faker::Job.field }
-    association :department, factory: :department
+    department factory: %i[department]
   end
 end
-

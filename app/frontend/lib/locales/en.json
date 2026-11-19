@@ -473,25 +473,6 @@
         "overlap": "Overlaps with shift on %{time}"
       }
     },
-    "permission_group": "Permission Group",
-    "permissions": {
-      "edit": {
-        "title": "Edit Permission Group"
-      },
-      "form": {
-        "add_permission": "Add Permission",
-        "assignments": "Assignments",
-        "basic_info": "Basic Information",
-        "conditions": {
-          "owner_only": "Owner Only",
-          "time_restricted": "Time Restricted"
-        },
-        "permissions": "Permissions"
-      },
-      "new": {
-        "title": "New Permission Group"
-      }
-    },
     "pundit": {
       "not_authorized": "You are not authorized to access this page."
     },
@@ -554,6 +535,7 @@
           "title": "Edit %{name}"
         },
         "index": {
+          "new": "New Client",
           "title": "Clients"
         },
         "new": {
@@ -564,22 +546,89 @@
           "title": "%{name}'s Schedule"
         },
         "show": {
-          "contacts": {
-            "addresses": "Addresses",
-            "emails": "Emails",
-            "phones": "Phone Numbers"
+          "care": {
+            "add_attendant": "Assign Attendant",
+            "add_enrollment": "Add Enrollment",
+            "add_manager": "Assign Manager",
+            "attendants": "Attendants",
+            "enrollments": "Day Programs / Services",
+            "household": "Household",
+            "managers": "Managers"
           },
-          "details": {
-            "placeholder": "Some kind of useful dashboard, maybe important or commonly needed information and a picture. Maybe some stats and/or charts computed from other data. Could even be just a list of useful links for the client, curated by the agency."
+          "contacts": {
+            "add_support_contact": "Add Support Contact",
+            "addresses": "Addresses",
+            "client_contact": "Client Contact",
+            "emails": "Emails",
+            "emergency": "Emergency",
+            "phones": "Phone Numbers",
+            "support_network": "Support Network"
           },
           "documents": {
-            "title": "Documents"
+            "files": "Files",
+            "images": "Images",
+            "title": "Documents",
+            "upload_document": "Upload Document",
+            "upload_image": "Upload Image"
           },
           "edit": "Edit Client",
+          "health": {
+            "add_allergy": "Add Allergy",
+            "add_diagnosis": "Add Diagnosis",
+            "allergies": "Allergies",
+            "diagnoses": "Diagnoses",
+            "doctors": "Doctors",
+            "link_doctor": "Link Doctor",
+            "preferred_hospital": "Preferred Hospital"
+          },
+          "incidents": {
+            "empty": "No incident reports for this client.",
+            "title": "Incidents",
+            "view": "View"
+          },
+          "medications": {
+            "active": "Active Prescriptions",
+            "add": "Add Prescription",
+            "historical": "Historical Prescriptions"
+          },
+          "overview": {
+            "active_meds": "Active medications",
+            "allergies": "Active allergies",
+            "attendants": "Attendants",
+            "care_team": "Care Team",
+            "client_number": "Client",
+            "emergency_contacts": "Emergency contacts",
+            "funding": "Funding and Plans",
+            "health_alerts": "Health Alerts",
+            "household": "Household",
+            "identity": "Identity",
+            "ihss": "IHSS",
+            "incidents": "Incidents",
+            "ipp_review": "IPP Review",
+            "manager": "Manager",
+            "none": "None assigned",
+            "quick_links": "Quick Links",
+            "regional_center": "Regional Center",
+            "schedule": "Schedule",
+            "uci": "UCI"
+          },
+          "profile": {
+            "california": "California / Regional Center",
+            "communication": "Communication",
+            "demographics": "Demographics",
+            "ihss": "IHSS Profile",
+            "life_details": "Life Details",
+            "save": "Save Profile"
+          },
           "tabs": {
-            "contacts": "Contact Details",
-            "details": "Details",
-            "documents": "Documents"
+            "care": "Care and Services",
+            "contacts": "Contacts",
+            "documents": "Documents",
+            "health": "Health",
+            "incidents": "Incidents",
+            "medications": "Medications",
+            "overview": "Overview",
+            "profile": "Profile"
           },
           "title": "Client"
         }
@@ -655,6 +704,7 @@
         },
         "register": {
           "confirm_password": "Confirm Password",
+          "email": "Email",
           "errors": {
             "passwords_must_match": "Passwords must match"
           },
@@ -720,7 +770,7 @@
           "job_title": "Job Title",
           "job_title_select_all": "Select All",
           "last_name": "Last Name",
-          "number": "Employee #",
+          "number": "Employee",
           "status": "Status",
           "status_select_all": "Select All",
           "statuses": {
@@ -736,6 +786,11 @@
         "schedule": {
           "title": "%{name}'s Schedule"
         }
+      },
+      "index_template": {
+        "clear_selection": "Clear",
+        "delete_selected": "Delete",
+        "selected_count": "%{count} selected"
       },
       "pagination": {
         "first": "&laquo; First",
@@ -791,40 +846,6 @@
           "no_adjustments": "No adjustments recorded",
           "title": "Pay period",
           "workflow_help": "Review and approve each employee timesheet, then close the period to lock it."
-        }
-      },
-      "permissions": {
-        "edit": {
-          "title": "Edit Permission Group"
-        },
-        "form": {
-          "add_assignment": "Add Assignment",
-          "add_permission": "Add Permission",
-          "assignments": "Assignments",
-          "basic_info": "Basic Information",
-          "conditions": {
-            "owner_only": "Owner Only",
-            "time_restricted": "Time Restricted"
-          },
-          "effects": {
-            "allow": "Allow",
-            "deny": "Deny"
-          },
-          "permissions": "Permissions"
-        },
-        "index": {
-          "new": "New Permission Group",
-          "table": {
-            "actions": "Actions",
-            "assignments": "Assignments",
-            "description": "Description",
-            "name": "Name",
-            "precedence": "Precedence"
-          },
-          "title": "Permission Groups"
-        },
-        "new": {
-          "title": "New Permission Group"
         }
       },
       "settings": {
@@ -964,11 +985,6 @@
           "total": "Total",
           "vacation": "Vacation"
         }
-      },
-      "index_template": {
-        "clear_selection": "Clear",
-        "delete_selected": "Delete",
-        "selected_count": "%{count} selected"
       }
     }
   }

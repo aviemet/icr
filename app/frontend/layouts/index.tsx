@@ -20,7 +20,7 @@ export interface LayoutProps {
 	children: any
 }
 
-export const LayoutWrapper = ({ children }: LayoutProps) => {
+export function LayoutWrapper({ children }: LayoutProps) {
 	return (
 		<Providers>
 			<Flash />
@@ -29,7 +29,7 @@ export const LayoutWrapper = ({ children }: LayoutProps) => {
 	)
 }
 
-export const AuthLayout = ({ children }: LayoutProps) => {
+export function AuthLayout({ children }: LayoutProps) {
 	return (
 		<LayoutWrapper>
 			<BareAuthLayout>
@@ -39,7 +39,7 @@ export const AuthLayout = ({ children }: LayoutProps) => {
 	)
 }
 
-export const AppLayout = ({ children }: LayoutProps) => {
+export function AppLayout({ children }: LayoutProps) {
 	return (
 		<LayoutWrapper>
 			<SpotlightComponent />
@@ -50,7 +50,7 @@ export const AppLayout = ({ children }: LayoutProps) => {
 	)
 }
 
-export const SettingsLayout = ({ children }: LayoutProps) => {
+export function SettingsLayout({ children }: LayoutProps) {
 	return (
 		<LayoutWrapper>
 			<SpotlightComponent />
@@ -61,7 +61,7 @@ export const SettingsLayout = ({ children }: LayoutProps) => {
 	)
 }
 
-export const PublicLayout = ({ children }: LayoutProps) => {
+export function PublicLayout({ children }: LayoutProps) {
 	return (
 		<LayoutWrapper>
 			<BarePublicLayout>

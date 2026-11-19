@@ -1,10 +1,11 @@
 import { Table, type TableTheadProps } from "@mantine/core"
-import { forwardRef } from "react"
+import { type Ref } from "react"
 
-export const Head = forwardRef<HTMLTableSectionElement, TableTheadProps>((
-	{ children, ...props },
-	ref,
-) => {
+export interface HeadProps extends TableTheadProps {
+	ref?: Ref<HTMLTableSectionElement>
+}
+
+export function Head({ children, ref, ...props }: HeadProps) {
 	return (
 		<Table.Thead
 			ref={ ref }
@@ -13,6 +14,4 @@ export const Head = forwardRef<HTMLTableSectionElement, TableTheadProps>((
 			{ children }
 		</Table.Thead>
 	)
-})
-
-Head.displayName = "Table.Head"
+}

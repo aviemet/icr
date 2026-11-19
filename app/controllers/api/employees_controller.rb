@@ -9,7 +9,7 @@ class Api::EmployeesController < Api::ApiController
   # @route GET /api/employees/:slug/schedule {param: :slug} (api_employee_schedule)
   def schedule
     schedules = Employee
-      .find_by!(slug: params[:slug])
+      .find_by!(slug: params.expect(:slug))
       .schedule_events_between(*DateRangeCalculator.new(params).call)
 
     render json: schedules.render(:employee)

@@ -38,7 +38,7 @@ RSpec.describe Calendar::EventException do
       expect(build(:calendar_event_exception, {
         cancelled: Faker::Time.forward(days: 12, period: :morning),
         rescheduled: Faker::Time.forward(days: 12, period: :afternoon)
-        },)).not_to be_valid
+        })).not_to be_valid
     end
 
     it "is invalid if neither cancelled nor rescheduled are set" do

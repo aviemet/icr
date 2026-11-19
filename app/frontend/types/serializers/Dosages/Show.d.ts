@@ -6,10 +6,10 @@ declare global {
     interface DosagesShow {
       id: string
       amount?: string | number
-      amount_unit?: number
+      amount_unit: "mg" | "ml" | "tablet" | "capsule" | "unit" | "other"
       created_at: Date
       freq_amount?: string | number
-      freq_period?: number
+      freq_period: "hour" | "day" | "week" | "month" | "as_needed"
       notes?: string
       updated_at: Date
     }

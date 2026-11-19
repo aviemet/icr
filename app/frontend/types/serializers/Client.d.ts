@@ -9,14 +9,26 @@ declare global {
       active_at?: Date
       color?: string
       color_mappings: Record<string, Record<string, string>>
+      communication_notes?: string
       first_name: string
       full_name: string
+      ihss_authorized_hours?: string | number
+      ihss_notes?: string
+      ihss_share_of_cost?: string | number
       inactive_at?: Date
+      ipp_ends_on?: Date
+      ipp_review_on?: Date
+      ipp_starts_on?: Date
       last_name: string
+      medi_cal_number?: string
       name: string
       number?: string
       person: Person
       person_id: string
+      preferred_hospital?: string
+      preferred_language?: string
+      regional_center?: string
+      uci_number?: string
     }
   }
 }

@@ -1,0 +1,9 @@
+---
+en:
+  activerecord:
+    errors:
+      models:
+        clients_attendant:
+          attributes:
+            attendant_id:
+              already_attends: Already attends this client

@@ -96,7 +96,7 @@ RSpec.configure do |config|
   # Truncation wipes seeded system rows; restore required seed data afterward.
   config.after type: :request  do
     DatabaseCleaner.strategy = :transaction
-    Dir[Rails.root.join("db/seeds/*required*.rb")].sort.each { |seed| load seed }
+    Rails.root.glob("db/seeds/*required*.rb").each { |seed| load seed }
   end
 
   config.before do

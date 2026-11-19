@@ -23,7 +23,7 @@
 #
 class ClientsAttendant < ApplicationRecord
   belongs_to :attendant, class_name: "Employee"
-  belongs_to :client
+  belongs_to :client, inverse_of: :clients_attendants
 
   attribute :starts_at, :datetime, default: -> { Time.current }
 
@@ -33,7 +33,7 @@ class ClientsAttendant < ApplicationRecord
   validates :attendant_id, uniqueness: {
     scope: :client_id,
     conditions: -> { where(ends_at: nil) },
-    message: "already attends this client"
+    message: :already_attends
   }
 
   scope :current, -> { where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current) }

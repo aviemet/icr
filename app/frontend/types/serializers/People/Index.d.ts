@@ -10,6 +10,7 @@ declare global {
       agency_role: string
       client: ClientsPersisted
       created_at: Date
+      dob?: Date
       employee: EmployeesPersisted
       first_name?: string
       last_name?: string

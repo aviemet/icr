@@ -1,5 +1,5 @@
 class Doctors::SpotlightSerializer < SpotlightSerializer
-  SPOTLIGHT_TYPE = "doctor"
+  SPOTLIGHT_TYPE = "doctor".freeze
 
   object_as :doctor, model: "Doctor"
 
@@ -7,4 +7,3 @@ class Doctors::SpotlightSerializer < SpotlightSerializer
 
   attributes(:slug)
 end
-

@@ -10,7 +10,7 @@ class Api::ClientsController < ApplicationController
   # @route GET /api/clients/:slug/schedule {param: :slug} (api_client_schedule)
   def schedule
     schedules = Client
-      .find_by!(slug: params[:slug])
+      .find_by!(slug: params.expect(:slug))
       .schedule_events_between(*DateRangeCalculator.new(params).call)
 
     render json: schedules.render(:client)

@@ -125,7 +125,7 @@ class ApplicationPolicy
 
   private
 
-  def standard_auth(action)
+  def standard_auth(action) # rubocop:disable Naming/PredicateMethod
     return true if admin?
 
     job_title_allows?(action, resource_class_for_record)

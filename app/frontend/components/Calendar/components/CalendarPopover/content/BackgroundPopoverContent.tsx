@@ -6,12 +6,10 @@ interface BackgroundPopoverContentProps {
 	resourceId?: string | number
 }
 
-const BackgroundPopoverContent = ({ date }: BackgroundPopoverContentProps) => {
+export function BackgroundPopoverContent({ date }: BackgroundPopoverContentProps) {
 	return (
 		<Text size="sm">
 			Selected: { date.toLocaleDateString() }
 		</Text>
 	)
 }
-
-export { BackgroundPopoverContent }

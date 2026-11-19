@@ -25,7 +25,7 @@ i18n
 	.init({
 		resources,
 		fallbackLng: defaultLocale,
-		debug: true,
+		debug: import.meta.env.MODE === "development",
 		interpolation: {
 			escapeValue: false, // React already escapes values
 			prefix: "%{",

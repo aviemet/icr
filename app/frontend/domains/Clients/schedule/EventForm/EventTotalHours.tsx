@@ -16,7 +16,7 @@ export function EventTotalHours() {
 	const startsAt = parseDateTime(startsAtVal)
 	const endsAt = parseDateTime(endsAtVal)
 
-	let label = "—"
+	let label = "-"
 	if(startsAt && endsAt) {
 		const hours = endsAt.diff(startsAt, "hour", true)
 		if(hours < 0) {

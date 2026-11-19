@@ -1,7 +1,7 @@
 require "rails_helper"
 require_relative "../support/devise"
 
-RSpec.describe "/households", :inertia do
+RSpec.describe "/households" do
   login_user(:admin)
 
   describe "GET /index" do
