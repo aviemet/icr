@@ -1,8 +1,6 @@
-import { Select } from "@mantine/core"
-import { useState, useMemo } from "react"
+import { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { Title, Page, Section, Grid } from "@/components"
 import {
 	AcceptOfferForm,
 	CloseApplicationForm,
@@ -12,6 +10,7 @@ import {
 	ResignationForm,
 	TerminationForm,
 } from "@/domains/Employees/StatusChange"
+import { StatusDesk } from "@/features"
 import { Routes } from "@/lib"
 
 interface StatusProps {
@@ -29,10 +28,6 @@ const Status = ({ employee }: StatusProps) => {
 		}
 		return ""
 	})
-
-	const handleTransitionChange = (value: string | null) => {
-		if(value) setSelectedTransition(value)
-	}
 
 	const availableTransitions = useMemo(() => {
 		switch(employee.status) {
@@ -62,53 +57,44 @@ const Status = ({ employee }: StatusProps) => {
 		}
 	}, [employee.status, t])
 
+	const statusLabel = employee.status
+		? t(`views.employees.table.statuses.${employee.status}`, { defaultValue: employee.status })
+		: "-"
+
+	let form: React.ReactNode = null
+	if(selectedTransition === "begin_onboarding") {
+		form = <OnboardingForm employee={ employee } />
+	} else if(selectedTransition === "close_application") {
+		form = <CloseApplicationForm employee={ employee } />
+	} else if(selectedTransition === "accept_offer") {
+		form = <AcceptOfferForm employee={ employee } />
+	} else if(selectedTransition === "reject_offer") {
+		form = <RejectOfferForm employee={ employee } />
+	} else if(selectedTransition === "record_resignation") {
+		form = <ResignationForm employee={ employee } />
+	} else if(selectedTransition === "process_termination") {
+		form = <TerminationForm employee={ employee } />
+	} else if(selectedTransition === "reconsider") {
+		form = <ReconsiderForm employee={ employee } />
+	}
+
 	return (
-		<Page
+		<StatusDesk
 			title={ t("views.employees.status.title") }
 			breadcrumbs={ [
 				{ title: t("views.employees.index.title"), href: Routes.employees() },
 				{ title: employee.person.name, href: Routes.employee(employee.slug) },
 				{ title: t("views.employees.show.change_status") },
 			] }
+			heading={ t("views.employees.status.change_for", { name: employee.person.name }) }
+			statusLabel={ statusLabel }
+			transitionLabel={ t("views.employees.status.label") }
+			options={ availableTransitions }
+			value={ selectedTransition }
+			onChange={ setSelectedTransition }
 		>
-			<Section>
-				<Title>{ t("views.employees.status.change_for", { name: employee.person.name }) }</Title>
-
-				<Grid mt="xl">
-					<Grid.Col span={ { base: 12, sm: 6, md: 4 } }>
-						<Select
-							label={ t("views.employees.status.label") }
-							value={ selectedTransition }
-							onChange={ handleTransitionChange }
-							data={ availableTransitions }
-							clearable={ false }
-						/>
-					</Grid.Col>
-				</Grid>
-
-				{ selectedTransition === "begin_onboarding" && (
-					<OnboardingForm employee={ employee } />
-				) }
-				{ selectedTransition === "close_application" && (
-					<CloseApplicationForm employee={ employee } />
-				) }
-				{ selectedTransition === "accept_offer" && (
-					<AcceptOfferForm employee={ employee } />
-				) }
-				{ selectedTransition === "reject_offer" && (
-					<RejectOfferForm employee={ employee } />
-				) }
-				{ selectedTransition === "record_resignation" && (
-					<ResignationForm employee={ employee } />
-				) }
-				{ selectedTransition === "process_termination" && (
-					<TerminationForm employee={ employee } />
-				) }
-				{ selectedTransition === "reconsider" && (
-					<ReconsiderForm employee={ employee } />
-				) }
-			</Section>
-		</Page>
+			{ form }
+		</StatusDesk>
 	)
 }
 

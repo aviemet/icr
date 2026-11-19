@@ -9,7 +9,7 @@ This is a single-instance Rails application designed to run for a single company
 
 ## Project Milestones
 
-When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the payroll index/workflow), use the plan at [.cursor/plans/payroll_workflow_redesign_80191109.plan.md](.cursor/plans/payroll_workflow_redesign_80191109.plan.md) and document progress in this file (e.g. under Feature Documentation or by updating the Phase 6/7 checklist items below).
+When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the payroll index/workflow), use the plan at [.cursor/plans/payroll_workflow_redesign_31672fdc.plan.md](.cursor/plans/payroll_workflow_redesign_31672fdc.plan.md) and document progress in this file (e.g. under Feature Documentation or by updating the Phase 6/7 checklist items below). The redesign plan's hard approval-window close is superseded: Approve stays available until finalize; due date is urgency only.
 
 ### Phase 1: Core Authentication and Authorization
 - [x] User authentication system
@@ -55,14 +55,14 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - [ ] MAR / controlled-substance logs (Future Feature)
 
 ### Phase 5: Calendar and Scheduling
-- [ ] Core calendar functionality
-  - [ ] Multiple view strategies (day, week, month)
-  - [ ] Proper handling of overlapping events
-- [ ] Event management
-  - [ ] Recurring event support
-  - [ ] Schedule conflict detection
-  - [ ] Schedule assignment for employees and clients
-- [ ] Calendar access controls based on roles
+- [x] Core calendar functionality
+  - [x] Multiple view strategies (day, week, month)
+  - [x] Proper handling of overlapping events
+- [x] Event management
+  - [ ] Recurring event support (model/serializers exist; schedule UI does not create or expand patterns yet)
+  - [x] Schedule conflict detection
+  - [x] Schedule assignment for employees and clients
+- [x] Calendar access controls based on roles
 
 ### Phase 6: Timesheet Management
 - [ ] Timesheet generation system
@@ -158,7 +158,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Shift create: PayPeriod.attach_shift! finds or creates the pay period that contains the shift date and attaches a timesheet. Pay periods appear because shifts are scheduled into them.
 - PayPeriod create/sync: sync_shifts! attaches every overlapping shift onto this period's timesheets (one Timesheet per employee).
 - Payroll index hours: Payroll::EmployeePeriodHours computes per-employee regular_hours and ot_hours for a pay period. Uses Setting overtime_weekly_hours and overtime_daily_hours; splits work intervals by day (including overnight); applies active OvertimeExemption rules to exclude exempt intervals from OT; weekly OT and daily OT are summed. The calculator reads intervals via a collector interface (default: scheduled shifts), so payroll can later swap in a clock-in/out collector without changing overtime math or UI contracts.
-- Payroll approval UI: Approve actions (index row menu, footer bulk approve, employee review Approve button) are visible only during the approval window (current date within 3 days before period end through period end).
+- Payroll approval UI: Approve / Unapprove / bulk approve stay available until the period is finalized (`can_approve = !finalized?`). The payroll due date and `approval_window_open` are deadline / urgency signals only (including overdue copy on payroll home and period show); they must never hard-block approval. Hard-close language in the older payroll redesign plan is superseded by this rule.
 
 ### Frontend Components
 #### UI Framework
@@ -185,6 +185,8 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 
 #### UI & Styling
 - Mantine; Linaria with .css.ts; clsx for class composition; theme supports dark/light.
+- Page chrome contract: `theme.other.page.maxWidth` is the shared content width. Panel surfaces use `pageChrome.panelSurface` (via `Section variant="panel"` or composed on identity chrome). That surface sets `--icr-field-bg` / `--icr-field-border` so Mantine inputs read as inset wells against the panel, not the same fill. Left accent stripes are status opt-in only. Do not add page background gradients or primary-tinted panel fills.
+- Board metric/action styles live in `features/RecordShow/BoardPrimitives.css.ts` for Dashboard and show Overview boards.
 - Gotcha: Linaria-generated class order can make overrides between multiple classes on the same element unreliable. When a view-specific class must override a base class (e.g. base `event` plus TimeGrid `timeGridEvent`), prefer a combined selector like `&.${event} { ... }` in the overriding class so it wins regardless of CSS emission order.
 
 #### Form Implementation

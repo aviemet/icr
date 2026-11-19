@@ -1,11 +1,12 @@
 import React from "react"
 
-import { Button, Divider, Grid, Group, Stack, Text, Tooltip } from "@/components"
+import { Button, Grid, Group, Tooltip } from "@/components"
 import { useFormField, Submit } from "@/components/Form"
 import { RandomizeIcon } from "@/components/Icons"
 import { ColorPickerInput, DateInput, Select, TextInput } from "@/components/Inputs"
 import { type DateInputValue } from "@/components/Inputs"
 import { JobTitlesDropdown } from "@/components/Inputs/Dropdowns"
+import { FormBand, FormBandStack } from "@/features"
 import { generateRandomColor } from "@/lib"
 
 export interface EmployeeInputProps {
@@ -35,8 +36,8 @@ export function Inputs({ employee, jobTitles = [] }: EmployeeInputProps) {
 	}
 
 	return (
-		<Stack gap="xl">
-			<Stack gap="md">
+		<FormBandStack>
+			<FormBand title="Status">
 				<Grid gap="lg">
 					<Grid.Col span={ { xxs: 12, sm: 6 } }>
 						<Select
@@ -46,67 +47,60 @@ export function Inputs({ employee, jobTitles = [] }: EmployeeInputProps) {
 						/>
 					</Grid.Col>
 				</Grid>
-			</Stack>
+			</FormBand>
 
-			<Divider />
-
-			<Stack gap="md">
-				<Text size="sm" fw={ 500 } c="dimmed">Personal Information</Text>
+			<FormBand title="Personal Information">
 				<Grid gap="lg">
 					<Grid.Col span={ { xs: 12, sm: 6, md: 4 } }>
 						<TextInput name="employee.person.first_name" label="First Name" />
 					</Grid.Col>
-
 					<Grid.Col span={ { xs: 12, sm: 6, md: 4 } }>
 						<TextInput name="employee.person.middle_name" label="Middle Name" />
 					</Grid.Col>
-
 					<Grid.Col span={ { xs: 12, sm: 6, md: 4 } }>
 						<TextInput name="employee.person.last_name" label="Last Name" />
 					</Grid.Col>
 				</Grid>
-			</Stack>
+			</FormBand>
 
-			<Stack gap="md">
-				<Text size="sm" fw={ 500 } c="dimmed">Employment Details</Text>
+			<FormBand title="Employment Details">
 				<Grid gap="lg">
 					{ status === "employed" && (
 						<Grid.Col span={ { xs: 12, sm: 6 } }>
 							<TextInput name="employee.number" label="Employee Number" />
 						</Grid.Col>
 					) }
-
 					<Grid.Col span={ { xxs: 12, sm: 6 } }>
 						<DateInput
 							name="employee.active_at"
 							label="Start Date"
 							value={ toDateInputValue(activeAt) }
-							onChange={ (v) => setActiveAt(v) }
+							onChange={ (value) => setActiveAt(value) }
 						/>
 					</Grid.Col>
-
 					<Grid.Col span={ { xxs: 12, sm: 6 } }>
 						<JobTitlesDropdown name="employee.job_title_id" />
 					</Grid.Col>
-
 					<Grid.Col span={ { xxs: 12, sm: 6 } }>
 						<ColorPickerInput
 							name="employee.color"
 							label="Default Calendar Color"
 							value={ typeof color === "string" ? color : undefined }
-							onChange={ (c: string) => setColor(c) }
+							onChange={ (value: string) => setColor(value) }
 						>
 							<Tooltip label="Random" position="right-end">
-								<Button variant="transparent" mx={ 0 } px="xxs" onClick={ handleRandomizeColor }><RandomizeIcon /></Button>
+								<Button variant="transparent" mx={ 0 } px="xxs" onClick={ handleRandomizeColor }>
+									<RandomizeIcon />
+								</Button>
 							</Tooltip>
 						</ColorPickerInput>
 					</Grid.Col>
 				</Grid>
-			</Stack>
+			</FormBand>
 
 			<Group justify="flex-end">
 				<Submit size="md">{ employee.id ? "Update" : "Create" } Employee</Submit>
 			</Group>
-		</Stack>
+		</FormBandStack>
 	)
 }

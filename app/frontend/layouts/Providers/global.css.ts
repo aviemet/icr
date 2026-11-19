@@ -6,6 +6,8 @@ export const globals = css`
 	:global() {
 		html, body, #app {
 			height: 100%;
+			--icr-field-bg: light-dark(${ vars.colors.gray[0] }, ${ vars.colors.dark[8] });
+			--icr-field-border: light-dark(${ vars.colors.gray[4] }, ${ vars.colors.dark[3] });
 		}
 
 		*::selection {

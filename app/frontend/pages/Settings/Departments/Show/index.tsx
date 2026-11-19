@@ -1,4 +1,5 @@
-import { Group, Title, Menu, Page, Section, Text } from "@/components"
+import { Group, Title, Page, Section, Text } from "@/components"
+import { DeleteButton, EditButton } from "@/components/Button"
 import { Routes, withLayout } from "@/lib"
 
 interface ShowDepartmentProps {
@@ -17,21 +18,10 @@ const ShowDepartment = ({ department, job_titles }: ShowDepartmentProps) => {
 			<Section>
 				<Group justify="space-between">
 					<Title>{ title }</Title>
-					<Menu position="bottom-end">
-						<Menu.Target />
-						<Menu.Dropdown>
-							<Menu.Link href={ Routes.editSettingsDepartment(String(department.slug)) }>
-								Edit Department
-							</Menu.Link>
-							<Menu.Link
-								href={ Routes.settingsDepartment(String(department.slug)) }
-								method="delete"
-								as="button"
-							>
-								Delete Department
-							</Menu.Link>
-						</Menu.Dropdown>
-					</Menu>
+					<Group gap="xs">
+						<EditButton href={ Routes.editSettingsDepartment(String(department.slug)) } label={ title } />
+						<DeleteButton href={ Routes.settingsDepartment(String(department.slug)) } label={ title } />
+					</Group>
 				</Group>
 
 				{ department.description && (

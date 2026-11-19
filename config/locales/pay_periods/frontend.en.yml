@@ -26,6 +26,7 @@ en:
           approved_label: Approved
           approved: "%{approved} / %{total}"
           due_in_days: Due in %{count} days
+          overdue_by_days: Overdue by %{count} days
           finalized_on: Finalized %{date}
       show:
         title: Pay period

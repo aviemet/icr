@@ -1,6 +1,7 @@
-import { Grid } from "@/components"
+import { Grid, Group } from "@/components"
 import { Form, Submit } from "@/components/Form"
 import { DateInput, NumberInput, Textarea, TextInput } from "@/components/Inputs"
+import { FormBand, FormBandStack } from "@/features"
 import { type HTTPVerb } from "@/lib"
 
 export interface ClientFormProps {
@@ -30,53 +31,68 @@ export function ClientForm({ method = "post", to, client, ...props }: ClientForm
 			} }
 			{ ...props }
 		>
-			<Grid>
-				<Grid.Col span={ { xxs: 12, sm: 4 } }>
-					<TextInput name="client.person.first_name" label="First Name" />
-				</Grid.Col>
-				<Grid.Col span={ { xxs: 12, sm: 4 } }>
-					<TextInput name="client.person.middle_name" label="Middle Name" />
-				</Grid.Col>
-				<Grid.Col span={ { xxs: 12, sm: 4 } }>
-					<TextInput name="client.person.last_name" label="Last Name" />
-				</Grid.Col>
-				<Grid.Col span={ { xxs: 12, sm: 4 } }>
-					<TextInput name="client.number" label="Client #" />
-				</Grid.Col>
-				<Grid.Col span={ { xxs: 12, sm: 4 } }>
-					<DateInput name="client.person.dob" label="Date of Birth" />
-				</Grid.Col>
-				<Grid.Col span={ { xxs: 12, sm: 4 } }>
-					<TextInput name="client.uci_number" label="UCI Number" />
-				</Grid.Col>
-				<Grid.Col span={ { xxs: 12, sm: 4 } }>
-					<TextInput name="client.regional_center" label="Regional Center" />
-				</Grid.Col>
-				<Grid.Col span={ { xxs: 12, sm: 4 } }>
-					<TextInput name="client.medi_cal_number" label="Medi-Cal Number" />
-				</Grid.Col>
-				<Grid.Col span={ { xxs: 12, sm: 4 } }>
-					<NumberInput name="client.ihss_authorized_hours" label="IHSS Authorized Hours" decimalScale={ 2 } />
-				</Grid.Col>
-				<Grid.Col span={ { xxs: 12, sm: 4 } }>
-					<NumberInput name="client.ihss_share_of_cost" label="IHSS Share of Cost" decimalScale={ 2 } />
-				</Grid.Col>
-				<Grid.Col span={ 12 }>
-					<Textarea name="client.ihss_notes" label="IHSS Notes" minRows={ 2 } />
-				</Grid.Col>
-				<Grid.Col span={ { xxs: 12, sm: 6 } }>
-					<TextInput name="client.preferred_language" label="Preferred Language" />
-				</Grid.Col>
-				<Grid.Col span={ { xxs: 12, sm: 6 } }>
-					<TextInput name="client.preferred_hospital" label="Preferred Hospital" />
-				</Grid.Col>
-				<Grid.Col span={ 12 }>
-					<Textarea name="client.communication_notes" label="Communication Notes" minRows={ 2 } />
-				</Grid.Col>
-				<Grid.Col>
+			<FormBandStack>
+				<FormBand title="Demographics" description="Legal name, client number, and date of birth.">
+					<Grid>
+						<Grid.Col span={ { xxs: 12, sm: 4 } }>
+							<TextInput name="client.person.first_name" label="First Name" />
+						</Grid.Col>
+						<Grid.Col span={ { xxs: 12, sm: 4 } }>
+							<TextInput name="client.person.middle_name" label="Middle Name" />
+						</Grid.Col>
+						<Grid.Col span={ { xxs: 12, sm: 4 } }>
+							<TextInput name="client.person.last_name" label="Last Name" />
+						</Grid.Col>
+						<Grid.Col span={ { xxs: 12, sm: 4 } }>
+							<TextInput name="client.number" label="Client #" />
+						</Grid.Col>
+						<Grid.Col span={ { xxs: 12, sm: 4 } }>
+							<DateInput name="client.person.dob" label="Date of Birth" />
+						</Grid.Col>
+					</Grid>
+				</FormBand>
+
+				<FormBand title="Funding" description="Regional center and IHSS funding details.">
+					<Grid>
+						<Grid.Col span={ { xxs: 12, sm: 4 } }>
+							<TextInput name="client.uci_number" label="UCI Number" />
+						</Grid.Col>
+						<Grid.Col span={ { xxs: 12, sm: 4 } }>
+							<TextInput name="client.regional_center" label="Regional Center" />
+						</Grid.Col>
+						<Grid.Col span={ { xxs: 12, sm: 4 } }>
+							<TextInput name="client.medi_cal_number" label="Medi-Cal Number" />
+						</Grid.Col>
+						<Grid.Col span={ { xxs: 12, sm: 4 } }>
+							<NumberInput name="client.ihss_authorized_hours" label="IHSS Authorized Hours" decimalScale={ 2 } />
+						</Grid.Col>
+						<Grid.Col span={ { xxs: 12, sm: 4 } }>
+							<NumberInput name="client.ihss_share_of_cost" label="IHSS Share of Cost" decimalScale={ 2 } />
+						</Grid.Col>
+						<Grid.Col span={ 12 }>
+							<Textarea name="client.ihss_notes" label="IHSS Notes" minRows={ 2 } />
+						</Grid.Col>
+					</Grid>
+				</FormBand>
+
+				<FormBand title="Communication" description="Language, hospital, and care notes.">
+					<Grid>
+						<Grid.Col span={ { xxs: 12, sm: 6 } }>
+							<TextInput name="client.preferred_language" label="Preferred Language" />
+						</Grid.Col>
+						<Grid.Col span={ { xxs: 12, sm: 6 } }>
+							<TextInput name="client.preferred_hospital" label="Preferred Hospital" />
+						</Grid.Col>
+						<Grid.Col span={ 12 }>
+							<Textarea name="client.communication_notes" label="Communication Notes" minRows={ 2 } />
+						</Grid.Col>
+					</Grid>
+				</FormBand>
+
+				<Group justify="flex-end">
 					<Submit>{ client.id ? "Update" : "Create" } Client</Submit>
-				</Grid.Col>
-			</Grid>
+				</Group>
+			</FormBandStack>
 		</Form>
 	)
 }

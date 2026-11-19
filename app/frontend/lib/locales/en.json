@@ -680,8 +680,7 @@
           "total_hours": "%{hours} Hours",
           "total_hours_week": "Total hours tracked this week",
           "view": "View Timesheets"
-        },
-        "welcome": "Welcome back, %{name}"
+        }
       },
       "devise": {
         "confirmations": {
@@ -888,6 +887,7 @@
             "due_in_days": "Due in %{count} days",
             "finalized_on": "Finalized %{date}",
             "flagged": "Flagged",
+            "overdue_by_days": "Overdue by %{count} days",
             "overtime": "Overtime",
             "pending": "Pending"
           },
@@ -998,6 +998,7 @@
           "approve_selected": "Approve selected",
           "approved_count": "%{approved} / %{total} Approved",
           "due_in_days": "Due in %{count} days",
+          "overdue_by_days": "Overdue by %{count} days",
           "employees": {
             "actions": "Action",
             "approve": "Approve",

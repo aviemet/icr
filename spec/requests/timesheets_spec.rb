@@ -39,6 +39,29 @@ RSpec.describe "/timesheets", type: :request do
       expect(inertia.props[:finalized]).to be(false)
       expect(inertia.props[:timesheet][:id]).to eq(timesheet.id.to_s)
     end
+
+    it "keeps can_approve true after the due date while the period is open" do
+      Setting.payroll_due_date_rule_type = Setting::PAYROLL_DUE_DATE_RULE_TYPES[:days_after_period_end]
+      Setting.payroll_due_date_days = 5
+      pay_period = create(
+        :pay_period,
+        starts_at: Time.zone.local(2024, 3, 1).beginning_of_day,
+        ends_at: Time.zone.local(2024, 3, 15).end_of_day,
+        finalized_at: nil,
+        approved_at: nil,
+      )
+      employee = create(:employee)
+      timesheet = create(:timesheet, pay_period: pay_period, employee: employee, approved_at: nil)
+
+      travel_to Time.zone.local(2024, 3, 25, 12, 0, 0) do
+        get period_employee_review_path(period_id: pay_period.id, employee_id: employee.id)
+
+        expect(response).to have_http_status(:success)
+        expect(inertia.props[:approval_window_open]).to be(false)
+        expect(inertia.props[:can_approve]).to be(true)
+        expect(inertia.props[:timesheet][:id]).to eq(timesheet.id.to_s)
+      end
+    end
   end
 
   describe "GET /show" do
@@ -160,6 +183,28 @@ RSpec.describe "/timesheets", type: :request do
 
       expect(response).to redirect_to(period_url(pay_period))
       expect(timesheet.reload.approved_at).to be_present
+    end
+
+    it "approves a timesheet after the payroll due date when the period is open" do
+      Setting.payroll_due_date_rule_type = Setting::PAYROLL_DUE_DATE_RULE_TYPES[:days_after_period_end]
+      Setting.payroll_due_date_days = 5
+      pay_period = create(
+        :pay_period,
+        starts_at: Time.zone.local(2024, 3, 1).beginning_of_day,
+        ends_at: Time.zone.local(2024, 3, 15).end_of_day,
+        finalized_at: nil,
+        approved_at: nil,
+      )
+      timesheet = create(:timesheet, pay_period: pay_period, approved_at: nil)
+
+      travel_to Time.zone.local(2024, 3, 25, 12, 0, 0) do
+        expect(Payroll::Period.approval_window_open?(pay_period.ends_at.to_date)).to be(false)
+
+        post approve_timesheet_url(timesheet)
+
+        expect(response).to redirect_to(period_url(pay_period))
+        expect(timesheet.reload.approved_at).to be_present
+      end
     end
 
     it "rejects approve when the pay period is finalized" do

@@ -1,22 +1,31 @@
 import { css } from "@linaria/core"
 
-import { vars } from "@/lib/theme"
+import { theme, vars } from "@/lib/theme"
 
-export const settingsLayout = css`
+export const viewport = css`
+	height: calc(100vh - ${ theme.other.footer.height }px - (${ vars.spacing.sm } * 2));
+	min-height: 0;
+`
+
+export const shell = css`
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	min-height: 0;
+	gap: ${ vars.spacing.sm };
+	width: 100%;
+	max-width: ${ theme.other.page.maxWidth };
+	margin-inline: auto;
+`
+
+export const chrome = css`
 	--settings-nav-gap: 4px;
 
+	flex: 0 0 auto;
 	position: relative;
-	border-radius: ${ vars.radius.md };
-	padding: ${ vars.spacing.sm };
-	margin-top: ${ vars.spacing.sm };
-	margin-bottom: ${ vars.spacing.sm };
 	display: flex;
 	flex-direction: column;
 	gap: var(--settings-nav-gap);
-	background-color: light-dark(
-		${ vars.colors.gray[0] },
-		${ vars.colors.dark[7] }
-	);
 
 	.parentRow,
 	.childRow {
@@ -96,5 +105,10 @@ export const settingsLayout = css`
 		background-color: ${ vars.colors.primaryColors.filled };
 		border-radius: ${ vars.radius.sm };
 	}
+`
 
+export const body = css`
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow: auto;
 `

@@ -46,7 +46,7 @@ class Settings::PeopleController < ApplicationController
     authorize person
 
     render inertia: "Settings/People/Edit", props: {
-      person: person.render(:edit)
+      person: person.render(:form_data)
     }
   end
 

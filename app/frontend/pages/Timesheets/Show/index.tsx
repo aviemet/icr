@@ -1,4 +1,5 @@
-import { Group, Title, Menu, Page, Section } from "@/components"
+import { Group, Title, Page, Section } from "@/components"
+import { EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
 interface ShowTimesheetProps {
@@ -16,17 +17,8 @@ const ShowTimesheet = ({ timesheet }: ShowTimesheetProps) => {
 			<Section>
 				<Group justify="space-between">
 					<Title>{ title }</Title>
-
-					<Menu position="bottom-end">
-						<Menu.Target />
-						<Menu.Dropdown>
-							<Menu.Link href={ Routes.editTimesheet(timesheet.id) }>
-								Edit Timesheet
-							</Menu.Link>
-						</Menu.Dropdown>
-					</Menu>
+					<EditButton href={ Routes.editTimesheet(timesheet.id) } label={ title } />
 				</Group>
-
 			</Section>
 		</Page>
 	)

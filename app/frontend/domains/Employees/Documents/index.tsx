@@ -1,9 +1,13 @@
 import { router } from "@inertiajs/react"
 import { useTranslation } from "react-i18next"
 
-import { Group, Image, Link, Section, Stack, Text, Title } from "@/components"
+import { Group, Image, Link, Stack, Text, Title } from "@/components"
 import { DeleteButton } from "@/components/Button"
+import { CollectionAddModal, CollectionPanel, DropzoneField, RecordRow } from "@/features"
 import { Routes } from "@/lib"
+import { usePermissions } from "@/lib/hooks"
+
+import * as classes from "./Documents.css"
 
 type EmployeeAttachment = {
 	id: string
@@ -20,6 +24,8 @@ interface EmployeeDocumentsProps {
 
 export function EmployeeDocuments({ employee }: EmployeeDocumentsProps) {
 	const { t } = useTranslation()
+	const { can } = usePermissions()
+	const canUpdate = can("employees", "update")
 	const documents: EmployeeAttachment[] = employee.documents
 	const images: EmployeeAttachment[] = employee.images
 
@@ -46,57 +52,79 @@ export function EmployeeDocuments({ employee }: EmployeeDocumentsProps) {
 	}
 
 	return (
-		<Stack gap="xl">
-			<Section>
-				<Title order={ 3 } mb="md">{ t("views.employees.show.documents.files") }</Title>
-				<Stack gap="sm" mb="lg">
-					{ documents.map(document => (
-						<Group key={ document.id } justify="space-between">
-							<Link href={ document.url } target="_blank">{ document.filename }</Link>
-							<DeleteButton
-								href={ Routes.employeeDocument(employee.slug, document.id) }
-								label={ document.filename }
-							/>
-						</Group>
-					)) }
-					{ documents.length === 0 && <Text c="dimmed">{ t("views.employees.show.documents.empty_files") }</Text> }
-				</Stack>
-				<label>
-					<Text size="sm" mb={ 4 }>{ t("views.employees.show.documents.upload_document") }</Text>
-					<input
-						type="file"
-						accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-						onChange={ event => uploadDocument(event.target.files) }
-					/>
-				</label>
-			</Section>
-
-			<Section>
-				<Title order={ 3 } mb="md">{ t("views.employees.show.documents.images") }</Title>
-				<Group gap="md" mb="lg">
-					{ images.map(image => (
-						<Stack key={ image.id } gap="xs">
-							<Image src={ image.url } alt={ image.filename } w={ 120 } h={ 120 } fit="cover" />
-							<Group justify="space-between">
-								<Text size="xs">{ image.filename }</Text>
+		<Stack gap="lg">
+			<CollectionPanel
+				title={ t("views.employees.show.documents.files") }
+				count={ documents.length }
+				emptyLabel={ t("views.employees.show.documents.empty_files") }
+				actions={ (
+					<CollectionAddModal
+						canUpdate={ canUpdate }
+						label={ t("views.employees.show.documents.upload_document") }
+					>
+						<DropzoneField
+							label={ t("views.employees.show.documents.upload_document") }
+							hint="PDF or Word document"
+							accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+							onSelect={ uploadDocument }
+						/>
+					</CollectionAddModal>
+				) }
+			>
+				{ documents.map(document => (
+					<RecordRow
+						key={ document.id }
+						title={ <Link href={ document.url } target="_blank">{ document.filename }</Link> }
+						actions={ canUpdate
+							? (
 								<DeleteButton
-									href={ Routes.employeeImage(employee.slug, image.id) }
-									label={ image.filename }
+									href={ Routes.employeeDocument(employee.slug, document.id) }
+									label={ document.filename }
 								/>
-							</Group>
-						</Stack>
-					)) }
-					{ images.length === 0 && <Text c="dimmed">{ t("views.employees.show.documents.empty_images") }</Text> }
-				</Group>
-				<label>
-					<Text size="sm" mb={ 4 }>{ t("views.employees.show.documents.upload_image") }</Text>
-					<input
-						type="file"
-						accept="image/png,image/jpeg"
-						onChange={ event => uploadImage(event.target.files) }
+							)
+							: undefined }
 					/>
-				</label>
-			</Section>
+				)) }
+			</CollectionPanel>
+
+			<Stack gap="sm">
+				<Group justify="space-between" align="center" gap="sm" wrap="wrap">
+					<Title order={ 4 }>
+						{ t("views.employees.show.documents.images") }
+						{ " " }
+						<Text span size="sm" c="dimmed">{ images.length }</Text>
+					</Title>
+					<CollectionAddModal
+						canUpdate={ canUpdate }
+						label={ t("views.employees.show.documents.upload_image") }
+					>
+						<DropzoneField
+							label={ t("views.employees.show.documents.upload_image") }
+							hint="PNG or JPEG"
+							accept="image/png,image/jpeg"
+							onSelect={ uploadImage }
+						/>
+					</CollectionAddModal>
+				</Group>
+				{ images.length === 0
+					? <Text size="sm" c="dimmed">{ t("views.employees.show.documents.empty_images") }</Text>
+					: (
+						<div className={ classes.imageGrid }>
+							{ images.map(image => (
+								<div key={ image.id } className={ classes.imageCard }>
+									<Image src={ image.url } alt={ image.filename } w="100%" h={ 100 } fit="cover" />
+									<Text size="xs" lineClamp={ 1 }>{ image.filename }</Text>
+									{ canUpdate && (
+										<DeleteButton
+											href={ Routes.employeeImage(employee.slug, image.id) }
+											label={ image.filename }
+										/>
+									) }
+								</div>
+							)) }
+						</div>
+					) }
+			</Stack>
 		</Stack>
 	)
 }

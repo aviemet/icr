@@ -17,6 +17,7 @@ import {
 } from "@/components"
 import { PreviousIcon } from "@/components/Icons"
 import { AdjustmentForm } from "@/domains/PayPeriods/AdjustmentForm"
+import { payrollDueDateLabel } from "@/domains/PayPeriods/dueDateLabel"
 import { periodWorkflowLabel } from "@/domains/PayPeriods/workflow"
 import { WorkQueue } from "@/domains/PayPeriods/WorkQueue"
 import { formatter, Routes } from "@/lib"
@@ -175,8 +176,11 @@ export default function PayPeriodsShow({
 									}) }
 								</Text>
 								{ !finalized && (
-									<Text size="sm" c="dimmed">
-										{ t("views.timesheets.index.due_in_days", { count: dueInDays }) }
+									<Text size="sm" c={ dueInDays < 0 ? "red" : "dimmed" }>
+										{ payrollDueDateLabel(dueInDays, t, {
+											dueInDays: "views.timesheets.index.due_in_days",
+											overdueByDays: "views.timesheets.index.overdue_by_days",
+										}) }
 									</Text>
 								) }
 								{ finalized && pay_period.finalized_at && (

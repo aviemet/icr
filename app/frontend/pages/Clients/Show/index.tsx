@@ -1,6 +1,8 @@
 import { useTranslation } from "react-i18next"
 
-import { Group, Title, Menu, Page, Section, Tabs } from "@/components"
+import { Avatar, Badge, ScheduleButton, Text } from "@/components"
+import { DateTimeFormatter } from "@/components/Formatters"
+import { RecordShowShell } from "@/features"
 import { Routes } from "@/lib"
 
 import Care from "./Care"
@@ -16,64 +18,57 @@ export interface ShowClientProps {
 	client: Schema.ClientsShow
 }
 
+function personInitials(name: string) {
+	const parts = name.trim().split(/\s+/).filter(Boolean)
+	if(parts.length === 0) return "?"
+	if(parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
+	return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase()
+}
+
 const ShowClient = ({ client }: ShowClientProps) => {
 	const { t } = useTranslation()
-
-	const tabsList = [
-		{ id: "overview", label: t("views.clients.show.tabs.overview"), component: Overview },
-		{ id: "profile", label: t("views.clients.show.tabs.profile"), component: Profile },
-		{ id: "contacts", label: t("views.clients.show.tabs.contacts"), component: Contacts },
-		{ id: "health", label: t("views.clients.show.tabs.health"), component: Health },
-		{ id: "medications", label: t("views.clients.show.tabs.medications"), component: Medications },
-		{ id: "care", label: t("views.clients.show.tabs.care"), component: Care },
-		{ id: "documents", label: t("views.clients.show.tabs.documents"), component: Documents },
-		{ id: "incidents", label: t("views.clients.show.tabs.incidents"), component: Incidents },
-	]
-
 	const title = client?.person?.name || t("views.clients.show.title")
+	const isActive = Boolean(client.active_at)
 
 	return (
-		<Page title={ title } breadcrumbs={ [
-			{ title: t("views.clients.index.title"), href: Routes.clients() },
-			{ title, href: Routes.client(client.slug) },
-		] }>
-			<Section fullHeight>
-
-				<Group justify="space-between">
-					<Title>{ title }</Title>
-
-					<Menu position="bottom-end">
-						<Menu.Target />
-						<Menu.Dropdown>
-							<Menu.Link href={ Routes.editClient(client.slug) }>
-								{ t("views.clients.show.edit") }
-							</Menu.Link>
-						</Menu.Dropdown>
-					</Menu>
-				</Group>
-
-
-				<Tabs urlControlled={ true } defaultValue={ tabsList[0].id }>
-					<Tabs.List>
-						{ tabsList.map(tab => (
-							<Tabs.Tab key={ tab.id } value={ tab.id }>{ tab.label }</Tabs.Tab>
-						)) }
-					</Tabs.List>
-
-					{ tabsList.map(tab => {
-						const Component = tab.component
-
-						return (
-							<Tabs.Panel key={ tab.id } value={ tab.id } p="md">
-								<Component client={ client } />
-							</Tabs.Panel>
-						)
-					}) }
-				</Tabs>
-
-			</Section>
-
-		</Page>
+		<RecordShowShell
+			title={ title }
+			breadcrumbs={ [
+				{ title: t("views.clients.index.title"), href: Routes.clients() },
+				{ title, href: Routes.client(client.slug) },
+			] }
+			avatar={ (
+				<Avatar radius="xl" size={ 44 } color="brand">
+					{ personInitials(title) }
+				</Avatar>
+			) }
+			badge={ isActive
+				? <Badge color="green" variant="light">Active</Badge>
+				: undefined }
+			meta={ (
+				<>
+					<Text size="sm" c="dimmed" component="span">
+						{ t("views.clients.show.overview.client_number") }: { client.number || "-" }
+					</Text>
+					{ client.active_at && (
+						<Text size="sm" c="dimmed" component="span">
+							Since <DateTimeFormatter>{ client.active_at }</DateTimeFormatter>
+						</Text>
+					) }
+				</>
+			) }
+			actions={ <ScheduleButton href={ Routes.scheduleClient(client.slug) } appearance="button" /> }
+			tabs={ [
+				{ id: "overview", label: t("views.clients.show.tabs.overview"), panel: <Overview client={ client } /> },
+				{ id: "profile", label: t("views.clients.show.tabs.profile"), panel: <Profile client={ client } /> },
+				{ id: "contacts", label: t("views.clients.show.tabs.contacts"), panel: <Contacts client={ client } /> },
+				{ id: "health", label: t("views.clients.show.tabs.health"), panel: <Health client={ client } /> },
+				{ id: "medications", label: t("views.clients.show.tabs.medications"), panel: <Medications client={ client } /> },
+				{ id: "care", label: t("views.clients.show.tabs.care"), panel: <Care client={ client } /> },
+				{ id: "documents", label: t("views.clients.show.tabs.documents"), panel: <Documents client={ client } /> },
+				{ id: "incidents", label: t("views.clients.show.tabs.incidents"), panel: <Incidents client={ client } /> },
+			] }
+		/>
 	)
 }
 

@@ -19,6 +19,7 @@ const ClientsIndex = ({ clients, pagination }: ClientIndexProps) => {
 			model="clients"
 			pagination={ pagination }
 			deleteRoute={ Routes.clients() }
+			dense
 			actions={ [
 				{ label: t("views.clients.index.new"), href: Routes.newClient(), icon: <NewIcon /> },
 			] }

@@ -1,11 +1,20 @@
 import { useTranslation } from "react-i18next"
 
-import { Button, Divider, Grid, Group, Stack, Title, Tooltip } from "@/components"
+import { Box, Button, Grid, Group, Tooltip } from "@/components"
 import { Form, Submit, useFormField } from "@/components/Form"
+import { DateTimeFormatter } from "@/components/Formatters"
 import { RandomizeIcon } from "@/components/Icons"
 import { ColorPickerInput, DateInput, Textarea, TextInput } from "@/components/Inputs"
 import { JobTitlesDropdown } from "@/components/Inputs/Dropdowns"
+import {
+	DefinitionItem,
+	DefinitionList,
+	FormBand,
+	FormBandStack,
+	ShowEditToggle,
+} from "@/features"
 import { Routes, generateRandomColor } from "@/lib"
+import { usePermissions } from "@/lib/hooks"
 
 interface EmployeeProfileFormProps {
 	employee: Schema.EmployeesShow
@@ -13,38 +22,110 @@ interface EmployeeProfileFormProps {
 
 export function EmployeeProfileForm({ employee }: EmployeeProfileFormProps) {
 	const { t } = useTranslation()
+	const { can } = usePermissions()
+	const canUpdate = can("employees", "update")
 
 	return (
-		<Form
-			action={ Routes.employee(employee.slug) }
-			method="put"
-			initialData={ {
-				tab: "profile",
-				employee: {
-					number: employee.number ?? "",
-					color: employee.color ?? "",
-					preferred_language: employee.preferred_language ?? "",
-					communication_notes: employee.communication_notes ?? "",
-					active_at: employee.active_at ?? "",
-					inactive_at: employee.inactive_at ?? "",
-					eligible_for_hire: employee.eligible_for_hire,
-					job_title_id: employee.job_title?.id ?? "",
-					person: {
-						id: employee.person.id,
-						first_name: employee.person.first_name,
-						middle_name: employee.person.middle_name ?? "",
-						last_name: employee.person.last_name,
-						nick_name: employee.person.nick_name ?? "",
-						dob: employee.person.dob ?? "",
-					},
-				},
-			} }
-		>
-			<ProfileFields />
-			<Group justify="flex-end" mt="xl">
-				<Submit>{ t("views.employees.show.profile.save") }</Submit>
-			</Group>
-		</Form>
+		<ShowEditToggle
+			canUpdate={ canUpdate }
+			show={ (
+				<FormBandStack>
+					<FormBand title={ t("views.employees.show.profile.demographics") }>
+						<DefinitionList>
+							<DefinitionItem label="First Name" value={ employee.person.first_name } />
+							<DefinitionItem label="Middle Name" value={ employee.person.middle_name || "-" } />
+							<DefinitionItem label="Last Name" value={ employee.person.last_name } />
+							<DefinitionItem label="Nickname" value={ employee.person.nick_name || "-" } />
+							<DefinitionItem
+								label="Date of Birth"
+								value={ employee.person.dob
+									? <DateTimeFormatter>{ employee.person.dob }</DateTimeFormatter>
+									: "-" }
+							/>
+							<DefinitionItem label="Employee #" value={ employee.number || "-" } />
+						</DefinitionList>
+					</FormBand>
+
+					<FormBand title={ t("views.employees.show.profile.employment") }>
+						<DefinitionList>
+							<DefinitionItem
+								label="Job Title"
+								value={ employee.job_title ? String(employee.job_title.name) : "-" }
+							/>
+							<DefinitionItem
+								label="Default Calendar Color"
+								value={ employee.color
+									? (
+										<Group gap="xs">
+											<Box
+												w={ 16 }
+												h={ 16 }
+												style={ {
+													borderRadius: 4,
+													backgroundColor: employee.color,
+												} }
+											/>
+											<span>{ employee.color }</span>
+										</Group>
+									)
+									: "-" }
+							/>
+							<DefinitionItem
+								label="Hire Date"
+								value={ employee.active_at
+									? <DateTimeFormatter>{ employee.active_at }</DateTimeFormatter>
+									: "-" }
+							/>
+							<DefinitionItem
+								label="End Date"
+								value={ employee.inactive_at
+									? <DateTimeFormatter>{ employee.inactive_at }</DateTimeFormatter>
+									: "-" }
+							/>
+						</DefinitionList>
+					</FormBand>
+
+					<FormBand title={ t("views.employees.show.profile.communication") }>
+						<DefinitionList>
+							<DefinitionItem label="Preferred Language" value={ employee.preferred_language || "-" } />
+							<DefinitionItem label="Communication Notes" value={ employee.communication_notes || "-" } fullWidth />
+						</DefinitionList>
+					</FormBand>
+				</FormBandStack>
+			) }
+			edit={ (
+				<Form
+					action={ Routes.employee(employee.slug) }
+					method="put"
+					initialData={ {
+						tab: "profile",
+						employee: {
+							number: employee.number ?? "",
+							color: employee.color ?? "",
+							preferred_language: employee.preferred_language ?? "",
+							communication_notes: employee.communication_notes ?? "",
+							active_at: employee.active_at ?? "",
+							inactive_at: employee.inactive_at ?? "",
+							eligible_for_hire: employee.eligible_for_hire,
+							job_title_id: employee.job_title?.id ?? "",
+							person: {
+								id: employee.person.id,
+								first_name: employee.person.first_name,
+								middle_name: employee.person.middle_name ?? "",
+								last_name: employee.person.last_name,
+								nick_name: employee.person.nick_name ?? "",
+								dob: employee.person.dob ?? "",
+							},
+						},
+					} }
+				>
+					<ProfileFields />
+					<Group justify="flex-end" mt="md">
+						<Submit>{ t("views.employees.show.profile.save") }</Submit>
+					</Group>
+				</Form>
+			) }
+		/>
 	)
 }
 
@@ -53,9 +134,8 @@ function ProfileFields() {
 	const [color, setColor] = useFormField("employee.color")
 
 	return (
-		<Stack gap="xl">
-			<Stack gap="md">
-				<Title order={ 4 }>{ t("views.employees.show.profile.demographics") }</Title>
+		<FormBandStack>
+			<FormBand title={ t("views.employees.show.profile.demographics") }>
 				<Grid>
 					<Grid.Col span={ { xxs: 12, sm: 4 } }>
 						<TextInput name="employee.person.first_name" label="First Name" />
@@ -76,12 +156,9 @@ function ProfileFields() {
 						<TextInput name="employee.number" label="Employee #" />
 					</Grid.Col>
 				</Grid>
-			</Stack>
+			</FormBand>
 
-			<Divider />
-
-			<Stack gap="md">
-				<Title order={ 4 }>{ t("views.employees.show.profile.employment") }</Title>
+			<FormBand title={ t("views.employees.show.profile.employment") }>
 				<Grid>
 					<Grid.Col span={ { xxs: 12, sm: 6 } }>
 						<JobTitlesDropdown name="employee.job_title_id" />
@@ -107,12 +184,9 @@ function ProfileFields() {
 						<DateInput name="employee.inactive_at" label="End Date" />
 					</Grid.Col>
 				</Grid>
-			</Stack>
+			</FormBand>
 
-			<Divider />
-
-			<Stack gap="md">
-				<Title order={ 4 }>{ t("views.employees.show.profile.communication") }</Title>
+			<FormBand title={ t("views.employees.show.profile.communication") }>
 				<Grid>
 					<Grid.Col span={ { xxs: 12, sm: 6 } }>
 						<TextInput name="employee.preferred_language" label="Preferred Language" />
@@ -121,7 +195,7 @@ function ProfileFields() {
 						<Textarea name="employee.communication_notes" label="Communication Notes" minRows={ 2 } />
 					</Grid.Col>
 				</Grid>
-			</Stack>
-		</Stack>
+			</FormBand>
+		</FormBandStack>
 	)
 }
