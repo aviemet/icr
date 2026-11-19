@@ -29,14 +29,14 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - [ ] Document association with records (users, clients, etc.)
 
 ### Phase 3: Employee Management
-- [ ] Employee onboarding workflow
-  - [ ] Personal information management
-  - [ ] Required documentation tracking
-  - [ ] Employment status tracking
-- [ ] Employee profile management
-  - [ ] Qualification tracking
-  - [ ] Document storage for IDs and certifications
-  - [ ] Medical information storage
+- [x] Employee onboarding workflow
+  - [x] Personal information management
+  - [x] Required documentation tracking
+  - [x] Employment status tracking
+- [x] Employee profile management
+  - [x] Qualification tracking
+  - [x] Document storage for IDs and certifications
+  - [x] Medical information storage (clearances: TB, physical, other)
 - [ ] Requirements System (Future Feature)
   - [ ] User-defined requirements for employees
   - [ ] Requirements can be scoped to job titles, roles, or other criteria
@@ -117,6 +117,9 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 
 ### Client Show
 - Client show is URL-tabbed (Overview, Profile, Contacts, Health, Medications, Care and Services, Documents, Incidents). Schedule stays a member route. Nested writes live under `/clients/:client_slug/...` and authorize through `ClientPolicy#update?` (show for read). Overview counts and sibling collections come from one `Client.includes_show` load via `Clients::ShowSerializer` so allergy/prescription/support-contact/enrollment/attendant ids stay lockstep. CA-aware profile fields and IHSS profile fields live on `clients`; day programs are `Client::Enrollment` rows linked to `Vendor`. Support contacts use Personable (name and Contactable phones/emails/addresses live on Person). Document/image UI uses ActiveStorage `HasDocuments`/`HasImages` list/upload/purge (Phase 2 versioning still open).
+
+### Employee Show
+- Employee show is URL-tabbed (Overview, Profile, Contacts, Credentials, Assignments, Trainings, Pay, Documents). Schedule and Status stay member routes. Nested writes live under `/employees/:employee_slug/...` and authorize through `EmployeePolicy#update?` (show for read). Overview counts and sibling collections come from one `Employee.includes_show` load via `Employees::ShowSerializer`. Status transitions use AASM events via `PUT .../status` with `employee[event]` (including `begin_employment` for applicant to employed). HR nested models under `Employee::` (`SupportContact`, `Credential`, `Clearance`) need Decent Exposure `model: Employee::...`. Credentials tab covers identifications, credentials, and clearances. Pay tab holds pay-rate history and deep-links to payroll employee review when a current `PayPeriod` row already exists (GET does not create periods). Requirements engine remains deferred.
 
 ### Permission System
 - Single stack: Devise auth, Rolify roles, Pundit policies. Job Titles are the admin-facing permission surface (Settings > Job Titles matrix).

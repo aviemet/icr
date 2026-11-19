@@ -3,25 +3,39 @@ import { useTranslation } from "react-i18next"
 import { Badge, Group, Title, Menu, Page, Section, Tabs } from "@/components"
 import { Routes } from "@/lib"
 
+import Assignments from "./Assignments"
 import Contacts from "./Contacts"
-import Details from "./Details"
+import Credentials from "./Credentials"
 import Documents from "./Documents"
+import Overview from "./Overview"
+import Pay from "./Pay"
+import Profile from "./Profile"
+import Trainings from "./Trainings"
 
 export interface ShowEmployeeProps {
 	employee: Schema.EmployeesShow
+	trainingOptions?: Schema.EmployeeTrainingsOptions[]
 }
 
-const ShowEmployee = ({ employee }: ShowEmployeeProps) => {
+const ShowEmployee = ({ employee, trainingOptions = [] }: ShowEmployeeProps) => {
 	const { t } = useTranslation()
 
 	const tabsList = [
-		{ id: "details", label: t("views.employees.show.tabs.details"), component: Details },
+		{ id: "overview", label: t("views.employees.show.tabs.overview"), component: Overview },
+		{ id: "profile", label: t("views.employees.show.tabs.profile"), component: Profile },
 		{ id: "contacts", label: t("views.employees.show.tabs.contacts"), component: Contacts },
+		{ id: "credentials", label: t("views.employees.show.tabs.credentials"), component: Credentials },
+		{ id: "assignments", label: t("views.employees.show.tabs.assignments"), component: Assignments },
+		{ id: "trainings", label: t("views.employees.show.tabs.trainings"), component: Trainings },
+		{ id: "pay", label: t("views.employees.show.tabs.pay"), component: Pay },
 		{ id: "documents", label: t("views.employees.show.tabs.documents"), component: Documents },
 	]
 
 	const title = employee?.person?.name || t("views.employees.show.title")
 	const employeeStatus = employee?.status
+	const statusLabel = employeeStatus
+		? t(`views.employees.table.statuses.${employeeStatus}`, { defaultValue: employeeStatus })
+		: ""
 
 	return (
 		<Page title={ title } breadcrumbs={ [
@@ -33,7 +47,7 @@ const ShowEmployee = ({ employee }: ShowEmployeeProps) => {
 				<Group justify="space-between" align="flex-start">
 					<Group align="center" gap="sm">
 						<Title>{ title }</Title>
-						{ employeeStatus === "applicant" && <Badge>{ employeeStatus.charAt(0).toUpperCase() + employeeStatus.slice(1) }</Badge> }
+						{ employeeStatus && <Badge>{ statusLabel }</Badge> }
 					</Group>
 
 					<Group>
@@ -65,7 +79,7 @@ const ShowEmployee = ({ employee }: ShowEmployeeProps) => {
 
 						return (
 							<Tabs.Panel key={ tab.id } value={ tab.id } p="md">
-								<Component employee={ employee } />
+								<Component employee={ employee } trainingOptions={ trainingOptions } />
 							</Tabs.Panel>
 						)
 					}) }

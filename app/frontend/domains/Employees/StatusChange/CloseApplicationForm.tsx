@@ -13,7 +13,7 @@ export function CloseApplicationForm({ employee }: CloseApplicationFormProps) {
 			action={ Routes.statusEmployee(employee.slug) }
 			initialData={ {
 				employee: {
-					status: "application_withdrawn",
+					event: "close_application",
 				},
 			} }
 			method="put"
@@ -22,8 +22,9 @@ export function CloseApplicationForm({ employee }: CloseApplicationFormProps) {
 				<Grid.Col span={ { xxs: 12 } }>
 					<Textarea
 						name="employee.ineligibility_reason"
-						label="Reason (Optional)"
+						label="Reason"
 						placeholder="Enter reason for closing application"
+						required
 					/>
 				</Grid.Col>
 

@@ -14,19 +14,77 @@ en:
       show:
         change_status: Change Status
         contacts:
+          add_support_contact: Add Support Contact
           addresses: Addresses
           emails: Emails
+          emergency: Emergency
+          employee_contact: Employee Contact
           phones: Phone Numbers
-        details:
-          placeholder: Some kind of useful dashboard, maybe important or commonly needed information and a picture. Maybe some stats and/or charts computed from other data. Could even be just a list of useful links for the employee, curated by the agency.
+          support_network: Support Network
+        credentials:
+          add_clearance: Add Clearance
+          add_credential: Add Credential
+          add_identification: Add Identification
+          clearances: Clearances
+          credentials: Credentials
+          identifications: Identifications
         documents:
+          empty_files: No documents uploaded.
+          empty_images: No images uploaded.
+          files: Documents
+          images: Images
           title: Documents
+          upload_document: Upload Document
+          upload_image: Upload Image
         edit: Edit Employee
+        overview:
+          alerts: Alerts
+          assigned_clients: Assigned Clients
+          emergency_contacts: Emergency Contacts
+          employee_number: Employee #
+          expiring_clearances: Expiring Clearances
+          expiring_credentials: Expiring Credentials
+          hire_date: Hire Date
+          incomplete_trainings: Incomplete Trainings
+          job_title: Job Title
+          manager: Manager
+          none: None
+          payroll_review: Current Payroll Review
+          quick_links: Quick Links
+          recent_interviews: Recent Interviews
+          view_interview: View
+          assignments: Assignments
+        assignments:
+          add_attended_client: Assign Attended Client
+          add_managed_client: Assign Managed Client
+          add_manager: Assign Manager
+          attended_clients: Attended Clients
+          managed_clients: Managed Clients
+          managers: Reporting Managers
+        pay:
+          add_rate: Add Pay Rate
+          payroll: Payroll
+          rates: Pay Rates
+          view_period_review: View Current Period Review
+        profile:
+          communication: Communication
+          demographics: Demographics
+          employment: Employment
+          save: Save Profile
         tabs:
-          contacts: Contact Details
-          details: Details
+          assignments: Assignments
+          contacts: Contacts
+          credentials: Credentials
           documents: Documents
+          overview: Overview
+          pay: Pay
+          profile: Profile
+          trainings: Trainings
         title: Employee
+        trainings:
+          assign: Assign Training
+          empty: No trainings assigned.
+          title: Trainings
       table:
         actions: Actions
         first_name: First Name
@@ -39,6 +97,7 @@ en:
         status_select_all: Select All
         statuses:
           applicant: Applicant
+          application_withdrawn: Application Withdrawn
           declined: Declined
           employed: Employed
           offered: Offered
@@ -48,7 +107,10 @@ en:
         label: Status Change
         title: Change Employee Status
         transitions:
+          accept_offer: Accept Offer
           begin_onboarding: Begin Onboarding
           close_application: Close Application
           process_termination: Process Termination
+          reconsider: Reconsider
           record_resignation: Record Resignation
+          reject_offer: Reject Offer

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_18_170500) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_18_210300) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -327,6 +327,44 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_170500) do
     t.index ["contact_id"], name: "index_emails_on_contact_id"
   end
 
+  create_table "employee_clearances", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "employee_id", null: false
+    t.integer "clearance_type", default: 0, null: false
+    t.integer "status", default: 0, null: false
+    t.date "cleared_on"
+    t.date "expires_on"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_id"], name: "index_employee_clearances_on_employee_id"
+  end
+
+  create_table "employee_credentials", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "employee_id", null: false
+    t.string "name", null: false
+    t.integer "credential_type", default: 0, null: false
+    t.string "number"
+    t.date "issued_on"
+    t.date "expires_on"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_id"], name: "index_employee_credentials_on_employee_id"
+  end
+
+  create_table "employee_support_contacts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "employee_id", null: false
+    t.uuid "person_id", null: false
+    t.integer "relationship", default: 0, null: false
+    t.integer "priority", default: 1, null: false
+    t.boolean "is_emergency", default: false, null: false
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_id"], name: "index_employee_support_contacts_on_employee_id"
+    t.index ["person_id"], name: "index_employee_support_contacts_on_person_id"
+  end
+
   create_table "employees", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "person_id", null: false
     t.date "active_at"
@@ -339,6 +377,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_170500) do
     t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "termination_reason"
+    t.string "preferred_language"
+    t.text "communication_notes"
     t.index ["person_id"], name: "index_employees_on_person_id"
     t.index ["slug"], name: "index_employees_on_slug", unique: true
   end
@@ -957,6 +998,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_170500) do
   add_foreign_key "doctors_clients", "doctors"
   add_foreign_key "emails", "categories"
   add_foreign_key "emails", "contacts"
+  add_foreign_key "employee_clearances", "employees"
+  add_foreign_key "employee_credentials", "employees"
+  add_foreign_key "employee_support_contacts", "employees"
+  add_foreign_key "employee_support_contacts", "people"
   add_foreign_key "employees", "people"
   add_foreign_key "employees_job_titles", "employees"
   add_foreign_key "employees_job_titles", "job_titles"

@@ -5,12 +5,15 @@
 #  id                   :uuid             not null, primary key
 #  active_at            :date
 #  color                :string
+#  communication_notes  :text
 #  eligible_for_hire    :boolean          default(TRUE), not null
 #  inactive_at          :date
 #  ineligibility_reason :text
 #  number               :string
+#  preferred_language   :string
 #  slug                 :string           not null
 #  status               :integer
+#  termination_reason   :text
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  person_id            :uuid             not null
@@ -48,6 +51,10 @@ RSpec.describe Employee do
     it{ is_expected.to have_many(:job_titles).through(:employees_job_titles) }
     it{ is_expected.to have_one(:job_title).through(:active_employees_job_title) }
     it{ is_expected.to have_many(:pay_rates) }
+    it{ is_expected.to have_many(:support_contacts) }
+    it{ is_expected.to have_many(:credentials) }
+    it{ is_expected.to have_many(:clearances) }
+    it{ is_expected.to have_many(:interviews) }
 
     it { is_expected.to have_many(:shifts) }
     it { is_expected.to have_many(:shift_events).through(:shifts) }
