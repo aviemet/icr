@@ -1,6 +1,6 @@
 import { Link } from "@inertiajs/react"
 import clsx from "clsx"
-import { ReactNode } from "react"
+import { Children, ReactNode } from "react"
 
 import { Box } from "@/components"
 import { NextIcon } from "@/components/Icons"
@@ -15,6 +15,10 @@ export interface MenuLinkProps {
 	children?: ReactNode
 }
 
+function hasVisibleChildren(children: ReactNode) {
+	return Children.toArray(children).some(Boolean)
+}
+
 export function MenuLink({
 	href,
 	label,
@@ -22,6 +26,8 @@ export function MenuLink({
 	active,
 	children,
 }: MenuLinkProps) {
+	const showSubmenu = hasVisibleChildren(children)
+
 	return (
 		<li>
 			<Link
@@ -32,10 +38,10 @@ export function MenuLink({
 					{ leftSection }
 					<Box component="span" className="label">{ label }</Box>
 				</Box>
-				{ children && <NextIcon className="indicator" /> }
+				{ showSubmenu && <NextIcon className="indicator" /> }
 			</Link>
-			{ children && (
-				<ul className={ classes.submenu }>
+			{ showSubmenu && (
+				<ul className={ clsx(classes.submenu, "submenu") }>
 					{ children }
 				</ul>
 			) }

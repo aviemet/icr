@@ -33,10 +33,12 @@ function ColumnTextFilter({
 
 export function useClientTableColumns({
 	serverFiltered,
+	canUpdates = {},
 	filters,
 	setText,
 }: {
 	serverFiltered: boolean
+	canUpdates?: Record<string, boolean>
 	filters: ClientColumnFilters
 	setText: (param: string, value: string) => void
 }) {
@@ -125,10 +127,13 @@ export function useClientTableColumns({
 			sortable: false,
 			render: (client) => (
 				<Group wrap="nowrap" gap="xs">
-					<EditButton href={ Routes.editClient(client.slug) } />
+					{ canUpdates[client.id] && (
+						<EditButton href={ Routes.editClient(client.slug) } />
+					) }
 					<ScheduleButton href={ Routes.scheduleClient(client.slug) } />
 				</Group>
 			),
+
 		},
 	]
 

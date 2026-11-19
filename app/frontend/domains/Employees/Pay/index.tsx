@@ -12,7 +12,7 @@ import {
 	RecordRow,
 } from "@/features"
 import { Routes } from "@/lib"
-import { usePermissions } from "@/lib/hooks"
+import { useRecordCanUpdate } from "@/lib/hooks"
 
 interface EmployeePayProps {
 	employee: Schema.EmployeesShow
@@ -25,8 +25,7 @@ const PERIOD_OPTIONS = [
 
 export function EmployeePay({ employee }: EmployeePayProps) {
 	const { t } = useTranslation()
-	const { can } = usePermissions()
-	const canUpdate = can("employees", "update")
+	const canUpdate = useRecordCanUpdate()
 	const rates = [...employee.pay_rates].sort((left, right) => {
 		const leftTime = left.starts_at ? new Date(left.starts_at).getTime() : 0
 		const rightTime = right.starts_at ? new Date(right.starts_at).getTime() : 0

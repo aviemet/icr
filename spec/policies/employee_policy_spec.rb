@@ -63,4 +63,14 @@ RSpec.describe EmployeePolicy, type: :policy do
       expect(described_class.new(facilitator_user, other_employee)).to authorize(:show)
     end
   end
+
+  permissions :index? do
+    it "allows facilitator with index role for a relation record" do
+      expect(described_class.new(facilitator_user, Employee.all)).to authorize(:index)
+    end
+
+    it "denies hourly without index role" do
+      expect(described_class.new(hourly_user, Employee.all)).not_to authorize(:index)
+    end
+  end
 end

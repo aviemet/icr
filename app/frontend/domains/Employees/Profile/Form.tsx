@@ -14,7 +14,7 @@ import {
 	ShowEditToggle,
 } from "@/features"
 import { Routes, generateRandomColor } from "@/lib"
-import { usePermissions } from "@/lib/hooks"
+import { useRecordCanUpdate } from "@/lib/hooks"
 
 interface EmployeeProfileFormProps {
 	employee: Schema.EmployeesShow
@@ -22,8 +22,7 @@ interface EmployeeProfileFormProps {
 
 export function EmployeeProfileForm({ employee }: EmployeeProfileFormProps) {
 	const { t } = useTranslation()
-	const { can } = usePermissions()
-	const canUpdate = can("employees", "update")
+	const canUpdate = useRecordCanUpdate()
 
 	return (
 		<ShowEditToggle canUpdate={ canUpdate }>

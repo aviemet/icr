@@ -12,7 +12,7 @@ import {
 	ShowEditToggle,
 } from "@/features"
 import { Routes } from "@/lib"
-import { usePermissions } from "@/lib/hooks"
+import { useRecordCanUpdate } from "@/lib/hooks"
 
 interface ClientProfileFormProps {
 	client: Schema.ClientsShow
@@ -20,8 +20,7 @@ interface ClientProfileFormProps {
 
 export function ClientProfileForm({ client }: ClientProfileFormProps) {
 	const { t } = useTranslation()
-	const { can } = usePermissions()
-	const canUpdate = can("clients", "update")
+	const canUpdate = useRecordCanUpdate()
 	const lifeDetail = client.life_detail
 
 	return (

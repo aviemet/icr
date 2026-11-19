@@ -1,11 +1,11 @@
 class PayPeriodPolicy < ApplicationPolicy
   class Scope < ApplicationPolicy::Scope
     def resolve
-      return scope.all if user.has_role?(:admin)
+      return scope.all if admin?
 
       case user.person&.agency_role
       when "Employee"
-        if user.person.employee&.job_title&.has_role?(:index, Timesheet)
+        if timesheet_queue_access? || timesheet_review_access?
           scope.all
         else
           scope.none
@@ -14,20 +14,30 @@ class PayPeriodPolicy < ApplicationPolicy
         scope.none
       end
     end
+
+    private
+
+    def timesheet_queue_access?
+      job_title_allows?(:index, Timesheet)
+    end
+
+    def timesheet_review_access?
+      job_title_allows?(:show, Timesheet) || job_title_allows?(:update, Timesheet)
+    end
   end
 
   def index?
-    return true if user.has_role?(:admin)
+    return true if admin?
     return false unless user.person&.employee?
 
-    user.person.employee.job_title&.has_role?(:index, Timesheet) || false
+    timesheet_queue_access? || timesheet_review_access?
   end
 
   def show?
-    return true if user.has_role?(:admin)
+    return true if admin?
     return false unless user.person&.employee?
 
-    user.person.employee.job_title&.has_role?(:show, Timesheet) || false
+    timesheet_queue_access? || timesheet_review_access?
   end
 
   def finalize?
@@ -39,8 +49,25 @@ class PayPeriodPolicy < ApplicationPolicy
   end
 
   def create_adjustment?
-    return true if user.has_role?(:admin)
+    return true if admin?
 
     false
+  end
+
+  def update?
+    return true if admin?
+    return false unless user.person&.employee?
+
+    timesheet_queue_access?
+  end
+
+  private
+
+  def timesheet_queue_access?
+    job_title_allows?(:index, Timesheet)
+  end
+
+  def timesheet_review_access?
+    job_title_allows?(:show, Timesheet) || job_title_allows?(:update, Timesheet)
   end
 end

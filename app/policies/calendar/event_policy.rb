@@ -30,6 +30,22 @@ class Calendar::EventPolicy < ApplicationPolicy
     end
   end
 
+  def index?
+    return true if admin?
+    return false unless user.person
+
+    case user.person.agency_role
+    when "Employee"
+      return true if job_title_allows?(:index, Calendar::Event)
+
+      current_employee.present?
+    when "Client"
+      user.person.client.present?
+    else
+      false
+    end
+  end
+
   def show?
     return true if admin?
     return false unless user.person
@@ -49,6 +65,7 @@ class Calendar::EventPolicy < ApplicationPolicy
   end
 
   private
+
 
   def own_shift?
     record.shift&.employee_id == current_employee&.id

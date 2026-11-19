@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   before_action :set_paper_trail_whodunnit
 
   include Authentication
+  include DevActsAs
   include Authorization
   include InertiaCsrf
   include Localization
@@ -18,3 +19,4 @@ class ApplicationController < ActionController::Base
 
   include ErrorHandling
 end
+

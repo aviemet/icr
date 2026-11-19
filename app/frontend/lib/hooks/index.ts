@@ -9,5 +9,7 @@ export { useInit } from "./useInit"
 export { useAuth } from "./useAuth"
 export { useCurrency, type UseCurrencyOptions } from "./useCurrency"
 export { usePermissions } from "./usePermissions"
+export { useRecordCanUpdate, useRecordCanUpdates } from "./useRecordCanUpdate"
+
 
 export * from "@mantine/hooks"

@@ -120,7 +120,9 @@ if Rails.env.development?
 
       if Client.any?
         FactoryBot.create(:clients_attendant, attendant: attendant, client: Client.first)
+        FactoryBot.create(:clients_manager, manager: facilitator, client: Client.first, primary: true)
       end
+
 
       training = Employee::Training.find_or_create_by!(name: "Orientation") do |record|
         record.description = "New hire orientation"
