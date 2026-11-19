@@ -1,4 +1,5 @@
-import { Group, Title, Menu, Page, Section } from "@/components"
+import { Group, Title, Page, Section } from "@/components"
+import { EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
 interface ShowTrainingProps {
@@ -16,17 +17,8 @@ const ShowTraining = ({ training }: ShowTrainingProps) => {
 			<Section>
 				<Group justify="space-between">
 					<Title>{ title }</Title>
-
-					<Menu position="bottom-end">
-						<Menu.Target />
-						<Menu.Dropdown>
-							<Menu.Link href={ Routes.editTraining(training.id) }>
-								Edit Training
-							</Menu.Link>
-						</Menu.Dropdown>
-					</Menu>
+					<EditButton href={ Routes.editTraining(training.id) } label={ title } />
 				</Group>
-
 			</Section>
 		</Page>
 	)

@@ -13,6 +13,7 @@ import {
 	Text,
 	Title,
 } from "@/components"
+import { payrollDueDateLabel } from "@/domains/PayPeriods/dueDateLabel"
 import { PayPeriodsTable, type PayPeriodRow } from "@/domains/PayPeriods/Table"
 import { periodWorkflowLabel } from "@/domains/PayPeriods/workflow"
 import { formatter, Routes } from "@/lib"
@@ -86,8 +87,11 @@ export default function PayPeriodsIndex({
 									</Text>
 								)
 								: (
-									<Text size="sm" c="dimmed">
-										{ t("views.pay_periods.index.summary.due_in_days", { count: dueInDays }) }
+									<Text size="sm" c={ dueInDays < 0 ? "red" : "dimmed" }>
+										{ payrollDueDateLabel(dueInDays, t, {
+											dueInDays: "views.pay_periods.index.summary.due_in_days",
+											overdueByDays: "views.pay_periods.index.summary.overdue_by_days",
+										}) }
 									</Text>
 								) }
 							{ (can_finalize || can_export) && (

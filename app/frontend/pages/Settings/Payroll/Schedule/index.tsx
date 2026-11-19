@@ -1,7 +1,8 @@
-import { Box, Divider, Grid, Stack, Text, Title } from "@/components"
+import { Box, Grid } from "@/components"
 import { Form, Submit } from "@/components/Form"
 import { DueDate } from "@/domains/Settings/Payroll/Form/DueDate"
 import { Payroll } from "@/domains/Settings/Payroll/Form/Payroll"
+import { FormBand, FormBandStack } from "@/features"
 import { Routes, withLayout } from "@/lib"
 
 import { SettingsPageHeader } from "../../SettingsPageHeader"
@@ -23,31 +24,27 @@ const PayrollScheduleSettings = ({ settings }: PayrollScheduleSettingsProps) => 
 				method="patch"
 				initialData={ { settings } }
 			>
-				<Stack gap="xl">
-					<Stack gap="md">
-						<Title order={ 4 }>Pay period</Title>
-						<Text size="sm" c="dimmed">
-							How often payroll runs and when each period starts.
-						</Text>
+				<FormBandStack>
+					<FormBand
+						title="Pay period"
+						description="How often payroll runs and when each period starts."
+					>
 						<Grid>
 							<Payroll />
 						</Grid>
-					</Stack>
+					</FormBand>
 
-					<Divider />
-
-					<Stack gap="md">
-						<Title order={ 4 }>Due date</Title>
-						<Text size="sm" c="dimmed">
-							When timesheets must be ready after a pay period closes.
-						</Text>
+					<FormBand
+						title="Due date"
+						description="When timesheets must be ready after a pay period closes."
+					>
 						<Grid>
 							<DueDate />
 						</Grid>
-					</Stack>
+					</FormBand>
 
 					<Submit>Update settings</Submit>
-				</Stack>
+				</FormBandStack>
 			</Form>
 		</Box>
 	)

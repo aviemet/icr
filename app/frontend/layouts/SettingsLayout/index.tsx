@@ -1,8 +1,9 @@
-import { FloatingIndicator, Portal } from "@mantine/core"
+import { FloatingIndicator } from "@mantine/core"
 import clsx from "clsx"
 import { useState } from "react"
 
-import { Box, Paper, Container } from "@/components"
+import { Box } from "@/components"
+import { pageChrome } from "@/components/PageChrome"
 import { Routes } from "@/lib"
 import { useLocation } from "@/lib/hooks"
 
@@ -104,13 +105,9 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
 
 	return (
 		<AppLayout>
-			<Portal target="#above-content-portal">
-				<Container>
-					<Paper
-						component="nav"
-						shadow="xs"
-						className={ classes.settingsLayout }
-					>
+			<div className={ classes.viewport }>
+				<div className={ classes.shell }>
+					<nav className={ clsx(pageChrome.panelSurface, classes.chrome) }>
 						<Box className="parentRow" ref={ setRootRef }>
 							{ links.map((link, index) => (
 								<SettingsNavLink
@@ -145,15 +142,13 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
 								)) }
 							</Box>
 						) }
-					</Paper>
-				</Container>
-			</Portal>
+					</nav>
 
-			<Box>
-				<Container>
-					{ children }
-				</Container>
-			</Box>
+					<div className={ classes.body }>
+						{ children }
+					</div>
+				</div>
+			</div>
 		</AppLayout>
 	)
 }

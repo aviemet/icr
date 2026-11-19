@@ -20,6 +20,7 @@ const EmployeesIndex = ({ employees, pagination, job_title_options }: EmployeeIn
 			model="employees"
 			pagination={ pagination }
 			deleteRoute={ Routes.employees() }
+			dense
 			actions={ [
 				{ label: t("views.employees.index.new"), href: Routes.newEmployee(), icon: <NewIcon /> },
 			] }

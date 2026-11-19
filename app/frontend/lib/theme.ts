@@ -25,6 +25,9 @@ type CustomMantineTheme = Omit<MantineTheme, "spacing" | "other"> & {
 			sortButtonHeight: number
 			sortButtonWidth: number
 		}
+		page: {
+			maxWidth: string
+		}
 	}
 }
 
@@ -72,6 +75,22 @@ export const themeObject: Partial<CustomMantineTheme> = {
 				},
 			}),
 		},
+		Input: {
+			styles: {
+				input: {
+					backgroundColor: "var(--icr-field-bg)",
+					borderColor: "var(--icr-field-border)",
+				},
+			},
+		},
+		Textarea: {
+			styles: {
+				input: {
+					backgroundColor: "var(--icr-field-bg)",
+					borderColor: "var(--icr-field-border)",
+				},
+			},
+		},
 		Tooltip: {
 			defaultProps: (theme: MantineTheme) => ({
 				color: theme.primaryColor,
@@ -101,6 +120,9 @@ export const themeObject: Partial<CustomMantineTheme> = {
 		table: {
 			sortButtonHeight: 5,
 			sortButtonWidth: 6,
+		},
+		page: {
+			maxWidth: "112rem",
 		},
 	},
 }

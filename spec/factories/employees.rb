@@ -5,12 +5,15 @@
 #  id                   :uuid             not null, primary key
 #  active_at            :date
 #  color                :string
+#  communication_notes  :text
 #  eligible_for_hire    :boolean          default(TRUE), not null
 #  inactive_at          :date
 #  ineligibility_reason :text
 #  number               :string
+#  preferred_language   :string
 #  slug                 :string           not null
 #  status               :integer
+#  termination_reason   :text
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  person_id            :uuid             not null
@@ -68,10 +71,21 @@ FactoryBot.define do
         termination_date { Time.zone.now }
       end
 
-      after(:create) do |employee|
+      after(:create) do |employee, evaluator|
         employee.make_offer! if employee.may_make_offer?
         employee.accept_offer! if employee.may_accept_offer?
+        employee.assign_attributes(
+          termination_reason: "Factory termination",
+          inactive_at: evaluator.termination_date,
+        )
         employee.terminate! if employee.may_terminate?
+      end
+    end
+
+    trait :application_withdrawn do
+      after(:create) do |employee|
+        employee.assign_attributes(ineligibility_reason: "Factory withdrawal")
+        employee.close_application! if employee.may_close_application?
       end
     end
 

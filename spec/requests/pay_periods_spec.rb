@@ -113,6 +113,39 @@ RSpec.describe "/payroll", type: :request do
       end
     end
 
+    it "keeps can_approve true after the due date while the period is open" do
+      Setting.payroll_due_date_rule_type = Setting::PAYROLL_DUE_DATE_RULE_TYPES[:days_after_period_end]
+      Setting.payroll_due_date_days = 5
+      pay_period = create(
+        :pay_period,
+        starts_at: Time.zone.local(2024, 3, 1).beginning_of_day,
+        ends_at: Time.zone.local(2024, 3, 15).end_of_day,
+        finalized_at: nil,
+        approved_at: nil,
+      )
+      employee = create(:employee)
+      create(:timesheet, pay_period: pay_period, employee: employee, approved_at: nil)
+      create(
+        :shift,
+        employee: employee,
+        timesheet: Timesheet.find_by(employee: employee, pay_period: pay_period),
+        calendar_event: create(
+          :calendar_event,
+          starts_at: Time.zone.local(2024, 3, 10, 9, 0, 0),
+          ends_at: Time.zone.local(2024, 3, 10, 17, 0, 0),
+        ),
+      )
+
+      travel_to Time.zone.local(2024, 3, 25, 12, 0, 0) do
+        get period_url(pay_period)
+
+        expect(response).to be_successful
+        expect(inertia.props[:approval_window_open]).to be(false)
+        expect(inertia.props[:can_approve]).to be(true)
+        expect(inertia.props[:finalized]).to be(false)
+      end
+    end
+
     it "omits employees with no worked shifts for the period" do
       Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:bi_weekly]
       Setting.payroll_period_day = "monday"

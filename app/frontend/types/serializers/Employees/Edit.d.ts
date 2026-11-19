@@ -9,18 +9,23 @@ declare global {
       active_at?: Date
       color?: string
       color_mappings: Record<string, Record<string, string>>
+      communication_notes?: string
       created_at: Date
+      eligible_for_hire: boolean
       first_name: string
       full_name: string
       inactive_at?: Date
+      ineligibility_reason?: string
       job_title: EmployeeJobTitle
       last_name: string
       name: string
       number?: string
       person: PeoplePersisted
       person_id: string
+      preferred_language?: string
       slug: string
-      status: "applicant" | "offered" | "employed" | "declined" | "terminated"
+      status: "applicant" | "offered" | "employed" | "declined" | "terminated" | "application_withdrawn"
+      termination_reason?: string
       updated_at: Date
     }
   }

@@ -1,5 +1,8 @@
-import { Group, Title, Menu, Page, Section } from "@/components"
+import { Box, Group, Link, Text } from "@/components"
+import { EditButton } from "@/components/Button"
 import { Routes, withLayout } from "@/lib"
+
+import { SettingsPageHeader } from "../../SettingsPageHeader"
 
 interface ShowPersonProps {
 	person: Schema.PeopleShow
@@ -9,26 +12,27 @@ const ShowPerson = ({ person }: ShowPersonProps) => {
 	const title = person?.name || "Person"
 
 	return (
-		<Page title={ title } breadcrumbs={ [
-			{ title: "People", href: Routes.settingsPeople() },
-			{ title, href: window.location.href },
-		] }>
-			<Section>
-				<Group justify="space-between">
-					<Title>{ title }</Title>
-
-					<Menu position="bottom-end">
-						<Menu.Target />
-						<Menu.Dropdown>
-							<Menu.Link href={ Routes.editSettingsPerson(person.slug) }>
-								Edit Person
-							</Menu.Link>
-						</Menu.Dropdown>
-					</Menu>
-				</Group>
-
-			</Section>
-		</Page>
+		<Box>
+			<SettingsPageHeader
+				title={ title }
+				description="Person record in settings."
+				actions={ (
+					<Group gap="xs">
+						<EditButton href={ Routes.editSettingsPerson(person.slug) } label={ title } />
+						<Link
+							href={ Routes.settingsPeople() }
+							as="button"
+							buttonProps={ { variant: "light", size: "sm" } }
+						>
+							Back to People
+						</Link>
+					</Group>
+				) }
+			/>
+			<Text size="sm" c="dimmed">
+				Role: { person.agency_role || "-" }
+			</Text>
+		</Box>
 	)
 }
 

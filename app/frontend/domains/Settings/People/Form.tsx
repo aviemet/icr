@@ -22,22 +22,19 @@ export function PersonForm({ method = "post", to, person, ...props }: PersonForm
 			{ ...props }
 		>
 			<Grid>
-				<Grid.Col>
+				<Grid.Col span={ { xs: 12, sm: 4 } }>
 					<TextInput name="person.first_name" label="First Name" />
 				</Grid.Col>
-				<Grid.Col>
+				<Grid.Col span={ { xs: 12, sm: 4 } }>
 					<TextInput name="person.middle_name" label="Middle Name" />
 				</Grid.Col>
-				<Grid.Col>
+				<Grid.Col span={ { xs: 12, sm: 4 } }>
 					<TextInput name="person.last_name" label="Last Name" />
 				</Grid.Col>
-				<Grid.Col>
-					<TextInput name="person.email" label="Email" />
+				<Grid.Col span={ { xs: 12, sm: 6 } }>
+					<TextInput name="person.nick_name" label="Nickname" />
 				</Grid.Col>
-				<Grid.Col>
-					<TextInput name="person.password" label="Password" />
-				</Grid.Col>
-				<Grid.Col>
+				<Grid.Col span={ 12 }>
 					<Submit>{ person.id ? "Update" : "Create" } Person</Submit>
 				</Grid.Col>
 			</Grid>

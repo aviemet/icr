@@ -101,6 +101,17 @@ Rails.application.routes.draw do
       get :status
       put :status, action: :update_status
     end
+    resources :support_contacts, controller: "employees/support_contacts", only: [:create, :update, :destroy]
+    resources :credentials, controller: "employees/credentials", only: [:create, :update, :destroy]
+    resources :clearances, controller: "employees/clearances", only: [:create, :update, :destroy]
+    resources :identifications, controller: "employees/identifications", only: [:create, :update, :destroy]
+    resources :pay_rates, controller: "employees/pay_rates", only: [:create, :update, :destroy]
+    resources :managers, controller: "employees/managers", only: [:create, :update, :destroy]
+    resources :client_attendants, controller: "employees/client_attendants", only: [:create, :update, :destroy]
+    resources :client_managers, controller: "employees/client_managers", only: [:create, :update, :destroy]
+    resources :trainings, controller: "employees/trainings", only: [:create, :update, :destroy]
+    resources :documents, controller: "employees/documents", only: [:create, :destroy]
+    resources :images, controller: "employees/images", only: [:create, :destroy]
   end
 
   resources :households, param: :slug, concerns: :schedulable

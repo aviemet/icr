@@ -499,6 +499,10 @@
         "notices": {
           "created": "%{model} was successfully created.",
           "destroyed": "%{model} was successfully destroyed.",
+          "destroyed_count": {
+            "one": "%{count} %{model} deleted",
+            "other": "%{count} %{model}s deleted"
+          },
           "status_updated": "%{model} status updated successfully",
           "updated": "%{model} was successfully updated."
         }
@@ -676,8 +680,7 @@
           "total_hours": "%{hours} Hours",
           "total_hours_week": "Total hours tracked this week",
           "view": "View Timesheets"
-        },
-        "welcome": "Welcome back, %{name}"
+        }
       },
       "devise": {
         "confirmations": {
@@ -732,35 +735,101 @@
           "title": "%{name}'s Schedule"
         },
         "show": {
+          "assignments": {
+            "add_attended_client": "Assign Attended Client",
+            "add_managed_client": "Assign Managed Client",
+            "add_manager": "Assign Manager",
+            "attended_clients": "Attended Clients",
+            "managed_clients": "Managed Clients",
+            "managers": "Reporting Managers"
+          },
           "change_status": "Change Status",
           "contacts": {
+            "add_support_contact": "Add Support Contact",
             "addresses": "Addresses",
             "emails": "Emails",
-            "phones": "Phone Numbers"
+            "emergency": "Emergency",
+            "employee_contact": "Employee Contact",
+            "phones": "Phone Numbers",
+            "support_network": "Support Network"
           },
-          "details": {
-            "placeholder": "Some kind of useful dashboard, maybe important or commonly needed information and a picture. Maybe some stats and/or charts computed from other data. Could even be just a list of useful links for the employee, curated by the agency."
+          "credentials": {
+            "add_clearance": "Add Clearance",
+            "add_credential": "Add Credential",
+            "add_identification": "Add Identification",
+            "clearances": "Clearances",
+            "credentials": "Credentials",
+            "identifications": "Identifications"
           },
           "documents": {
-            "title": "Documents"
+            "empty_files": "No documents uploaded.",
+            "empty_images": "No images uploaded.",
+            "files": "Documents",
+            "images": "Images",
+            "title": "Documents",
+            "upload_document": "Upload Document",
+            "upload_image": "Upload Image"
           },
           "edit": "Edit Employee",
-          "tabs": {
-            "contacts": "Contact Details",
-            "details": "Details",
-            "documents": "Documents"
+          "overview": {
+            "alerts": "Alerts",
+            "assigned_clients": "Assigned Clients",
+            "assignments": "Assignments",
+            "emergency_contacts": "Emergency Contacts",
+            "employee_number": "Employee",
+            "expiring_clearances": "Expiring Clearances",
+            "expiring_credentials": "Expiring Credentials",
+            "hire_date": "Hire Date",
+            "incomplete_trainings": "Incomplete Trainings",
+            "job_title": "Job Title",
+            "manager": "Manager",
+            "none": "None",
+            "payroll_review": "Current Payroll Review",
+            "quick_links": "Quick Links",
+            "recent_interviews": "Recent Interviews",
+            "view_interview": "View"
           },
-          "title": "Employee"
+          "pay": {
+            "add_rate": "Add Pay Rate",
+            "payroll": "Payroll",
+            "rates": "Pay Rates",
+            "view_period_review": "View Current Period Review"
+          },
+          "profile": {
+            "communication": "Communication",
+            "demographics": "Demographics",
+            "employment": "Employment",
+            "save": "Save Profile"
+          },
+          "tabs": {
+            "assignments": "Assignments",
+            "contacts": "Contacts",
+            "credentials": "Credentials",
+            "documents": "Documents",
+            "overview": "Overview",
+            "pay": "Pay",
+            "profile": "Profile",
+            "trainings": "Trainings"
+          },
+          "title": "Employee",
+          "trainings": {
+            "assign": "Assign Training",
+            "empty": "No trainings assigned.",
+            "title": "Trainings"
+          }
         },
         "status": {
           "change_for": "Change Status for %{name}",
           "label": "Status Change",
           "title": "Change Employee Status",
           "transitions": {
+            "accept_offer": "Accept Offer",
             "begin_onboarding": "Begin Onboarding",
             "close_application": "Close Application",
             "process_termination": "Process Termination",
-            "record_resignation": "Record Resignation"
+            "reconsider": "Reconsider",
+            "record_resignation": "Record Resignation",
+            "reject_offer": "Reject Offer"
           }
         },
         "table": {
@@ -775,6 +844,7 @@
           "status_select_all": "Select All",
           "statuses": {
             "applicant": "Applicant",
+            "application_withdrawn": "Application Withdrawn",
             "declined": "Declined",
             "employed": "Employed",
             "offered": "Offered",
@@ -817,6 +887,7 @@
             "due_in_days": "Due in %{count} days",
             "finalized_on": "Finalized %{date}",
             "flagged": "Flagged",
+            "overdue_by_days": "Overdue by %{count} days",
             "overtime": "Overtime",
             "pending": "Pending"
           },
@@ -927,6 +998,7 @@
           "approve_selected": "Approve selected",
           "approved_count": "%{approved} / %{total} Approved",
           "due_in_days": "Due in %{count} days",
+          "overdue_by_days": "Overdue by %{count} days",
           "employees": {
             "actions": "Action",
             "approve": "Approve",

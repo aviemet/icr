@@ -1,4 +1,5 @@
-import { Group, Title, Menu, Page, Section } from "@/components"
+import { Group, Title, Page, Section } from "@/components"
+import { EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
 interface ShowShiftTemplateProps {
@@ -6,7 +7,7 @@ interface ShowShiftTemplateProps {
 }
 
 const ShowShiftTemplate = ({ shift_template }: ShowShiftTemplateProps) => {
-	const title = "ShiftTemplate"
+	const title = "Shift Template"
 
 	return (
 		<Page title={ title } breadcrumbs={ [
@@ -16,17 +17,8 @@ const ShowShiftTemplate = ({ shift_template }: ShowShiftTemplateProps) => {
 			<Section>
 				<Group justify="space-between">
 					<Title>{ title }</Title>
-
-					<Menu position="bottom-end">
-						<Menu.Target />
-						<Menu.Dropdown>
-							<Menu.Link href={ Routes.editShiftTemplate(shift_template.id) }>
-								Edit ShiftTemplate
-							</Menu.Link>
-						</Menu.Dropdown>
-					</Menu>
+					<EditButton href={ Routes.editShiftTemplate(shift_template.id) } label={ title } />
 				</Group>
-
 			</Section>
 		</Page>
 	)

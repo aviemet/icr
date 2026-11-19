@@ -1,79 +1,94 @@
 import { useTranslation } from "react-i18next"
 
-import { Badge, Group, Title, Menu, Page, Section, Tabs } from "@/components"
+import { Avatar, Badge, Link, ScheduleButton, Text } from "@/components"
+import { DateTimeFormatter } from "@/components/Formatters"
+import { RecordShowShell } from "@/features"
 import { Routes } from "@/lib"
 
+import Assignments from "./Assignments"
 import Contacts from "./Contacts"
-import Details from "./Details"
+import Credentials from "./Credentials"
 import Documents from "./Documents"
+import Overview from "./Overview"
+import Pay from "./Pay"
+import Profile from "./Profile"
+import Trainings from "./Trainings"
 
 export interface ShowEmployeeProps {
 	employee: Schema.EmployeesShow
+	trainingOptions?: Schema.EmployeeTrainingsOptions[]
 }
 
-const ShowEmployee = ({ employee }: ShowEmployeeProps) => {
+function personInitials(name: string) {
+	const parts = name.trim().split(/\s+/).filter(Boolean)
+	if(parts.length === 0) return "?"
+	if(parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
+	return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase()
+}
+
+const ShowEmployee = ({ employee, trainingOptions = [] }: ShowEmployeeProps) => {
 	const { t } = useTranslation()
-
-	const tabsList = [
-		{ id: "details", label: t("views.employees.show.tabs.details"), component: Details },
-		{ id: "contacts", label: t("views.employees.show.tabs.contacts"), component: Contacts },
-		{ id: "documents", label: t("views.employees.show.tabs.documents"), component: Documents },
-	]
-
 	const title = employee?.person?.name || t("views.employees.show.title")
 	const employeeStatus = employee?.status
+	const statusLabel = employeeStatus
+		? t(`views.employees.table.statuses.${employeeStatus}`, { defaultValue: employeeStatus })
+		: ""
+	let statusColor = "blue"
+	if(employeeStatus === "employed") statusColor = "green"
+	if(employeeStatus === "terminated" || employeeStatus === "declined") statusColor = "red"
 
 	return (
-		<Page title={ title } breadcrumbs={ [
-			{ title: t("views.employees.index.title"), href: Routes.employees() },
-			{ title, href: Routes.employee(employee.slug) },
-		] }>
-			<Section fullHeight>
-
-				<Group justify="space-between" align="flex-start">
-					<Group align="center" gap="sm">
-						<Title>{ title }</Title>
-						{ employeeStatus === "applicant" && <Badge>{ employeeStatus.charAt(0).toUpperCase() + employeeStatus.slice(1) }</Badge> }
-					</Group>
-
-					<Group>
-						<Menu position="bottom-end">
-							<Menu.Target>
-							</Menu.Target>
-							<Menu.Dropdown>
-								<Menu.Link href={ Routes.editEmployee(employee.slug) }>
-									{ t("views.employees.show.edit") }
-								</Menu.Link>
-								<Menu.Link href={ Routes.statusEmployee(employee.slug) }>
-									{ t("views.employees.show.change_status") }
-								</Menu.Link>
-							</Menu.Dropdown>
-						</Menu>
-					</Group>
-				</Group>
-
-
-				<Tabs urlControlled={ true } defaultValue={ tabsList[0].id } mt="md">
-					<Tabs.List>
-						{ tabsList.map(tab => (
-							<Tabs.Tab key={ tab.id } value={ tab.id }>{ tab.label }</Tabs.Tab>
-						)) }
-					</Tabs.List>
-
-					{ tabsList.map(tab => {
-						const Component = tab.component
-
-						return (
-							<Tabs.Panel key={ tab.id } value={ tab.id } p="md">
-								<Component employee={ employee } />
-							</Tabs.Panel>
-						)
-					}) }
-				</Tabs>
-
-			</Section>
-
-		</Page>
+		<RecordShowShell
+			title={ title }
+			breadcrumbs={ [
+				{ title: t("views.employees.index.title"), href: Routes.employees() },
+				{ title, href: Routes.employee(employee.slug) },
+			] }
+			avatar={ (
+				<Avatar radius="xl" size={ 44 } color={ employee.color || "brand" }>
+					{ personInitials(title) }
+				</Avatar>
+			) }
+			badge={ employeeStatus
+				? <Badge color={ statusColor } variant="light">{ statusLabel }</Badge>
+				: undefined }
+			meta={ (
+				<>
+					<Text size="sm" c="dimmed" component="span">
+						{ t("views.employees.show.overview.employee_number") }: { employee.number || "-" }
+					</Text>
+					{ employee.job_title && (
+						<Text size="sm" c="dimmed" component="span">
+							{ t("views.employees.show.overview.job_title") }: { String(employee.job_title.name) }
+						</Text>
+					) }
+					{ employee.active_at && (
+						<Text size="sm" c="dimmed" component="span">
+							{ t("views.employees.show.overview.hire_date") }:{ " " }
+							<DateTimeFormatter>{ employee.active_at }</DateTimeFormatter>
+						</Text>
+					) }
+				</>
+			) }
+			actions={ (
+				<>
+					<ScheduleButton href={ Routes.scheduleEmployee(employee.slug) } appearance="button" />
+					<Link href={ Routes.statusEmployee(employee.slug) } as="button" buttonProps={ { variant: "light", size: "sm" } }>
+						{ t("views.employees.show.change_status") }
+					</Link>
+				</>
+			) }
+			tabs={ [
+				{ id: "overview", label: t("views.employees.show.tabs.overview"), panel: <Overview employee={ employee } /> },
+				{ id: "profile", label: t("views.employees.show.tabs.profile"), panel: <Profile employee={ employee } /> },
+				{ id: "contacts", label: t("views.employees.show.tabs.contacts"), panel: <Contacts employee={ employee } /> },
+				{ id: "credentials", label: t("views.employees.show.tabs.credentials"), panel: <Credentials employee={ employee } /> },
+				{ id: "assignments", label: t("views.employees.show.tabs.assignments"), panel: <Assignments employee={ employee } /> },
+				{ id: "trainings", label: t("views.employees.show.tabs.trainings"), panel: <Trainings employee={ employee } trainingOptions={ trainingOptions } /> },
+				{ id: "pay", label: t("views.employees.show.tabs.pay"), panel: <Pay employee={ employee } /> },
+				{ id: "documents", label: t("views.employees.show.tabs.documents"), panel: <Documents employee={ employee } /> },
+			] }
+		/>
 	)
 }
 

@@ -10,4 +10,5 @@ class ClientsAttendants::PersistedSerializer < ApplicationSerializer
   )
 
   belongs_to :attendant, serializer: Employees::PersistedSerializer
+  belongs_to :client, serializer: Clients::PersistedSerializer
 end

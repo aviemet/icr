@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 
-import { Title, Page, Section } from "@/components"
 import { EmployeeForm } from "@/domains/Employees/Form"
+import { RecordFormPage } from "@/features"
 import { Routes } from "@/lib"
 
 interface INewEmployeeProps {
@@ -13,16 +13,19 @@ const NewEmployee = ({ ...data }: INewEmployeeProps) => {
 	const title = t("views.employees.new.title")
 
 	return (
-		<Page title={ title }>
-			<Section>
-				<Title>{ title }</Title>
-
-				<EmployeeForm
-					to={ Routes.employees() }
-					{ ...data }
-				/>
-			</Section>
-		</Page>
+		<RecordFormPage
+			title={ title }
+			description="Add personal details to start employee onboarding."
+			breadcrumbs={ [
+				{ title: t("views.employees.index.title"), href: Routes.employees() },
+				{ title },
+			] }
+		>
+			<EmployeeForm
+				to={ Routes.employees() }
+				{ ...data }
+			/>
+		</RecordFormPage>
 	)
 }
 

@@ -1,30 +1,30 @@
-import { Title, Page, Section } from "@/components"
+import { Box } from "@/components"
 import { PersonForm } from "@/domains/Settings/People/Form"
+import { FormBand, FormBandStack } from "@/features"
 import { Routes, withLayout } from "@/lib"
+
+import { SettingsPageHeader } from "../../SettingsPageHeader"
 
 interface NewPersonProps {
 	person: Schema.PeopleFormData
 }
 
-const NewPerson = ({ ...data }: NewPersonProps) => {
-	const title = "New Person"
-
+const NewPerson = ({ person }: NewPersonProps) => {
 	return (
-		<Page title={ title } breadcrumbs={ [
-			{ title: "People", href: Routes.settingsPeople() },
-			{ title: "New Person", href: window.location.href },
-		] }>
-
-			<Section>
-				<Title>{ title }</Title>
-
-				<PersonForm
-					to={ Routes.settingsPeople() }
-					{ ...data }
-				/>
-			</Section>
-
-		</Page>
+		<Box>
+			<SettingsPageHeader
+				title="New Person"
+				description="Create a person record."
+			/>
+			<FormBandStack>
+				<FormBand title="Identity" description="Legal and preferred names.">
+					<PersonForm
+						to={ Routes.settingsPeople() }
+						person={ person }
+					/>
+				</FormBand>
+			</FormBandStack>
+		</Box>
 	)
 }
 

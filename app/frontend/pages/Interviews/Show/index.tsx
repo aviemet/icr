@@ -1,4 +1,5 @@
-import { Group, Title, Menu, Page, Section } from "@/components"
+import { Group, Title, Page, Section } from "@/components"
+import { EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
 interface ShowEmployeeInterviewProps {
@@ -6,7 +7,7 @@ interface ShowEmployeeInterviewProps {
 }
 
 const ShowEmployeeInterview = ({ employee_interview }: ShowEmployeeInterviewProps) => {
-	const title = "EmployeeInterview"
+	const title = "Interview"
 
 	return (
 		<Page title={ title } breadcrumbs={ [
@@ -16,17 +17,8 @@ const ShowEmployeeInterview = ({ employee_interview }: ShowEmployeeInterviewProp
 			<Section>
 				<Group justify="space-between">
 					<Title>{ title }</Title>
-
-					<Menu position="bottom-end">
-						<Menu.Target />
-						<Menu.Dropdown>
-							<Menu.Link href={ Routes.editInterview(employee_interview.id) }>
-								Edit EmployeeInterview
-							</Menu.Link>
-						</Menu.Dropdown>
-					</Menu>
+					<EditButton href={ Routes.editInterview(employee_interview.id) } label={ title } />
 				</Group>
-
 			</Section>
 		</Page>
 	)

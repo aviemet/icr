@@ -1,5 +1,5 @@
-import { Box, Group, Link, Menu, Page, Section, Table, Text, Title } from "@/components"
-import { ScheduleButton } from "@/components/Button"
+import { Box, Group, Link, Page, Section, Table, Text, Title } from "@/components"
+import { EditButton, ScheduleButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
 interface ShowHouseholdProps {
@@ -20,15 +20,7 @@ const ShowHousehold = ({ household }: ShowHouseholdProps) => {
 			<Section fullHeight>
 				<Group justify="space-between" align="flex-start">
 					<Title>{ title }</Title>
-
-					<Menu position="bottom-end">
-						<Menu.Target />
-						<Menu.Dropdown>
-							<Menu.Link href={ Routes.editHousehold(household.slug) }>
-								Edit Household
-							</Menu.Link>
-						</Menu.Dropdown>
-					</Menu>
+					<EditButton href={ Routes.editHousehold(household.slug) } label={ title } />
 				</Group>
 
 				<Box mt="md">

@@ -1,4 +1,6 @@
-import { Group, Stack, Text, Title } from "@/components"
+import { Section, Title } from "@/components"
+
+import * as classes from "./SettingsPageHeader.css"
 
 interface SettingsPageHeaderProps {
 	title: string
@@ -8,12 +10,12 @@ interface SettingsPageHeaderProps {
 
 export function SettingsPageHeader({ title, description, actions }: SettingsPageHeaderProps) {
 	return (
-		<Group justify="space-between" align="flex-start" mb="xl" wrap="nowrap" gap="md">
-			<Stack gap="xs">
+		<Section variant="panel" className={ classes.chrome }>
+			<div className={ classes.identity }>
 				<Title order={ 2 }>{ title }</Title>
-				<Text size="sm" c="dimmed">{ description }</Text>
-			</Stack>
-			{ actions }
-		</Group>
+				<span className={ classes.description }>{ description }</span>
+			</div>
+			{ actions && <div className={ classes.actions }>{ actions }</div> }
+		</Section>
 	)
 }

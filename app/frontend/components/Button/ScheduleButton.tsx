@@ -6,10 +6,27 @@ import * as classes from "./IconActionButton.css"
 interface ScheduleButtonProps {
 	href: string
 	label?: string
+	appearance?: "icon" | "button"
 }
 
-export function ScheduleButton({ href, label }: ScheduleButtonProps) {
+export function ScheduleButton({ href, label, appearance = "icon" }: ScheduleButtonProps) {
 	const usedLabel = `Schedule${label ? ` ${label}` : ""}`
+
+	if(appearance === "button") {
+		return (
+			<Link
+				href={ href }
+				as="button"
+				buttonProps={ {
+					variant: "light",
+					size: "sm",
+					leftSection: <CalendarIcon size={ 14 } />,
+				} }
+			>
+				{ usedLabel }
+			</Link>
+		)
+	}
 
 	return (
 		<Tooltip

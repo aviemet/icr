@@ -19,6 +19,13 @@ module Employee::StateMachine
           guard: :eligible_for_hire?
       end
 
+      event :begin_employment do
+        transitions from: :applicant,
+          to: :employed,
+          after: :activate_employment,
+          guard: :eligible_for_hire?
+      end
+
       event :close_application do
         transitions from: :applicant,
           to: :application_withdrawn
@@ -32,8 +39,8 @@ module Employee::StateMachine
 
       event :reject_offer do
         transitions from: :offered,
-        to: :declined,
-        after: :offer_declined
+          to: :declined,
+          after: :offer_declined
       end
 
       event :terminate do
@@ -51,18 +58,20 @@ module Employee::StateMachine
     end
 
     def activate_employment
-      update(active_at: Time.current, inactive_at: nil)
+      attrs = { inactive_at: nil }
+      attrs[:active_at] = Time.current if active_at.blank?
+      update(attrs)
     end
 
     def deactivate_employment
-      now = Time.current
-      update(inactive_at: now)
+      ends_at = inactive_at.presence || Time.current
+      update(inactive_at: ends_at) if inactive_at.blank?
 
-      current_job_assignment = employees_job_titles.where("starts_at <= ? AND ends_at IS NULL", now).first
-      current_job_assignment&.update(ends_at: now)
+      current_job_assignment = employees_job_titles.where("starts_at <= ? AND ends_at IS NULL", ends_at).first
+      current_job_assignment&.update(ends_at: ends_at)
 
-      current_pay_rate = pay_rates.where("starts_at <= ? AND ends_at IS NULL", now).first
-      current_pay_rate&.update(ends_at: now)
+      current_pay_rate = pay_rates.where("starts_at <= ? AND ends_at IS NULL", ends_at).first
+      current_pay_rate&.update(ends_at: ends_at)
     end
 
     def make_offer

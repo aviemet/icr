@@ -111,9 +111,27 @@ if Rails.env.development?
       })
 
       attendant.assign_job_title(Employee::JobTitle.find_by(slug: "attendant"))
+
+      FactoryBot.create(:employees_manager, employee: attendant, manager: facilitator, primary: true)
+      FactoryBot.create(:pay_rate, :active, employee: attendant)
+      FactoryBot.create(:employee_credential, employee: attendant, expires_on: 20.days.from_now)
+      FactoryBot.create(:employee_clearance, employee: attendant)
+      FactoryBot.create(:employee_support_contact, employee: attendant)
+
+      if Client.any?
+        FactoryBot.create(:clients_attendant, attendant: attendant, client: Client.first)
+      end
+
+      training = Employee::Training.find_or_create_by!(name: "Orientation") do |record|
+        record.description = "New hire orientation"
+        record.estimated_minutes = 60
+        record.active_on = Date.current
+      end
+      FactoryBot.create(:employees_training, employee: attendant, training: training, completed_at: nil, started_at: Time.current)
+      FactoryBot.create(:employees_training, employee: facilitator, training: training, completed_at: Time.current)
     end
 
-    Rails.logger.info "[seeds] employees + facilitator/director/attendant users"
+    Rails.logger.info "[seeds] employees + facilitator/director/attendant users + HR sample data"
   end
 
 end

@@ -1,9 +1,13 @@
 import { router } from "@inertiajs/react"
 import { useTranslation } from "react-i18next"
 
-import { Group, Image, Link, Section, Stack, Text, Title } from "@/components"
+import { Group, Image, Link, Stack, Text, Title } from "@/components"
 import { DeleteButton } from "@/components/Button"
+import { CollectionAddModal, CollectionPanel, DropzoneField, RecordRow } from "@/features"
 import { Routes } from "@/lib"
+import { usePermissions } from "@/lib/hooks"
+
+import * as classes from "./Documents.css"
 
 type ClientAttachment = {
 	id: string
@@ -20,6 +24,8 @@ interface ClientDocumentsProps {
 
 export function ClientDocuments({ client }: ClientDocumentsProps) {
 	const { t } = useTranslation()
+	const { can } = usePermissions()
+	const canUpdate = can("clients", "update")
 	const documents: ClientAttachment[] = client.documents
 	const images: ClientAttachment[] = client.images
 
@@ -46,57 +52,99 @@ export function ClientDocuments({ client }: ClientDocumentsProps) {
 	}
 
 	return (
-		<Stack gap="xl">
-			<Section>
-				<Title order={ 3 } mb="md">{ t("views.clients.show.documents.files") }</Title>
-				<Stack gap="sm" mb="lg">
-					{ documents.map(document => (
-						<Group key={ document.id } justify="space-between">
-							<Link href={ document.url } target="_blank">{ document.filename }</Link>
-							<DeleteButton
-								href={ Routes.clientDocument(client.slug, document.id) }
-								label={ document.filename }
-							/>
-						</Group>
-					)) }
-					{ documents.length === 0 && <Text c="dimmed">No documents uploaded.</Text> }
-				</Stack>
-				<label>
-					<Text size="sm" mb={ 4 }>{ t("views.clients.show.documents.upload_document") }</Text>
-					<input
-						type="file"
-						accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-						onChange={ event => uploadDocument(event.target.files) }
-					/>
-				</label>
-			</Section>
-
-			<Section>
-				<Title order={ 3 } mb="md">{ t("views.clients.show.documents.images") }</Title>
-				<Group gap="md" mb="lg">
-					{ images.map(image => (
-						<Stack key={ image.id } gap="xs">
-							<Image src={ image.url } alt={ image.filename } w={ 120 } h={ 120 } fit="cover" />
-							<Group justify="space-between">
-								<Text size="xs">{ image.filename }</Text>
+		<Stack gap="lg">
+			<CollectionPanel
+				title={ t("views.clients.show.documents.files") }
+				count={ documents.length }
+				emptyLabel="No documents uploaded."
+				actions={ (
+					<CollectionAddModal
+						canUpdate={ canUpdate }
+						label={ t("views.clients.show.documents.upload_document") }
+					>
+						<DropzoneField
+							label={ t("views.clients.show.documents.upload_document") }
+							hint="PDF or Word document"
+							accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+							onSelect={ uploadDocument }
+						/>
+					</CollectionAddModal>
+				) }
+			>
+				{ documents.map(document => (
+					<RecordRow
+						key={ document.id }
+						title={ <Link href={ document.url } target="_blank">{ document.filename }</Link> }
+						actions={ canUpdate
+							? (
 								<DeleteButton
-									href={ Routes.clientImage(client.slug, image.id) }
-									label={ image.filename }
+									href={ Routes.clientDocument(client.slug, document.id) }
+									label={ document.filename }
 								/>
-							</Group>
-						</Stack>
-					)) }
-					{ images.length === 0 && <Text c="dimmed">No images uploaded.</Text> }
-				</Group>
-				<label>
-					<Text size="sm" mb={ 4 }>{ t("views.clients.show.documents.upload_image") }</Text>
-					<input
-						type="file"
-						accept="image/png,image/jpeg"
-						onChange={ event => uploadImage(event.target.files) }
+							)
+							: undefined }
 					/>
-				</label>
-			</Section>
+				)) }
+			</CollectionPanel>
+
+			<Stack gap="sm">
+				<GroupHeader
+					title={ t("views.clients.show.documents.images") }
+					count={ images.length }
+					action={ (
+						<CollectionAddModal
+							canUpdate={ canUpdate }
+							label={ t("views.clients.show.documents.upload_image") }
+						>
+							<DropzoneField
+								label={ t("views.clients.show.documents.upload_image") }
+								hint="PNG or JPEG"
+								accept="image/png,image/jpeg"
+								onSelect={ uploadImage }
+							/>
+						</CollectionAddModal>
+					) }
+				/>
+				{ images.length === 0
+					? <Text size="sm" c="dimmed">No images uploaded.</Text>
+					: (
+						<div className={ classes.imageGrid }>
+							{ images.map(image => (
+								<div key={ image.id } className={ classes.imageCard }>
+									<Image src={ image.url } alt={ image.filename } w="100%" h={ 100 } fit="cover" />
+									<Text size="xs" lineClamp={ 1 }>{ image.filename }</Text>
+									{ canUpdate && (
+										<DeleteButton
+											href={ Routes.clientImage(client.slug, image.id) }
+											label={ image.filename }
+										/>
+									) }
+								</div>
+							)) }
+						</div>
+					) }
+			</Stack>
 		</Stack>
+	)
+}
+
+function GroupHeader({
+	title,
+	count,
+	action,
+}: {
+	title: string
+	count: number
+	action: React.ReactNode
+}) {
+	return (
+		<Group justify="space-between" align="center" gap="sm" wrap="wrap">
+			<Title order={ 4 }>
+				{ title }
+				{ " " }
+				<Text span size="sm" c="dimmed">{ count }</Text>
+			</Title>
+			{ action }
+		</Group>
 	)
 }

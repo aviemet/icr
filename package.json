@@ -23,7 +23,7 @@
     "coverage": "vitest run --coverage",
     "rspec": "RAILS_ENV=test bundle install && bundle exec rspec --color",
     "rspec:watch": "RAILS_ENV=test bundle exec rake rspec_watcher:watch",
-    "verify": "yarn lint:fix && yarn rubocop:fix && yarn tsc && yarn test:once && yarn rspec",
+    "verify": "bash -c 'status=0; yarn lint:fix || status=1; yarn rubocop:fix || status=1; yarn tsc || status=1; yarn test:once || status=1; yarn rspec || status=1; exit $status'",
     "regenerate": "rails types:generate && rails annotate:all && rails i18n:export"
   },
   "dependencies": {

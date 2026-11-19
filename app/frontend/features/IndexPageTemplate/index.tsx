@@ -1,8 +1,11 @@
+import clsx from "clsx"
+
 import { Table } from "@/components"
 import { type Breadcrumb } from "@/components/Breadcrumbs"
 import { Page } from "@/components/Page"
 import { usePageProps } from "@/lib/hooks/usePageProps"
 
+import * as classes from "./IndexPage.css"
 import { IndexTableTitleSection, type IndexTableTitleSectionProps } from "./TableTitleSection"
 
 export interface IndexPageTemplateProps extends IndexTableTitleSectionProps {
@@ -10,6 +13,7 @@ export interface IndexPageTemplateProps extends IndexTableTitleSectionProps {
 	pagination: Schema.Pagination
 	search?: boolean
 	breadcrumbs?: Breadcrumb[]
+	dense?: boolean
 }
 
 export function IndexPageTemplate({
@@ -21,6 +25,7 @@ export function IndexPageTemplate({
 	breadcrumbs,
 	actions,
 	deleteRoute,
+	dense = false,
 }: IndexPageTemplateProps) {
 	const { auth: { user } } = usePageProps()
 	const columnHide = user.table_preferences?.[model]?.hide ?? {}
@@ -30,20 +35,22 @@ export function IndexPageTemplate({
 			{ title, href: window.location.href },
 		] }>
 			<Table.Section>
-				<Table.Provider
-					selectable
-					model={ model }
-					pagination={ pagination }
-					columnHide={ columnHide }
-				>
-					<IndexTableTitleSection title={ title } actions={ actions } deleteRoute={ deleteRoute }>
-						{ search && <Table.SearchInput model={ model } /> }
-					</IndexTableTitleSection>
+				<div className={ clsx(dense && classes.denseShell) }>
+					<Table.Provider
+						selectable
+						model={ model }
+						pagination={ pagination }
+						columnHide={ columnHide }
+					>
+						<IndexTableTitleSection title={ title } actions={ actions } deleteRoute={ deleteRoute }>
+							{ search && <Table.SearchInput model={ model } /> }
+						</IndexTableTitleSection>
 
-					{ children }
+						{ children }
 
-					<Table.Pagination pagination={ pagination } model={ model } />
-				</Table.Provider>
+						<Table.Pagination pagination={ pagination } model={ model } />
+					</Table.Provider>
+				</div>
 			</Table.Section>
 		</Page>
 	)
