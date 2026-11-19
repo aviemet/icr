@@ -5,7 +5,7 @@ import { Group, Image, Link, Stack, Text, Title } from "@/components"
 import { DeleteButton } from "@/components/Button"
 import { CollectionAddModal, CollectionPanel, DropzoneField, RecordRow } from "@/features"
 import { Routes } from "@/lib"
-import { usePermissions } from "@/lib/hooks"
+import { useRecordCanUpdate } from "@/lib/hooks"
 
 import * as classes from "./Documents.css"
 
@@ -24,8 +24,7 @@ interface EmployeeDocumentsProps {
 
 export function EmployeeDocuments({ employee }: EmployeeDocumentsProps) {
 	const { t } = useTranslation()
-	const { can } = usePermissions()
-	const canUpdate = can("employees", "update")
+	const canUpdate = useRecordCanUpdate()
 	const documents: EmployeeAttachment[] = employee.documents
 	const images: EmployeeAttachment[] = employee.images
 

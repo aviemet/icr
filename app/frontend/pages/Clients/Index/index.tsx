@@ -4,14 +4,18 @@ import { NewIcon } from "@/components/Icons"
 import { ClientTable } from "@/domains/Clients/Table"
 import { IndexPageTemplate } from "@/features"
 import { Routes } from "@/lib"
+import { usePermissions } from "@/lib/hooks"
 
 interface ClientIndexProps {
 	clients: Schema.ClientsIndex[]
+	can_updates: Record<string, boolean>
 	pagination: Schema.Pagination
 }
 
-const ClientsIndex = ({ clients, pagination }: ClientIndexProps) => {
+const ClientsIndex = ({ clients, can_updates, pagination }: ClientIndexProps) => {
 	const { t } = useTranslation()
+	const { can } = usePermissions()
+	const canCreate = can("clients", "create")
 
 	return (
 		<IndexPageTemplate
@@ -20,11 +24,18 @@ const ClientsIndex = ({ clients, pagination }: ClientIndexProps) => {
 			pagination={ pagination }
 			deleteRoute={ Routes.clients() }
 			dense
-			actions={ [
-				{ label: t("views.clients.index.new"), href: Routes.newClient(), icon: <NewIcon /> },
-			] }
+			actions={ canCreate
+				? [
+					{ label: t("views.clients.index.new"), href: Routes.newClient(), icon: <NewIcon /> },
+				]
+				: [] }
 		>
-			<ClientTable records={ clients } model="clients" serverFiltered />
+			<ClientTable
+				records={ clients }
+				canUpdates={ can_updates }
+				model="clients"
+				serverFiltered
+			/>
 		</IndexPageTemplate>
 	)
 }

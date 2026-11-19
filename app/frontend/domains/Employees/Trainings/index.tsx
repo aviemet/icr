@@ -7,7 +7,7 @@ import { DateTimeFormatter } from "@/components/Formatters"
 import { DateInput, Select } from "@/components/Inputs"
 import { CollectionAddModal, CollectionPanel, RecordRow } from "@/features"
 import { Routes } from "@/lib"
-import { usePermissions } from "@/lib/hooks"
+import { useRecordCanUpdate } from "@/lib/hooks"
 
 interface EmployeeTrainingsProps {
 	employee: Schema.EmployeesShow
@@ -16,8 +16,7 @@ interface EmployeeTrainingsProps {
 
 export function EmployeeTrainings({ employee, trainingOptions }: EmployeeTrainingsProps) {
 	const { t } = useTranslation()
-	const { can } = usePermissions()
-	const canUpdate = can("employees", "update")
+	const canUpdate = useRecordCanUpdate()
 
 	const options = trainingOptions.map(training => ({
 		value: training.id,

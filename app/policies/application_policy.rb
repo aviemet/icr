@@ -120,7 +120,11 @@ class ApplicationPolicy
   end
 
   def resource_class_for_record
-    record.is_a?(Class) ? record : record.class
+    return record if record.is_a?(Class)
+    return record.klass if record.respond_to?(:klass)
+    return record.model if record.respond_to?(:model)
+
+    record.class
   end
 
   private

@@ -7,7 +7,7 @@ import { DateTimeFormatter } from "@/components/Formatters"
 import { DateInput, NumberInput, Select, TextInput, Textarea } from "@/components/Inputs"
 import { CollectionAddModal, CollectionPanel, RecordRow } from "@/features"
 import { Routes } from "@/lib"
-import { usePermissions } from "@/lib/hooks"
+import { useRecordCanUpdate } from "@/lib/hooks"
 
 interface ClientMedicationsProps {
 	client: Schema.ClientsShow
@@ -65,8 +65,7 @@ function prescriptionMeta(prescription: Schema.PrescriptionsPersisted) {
 
 export function ClientMedications({ client }: ClientMedicationsProps) {
 	const { t } = useTranslation()
-	const { can } = usePermissions()
-	const canUpdate = can("clients", "update")
+	const canUpdate = useRecordCanUpdate()
 	const active = client.prescriptions.filter(isActivePrescription)
 	const historical = client.prescriptions.filter(prescription => !isActivePrescription(prescription))
 	const defaultDoctorId = client.doctors[0]?.id ?? ""

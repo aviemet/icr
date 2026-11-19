@@ -67,18 +67,20 @@ export function Sidebar() {
 								label="Clients"
 								href={ Routes.clients() }
 								leftSection={ <ClientIcon /> }
-								active={ matchesAtPosition(paths, [0, "clients"]) }
+								active={ matchesAtPosition(paths, [0, "clients"]) || matchesAtPosition(paths, [0, "households"]) }
 							>
 								{ can("households", "index") && (
 									<MenuLink
 										label="Households"
 										href={ Routes.households() }
+										active={ matchesAtPosition(paths, [0, "households"]) }
 									/>
 								) }
 								{ can("doctors", "index") && (
 									<MenuLink
 										label="Doctors"
 										href={ Routes.doctors() }
+										active={ matchesAtPosition(paths, [0, "doctors"]) }
 									/>
 								) }
 							</MenuLink>

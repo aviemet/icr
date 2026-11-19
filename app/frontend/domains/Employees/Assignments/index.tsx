@@ -8,7 +8,7 @@ import { Checkbox, DateInput } from "@/components/Inputs"
 import { ClientsDropdown, EmployeesDropdown } from "@/components/Inputs/Dropdowns"
 import { CollectionAddModal, CollectionPanel, RecordRow } from "@/features"
 import { Routes } from "@/lib"
-import { usePermissions } from "@/lib/hooks"
+import { useRecordCanUpdate } from "@/lib/hooks"
 
 interface EmployeeAssignmentsProps {
 	employee: Schema.EmployeesShow
@@ -26,8 +26,7 @@ function dateRange(starts: string | Date | null | undefined, ends: string | Date
 
 export function EmployeeAssignments({ employee }: EmployeeAssignmentsProps) {
 	const { t } = useTranslation()
-	const { can } = usePermissions()
-	const canUpdate = can("employees", "update")
+	const canUpdate = useRecordCanUpdate()
 
 	return (
 		<Stack gap="lg">

@@ -12,6 +12,7 @@ import {
 	RecordRow,
 } from "@/features"
 import { initials, Routes } from "@/lib"
+import { useRecordCanUpdate } from "@/lib/hooks"
 
 import * as classes from "./Overview.css"
 
@@ -21,6 +22,7 @@ interface EmployeeOverviewProps {
 
 export function EmployeeOverview({ employee }: EmployeeOverviewProps) {
 	const { t } = useTranslation()
+	const canUpdate = useRecordCanUpdate()
 	const alertCount = employee.incomplete_trainings_count
 		+ employee.expiring_credentials_count
 		+ employee.expiring_clearances_count
@@ -123,16 +125,19 @@ export function EmployeeOverview({ employee }: EmployeeOverviewProps) {
 								hint="Current period"
 							/>
 						) }
-						<BoardActionTile
-							href={ Routes.statusEmployee(employee.slug) }
-							title={ t("views.employees.show.change_status") }
-							hint="Employment transitions"
-						/>
+						{ canUpdate && (
+							<BoardActionTile
+								href={ Routes.statusEmployee(employee.slug) }
+								title={ t("views.employees.show.change_status") }
+								hint="Employment transitions"
+							/>
+						) }
 						<BoardActionTile
 							href={ Routes.scheduleEmployee(employee.slug) }
 							title="Schedule"
 							hint="Open calendar"
 						/>
+
 					</BoardActionGrid>
 				</MetricTile>
 			</Box>

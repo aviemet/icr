@@ -62,6 +62,14 @@ RSpec.describe HouseholdPolicy, type: :policy do
     it "allows admin" do
       expect(described_class.new(@admin_user, Household.new)).to authorize(:index)
     end
+
+    it "allows employees even with no household assignments" do
+      expect(described_class.new(@employee_user, Household.new)).to authorize(:index)
+    end
+
+    it "allows client users" do
+      expect(described_class.new(@client_user, Household.new)).to authorize(:index)
+    end
   end
 
   permissions :show? do

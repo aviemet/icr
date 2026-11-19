@@ -12,7 +12,7 @@ import {
 	RecordRow,
 } from "@/features"
 import { Routes } from "@/lib"
-import { usePermissions } from "@/lib/hooks"
+import { useRecordCanUpdate } from "@/lib/hooks"
 
 interface ClientCareServicesProps {
 	client: Schema.ClientsShow
@@ -30,8 +30,7 @@ function dateRange(starts: string | Date | null | undefined, ends: string | Date
 
 export function ClientCareServices({ client }: ClientCareServicesProps) {
 	const { t } = useTranslation()
-	const { can } = usePermissions()
-	const canUpdate = can("clients", "update")
+	const canUpdate = useRecordCanUpdate()
 
 	return (
 		<Stack gap="lg">

@@ -108,6 +108,24 @@ export const navbar = css`
 			min-width: 0;
 			overflow: hidden;
 		}
+
+		.submenu {
+			.label {
+				opacity: 1;
+				visibility: visible;
+				max-width: 14rem;
+			}
+
+			.nav-link {
+				justify-content: space-between;
+				padding: ${ vars.spacing.xs } ${ vars.spacing.sm };
+			}
+
+			.content {
+				gap: ${ vars.spacing.xs };
+				justify-content: flex-start;
+			}
+		}
 	}
 
 	#site-logo, #site-logo svg {

@@ -39,12 +39,16 @@ class ClientsController < ApplicationController
 
   # @route GET /clients (clients)
   def index
-    authorize clients
+    authorize Client
 
     paginated_clients = paginate(clients, :clients)
+    page_clients = paginated_clients.to_a
 
     render inertia: "Clients/Index", props: {
-      clients: -> { paginated_clients.render(:index) },
+      clients: -> { page_clients.map { |record| record.render(:index) } },
+      can_updates: -> {
+        page_clients.to_h { |record| [record.id, policy(record).update?] }
+      },
       pagination: -> { {
         count: clients.count,
         **pagination_data(paginated_clients)
@@ -59,9 +63,11 @@ class ClientsController < ApplicationController
     client_for_show = Client.includes_show.find(client.id)
 
     render inertia: "Clients/Show", props: {
-      client: -> { client_for_show.render(:show) }
+      client: -> { client_for_show.render(:show) },
+      can_update: -> { policy(client).update? },
     }
   end
+
 
   # @route GET /clients/new (new_client)
   def new
@@ -91,11 +97,13 @@ class ClientsController < ApplicationController
 
     render inertia: "Clients/Schedule", props: {
       client: -> { client_for_show.render(:show) },
+      can_update: -> { policy(client).update? },
       schedules: lambda {
         schedules.render(:client)
       },
     }
   end
+
 
   # @route POST /clients (clients)
   def create

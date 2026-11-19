@@ -151,4 +151,11 @@ Rails.application.routes.draw do
   resources :requirements
 
   draw(:api)
+
+  if Rails.env.development? || Rails.env.test?
+    namespace :dev do
+      resource :acts_as, only: [:create, :destroy], controller: "acts_as"
+    end
+  end
 end
+

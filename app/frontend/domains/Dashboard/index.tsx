@@ -11,7 +11,7 @@ import {
 	MetricValue,
 } from "@/features"
 import { formatter, Routes } from "@/lib"
-import { usePageProps } from "@/lib/hooks"
+import { usePageProps, usePermissions } from "@/lib/hooks"
 
 import * as classes from "./Board.css"
 
@@ -21,9 +21,22 @@ interface DashboardBoardProps {
 
 export function DashboardBoard({ dashboard }: DashboardBoardProps) {
 	const { t } = useTranslation()
-	const { settings, auth: { user } } = usePageProps()
+	const { settings, auth } = usePageProps()
+	const { can } = usePermissions()
+	const user = auth.user
 	const hoursLabel = formatter.number.decimal(dashboard.week_tracked_hours, 1)
 	const timeTone = dashboard.pending_timesheet_count > 0 ? "alert" : "default"
+	const canViewClients = can("clients", "index")
+	const canCreateClients = can("clients", "create")
+	const canViewEmployees = can("employees", "index")
+	const canCreateEmployees = can("employees", "create")
+	const canViewPayroll = can("timesheets", "index")
+	const ownEmployeeHref = auth.own_employee_slug
+		? Routes.employee(auth.own_employee_slug)
+		: null
+	const ownClientHref = auth.own_client_slug
+		? Routes.client(auth.own_client_slug)
+		: null
 
 	return (
 		<Box className={ classes.viewport }>
@@ -53,16 +66,27 @@ export function DashboardBoard({ dashboard }: DashboardBoardProps) {
 							value={ <CountChip value={ dashboard.inactive_client_count } /> }
 						/>
 						<BoardActionGrid>
-							<BoardActionTile
-								href={ Routes.clients() }
-								title={ t("views.dashboard.clients.view_all") }
-								hint="Open client list"
-							/>
-							<BoardActionTile
-								href={ Routes.newClient() }
-								title={ t("views.dashboard.clients.add_new") }
-								hint="Create a client"
-							/>
+							{ canViewClients && (
+								<BoardActionTile
+									href={ Routes.clients() }
+									title={ t("views.dashboard.clients.view_all") }
+									hint="Open client list"
+								/>
+							) }
+							{ canCreateClients && (
+								<BoardActionTile
+									href={ Routes.newClient() }
+									title={ t("views.dashboard.clients.add_new") }
+									hint="Create a client"
+								/>
+							) }
+							{ ownClientHref && (
+								<BoardActionTile
+									href={ ownClientHref }
+									title="My profile"
+									hint="Open your client record"
+								/>
+							) }
 						</BoardActionGrid>
 					</MetricTile>
 
@@ -84,16 +108,27 @@ export function DashboardBoard({ dashboard }: DashboardBoardProps) {
 							) }
 						/>
 						<BoardActionGrid>
-							<BoardActionTile
-								href={ Routes.employees() }
-								title={ t("views.dashboard.team.view_all") }
-								hint="Open employee list"
-							/>
-							<BoardActionTile
-								href={ Routes.newEmployee() }
-								title={ t("views.dashboard.team.add_new") }
-								hint="Start onboarding"
-							/>
+							{ canViewEmployees && (
+								<BoardActionTile
+									href={ Routes.employees() }
+									title={ t("views.dashboard.team.view_all") }
+									hint="Open employee list"
+								/>
+							) }
+							{ canCreateEmployees && (
+								<BoardActionTile
+									href={ Routes.newEmployee() }
+									title={ t("views.dashboard.team.add_new") }
+									hint="Start onboarding"
+								/>
+							) }
+							{ ownEmployeeHref && (
+								<BoardActionTile
+									href={ ownEmployeeHref }
+									title="My profile"
+									hint="Open your employee record"
+								/>
+							) }
 						</BoardActionGrid>
 					</MetricTile>
 
@@ -113,13 +148,15 @@ export function DashboardBoard({ dashboard }: DashboardBoardProps) {
 								/>
 							) }
 						/>
-						<BoardActionGrid>
-							<BoardActionTile
-								href={ Routes.payrollPeriods() }
-								title={ t("views.dashboard.time.view") }
-								hint="Payroll periods"
-							/>
-						</BoardActionGrid>
+						{ canViewPayroll && (
+							<BoardActionGrid>
+								<BoardActionTile
+									href={ Routes.payrollPeriods() }
+									title={ t("views.dashboard.time.view") }
+									hint="Payroll periods"
+								/>
+							</BoardActionGrid>
+						) }
 					</MetricTile>
 				</Box>
 
@@ -144,18 +181,20 @@ export function DashboardBoard({ dashboard }: DashboardBoardProps) {
 									))
 								) }
 						</Box>
-						<BoardActionGrid>
-							<BoardActionTile
-								href={ Routes.payrollPeriods() }
-								title={ t("views.dashboard.schedule.view") }
-								hint="Open schedule"
-							/>
-							<BoardActionTile
-								href={ Routes.newTimesheet() }
-								title={ t("views.dashboard.schedule.add") }
-								hint="New timesheet entry"
-							/>
-						</BoardActionGrid>
+						{ canViewPayroll && (
+							<BoardActionGrid>
+								<BoardActionTile
+									href={ Routes.payrollPeriods() }
+									title={ t("views.dashboard.schedule.view") }
+									hint="Open schedule"
+								/>
+								<BoardActionTile
+									href={ Routes.newTimesheet() }
+									title={ t("views.dashboard.schedule.add") }
+									hint="New timesheet entry"
+								/>
+							</BoardActionGrid>
+						) }
 					</MetricTile>
 
 					<MetricTile
