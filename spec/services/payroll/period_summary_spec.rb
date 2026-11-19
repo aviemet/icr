@@ -176,4 +176,3 @@ RSpec.describe Payroll::PeriodSummary do
     end
   end
 end
-

@@ -1,5 +1,5 @@
 class Vendors::SpotlightSerializer < SpotlightSerializer
-  SPOTLIGHT_TYPE = "vendor"
+  SPOTLIGHT_TYPE = "vendor".freeze
 
   object_as :vendor, model: "Vendor"
 
@@ -8,4 +8,3 @@ class Vendors::SpotlightSerializer < SpotlightSerializer
     :name,
   )
 end
-

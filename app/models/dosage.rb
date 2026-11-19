@@ -16,6 +16,23 @@ class Dosage < ApplicationRecord
 
   has_one :prescription, dependent: :nullify
 
+  enum :amount_unit, {
+    mg: 0,
+    ml: 1,
+    tablet: 2,
+    capsule: 3,
+    unit: 4,
+    other: 5
+  }, prefix: true
+
+  enum :freq_period, {
+    hour: 0,
+    day: 1,
+    week: 2,
+    month: 3,
+    as_needed: 4
+  }, prefix: true
+
   validates :amount, presence: true
   validates :freq_period, presence: true
 

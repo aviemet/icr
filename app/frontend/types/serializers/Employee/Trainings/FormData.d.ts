@@ -4,10 +4,10 @@ export {}
 declare global {
   namespace Schema {
     interface EmployeeTrainingsFormData {
+      id?: string
       active_on?: Date
       description?: string
       estimated_minutes?: number
-      id?: string
       inactive_on?: Date
       name?: string
     }

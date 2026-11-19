@@ -2,6 +2,7 @@ import { MantineProvider } from "@mantine/core"
 import { cleanup, render } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
+import "@/lib/i18n"
 import { theme } from "@/lib/theme"
 import Login from "@/pages/Devise/Login"
 

@@ -91,7 +91,7 @@ You are an expert in Ruby on Rails, PostgreSQL, Hotwire (Turbo and Stimulus), an
   - Inertia has its own set of rspec assertions, use them when appropriate to test inertia specific actions. Examples below:
 
   ```ruby
-    RSpec.describe '/events', inertia: true do
+    RSpec.describe '/events' do
       describe '#index' do
         let!(:event) { Event.create!(title: 'Foo', start_date: '2024-02-21', description: 'Foo bar') }
 

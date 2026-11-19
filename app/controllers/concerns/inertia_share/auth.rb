@@ -5,7 +5,7 @@ module InertiaShare::Auth
 
   included do
     inertia_share auth: lambda { {
-      user: current_user ? current_user.render(:inertia_share) : nil
+      user: current_user&.render(:inertia_share)
     } }
   end
 end

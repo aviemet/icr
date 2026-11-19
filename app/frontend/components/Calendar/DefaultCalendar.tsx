@@ -1,6 +1,6 @@
 import { Calendar, CalendarProps } from "./Calendar"
 
-const DefaultCalendar = (props: CalendarProps) => {
+export function DefaultCalendar(props: CalendarProps) {
 	// const {
 	// 	defaultDate,
 	// 	defaultView = VIEWS.month,
@@ -19,5 +19,3 @@ const DefaultCalendar = (props: CalendarProps) => {
 
 	return <Calendar { ...props } />
 }
-
-export { DefaultCalendar }

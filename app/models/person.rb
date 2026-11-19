@@ -48,6 +48,7 @@ class Person < ApplicationRecord
   has_one :client, dependent: :nullify
   has_one :employee, dependent: :nullify
   has_one :doctor, dependent: :nullify
+  has_many :client_support_contacts, class_name: "Client::SupportContact", dependent: :nullify, inverse_of: :person
 
   validates :first_name, presence: true
   validates :last_name, presence: true

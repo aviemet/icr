@@ -1,7 +1,7 @@
 require "rails_helper"
 require_relative "../support/devise"
 
-RSpec.describe "/employees", :inertia do
+RSpec.describe "/employees" do
   def valid_attributes
     {
       employee: {

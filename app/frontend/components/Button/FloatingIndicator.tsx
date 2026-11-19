@@ -29,7 +29,7 @@ interface FloatingIndicatorProps<T extends string = string> extends PaperProps, 
 	defaultValue?: T
 }
 
-const FloatingIndicator = <T extends string = string>({
+export function FloatingIndicator<T extends string = string>({
 	options,
 	radius = "sm",
 	p = "xxs",
@@ -40,7 +40,7 @@ const FloatingIndicator = <T extends string = string>({
 	onValueChange,
 	defaultValue,
 	...props
-}: FloatingIndicatorProps<T>) => {
+}: FloatingIndicatorProps<T>) {
 	const [rootRef, setRootRef] = useState<HTMLDivElement | null>(null)
 	const [activeTarget, setActiveTarget] = useState<HTMLButtonElement | null>(null)
 	const controlsRefs = useRef<Record<string, HTMLButtonElement | null>>({})
@@ -105,5 +105,3 @@ const FloatingIndicator = <T extends string = string>({
 		</Paper>
 	)
 }
-
-export { FloatingIndicator }

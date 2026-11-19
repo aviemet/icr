@@ -10,8 +10,8 @@ class Settings::PayrollsController < ApplicationController
     }
   end
 
-  # @route PATCH /settings/payroll/schedule (settings_payroll_schedule)
   # @route PUT /settings/payroll/schedule (settings_payroll_schedule)
+  # @route PATCH /settings/payroll/schedule (settings_payroll_schedule)
   def update_schedule
     authorize Setting, :update?
     update_settings(settings_payroll_schedule_path)
@@ -28,8 +28,8 @@ class Settings::PayrollsController < ApplicationController
     }
   end
 
-  # @route PATCH /settings/payroll/overtime (settings_payroll_overtime)
   # @route PUT /settings/payroll/overtime (settings_payroll_overtime)
+  # @route PATCH /settings/payroll/overtime (settings_payroll_overtime)
   def update_overtime
     authorize Setting, :update?
     update_settings(settings_payroll_overtime_path)

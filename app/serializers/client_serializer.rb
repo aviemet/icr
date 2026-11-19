@@ -2,15 +2,27 @@
 #
 # Table name: clients
 #
-#  id          :uuid             not null, primary key
-#  active_at   :date
-#  color       :string
-#  inactive_at :date
-#  number      :string
-#  slug        :string           not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  person_id   :uuid             not null
+#  id                    :uuid             not null, primary key
+#  active_at             :date
+#  color                 :string
+#  communication_notes   :text
+#  ihss_authorized_hours :decimal(8, 2)
+#  ihss_notes            :text
+#  ihss_share_of_cost    :decimal(10, 2)
+#  inactive_at           :date
+#  ipp_ends_on           :date
+#  ipp_review_on         :date
+#  ipp_starts_on         :date
+#  medi_cal_number       :string
+#  number                :string
+#  preferred_hospital    :string
+#  preferred_language    :string
+#  regional_center       :string
+#  slug                  :string           not null
+#  uci_number            :string
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  person_id             :uuid             not null
 #
 # Indexes
 #
@@ -33,6 +45,18 @@ class ClientSerializer < ApplicationSerializer
     :active_at,
     :inactive_at,
     :color,
+    :uci_number,
+    :regional_center,
+    :medi_cal_number,
+    :ipp_starts_on,
+    :ipp_ends_on,
+    :ipp_review_on,
+    :preferred_hospital,
+    :preferred_language,
+    :communication_notes,
+    :ihss_authorized_hours,
+    :ihss_share_of_cost,
+    :ihss_notes,
   )
 
   belongs_to :person, serializer: PersonSerializer

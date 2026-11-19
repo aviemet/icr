@@ -35,10 +35,14 @@ if Rails.env.development?
 
   if Client.none?
     4.times do
-      client = FactoryBot.create :client
+      client = FactoryBot.create(:client, :with_profile)
       FactoryBot.create(:address, contact: client.contact, category: Category.type("Contact::Address").find_by(name: "Personal"))
       FactoryBot.create(:email, contact: client.contact, category: Category.type("Contact::Email").find_by(name: "Personal"))
       FactoryBot.create(:phone, contact: client.contact, category: Category.type("Contact::Phone").find_by(name: "Home"))
+      FactoryBot.create(:client_life_detail, client: client)
+      FactoryBot.create(:client_allergy, client: client)
+      FactoryBot.create(:client_diagnosis, client: client)
+      FactoryBot.create(:client_support_contact, client: client)
     end
 
     h = Household.create({ name: "Test Household" })

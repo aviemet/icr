@@ -1,5 +1,5 @@
 class Clients::SpotlightSerializer < SpotlightSerializer
-  SPOTLIGHT_TYPE = "client"
+  SPOTLIGHT_TYPE = "client".freeze
 
   object_as :client, model: :Client
 
@@ -7,4 +7,3 @@ class Clients::SpotlightSerializer < SpotlightSerializer
 
   attributes(:slug)
 end
-

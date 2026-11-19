@@ -47,7 +47,7 @@ RSpec.describe ClientsAttendant, type: :model do
 
       it "validates uniqueness of attendant_id scoped to client_id when ends_at is nil" do
         expect(clients_attendant).not_to be_valid
-        expect(clients_attendant.errors[:attendant_id]).to include("already attends this client")
+        expect(clients_attendant.errors[:attendant_id]).to include("Already attends this client")
       end
 
       it "allows duplicate relationships when previous relationship has ended" do

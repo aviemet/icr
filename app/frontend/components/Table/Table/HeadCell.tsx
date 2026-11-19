@@ -1,16 +1,15 @@
 import { Table, type TableThProps } from "@mantine/core"
-import { forwardRef } from "react"
+import { type Ref } from "react"
 
 export interface HeadCellProps extends TableThProps {
 	children?: React.ReactNode
+	ref?: Ref<HTMLTableCellElement>
 }
 
-export const HeadCell = forwardRef<HTMLTableCellElement, HeadCellProps>(({ children, ...props }, ref) => {
+export function HeadCell({ children, ref, ...props }: HeadCellProps) {
 	return (
 		<Table.Th { ...props } ref={ ref }>
 			{ children }
 		</Table.Th>
 	)
-})
-
-HeadCell.displayName = "Table.HeadCell"
+}

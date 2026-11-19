@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe Contactable do
   shared_examples "a contactable entity" do
     let(:contactable) { described_class.name.underscore.to_sym }
+
     it { is_expected.to have_one(:contact).dependent(:destroy) }
 
     it { is_expected.to have_many(:addresses).through(:contact) }

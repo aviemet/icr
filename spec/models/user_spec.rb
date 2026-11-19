@@ -110,6 +110,17 @@ RSpec.describe User, type: :model do
         expect(person.contact.emails.exists?(email: "new@example.com")).to be true
       end
 
+      it "reuses the existing Other email category" do
+        other_category = Category.type("Contact::Email").find_or_create_by!(name: "Other") do |category|
+          category.system = true
+        end
+        person = create(:person_with_contacts)
+        create(:user, person: person, email: "other-category@example.com")
+
+        synced_email = person.contact.emails.find_by!(email: "other-category@example.com")
+        expect(synced_email.category_id).to eq(other_category.id)
+      end
+
       it "doesn't create an email when the user email changes if one already exists" do
         person = create(:person_with_contacts)
         user = create(:user, person: person, email: "existing@example.com")

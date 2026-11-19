@@ -1,5 +1,5 @@
 class Employee::JobTitle::SyncPermissions
-  CACHE_KEY_PREFIX = "user_permissions"
+  CACHE_KEY_PREFIX = "user_permissions".freeze
 
   def self.call(job_title, permissions)
     new(job_title, permissions).call

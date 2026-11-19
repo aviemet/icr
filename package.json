@@ -15,6 +15,7 @@
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "eslint:inspect": "npx @eslint/config-inspector@latest",
     "tsc": "tsc --noEmit",
+    "rubocop:fix": "bundle exec rubocop -A --fail-level fatal",
     "test": "vitest",
     "test:once": "vitest run",
     "test:browser": "vitest --config=vitest.browser.config.ts",
@@ -22,7 +23,7 @@
     "coverage": "vitest run --coverage",
     "rspec": "RAILS_ENV=test bundle install && bundle exec rspec --color",
     "rspec:watch": "RAILS_ENV=test bundle exec rake rspec_watcher:watch",
-    "verify": "yarn lint:fix && yarn test:once && yarn rspec",
+    "verify": "yarn lint:fix && yarn rubocop:fix && yarn tsc && yarn test:once && yarn rspec",
     "regenerate": "rails types:generate && rails annotate:all && rails i18n:export"
   },
   "dependencies": {

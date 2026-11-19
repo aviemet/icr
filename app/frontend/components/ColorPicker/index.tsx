@@ -14,14 +14,14 @@ export interface ColorPickerComponentProps extends ColorPickerProps {
 	withPreview?: boolean | undefined
 }
 
-export const ColorPickerComponent = ({
+export function ColorPickerComponent({
 	format = "rgb",
 	initialValue = theme.primaryColor,
 	value: controlledValue,
 	onChange: controlledOnChange,
 	withPreview,
 	...props
-}: ColorPickerComponentProps) => {
+}: ColorPickerComponentProps) {
 	const [internalValue, setInternalValue] = useState(initialValue)
 
 	const value = controlledValue ?? internalValue

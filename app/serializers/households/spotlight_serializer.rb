@@ -1,5 +1,5 @@
 class Households::SpotlightSerializer < SpotlightSerializer
-  SPOTLIGHT_TYPE = "household"
+  SPOTLIGHT_TYPE = "household".freeze
 
   object_as :household, model: "Household"
 
@@ -8,4 +8,3 @@ class Households::SpotlightSerializer < SpotlightSerializer
     :name,
   )
 end
-

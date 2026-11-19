@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_16_193000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_18_170500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -145,6 +145,68 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_16_193000) do
     t.index ["slug"], name: "index_categories_on_slug", unique: true
   end
 
+  create_table "client_allergies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "client_id", null: false
+    t.string "name", null: false
+    t.integer "severity", default: 0, null: false
+    t.string "reaction"
+    t.text "notes"
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_client_allergies_on_client_id"
+  end
+
+  create_table "client_diagnoses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "client_id", null: false
+    t.string "name", null: false
+    t.string "code"
+    t.date "diagnosed_on"
+    t.text "notes"
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_client_diagnoses_on_client_id"
+  end
+
+  create_table "client_enrollments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "client_id", null: false
+    t.uuid "vendor_id", null: false
+    t.date "starts_on", null: false
+    t.date "ends_on"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id", "vendor_id", "starts_on"], name: "idx_on_client_id_vendor_id_starts_on_6390a83a5d"
+    t.index ["client_id"], name: "index_client_enrollments_on_client_id"
+    t.index ["vendor_id"], name: "index_client_enrollments_on_vendor_id"
+  end
+
+  create_table "client_life_details", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "client_id", null: false
+    t.text "adls"
+    t.text "adaptive_supports"
+    t.text "behavior_supports"
+    t.text "routines"
+    t.text "risk_flags"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_client_life_details_on_client_id", unique: true
+  end
+
+  create_table "client_support_contacts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "client_id", null: false
+    t.uuid "person_id", null: false
+    t.integer "relationship", default: 0, null: false
+    t.integer "priority", default: 1, null: false
+    t.boolean "is_emergency", default: false, null: false
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_client_support_contacts_on_client_id"
+    t.index ["person_id"], name: "index_client_support_contacts_on_person_id"
+  end
+
   create_table "clients", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "person_id", null: false
     t.date "active_at"
@@ -152,6 +214,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_16_193000) do
     t.string "number"
     t.string "color"
     t.string "slug", null: false
+    t.string "uci_number"
+    t.string "regional_center"
+    t.string "medi_cal_number"
+    t.date "ipp_starts_on"
+    t.date "ipp_ends_on"
+    t.date "ipp_review_on"
+    t.string "preferred_hospital"
+    t.string "preferred_language"
+    t.text "communication_notes"
+    t.decimal "ihss_authorized_hours", precision: 8, scale: 2
+    t.decimal "ihss_share_of_cost", precision: 10, scale: 2
+    t.text "ihss_notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["person_id"], name: "index_clients_on_person_id"
@@ -863,6 +937,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_16_193000) do
   add_foreign_key "calendar_events", "categories"
   add_foreign_key "calendar_recurring_patterns", "calendar_events"
   add_foreign_key "categories", "categories", column: "parent_id"
+  add_foreign_key "client_allergies", "clients"
+  add_foreign_key "client_diagnoses", "clients"
+  add_foreign_key "client_enrollments", "clients"
+  add_foreign_key "client_enrollments", "vendors"
+  add_foreign_key "client_life_details", "clients"
+  add_foreign_key "client_support_contacts", "clients"
+  add_foreign_key "client_support_contacts", "people"
   add_foreign_key "clients", "people"
   add_foreign_key "clients_attendants", "clients"
   add_foreign_key "clients_attendants", "employees", column: "attendant_id"

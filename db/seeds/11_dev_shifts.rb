@@ -149,22 +149,23 @@ if Rails.env.development?
 
           client.calendar_events << shift.calendar_event
 
-          if day_index % 10 == 0
-            overlap_start = starts_at + [*-2..2].sample.hours
-            overlap_end = shift.calendar_event.ends_at + [*-2..2].sample.hours
-            overlap_employee = FactoryBot.create(:employee)
-            overlap_employee.assign_job_title(attendant_job)
+          next unless day_index % 10 == 0
 
-            overlap_shift = FactoryBot.create(:shift, {
-              employee: overlap_employee,
-              calendar_event: FactoryBot.create(:calendar_event, {
-                starts_at: overlap_start,
-                ends_at: overlap_end,
-              })
+          overlap_start = starts_at + [*-2..2].sample.hours
+          overlap_end = shift.calendar_event.ends_at + [*-2..2].sample.hours
+          overlap_employee = FactoryBot.create(:employee)
+          overlap_employee.assign_job_title(attendant_job)
+
+          overlap_shift = FactoryBot.create(:shift, {
+            employee: overlap_employee,
+            calendar_event: FactoryBot.create(:calendar_event, {
+              starts_at: overlap_start,
+              ends_at: overlap_end,
             })
+          })
 
-            client.calendar_events << overlap_shift.calendar_event
-          end
+          client.calendar_events << overlap_shift.calendar_event
+
         end
       end
 

@@ -8,6 +8,7 @@ declare global {
       agency_role: string
       contact: ContactsPersisted
       created_at: Date
+      dob?: Date
       first_name?: string
       last_name?: string
       login_enabled: boolean

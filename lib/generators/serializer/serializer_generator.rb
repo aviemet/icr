@@ -47,7 +47,7 @@ class SerializerGenerator < Rails::Generators::NamedBase
   def model_attributes
     args_attributes = args[1..] || []
 
-    return args_attributes unless args_attributes&.empty?
+    return args_attributes unless args_attributes && args_attributes.empty?
 
     if ar_model&.ancestors&.include?(ActiveRecord::Base)
       return ar_model.attribute_names.reject { |attr| attr.to_s == "id" }

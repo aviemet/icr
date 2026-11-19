@@ -1,9 +1,9 @@
 import { render, RenderOptions } from "@testing-library/react"
-import React, { FC, ReactElement } from "react"
+import React, { ReactElement } from "react"
 
 import { Providers } from "@/layouts/Providers"
 
-const AllTheProviders: FC<{ children: React.ReactNode }> = ({ children }) => {
+function AllTheProviders({ children }: { children: React.ReactNode }) {
 	return (
 		<Providers>{ children }</Providers>
 	)

@@ -6,17 +6,17 @@ if rspec_files.length == 1 && rspec_files[0] == "spec"
   SimpleCov.start "rails" do
     enable_coverage :branch
 
-    add_filter "/spec/"
-    add_filter "/db/seeds.rb"
-    add_filter "/db/seeds/"
+    skip "/spec/"
+    skip "/db/seeds.rb"
+    skip "/db/seeds/"
 
-    add_group "Models", "app/models"
-    add_group "Controllers", "app/controllers"
-    add_group "Serializers", "app/serializers"
-    add_group "Jobs", "app/jobs"
-    add_group "Policies", "app/policies"
-    add_group "Services", "app/services"
-    add_group "Queries", "app/queries"
+    group "Models", "app/models"
+    group "Controllers", "app/controllers"
+    group "Serializers", "app/serializers"
+    group "Jobs", "app/jobs"
+    group "Policies", "app/policies"
+    group "Services", "app/services"
+    group "Queries", "app/queries"
   end
 end
 
@@ -116,8 +116,4 @@ RSpec.configure do |config|
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   Kernel.srand config.seed
-
-  config.before(:suite) do
-    Dir[Rails.root.join("db/seeds/*required*.rb")].sort.each { |seed| load seed }
-  end
 end

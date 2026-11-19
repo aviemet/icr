@@ -9,7 +9,7 @@ interface DayHeaderProps {
 	children: React.ReactNode
 }
 
-export const DayHeader = ({ children }: DayHeaderProps) => {
+export function DayHeader({ children }: DayHeaderProps) {
 	const [headerRef, isStuck] = useStickySentinel<HTMLDivElement>()
 
 	return (

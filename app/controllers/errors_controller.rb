@@ -3,7 +3,7 @@ class ErrorsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:show]
 
   # Most important - remove the error handling for this controller!
-  def self.skip_handle_exceptions
+  def self.skip_handle_exceptions # rubocop:disable Naming/PredicateMethod
     true
   end
 

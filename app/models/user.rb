@@ -126,8 +126,9 @@ class User < ApplicationRecord
 
     email_record = person.contact.emails.find_or_initialize_by(email: email)
     if email_record.new_record? && email_record.category.blank?
-      email_record.category = Category.type("Contact::Email").where(name: "Other").first ||
-        Category.create!(categorizable_type: "Contact::Email", name: "Other", system: true)
+      email_record.category = Category.type("Contact::Email").find_or_create_by!(name: "Other") do |category|
+        category.system = true
+      end
     end
     email_record.save!
   end

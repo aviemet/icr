@@ -13,7 +13,7 @@ class ShiftTemplateApplicator
       false
     end
 
-    def apply_recurring(shift_template)
+    def apply_recurring(shift_template) # rubocop:disable Naming/PredicateMethod
       return false unless shift_template.recurring? && shift_template.active?
 
       current_date = shift_template.start_date

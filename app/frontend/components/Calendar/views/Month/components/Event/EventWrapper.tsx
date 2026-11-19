@@ -24,14 +24,14 @@ interface EventWrapperProps<P extends GridDisplayProperties = GridDisplayPropert
  * Internal only, used solely to position the event on the calendar view.
  * Event component is passed as children, which can be customized.
  */
-const EventWrapper = <P extends GridDisplayProperties = GridDisplayProperties>({
+export function EventWrapper<P extends GridDisplayProperties = GridDisplayProperties>({
 	children,
 	style,
 	event,
 	displayProperties,
 	contextMenuOptions,
 	setHoverId,
-}: EventWrapperProps<P>) => {
+}: EventWrapperProps<P>) {
 	const [animationParent] = useAutoAnimate()
 
 	const { getContrastingColor } = useStore()
@@ -84,5 +84,3 @@ const EventWrapper = <P extends GridDisplayProperties = GridDisplayProperties>({
 		</Box>
 	)
 }
-
-export { EventWrapper }

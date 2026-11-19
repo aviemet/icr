@@ -26,7 +26,7 @@ RSpec.describe "/timesheets", type: :request do
   end
 
   describe "GET /payroll/periods/:period_id/employees/:employee_id (employee_review)" do
-    it "renders a successful response with approve controls enabled", :inertia do
+    it "renders a successful response with approve controls enabled" do
       pay_period = create(:pay_period, finalized_at: nil, approved_at: nil)
       employee = create(:employee)
       timesheet = create(:timesheet, pay_period: pay_period, employee: employee, approved_at: nil)

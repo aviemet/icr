@@ -16,13 +16,13 @@ interface EventNodeProps<TEventResources extends EventResources> {
 	onEventClick?: (event: BaseCalendarEvent<TEventResources>, element: HTMLElement) => void
 }
 
-export const EventNode = <TEventResources extends EventResources>({
+export function EventNode<TEventResources extends EventResources>({
 	event,
 	displayProperties,
 	startTime,
 	timeIncrement,
 	onEventClick,
-}: EventNodeProps<TEventResources>) => {
+}: EventNodeProps<TEventResources>) {
 	const { localizer } = useCalendarContext()
 
 
