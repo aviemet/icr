@@ -34,7 +34,7 @@ RSpec.describe Payroll::EmployeeQueue do
         starts_at: Time.zone.local(2024, 3, 11).beginning_of_day,
         ends_at: Time.zone.local(2024, 3, 24).end_of_day,
       )
-      employees = Array.new(3) { create(:employee) }
+      employees = create_list(:employee, 3)
       employees.each_with_index do |employee, index|
         timesheet = create(:timesheet, pay_period: pay_period, employee: employee, approved_at: nil)
         event = create(

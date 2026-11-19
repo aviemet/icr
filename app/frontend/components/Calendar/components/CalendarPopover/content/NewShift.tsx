@@ -10,7 +10,7 @@ interface DefaultPopoverContentProps<TEventResources extends EventResources> {
 	event: BaseCalendarEvent<TEventResources>
 }
 
-const DefaultPopoverContent = <TEventResources extends EventResources>({ event }: DefaultPopoverContentProps<TEventResources>) => {
+export function DefaultPopoverContent<TEventResources extends EventResources>({ event }: DefaultPopoverContentProps<TEventResources>) {
 	const { localizer } = useCalendarContext()
 	const color = event.color || vars.colors.primaryColors.filled
 
@@ -54,5 +54,3 @@ const DefaultPopoverContent = <TEventResources extends EventResources>({ event }
 		</Stack>
 	)
 }
-
-export { DefaultPopoverContent }

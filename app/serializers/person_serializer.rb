@@ -31,13 +31,14 @@ class PersonSerializer < ApplicationSerializer
     :middle_name,
     :last_name,
     :nick_name,
+    :dob,
     :user_id,
     agency_role: { type: :string, optional: false },
     name: { type: :string },
   )
 
   type :boolean, optional: false
-  def login_enabled
+  def login_enabled # rubocop:disable Naming/PredicateMethod
     person.login_enabled?
   end
 end

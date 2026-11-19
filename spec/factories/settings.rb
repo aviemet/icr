@@ -14,6 +14,7 @@
 #
 FactoryBot.define do
   factory :setting do
-    
+    sequence(:var) { |number| "setting_#{number}" }
+    value { "test" }
   end
 end

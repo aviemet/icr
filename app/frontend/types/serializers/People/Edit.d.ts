@@ -7,6 +7,7 @@ declare global {
       id: string
       agency_role: string
       created_at: Date
+      dob?: Date
       first_name?: string
       last_name?: string
       login_enabled: boolean

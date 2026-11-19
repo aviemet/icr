@@ -18,6 +18,5 @@ class OvertimeExemptionSerializer < ApplicationSerializer
     :name,
     :active,
     criteria: { type: "OvertimeExemptionCriteria" },
-
   )
 end

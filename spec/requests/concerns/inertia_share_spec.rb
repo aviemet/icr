@@ -44,7 +44,7 @@ RSpec.describe "InertiaShare Concerns", type: :request do
     end
 
     it "leaves menu nil (InertiaShare::Menu else branch)" do
-      allow_any_instance_of(ApplicationController).to receive(:authenticate_user!)
+      allow_any_instance_of(ApplicationController).to receive(:authenticate_user!) # rubocop:disable RSpec/AnyInstance
 
       get root_path
 

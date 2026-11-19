@@ -55,6 +55,9 @@ en:
       notices:
         created: "%{model} was successfully created."
         destroyed: "%{model} was successfully destroyed."
+        destroyed_count:
+          one: "%{count} %{model} deleted"
+          other: "%{count} %{model}s deleted"
         status_updated: "%{model} status updated successfully"
         updated: "%{model} was successfully updated."
   timesheets:

@@ -3,7 +3,7 @@
 require "rails_helper"
 require_relative "../support/devise"
 
-RSpec.describe "Pages", :inertia do
+RSpec.describe "Pages" do
   login_user(:admin)
 
   describe "GET /" do

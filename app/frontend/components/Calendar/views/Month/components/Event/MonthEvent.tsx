@@ -4,10 +4,10 @@ import { CalendarEvent, EventProps } from "@/components/Calendar/components/Even
 
 import * as classes from "./Event.css"
 
-const MonthEvent = ({
+export function MonthEvent({
 	className,
 	...props
-}: EventProps) => {
+}: EventProps) {
 	return (
 		<CalendarEvent
 			className={ clsx(classes.monthEvent, className) }
@@ -15,5 +15,3 @@ const MonthEvent = ({
 		/>
 	)
 }
-
-export { MonthEvent }

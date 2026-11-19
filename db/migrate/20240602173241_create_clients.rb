@@ -9,6 +9,19 @@ class CreateClients < ActiveRecord::Migration[7.1]
 
       t.string :slug, null: false, index: { unique: true }
 
+      t.string :uci_number
+      t.string :regional_center
+      t.string :medi_cal_number
+      t.date :ipp_starts_on
+      t.date :ipp_ends_on
+      t.date :ipp_review_on
+      t.string :preferred_hospital
+      t.string :preferred_language
+      t.text :communication_notes
+      t.decimal :ihss_authorized_hours, precision: 8, scale: 2
+      t.decimal :ihss_share_of_cost, precision: 10, scale: 2
+      t.text :ihss_notes
+
       t.timestamps
     end
   end

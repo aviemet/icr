@@ -27,6 +27,8 @@ class Employee::JobTitle::PermissionsCatalog
     "calendar_event" => Calendar::Event,
     "setting" => Setting,
     "incident_report" => IncidentReport,
+    "prescription" => Prescription,
+    "medication" => Medication,
   }.freeze
 
   def self.resource_keys

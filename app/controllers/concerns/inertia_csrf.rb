@@ -18,7 +18,7 @@ module InertiaCsrf
     before_action :set_csrf_cookie
 
     rescue_from ActionController::InvalidAuthenticityToken do
-      redirect_back fallback_location: "/", notice: I18n.t("application.invalid_authenticity_token_notice")
+      redirect_back_or_to("/", notice: I18n.t("application.invalid_authenticity_token_notice"))
     end
   end
 

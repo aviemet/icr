@@ -5,4 +5,3 @@ class SpotlightSerializer < ApplicationSerializer
     self.class::SPOTLIGHT_TYPE
   end
 end
-

@@ -46,14 +46,18 @@ RSpec.describe Identification do
   end
 
   describe "Enums" do
-    it { expect(subject).to define_enum_for(:id_type).with_values(
-      drivers_license: 0,
-      passport: 1,
-      state_id: 2,
-      military_id: 3,
-      employee_id: 4,
-      other: 5,
-    ).backed_by_column_of_type(:integer) }
+    subject(:identification) { described_class.new }
+
+    it {
+      expect(identification).to define_enum_for(:id_type).with_values(
+        drivers_license: 0,
+        passport: 1,
+        state_id: 2,
+        military_id: 3,
+        employee_id: 4,
+        other: 5,
+      ).backed_by_column_of_type(:integer)
+    }
   end
 
   describe "Scopes" do

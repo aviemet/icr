@@ -83,6 +83,8 @@ function FormInner<TFormData extends Record<string, unknown>>({
 
 	const wrapperRef = useRef<HTMLDivElement>(null)
 	const appliedInitialDataRef = useRef(false)
+	const initialDataRef = useRef(initialData)
+	const rememberKeyRef = useRef(rememberKey)
 	const { registerForm, handleFormChange, setSlotProps, applyInitialData, subscribeFormData } = useFormFieldContext()
 	const slotProps = useSlotProps()
 	const latestSlotPropsRef = useRef<FormComponentSlotProps | null>(null)
@@ -94,30 +96,32 @@ function FormInner<TFormData extends Record<string, unknown>>({
 		const form = wrapperRef.current?.querySelector("form") ?? null
 		registerForm(form)
 
+		let animationFrameId: number | undefined
+
 		if(!appliedInitialDataRef.current) {
-			appliedInitialDataRef.current = true
-			const dataToApply = rememberKey ? loadRememberedData(rememberKey) : undefined
-			const data = dataToApply ?? initialData
+			const rememberedKey = rememberKeyRef.current
+			const dataToApply = rememberedKey ? loadRememberedData(rememberedKey) : undefined
+			const data = dataToApply ?? initialDataRef.current
 
 			if(data) {
-				const id = requestAnimationFrame(() => {
+				animationFrameId = requestAnimationFrame(() => {
 					const formEl = wrapperRef.current?.querySelector("form") ?? null
 					if(formEl) registerForm(formEl)
 					applyInitialData(data)
+					appliedInitialDataRef.current = true
 				})
-				return () => {
-					cancelAnimationFrame(id)
-					registerForm(null)
-					appliedInitialDataRef.current = false
-				}
+			} else {
+				appliedInitialDataRef.current = true
 			}
 		}
 
 		return () => {
+			if(animationFrameId !== undefined) {
+				cancelAnimationFrame(animationFrameId)
+			}
 			registerForm(null)
-			appliedInitialDataRef.current = false
 		}
-	}, [registerForm, initialData, rememberKey, applyInitialData])
+	}, [registerForm, applyInitialData])
 
 	useEffect(() => {
 		if(!rememberKey) return
@@ -188,7 +192,7 @@ function FormInner<TFormData extends Record<string, unknown>>({
 	)
 }
 
-function FormContextWrapper<TFormData extends Record<string, unknown>>({
+export function Form<TFormData extends Record<string, unknown>>({
 	children,
 	...props
 }: FormProps<TFormData>) {
@@ -200,5 +204,3 @@ function FormContextWrapper<TFormData extends Record<string, unknown>>({
 		</FormFieldProvider>
 	)
 }
-
-export { FormContextWrapper as Form }

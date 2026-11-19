@@ -16,11 +16,11 @@ interface DayViewTimeGridHeading extends TimeGridHeading {
 	resourceId?: string | number
 }
 
-const DayViewComponent = <TEventResources extends EventResources>({
+function DayViewComponent<TEventResources extends EventResources>({
 	className,
 	style,
 	displayStrategy,
-}: DayViewProps<TEventResources>) => {
+}: DayViewProps<TEventResources>) {
 	const { date, localizer, resourcesById, groupByResource } = useCalendarContext()
 
 	const columnHeadings = useMemo<DayViewTimeGridHeading[]>(() => {

@@ -10,7 +10,7 @@ class AddOtherColumnsToUser < ActiveRecord::Migration[7.0]
       t.jsonb :user_preferences, default: {}
       t.index :user_preferences, using: :gin
 
-      t.string :slug, null: false, index: { unique: true }
+      t.string :slug, null: false, index: { unique: true } # rubocop:disable Rails/NotNullColumn
     end
   end
 end

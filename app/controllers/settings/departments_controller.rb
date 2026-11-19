@@ -50,7 +50,7 @@ class Settings::DepartmentsController < ApplicationController
     authorize Employee::Department.new
 
     if department.save
-      redirect_to settings_departments_path, notice: "Department created"
+      redirect_to settings_departments_path, notice: t("templates.controllers.notices.created", model: "Department")
     else
       render inertia: "Settings/Departments/New", props: {
         department: department.render(:form_data),
@@ -64,7 +64,7 @@ class Settings::DepartmentsController < ApplicationController
     authorize department
 
     if department.update(department_params)
-      redirect_to settings_departments_path, notice: "Department updated"
+      redirect_to settings_departments_path, notice: t("templates.controllers.notices.updated", model: "Department")
     else
       render inertia: "Settings/Departments/Edit", props: {
         department: department.render(:edit),
@@ -97,12 +97,12 @@ class Settings::DepartmentsController < ApplicationController
     end
 
     redirect_to settings_departments_path,
-      notice: "#{destroyed_count} #{"department".pluralize(destroyed_count)} deleted"
+      notice: t("templates.controllers.notices.destroyed_count", count: destroyed_count, model: "department")
   end
 
   def destroy_one
     authorize department
     department.destroy!
-    redirect_to settings_departments_path, notice: "Department deleted"
+    redirect_to settings_departments_path, notice: t("templates.controllers.notices.destroyed", model: "Department")
   end
 end

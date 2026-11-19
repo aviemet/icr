@@ -3,17 +3,31 @@ import { useTranslation } from "react-i18next"
 import { Group, Title, Menu, Page, Section, Tabs } from "@/components"
 import { Routes } from "@/lib"
 
+import Care from "./Care"
 import Contacts from "./Contacts"
-import Details from "./Details"
 import Documents from "./Documents"
+import Health from "./Health"
+import Incidents from "./Incidents"
+import Medications from "./Medications"
+import Overview from "./Overview"
+import Profile from "./Profile"
+
+export interface ShowClientProps {
+	client: Schema.ClientsShow
+}
 
 const ShowClient = ({ client }: ShowClientProps) => {
 	const { t } = useTranslation()
 
 	const tabsList = [
-		{ id: "details", label: t("views.clients.show.tabs.details"), component: Details },
+		{ id: "overview", label: t("views.clients.show.tabs.overview"), component: Overview },
+		{ id: "profile", label: t("views.clients.show.tabs.profile"), component: Profile },
 		{ id: "contacts", label: t("views.clients.show.tabs.contacts"), component: Contacts },
+		{ id: "health", label: t("views.clients.show.tabs.health"), component: Health },
+		{ id: "medications", label: t("views.clients.show.tabs.medications"), component: Medications },
+		{ id: "care", label: t("views.clients.show.tabs.care"), component: Care },
 		{ id: "documents", label: t("views.clients.show.tabs.documents"), component: Documents },
+		{ id: "incidents", label: t("views.clients.show.tabs.incidents"), component: Incidents },
 	]
 
 	const title = client?.person?.name || t("views.clients.show.title")
@@ -61,10 +75,6 @@ const ShowClient = ({ client }: ShowClientProps) => {
 
 		</Page>
 	)
-}
-
-export interface ShowClientProps {
-	client: Schema.ClientsShow
 }
 
 export default ShowClient

@@ -7,7 +7,7 @@ interface TimeIndicatorProps {
 	containerRef: React.RefObject<HTMLDivElement | null>
 }
 
-export const TimeIndicator = ({ containerRef }: TimeIndicatorProps) => {
+export function TimeIndicator({ containerRef }: TimeIndicatorProps) {
 	const [position, setPosition] = useState<number | null>(null)
 
 	useEffect(() => {

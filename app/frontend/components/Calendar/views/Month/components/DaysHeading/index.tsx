@@ -8,7 +8,7 @@ interface DaysHeadingProps {
 	weekdays: string[]
 }
 
-export const DaysHeading = ({ weekdays }: DaysHeadingProps) => {
+export function DaysHeading({ weekdays }: DaysHeadingProps) {
 	const [headerRef, isStuck] = useStickySentinel<HTMLDivElement>()
 
 	return (

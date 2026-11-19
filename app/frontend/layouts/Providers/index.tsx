@@ -9,7 +9,7 @@ export interface ProvidersProps {
 	children?: React.ReactNode
 }
 
-export const Providers = React.memo(({ children }: ProvidersProps) => {
+export function Providers({ children }: ProvidersProps) {
 	return (
 		<QueryProvider>
 			<UiFrameworkProvider>
@@ -20,4 +20,4 @@ export const Providers = React.memo(({ children }: ProvidersProps) => {
 			</UiFrameworkProvider>
 		</QueryProvider>
 	)
-})
+}

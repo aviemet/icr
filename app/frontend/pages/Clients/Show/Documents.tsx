@@ -1,15 +1,9 @@
-import { useTranslation } from "react-i18next"
+import { ClientDocuments } from "@/domains/Clients/Documents"
 
 import { type ShowClientProps } from "."
 
-interface ClientDocumentsProps extends ShowClientProps {}
-
-const Documents = ({ client }: ClientDocumentsProps) => {
-	const { t } = useTranslation()
-
-	return (
-		<div>{ t("views.clients.show.documents.title") }</div>
-	)
+const Documents = ({ client }: ShowClientProps) => {
+	return <ClientDocuments client={ client } />
 }
 
 export default Documents

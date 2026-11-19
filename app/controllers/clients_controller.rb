@@ -1,15 +1,40 @@
 class ClientsController < ApplicationController
   include Searchable
 
-  expose :clients, ->{ policy_scope(search(Client.includes_associated)) }
-  expose :client, id: ->{ params[:slug] }, scope: ->{ policy_scope(Client.includes_associated) }, find_by: :slug
+  expose :clients, -> { policy_scope(search(Client.includes_associated)) }
+  expose :client, id: -> { params[:slug] }, scope: -> { policy_scope(Client.includes_associated) }, find_by: :slug
 
   sortable_fields %w(active_at inactive_at number people.first_name people.last_name)
 
+  filterable_fields :number, :active_at,
+    first_name: { column: "people.first_name" },
+    last_name: { column: "people.last_name" },
+    uci_number: { column: :uci_number }
+
   strong_params :client, permit: [
-    :person_id, :active_at, :inactive_at, :number, person_attributes: [
-      :first_name, :last_name, :middle_name, :nick_name, :dob, :characteristics
-    ]
+    :person_id, :active_at, :inactive_at, :number, :color,
+    :uci_number, :regional_center, :medi_cal_number,
+    :ipp_starts_on, :ipp_ends_on, :ipp_review_on,
+    :preferred_hospital, :preferred_language, :communication_notes,
+    :ihss_authorized_hours, :ihss_share_of_cost, :ihss_notes,
+    person_attributes: [
+      :id, :first_name, :last_name, :middle_name, :nick_name, :dob, :characteristics,
+      contact_attributes: [
+        :id,
+        addresses_attributes: [
+          :id, :name, :address, :address_2, :city, :region, :postal, :country, :notes, :category_id, :_destroy,
+        ],
+        phones_attributes: [
+          :id, :name, :number, :extension, :notes, :category_id, :_destroy,
+        ],
+        emails_attributes: [
+          :id, :name, :email, :notes, :category_id, :_destroy,
+        ],
+      ],
+    ],
+    life_detail_attributes: [
+      :id, :adls, :adaptive_supports, :behavior_supports, :routines, :risk_flags,
+    ],
   ]
 
   # @route GET /clients (clients)
@@ -31,8 +56,10 @@ class ClientsController < ApplicationController
   def show
     authorize client
 
+    client_for_show = Client.includes_show.find(client.id)
+
     render inertia: "Clients/Show", props: {
-      client: -> { client.render(:show) }
+      client: -> { client_for_show.render(:show) }
     }
   end
 
@@ -58,14 +85,7 @@ class ClientsController < ApplicationController
   def schedule
     authorize client
 
-    client_for_show = Client.includes(
-      :calendar_customization,
-      person: [
-        :employee,
-        :client,
-        { contact: { addresses: :category, emails: :category, phones: :category } },
-      ],
-    ).find(client.id)
+    client_for_show = Client.includes_show.find(client.id)
 
     schedules = client.schedule_events_between(*DateRangeCalculator.new(params).call)
 
@@ -96,9 +116,10 @@ class ClientsController < ApplicationController
     authorize client
 
     if client.update(client_params)
-      redirect_to client, notice: t("templates.controllers.notices.updated", model: "Client")
+      redirect_to client_path(client, tab: params[:tab].presence || "profile"),
+        notice: t("templates.controllers.notices.updated", model: "Client")
     else
-      redirect_to edit_client_path(client), inertia: { errors: client.errors }
+      redirect_back_or_to edit_client_path(client), inertia: { errors: client.errors }
     end
   end
 

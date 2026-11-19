@@ -7,6 +7,7 @@ en:
         title: Edit %{name}
       index:
         title: Clients
+        new: New Client
       new:
         title: New Client
       schedule:
@@ -17,13 +18,75 @@ en:
           addresses: Addresses
           emails: Emails
           phones: Phone Numbers
-        details:
-          placeholder: Some kind of useful dashboard, maybe important or commonly needed information and a picture. Maybe some stats and/or charts computed from other data. Could even be just a list of useful links for the client, curated by the agency.
+          support_network: Support Network
+          client_contact: Client Contact
+          add_support_contact: Add Support Contact
+          emergency: Emergency
+        overview:
+          schedule: Schedule
+          identity: Identity
+          care_team: Care Team
+          health_alerts: Health Alerts
+          funding: Funding and Plans
+          ihss: IHSS
+          quick_links: Quick Links
+          client_number: Client #
+          uci: UCI
+          regional_center: Regional Center
+          ipp_review: IPP Review
+          active_meds: Active medications
+          allergies: Active allergies
+          incidents: Incidents
+          emergency_contacts: Emergency contacts
+          household: Household
+          manager: Manager
+          attendants: Attendants
+          none: None assigned
+        profile:
+          demographics: Demographics
+          california: California / Regional Center
+          ihss: IHSS Profile
+          life_details: Life Details
+          communication: Communication
+          save: Save Profile
+        health:
+          allergies: Allergies
+          diagnoses: Diagnoses
+          doctors: Doctors
+          preferred_hospital: Preferred Hospital
+          add_allergy: Add Allergy
+          add_diagnosis: Add Diagnosis
+          link_doctor: Link Doctor
+        medications:
+          active: Active Prescriptions
+          historical: Historical Prescriptions
+          add: Add Prescription
+        care:
+          managers: Managers
+          attendants: Attendants
+          enrollments: Day Programs / Services
+          household: Household
+          add_manager: Assign Manager
+          add_attendant: Assign Attendant
+          add_enrollment: Add Enrollment
         documents:
           title: Documents
+          files: Files
+          images: Images
+          upload_document: Upload Document
+          upload_image: Upload Image
+        incidents:
+          title: Incidents
+          empty: No incident reports for this client.
+          view: View
         edit: Edit Client
         tabs:
-          contacts: Contact Details
-          details: Details
+          overview: Overview
+          profile: Profile
+          contacts: Contacts
+          health: Health
+          medications: Medications
+          care: Care and Services
           documents: Documents
+          incidents: Incidents
         title: Client

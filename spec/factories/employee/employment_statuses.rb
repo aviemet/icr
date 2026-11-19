@@ -24,7 +24,7 @@
 #  fk_rails_...  (updated_by_id => users.id)
 #
 FactoryBot.define do
-  factory :employee_employment_status, class: 'Employee::EmploymentStatus' do
+  factory :employee_employment_status, class: "Employee::EmploymentStatus" do
     name { "MyString" }
     employee { nil }
     active_at { "2025-04-17 23:03:06" }

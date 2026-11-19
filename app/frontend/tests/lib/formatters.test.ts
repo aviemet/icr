@@ -1,6 +1,10 @@
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
 import { describe, it, expect } from "vitest"
 
 import { currency, datetime } from "@/lib/formatters"
+
+dayjs.extend(relativeTime)
 
 describe("currency", () => {
 	it("formats number as USD by default", () => {
@@ -35,8 +39,8 @@ describe("datetime", () => {
 		expect(datetime.timeLong(jan1)).toBe("02:30 PM")
 	})
 
-	it.skip("fromNow returns a string (requires dayjs relativeTime plugin)", () => {
+	it("fromNow returns a relative past string", () => {
 		const past = new Date(Date.now() - 60000)
-		expect(typeof datetime.fromNow(past)).toBe("string")
+		expect(datetime.fromNow(past)).toMatch(/ago/)
 	})
 })

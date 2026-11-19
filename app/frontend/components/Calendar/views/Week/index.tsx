@@ -12,7 +12,7 @@ interface WeekViewProps<TEventResources extends EventResources> extends BaseView
 	style?: React.CSSProperties
 }
 
-const WeekViewComponent = <TEventResources extends EventResources>({ className, style, displayStrategy }: WeekViewProps<TEventResources>) => {
+function WeekViewComponent<TEventResources extends EventResources>({ className, style, displayStrategy }: WeekViewProps<TEventResources>) {
 	const { date, localizer } = useCalendarContext()
 
 	const columnHeadings = useMemo(() => {

@@ -5,7 +5,7 @@ RSpec.describe "/payroll", type: :request do
   login_user(:admin)
 
   describe "GET /payroll (index)" do
-    it "renders the payroll home with current summary and pay periods", :inertia do
+    it "renders the payroll home with current summary and pay periods" do
       Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
 
       travel_to Time.zone.local(2024, 3, 20, 12, 0, 0) do
@@ -28,7 +28,7 @@ RSpec.describe "/payroll", type: :request do
       end
     end
 
-    it "lists future periods created when shifts are scheduled into them", :inertia do
+    it "lists future periods created when shifts are scheduled into them" do
       Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
 
       travel_to Time.zone.local(2024, 3, 10, 12, 0, 0) do
@@ -56,7 +56,7 @@ RSpec.describe "/payroll", type: :request do
   end
 
   describe "GET /payroll/periods/:id (show)" do
-    it "renders the period employee list with summary", :inertia do
+    it "renders the period employee list with summary" do
       Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:bi_weekly]
       Setting.payroll_period_day = "monday"
 
@@ -113,7 +113,7 @@ RSpec.describe "/payroll", type: :request do
       end
     end
 
-    it "omits employees with no worked shifts for the period", :inertia do
+    it "omits employees with no worked shifts for the period" do
       Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:bi_weekly]
       Setting.payroll_period_day = "monday"
 

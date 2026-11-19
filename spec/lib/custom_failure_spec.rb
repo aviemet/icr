@@ -10,7 +10,7 @@ RSpec.describe CustomFailure, type: :request do
 
     it "sets x-inertia and redirects for unauthenticated JSON request" do
       get settings_general_path, headers: { "Accept" => "application/json" }
-      expect(response.headers["x-inertia"]).to eq(true)
+      expect(response.headers["x-inertia"]).to be(true)
       expect(response).to redirect_to(new_user_session_path)
     end
 

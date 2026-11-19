@@ -77,7 +77,19 @@ Rails.application.routes.draw do
 
   # RESOURCEFUL PATHS #
 
-  resources :clients, param: :slug, concerns: :schedulable
+  resources :clients, param: :slug, concerns: :schedulable do
+    resources :support_contacts, controller: "clients/support_contacts", only: [:create, :update, :destroy]
+    resources :allergies, controller: "clients/allergies", only: [:create, :update, :destroy]
+    resources :diagnoses, controller: "clients/diagnoses", only: [:create, :update, :destroy]
+    resources :prescriptions, controller: "clients/prescriptions", only: [:create, :update, :destroy]
+    resources :enrollments, controller: "clients/enrollments", only: [:create, :update, :destroy]
+    resources :managers, controller: "clients/managers", only: [:create, :update, :destroy]
+    resources :attendants, controller: "clients/attendants", only: [:create, :update, :destroy]
+    resources :doctors, controller: "clients/doctors", only: [:create, :destroy]
+    resources :documents, controller: "clients/documents", only: [:create, :destroy]
+    resources :images, controller: "clients/images", only: [:create, :destroy]
+    resource :life_detail, controller: "clients/life_details", only: [:update]
+  end
 
   scope "/employees" do
     resources :trainings, path: "trainings"

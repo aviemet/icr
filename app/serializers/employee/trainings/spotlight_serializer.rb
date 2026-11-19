@@ -1,5 +1,5 @@
 class Employee::Trainings::SpotlightSerializer < SpotlightSerializer
-  SPOTLIGHT_TYPE = "training"
+  SPOTLIGHT_TYPE = "training".freeze
 
   object_as :training, model: "Employee::Training"
 
@@ -8,4 +8,3 @@ class Employee::Trainings::SpotlightSerializer < SpotlightSerializer
     :name,
   )
 end
-

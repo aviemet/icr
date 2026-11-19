@@ -12,13 +12,13 @@ interface MenuItemProps extends MantineMenuItemProps, Omit<LinkProps, "color" | 
 	type?: string
 }
 
-const MenuLinkInner = ({
+function MenuLinkInner({
 	children,
 	disabled = false,
 	className,
 	ref,
 	...props
-}: MenuItemProps) => {
+}: MenuItemProps) {
 	return (
 		<Menu.Item
 			ref={ ref }
@@ -33,6 +33,4 @@ const MenuLinkInner = ({
 	)
 }
 
-const MenuLink = createPolymorphicComponent<typeof Link, MenuItemProps>(MenuLinkInner)
-
-export { MenuLink }
+export const MenuLink = createPolymorphicComponent<typeof Link, MenuItemProps>(MenuLinkInner)

@@ -5,25 +5,27 @@ import { Select } from "@/components/Inputs"
 import { rem } from "@/lib"
 import { type PayrollPeriodType } from "@/types/PayrollPeriodType"
 
-const DayOfWeekSelect = () => (
-	<Select
-		name="settings.payroll_period_day"
-		options={ [
-			{ label: "Monday", value: "monday" },
-			{ label: "Tuesday", value: "tuesday" },
-			{ label: "Wednesday", value: "wednesday" },
-			{ label: "Thursday", value: "thursday" },
-			{ label: "Friday", value: "friday" },
-			{ label: "Saturday", value: "saturday" },
-			{ label: "Sunday", value: "sunday" },
-		] }
-		wrapperProps={ {
-			style: { display: "inline-block", width: rem(150) },
-		} }
-	/>
-)
+function DayOfWeekSelect() {
+	return (
+		<Select
+			name="settings.payroll_period_day"
+			options={ [
+				{ label: "Monday", value: "monday" },
+				{ label: "Tuesday", value: "tuesday" },
+				{ label: "Wednesday", value: "wednesday" },
+				{ label: "Thursday", value: "thursday" },
+				{ label: "Friday", value: "friday" },
+				{ label: "Saturday", value: "saturday" },
+				{ label: "Sunday", value: "sunday" },
+			] }
+			wrapperProps={ {
+				style: { display: "inline-block", width: rem(150) },
+			} }
+		/>
+	)
+}
 
-const DateSelect = () => {
+function DateSelect() {
 	const options: ComboboxItem[] = [
 		{ label: "1st", value: "1" },
 		{ label: "5th", value: "5" },

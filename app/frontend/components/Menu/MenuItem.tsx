@@ -12,7 +12,7 @@ interface IMenuItemProps extends MenuItemProps {
 	icon?: React.ReactElement
 }
 
-const MenuItemInner = ({
+function MenuItemInner({
 	children,
 	disabled = false,
 	href,
@@ -20,7 +20,7 @@ const MenuItemInner = ({
 	className,
 	ref,
 	...props
-}: IMenuItemProps) => {
+}: IMenuItemProps) {
 	const content = (
 		<Flex align="center" wrap="nowrap" gap="xs">
 			{ icon }

@@ -3,7 +3,7 @@ import path from "path"
 import react from "@vitejs/plugin-react"
 import { defineConfig, type Plugin } from "vitest/config"
 
-const frontendRoot = path.resolve(__dirname, "app", "frontend")
+const frontendRoot = path.resolve(import.meta.dirname, "app", "frontend")
 
 function stubLinariaCssModules(): Plugin {
 	return {
@@ -94,7 +94,7 @@ export default defineConfig({
 				"lib/routes/Routes.js",
 			],
 			reporter: ["text-summary", "json-summary", "lcov", "html"],
-			reportsDirectory: path.resolve(__dirname, "coverage", "frontend"),
+			reportsDirectory: path.resolve(import.meta.dirname, "coverage", "frontend"),
 		},
 		setupFiles: ["tests/helpers/setup.ts", "tests/helpers/mockServer.ts"],
 	},

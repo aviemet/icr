@@ -12,11 +12,7 @@ export interface CheckboxProps extends MantineCheckboxProps, BaseInputProps {
 	ref?: React.Ref<HTMLInputElement>
 }
 
-type CheckboxComponentType = React.FC<CheckboxProps> & {
-	Group: typeof MantineCheckbox.Group
-}
-
-const Checkbox: CheckboxComponentType = ({
+export function Checkbox({
 	id,
 	name,
 	wrapper,
@@ -25,7 +21,7 @@ const Checkbox: CheckboxComponentType = ({
 	error,
 	ref,
 	...props
-}) => {
+}: CheckboxProps) {
 	const fieldError = useFormFieldError(name)
 	const inputId = id ?? name
 
@@ -44,6 +40,6 @@ const Checkbox: CheckboxComponentType = ({
 	)
 }
 
-Checkbox.Group = MantineCheckbox.Group
-
-export { Checkbox }
+export namespace Checkbox {
+	export const Group = MantineCheckbox.Group
+}
