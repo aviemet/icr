@@ -39,7 +39,7 @@ export function Sidebar() {
 					</Group>
 
 					{ /* User menu and Logo */ }
-					<Group>
+					<Group gap={ sidebarOpen ? "sm" : 0 } wrap="nowrap" justify="center">
 						<UserMenu />
 						<Flex
 							direction="column"
@@ -54,7 +54,7 @@ export function Sidebar() {
 
 				<Divider />
 
-				<AppShell.Section mt="xs" p={ 0 } grow className={ classes.nav }>
+				<AppShell.Section mt="xs" p={ 0 } grow className={ clsx(classes.nav, "nav-section") }>
 					<ul>
 						<MenuLink
 							label="Dashboard"
@@ -123,7 +123,7 @@ export function Sidebar() {
 					</ul>
 				</AppShell.Section>
 				{ can("settings", "index") && (
-					<AppShell.Section>
+					<AppShell.Section p={ 0 } className={ clsx(classes.nav, "nav-section") }>
 						<ul>
 							<MenuLink
 								label="Settings"

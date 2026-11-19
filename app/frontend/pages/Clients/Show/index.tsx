@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 import { Avatar, Badge, ScheduleButton, Text } from "@/components"
 import { DateTimeFormatter } from "@/components/Formatters"
 import { RecordShowShell } from "@/features"
-import { Routes } from "@/lib"
+import { initials, Routes } from "@/lib"
 
 import Care from "./Care"
 import Contacts from "./Contacts"
@@ -16,13 +16,6 @@ import Profile from "./Profile"
 
 export interface ShowClientProps {
 	client: Schema.ClientsShow
-}
-
-function personInitials(name: string) {
-	const parts = name.trim().split(/\s+/).filter(Boolean)
-	if(parts.length === 0) return "?"
-	if(parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
-	return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase()
 }
 
 const ShowClient = ({ client }: ShowClientProps) => {
@@ -39,7 +32,7 @@ const ShowClient = ({ client }: ShowClientProps) => {
 			] }
 			avatar={ (
 				<Avatar radius="xl" size={ 44 } color="brand">
-					{ personInitials(title) }
+					{ initials(title) ?? "?" }
 				</Avatar>
 			) }
 			badge={ isActive

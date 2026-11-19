@@ -1,5 +1,7 @@
+/// <reference types="node" />
 import { readFileSync } from "node:fs"
-import { resolve } from "node:path"
+import { dirname, resolve } from "node:path"
+import { fileURLToPath } from "node:url"
 
 import { describe, expect, it } from "vitest"
 
@@ -10,7 +12,7 @@ describe("PersonTable edit action", () => {
 		expect(Routes.editSettingsPerson("ada-lovelace")).toBe("/settings/people/ada-lovelace/edit")
 
 		const source = readFileSync(
-			resolve(__dirname, "../../../../domains/Settings/People/Table.tsx"),
+			resolve(dirname(fileURLToPath(import.meta.url)), "../../../../domains/Settings/People/Table.tsx"),
 			"utf8",
 		)
 

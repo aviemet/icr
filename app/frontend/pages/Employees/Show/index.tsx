@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 import { Avatar, Badge, Link, ScheduleButton, Text } from "@/components"
 import { DateTimeFormatter } from "@/components/Formatters"
 import { RecordShowShell } from "@/features"
-import { Routes } from "@/lib"
+import { initials, Routes } from "@/lib"
 
 import Assignments from "./Assignments"
 import Contacts from "./Contacts"
@@ -17,13 +17,6 @@ import Trainings from "./Trainings"
 export interface ShowEmployeeProps {
 	employee: Schema.EmployeesShow
 	trainingOptions?: Schema.EmployeeTrainingsOptions[]
-}
-
-function personInitials(name: string) {
-	const parts = name.trim().split(/\s+/).filter(Boolean)
-	if(parts.length === 0) return "?"
-	if(parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
-	return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase()
 }
 
 const ShowEmployee = ({ employee, trainingOptions = [] }: ShowEmployeeProps) => {
@@ -46,7 +39,7 @@ const ShowEmployee = ({ employee, trainingOptions = [] }: ShowEmployeeProps) => 
 			] }
 			avatar={ (
 				<Avatar radius="xl" size={ 44 } color={ employee.color || "brand" }>
-					{ personInitials(title) }
+					{ initials(title) ?? "?" }
 				</Avatar>
 			) }
 			badge={ employeeStatus

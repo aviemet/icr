@@ -2,6 +2,7 @@ import { MantineProvider, Tabs as MantineTabs } from "@mantine/core"
 import { cleanup, render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
+import { RecordShowShell } from "@/features/RecordShow"
 import { theme } from "@/lib/theme"
 
 vi.mock("@inertiajs/react", () => ({
@@ -40,8 +41,6 @@ vi.mock("@/components", async () => {
 		Tabs,
 	}
 })
-
-import { RecordShowShell } from "@/features/RecordShow"
 
 describe("RecordShowShell", () => {
 	beforeEach(() => {

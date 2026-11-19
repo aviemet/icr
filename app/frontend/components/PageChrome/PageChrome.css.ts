@@ -32,3 +32,31 @@ export const panelSurface = css`
 		0 1px 3px color-mix(in srgb, ${ vars.colors.black } 40%, transparent)
 	);
 `
+
+export const iconBadge = css`
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.85rem;
+	height: 1.85rem;
+	border-radius: ${ vars.radius.sm };
+	flex: 0 0 auto;
+	color: ${ vars.colors.primaryColors.filled };
+	background-color: light-dark(
+		color-mix(in srgb, ${ vars.colors.primaryColors[1] } 75%, ${ vars.colors.white }),
+		color-mix(in srgb, ${ vars.colors.primaryColors.filled } 22%, ${ vars.colors.dark[6] })
+	);
+`
+
+export const tintedSurface = css`
+	padding: ${ vars.spacing.sm } ${ vars.spacing.md };
+	border-radius: ${ vars.radius.md };
+	border: 1px solid light-dark(
+		color-mix(in srgb, ${ vars.colors.primaryColors.filled } 22%, ${ vars.colors.gray[3] }),
+		color-mix(in srgb, ${ vars.colors.primaryColors.filled } 28%, ${ vars.colors.dark[4] })
+	);
+	background-color: light-dark(
+		color-mix(in srgb, ${ vars.colors.primaryColors[0] } 55%, ${ vars.colors.white }),
+		color-mix(in srgb, ${ vars.colors.primaryColors.filled } 12%, ${ vars.colors.dark[6] })
+	);
+`

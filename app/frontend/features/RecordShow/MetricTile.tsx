@@ -1,6 +1,7 @@
 import clsx from "clsx"
 
-import { Section } from "@/components"
+import { Box, Section } from "@/components"
+import { pageChrome } from "@/components/PageChrome"
 
 import * as classes from "./MetricTile.css"
 
@@ -14,34 +15,38 @@ export interface MetricTileProps {
 	className?: string
 }
 
-function accentForTone(tone: MetricTileTone) {
-	if(tone === "alert") return "yellow"
-	if(tone === "danger") return "red"
-	return false
-}
-
 export function MetricTile({ title, children, tone = "default", icon, className }: MetricTileProps) {
+	let accent: string | undefined
+	let iconClass = pageChrome.iconBadge
+
+	switch(tone) {
+		case "alert":
+			accent = "yellow"
+			iconClass = classes.iconAlert
+			break
+		case "danger":
+			accent = "red"
+			iconClass = classes.iconAlert
+			break
+		case "default":
+			iconClass = pageChrome.iconBadge
+	}
+
 	return (
 		<Section
 			variant="panel"
-			accent={ accentForTone(tone) }
+			accent={ accent }
 			className={ clsx(classes.tile, className) }
 		>
-			<div className={ classes.titleRow }>
+			<Box className={ clsx(classes.titleRow) }>
 				{ icon && (
-					<span
-						className={ clsx(
-							classes.icon,
-							tone === "alert" && classes.iconAlert,
-							tone === "danger" && classes.iconDanger,
-						) }
-					>
+					<span className={ clsx(iconClass) }>
 						{ icon }
 					</span>
 				) }
-				<div className={ classes.title }>{ title }</div>
-			</div>
-			<div className={ classes.body }>{ children }</div>
+				<Box className={ clsx(classes.title) }>{ title }</Box>
+			</Box>
+			<Box className={ clsx(classes.body) }>{ children }</Box>
 		</Section>
 	)
 }

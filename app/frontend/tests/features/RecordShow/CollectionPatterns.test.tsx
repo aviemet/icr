@@ -76,11 +76,16 @@ describe("RecordShow collection patterns", () => {
 	it("toggles ShowEditToggle between show and edit", () => {
 		render(
 			<MantineProvider theme={ theme } defaultColorScheme="dark">
-				<ShowEditToggle
-					canUpdate={ true }
-					show={ <div>Show profile</div> }
-					edit={ <input aria-label="First name" /> }
-				/>
+				<ShowEditToggle canUpdate={ true }>
+					{ ({ editing, controls }) => (
+						<div>
+							{ controls }
+							{ editing
+								? <input aria-label="First name" />
+								: <div>Show profile</div> }
+						</div>
+					) }
+				</ShowEditToggle>
 			</MantineProvider>,
 		)
 
@@ -97,11 +102,16 @@ describe("RecordShow collection patterns", () => {
 	it("hides edit control when canUpdate is false", () => {
 		render(
 			<MantineProvider theme={ theme } defaultColorScheme="dark">
-				<ShowEditToggle
-					canUpdate={ false }
-					show={ <div>Show only</div> }
-					edit={ <input aria-label="Secret field" /> }
-				/>
+				<ShowEditToggle canUpdate={ false }>
+					{ ({ editing, controls }) => (
+						<div>
+							{ controls }
+							{ editing
+								? <input aria-label="Secret field" />
+								: <div>Show only</div> }
+						</div>
+					) }
+				</ShowEditToggle>
 			</MantineProvider>,
 		)
 

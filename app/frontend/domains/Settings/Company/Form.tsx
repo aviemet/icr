@@ -38,8 +38,8 @@ const emptyPhone = {
 
 export function CompanyForm({ company }: CompanyFormProps) {
 	const contact = company.contact
-	const addresses = (company.addresses?.length ? company.addresses : (contact?.addresses || [])) as Record<string, unknown>[]
-	const phones = (company.phones?.length ? company.phones : (contact?.phones || [])) as Record<string, unknown>[]
+	const addresses = company.addresses?.length ? company.addresses : (contact?.addresses || [])
+	const phones = company.phones?.length ? company.phones : (contact?.phones || [])
 
 	return (
 		<Form
@@ -56,7 +56,7 @@ export function CompanyForm({ company }: CompanyFormProps) {
 				},
 			} }
 		>
-			{ contact?.id != null && (
+			{ contact?.id !== undefined && (
 				<HiddenInput name="company.contact_attributes.id" defaultValue={ String(contact.id) } />
 			) }
 			<FormBandStack>

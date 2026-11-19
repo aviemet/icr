@@ -28,7 +28,7 @@ export function Table({
 			<MantineTable
 				striped={ striped }
 				highlightOnHover={ highlightOnHover }
-				className={ clsx(className, classes.table, fixed && "layout-fixed") }
+				className={ clsx(className, classes.table, { "layout-fixed": fixed }) }
 				{ ...props }
 			>
 				{ children }

@@ -1,5 +1,5 @@
 ---
-description: Keep Inertia pages thin; domain UI lives under domains/
+description: Keep Inertia pages thin; domain UI lives under domains/; shared UI is never copy-pasted
 alwaysApply: true
 ---
 
@@ -9,6 +9,10 @@ alwaysApply: true
 
 Put tables, forms, form sections, work queues, review tables, filters, and related helpers in `app/frontend/domains/<Domain>/`.
 
-Put cross-cutting shells (auth paper, index templates, spotlight) in `app/frontend/features/`.
+Put cross-cutting shells and shared presentational widgets (auth paper, index templates, record show board pieces, form bands) in `app/frontend/features/`.
+
+Put general-purpose primitives in `app/frontend/components/`.
 
 Do not create `FormInputs/`, `ReviewTable/`, `WorkQueue.tsx`, or similar component trees under `pages/`. Import them into the page from `@/domains/...`.
+
+When the same presentational widget appears in more than one domain or page, extract it into `features/` or `components/` immediately. Domain files compose shared widgets; they do not host private copies of them. Follow `.cursor/rules/no-ui-duplication.mdc`.

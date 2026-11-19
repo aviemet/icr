@@ -1,40 +1,22 @@
 import { useTranslation } from "react-i18next"
-import clsx from "clsx"
 
-import { Avatar, Link, Text } from "@/components"
+import { Avatar, Box, Link, Text } from "@/components"
 import { DateTimeFormatter } from "@/components/Formatters"
 import { CalendarIcon, CheckIcon, UserGroupIcon, WarningTriangleIcon } from "@/components/Icons"
-import { MetricTile, RecordRow } from "@/features"
-import { Routes } from "@/lib"
+import {
+	BoardActionGrid,
+	BoardActionTile,
+	CountChip,
+	MetricLine,
+	MetricTile,
+	RecordRow,
+} from "@/features"
+import { initials, Routes } from "@/lib"
 
 import * as classes from "./Overview.css"
 
 interface EmployeeOverviewProps {
 	employee: Schema.EmployeesShow
-}
-
-function MetricLine({ label, value }: { label: string, value: React.ReactNode }) {
-	return (
-		<div className={ classes.metricLine }>
-			<span className={ classes.metricLabel }>{ label }</span>
-			<span>{ value }</span>
-		</div>
-	)
-}
-
-function CountChip({ value, alert = false }: { value: number, alert?: boolean }) {
-	return (
-		<span className={ clsx(classes.chip, alert && classes.chipAlert) }>
-			{ value }
-		</span>
-	)
-}
-
-function personInitials(name: string) {
-	const parts = name.trim().split(/\s+/).filter(Boolean)
-	if(parts.length === 0) return "?"
-	if(parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
-	return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase()
 }
 
 export function EmployeeOverview({ employee }: EmployeeOverviewProps) {
@@ -45,26 +27,26 @@ export function EmployeeOverview({ employee }: EmployeeOverviewProps) {
 	const alertTone = alertCount > 0 ? "alert" : "default"
 
 	return (
-		<div className={ classes.board }>
-			<div className={ classes.tileRow }>
+		<Box className={ classes.board }>
+			<Box className={ classes.tileRow }>
 				<MetricTile
 					title={ t("views.employees.show.overview.assignments") }
 					icon={ <UserGroupIcon size={ 16 } /> }
 				>
-					<div className={ classes.teamList }>
+					<Box className={ classes.teamList }>
 						{ employee.primary_manager
 							? (
-								<div className={ classes.teamRow }>
+								<Box className={ classes.teamRow }>
 									<Avatar radius="xl" size={ 32 } color="brand">
-										{ personInitials(employee.primary_manager.person.name) }
+										{ initials(employee.primary_manager.person.name) ?? "?" }
 									</Avatar>
-									<div className={ classes.teamMeta }>
+									<Box className={ classes.teamMeta }>
 										<Text size="sm" fw={ 600 }>{ employee.primary_manager.person.name }</Text>
 										<span className={ classes.teamRole }>
 											{ t("views.employees.show.overview.manager") }
 										</span>
-									</div>
-								</div>
+									</Box>
+								</Box>
 							)
 							: (
 								<Text size="sm" c="dimmed">{ t("views.employees.show.overview.none") }</Text>
@@ -73,7 +55,7 @@ export function EmployeeOverview({ employee }: EmployeeOverviewProps) {
 							label={ t("views.employees.show.overview.assigned_clients") }
 							value={ <CountChip value={ employee.assigned_clients_count } /> }
 						/>
-					</div>
+					</Box>
 				</MetricTile>
 
 				<MetricTile
@@ -118,48 +100,49 @@ export function EmployeeOverview({ employee }: EmployeeOverviewProps) {
 					title={ t("views.employees.show.overview.quick_links") }
 					icon={ <CalendarIcon size={ 16 } /> }
 				>
-					<div className={ classes.actionGrid }>
-						<Link href={ `${Routes.employee(employee.slug)}?tab=profile` } className={ classes.actionTile }>
-							<span className={ classes.actionTitle }>{ t("views.employees.show.tabs.profile") }</span>
-							<span className={ classes.actionHint }>Demographics and employment</span>
-						</Link>
-						<Link href={ `${Routes.employee(employee.slug)}?tab=credentials` } className={ classes.actionTile }>
-							<span className={ classes.actionTitle }>{ t("views.employees.show.tabs.credentials") }</span>
-							<span className={ classes.actionHint }>IDs and clearances</span>
-						</Link>
-						<Link href={ `${Routes.employee(employee.slug)}?tab=trainings` } className={ classes.actionTile }>
-							<span className={ classes.actionTitle }>{ t("views.employees.show.tabs.trainings") }</span>
-							<span className={ classes.actionHint }>Completion status</span>
-						</Link>
+					<BoardActionGrid>
+						<BoardActionTile
+							href={ `${Routes.employee(employee.slug)}?tab=profile` }
+							title={ t("views.employees.show.tabs.profile") }
+							hint="Demographics and employment"
+						/>
+						<BoardActionTile
+							href={ `${Routes.employee(employee.slug)}?tab=credentials` }
+							title={ t("views.employees.show.tabs.credentials") }
+							hint="IDs and clearances"
+						/>
+						<BoardActionTile
+							href={ `${Routes.employee(employee.slug)}?tab=trainings` }
+							title={ t("views.employees.show.tabs.trainings") }
+							hint="Completion status"
+						/>
 						{ employee.current_pay_period_id && (
-							<Link
+							<BoardActionTile
 								href={ Routes.periodEmployeeReview(employee.current_pay_period_id, employee.id) }
-								className={ classes.actionTile }
-							>
-								<span className={ classes.actionTitle }>
-									{ t("views.employees.show.overview.payroll_review") }
-								</span>
-								<span className={ classes.actionHint }>Current period</span>
-							</Link>
+								title={ t("views.employees.show.overview.payroll_review") }
+								hint="Current period"
+							/>
 						) }
-						<Link href={ Routes.statusEmployee(employee.slug) } className={ classes.actionTile }>
-							<span className={ classes.actionTitle }>{ t("views.employees.show.change_status") }</span>
-							<span className={ classes.actionHint }>Employment transitions</span>
-						</Link>
-						<Link href={ Routes.scheduleEmployee(employee.slug) } className={ classes.actionTile }>
-							<span className={ classes.actionTitle }>Schedule</span>
-							<span className={ classes.actionHint }>Open calendar</span>
-						</Link>
-					</div>
+						<BoardActionTile
+							href={ Routes.statusEmployee(employee.slug) }
+							title={ t("views.employees.show.change_status") }
+							hint="Employment transitions"
+						/>
+						<BoardActionTile
+							href={ Routes.scheduleEmployee(employee.slug) }
+							title="Schedule"
+							hint="Open calendar"
+						/>
+					</BoardActionGrid>
 				</MetricTile>
-			</div>
+			</Box>
 
 			{ employee.interviews.length > 0 && (
 				<MetricTile
 					title={ t("views.employees.show.overview.recent_interviews") }
 					icon={ <CheckIcon size={ 16 } /> }
 				>
-					<div className={ classes.interviewList }>
+					<Box className={ classes.interviewList }>
 						{ employee.interviews.slice(0, 5).map(interview => (
 							<RecordRow
 								key={ interview.id }
@@ -173,9 +156,9 @@ export function EmployeeOverview({ employee }: EmployeeOverviewProps) {
 								) }
 							/>
 						)) }
-					</div>
+					</Box>
 				</MetricTile>
 			) }
-		</div>
+		</Box>
 	)
 }

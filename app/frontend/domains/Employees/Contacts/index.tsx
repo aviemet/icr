@@ -40,62 +40,64 @@ export function EmployeeContacts({ employee }: EmployeeContactsProps) {
 			<ShowEditToggle
 				title={ t("views.employees.show.contacts.employee_contact") }
 				canUpdate={ canUpdate }
-				show={ (
-					<Stack gap="md">
-						<CollectionPanel
-							title={ t("views.employees.show.contacts.phones") }
-							count={ phones.length }
-							emptyLabel="-"
-						>
-							{ phones.map(phone => (
-								<RecordRow
-									key={ phone.id }
-									title={ <PhoneFormatter>{ phone.number }</PhoneFormatter> }
-									meta={ (
-										<>
-											{ phone.name && <span>{ phone.name }</span> }
-											{ phone.category && <span>{ phone.category.name }</span> }
-										</>
-									) }
-								/>
-							)) }
-						</CollectionPanel>
+			>
+				{ ({ editing }) => editing
+					? <EmployeeContactForm employee={ employee } />
+					: (
+						<Stack gap="md">
+							<CollectionPanel
+								title={ t("views.employees.show.contacts.phones") }
+								count={ phones.length }
+								emptyLabel="-"
+							>
+								{ phones.map(phone => (
+									<RecordRow
+										key={ phone.id }
+										title={ <PhoneFormatter>{ phone.number }</PhoneFormatter> }
+										meta={ (
+											<>
+												{ phone.name && <span>{ phone.name }</span> }
+												{ phone.category && <span>{ phone.category.name }</span> }
+											</>
+										) }
+									/>
+								)) }
+							</CollectionPanel>
 
-						<CollectionPanel
-							title={ t("views.employees.show.contacts.emails") }
-							count={ emails.length }
-							emptyLabel="-"
-						>
-							{ emails.map(email => (
-								<RecordRow
-									key={ email.id }
-									title={ <EmailFormatter>{ email.email }</EmailFormatter> }
-									meta={ (
-										<>
-											{ email.name && <span>{ email.name }</span> }
-											{ email.category && <span>{ email.category.name }</span> }
-										</>
-									) }
-								/>
-							)) }
-						</CollectionPanel>
+							<CollectionPanel
+								title={ t("views.employees.show.contacts.emails") }
+								count={ emails.length }
+								emptyLabel="-"
+							>
+								{ emails.map(email => (
+									<RecordRow
+										key={ email.id }
+										title={ <EmailFormatter>{ email.email }</EmailFormatter> }
+										meta={ (
+											<>
+												{ email.name && <span>{ email.name }</span> }
+												{ email.category && <span>{ email.category.name }</span> }
+											</>
+										) }
+									/>
+								)) }
+							</CollectionPanel>
 
-						<CollectionPanel
-							title={ t("views.employees.show.contacts.addresses") }
-							count={ addresses.length }
-							emptyLabel="-"
-						>
-							{ addresses.map(address => (
-								<RecordRow
-									key={ address.id }
-									title={ <AddressFormatter address={ address } /> }
-								/>
-							)) }
-						</CollectionPanel>
-					</Stack>
-				) }
-				edit={ <EmployeeContactForm employee={ employee } /> }
-			/>
+							<CollectionPanel
+								title={ t("views.employees.show.contacts.addresses") }
+								count={ addresses.length }
+								emptyLabel="-"
+							>
+								{ addresses.map(address => (
+									<RecordRow
+										key={ address.id }
+										title={ <AddressFormatter address={ address } /> }
+									/>
+								)) }
+							</CollectionPanel>
+						</Stack>
+					) }
+			</ShowEditToggle>
 
 			<CollectionPanel
 				title={ t("views.employees.show.contacts.support_network") }

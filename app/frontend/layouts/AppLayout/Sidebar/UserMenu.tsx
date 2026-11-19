@@ -6,7 +6,9 @@ export function UserMenu() {
 	return (
 		<Menu withArrow arrowPosition="center" position="bottom-start">
 			<Menu.Target>
-				<ActionIcon variant="transparent" p="lg"><Avatar id="user-menu" /></ActionIcon>
+				<ActionIcon variant="transparent" p={ 0 } className="user-menu-trigger">
+					<Avatar id="user-menu" size="md" />
+				</ActionIcon>
 			</Menu.Target>
 
 			<Menu.Dropdown>

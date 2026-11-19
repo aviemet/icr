@@ -1,5 +1,7 @@
 import clsx from "clsx"
 
+import { Box } from "@/components"
+
 import * as classes from "./DefinitionList.css"
 
 export interface DefinitionItemProps {
@@ -10,10 +12,12 @@ export interface DefinitionItemProps {
 
 export function DefinitionItem({ label, value, fullWidth = false }: DefinitionItemProps) {
 	return (
-		<div className={ clsx(classes.item, fullWidth && classes.fullWidth) }>
-			<div className={ classes.label }>{ label }</div>
-			<div className={ classes.value }>{ value ?? "-" }</div>
-		</div>
+		<Box className={ clsx(classes.item, {
+			[classes.fullWidth]: fullWidth,
+		}) }>
+			<Box className={ classes.label }>{ label }</Box>
+			<Box className={ classes.value }>{ value ?? "-" }</Box>
+		</Box>
 	)
 }
 
@@ -24,8 +28,8 @@ export interface DefinitionListProps {
 
 export function DefinitionList({ children, className }: DefinitionListProps) {
 	return (
-		<div className={ clsx(classes.list, className) }>
+		<Box className={ clsx(classes.list, className) }>
 			{ children }
-		</div>
+		</Box>
 	)
 }

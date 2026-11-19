@@ -1,6 +1,6 @@
 import clsx from "clsx"
 
-import { Table } from "@/components"
+import { Box, Table } from "@/components"
 import { type Breadcrumb } from "@/components/Breadcrumbs"
 import { Page } from "@/components/Page"
 import { usePageProps } from "@/lib/hooks/usePageProps"
@@ -35,7 +35,7 @@ export function IndexPageTemplate({
 			{ title, href: window.location.href },
 		] }>
 			<Table.Section>
-				<div className={ clsx(dense && classes.denseShell) }>
+				<Box className={ clsx({ [classes.denseShell]: dense }) }>
 					<Table.Provider
 						selectable
 						model={ model }
@@ -50,7 +50,7 @@ export function IndexPageTemplate({
 
 						<Table.Pagination pagination={ pagination } model={ model } />
 					</Table.Provider>
-				</div>
+				</Box>
 			</Table.Section>
 		</Page>
 	)

@@ -1,5 +1,6 @@
 import clsx from "clsx"
 
+import { Box } from "@/components"
 import { pageChrome } from "@/components/PageChrome"
 
 import * as classes from "./FormBand.css"
@@ -7,18 +8,32 @@ import * as classes from "./FormBand.css"
 export interface FormBandProps {
 	title: string
 	description?: string
+	icon?: React.ReactNode
+	actions?: React.ReactNode
 	children: React.ReactNode
 	className?: string
 }
 
-export function FormBand({ title, description, children, className }: FormBandProps) {
+export function FormBand({ title, description, icon, actions, children, className }: FormBandProps) {
 	return (
 		<section className={ clsx(pageChrome.panelSurface, classes.band, className) }>
-			<div className={ classes.header }>
-				<div className={ classes.title }>{ title }</div>
-				{ description && <div className={ classes.description }>{ description }</div> }
-			</div>
-			<div className={ classes.fields }>{ children }</div>
+			<Box className={ clsx(classes.header) }>
+				<Box className={ clsx(classes.titleRow) }>
+					<Box className={ clsx(classes.titleGroup) }>
+						{ icon && <span className={ pageChrome.iconBadge }>{ icon }</span> }
+						<Box className={ clsx(classes.title) }>{ title }</Box>
+					</Box>
+					{ actions }
+				</Box>
+				{ description && (
+					<Box className={ clsx(classes.description, {
+						[classes.descriptionIndented]: icon,
+					}) }>
+						{ description }
+					</Box>
+				) }
+			</Box>
+			<Box className={ clsx(classes.fields) }>{ children }</Box>
 		</section>
 	)
 }
@@ -30,8 +45,8 @@ export interface FormBandStackProps {
 
 export function FormBandStack({ children, className }: FormBandStackProps) {
 	return (
-		<div className={ clsx(classes.stack, className) }>
+		<Box className={ clsx(classes.stack, className) }>
 			{ children }
-		</div>
+		</Box>
 	)
 }

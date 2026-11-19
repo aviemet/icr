@@ -43,62 +43,64 @@ export function ClientContacts({ client }: ClientContactsProps) {
 			<ShowEditToggle
 				title={ t("views.clients.show.contacts.client_contact") }
 				canUpdate={ canUpdate }
-				show={ (
-					<Stack gap="md">
-						<CollectionPanel
-							title={ t("views.clients.show.contacts.phones") }
-							count={ phones.length }
-							emptyLabel="-"
-						>
-							{ phones.map(phone => (
-								<RecordRow
-									key={ phone.id }
-									title={ <PhoneFormatter>{ phone.number }</PhoneFormatter> }
-									meta={ (
-										<>
-											{ phone.name && <span>{ phone.name }</span> }
-											{ phone.category && <span>{ phone.category.name }</span> }
-										</>
-									) }
-								/>
-							)) }
-						</CollectionPanel>
+			>
+				{ ({ editing }) => editing
+					? <ClientContactForm client={ client } />
+					: (
+						<Stack gap="md">
+							<CollectionPanel
+								title={ t("views.clients.show.contacts.phones") }
+								count={ phones.length }
+								emptyLabel="-"
+							>
+								{ phones.map(phone => (
+									<RecordRow
+										key={ phone.id }
+										title={ <PhoneFormatter>{ phone.number }</PhoneFormatter> }
+										meta={ (
+											<>
+												{ phone.name && <span>{ phone.name }</span> }
+												{ phone.category && <span>{ phone.category.name }</span> }
+											</>
+										) }
+									/>
+								)) }
+							</CollectionPanel>
 
-						<CollectionPanel
-							title={ t("views.clients.show.contacts.emails") }
-							count={ emails.length }
-							emptyLabel="-"
-						>
-							{ emails.map(email => (
-								<RecordRow
-									key={ email.id }
-									title={ <EmailFormatter>{ email.email }</EmailFormatter> }
-									meta={ (
-										<>
-											{ email.name && <span>{ email.name }</span> }
-											{ email.category && <span>{ email.category.name }</span> }
-										</>
-									) }
-								/>
-							)) }
-						</CollectionPanel>
+							<CollectionPanel
+								title={ t("views.clients.show.contacts.emails") }
+								count={ emails.length }
+								emptyLabel="-"
+							>
+								{ emails.map(email => (
+									<RecordRow
+										key={ email.id }
+										title={ <EmailFormatter>{ email.email }</EmailFormatter> }
+										meta={ (
+											<>
+												{ email.name && <span>{ email.name }</span> }
+												{ email.category && <span>{ email.category.name }</span> }
+											</>
+										) }
+									/>
+								)) }
+							</CollectionPanel>
 
-						<CollectionPanel
-							title={ t("views.clients.show.contacts.addresses") }
-							count={ addresses.length }
-							emptyLabel="-"
-						>
-							{ addresses.map(address => (
-								<RecordRow
-									key={ address.id }
-									title={ <AddressFormatter address={ address } /> }
-								/>
-							)) }
-						</CollectionPanel>
-					</Stack>
-				) }
-				edit={ <ClientContactForm client={ client } /> }
-			/>
+							<CollectionPanel
+								title={ t("views.clients.show.contacts.addresses") }
+								count={ addresses.length }
+								emptyLabel="-"
+							>
+								{ addresses.map(address => (
+									<RecordRow
+										key={ address.id }
+										title={ <AddressFormatter address={ address } /> }
+									/>
+								)) }
+							</CollectionPanel>
+						</Stack>
+					) }
+			</ShowEditToggle>
 
 			<CollectionPanel
 				title={ t("views.clients.show.contacts.support_network") }

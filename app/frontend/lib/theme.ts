@@ -129,4 +129,4 @@ export const themeObject: Partial<CustomMantineTheme> = {
 
 export const theme = mergeMantineTheme(DEFAULT_THEME, createTheme(themeObject))
 
-export const vars = themeToVars(mergeMantineTheme(theme, {}))
+export const vars = themeToVars(theme)

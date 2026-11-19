@@ -16,6 +16,7 @@ import { vars } from "@/lib"
 import {
 	BRAND_COLOR_MAX_LIGHTNESS,
 	BRAND_COLOR_MIN_LIGHTNESS,
+	BRAND_PALETTE,
 	clampBrandColor,
 	DEFAULT_BRAND_COLOR,
 	hexToHsl,
@@ -28,7 +29,7 @@ import { Label } from "./Label"
 
 import { type BaseInputProps } from "."
 
-const EXCLUDED_SWATCH_COLORS = new Set(["dark", "gray", "brand"])
+const EXCLUDED_SWATCH_COLORS = new Set(["dark", "gray", BRAND_PALETTE])
 
 export interface BrandColorInputProps extends Omit<BaseInputProps, "disableAutofill"> {
 	ref?: React.Ref<HTMLInputElement>

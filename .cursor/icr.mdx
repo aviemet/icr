@@ -86,6 +86,10 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
   - [ ] Overtime calculation for both types
 - [ ] Co-employment settings and rules
 
+### Phase 8: Customization
+- [x] Color choice for site accent color
+- [ ] Dyslexia font option
+
 ## Conventions
 ### Architecture
 - Single-tenant application
@@ -173,6 +177,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 
 #### Component Organization
 - Frontend: components, features, layouts, lib, pages, queries, types under app/frontend.
+- One exported React component per file. Shared presentational widgets belong in `features/` or `components/`; domains compose them. Copy-pasting the same helper into multiple domain boards is forbidden tech debt (see `.cursor/rules/no-ui-duplication.mdc`).
 - React 19: ref is passed as a normal prop; components that need ref support accept ref in their props interface (ref?: React.Ref&lt;HTMLElement&gt;) and pass it to the underlying DOM or child. forwardRef is not used.
 
 #### Links and navigation
@@ -185,8 +190,9 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 
 #### UI & Styling
 - Mantine; Linaria with .css.ts; clsx for class composition; theme supports dark/light.
+- clsx conditionals use the object map (`{ [classes.foo]: condition }`). Do not toggle classes with `condition && classes.foo` or ternaries inside `clsx(...)`.
 - Page chrome contract: `theme.other.page.maxWidth` is the shared content width. Panel surfaces use `pageChrome.panelSurface` (via `Section variant="panel"` or composed on identity chrome). That surface sets `--icr-field-bg` / `--icr-field-border` so Mantine inputs read as inset wells against the panel, not the same fill. Left accent stripes are status opt-in only. Do not add page background gradients or primary-tinted panel fills.
-- Board metric/action styles live in `features/RecordShow/BoardPrimitives.css.ts` for Dashboard and show Overview boards.
+- Board metric/action UI lives in `features/RecordShow/Board` (`MetricLine`, `CountChip`, `MetricValue`, `BoardActionTile`, `BoardActionGrid`) with styles in `BoardPrimitives.css.ts`. Dashboard and Client/Employee Overview boards must use these shared components; do not redefine them locally.
 - Gotcha: Linaria-generated class order can make overrides between multiple classes on the same element unreliable. When a view-specific class must override a base class (e.g. base `event` plus TimeGrid `timeGridEvent`), prefer a combined selector like `&.${event} { ... }` in the overriding class so it wins regardless of CSS emission order.
 
 #### Form Implementation
