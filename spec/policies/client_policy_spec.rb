@@ -44,18 +44,10 @@ RSpec.describe ClientPolicy, type: :policy do
       expect(scope.count).to eq(1)
     end
 
-    it "returns own client for client with index permission" do
-      role = Role.find_or_create_by!(name: "index", resource_type: "Client", resource_id: nil)
-      @client_user.roles << role unless @client_user.roles.include?(role)
-
+    it "returns own client for client users" do
       scope = Pundit.policy_scope(@client_user, Client)
       expect(scope).to include(@client)
       expect(scope.count).to eq(1)
-    end
-
-    it "returns none for client without index permission" do
-      scope = Pundit.policy_scope(@client_user, Client)
-      expect(scope.count).to eq(0)
     end
 
     it "returns none for user without person" do
@@ -88,15 +80,8 @@ RSpec.describe ClientPolicy, type: :policy do
       expect(described_class.new(@employee_user, Client.new)).not_to authorize(:index)
     end
 
-    it "allows client with index permission" do
-      role = Role.find_or_create_by!(name: "index", resource_type: "Client", resource_id: nil)
-      @client_user.roles << role unless @client_user.roles.include?(role)
-
+    it "allows client users" do
       expect(described_class.new(@client_user, Client.new)).to authorize(:index)
-    end
-
-    it "denies client without index permission" do
-      expect(described_class.new(@client_user, Client.new)).not_to authorize(:index)
     end
   end
 
@@ -123,23 +108,14 @@ RSpec.describe ClientPolicy, type: :policy do
       expect(described_class.new(@employee_user, other_client)).not_to authorize(:show)
     end
 
-    it "allows client with show permission for own client" do
-      role = Role.find_or_create_by!(name: "show", resource_type: "Client", resource_id: nil)
-      @client_user.roles << role unless @client_user.roles.include?(role)
-
+    it "allows client users for own client" do
       expect(described_class.new(@client_user, @client)).to authorize(:show)
     end
 
-    it "denies client with show permission for other client" do
-      role = Role.find_or_create_by!(name: "show", resource_type: "Client", resource_id: nil)
-      @client_user.roles << role unless @client_user.roles.include?(role)
+    it "denies client users for other client" do
       other_client = @clients.first
 
       expect(described_class.new(@client_user, other_client)).not_to authorize(:show)
-    end
-
-    it "denies client without show permission" do
-      expect(described_class.new(@client_user, @client)).not_to authorize(:show)
     end
   end
 
@@ -161,10 +137,7 @@ RSpec.describe ClientPolicy, type: :policy do
       expect(described_class.new(@employee_user, @client)).to authorize(:schedule)
     end
 
-    it "allows client with show permission for own client" do
-      role = Role.find_or_create_by!(name: "show", resource_type: "Client", resource_id: nil)
-      @client_user.roles << role unless @client_user.roles.include?(role)
-
+    it "allows client users for own client" do
       expect(described_class.new(@client_user, @client)).to authorize(:schedule)
     end
   end
@@ -227,16 +200,11 @@ RSpec.describe ClientPolicy, type: :policy do
       expect(described_class.new(@employee_user, @client)).not_to authorize(:edit)
     end
 
-    it "allows client with update permission for own client" do
-      role = Role.find_or_create_by!(name: "update", resource_type: "Client", resource_id: nil)
-      @client_user.roles << role unless @client_user.roles.include?(role)
-
+    it "allows client users for own client" do
       expect(described_class.new(@client_user, @client)).to authorize(:edit)
     end
 
-    it "denies client with update permission for other client" do
-      role = Role.find_or_create_by!(name: "update", resource_type: "Client", resource_id: nil)
-      @client_user.roles << role unless @client_user.roles.include?(role)
+    it "denies client users for other client" do
       other_client = @clients.first
 
       expect(described_class.new(@client_user, other_client)).not_to authorize(:edit)

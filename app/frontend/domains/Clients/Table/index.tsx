@@ -5,6 +5,7 @@ import { useClientTableColumns } from "./columns"
 
 interface ClientTableProps {
 	records: Schema.ClientsIndex[]
+	canUpdates?: Record<string, boolean>
 	model: string
 	serverFiltered?: boolean
 }
@@ -17,15 +18,16 @@ const clientServerFilterFields = [
 	{ param: "active_at", kind: "text" as const },
 ]
 
-export function ClientTable({ records, model, serverFiltered = false }: ClientTableProps) {
+export function ClientTable({ records, canUpdates = {}, model, serverFiltered = false }: ClientTableProps) {
 	const { values, setText } = useServerTableFilters({
 		fields: clientServerFilterFields,
-		only: ["clients", "pagination"],
+		only: ["clients", "pagination", "can_updates"],
 		enabled: serverFiltered,
 	})
 
 	const columns = useClientTableColumns({
 		serverFiltered,
+		canUpdates,
 		filters: {
 			firstName: typeof values.first_name === "string" ? values.first_name : "",
 			lastName: typeof values.last_name === "string" ? values.last_name : "",

@@ -16,10 +16,11 @@ import Trainings from "./Trainings"
 
 export interface ShowEmployeeProps {
 	employee: Schema.EmployeesShow
+	can_update?: boolean
 	trainingOptions?: Schema.EmployeeTrainingsOptions[]
 }
 
-const ShowEmployee = ({ employee, trainingOptions = [] }: ShowEmployeeProps) => {
+const ShowEmployee = ({ employee, can_update = false, trainingOptions = [] }: ShowEmployeeProps) => {
 	const { t } = useTranslation()
 	const title = employee?.person?.name || t("views.employees.show.title")
 	const employeeStatus = employee?.status
@@ -66,9 +67,11 @@ const ShowEmployee = ({ employee, trainingOptions = [] }: ShowEmployeeProps) => 
 			actions={ (
 				<>
 					<ScheduleButton href={ Routes.scheduleEmployee(employee.slug) } appearance="button" />
-					<Link href={ Routes.statusEmployee(employee.slug) } as="button" buttonProps={ { variant: "light", size: "sm" } }>
-						{ t("views.employees.show.change_status") }
-					</Link>
+					{ can_update && (
+						<Link href={ Routes.statusEmployee(employee.slug) } as="button" buttonProps={ { variant: "light", size: "sm" } }>
+							{ t("views.employees.show.change_status") }
+						</Link>
+					) }
 				</>
 			) }
 			tabs={ [

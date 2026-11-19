@@ -11,7 +11,7 @@ import {
 	RecordRow,
 } from "@/features"
 import { Routes } from "@/lib"
-import { usePermissions } from "@/lib/hooks"
+import { useRecordCanUpdate } from "@/lib/hooks"
 
 interface ClientHealthProps {
 	client: Schema.ClientsShow
@@ -32,8 +32,7 @@ function allergyTone(severity: string) {
 
 export function ClientHealth({ client }: ClientHealthProps) {
 	const { t } = useTranslation()
-	const { can } = usePermissions()
-	const canUpdate = can("clients", "update")
+	const canUpdate = useRecordCanUpdate()
 
 	return (
 		<Stack gap="lg">

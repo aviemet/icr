@@ -7,7 +7,7 @@ import { DateTimeFormatter } from "@/components/Formatters"
 import { DateInput, Select, TextInput, Textarea } from "@/components/Inputs"
 import { CollectionAddModal, CollectionPanel, RecordRow } from "@/features"
 import { Routes } from "@/lib"
-import { usePermissions } from "@/lib/hooks"
+import { useRecordCanUpdate } from "@/lib/hooks"
 
 interface EmployeeCredentialsProps {
 	employee: Schema.EmployeesShow
@@ -54,8 +54,7 @@ function expiryTone(expiresOn: string | Date | null | undefined) {
 
 export function EmployeeCredentials({ employee }: EmployeeCredentialsProps) {
 	const { t } = useTranslation()
-	const { can } = usePermissions()
-	const canUpdate = can("employees", "update")
+	const canUpdate = useRecordCanUpdate()
 
 	return (
 		<Stack gap="lg">

@@ -1,4 +1,19 @@
 class EmployeePolicy < ApplicationPolicy
+  def index?
+    return true if admin?
+    return false unless user.person
+
+    case user.person.agency_role
+    when "Employee"
+      job_title_allows?(:index, Employee)
+    when "Client"
+      user.person.client.present?
+    else
+      false
+    end
+  end
+
+
   def schedule?
     show?
   end

@@ -1,6 +1,7 @@
 class Api::CalendarEventsController < Api::ApiController
-  expose :calendar_events, -> { Calendar::Event.all }
-  expose :calendar_event, model: Calendar::Event
+  expose :calendar_events, -> { policy_scope(Calendar::Event) }
+  expose :calendar_event, model: Calendar::Event, scope: -> { policy_scope(Calendar::Event) }
+
 
   before_action :resolve_category_slug, only: [:create, :update]
 

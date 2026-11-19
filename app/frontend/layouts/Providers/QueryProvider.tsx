@@ -13,7 +13,7 @@ const queryClient = new QueryClient()
 export function QueryProvider({ children }: QueryProviderProps) {
 	return (
 		<QueryClientProvider client={ queryClient }>
-			{ process.env.NODE_ENV && process.env.NODE_ENV === "development" && <ReactQueryDevtools /> }
+			{ process.env.NODE_ENV && process.env.NODE_ENV === "development" && <ReactQueryDevtools buttonPosition="top-right" /> }
 			{ children }
 		</QueryClientProvider>
 	)

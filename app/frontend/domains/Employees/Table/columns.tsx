@@ -180,6 +180,7 @@ function statusBadgeColor(status: EmployeeStatus) {
 
 type UseEmployeeTableColumnsOptions = {
 	serverFiltered: boolean
+	canUpdates?: Record<string, boolean>
 	filters: EmployeeColumnFilters
 	jobTitleOptions: string[]
 	setText: (param: string, value: string) => void
@@ -188,6 +189,7 @@ type UseEmployeeTableColumnsOptions = {
 
 export function useEmployeeTableColumns({
 	serverFiltered,
+	canUpdates = {},
 	filters,
 	jobTitleOptions,
 	setText,
@@ -323,10 +325,13 @@ export function useEmployeeTableColumns({
 			sortable: false,
 			render: (employee) => (
 				<Group wrap="nowrap" gap="xs">
-					<EditButton href={ Routes.editEmployee(employee.slug) } />
+					{ canUpdates[employee.id] && (
+						<EditButton href={ Routes.editEmployee(employee.slug) } />
+					) }
 					<ScheduleButton href={ Routes.scheduleEmployee(employee.slug) } />
 				</Group>
 			),
 		},
 	]
 }
+

@@ -10,6 +10,7 @@ import {
 
 interface EmployeeTableProps {
 	records: Schema.EmployeesIndex[]
+	canUpdates?: Record<string, boolean>
 	model?: string
 	jobTitleOptions?: string[]
 	serverFiltered?: boolean
@@ -17,6 +18,7 @@ interface EmployeeTableProps {
 
 export function EmployeeTable({
 	records,
+	canUpdates = {},
 	model,
 	jobTitleOptions = [],
 	serverFiltered = false,
@@ -29,11 +31,13 @@ export function EmployeeTable({
 	const filters = employeeFiltersFromServerValues(values)
 	const columns = useEmployeeTableColumns({
 		serverFiltered,
+		canUpdates,
 		filters,
 		jobTitleOptions,
 		setText,
 		setMulti,
 	})
+
 
 	return (
 		<Table.DataTable

@@ -17,7 +17,8 @@ export const employeeServerFilterFields: ServerTableFilterField[] = [
 	{ param: "number", kind: "text" },
 ]
 
-export const employeeServerFilterOnly = ["employees", "pagination", "job_title_options"]
+export const employeeServerFilterOnly = ["employees", "pagination", "job_title_options", "can_updates"]
+
 
 function isEmployeeStatus(value: string): value is EmployeeStatus {
 	return EMPLOYEE_STATUSES.some(status => status === value)

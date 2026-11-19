@@ -12,7 +12,7 @@ import {
 	ShowEditToggle,
 } from "@/features"
 import { Routes } from "@/lib"
-import { usePermissions } from "@/lib/hooks"
+import { useRecordCanUpdate } from "@/lib/hooks"
 
 import { ClientContactForm } from "./ClientContactForm"
 
@@ -31,8 +31,7 @@ const RELATIONSHIP_OPTIONS = [
 
 export function ClientContacts({ client }: ClientContactsProps) {
 	const { t } = useTranslation()
-	const { can } = usePermissions()
-	const canUpdate = can("clients", "update")
+	const canUpdate = useRecordCanUpdate()
 	const contact = client.person.contact
 	const phones = contact?.phones ?? []
 	const emails = contact?.emails ?? []

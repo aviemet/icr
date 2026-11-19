@@ -13,11 +13,7 @@ class ClientPolicy < ApplicationPolicy
           scope.where(id: attendant_ids).or(scope.where(id: managed_ids))
         end
       when "Client"
-        if user.roles.exists?(name: "index", resource_type: "Client", resource_id: nil)
-          scope.where(id: user.person.client.id)
-        else
-          scope.none
-        end
+        scope.where(id: user.person.client.id)
       else
         scope.none
       end
@@ -35,7 +31,7 @@ class ClientPolicy < ApplicationPolicy
       current_employee.clients_attendants.current.exists? ||
         current_employee.clients_managers.current.exists?
     when "Client"
-      user_has_client_role?(:index)
+      user.person.client.present?
     else
       false
     end
@@ -51,7 +47,7 @@ class ClientPolicy < ApplicationPolicy
 
       current_attendant? || manages_client?
     when "Client"
-      user_has_client_role?(:show) && record.id == user.person.client.id
+      own_client?
     else
       false
     end
@@ -82,7 +78,7 @@ class ClientPolicy < ApplicationPolicy
 
       manages_client?
     when "Client"
-      user_has_client_role?(:update) && record.id == user.person.client.id
+      own_client?
     else
       false
     end
@@ -101,7 +97,7 @@ class ClientPolicy < ApplicationPolicy
 
   private
 
-  def user_has_client_role?(role_name)
-    user.roles.exists?(name: role_name.to_s, resource_type: "Client", resource_id: nil)
+  def own_client?
+    user.person.client.present? && record.id == user.person.client.id
   end
 end

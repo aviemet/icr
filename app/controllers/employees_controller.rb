@@ -11,8 +11,8 @@ class EmployeesController < ApplicationController
     reconsider
   ].freeze
 
-  expose :employees, -> { search(Employee.includes_associated.left_joins(:person)) }
-  expose :employee, id: -> { params[:slug] }, find_by: :slug, scope: -> { Employee.includes_associated }
+  expose :employees, -> { policy_scope(search(Employee.includes_associated.left_joins(:person))) }
+  expose :employee, id: -> { params[:slug] }, find_by: :slug, scope: -> { policy_scope(Employee.includes_associated) }
 
   sortable_fields %w(active_at inactive_at number status people.first_name people.last_name)
 
@@ -51,12 +51,16 @@ class EmployeesController < ApplicationController
 
   # @route GET /employees (employees)
   def index
-    authorize employees
+    authorize Employee
 
     paginated_employees = paginate(employees, :employees)
+    page_employees = paginated_employees.to_a
 
     render inertia: "Employees/Index", props: {
-      employees: -> { paginated_employees.render(:index) },
+      employees: -> { page_employees.map { |record| record.render(:index) } },
+      can_updates: -> {
+        page_employees.to_h { |record| [record.id, policy(record).update?] }
+      },
       pagination: -> { {
         count: employees.count,
         **pagination_data(paginated_employees)
@@ -73,9 +77,11 @@ class EmployeesController < ApplicationController
 
     render inertia: "Employees/Show", props: {
       employee: -> { employee_for_show.render(:show) },
+      can_update: -> { policy(employee).update? },
       training_options: -> { Employee::Training.order(:name).render(:options) },
     }
   end
+
 
   # @route GET /employees/new (new_employee)
   def new
@@ -103,6 +109,7 @@ class EmployeesController < ApplicationController
 
     render inertia: "Employees/Schedule", props: {
       employee: -> { employee.render(:show) },
+      can_update: -> { policy(employee).update? },
       schedules: lambda {
         schedules.render(:employee)
       },
@@ -111,14 +118,16 @@ class EmployeesController < ApplicationController
 
   # @route GET /employees/:slug/status (status_employee)
   def status
-    authorize employee, :show?
+    authorize employee, :update?
 
     employee_for_show = Employee.includes_show.find(employee.id)
 
     render inertia: "Employees/Status", props: {
       employee: -> { employee_for_show.render(:show) },
+      can_update: -> { true },
     }
   end
+
 
   # @route PUT /employees/:slug/status (status_employee)
   def update_status

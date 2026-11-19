@@ -19,7 +19,7 @@ class Users::SessionsController < Devise::SessionsController
 
   # @route GET /logout (destroy_user_session)
   def destroy
-    # super
+    stop_acts_as!
     Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)
     yield if block_given?
     respond_to_on_destroy

@@ -1,5 +1,6 @@
 class Api::EmployeesController < Api::ApiController
-  expose :employees, -> { Employee.includes_associated.all }
+  expose :employees, -> { policy_scope(Employee.includes_associated) }
+  expose :employee, id: -> { params[:slug] }, scope: -> { policy_scope(Employee.includes_associated) }, find_by: :slug
 
   # @route GET /api/options/employees (api_employees_options)
   def options
@@ -8,10 +9,11 @@ class Api::EmployeesController < Api::ApiController
 
   # @route GET /api/employees/:slug/schedule {param: :slug} (api_employee_schedule)
   def schedule
-    schedules = Employee
-      .find_by!(slug: params.expect(:slug))
-      .schedule_events_between(*DateRangeCalculator.new(params).call)
+    authorize employee, :schedule?
+
+    schedules = employee.schedule_events_between(*DateRangeCalculator.new(params).call)
 
     render json: schedules.render(:employee)
   end
 end
+
