@@ -25,8 +25,10 @@ export function RecordRow({
 		<Box
 			className={ clsx(
 				classes.row,
-				tone === "warning" && classes.warning,
-				tone === "danger" && classes.danger,
+				{
+					[classes.warning]: tone === "warning",
+					[classes.danger]: tone === "danger",
+				},
 				className,
 			) }
 		>

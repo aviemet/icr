@@ -1,3 +1,4 @@
+export const BRAND_PALETTE = "brand"
 export const DEFAULT_BRAND_COLOR = "#228be6"
 export const BRAND_COLOR_MIN_LIGHTNESS = 0.35
 export const BRAND_COLOR_MAX_LIGHTNESS = 0.55

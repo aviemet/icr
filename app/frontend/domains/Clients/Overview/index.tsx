@@ -1,40 +1,21 @@
 import { useTranslation } from "react-i18next"
-import clsx from "clsx"
 
-import { Avatar, Badge, Group, Link, Text } from "@/components"
+import { Avatar, Badge, Box, Group, Link, Text } from "@/components"
 import { DateTimeFormatter } from "@/components/Formatters"
 import { CalendarIcon, CoinsIcon, HomeIcon, UserGroupIcon, WarningTriangleIcon } from "@/components/Icons"
-import { MetricTile } from "@/features"
-import { Routes } from "@/lib"
+import {
+	BoardActionGrid,
+	BoardActionTile,
+	CountChip,
+	MetricLine,
+	MetricTile,
+} from "@/features"
+import { initials, Routes } from "@/lib"
 
 import * as classes from "./Overview.css"
 
 interface ClientOverviewProps {
 	client: Schema.ClientsShow
-}
-
-function MetricLine({ label, value }: { label: string, value: React.ReactNode }) {
-	return (
-		<div className={ classes.metricLine }>
-			<span className={ classes.metricLabel }>{ label }</span>
-			<span>{ value }</span>
-		</div>
-	)
-}
-
-function CountChip({ value, alert = false }: { value: number, alert?: boolean }) {
-	return (
-		<span className={ clsx(classes.chip, alert && classes.chipAlert) }>
-			{ value }
-		</span>
-	)
-}
-
-function personInitials(name: string) {
-	const parts = name.trim().split(/\s+/).filter(Boolean)
-	if(parts.length === 0) return "?"
-	if(parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
-	return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase()
 }
 
 export function ClientOverview({ client }: ClientOverviewProps) {
@@ -44,8 +25,8 @@ export function ClientOverview({ client }: ClientOverviewProps) {
 		: "default"
 
 	return (
-		<div className={ classes.board }>
-			<div className={ classes.tileRow }>
+		<Box className={ classes.board }>
+			<Box className={ classes.tileRow }>
 				<MetricTile
 					title={ t("views.clients.show.overview.funding") }
 					icon={ <CoinsIcon size={ 16 } /> }
@@ -90,21 +71,21 @@ export function ClientOverview({ client }: ClientOverviewProps) {
 						value={ <CountChip value={ client.emergency_contacts_count } /> }
 					/>
 				</MetricTile>
-			</div>
+			</Box>
 
-			<div className={ classes.secondaryRow }>
+			<Box className={ classes.secondaryRow }>
 				<MetricTile
 					title={ t("views.clients.show.overview.care_team") }
 					icon={ <UserGroupIcon size={ 16 } /> }
 				>
-					<div className={ classes.teamList }>
+					<Box className={ classes.teamList }>
 						{ client.current_manager
 							? (
-								<div className={ classes.teamRow }>
+								<Box className={ classes.teamRow }>
 									<Avatar radius="xl" size={ 32 } color="brand">
-										{ personInitials(client.current_manager.person.name) }
+										{ initials(client.current_manager.person.name) ?? "?" }
 									</Avatar>
-									<div className={ classes.teamMeta }>
+									<Box className={ classes.teamMeta }>
 										<GroupLabel
 											name={ client.current_manager.person.name }
 											badge="Lead"
@@ -112,25 +93,25 @@ export function ClientOverview({ client }: ClientOverviewProps) {
 										<span className={ classes.teamRole }>
 											{ t("views.clients.show.overview.manager") }
 										</span>
-									</div>
-								</div>
+									</Box>
+								</Box>
 							)
 							: (
 								<Text size="sm" c="dimmed">{ t("views.clients.show.overview.none") }</Text>
 							) }
 
 						{ client.current_attendants.map(attendant => (
-							<div key={ attendant.id } className={ classes.teamRow }>
+							<Box key={ attendant.id } className={ classes.teamRow }>
 								<Avatar radius="xl" size={ 32 } color="gray">
-									{ personInitials(attendant.person.name) }
+									{ initials(attendant.person.name) ?? "?" }
 								</Avatar>
-								<div className={ classes.teamMeta }>
+								<Box className={ classes.teamMeta }>
 									<Text size="sm" fw={ 600 }>{ attendant.person.name }</Text>
 									<span className={ classes.teamRole }>
 										{ t("views.clients.show.overview.attendants") }
 									</span>
-								</div>
-							</div>
+								</Box>
+							</Box>
 						)) }
 
 						<MetricLine
@@ -139,42 +120,48 @@ export function ClientOverview({ client }: ClientOverviewProps) {
 								? <Link href={ Routes.household(client.household.slug) }>{ client.household.name }</Link>
 								: "-" }
 						/>
-					</div>
+					</Box>
 				</MetricTile>
 
 				<MetricTile
 					title={ t("views.clients.show.overview.quick_links") }
 					icon={ <CalendarIcon size={ 16 } /> }
 				>
-					<div className={ classes.actionGrid }>
-						<Link href={ `${Routes.client(client.slug)}?tab=profile` } className={ classes.actionTile }>
-							<span className={ classes.actionTitle }>{ t("views.clients.show.tabs.profile") }</span>
-							<span className={ classes.actionHint }>View demographics</span>
-						</Link>
-						<Link href={ `${Routes.client(client.slug)}?tab=medications` } className={ classes.actionTile }>
-							<span className={ classes.actionTitle }>{ t("views.clients.show.tabs.medications") }</span>
-							<span className={ classes.actionHint }>Active prescriptions</span>
-						</Link>
-						<Link href={ `${Routes.client(client.slug)}?tab=documents` } className={ classes.actionTile }>
-							<span className={ classes.actionTitle }>{ t("views.clients.show.tabs.documents") }</span>
-							<span className={ classes.actionHint }>Files and images</span>
-						</Link>
-						<Link href={ `${Routes.client(client.slug)}?tab=incidents` } className={ classes.actionTile }>
-							<span className={ classes.actionTitle }>{ t("views.clients.show.tabs.incidents") }</span>
-							<span className={ classes.actionHint }>Incident log</span>
-						</Link>
-						<Link href={ Routes.scheduleClient(client.slug) } className={ classes.actionTile }>
-							<span className={ classes.actionTitle }>{ t("views.clients.show.overview.schedule") }</span>
-							<span className={ classes.actionHint }>Open calendar</span>
-						</Link>
-						<Link href={ `${Routes.client(client.slug)}?tab=care` } className={ classes.actionTile }>
-							<span className={ classes.actionTitle }>{ t("views.clients.show.tabs.care") }</span>
-							<span className={ classes.actionHint }>Team and services</span>
-						</Link>
-					</div>
+					<BoardActionGrid>
+						<BoardActionTile
+							href={ `${Routes.client(client.slug)}?tab=profile` }
+							title={ t("views.clients.show.tabs.profile") }
+							hint="View demographics"
+						/>
+						<BoardActionTile
+							href={ `${Routes.client(client.slug)}?tab=medications` }
+							title={ t("views.clients.show.tabs.medications") }
+							hint="Active prescriptions"
+						/>
+						<BoardActionTile
+							href={ `${Routes.client(client.slug)}?tab=documents` }
+							title={ t("views.clients.show.tabs.documents") }
+							hint="Files and images"
+						/>
+						<BoardActionTile
+							href={ `${Routes.client(client.slug)}?tab=incidents` }
+							title={ t("views.clients.show.tabs.incidents") }
+							hint="Incident log"
+						/>
+						<BoardActionTile
+							href={ Routes.scheduleClient(client.slug) }
+							title={ t("views.clients.show.overview.schedule") }
+							hint="Open calendar"
+						/>
+						<BoardActionTile
+							href={ `${Routes.client(client.slug)}?tab=care` }
+							title={ t("views.clients.show.tabs.care") }
+							hint="Team and services"
+						/>
+					</BoardActionGrid>
 				</MetricTile>
-			</div>
-		</div>
+			</Box>
+		</Box>
 	)
 }
 

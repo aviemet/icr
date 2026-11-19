@@ -12,7 +12,7 @@ export const wrapper = css`
 	overflow: auto;
 	height: calc(100vh - ${ theme.other.footer.height }px);
 	padding: ${ vars.spacing.sm };
-	background-color: light-dark(${ vars.colors.gray[1] }, ${ vars.colors.dark[8] });
+	background-color: light-dark(${ vars.colors.gray[1] }, ${ vars.colors.gray[9] });
 `
 
 /**
@@ -41,32 +41,72 @@ export const navbar = css`
 	
 	[data-mantine-color-scheme="light"] & {
 		border-right-color: ${ vars.colors.gray[2] };
-		background-color: ${ vars.colors.white };
+		background-color: color-mix(in srgb, ${ vars.colors.primaryColors.filled } 6%, ${ vars.colors.gray[1] });
 	}
 
 	[data-mantine-color-scheme="dark"] & {
-		background-color: ${ vars.colors.dark[8] };
+		background-color: color-mix(in srgb, ${ vars.colors.primaryColors.filled } 12%, black);
 	}
 
-	// TODO: This animation doesn't work with display: none
-	.hidden-when-closed {
+	.hidden-when-closed,
+	.label {
 		opacity: 1;
-		transition: opacity 200ms, display 200ms;
+		visibility: visible;
+		max-width: 14rem;
+		overflow: hidden;
+		white-space: nowrap;
+		transition: opacity 200ms ease, max-width 200ms ease, visibility 0s linear 0s;
+	}
+
+	.user-menu-trigger {
+		transition: width 200ms ease, height 200ms ease;
+	}
+
+	#user-menu {
+		transition: width 200ms ease, height 200ms ease, min-width 200ms ease;
 	}
 
 	&.closed {
-		.hidden-when-closed {
-			display: none;
+		.hidden-when-closed,
+		.label {
+			opacity: 0;
+			visibility: hidden;
+			max-width: 0;
+			transition: opacity 200ms ease, max-width 200ms ease, visibility 0s linear 200ms;
+		}
+
+		.user-menu-trigger {
+			width: 1.75rem;
+			height: 1.75rem;
+			min-height: 1.75rem;
+		}
+
+		#user-menu {
+			width: 1.75rem;
+			height: 1.75rem;
+			min-width: 1.75rem;
+		}
+
+		.nav-section {
+			padding-inline: ${ vars.spacing.xxs };
+		}
+
+		.nav-link {
+			justify-content: center;
+			padding-inline: ${ vars.spacing.xxs };
 		}
 
 		.content {
-			> :not(:first-child) {
-				display: none;
-			}
+			gap: 0;
+			justify-content: center;
 		}
 
 		.indicator {
-			display: none;
+			opacity: 0;
+			visibility: hidden;
+			width: 0;
+			min-width: 0;
+			overflow: hidden;
 		}
 	}
 
@@ -91,6 +131,7 @@ export const nav = css`
 	flex-direction: column;
 	gap: ${ vars.spacing.xs };
 	padding: ${ vars.spacing.xs };
+	transition: padding 200ms ease;
 
 	li {
 		position: relative;
@@ -108,7 +149,7 @@ export const navLink = css`
 	padding: ${ vars.spacing.xs } ${ vars.spacing.sm };
 	color: ${ vars.colors.dark[9] };
 	text-decoration: none;
-	transition: all 0.15s ease-in-out;
+	transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, padding 200ms ease;
 
 	[data-mantine-color-scheme="dark"] & {
 		color: ${ vars.colors.white };

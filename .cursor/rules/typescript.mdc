@@ -51,6 +51,8 @@ Consider the keyword `any` to be forbidden, with NO EXCEPTIONS!
 
   - Use functional components with TypeScript interfaces.
   - Define components using `export function`.
+  - One exported React component per file. Do not nest sibling presentational components as local functions in the same module as a page or board.
+  - Never duplicate presentational JSX across domains/pages. Search `features/` and `components/` first; extract shared widgets there before a second copy exists.
   - Extract reusable logic into custom hooks.
   - Implement proper component composition.
   - Implement proper cleanup in useEffect hooks.

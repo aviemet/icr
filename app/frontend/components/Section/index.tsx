@@ -1,11 +1,9 @@
 import { Box, type BoxProps, type ElementProps, type MantineColor } from "@mantine/core"
 import clsx from "clsx"
-import type { CSSProperties } from "react"
 
 import { vars } from "@/lib/theme"
 
 import { pageChrome } from "../PageChrome"
-
 import * as classes from "./Section.css"
 
 export type SectionVariant = "plain" | "panel"
@@ -39,26 +37,27 @@ export function Section({
 }: SectionProps) {
 	const isPanel = variant === "panel"
 	const resolvedAccent: SectionAccent = accent === undefined ? false : accent
-	const showAccent = isPanel && resolvedAccent !== false
-	const accentColor = showAccent && resolvedAccent !== false
+	const accentColor = isPanel && resolvedAccent !== false
 		? resolveAccentColor(resolvedAccent)
 		: undefined
-
-	const mergedStyle: CSSProperties | undefined = accentColor
-		? { ...style, ["--section-accent" as string]: accentColor }
-		: style
+	const showAccent = accentColor !== undefined
 
 	return (
 		<Box
 			component="section"
 			className={ clsx(
-				isPanel ? pageChrome.panelSurface : classes.root,
-				isPanel && classes.panel,
-				showAccent && classes.accent,
-				fullHeight && classes.fullHeight,
+				{
+					[pageChrome.panelSurface]: isPanel,
+					[classes.root]: !isPanel,
+					[classes.panel]: isPanel,
+					[classes.accent]: showAccent,
+					[classes.fullHeight]: fullHeight,
+				},
 				className,
 			) }
-			style={ mergedStyle }
+			style={ accentColor
+				? [style, { "--section-accent": accentColor }]
+				: style }
 			{ ...props }
 		>
 			{ children }

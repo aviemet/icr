@@ -1,0 +1,33 @@
+---
+description: Never duplicate UI; one component per file; colocate shared pieces in features/components
+alwaysApply: true
+---
+
+# No UI duplication
+
+Copy-pasting JSX helpers into page or domain files is forbidden. That is how tech debt and drift bugs start.
+
+## Rules
+
+1. **One exported React component per file.** Do not define `MetricLine`, `CountChip`, or similar helpers as local functions inside a page/domain board file. Give each its own file.
+2. **Reuse before invent.** Before writing a small presentational widget, search `features/` and `components/` for an existing one. If two screens need the same widget, extract it first, then use it in both.
+3. **Shared board/chrome UI lives in `features/`** (e.g. `features/RecordShow/Board`). Domain folders compose those pieces; they do not redefine them.
+4. **General primitives live in `components/`.** Cross-cutting shells and record patterns live in `features/`. Domain-specific composition lives in `domains/`. Pages stay thin entrypoints.
+5. **User direction to colocate or extract overrides convenience.** If the user says to share, extract, or colocate, do that immediately. Do not leave "temporary" local copies.
+
+## Wrong
+
+```tsx
+function MetricLine(...) { ... }
+function CountChip(...) { ... }
+export function DashboardBoard() { ... }
+```
+
+## Right
+
+```tsx
+import { MetricLine, CountChip } from "@/features"
+export function DashboardBoard() { ... }
+```
+
+With `MetricLine.tsx` and `CountChip.tsx` each in their own file under the shared feature folder.

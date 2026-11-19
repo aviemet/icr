@@ -15,7 +15,7 @@ export const titleRow = css`
 	gap: ${ vars.spacing.sm };
 `
 
-export const icon = css`
+export const iconAlert = css`
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -23,14 +23,6 @@ export const icon = css`
 	height: 1.85rem;
 	border-radius: ${ vars.radius.sm };
 	flex: 0 0 auto;
-	color: ${ vars.colors.primaryColors.filled };
-	background-color: light-dark(
-		color-mix(in srgb, ${ vars.colors.primaryColors[1] } 75%, ${ vars.colors.white }),
-		color-mix(in srgb, ${ vars.colors.primaryColors.filled } 22%, ${ vars.colors.dark[6] })
-	);
-`
-
-export const iconAlert = css`
 	color: light-dark(${ vars.colors.yellow[8] }, ${ vars.colors.yellow[3] });
 	background-color: light-dark(
 		color-mix(in srgb, ${ vars.colors.yellow[2] } 80%, ${ vars.colors.white }),
@@ -39,6 +31,13 @@ export const iconAlert = css`
 `
 
 export const iconDanger = css`
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.85rem;
+	height: 1.85rem;
+	border-radius: ${ vars.radius.sm };
+	flex: 0 0 auto;
 	color: light-dark(${ vars.colors.red[7] }, ${ vars.colors.red[3] });
 	background-color: light-dark(
 		color-mix(in srgb, ${ vars.colors.red[1] } 80%, ${ vars.colors.white }),

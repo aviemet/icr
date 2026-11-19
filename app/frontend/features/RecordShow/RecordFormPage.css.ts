@@ -17,12 +17,25 @@ export const header = css`
 	align-items: flex-start;
 	justify-content: space-between;
 	gap: ${ vars.spacing.md };
+	box-shadow:
+		inset 3px 0 0 0 ${ vars.colors.primaryColors.filled },
+		light-dark(
+			0 1px 2px color-mix(in srgb, ${ vars.colors.dark[9] } 6%, transparent),
+			0 1px 3px color-mix(in srgb, ${ vars.colors.black } 40%, transparent)
+		);
 `
 
 export const identity = css`
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
+	min-width: 0;
+`
+
+export const identityRow = css`
+	display: flex;
+	align-items: center;
+	gap: ${ vars.spacing.sm };
 	min-width: 0;
 `
 

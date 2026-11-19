@@ -6,7 +6,7 @@ import { ContextMenuProvider } from "mantine-contextmenu"
 import { useMemo } from "react"
 
 import { Flash } from "@/components"
-import { clampBrandColor, DEFAULT_BRAND_COLOR } from "@/lib/brandColor"
+import { BRAND_PALETTE, clampBrandColor, DEFAULT_BRAND_COLOR } from "@/lib/brandColor"
 import { useInit, usePageProps } from "@/lib/hooks"
 import { theme as themeObject } from "@/lib/theme"
 
@@ -19,8 +19,6 @@ import "mantine-contextmenu/styles.layer.css"
 import "@mantine/spotlight/styles.css"
 import "mantine-datatable/styles.css"
 import "./global.css"
-
-const BRAND_PALETTE = "brand"
 
 export function UiFrameworkProvider({ children }: { children: React.ReactNode }) {
 	const { settings } = usePageProps()

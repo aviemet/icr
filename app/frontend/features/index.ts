@@ -5,6 +5,11 @@ export * as Dashboard from "./Dashboard"
 export {
 	RecordShowShell,
 	MetricTile,
+	MetricLine,
+	CountChip,
+	MetricValue,
+	BoardActionTile,
+	BoardActionGrid,
 	CollectionPanel,
 	RecordRow,
 	FormBand,

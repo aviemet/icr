@@ -2,6 +2,8 @@ import { MantineProvider } from "@mantine/core"
 import { cleanup, render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
+import { pageChrome } from "@/components/PageChrome"
+import { FormBand, RecordFormPage } from "@/features/RecordShow"
 import { theme } from "@/lib/theme"
 
 vi.mock("@inertiajs/react", () => ({
@@ -15,9 +17,6 @@ vi.mock("@/components", async () => {
 		Page: ({ children }: { children?: React.ReactNode }) => <div data-testid="page">{ children }</div>,
 	}
 })
-
-import { pageChrome } from "@/components/PageChrome"
-import { FormBand, RecordFormPage } from "@/features/RecordShow"
 
 describe("RecordFormPage", () => {
 	beforeEach(() => {

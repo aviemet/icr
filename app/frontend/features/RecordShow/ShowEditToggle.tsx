@@ -6,14 +6,18 @@ import * as classes from "./ShowEditToggle.css"
 
 export type ShowEditMode = "show" | "edit"
 
+export interface ShowEditToggleRenderArgs {
+	editing: boolean
+	controls: React.ReactNode
+}
+
 export interface ShowEditToggleProps {
 	title?: string
 	canUpdate: boolean
 	editLabel?: string
 	cancelLabel?: string
-	show: React.ReactNode
-	edit: React.ReactNode
 	defaultMode?: ShowEditMode
+	children: (args: ShowEditToggleRenderArgs) => React.ReactNode
 }
 
 export function ShowEditToggle({
@@ -21,36 +25,42 @@ export function ShowEditToggle({
 	canUpdate,
 	editLabel = "Edit",
 	cancelLabel = "Cancel",
-	show,
-	edit,
 	defaultMode = "show",
+	children,
 }: ShowEditToggleProps) {
 	const [mode, setMode] = useState<ShowEditMode>(defaultMode)
 	const editing = mode === "edit" && canUpdate
 
+	const controls = canUpdate
+		? (
+			<Group gap="xs">
+				{ editing
+					? (
+						<Button size="xs" variant="default" onClick={ () => setMode("show") }>
+							{ cancelLabel }
+						</Button>
+					)
+					: (
+						<Button size="xs" variant="light" onClick={ () => setMode("edit") }>
+							{ editLabel }
+						</Button>
+					) }
+			</Group>
+		)
+		: null
+
 	return (
 		<div>
-			{ (title || canUpdate) && (
+			{ title && (
 				<div className={ classes.header }>
-					{ title ? <div className={ classes.title }>{ title }</div> : <span /> }
-					{ canUpdate && (
-						<Group gap="xs">
-							{ editing
-								? (
-									<Button size="xs" variant="default" onClick={ () => setMode("show") }>
-										{ cancelLabel }
-									</Button>
-								)
-								: (
-									<Button size="xs" variant="light" onClick={ () => setMode("edit") }>
-										{ editLabel }
-									</Button>
-								) }
-						</Group>
-					) }
+					<div className={ classes.title }>{ title }</div>
+					{ controls }
 				</div>
 			) }
-			{ editing ? edit : show }
+			{ children({
+				editing,
+				controls: title ? null : controls,
+			}) }
 		</div>
 	)
 }

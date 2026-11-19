@@ -1,31 +1,13 @@
 import { css } from "@linaria/core"
 
 import {
-	actionGrid,
-	actionHint,
-	actionTile,
-	actionTitle,
 	board,
-	chip,
-	chipAlert,
-	metricLabel,
-	metricLine,
-	metricValue,
 	tileRow,
 } from "@/features/RecordShow/BoardPrimitives.css"
 import { vars } from "@/lib/theme"
 
 export {
-	actionGrid,
-	actionHint,
-	actionTile,
-	actionTitle,
 	board,
-	chip,
-	chipAlert,
-	metricLabel,
-	metricLine,
-	metricValue,
 	tileRow,
 }
 

@@ -26,11 +26,11 @@ export function MenuLink({
 		<li>
 			<Link
 				href={ href }
-				className={ clsx(classes.navLink, { active }) }
+				className={ clsx(classes.navLink, "nav-link", { active }) }
 			>
 				<Box className="content">
 					{ leftSection }
-					<Box component="span">{ label }</Box>
+					<Box component="span" className="label">{ label }</Box>
 				</Box>
 				{ children && <NextIcon className="indicator" /> }
 			</Link>

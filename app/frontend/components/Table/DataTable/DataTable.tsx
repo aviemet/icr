@@ -179,7 +179,9 @@ export function DataTable<T extends object = Record<string, unknown>>({
 					radius="xl"
 					size="sm"
 					color={ color ?? "gray" }
-					className={ clsx(classes.selectionAvatar, selected && classes.selectionAvatarSelected) }
+					className={ clsx(classes.selectionAvatar, {
+						[classes.selectionAvatarSelected]: selected,
+					}) }
 				>
 					{ selected ? <CheckIcon size={ 14 } /> : <span className={ classes.selectionAvatarInitials }>{ initials }</span> }
 				</Avatar>

@@ -1,6 +1,10 @@
-import { Grid, Group } from "@/components"
+import clsx from "clsx"
+
+import { Box, Grid, Group } from "@/components"
 import { Form, Submit } from "@/components/Form"
+import { ClientIcon, CoinsIcon, PersonIcon } from "@/components/Icons"
 import { DateInput, NumberInput, Textarea, TextInput } from "@/components/Inputs"
+import { pageChrome } from "@/components/PageChrome"
 import { FormBand, FormBandStack } from "@/features"
 import { type HTTPVerb } from "@/lib"
 
@@ -32,7 +36,11 @@ export function ClientForm({ method = "post", to, client, ...props }: ClientForm
 			{ ...props }
 		>
 			<FormBandStack>
-				<FormBand title="Demographics" description="Legal name, client number, and date of birth.">
+				<FormBand
+					title="Demographics"
+					description="Legal name, client number, and date of birth."
+					icon={ <PersonIcon size={ 16 } /> }
+				>
 					<Grid>
 						<Grid.Col span={ { xxs: 12, sm: 4 } }>
 							<TextInput name="client.person.first_name" label="First Name" />
@@ -52,7 +60,11 @@ export function ClientForm({ method = "post", to, client, ...props }: ClientForm
 					</Grid>
 				</FormBand>
 
-				<FormBand title="Funding" description="Regional center and IHSS funding details.">
+				<FormBand
+					title="Funding"
+					description="Regional center and IHSS funding details."
+					icon={ <CoinsIcon size={ 16 } /> }
+				>
 					<Grid>
 						<Grid.Col span={ { xxs: 12, sm: 4 } }>
 							<TextInput name="client.uci_number" label="UCI Number" />
@@ -75,7 +87,11 @@ export function ClientForm({ method = "post", to, client, ...props }: ClientForm
 					</Grid>
 				</FormBand>
 
-				<FormBand title="Communication" description="Language, hospital, and care notes.">
+				<FormBand
+					title="Communication"
+					description="Language, hospital, and care notes."
+					icon={ <ClientIcon size={ 16 } /> }
+				>
 					<Grid>
 						<Grid.Col span={ { xxs: 12, sm: 6 } }>
 							<TextInput name="client.preferred_language" label="Preferred Language" />
@@ -89,9 +105,11 @@ export function ClientForm({ method = "post", to, client, ...props }: ClientForm
 					</Grid>
 				</FormBand>
 
-				<Group justify="flex-end">
-					<Submit>{ client.id ? "Update" : "Create" } Client</Submit>
-				</Group>
+				<Box className={ clsx(pageChrome.tintedSurface) }>
+					<Group justify="flex-end">
+						<Submit>{ client.id ? "Update" : "Create" } Client</Submit>
+					</Group>
+				</Box>
 			</FormBandStack>
 		</Form>
 	)
