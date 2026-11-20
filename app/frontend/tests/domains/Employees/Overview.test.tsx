@@ -1,4 +1,5 @@
 import { MantineProvider } from "@mantine/core"
+import { ModalsProvider } from "@mantine/modals"
 import { cleanup, render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
@@ -15,6 +16,11 @@ vi.mock("@inertiajs/react", () => ({
 	Link: ({ children, href, ...props }: { children?: React.ReactNode, href: string }) => (
 		<a href={ href } { ...props }>{ children }</a>
 	),
+}))
+
+vi.mock("@/lib/hooks", async (importOriginal) => ({
+	...await importOriginal<typeof import("@/lib/hooks")>(),
+	useRecordCanUpdate: () => false,
 }))
 
 function buildEmployee(overrides: Partial<Schema.EmployeesShow> = {}): Schema.EmployeesShow {
@@ -48,6 +54,8 @@ function buildEmployee(overrides: Partial<Schema.EmployeesShow> = {}): Schema.Em
 		color_mappings: {},
 		created_at: new Date("2024-01-01"),
 		credentials: [],
+		desired_compensation_currency: "USD",
+		desired_compensation_period: "hourly",
 		documents: [],
 		eligible_for_hire: true,
 		employees_trainings: [],
@@ -56,6 +64,7 @@ function buildEmployee(overrides: Partial<Schema.EmployeesShow> = {}): Schema.Em
 		job_title: { id: "jt-1", name: "Caregiver" } as Schema.EmployeeJobTitle,
 		managed_clients: [],
 		managers_employees_managers: [],
+		offers: [],
 		pay_rates: [],
 		support_contacts: [],
 		updated_at: new Date("2024-01-01"),
@@ -84,7 +93,9 @@ describe("EmployeeOverview", () => {
 	it("renders assignment, alert tiles, and quick action links", () => {
 		render(
 			<MantineProvider theme={ theme }>
-				<EmployeeOverview employee={ buildEmployee() } />
+				<ModalsProvider>
+					<EmployeeOverview employee={ buildEmployee() } />
+				</ModalsProvider>
 			</MantineProvider>,
 		)
 
@@ -94,5 +105,22 @@ describe("EmployeeOverview", () => {
 		expect(screen.getByText("views.employees.show.tabs.profile")).toBeInTheDocument()
 		expect(screen.getByText("views.employees.show.overview.payroll_review")).toBeInTheDocument()
 		expect(screen.getByText("Schedule")).toBeInTheDocument()
+	})
+
+	it("shows a pending termination banner", () => {
+		render(
+			<MantineProvider theme={ theme }>
+				<ModalsProvider>
+					<EmployeeOverview
+						employee={ buildEmployee({
+							pending_termination_at: new Date("2026-04-20T23:59:59Z"),
+						}) }
+					/>
+				</ModalsProvider>
+			</MantineProvider>,
+		)
+
+		expect(screen.getByText("Pending termination")).toBeInTheDocument()
+		expect(screen.getByText(/Scheduled for/)).toBeInTheDocument()
 	})
 })

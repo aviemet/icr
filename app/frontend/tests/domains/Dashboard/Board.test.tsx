@@ -1,4 +1,5 @@
 import { MantineProvider } from "@mantine/core"
+import { ModalsProvider } from "@mantine/modals"
 import { cleanup, render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
@@ -36,6 +37,9 @@ vi.mock("@/lib/hooks", () => ({
 		settings: { company_name: "ICR SLS" },
 		auth: { user: { person: { name: "Ada Lovelace" } } },
 	}),
+	usePermissions: () => ({
+		can: () => true,
+	}),
 }))
 
 function buildDashboard(overrides: Partial<Schema.DashboardStats> = {}): Schema.DashboardStats {
@@ -45,10 +49,13 @@ function buildDashboard(overrides: Partial<Schema.DashboardStats> = {}): Schema.
 		active_team_count: 2,
 		hiring_pipeline_count: 3,
 		pending_timesheet_count: 1,
+		open_shift_count: 0,
 		week_tracked_hours: 40.5,
+		pending_terminations: [],
 		upcoming_events: [
 			{ id: "event-1", name: "Morning shift", starts_at: "2026-11-19T09:00:00Z" } as Schema.DashboardStatsUpcomingEvent,
 		],
+		open_shifts: [],
 		activity_items: [
 			{ id: "emp-1", kind: "employee", name: "Lawrence Schultz" } as Schema.DashboardStatsActivityItem,
 		],
@@ -77,7 +84,9 @@ describe("DashboardBoard", () => {
 	it("renders welcome chrome, metric tiles, and action links", () => {
 		render(
 			<MantineProvider theme={ theme }>
-				<DashboardBoard dashboard={ buildDashboard() } />
+				<ModalsProvider>
+					<DashboardBoard dashboard={ buildDashboard() } />
+				</ModalsProvider>
 			</MantineProvider>,
 		)
 
@@ -90,5 +99,56 @@ describe("DashboardBoard", () => {
 		expect(screen.getByText("New employee: Lawrence Schultz")).toBeInTheDocument()
 		expect(screen.getByText("views.dashboard.clients.view_all")).toBeInTheDocument()
 		expect(screen.getByText("views.dashboard.time.view")).toBeInTheDocument()
+	})
+
+	it("renders open shifts with alert count and schedule links", () => {
+		render(
+			<MantineProvider theme={ theme }>
+				<ModalsProvider>
+					<DashboardBoard
+						dashboard={ buildDashboard({
+							open_shift_count: 2,
+							open_shifts: [
+								{
+									id: "shift-1",
+									client_name: "Maria Santos",
+									client_slug: "maria-santos",
+									starts_at: "2026-11-21T09:00:00Z",
+									ends_at: "2026-11-21T17:00:00Z",
+								},
+							],
+						}) }
+					/>
+				</ModalsProvider>
+			</MantineProvider>,
+		)
+
+		expect(screen.getByText("views.dashboard.schedule.open_shifts")).toBeInTheDocument()
+		expect(screen.getByText("Maria Santos")).toBeInTheDocument()
+	})
+
+	it("renders pending terminations with cancel", () => {
+		render(
+			<MantineProvider theme={ theme }>
+				<ModalsProvider>
+					<DashboardBoard
+						dashboard={ buildDashboard({
+							pending_terminations: [
+								{
+									id: "emp-2",
+									slug: "waldo-heathcote",
+									name: "Waldo Heathcote",
+									inactive_at: new Date("2026-04-20T23:59:59Z"),
+								},
+							],
+						}) }
+					/>
+				</ModalsProvider>
+			</MantineProvider>,
+		)
+
+		expect(screen.getByText("Pending terminations")).toBeInTheDocument()
+		expect(screen.getByText("Waldo Heathcote")).toBeInTheDocument()
+		expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument()
 	})
 })

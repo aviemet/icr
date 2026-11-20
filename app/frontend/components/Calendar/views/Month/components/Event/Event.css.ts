@@ -10,6 +10,8 @@ const triangleWidth = 3
 export const showMore = css`
 `
 
+export const openShift = css``
+
 export const monthEventWrapper = css`
   --column-start: 1;
   --column-span: 1;
@@ -28,6 +30,10 @@ export const monthEventWrapper = css`
 
   &.${ showMore } {
     grid-column: var(--column-start) / span var(--column-span);
+  }
+
+  &.${ openShift } {
+    border-left: 3px solid var(--event-border-color, ${ vars.colors.teal[6] });
   }
 `
 

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest"
 
-import { confirmBusyAction } from "@/domains/TimeSheets/ReviewTable/confirmBusyAction"
+import { confirmBusyAction } from "@/features"
 
 describe("confirmBusyAction", () => {
 	it("keeps the modal open and shows loading while the action runs", async () => {

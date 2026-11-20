@@ -12,6 +12,7 @@ export type SectionAccent = boolean | MantineColor
 export interface SectionProps extends BoxProps, ElementProps<"section"> {
 	fullHeight?: boolean
 	variant?: SectionVariant
+	wrapper?: boolean
 	accent?: SectionAccent
 }
 
@@ -30,12 +31,14 @@ export function Section({
 	children,
 	fullHeight = false,
 	variant = "plain",
+	wrapper = false,
 	accent,
 	className,
 	style,
 	...props
 }: SectionProps) {
 	const isPanel = variant === "panel"
+	const isWrapperPanel = isPanel && wrapper
 	const resolvedAccent: SectionAccent = accent === undefined ? false : accent
 	const accentColor = isPanel && resolvedAccent !== false
 		? resolveAccentColor(resolvedAccent)
@@ -47,7 +50,8 @@ export function Section({
 			component="section"
 			className={ clsx(
 				{
-					[pageChrome.panelSurface]: isPanel,
+					[pageChrome.panelSurface]: isPanel && !isWrapperPanel,
+					[pageChrome.panelWrapperSurface]: isWrapperPanel,
 					[classes.root]: !isPanel,
 					[classes.panel]: isPanel,
 					[classes.accent]: showAccent,

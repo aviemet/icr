@@ -56,6 +56,22 @@ RSpec.describe "/clients" do
       expect_inertia.to render_component "Clients/Show"
     end
 
+    it "includes future open shift count for admins" do
+      client = create(:client)
+      future_event = create(:calendar_event, starts_at: 1.day.from_now, ends_at: 1.day.from_now + 2.hours)
+      create(:event_participant, calendar_event: future_event, participant: client)
+      create(:shift, :open, calendar_event: future_event)
+      past_event = create(:calendar_event, starts_at: 1.day.ago, ends_at: 1.day.ago + 2.hours)
+      create(:event_participant, calendar_event: past_event, participant: client)
+      create(:shift, :open, calendar_event: past_event)
+
+      get client_url(client)
+
+      expect(response).to have_http_status(:ok)
+      expect(inertia.props[:can_view_open_shifts]).to be(true)
+      expect(inertia.props[:open_shifts_count]).to eq(1)
+    end
+
     it "ships overview props in lockstep for related collections" do
       client = create(:client, :with_profile)
       allergy = create(:client_allergy, client: client)

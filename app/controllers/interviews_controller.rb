@@ -6,7 +6,9 @@ class InterviewsController < ApplicationController
 
   sortable_fields %w(employee_id scheduled_at notes)
 
-  strong_params :employee_interview, permit: [:employee_id, :scheduled_at, :notes]
+  strong_params :employee_interview, permit: [
+    :employee_id, :scheduled_at, :notes, :location, :interview_type,
+  ]
 
   # @route GET /employees/interviews (interviews)
   def index

@@ -7,14 +7,20 @@ import { useStickySentinel } from "@/lib/hooks/useStickySentinel"
 
 import { BaseCalendarEvent, EventResources, useCalendarContext } from "../../"
 import { EventNode } from "./components/Event"
+import * as eventClasses from "./components/Event/Event.css"
 import { TimeColumn } from "./components/TimeColumn"
 import { TimeIndicator } from "./components/TimeIndicator"
+import {
+	getTimeGridSlotAnchorBox,
+	resolveTimeGridBackgroundClick,
+} from "./resolveTimeGridBackgroundClick"
 import * as classes from "./TimeGrid.css"
 import { CalendarTransitionContainer } from "../../lib/CalendarTransitionContainer"
 import { useDisplayStrategy, ViewStrategyName } from "../../lib/displayStrategies"
 import {
 	TimeGridDisplayProperties,
 } from "../../lib/displayStrategies/types"
+import * as baseEventClasses from "../Event/Event.css"
 
 export interface TimeGridHeading {
 	date: Date
@@ -60,6 +66,59 @@ export function TimeGrid<
 		onClick({ type: "event", event, element })
 	}, [onClick])
 
+	const animationContainerRef = useRef<HTMLDivElement>(null)
+	const contentAreaRef = useRef<HTMLDivElement>(null)
+	const eventsContainerRef = useRef<HTMLDivElement>(null)
+	const slotAnchorRef = useRef<HTMLDivElement>(null)
+
+	const handleBackgroundClick = useCallback((mouseEvent: React.MouseEvent<HTMLDivElement>) => {
+		if(!(mouseEvent.target instanceof HTMLElement)) return
+		if(
+			mouseEvent.target.closest(`.${eventClasses.eventWrapper}`)
+			|| mouseEvent.target.closest(`.${baseEventClasses.event}`)
+		) {
+			return
+		}
+
+		const eventsContainer = eventsContainerRef.current
+		const slotAnchor = slotAnchorRef.current
+		if(!eventsContainer || !slotAnchor) return
+
+		const resolved = resolveTimeGridBackgroundClick({
+			clientX: mouseEvent.clientX,
+			clientY: mouseEvent.clientY,
+			container: eventsContainer,
+			columnHeadings,
+			timeIncrement,
+			localizer,
+		})
+		if(!resolved) return
+
+		const eventsRect = eventsContainer.getBoundingClientRect()
+		const anchorBox = getTimeGridSlotAnchorBox({
+			containerWidth: eventsRect.width,
+			containerHeight: eventsRect.height,
+			columnCount: columnHeadings.length,
+			columnIndex: resolved.columnIndex,
+			rowIndex: resolved.rowIndex,
+			timeIncrement,
+		})
+		if(!anchorBox) return
+
+		slotAnchor.style.left = `${anchorBox.left}px`
+		slotAnchor.style.top = `${anchorBox.top}px`
+		slotAnchor.style.width = `${anchorBox.width}px`
+		slotAnchor.style.height = `${anchorBox.height}px`
+
+		onClick({
+			type: "background",
+			date: resolved.date,
+			time: resolved.time,
+			resourceId: resolved.resourceId,
+			element: slotAnchor,
+		})
+	}, [columnHeadings, localizer, onClick, timeIncrement])
+
 	const [headerRef, isStuck] = useStickySentinel<HTMLDivElement>()
 
 	const localStartTime = startTime || localizer.startOf(new Date(), "day")
@@ -77,9 +136,6 @@ export function TimeGrid<
 	)
 
 	const rowsPerDay = (24 * 60) / timeIncrement
-
-	const animationContainerRef = useRef<HTMLDivElement>(null)
-	const contentAreaRef = useRef<HTMLDivElement>(null)
 
 	// Separate all-day events from standard events to be rendered in different sections
 	const { allDayEvents, standardEvents } = useMemo(() => {
@@ -182,19 +238,17 @@ export function TimeGrid<
 						ref={ contentAreaRef }
 						className={ clsx(classes.contentArea) }
 						style={ { "--rows-per-day": rowsPerDay } as React.CSSProperties }
+						onClick={ handleBackgroundClick }
 					>
 						<Box className={ clsx(classes.gridLines) } />
 
 						<TimeIndicator containerRef={ contentAreaRef } />
 
-						<Box className={ clsx(classes.eventsContainer) }>
+						<Box ref={ eventsContainerRef } className={ clsx(classes.eventsContainer) }>
 							{ columnHeadings.map((heading, columnIndex) => {
 								const key = groupByResource && heading.resourceId !== undefined
 									? String(heading.resourceId)
 									: localizer.startOf(heading.date, "day").toISOString()
-
-								const columnEvents = eventsByColumn?.get(key)
-								if(!columnEvents) return null
 
 								return (
 									<Box
@@ -208,6 +262,11 @@ export function TimeGrid<
 									</Box>
 								)
 							}) }
+							<Box
+								ref={ slotAnchorRef }
+								className={ clsx(classes.slotAnchor) }
+								aria-hidden
+							/>
 						</Box>
 					</Box>
 				</CalendarTransitionContainer>

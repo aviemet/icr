@@ -13,7 +13,6 @@ class EmployeePolicy < ApplicationPolicy
     end
   end
 
-
   def schedule?
     show?
   end

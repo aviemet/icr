@@ -10,7 +10,7 @@ module Employee::StateMachine
       state :employed
       state :declined
       state :terminated
-      state :application_withdrawn
+      state :withdrawn
 
       event :make_offer do
         transitions from: :applicant,
@@ -26,9 +26,14 @@ module Employee::StateMachine
           guard: :eligible_for_hire?
       end
 
-      event :close_application do
-        transitions from: :applicant,
-          to: :application_withdrawn
+      event :withdraw_application do
+        transitions from: [:applicant, :offered],
+          to: :withdrawn
+      end
+
+      event :decline_application do
+        transitions from: [:applicant, :offered],
+          to: :declined
       end
 
       event :accept_offer do
@@ -50,7 +55,7 @@ module Employee::StateMachine
       end
 
       event :reconsider do
-        transitions from: [:declined, :terminated, :application_withdrawn],
+        transitions from: [:declined, :terminated, :withdrawn],
           to: :applicant,
           after: :make_offer,
           guard: :eligible_for_hire?
@@ -78,6 +83,7 @@ module Employee::StateMachine
     end
 
     def offer_declined
+      self.ineligibility_reason = ineligibility_reason.presence || "Offer declined"
     end
   end
 end

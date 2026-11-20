@@ -7,7 +7,7 @@
 #  updated_at        :datetime         not null
 #  calendar_event_id :uuid             not null
 #  category_id       :uuid             not null
-#  employee_id       :uuid             not null
+#  employee_id       :uuid
 #  timesheet_id      :uuid
 #
 # Indexes

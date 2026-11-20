@@ -26,6 +26,12 @@ export function EmployeeInterviewForm({ method = "post", to, employee_interview,
 					<TextInput name="employee_interview.scheduled_at" label="Scheduled_at" />
 				</Grid.Col>
 				<Grid.Col>
+					<TextInput name="employee_interview.location" label="Location" />
+				</Grid.Col>
+				<Grid.Col>
+					<TextInput name="employee_interview.interview_type" label="Interview Type" />
+				</Grid.Col>
+				<Grid.Col>
 					<TextInput name="employee_interview.notes" label="Notes" />
 				</Grid.Col>
 

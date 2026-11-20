@@ -2,7 +2,7 @@ import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { describe, it, expect } from "vitest"
 
-import { currency, datetime } from "@/lib/formatters"
+import { currency, currencyInputFormat, datetime } from "@/lib/formatters"
 
 dayjs.extend(relativeTime)
 
@@ -13,6 +13,25 @@ describe("currency", () => {
 
 	it("accepts currency code", () => {
 		expect(currency(100, "EUR")).toMatch(/\d+[,.]?\d*\s*€|€\s*\d+[,.]?\d*/)
+	})
+})
+
+describe("currencyInputFormat", () => {
+	it("returns en-US separators and symbol for USD", () => {
+		expect(currencyInputFormat("en-US", "USD")).toEqual({
+			decimalSeparator: ".",
+			thousandSeparator: ",",
+			currencySymbol: "$",
+			decimalScale: 2,
+		})
+	})
+
+	it("returns de-DE separators for EUR", () => {
+		const format = currencyInputFormat("de-DE", "EUR")
+		expect(format.decimalSeparator).toBe(",")
+		expect(format.thousandSeparator).toBe(".")
+		expect(format.currencySymbol).toBe("€")
+		expect(format.decimalScale).toBe(2)
 	})
 })
 

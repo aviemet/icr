@@ -3,7 +3,7 @@ import { Loader } from "@mantine/core"
 import { Spotlight, type SpotlightActionData } from "@mantine/spotlight"
 import React, { useMemo, useState } from "react"
 
-import { SearchIcon, DashboardIcon, ClientIcon, EmployeeIcon, SettingsIcon, ClockIcon, HelpingIcon } from "@/components/Icons"
+import { SearchIcon, DashboardIcon, ClientIcon, EmployeeIcon, SettingsIcon, ClockIcon, HelpingIcon, PeopleIcon } from "@/components/Icons"
 import { Routes } from "@/lib"
 import { useDebouncedValue, usePermissions } from "@/lib/hooks"
 import { useGetSpotlights } from "@/queries"
@@ -53,12 +53,32 @@ export function SpotlightComponent() {
 			})
 		}
 
+		if(can("employees", "index")) {
+			spotlightStaticActions.push({
+				id: "applicants",
+				label: "Applicants",
+				description: "View applicants",
+				onClick: () => router.visit(Routes.applicants()),
+				leftSection: <EmployeeIcon />,
+			})
+		}
+
 		if(can("employee/trainings", "index")) {
 			spotlightStaticActions.push({
 				id: "trainings",
 				label: "Employee trainings",
 				description: "View employee trainings",
 				onClick: () => router.visit(Routes.trainings()),
+			})
+		}
+
+		if(can("clients_managers", "index")) {
+			spotlightStaticActions.push({
+				id: "caseloads",
+				label: "Caseloads",
+				description: "View caseloads",
+				onClick: () => router.visit(Routes.caseloads()),
+				leftSection: <PeopleIcon />,
 			})
 		}
 

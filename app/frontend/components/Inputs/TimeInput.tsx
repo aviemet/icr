@@ -39,6 +39,7 @@ export function TimeInput({
 	required = false,
 	value,
 	withDropdown = true,
+	minutesStep = 5,
 	popoverProps,
 	error,
 	ref,
@@ -59,6 +60,7 @@ export function TimeInput({
 				value={ pickerValue }
 				withDropdown={ withDropdown }
 				format={ format }
+				minutesStep={ minutesStep }
 				leftSection={ <ClockIcon /> }
 				leftSectionPointerEvents="none"
 				error={ error ?? fieldError }

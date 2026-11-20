@@ -64,7 +64,6 @@ export function DepartmentTable({ records }: DepartmentTableProps) {
 			withBorder
 			radius="md"
 			shadow="xs"
-			className={ classes.panel }
 			style={ { overflow: "hidden" } }
 		>
 			<Table.Provider>

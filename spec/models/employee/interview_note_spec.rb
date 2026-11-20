@@ -18,7 +18,7 @@
 # Foreign Keys
 #
 #  fk_rails_...  (employee_id => employees.id)
-#  fk_rails_...  (interview_id => employees.id)
+#  fk_rails_...  (interview_id => interviews.id)
 #
 require "rails_helper"
 

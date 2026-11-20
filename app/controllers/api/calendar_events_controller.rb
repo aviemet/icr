@@ -2,7 +2,6 @@ class Api::CalendarEventsController < Api::ApiController
   expose :calendar_events, -> { policy_scope(Calendar::Event) }
   expose :calendar_event, model: Calendar::Event, scope: -> { policy_scope(Calendar::Event) }
 
-
   before_action :resolve_category_slug, only: [:create, :update]
 
   strong_params :calendar_event, permit: [:name, :starts_at, :ends_at, :parent_id, :category_id, shift_attributes: [:employee_id], event_participants_attributes: [:participant_id, :participant_type]]
@@ -14,7 +13,7 @@ class Api::CalendarEventsController < Api::ApiController
     if calendar_event.save
       render json: calendar_event.render, status: :created
     else
-      render json: { errors: calendar_event.errors }, status: :see_other
+      render json: { errors: calendar_event_error_messages }, status: :unprocessable_content
     end
   end
 
@@ -26,7 +25,7 @@ class Api::CalendarEventsController < Api::ApiController
     if calendar_event.update(calendar_event_params)
       render json: calendar_event.render, status: :created
     else
-      render json: { errors: calendar_event.errors }, status: :see_other
+      render json: { errors: calendar_event_error_messages }, status: :unprocessable_content
     end
   end
 
@@ -42,6 +41,10 @@ class Api::CalendarEventsController < Api::ApiController
   end
 
   private
+
+  def calendar_event_error_messages
+    calendar_event.errors.to_hash(true).transform_values { |messages| messages.first.to_s }
+  end
 
   # rubocop:disable-next Rails/StrongParametersExpect
   def resolve_category_slug

@@ -2,29 +2,37 @@
 #
 # Table name: employees
 #
-#  id                   :uuid             not null, primary key
-#  active_at            :date
-#  color                :string
-#  communication_notes  :text
-#  eligible_for_hire    :boolean          default(TRUE), not null
-#  inactive_at          :date
-#  ineligibility_reason :text
-#  number               :string
-#  preferred_language   :string
-#  slug                 :string           not null
-#  status               :integer
-#  termination_reason   :text
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#  person_id            :uuid             not null
+#  id                            :uuid             not null, primary key
+#  active_at                     :date
+#  application_source            :string
+#  color                         :string
+#  communication_notes           :text
+#  desired_compensation_cents    :integer
+#  desired_compensation_currency :string           default("USD"), not null
+#  desired_compensation_period   :integer
+#  eligible_for_hire             :boolean          default(TRUE), not null
+#  hiring_notes                  :text
+#  inactive_at                   :datetime
+#  ineligibility_reason          :text
+#  number                        :string
+#  preferred_language            :string
+#  slug                          :string           not null
+#  status                        :integer
+#  termination_reason            :text
+#  created_at                    :datetime         not null
+#  updated_at                    :datetime         not null
+#  desired_job_title_id          :uuid
+#  person_id                     :uuid             not null
 #
 # Indexes
 #
-#  index_employees_on_person_id  (person_id)
-#  index_employees_on_slug       (slug) UNIQUE
+#  index_employees_on_desired_job_title_id  (desired_job_title_id)
+#  index_employees_on_person_id             (person_id)
+#  index_employees_on_slug                  (slug) UNIQUE
 #
 # Foreign Keys
 #
+#  fk_rails_...  (desired_job_title_id => job_titles.id)
 #  fk_rails_...  (person_id => people.id)
 #
 require "rails_helper"

@@ -25,6 +25,8 @@ class ClientsManager < ApplicationRecord
   belongs_to :manager, class_name: "Employee"
   belongs_to :client, inverse_of: :clients_managers
 
+  resourcify
+
   attribute :starts_at, :datetime, default: -> { Time.current }
 
   validates :starts_at, presence: true

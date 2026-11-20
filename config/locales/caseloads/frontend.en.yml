@@ -1,0 +1,33 @@
+---
+en:
+  views:
+    caseloads:
+      title: Caseloads
+      subtitle: Assign clients to facilitators
+      metrics:
+        facilitators: Facilitators
+        on_caseload: On caseload
+        unassigned: Unassigned
+      roster:
+        title: Facilitators
+        empty: No facilitators found
+        caseload_size: "%{count} clients"
+        select_hint: Select a facilitator to review their caseload
+      clients:
+        title: Caseload
+        empty: No clients on this caseload
+        unassign: Unassign
+        unassign_title: Unassign client
+        unassign_confirm: Remove %{client} from %{facilitator}'s caseload?
+        unassign_confirm_button: Unassign
+        unassign_cancel: Cancel
+      unassigned:
+        title: Unassigned clients
+        empty: All active clients are on a facilitator caseload
+        assign: Assign
+        assign_title: Assign client
+        assign_confirm: Assign %{client} to a facilitator?
+        assign_confirm_button: Assign
+        assign_cancel: Cancel
+        facilitator_label: Facilitator
+        pick_facilitator: Select a facilitator first

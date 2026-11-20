@@ -1,46 +1,50 @@
-import { type ServerTableFilterField } from "@/components/Table/serverTableFilters"
-
 import {
-	defaultEmployeeColumnFilters,
-	EMPLOYEE_STATUSES,
-	type EmployeeColumnFilters,
-	type EmployeeStatus,
-} from "./filterEmployees"
+	emptyDateRangeFilterValue,
+	type DateRangeFilterValue,
+} from "@/components/Table/Filters"
+import {
+	type ServerTableFilterField,
+	type ServerTableFilterValues,
+} from "@/components/Table/serverTableFilters"
+
+import { type EmployeeColumnFilters } from "./filterEmployees"
 
 export const employeeServerFilterFields: ServerTableFilterField[] = [
 	{ param: "first_name", kind: "text" },
 	{ param: "last_name", kind: "text" },
 	{ param: "job_title", kind: "text" },
 	{ param: "job_titles", kind: "multi" },
-	{ param: "statuses", kind: "multi", default: ["employed"] },
-	{ param: "active_at", kind: "text" },
+	{ param: "active_at", kind: "date_range" },
 	{ param: "number", kind: "text" },
 ]
 
-export const employeeServerFilterOnly = ["employees", "pagination", "job_title_options", "can_updates"]
+export const employeeServerFilterOnly = [
+	"employees",
+	"pagination",
+	"job_title_options",
+	"can_updates",
+	"can_scope_employees",
+	"workforce_view",
+]
 
-
-function isEmployeeStatus(value: string): value is EmployeeStatus {
-	return EMPLOYEE_STATUSES.some(status => status === value)
+function isDateRangeValue(value: string | string[] | DateRangeFilterValue | undefined): value is DateRangeFilterValue {
+	return typeof value === "object" && value !== null && !Array.isArray(value) && "start" in value && "end" in value
 }
 
 export function employeeFiltersFromServerValues(
-	values: Record<string, string | string[]>,
+	values: ServerTableFilterValues,
 ): EmployeeColumnFilters {
-	const statusesValue = values.statuses
-	const statuses = Array.isArray(statusesValue)
-		? statusesValue.filter(isEmployeeStatus)
-		: defaultEmployeeColumnFilters.statuses
-
 	const jobTitlesValue = values.job_titles
+	const hireDateValue = values.active_at
 
 	return {
 		firstName: typeof values.first_name === "string" ? values.first_name : "",
 		lastName: typeof values.last_name === "string" ? values.last_name : "",
 		jobTitle: typeof values.job_title === "string" ? values.job_title : "",
 		jobTitles: Array.isArray(jobTitlesValue) ? jobTitlesValue : [],
-		statuses,
-		hireDate: typeof values.active_at === "string" ? values.active_at : "",
+		hireDate: isDateRangeValue(hireDateValue)
+			? hireDateValue
+			: { ...emptyDateRangeFilterValue },
 		number: typeof values.number === "string" ? values.number : "",
 	}
 }

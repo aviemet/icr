@@ -4,7 +4,6 @@ class HouseholdsController < ApplicationController
   expose :households, -> { policy_scope(search(Household.includes_associated)) }
   expose :household, id: ->{ params[:slug] }, scope: ->{ policy_scope(Household.includes_associated) }, find_by: :slug
 
-
   sortable_fields %w(householdable_id householdable_type type number notes issued_at expires_at extra_fields)
 
   strong_params :household, permit: [:householdable_id, :householdable_type, :type, :number, :notes, :issued_at, :expires_at, :extra_fields]
@@ -12,7 +11,6 @@ class HouseholdsController < ApplicationController
   # @route GET /households (households)
   def index
     authorize Household
-
 
     paginated_households = paginate(households, :households)
 

@@ -1,3 +1,8 @@
+import {
+	emptyDateRangeFilterValue,
+	type DateRangeFilterValue,
+} from "./Filters"
+
 export type ServerTableTextField = {
 	param: string
 	kind: "text"
@@ -9,9 +14,17 @@ export type ServerTableMultiField = {
 	default?: string[]
 }
 
-export type ServerTableFilterField = ServerTableTextField | ServerTableMultiField
+export type ServerTableDateRangeField = {
+	param: string
+	kind: "date_range"
+}
 
-export type ServerTableFilterValues = Record<string, string | string[]>
+export type ServerTableFilterField =
+	| ServerTableTextField
+	| ServerTableMultiField
+	| ServerTableDateRangeField
+
+export type ServerTableFilterValues = Record<string, string | string[] | DateRangeFilterValue>
 
 function readArrayParam(params: URLSearchParams, key: string) {
 	const bracketValues = params.getAll(`${key}[]`)
@@ -44,6 +57,47 @@ function hasParam(params: URLSearchParams, key: string) {
 	return params.has(key) || params.has(`${key}[]`)
 }
 
+function dateRangeStartKey(param: string) {
+	return `${param}[start]`
+}
+
+function dateRangeEndKey(param: string) {
+	return `${param}[end]`
+}
+
+function dateRangeTypeKey(param: string) {
+	return `${param}[type]`
+}
+
+function deleteDateRangeParam(params: URLSearchParams, key: string) {
+	params.delete(dateRangeStartKey(key))
+	params.delete(dateRangeEndKey(key))
+	params.delete(dateRangeTypeKey(key))
+}
+
+function readDateRangeParam(params: URLSearchParams, key: string): DateRangeFilterValue {
+	return {
+		start: params.get(dateRangeStartKey(key)) ?? "",
+		end: params.get(dateRangeEndKey(key)) ?? "",
+	}
+}
+
+function writeDateRangeParam(params: URLSearchParams, key: string, value: DateRangeFilterValue) {
+	deleteDateRangeParam(params, key)
+
+	if(value.start === "" || value.end === "") {
+		return
+	}
+
+	params.set(dateRangeStartKey(key), value.start)
+	params.set(dateRangeEndKey(key), value.end)
+	params.set(dateRangeTypeKey(key), "range")
+}
+
+function isDateRangeValue(value: string | string[] | DateRangeFilterValue | undefined): value is DateRangeFilterValue {
+	return typeof value === "object" && value !== null && !Array.isArray(value) && "start" in value && "end" in value
+}
+
 function arraysEqual(left: string[], right: string[]) {
 	return left.length === right.length && left.every((value, index) => value === right[index])
 }
@@ -54,6 +108,8 @@ function emptyValues(fields: ServerTableFilterField[]) {
 	for(const field of fields) {
 		if(field.kind === "text") {
 			values[field.param] = ""
+		} else if(field.kind === "date_range") {
+			values[field.param] = { ...emptyDateRangeFilterValue }
 		} else if(field.default) {
 			values[field.param] = [...field.default]
 		} else {
@@ -69,6 +125,14 @@ function isDefaultValues(fields: ServerTableFilterField[], values: ServerTableFi
 		const value = values[field.param]
 		if(field.kind === "text") {
 			return value === "" || value === undefined
+		}
+
+		if(field.kind === "date_range") {
+			if(!isDateRangeValue(value)) {
+				return true
+			}
+
+			return value.start === "" || value.end === ""
 		}
 
 		const multiValue = Array.isArray(value) ? value : []
@@ -89,6 +153,11 @@ export function readServerTableFilters(
 	for(const field of fields) {
 		if(field.kind === "text") {
 			values[field.param] = params.get(field.param) ?? ""
+			continue
+		}
+
+		if(field.kind === "date_range") {
+			values[field.param] = readDateRangeParam(params, field.param)
 			continue
 		}
 
@@ -113,6 +182,8 @@ export function writeServerTableFilters(
 	for(const field of fields) {
 		if(field.kind === "text") {
 			params.delete(field.param)
+		} else if(field.kind === "date_range") {
+			deleteDateRangeParam(params, field.param)
 		} else {
 			deleteArrayParam(params, field.param)
 		}
@@ -131,6 +202,13 @@ export function writeServerTableFilters(
 			const textValue = typeof value === "string" ? value : ""
 			if(textValue !== "") {
 				params.set(field.param, textValue)
+			}
+			continue
+		}
+
+		if(field.kind === "date_range") {
+			if(isDateRangeValue(value)) {
+				writeDateRangeParam(params, field.param, value)
 			}
 			continue
 		}

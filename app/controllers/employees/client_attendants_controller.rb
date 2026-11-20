@@ -3,6 +3,7 @@ class Employees::ClientAttendantsController < Employees::BaseController
 
   strong_params :clients_attendant, permit: [:client_id, :starts_at, :ends_at]
 
+  # @route POST /employees/:employee_slug/client_attendants (employee_client_attendants)
   def create
     authorize_employee_update!
     clients_attendant.assign_attributes(clients_attendant_params)
@@ -11,12 +12,15 @@ class Employees::ClientAttendantsController < Employees::BaseController
     redirect_to_employee_tab("assignments")
   end
 
+  # @route PATCH /employees/:employee_slug/client_attendants/:id (employee_client_attendant)
+  # @route PUT /employees/:employee_slug/client_attendants/:id (employee_client_attendant)
   def update
     authorize_employee_update!
     clients_attendant.update(clients_attendant_params)
     redirect_to_employee_tab("assignments")
   end
 
+  # @route DELETE /employees/:employee_slug/client_attendants/:id (employee_client_attendant)
   def destroy
     authorize_employee_update!
     clients_attendant.destroy!

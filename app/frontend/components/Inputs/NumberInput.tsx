@@ -17,7 +17,7 @@ export interface NumberInputProps extends MantineNumberInputProps, BaseInputProp
 
 function numberInputValue(value: unknown) {
 	if(value === null || value === undefined || value === "") return undefined
-	if(typeof value === "number") return value
+	if(typeof value === "number") return Number.isFinite(value) ? value : undefined
 
 	const parsed = Number(value)
 	return Number.isFinite(parsed) ? parsed : undefined

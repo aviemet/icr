@@ -52,6 +52,7 @@ function TestWrapper({ children }: TestWrapperProps) {
 							upsertDraftEvent: () => {},
 							patchDraftEvent: () => {},
 							removeDraftEvent: () => {},
+							closePopover: () => {},
 							localizer,
 							handleViewChange: () => {},
 							handleDateChange: () => {},

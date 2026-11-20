@@ -73,6 +73,7 @@ export function Calendar({
 		popoverPosition,
 		popoverRef,
 		handleClick: handlePopoverClick,
+		close: closePopover,
 	} = useCalendarPopover()
 
 	const {
@@ -195,6 +196,7 @@ export function Calendar({
 				end: displayProperties.displayEnd ?? event.end,
 				allDay: event.allDay,
 				title: event.title,
+				open: event.open,
 				resources: event.resources,
 				resourceId: event.resourceId,
 			})
@@ -210,6 +212,7 @@ export function Calendar({
 		upsertDraftEvent,
 		patchDraftEvent,
 		removeDraftEvent,
+		closePopover,
 		localizer: localLocalizer,
 		handleViewChange,
 		handleDateChange,
@@ -227,6 +230,7 @@ export function Calendar({
 		upsertDraftEvent,
 		patchDraftEvent,
 		removeDraftEvent,
+		closePopover,
 		localLocalizer,
 		handleViewChange,
 		handleDateChange,

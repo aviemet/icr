@@ -23,7 +23,7 @@ export function EmployeeTable({
 	jobTitleOptions = [],
 	serverFiltered = false,
 }: EmployeeTableProps) {
-	const { values, setText, setMulti } = useServerTableFilters({
+	const { values, setText, setMulti, setDateRange } = useServerTableFilters({
 		fields: employeeServerFilterFields,
 		only: employeeServerFilterOnly,
 		enabled: serverFiltered,
@@ -36,6 +36,7 @@ export function EmployeeTable({
 		jobTitleOptions,
 		setText,
 		setMulti,
+		setDateRange,
 	})
 
 

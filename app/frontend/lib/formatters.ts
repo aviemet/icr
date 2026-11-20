@@ -2,12 +2,41 @@ import dayjs from "dayjs"
 
 import { ensureDate } from "./dates"
 
-export const currency = (amount: number, currency = "USD") => {
-	const formatter = new Intl.NumberFormat("en-US", {
+export const currency = (amount: number, currency = "USD", locale = "en-US") => {
+	const formatter = new Intl.NumberFormat(locale, {
 		style: "currency",
 		currency,
 	})
 	return formatter.format(amount)
+}
+
+export type CurrencyInputFormat = {
+	decimalSeparator: string
+	thousandSeparator: string
+	currencySymbol: string
+	decimalScale: number
+}
+
+export function currencyInputFormat(
+	locale = "en-US",
+	currencyCode = "USD",
+): CurrencyInputFormat {
+	const parts = new Intl.NumberFormat(locale, {
+		style: "currency",
+		currency: currencyCode,
+	}).formatToParts(1234567.89)
+
+	const decimalSeparator = parts.find(part => part.type === "decimal")?.value ?? "."
+	const groupSeparator = parts.find(part => part.type === "group")?.value
+	const currencySymbol = parts.find(part => part.type === "currency")?.value ?? currencyCode
+	const fractionDigits = parts.find(part => part.type === "fraction")?.value.length
+
+	return {
+		decimalSeparator,
+		thousandSeparator: groupSeparator && groupSeparator.length > 0 ? groupSeparator : ",",
+		currencySymbol,
+		decimalScale: fractionDigits ?? 2,
+	}
 }
 
 export const number = {

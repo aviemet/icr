@@ -7,13 +7,21 @@ declare global {
     interface EmployeesEdit {
       id: string
       active_at?: Date
+      application_source?: string
       color?: string
       color_mappings: Record<string, Record<string, string>>
       communication_notes?: string
       created_at: Date
+      desired_compensation?: string
+      desired_compensation_cents?: number
+      desired_compensation_currency: string
+      desired_compensation_period: "hourly" | "salary"
+      desired_job_title?: EmployeeJobTitle
+      desired_job_title_id?: string
       eligible_for_hire: boolean
       first_name: string
       full_name: string
+      hiring_notes?: string
       inactive_at?: Date
       ineligibility_reason?: string
       job_title: EmployeeJobTitle
@@ -23,8 +31,9 @@ declare global {
       person: PeoplePersisted
       person_id: string
       preferred_language?: string
+      resume?: ({ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date } | null)
       slug: string
-      status: "applicant" | "offered" | "employed" | "declined" | "terminated" | "application_withdrawn"
+      status: "applicant" | "offered" | "employed" | "declined" | "terminated" | "withdrawn"
       termination_reason?: string
       updated_at: Date
     }

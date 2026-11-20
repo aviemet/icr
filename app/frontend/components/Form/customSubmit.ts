@@ -49,8 +49,13 @@ function stringErrorsFrom(value: unknown): Record<string, string> | undefined {
 
 	const errors: Record<string, string> = {}
 	for(const [key, entry] of Object.entries(value)) {
-		if(typeof entry === "string") {
+		if(typeof entry === "string" && entry.trim() !== "") {
 			errors[key] = entry
+			continue
+		}
+
+		if(Array.isArray(entry) && typeof entry[0] === "string" && entry[0].trim() !== "") {
+			errors[key] = entry[0]
 		}
 	}
 

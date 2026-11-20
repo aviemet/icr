@@ -22,11 +22,14 @@ en:
       schedule:
         add: Add Event
         empty: No upcoming events in your view.
+        open_shift: Open shift
+        open_shifts: "%{count} open shifts to fill"
         shift_for: Shift - %{name}
         title: Today's Schedule
         untitled_shift: Shift
         upcoming: Upcoming Appointments
         view: View Schedule
+
       team:
         add_new: Add New Employee
         hiring_pipeline: "%{count} in hiring pipeline"

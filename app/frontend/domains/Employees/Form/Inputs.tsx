@@ -3,7 +3,7 @@ import React from "react"
 import { Button, Grid, Group, Tooltip } from "@/components"
 import { useFormField, Submit } from "@/components/Form"
 import { RandomizeIcon } from "@/components/Icons"
-import { ColorPickerInput, DateInput, Select, TextInput } from "@/components/Inputs"
+import { ColorPickerInput, CurrencyInput, DateInput, FileInput, Select, Textarea, TextInput } from "@/components/Inputs"
 import { type DateInputValue } from "@/components/Inputs"
 import { JobTitlesDropdown } from "@/components/Inputs/Dropdowns"
 import { FormBand, FormBandStack } from "@/features"
@@ -29,6 +29,11 @@ export function Inputs({ employee, jobTitles = [] }: EmployeeInputProps) {
 	const statusOptions = [
 		{ value: "applicant", label: "Applicant" },
 		{ value: "employed", label: "Employee" },
+	]
+
+	const compensationPeriodOptions = [
+		{ value: "hourly", label: "Hourly" },
+		{ value: "salary", label: "Salary" },
 	]
 
 	const handleRandomizeColor = () => {
@@ -66,18 +71,20 @@ export function Inputs({ employee, jobTitles = [] }: EmployeeInputProps) {
 			<FormBand title="Employment Details">
 				<Grid gap="lg">
 					{ status === "employed" && (
-						<Grid.Col span={ { xs: 12, sm: 6 } }>
-							<TextInput name="employee.number" label="Employee Number" />
-						</Grid.Col>
+						<>
+							<Grid.Col span={ { xs: 12, sm: 6 } }>
+								<TextInput name="employee.number" label="Employee Number" />
+							</Grid.Col>
+							<Grid.Col span={ { xxs: 12, sm: 6 } }>
+								<DateInput
+									name="employee.active_at"
+									label="Start Date"
+									value={ toDateInputValue(activeAt) }
+									onChange={ (value) => setActiveAt(value) }
+								/>
+							</Grid.Col>
+						</>
 					) }
-					<Grid.Col span={ { xxs: 12, sm: 6 } }>
-						<DateInput
-							name="employee.active_at"
-							label="Start Date"
-							value={ toDateInputValue(activeAt) }
-							onChange={ (value) => setActiveAt(value) }
-						/>
-					</Grid.Col>
 					<Grid.Col span={ { xxs: 12, sm: 6 } }>
 						<JobTitlesDropdown name="employee.job_title_id" />
 					</Grid.Col>
@@ -97,6 +104,35 @@ export function Inputs({ employee, jobTitles = [] }: EmployeeInputProps) {
 					</Grid.Col>
 				</Grid>
 			</FormBand>
+
+			{ status === "applicant" && (
+				<FormBand title="Application">
+					<Grid gap="lg">
+						<Grid.Col span={ { xxs: 12, sm: 6 } }>
+							<TextInput name="employee.application_source" label="Application Source" />
+						</Grid.Col>
+						<Grid.Col span={ { xxs: 12, sm: 6 } }>
+							<JobTitlesDropdown name="employee.desired_job_title_id" label="Desired Job Title" />
+						</Grid.Col>
+						<Grid.Col span={ { xxs: 12, sm: 6 } }>
+							<CurrencyInput name="employee.desired_compensation" label="Desired Compensation" decimalScale={ 2 } />
+						</Grid.Col>
+						<Grid.Col span={ { xxs: 12, sm: 6 } }>
+							<Select
+								name="employee.desired_compensation_period"
+								label="Compensation Period"
+								options={ compensationPeriodOptions }
+							/>
+						</Grid.Col>
+						<Grid.Col span={ { xxs: 12 } }>
+							<FileInput name="employee.resume" label="Resume" accept=".pdf,.doc,.docx" />
+						</Grid.Col>
+						<Grid.Col span={ { xxs: 12 } }>
+							<Textarea name="employee.hiring_notes" label="Hiring Notes" minRows={ 3 } />
+						</Grid.Col>
+					</Grid>
+				</FormBand>
+			) }
 
 			<Group justify="flex-end">
 				<Submit size="md">{ employee.id ? "Update" : "Create" } Employee</Submit>

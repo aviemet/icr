@@ -10,7 +10,7 @@ declare global {
       client_name: string
       client_slug: string
       created_at: Date
-      employee_id: string
+      employee_id?: string
       ends_at: Date
       starts_at: Date
       updated_at: Date

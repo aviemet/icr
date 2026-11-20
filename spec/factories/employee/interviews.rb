@@ -2,12 +2,14 @@
 #
 # Table name: interviews
 #
-#  id           :uuid             not null, primary key
-#  notes        :text
-#  scheduled_at :datetime
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  employee_id  :uuid             not null
+#  id             :uuid             not null, primary key
+#  interview_type :string
+#  location       :string
+#  notes          :text
+#  scheduled_at   :datetime
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  employee_id    :uuid             not null
 #
 # Indexes
 #

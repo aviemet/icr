@@ -7,7 +7,7 @@
 #  updated_at        :datetime         not null
 #  calendar_event_id :uuid             not null
 #  category_id       :uuid             not null
-#  employee_id       :uuid             not null
+#  employee_id       :uuid
 #  timesheet_id      :uuid
 #
 # Indexes
@@ -32,12 +32,14 @@ class Shift < ApplicationRecord
 
   resourcify
 
-  belongs_to :employee
+  belongs_to :employee, optional: true
   belongs_to :calendar_event, class_name: "Calendar::Event"
   belongs_to :timesheet, optional: true
 
   validates :calendar_event_id, uniqueness: true
   validate :no_overlapping_shifts_for_employee
+
+  before_validation :normalize_blank_employee_id
 
   after_create :attach_to_containing_pay_period
 
@@ -59,9 +61,22 @@ class Shift < ApplicationRecord
     (end_time - start_time) / 1.hour.to_f
   end
 
+  def open?
+    employee_id.blank?
+  end
+
+  scope :open, -> { where(employee_id: nil) }
+  scope :assigned, -> { where.not(employee_id: nil) }
+  scope :future, -> {
+    joins(:calendar_event).where(calendar_events: { starts_at: Time.current.. })
+  }
   scope :includes_associated, -> { includes(:calendar_event, :timesheet) }
 
   private
+
+  def normalize_blank_employee_id
+    self.employee_id = nil if employee_id.blank?
+  end
 
   def no_overlapping_shifts_for_employee
     return if employee_id.blank?

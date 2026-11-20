@@ -19,7 +19,7 @@ import { Modal, useModalContext } from "@/components/Modal"
 import { EventPopoverContent } from "@/domains/Clients/EventPopoverContent"
 import { EventForm } from "@/domains/Clients/schedule/EventForm"
 import { EventCalendarPopover } from "@/domains/Clients/schedule/NewEventCalendarPopover"
-import { ensureViewName, Routes } from "@/lib"
+import { ensureViewName, Routes, vars } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
 import { useCalendarScheduleQueryInitialData, useLocation } from "@/lib/hooks"
@@ -33,13 +33,18 @@ interface ScheduleProps {
 
 interface ScheduleResources {
 	[key: string]: object
-	employee: Schema.ShiftsClient["employee"]
+	employee: NonNullable<Schema.ShiftsClient["employee"]> | Record<string, never>
 	client: Schema.ClientsShow
 }
 
+const OPEN_SHIFT_COLOR = vars.colors.red[6]
 
 function isScheduleResources(resources: EventResources | undefined): resources is ScheduleResources {
 	return resources !== undefined && "employee" in resources && "client" in resources
+}
+
+function hasAssignedEmployee(employee: Schema.ShiftsClient["employee"] | undefined | null): employee is NonNullable<Schema.ShiftsClient["employee"]> {
+	return employee !== undefined && employee !== null && typeof employee.id === "string"
 }
 
 function NewEventModalContent({ client }: { client: Schema.ClientsShow }) {
@@ -104,15 +109,20 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 			const start = ensureDate(schedule.starts_at)
 			const end = ensureDate(schedule.ends_at)
 			const employee = schedule?.shift?.employee
+			const isOpenShift = !hasAssignedEmployee(employee)
 
 			return {
 				id: schedule.id,
-				title: schedule.name ?? "",
+				title: isOpenShift ? (schedule.name || "Open shift") : (schedule.name ?? ""),
 				start,
 				end,
 				allDay: schedule.all_day,
-				color: employee?.color,
-				resources: { employee, client },
+				color: isOpenShift ? OPEN_SHIFT_COLOR : employee?.color,
+				open: isOpenShift,
+				resources: {
+					employee: hasAssignedEmployee(employee) ? employee : {},
+					client,
+				},
 			}
 		}) ?? []
 	}, [client, data])
@@ -148,12 +158,19 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 				onNavigate={ handleNavigate }
 				onViewChange={ handleViewChange }
 				defaultTitleBuilder={ (event) => {
-					const employee = isScheduleResources(event.resources) ? event.resources.employee : undefined
-					return formatEventTitle(event, employee)
+					if(event.open === true) {
+						return event.title || "Open shift"
+					}
+					const resources = isScheduleResources(event.resources) ? event.resources : undefined
+					const employee = resources?.employee
+					if(employee && "id" in employee && typeof employee.id === "string") {
+						return formatEventTitle(event, employee)
+					}
+					return formatEventTitle(event)
 				} }
 				popoverContent={ {
 					event: (event: BaseCalendarEvent, localizer: CalendarLocalizer) => <EventPopoverContent event={ event } localizer={ localizer } />,
-					background: (context) => <EventCalendarPopover client={ client } selectedDate={ context.date } />,
+					background: (context) => <EventCalendarPopover client={ client } selectedDate={ context.time ?? context.date } />,
 				} satisfies Partial<PopoverContentMap> }
 			/>
 		</Page>

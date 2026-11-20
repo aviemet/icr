@@ -51,7 +51,12 @@ function AgendaViewComponent<TEventResources extends EventResources>({
 				className={ clsx(classes.eventItem, {
 					"all-day": !!event.allDay,
 				}) }
-				style={ event.color ? { borderLeftColor: event.color } : undefined }
+				style={ event.open === true
+					? {
+						borderLeftColor: "var(--mantine-color-teal-6)",
+						backgroundColor: event.color,
+					}
+					: (event.color ? { borderLeftColor: event.color } : undefined) }
 			>
 				<Box>
 					<span className={ classes.eventTime }>

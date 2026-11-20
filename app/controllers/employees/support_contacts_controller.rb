@@ -16,6 +16,7 @@ class Employees::SupportContactsController < Employees::BaseController
     ],
   ]
 
+  # @route POST /employees/:employee_slug/support_contacts (employee_support_contacts)
   def create
     authorize_employee_update!
     support_contact.assign_attributes(support_contact_params)
@@ -23,12 +24,15 @@ class Employees::SupportContactsController < Employees::BaseController
     redirect_to_employee_tab("contacts")
   end
 
+  # @route PATCH /employees/:employee_slug/support_contacts/:id (employee_support_contact)
+  # @route PUT /employees/:employee_slug/support_contacts/:id (employee_support_contact)
   def update
     authorize_employee_update!
     support_contact.update(support_contact_params)
     redirect_to_employee_tab("contacts")
   end
 
+  # @route DELETE /employees/:employee_slug/support_contacts/:id (employee_support_contact)
   def destroy
     authorize_employee_update!
     support_contact.destroy!

@@ -141,6 +141,8 @@ class PayPeriod < ApplicationRecord
   end
 
   def self.attach_shift!(shift)
+    return if shift.employee_id.blank?
+
     shift_date = shift.start_time&.to_date
     return if shift_date.blank?
 
@@ -157,7 +159,7 @@ class PayPeriod < ApplicationRecord
     shifts_in_range = self.class.shifts_overlapping_period(self)
     return if shifts_in_range.empty?
 
-    shifts_in_range.distinct.pluck(:employee_id).each do |employee_id|
+    shifts_in_range.distinct.pluck(:employee_id).compact.each do |employee_id|
       timesheet = timesheets.find_or_create_by!(employee_id: employee_id)
       employee_shifts = shifts_in_range.where(employee_id: employee_id)
       misplaced = employee_shifts.left_outer_joins(:timesheet).where(

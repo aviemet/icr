@@ -12,6 +12,7 @@ class Employees::ShowSerializer < Employees::PersistedSerializer
   has_many :clients_managers, serializer: ClientsManagers::PersistedSerializer
   has_many :employees_trainings, serializer: Employee::EmployeesTrainings::PersistedSerializer
   has_many :interviews, serializer: Employee::Interviews::PersistedSerializer
+  has_many :offers, serializer: Employee::Offers::PersistedSerializer
   has_many :attended_clients, serializer: Clients::PersistedSerializer
   has_many :managed_clients, serializer: Clients::PersistedSerializer
 
@@ -59,4 +60,7 @@ class Employees::ShowSerializer < Employees::PersistedSerializer
     )
     period&.id
   end
+
+  type :Date, optional: true
+  delegate :pending_termination_at, to: :@object
 end

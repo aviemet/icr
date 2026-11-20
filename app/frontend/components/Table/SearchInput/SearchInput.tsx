@@ -2,6 +2,7 @@ import { type VisitOptions } from "@inertiajs/core"
 import { router } from "@inertiajs/react"
 import { ActionIcon, Box } from "@mantine/core"
 import { useSessionStorage } from "@mantine/hooks"
+import clsx from "clsx"
 import { debounce } from "es-toolkit"
 import React, { useMemo, useEffect, useCallback } from "react"
 
@@ -19,6 +20,7 @@ interface SearchInputProps {
 	onSearch?: (value: string) => void
 	model?: string
 	debounceMs?: number
+	className?: string
 }
 
 export function SearchInput({
@@ -27,6 +29,7 @@ export function SearchInput({
 	onSearch: onSearchProp,
 	model: modelProp,
 	debounceMs = 500,
+	className,
 }: SearchInputProps) {
 	const context = useTableContext(false)
 	const model = modelProp ?? context?.model
@@ -120,7 +123,7 @@ export function SearchInput({
 	}, [debouncedSearch, searchValue, onSearchProp, isControlled])
 
 	return (
-		<Box className={ classes.searchWrapper }>
+		<Box className={ clsx(classes.searchWrapper, className) }>
 			<TextInput
 				name="search"
 				id="search"

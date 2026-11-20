@@ -2,6 +2,7 @@ import { MantineProvider } from "@mantine/core"
 import { cleanup, render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it } from "vitest"
 
+import { pageChrome } from "@/components/PageChrome"
 import { Section } from "@/components/Section"
 import * as sectionClasses from "@/components/Section/Section.css"
 import { theme } from "@/lib/theme"
@@ -34,6 +35,7 @@ describe("Section", () => {
 		)
 
 		const panel = screen.getByTestId("panel")
+		expect(panel.className).toContain(pageChrome.panelSurface)
 		expect(panel.className).toContain(sectionClasses.panel)
 		expect(panel.className).not.toContain(sectionClasses.accent)
 		expect(panel.className).not.toContain(sectionClasses.root)
@@ -54,6 +56,20 @@ describe("Section", () => {
 		expect(panel.style.getPropertyValue("--section-accent")).toBeTruthy()
 	})
 
+	it("uses wrapper surface when wrapper is set", () => {
+		render(
+			<MantineProvider theme={ theme }>
+				<Section variant="panel" wrapper data-testid="panel">
+					Wrapper body
+				</Section>
+			</MantineProvider>,
+		)
+
+		const panel = screen.getByTestId("panel")
+		expect(panel.className).toContain(pageChrome.panelWrapperSurface)
+		expect(panel.className).not.toContain(pageChrome.panelSurface)
+	})
+
 	it("keeps plain variant without panel chrome", () => {
 		render(
 			<MantineProvider theme={ theme }>
@@ -65,6 +81,7 @@ describe("Section", () => {
 
 		const plain = screen.getByTestId("plain")
 		expect(plain.className).toContain(sectionClasses.root)
+		expect(plain.className).not.toContain(pageChrome.panelSurface)
 		expect(plain.className).not.toContain(sectionClasses.panel)
 		expect(plain.className).not.toContain(sectionClasses.accent)
 	})

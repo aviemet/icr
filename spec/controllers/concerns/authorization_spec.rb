@@ -14,7 +14,7 @@ RSpec.describe Authorization, type: :controller do
 
   describe "authorization" do
     it "handles unauthorized access" do
-      user = create(:user)
+      user = create(:user, person: nil)
       sign_in user
 
       get :index

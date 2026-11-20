@@ -100,6 +100,7 @@ RSpec.describe Searchable do
         include Searchable
 
         filterable_fields :number, :created_at,
+          active_at: { type: :date_range },
           first_name: { column: "people.first_name" },
           statuses: {
             column: :status,
@@ -203,6 +204,22 @@ RSpec.describe Searchable do
       result = filterable_controller.search(Employee.includes_associated.left_joins(:person))
       expect(result).to include(employed)
       expect(result).not_to include(applicant)
+    end
+
+    it "filters with :date_range on active_at" do
+      employed.update!(active_at: Date.new(2024, 4, 10))
+      create(:employee, :employed, active_at: Date.new(2023, 1, 1))
+
+      allow(filterable_controller).to receive(:params).and_return(
+        ActionController::Parameters.new({
+          adv: "true",
+          active_at: { type: "range", start: "2024-04-01", end: "2024-04-30" },
+        }),
+      )
+
+      result = filterable_controller.search(Employee.includes_associated.left_joins(:person))
+      expect(result).to include(employed)
+      expect(result.count).to eq(1)
     end
   end
 

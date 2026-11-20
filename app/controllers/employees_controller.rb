@@ -1,37 +1,44 @@
 class EmployeesController < ApplicationController
   include Searchable
 
+  WORKFORCE_STATUSES = %w[employed terminated].freeze
+  PIPELINE_STATUSES = %w[applicant offered declined withdrawn].freeze
+  WORKFORCE_VIEWS = %w[employed terminated all].freeze
+
   STATUS_EVENTS = %w[
     make_offer
     begin_employment
-    close_application
+    withdraw_application
+    decline_application
     accept_offer
     reject_offer
     terminate
     reconsider
   ].freeze
 
-  expose :employees, -> { policy_scope(search(Employee.includes_associated.left_joins(:person))) }
-  expose :employee, id: -> { params[:slug] }, find_by: :slug, scope: -> { policy_scope(Employee.includes_associated) }
+  expose :employees, -> { workforce_employees }
+  expose :employee,
+    id: -> { params[:slug] },
+    find_by: :slug,
+    scope: -> { policy_scope(Employee.includes_associated) },
+    build_params: -> { employee_params.except(:job_title_id) }
 
   sortable_fields %w(active_at inactive_at number status people.first_name people.last_name)
 
-  filterable_fields :number, :active_at, :created_at,
+  filterable_fields :number, :created_at,
+    active_at: { type: :date_range },
     first_name: { column: "people.first_name" },
     last_name: { column: "people.last_name" },
     job_title: { column: "job_titles.name", joins: :job_title },
-    job_titles: { column: "job_titles.name", joins: :job_title, type: :in },
-    statuses: {
-      column: :status,
-      type: :in,
-      values: -> { Employee.statuses.keys },
-      default: "employed",
-    }
+    job_titles: { column: "job_titles.name", joins: :job_title, type: :in }
 
   strong_params :employee, permit: [
     :person_id, :active_at, :inactive_at, :number, :status, :color,
     :preferred_language, :communication_notes, :eligible_for_hire,
     :ineligibility_reason, :termination_reason, :job_title_id,
+    :application_source, :desired_compensation, :desired_compensation_cents,
+    :desired_compensation_currency, :desired_compensation_period,
+    :desired_job_title_id, :hiring_notes, :resume,
     person_attributes: [
       :id, :first_name, :middle_name, :last_name, :nick_name, :dob,
       contact_attributes: [
@@ -66,6 +73,8 @@ class EmployeesController < ApplicationController
         **pagination_data(paginated_employees)
       } },
       job_title_options: -> { Employee::JobTitle.order(:name).distinct.pluck(:name) },
+      can_scope_employees: -> { can_scope_employees? },
+      workforce_view: -> { workforce_view_param },
     }
   end
 
@@ -81,7 +90,6 @@ class EmployeesController < ApplicationController
       training_options: -> { Employee::Training.order(:name).render(:options) },
     }
   end
-
 
   # @route GET /employees/new (new_employee)
   def new
@@ -128,7 +136,6 @@ class EmployeesController < ApplicationController
     }
   end
 
-
   # @route PUT /employees/:slug/status (status_employee)
   def update_status
     authorize employee, :update?
@@ -139,12 +146,22 @@ class EmployeesController < ApplicationController
       return
     end
 
+    if event == "terminate"
+      Employee::Offboard.call(
+        employee: employee,
+        attrs: employee_status_params.except(:event, :terminate_immediately),
+        terminate_immediately: employee_status_params[:terminate_immediately],
+      )
+      redirect_to employee_path(employee), notice: t("templates.controllers.notices.status_updated", model: "Employee")
+      return
+    end
+
     unless employee.aasm.may_fire_event?(event.to_sym)
       redirect_to status_employee_path(employee), inertia: { errors: { event: ["cannot transition"] } }
       return
     end
 
-    employee.assign_attributes(employee_status_params.except(:event))
+    employee.assign_attributes(employee_status_params.except(:event, :terminate_immediately, :inactive_at_time))
 
     if employee.public_send(:"#{event}!")
       redirect_to employee_path(employee), notice: t("templates.controllers.notices.status_updated", model: "Employee")
@@ -154,8 +171,20 @@ class EmployeesController < ApplicationController
         errors: employee.errors
       }
     end
+  rescue ArgumentError => e
+    redirect_to status_employee_path(employee), inertia: { errors: { inactive_at: [e.message] } }
   rescue AASM::InvalidTransition
     redirect_to status_employee_path(employee), inertia: { errors: { event: ["cannot transition"] } }
+  end
+
+  # @route DELETE /employees/:slug/pending_termination (pending_termination_employee)
+  def destroy_pending_termination
+    authorize employee, :update?
+
+    Employee::CancelPendingTermination.call(employee: employee)
+    redirect_back_or_to root_path, notice: t("templates.controllers.notices.status_updated", model: "Employee")
+  rescue ArgumentError => e
+    redirect_back_or_to employee_path(employee), alert: e.message
   end
 
   # @route POST /employees (employees)
@@ -204,6 +233,8 @@ class EmployeesController < ApplicationController
       employee: [:event,
                  :active_at,
                  :inactive_at,
+                 :inactive_at_time,
+                 :terminate_immediately,
                  :termination_reason,
                  :ineligibility_reason,
                  :eligible_for_hire],
@@ -215,5 +246,31 @@ class EmployeesController < ApplicationController
 
     job_title = Employee::JobTitle.find_by(id: job_title_id)
     record.assign_job_title(job_title) if job_title
+  end
+
+  def workforce_employees
+    relation = policy_scope(Employee.includes_associated.left_joins(:person))
+    relation = case workforce_view_param
+               when "all"
+                 relation
+               when "terminated"
+                 relation.where(status: :terminated)
+               else
+                 relation.where(status: :employed)
+               end
+    search(relation)
+  end
+
+  def workforce_view_param
+    return "employed" unless can_scope_employees?
+
+    view = params[:workforce_view].to_s
+    return view if WORKFORCE_VIEWS.include?(view)
+
+    "employed"
+  end
+
+  def can_scope_employees?
+    current_user&.has_role?(:admin)
   end
 end

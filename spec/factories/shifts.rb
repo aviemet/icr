@@ -7,7 +7,7 @@
 #  updated_at        :datetime         not null
 #  calendar_event_id :uuid             not null
 #  category_id       :uuid             not null
-#  employee_id       :uuid             not null
+#  employee_id       :uuid
 #  timesheet_id      :uuid
 #
 # Indexes
@@ -38,6 +38,10 @@ FactoryBot.define do
       shift.category_id = Category.type("Shift").find_or_create_by!(name: "Regular") { |category|
         category.system = true
       }.id
+    end
+
+    trait :open do
+      employee { nil }
     end
   end
 end

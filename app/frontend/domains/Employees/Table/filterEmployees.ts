@@ -1,10 +1,12 @@
+import {
+	emptyDateRangeFilterValue,
+	type DateRangeFilterValue,
+} from "@/components/Table/Filters"
+
 export type EmployeeStatus = Schema.EmployeesIndex["status"]
 
 export const EMPLOYEE_STATUSES: EmployeeStatus[] = [
-	"applicant",
-	"offered",
 	"employed",
-	"declined",
 	"terminated",
 ]
 
@@ -13,8 +15,7 @@ export type EmployeeColumnFilters = {
 	lastName: string
 	jobTitle: string
 	jobTitles: string[]
-	statuses: EmployeeStatus[]
-	hireDate: string
+	hireDate: DateRangeFilterValue
 	number: string
 }
 
@@ -23,14 +24,8 @@ export const emptyEmployeeColumnFilters: EmployeeColumnFilters = {
 	lastName: "",
 	jobTitle: "",
 	jobTitles: [],
-	statuses: [],
-	hireDate: "",
+	hireDate: { ...emptyDateRangeFilterValue },
 	number: "",
-}
-
-export const defaultEmployeeColumnFilters: EmployeeColumnFilters = {
-	...emptyEmployeeColumnFilters,
-	statuses: ["employed"],
 }
 
 export function employeeJobTitleName(employee: Schema.EmployeesIndex) {

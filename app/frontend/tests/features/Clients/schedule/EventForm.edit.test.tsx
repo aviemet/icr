@@ -78,8 +78,13 @@ beforeEach(() => {
 			const body = await request.json().catch(() => ({}))
 			return HttpResponse.json({ id: "event-1", ...(typeof body === "object" && body ? body : {}) }, { status: 200 })
 		}),
+		http.post(Routes.apiCalendarEvents(), async ({ request }) => {
+			const body = await request.json().catch(() => ({}))
+			return HttpResponse.json({ id: "event-new", ...(typeof body === "object" && body ? body : {}) }, { status: 201 })
+		}),
 	)
 })
+
 
 function renderEditForm(onSuccess?: () => void) {
 	const queryClient = new QueryClient({
@@ -160,3 +165,65 @@ describe("EventForm edit population", () => {
 		})
 	})
 })
+
+describe("EventForm create participants", () => {
+	it("includes the client as an event participant on create", async () => {
+		const user = userEvent.setup()
+		type PostedCalendarEvent = {
+			event_participants_attributes?: Array<{ participant_id: string, participant_type: string }>
+			event_participants?: Array<{ participant_id: string, participant_type: string }>
+			shift_attributes?: { employee_id?: string }
+		}
+		type PostedBody = { calendar_event: PostedCalendarEvent }
+		const captured: { body: PostedBody | null } = { body: null }
+
+		server.use(
+			http.post(Routes.apiCalendarEvents(), async ({ request }) => {
+				captured.body = await request.json() as PostedBody
+				return HttpResponse.json({ id: "event-new" }, { status: 201 })
+			}),
+		)
+
+		const queryClient = new QueryClient({
+			defaultOptions: {
+				queries: { retry: false },
+				mutations: { retry: false },
+			},
+		})
+
+		render(
+			<QueryClientProvider client={ queryClient }>
+				<MantineProvider theme={ theme } defaultColorScheme="dark">
+					<DatesProvider settings={ { consistentWeeks: true } }>
+						<EventForm client={ client } selectedDate={ start } />
+					</DatesProvider>
+				</MantineProvider>
+			</QueryClientProvider>,
+		)
+
+		await waitFor(() => {
+			expect(screen.getByRole("combobox", { name: "Employee" })).toBeInTheDocument()
+		})
+
+		await user.click(screen.getByRole("button", { name: "Save Shift" }))
+
+		await waitFor(() => {
+			if(captured.body === null) {
+				throw new Error("Expected create request body")
+			}
+		})
+
+		const postedBody = captured.body
+		if(postedBody === null) {
+			throw new Error("Expected create request body")
+		}
+
+		const calendarEvent = postedBody.calendar_event
+		expect(calendarEvent.event_participants_attributes).toEqual([
+			{ participant_type: "Client", participant_id: client.id },
+		])
+		expect(calendarEvent.event_participants).toBeUndefined()
+		expect(calendarEvent.shift_attributes).toBeDefined()
+	})
+})
+

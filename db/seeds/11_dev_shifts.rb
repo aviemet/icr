@@ -5,30 +5,34 @@ if Rails.env.development?
   seed_start_date = Date.current.prev_month.beginning_of_month
   seed_end_date = (seed_start_date + 2.months).end_of_month
   seed_dates = (seed_start_date..seed_end_date).to_a
+  attendant_job = Employee::JobTitle.find_by(slug: "attendant")
+
+  create_shift_attendant = lambda do |client:|
+    employee = FactoryBot.create(:employee, :employed)
+    employee.assign_job_title(attendant_job)
+    FactoryBot.create(:pay_rate, :active, employee: employee)
+    FactoryBot.create(:clients_attendant, attendant: employee, client: client)
+    employee
+  end
 
   if Client.first.calendar_events.empty?
-    attendant_job = Employee::JobTitle.find_by(slug: "attendant")
-
     ActiveRecord::Base.transaction do
       shift_length = 6
-
+      client = Client.first
       first_attendant = nil
 
-      5.times do |i|
-        employee = FactoryBot.create(:employee)
-        employee.assign_job_title(attendant_job)
+      5.times do |index|
+        employee = create_shift_attendant.call(client: client)
         FactoryBot.create(:address, contact: employee.contact, category: Category.type("Contact::Address").sample)
         FactoryBot.create(:email, contact: employee.contact, category: Category.type("Contact::Email").sample)
         FactoryBot.create(:phone, contact: employee.contact, category: Category.type("Contact::Phone").sample)
 
-        first_attendant = employee if i == 1
-
-        client = Client.first
+        first_attendant = employee if index == 1
 
         seed_dates.each do |date|
           next if date.saturday? || date.sunday?
 
-          starts_at = Time.zone.local(date.year, date.month, date.day) + (i * shift_length).hours
+          starts_at = Time.zone.local(date.year, date.month, date.day) + (index * shift_length).hours
 
           shift = FactoryBot.create(:shift, {
             employee:,
@@ -42,25 +46,43 @@ if Rails.env.development?
         end
       end
 
-      # Test attendant User
-      User.create({
-        email: "attendant@gmail.com",
-        password: dev_password,
-        confirmed_at: Time.zone.now,
-        time_zone: test_timezone,
-        person: first_attendant.person
-      })
-
+      unless User.exists?(email: "attendant@gmail.com")
+        User.create({
+          email: "attendant@gmail.com",
+          password: dev_password,
+          confirmed_at: Time.zone.now,
+          time_zone: test_timezone,
+          person: first_attendant.person
+        })
+      end
     end
 
     Rails.logger.info "[seeds] shifts: client 1 + attendant user"
-
   end
 
-  # Add shifts for the second and third clients (household members)
-  if Client.second.calendar_events.empty? && Client.third.calendar_events.empty?
-    attendant_job = Employee::JobTitle.find_by(slug: "attendant")
+  if Shift.open.none? && Client.first.present?
+    ActiveRecord::Base.transaction do
+      client = Client.first
+      open_shift_dates = seed_dates.select { |date| date.monday? || date.wednesday? }.first(4)
 
+      open_shift_dates.each_with_index do |date, index|
+        starts_at = Time.zone.local(date.year, date.month, date.day) + (18 + index).hours
+
+        open_shift = FactoryBot.create(:shift, :open, {
+          calendar_event: FactoryBot.create(:calendar_event, {
+            starts_at:,
+            ends_at: starts_at + 6.hours,
+          })
+        })
+
+        client.calendar_events << open_shift.calendar_event
+      end
+    end
+
+    Rails.logger.info "[seeds] open shifts: client 1"
+  end
+
+  if Client.second.calendar_events.empty? && Client.third.calendar_events.empty?
     ActiveRecord::Base.transaction do
       client_2 = Client.second
       client_3 = Client.third
@@ -68,16 +90,8 @@ if Rails.env.development?
       shift_length = 8
       shifts_per_day = 24 / shift_length
 
-      employees_for_client_2 = 5.times.map do
-        employee = FactoryBot.create(:employee)
-        employee.assign_job_title(attendant_job)
-        employee
-      end
-      employees_for_client_3 = 5.times.map do
-        employee = FactoryBot.create(:employee)
-        employee.assign_job_title(attendant_job)
-        employee
-      end
+      employees_for_client_2 = 5.times.map { create_shift_attendant.call(client: client_2) }
+      employees_for_client_3 = 5.times.map { create_shift_attendant.call(client: client_3) }
 
       seed_dates.each_with_index do |date, day_index|
         day_start = Time.zone.local(date.year, date.month, date.day)
@@ -119,14 +133,11 @@ if Rails.env.development?
   if Client.fourth.calendar_events.empty?
     client = Client.fourth
 
-    attendant_job = Employee::JobTitle.find_by(slug: "attendant")
-
     ActiveRecord::Base.transaction do
       shift_length = 6
 
       primary_employees = 5.times.map do
-        employee = FactoryBot.create(:employee)
-        employee.assign_job_title(attendant_job)
+        employee = create_shift_attendant.call(client: client)
         FactoryBot.create(:address, contact: employee.contact, category: Category.type("Contact::Address").sample)
         FactoryBot.create(:email, contact: employee.contact, category: Category.type("Contact::Email").sample)
         FactoryBot.create(:phone, contact: employee.contact, category: Category.type("Contact::Phone").sample)
@@ -153,8 +164,7 @@ if Rails.env.development?
 
           overlap_start = starts_at + [*-2..2].sample.hours
           overlap_end = shift.calendar_event.ends_at + [*-2..2].sample.hours
-          overlap_employee = FactoryBot.create(:employee)
-          overlap_employee.assign_job_title(attendant_job)
+          overlap_employee = create_shift_attendant.call(client: client)
 
           overlap_shift = FactoryBot.create(:shift, {
             employee: overlap_employee,
@@ -165,10 +175,8 @@ if Rails.env.development?
           })
 
           client.calendar_events << overlap_shift.calendar_event
-
         end
       end
-
     end
 
     Rails.logger.info "[seeds] shifts: client 4 + overlaps"

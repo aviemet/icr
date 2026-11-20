@@ -42,9 +42,6 @@ export const denseShell = css`
 	height: 100%;
 	min-height: 0;
 	padding: ${ vars.spacing.sm };
-	border-radius: ${ vars.radius.md };
-	border: 1px solid light-dark(${ vars.colors.gray[3] }, ${ vars.colors.dark[4] });
-	background-color: light-dark(${ vars.colors.white }, ${ vars.colors.dark[8] });
 	gap: ${ vars.spacing.xs };
 
 	h1 {

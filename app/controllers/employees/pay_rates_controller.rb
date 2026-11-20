@@ -5,6 +5,7 @@ class Employees::PayRatesController < Employees::BaseController
     :rate, :rate_cents, :rate_currency, :period, :starts_at, :ends_at, :notes,
   ]
 
+  # @route POST /employees/:employee_slug/pay_rates (employee_pay_rates)
   def create
     authorize_employee_update!
     pay_rate.assign_attributes(pay_rate_params)
@@ -12,12 +13,15 @@ class Employees::PayRatesController < Employees::BaseController
     redirect_to_employee_tab("pay")
   end
 
+  # @route PATCH /employees/:employee_slug/pay_rates/:id (employee_pay_rate)
+  # @route PUT /employees/:employee_slug/pay_rates/:id (employee_pay_rate)
   def update
     authorize_employee_update!
     pay_rate.update(pay_rate_params)
     redirect_to_employee_tab("pay")
   end
 
+  # @route DELETE /employees/:employee_slug/pay_rates/:id (employee_pay_rate)
   def destroy
     authorize_employee_update!
     pay_rate.destroy!

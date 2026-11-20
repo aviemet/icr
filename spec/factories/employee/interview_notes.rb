@@ -18,13 +18,14 @@
 # Foreign Keys
 #
 #  fk_rails_...  (employee_id => employees.id)
-#  fk_rails_...  (interview_id => employees.id)
+#  fk_rails_...  (interview_id => interviews.id)
 #
 FactoryBot.define do
   factory :interview_note, class: "Employee::InterviewNote" do
     note { Faker::Lorem.paragraph }
+    recommendation { :neutral }
 
     employee
-    interview
+    interview { association :interview, employee: employee }
   end
 end

@@ -76,6 +76,7 @@ if Rails.env.development?
       })
 
       facilitator.assign_job_title(Employee::JobTitle.find_by(slug: "facilitator"))
+      FactoryBot.create(:pay_rate, :active, employee: facilitator)
 
       FactoryBot.create(:address, contact: facilitator.person.contact, category: Category.type("Contact::Address").sample)
       FactoryBot.create(:phone, contact: facilitator.person.contact, category: Category.type("Contact::Phone").sample)
@@ -93,6 +94,7 @@ if Rails.env.development?
       })
 
       director.assign_job_title(Employee::JobTitle.find_by(slug: "director"))
+      FactoryBot.create(:pay_rate, :active, employee: director)
 
       FactoryBot.create(:address, contact: director.person.contact, category: Category.type("Contact::Address").sample)
       FactoryBot.create(:phone, contact: director.person.contact, category: Category.type("Contact::Phone").sample)
@@ -120,9 +122,8 @@ if Rails.env.development?
 
       if Client.any?
         FactoryBot.create(:clients_attendant, attendant: attendant, client: Client.first)
-        FactoryBot.create(:clients_manager, manager: facilitator, client: Client.first, primary: true)
+        FactoryBot.create(:clients_manager, manager: facilitator, client: Client.first)
       end
-
 
       training = Employee::Training.find_or_create_by!(name: "Orientation") do |record|
         record.description = "New hire orientation"
@@ -131,6 +132,55 @@ if Rails.env.development?
       end
       FactoryBot.create(:employees_training, employee: attendant, training: training, completed_at: nil, started_at: Time.current)
       FactoryBot.create(:employees_training, employee: facilitator, training: training, completed_at: Time.current)
+
+      attendant_job = Employee::JobTitle.find_by(slug: "attendant")
+
+      applicant = FactoryBot.create(:employee, {
+        status: :applicant,
+        application_source: "Indeed",
+        desired_compensation_cents: 2200,
+        desired_compensation_currency: "USD",
+        desired_compensation_period: :hourly,
+        desired_job_title: attendant_job,
+        hiring_notes: "Referred by current attendant. Available evenings and weekends.",
+      })
+      FactoryBot.create(:address, contact: applicant.person.contact, category: Category.type("Contact::Address").sample)
+      FactoryBot.create(:phone, contact: applicant.person.contact, category: Category.type("Contact::Phone").sample)
+
+      interview = FactoryBot.create(:interview, {
+        employee: applicant,
+        scheduled_at: 3.days.from_now.change(hour: 10, min: 0),
+        location: "Main office conference room",
+        interview_type: "in_person",
+        notes: "Panel interview with facilitator and director.",
+      })
+      FactoryBot.create(:interview_participant, interview: interview, person: facilitator.person)
+      FactoryBot.create(:interview_note, {
+        interview: interview,
+        employee: facilitator,
+        note: "Strong communication skills. Comfortable with overnight shifts.",
+        recommendation: :yes,
+      })
+
+      offered_applicant = FactoryBot.create(:employee, {
+        status: :applicant,
+        application_source: "Referral",
+        desired_compensation_cents: 2400,
+        desired_compensation_currency: "USD",
+        desired_compensation_period: :hourly,
+        desired_job_title: attendant_job,
+        hiring_notes: "Former SLS staff. Ready to start within two weeks.",
+      })
+      FactoryBot.create(:employee_offer, :extended, {
+        employee: offered_applicant,
+        job_title: attendant_job,
+        proposed_start_on: 2.weeks.from_now.to_date,
+        rate_cents: 2400,
+        period: :hourly,
+        employee_number: "EMP-SEED01",
+        notes: "Extended after strong interview. Includes weekend differential discussion.",
+      })
+      offered_applicant.make_offer! if offered_applicant.may_make_offer?
     end
 
     Rails.logger.info "[seeds] employees + facilitator/director/attendant users + HR sample data"

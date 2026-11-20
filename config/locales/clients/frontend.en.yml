@@ -38,10 +38,12 @@ en:
           allergies: Active allergies
           incidents: Incidents
           emergency_contacts: Emergency contacts
+          open_shifts: Open shifts to fill
           household: Household
           manager: Manager
           attendants: Attendants
           none: None assigned
+
         profile:
           demographics: Demographics
           california: California / Regional Center

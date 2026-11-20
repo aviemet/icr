@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_18_210300) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -352,6 +352,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_210300) do
     t.index ["employee_id"], name: "index_employee_credentials_on_employee_id"
   end
 
+  create_table "employee_offers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "employee_id", null: false
+    t.uuid "job_title_id", null: false
+    t.date "proposed_start_on"
+    t.integer "rate_cents", default: 0, null: false
+    t.string "rate_currency", default: "USD", null: false
+    t.integer "period", default: 0, null: false
+    t.string "employee_number"
+    t.integer "status", default: 0, null: false
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_id", "status"], name: "index_employee_offers_on_employee_id_and_status"
+    t.index ["employee_id"], name: "index_employee_offers_on_employee_id"
+    t.index ["job_title_id"], name: "index_employee_offers_on_job_title_id"
+  end
+
   create_table "employee_support_contacts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "employee_id", null: false
     t.uuid "person_id", null: false
@@ -368,18 +385,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_210300) do
   create_table "employees", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "person_id", null: false
     t.date "active_at"
-    t.date "inactive_at"
+    t.datetime "inactive_at"
     t.string "number"
     t.string "color"
     t.integer "status"
     t.boolean "eligible_for_hire", default: true, null: false
     t.text "ineligibility_reason"
-    t.string "slug", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.text "termination_reason"
     t.string "preferred_language"
     t.text "communication_notes"
+    t.string "slug", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "application_source"
+    t.integer "desired_compensation_cents"
+    t.string "desired_compensation_currency", default: "USD", null: false
+    t.integer "desired_compensation_period"
+    t.text "hiring_notes"
+    t.uuid "desired_job_title_id"
+    t.index ["desired_job_title_id"], name: "index_employees_on_desired_job_title_id"
     t.index ["person_id"], name: "index_employees_on_person_id"
     t.index ["slug"], name: "index_employees_on_slug", unique: true
   end
@@ -641,6 +665,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_210300) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "location"
+    t.string "interview_type"
     t.index ["employee_id"], name: "index_interviews_on_employee_id"
   end
 
@@ -845,7 +871,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_210300) do
   end
 
   create_table "shifts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "employee_id", null: false
+    t.uuid "employee_id"
     t.uuid "calendar_event_id", null: false
     t.uuid "timesheet_id"
     t.uuid "category_id", null: false
@@ -1000,8 +1026,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_210300) do
   add_foreign_key "emails", "contacts"
   add_foreign_key "employee_clearances", "employees"
   add_foreign_key "employee_credentials", "employees"
+  add_foreign_key "employee_offers", "employees"
+  add_foreign_key "employee_offers", "job_titles"
   add_foreign_key "employee_support_contacts", "employees"
   add_foreign_key "employee_support_contacts", "people"
+  add_foreign_key "employees", "job_titles", column: "desired_job_title_id"
   add_foreign_key "employees", "people"
   add_foreign_key "employees_job_titles", "employees"
   add_foreign_key "employees_job_titles", "job_titles"
@@ -1022,7 +1051,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_210300) do
   add_foreign_key "incident_reports", "people", column: "reported_by_id"
   add_foreign_key "incident_reports", "people", column: "reported_to_id"
   add_foreign_key "interview_notes", "employees"
-  add_foreign_key "interview_notes", "employees", column: "interview_id"
+  add_foreign_key "interview_notes", "interviews"
   add_foreign_key "interview_participants", "interviews"
   add_foreign_key "interview_participants", "people"
   add_foreign_key "interviews", "employees"

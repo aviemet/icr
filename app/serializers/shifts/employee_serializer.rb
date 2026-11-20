@@ -1,5 +1,5 @@
 class Shifts::EmployeeSerializer < ShiftSerializer
   delegate :employee, to: :@object
 
-  belongs_to :employee, serializer: Employees::PersistedSerializer
+  belongs_to :employee, serializer: Employees::PersistedSerializer, optional: true
 end

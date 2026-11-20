@@ -3,7 +3,7 @@ import { useState } from "react"
 
 import { Box, Group, Link, Stack, Text, Title } from "@/components"
 import { DeleteButton, EditButton } from "@/components/Button"
-import { BaseCalendarEvent } from "@/components/Calendar"
+import { BaseCalendarEvent, useCalendarContext } from "@/components/Calendar"
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 import { EventForm } from "@/domains/Clients/schedule/EventForm"
 import { Routes } from "@/lib"
@@ -33,8 +33,10 @@ function isClientResource(value: unknown): value is Schema.ClientsPersisted {
 
 export function EventPopoverContent({ event, localizer, primaryResource = "employee" }: EventPopoverContentProps) {
 	const [editing, setEditing] = useState(false)
+	const { closePopover } = useCalendarContext()
 
 	const color = event.color || "#000000"
+	const isOpenShift = event.open === true
 
 	const employee = isEmployeeResource(event.resources?.employee) ? event.resources?.employee : undefined
 	const client = isClientResource(event.resources?.client) ? event.resources.client : undefined
@@ -62,7 +64,9 @@ export function EventPopoverContent({ event, localizer, primaryResource = "emplo
 			<EventForm
 				client={ client }
 				event={ event }
-				onSuccess={ () => setEditing(false) }
+				onSuccess={ () => {
+					closePopover()
+				} }
 				onCancel={ () => setEditing(false) }
 			/>
 		)
@@ -74,12 +78,17 @@ export function EventPopoverContent({ event, localizer, primaryResource = "emplo
 				<Group gap="xs">
 					<Box
 						className={ clsx(classes.eventColor) }
-						style={ { backgroundColor: color } }
+						style={ {
+							backgroundColor: color,
+							...(isOpenShift ? { boxShadow: "inset 3px 0 0 var(--mantine-color-teal-6)" } : {}),
+						} }
 					/>
 					<Title order={ 4 }>
-						{ primaryLink && (
-							<Link href={ primaryLink.href }>{ primaryLink.label }</Link>
-						) }
+						{ isOpenShift
+							? "Open shift"
+							: (primaryLink && (
+								<Link href={ primaryLink.href }>{ primaryLink.label }</Link>
+							)) }
 					</Title>
 				</Group>
 				{ client && (
