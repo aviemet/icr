@@ -3,17 +3,17 @@ import { Form, Submit } from "@/components/Form"
 import { Textarea } from "@/components/Inputs"
 import { Routes } from "@/lib"
 
-export interface CloseApplicationFormProps {
+export interface WithdrawApplicationFormProps {
 	employee: Schema.EmployeesShow
 }
 
-export function CloseApplicationForm({ employee }: CloseApplicationFormProps) {
+export function WithdrawApplicationForm({ employee }: WithdrawApplicationFormProps) {
 	return (
 		<Form
 			action={ Routes.statusEmployee(employee.slug) }
 			initialData={ {
 				employee: {
-					event: "close_application",
+					event: "withdraw_application",
 				},
 			} }
 			method="put"
@@ -23,13 +23,13 @@ export function CloseApplicationForm({ employee }: CloseApplicationFormProps) {
 					<Textarea
 						name="employee.ineligibility_reason"
 						label="Reason"
-						placeholder="Enter reason for closing application"
+						placeholder="Enter reason for withdrawing application"
 						required
 					/>
 				</Grid.Col>
 
 				<Grid.Col>
-					<Submit>Close Application</Submit>
+					<Submit>Withdraw Application</Submit>
 				</Grid.Col>
 			</Grid>
 		</Form>

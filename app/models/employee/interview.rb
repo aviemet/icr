@@ -2,12 +2,14 @@
 #
 # Table name: interviews
 #
-#  id           :uuid             not null, primary key
-#  notes        :text
-#  scheduled_at :datetime
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  employee_id  :uuid             not null
+#  id             :uuid             not null, primary key
+#  interview_type :string
+#  location       :string
+#  notes          :text
+#  scheduled_at   :datetime
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  employee_id    :uuid             not null
 #
 # Indexes
 #
@@ -34,8 +36,9 @@ class Employee::Interview < ApplicationRecord
   belongs_to :employee # Interviewee
   has_many :interview_participants, class_name: "Employee::InterviewParticipant", dependent: :destroy
   has_many :interviewers, through: :interview_participants, source: :person
+  has_many :interview_notes, class_name: "Employee::InterviewNote", dependent: :destroy, inverse_of: :interview
 
-  scope :includes_associated, -> { includes([:employee, :interviewers]) }
+  scope :includes_associated, -> { includes([:employee, :interviewers, :interview_notes]) }
   scope :upcoming, -> { where("scheduled_at > ?", Time.current) }
   scope :past, -> { where(scheduled_at: ..Time.current) }
 end

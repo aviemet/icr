@@ -65,9 +65,10 @@ class ClientsController < ApplicationController
     render inertia: "Clients/Show", props: {
       client: -> { client_for_show.render(:show) },
       can_update: -> { policy(client).update? },
+      can_view_open_shifts: -> { Shifts::OpenVisibility.can_view?(current_user, client) },
+      open_shifts_count: -> { Shifts::OpenVisibility.future_open_count_for_client(current_user, client) },
     }
   end
-
 
   # @route GET /clients/new (new_client)
   def new
@@ -103,7 +104,6 @@ class ClientsController < ApplicationController
       },
     }
   end
-
 
   # @route POST /clients (clients)
   def create

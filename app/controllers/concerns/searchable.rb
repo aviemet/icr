@@ -53,7 +53,6 @@ module Searchable
             end_date: end_date,
           })
         end
-
       end,
     }
     self.internal_filterable_fields = {}
@@ -186,11 +185,8 @@ module Searchable
     relation = relation.joins(config[:joins]) if config[:joins].present?
 
     case config[:type]
-    when :created_at
-      created_at_handler = (internal_advanced_search_methods || {})[:created_at]
-      return relation unless created_at_handler
-
-      created_at_handler.call(relation, key, value)
+    when :created_at, :date_range
+      apply_date_range_filter(relation, key, value, config)
     when :in
       apply_in_filter(relation, key, value, config)
     when :cast_ilike
@@ -204,6 +200,49 @@ module Searchable
       column = resolve_filter_column(relation, key, config)
       apply_ilike_filter(relation, key, column, value)
     end
+  end
+
+  def apply_date_range_filter(relation, key, value, config)
+    return relation unless value.respond_to?(:[])
+
+    start_date = value[:start].presence&.to_date
+    return relation if start_date.nil?
+
+    column = resolve_filter_column(relation, key, config)
+    field_type = filter_column_type(relation, key, column)
+    range_type = value[:type].presence || "range"
+
+    case range_type
+    when "before"
+      bound = date_range_lower_bound(start_date, field_type)
+      relation.where("#{column} <= ?", bound)
+    when "after"
+      bound = date_range_lower_bound(start_date, field_type)
+      relation.where("#{column} >= ?", bound)
+    when "exact"
+      if field_type == :date
+        relation.where("#{column} = ?", start_date)
+      else
+        relation.where("#{column} >= ? AND #{column} <= ?", start_date.beginning_of_day, start_date.end_of_day)
+      end
+    when "range"
+      end_date = value[:end].presence&.to_date
+      return relation if end_date.nil?
+
+      lower = date_range_lower_bound(start_date, field_type)
+      upper = date_range_upper_bound(end_date, field_type)
+      relation.where("#{column} >= ? AND #{column} <= ?", lower, upper)
+    else
+      relation
+    end
+  end
+
+  def date_range_lower_bound(date, field_type)
+    field_type == :date ? date : date.beginning_of_day
+  end
+
+  def date_range_upper_bound(date, field_type)
+    field_type == :date ? date : date.end_of_day
   end
 
   def apply_in_filter(relation, key, value, config)
@@ -263,7 +302,7 @@ module Searchable
       case config[:type]
       when :in
         arrays[name] = []
-      when :created_at
+      when :created_at, :date_range
         nested[name] = [:start, :end, :type]
       else
         scalars << name

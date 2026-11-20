@@ -1,4 +1,5 @@
 import dayjs from "dayjs"
+import { omit } from "es-toolkit"
 import { useMemo, useState } from "react"
 
 import { Box, Button, Grid, Group } from "@/components"
@@ -101,7 +102,33 @@ export function EventForm({
 	}
 
 	const submitWith = (data: EventData) => {
-		const mutation = isEdit ? updateEvent.mutateAsync(data) : createEvent.mutateAsync(data)
+		const calendarEvent = data.calendar_event as EventData["calendar_event"] & {
+			event_participants_attributes?: EventData["calendar_event"]["event_participants"]
+			shift_attributes?: EventData["calendar_event"]["shift"]
+		}
+		const existingParticipants = calendarEvent.event_participants_attributes
+			?? calendarEvent.event_participants
+		const participants = (existingParticipants && existingParticipants.length > 0)
+			? existingParticipants
+			: [{ participant_type: "Client", participant_id: client.id }]
+		const usesRailsAttributes = Object.prototype.hasOwnProperty.call(calendarEvent, "shift_attributes")
+			|| Object.prototype.hasOwnProperty.call(calendarEvent, "event_participants_attributes")
+
+		const nextCalendarEvent = usesRailsAttributes
+			? {
+				...omit(calendarEvent, ["event_participants"]),
+				event_participants_attributes: participants,
+			}
+			: {
+				...calendarEvent,
+				event_participants: participants,
+			}
+
+		const payload = {
+			...data,
+			calendar_event: nextCalendarEvent,
+		} as EventData
+		const mutation = isEdit ? updateEvent.mutateAsync(payload) : createEvent.mutateAsync(payload)
 
 		return mutation
 			.then(() => {
@@ -138,7 +165,11 @@ export function EventForm({
 
 				{ eventType === CALENDAR_EVENT_SHIFT &&
 					<Grid.Col>
-						<EmployeesDropdown name="calendar_event.shift.employee_id" clearable={ false } />
+						<EmployeesDropdown
+							name="calendar_event.shift.employee_id"
+							clearable={ true }
+							comboboxProps={ { withinPortal: false } }
+						/>
 					</Grid.Col>
 				}
 

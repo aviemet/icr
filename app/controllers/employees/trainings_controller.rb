@@ -3,6 +3,7 @@ class Employees::TrainingsController < Employees::BaseController
 
   strong_params :employees_training, permit: [:training_id, :started_at, :completed_at]
 
+  # @route POST /employees/:employee_slug/trainings (employee_trainings)
   def create
     authorize_employee_update!
     employees_training.assign_attributes(employees_training_params)
@@ -10,12 +11,15 @@ class Employees::TrainingsController < Employees::BaseController
     redirect_to_employee_tab("trainings")
   end
 
+  # @route PATCH /employees/:employee_slug/trainings/:id (employee_training)
+  # @route PUT /employees/:employee_slug/trainings/:id (employee_training)
   def update
     authorize_employee_update!
     employees_training.update(employees_training_params)
     redirect_to_employee_tab("trainings")
   end
 
+  # @route DELETE /employees/:employee_slug/trainings/:id (employee_training)
   def destroy
     authorize_employee_update!
     employees_training.destroy!

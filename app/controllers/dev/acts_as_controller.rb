@@ -4,12 +4,14 @@ module Dev
   class ActsAsController < ApplicationController
     before_action :ensure_acts_as_available
 
+    # @route POST /dev/acts_as (dev_acts_as)
     def create
       user = User.find(params.require(:user_id))
       start_acts_as!(user)
       redirect_to root_path
     end
 
+    # @route DELETE /dev/acts_as (dev_acts_as)
     def destroy
       stop_acts_as!
       redirect_to root_path

@@ -4,11 +4,12 @@ import type EmployeeClearancesPersisted from '../Employee/Clearances/Persisted'
 import type ClientsAttendantsPersisted from '../ClientsAttendants/Persisted'
 import type ClientsManagersPersisted from '../ClientsManagers/Persisted'
 import type EmployeeCredentialsPersisted from '../Employee/Credentials/Persisted'
+import type EmployeeJobTitle from '../Employee/JobTitle'
 import type EmployeeEmployeesTrainingsPersisted from '../Employee/EmployeesTrainings/Persisted'
 import type IdentificationsShow from '../Identifications/Show'
 import type EmployeeInterviewsPersisted from '../Employee/Interviews/Persisted'
-import type EmployeeJobTitle from '../Employee/JobTitle'
 import type EmployeeEmployeesManagersPersisted from '../Employee/EmployeesManagers/Persisted'
+import type EmployeeOffersPersisted from '../Employee/Offers/Persisted'
 import type EmployeePayRatesPersisted from '../Employee/PayRates/Persisted'
 import type PeopleShow from '../People/Show'
 import type EmployeesPersisted from './Persisted'
@@ -19,6 +20,7 @@ declare global {
     interface EmployeesShow {
       id: string
       active_at?: Date
+      application_source?: string
       assigned_clients_count: number
       attended_clients: ClientsPersisted[]
       clearances: EmployeeClearancesPersisted[]
@@ -30,6 +32,12 @@ declare global {
       created_at: Date
       credentials: EmployeeCredentialsPersisted[]
       current_pay_period_id?: string
+      desired_compensation?: string
+      desired_compensation_cents?: number
+      desired_compensation_currency: string
+      desired_compensation_period: "hourly" | "salary"
+      desired_job_title?: EmployeeJobTitle
+      desired_job_title_id?: string
       documents: Array<{ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date }>
       eligible_for_hire: boolean
       emergency_contacts_count: number
@@ -38,6 +46,7 @@ declare global {
       expiring_credentials_count: number
       first_name: string
       full_name: string
+      hiring_notes?: string
       identifications: IdentificationsShow[]
       images: Array<{ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date }>
       inactive_at?: Date
@@ -50,13 +59,16 @@ declare global {
       managers_employees_managers: EmployeeEmployeesManagersPersisted[]
       name: string
       number?: string
+      offers: EmployeeOffersPersisted[]
       pay_rates: EmployeePayRatesPersisted[]
+      pending_termination_at?: Date
       person: PeopleShow
       person_id: string
       preferred_language?: string
       primary_manager: EmployeesPersisted
+      resume?: ({ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date } | null)
       slug: string
-      status: "applicant" | "offered" | "employed" | "declined" | "terminated" | "application_withdrawn"
+      status: "applicant" | "offered" | "employed" | "declined" | "terminated" | "withdrawn"
       support_contacts: EmployeeSupportContactsPersisted[]
       termination_reason?: string
       updated_at: Date

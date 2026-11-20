@@ -59,6 +59,7 @@ export function DateTimeInput({
 					withDropdown: true,
 					popoverProps: { withinPortal: false },
 					format: "12h",
+					minutesStep: 5,
 				} }
 				{ ...props }
 			/>

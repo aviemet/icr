@@ -22,8 +22,10 @@ RSpec.describe Dashboard::StatsSerializer do
       :pending_timesheet_count,
       :upcoming_events,
       :activity_items,
+      :pending_terminations,
     )
     expect(json[:upcoming_events]).to be_an(Array)
     expect(json[:activity_items]).to be_an(Array)
+    expect(json[:pending_terminations]).to be_an(Array)
   end
 end

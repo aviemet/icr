@@ -71,7 +71,16 @@ export const themeObject: Partial<CustomMantineTheme> = {
 		Card: {
 			styles: (theme: MantineTheme) => ({
 				root: {
-					backgroundColor: `light-dark(${theme.colors.gray[1]}, ${theme.colors.dark[6]})`,
+					backgroundColor: `light-dark(${theme.white}, ${theme.colors.dark[6]})`,
+					borderColor: `light-dark(${theme.colors.gray[3]}, ${theme.colors.dark[4]})`,
+				},
+			}),
+		},
+		Paper: {
+			styles: (theme: MantineTheme) => ({
+				root: {
+					backgroundColor: `light-dark(${theme.white}, ${theme.colors.dark[6]})`,
+					borderColor: `light-dark(${theme.colors.gray[3]}, ${theme.colors.dark[4]})`,
 				},
 			}),
 		},

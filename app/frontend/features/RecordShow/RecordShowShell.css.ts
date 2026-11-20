@@ -119,9 +119,5 @@ export const tabs = css`
 		flex: 1 1 auto;
 		min-height: 0;
 		overflow: auto;
-		padding: ${ vars.spacing.md };
-		border-radius: ${ vars.radius.md };
-		border: 1px solid light-dark(${ vars.colors.gray[3] }, ${ vars.colors.dark[4] });
-		background-color: light-dark(${ vars.colors.white }, ${ vars.colors.dark[8] });
 	}
 `

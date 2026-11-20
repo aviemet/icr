@@ -4,7 +4,7 @@ class CreateInterviewNotes < ActiveRecord::Migration[7.2]
       t.text :note
       t.integer :recommendation
       t.belongs_to :employee, null: false, foreign_key: true, type: :uuid
-      t.belongs_to :interview, null: false, type: :uuid, foreign_key: { to_table: :employees }
+      t.belongs_to :interview, null: false, type: :uuid, foreign_key: true
 
       t.timestamps
     end

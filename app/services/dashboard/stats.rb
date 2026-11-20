@@ -13,6 +13,24 @@ class Dashboard::Stats
     end
   end
 
+  PendingTermination = Struct.new(:id, :slug, :name, :inactive_at, keyword_init: true) do
+    def to_h
+      { id: id, slug: slug, name: name, inactive_at: inactive_at }
+    end
+  end
+
+  OpenShiftItem = Struct.new(:id, :client_name, :client_slug, :starts_at, :ends_at, keyword_init: true) do
+    def to_h
+      {
+        id: id,
+        client_name: client_name,
+        client_slug: client_slug,
+        starts_at: starts_at,
+        ends_at: ends_at,
+      }
+    end
+  end
+
   Payload = Struct.new(
     :active_client_count,
     :inactive_client_count,
@@ -20,8 +38,11 @@ class Dashboard::Stats
     :hiring_pipeline_count,
     :week_tracked_hours,
     :pending_timesheet_count,
+    :open_shift_count,
     :upcoming_events,
+    :open_shifts,
     :activity_items,
+    :pending_terminations,
     keyword_init: true,
   ) do
     def to_h
@@ -32,8 +53,11 @@ class Dashboard::Stats
         hiring_pipeline_count: hiring_pipeline_count,
         week_tracked_hours: week_tracked_hours,
         pending_timesheet_count: pending_timesheet_count,
+        open_shift_count: open_shift_count,
         upcoming_events: upcoming_events.map(&:to_h),
+        open_shifts: open_shifts.map(&:to_h),
         activity_items: activity_items.map(&:to_h),
+        pending_terminations: pending_terminations.map(&:to_h),
       }
     end
   end
@@ -50,8 +74,11 @@ class Dashboard::Stats
       hiring_pipeline_count: hiring_pipeline_count,
       week_tracked_hours: week_tracked_hours_total,
       pending_timesheet_count: pending_timesheet_count,
+      open_shift_count: open_shift_count,
       upcoming_events: upcoming_events_payload,
+      open_shifts: open_shifts_payload,
       activity_items: activity_items_payload,
+      pending_terminations: pending_terminations_payload,
     )
   end
 
@@ -132,6 +159,27 @@ class Dashboard::Stats
     I18n.t("views.dashboard.schedule.shift_for", name: person.name)
   end
 
+  def open_shift_count
+    Shifts::OpenVisibility.new(user).future_open_count
+  end
+
+  def open_shifts_payload
+    Shifts::OpenVisibility.future_open_shifts_for(user)
+      .limit(5)
+      .map { |shift| serialize_open_shift(shift) }
+  end
+
+  def serialize_open_shift(shift)
+    client = shift.calendar_event&.clients&.first
+    OpenShiftItem.new(
+      id: shift.id,
+      client_name: client&.person&.name.to_s.presence || I18n.t("views.dashboard.schedule.open_shift"),
+      client_slug: client&.slug.to_s,
+      starts_at: shift.starts_at.iso8601,
+      ends_at: shift.ends_at.iso8601,
+    )
+  end
+
   def activity_items_payload
     client_rows = clients_scope.includes(:person).order(created_at: :desc).limit(5).map do |client|
       ActivityItem.new(
@@ -179,5 +227,30 @@ class Dashboard::Stats
     timesheets_scope
       .where(pay_period_id: pay_period.id, approved_at: nil)
       .count
+  end
+
+  def can_view_pending_terminations?
+    return false if user.blank?
+    return true if user.has_role?(:admin)
+
+    job_title = user.person&.employee&.job_title
+    job_title&.has_role?(:update, Employee) || false
+  end
+
+  def pending_terminations_payload
+    return [] unless can_view_pending_terminations?
+
+    employees_scope
+      .pending_termination
+      .includes(:person)
+      .order(:inactive_at)
+      .map do |employee|
+        PendingTermination.new(
+          id: employee.id,
+          slug: employee.slug,
+          name: employee.person&.name.to_s,
+          inactive_at: employee.inactive_at.iso8601,
+        )
+      end
   end
 end

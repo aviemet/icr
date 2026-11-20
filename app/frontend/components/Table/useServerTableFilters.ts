@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react"
 
 import { useLocation } from "@/lib/hooks/useLocation"
 
+import { type DateRangeFilterValue } from "./Filters"
 import { useTableContext } from "./Provider"
 import {
 	defaultServerTableFilterValues,
@@ -12,6 +13,10 @@ import {
 	type ServerTableFilterField,
 	type ServerTableFilterValues,
 } from "./serverTableFilters"
+
+function isDateRangeValue(value: string | string[] | DateRangeFilterValue | undefined): value is DateRangeFilterValue {
+	return typeof value === "object" && value !== null && !Array.isArray(value) && "start" in value && "end" in value
+}
 
 function valuesEqual(left: ServerTableFilterValues, right: ServerTableFilterValues) {
 	const leftKeys = Object.keys(left)
@@ -24,6 +29,10 @@ function valuesEqual(left: ServerTableFilterValues, right: ServerTableFilterValu
 		if(Array.isArray(leftValue) && Array.isArray(rightValue)) {
 			return leftValue.length === rightValue.length &&
 				leftValue.every((value, index) => value === rightValue[index])
+		}
+
+		if(isDateRangeValue(leftValue) && isDateRangeValue(rightValue)) {
+			return leftValue.start === rightValue.start && leftValue.end === rightValue.end
 		}
 
 		return leftValue === rightValue
@@ -111,9 +120,16 @@ export function useServerTableFilters({
 		visitImmediate(nextValues)
 	}
 
+	const setDateRange = (param: string, value: DateRangeFilterValue) => {
+		const nextValues = { ...values, [param]: value }
+		setValues(nextValues)
+		visitImmediate(nextValues)
+	}
+
 	return {
 		values,
 		setText,
 		setMulti,
+		setDateRange,
 	}
 }

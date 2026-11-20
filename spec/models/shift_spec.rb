@@ -11,7 +11,7 @@ require "rails_helper"
 #  updated_at        :datetime         not null
 #  calendar_event_id :uuid             not null
 #  category_id       :uuid             not null
-#  employee_id       :uuid             not null
+#  employee_id       :uuid
 #  timesheet_id      :uuid
 #
 # Indexes
@@ -30,9 +30,29 @@ require "rails_helper"
 #
 RSpec.describe Shift, type: :model do
   describe "associations" do
-    it { is_expected.to belong_to(:employee) }
+    it { is_expected.to belong_to(:employee).optional }
     it { is_expected.to belong_to(:calendar_event) }
     it { is_expected.to belong_to(:timesheet).optional }
+  end
+
+  describe "open shifts" do
+    it "persists without an employee" do
+      event = create(:calendar_event, starts_at: 1.day.from_now, ends_at: 1.day.from_now + 2.hours)
+      shift = create(:shift, :open, calendar_event: event)
+
+      expect(shift).to be_open
+      expect(shift.employee_id).to be_nil
+      expect(shift.timesheet_id).to be_nil
+    end
+
+    it "normalizes blank employee_id to nil" do
+      event = create(:calendar_event, starts_at: 1.day.from_now, ends_at: 1.day.from_now + 2.hours)
+      shift = build(:shift, calendar_event: event, employee: nil)
+      shift.employee_id = ""
+
+      expect(shift).to be_valid
+      expect(shift.employee_id).to be_nil
+    end
   end
 
   describe "after_create :attach_to_containing_pay_period" do

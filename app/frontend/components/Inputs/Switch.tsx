@@ -2,14 +2,15 @@ import {
 	Switch as MantineSwitch,
 	type SwitchProps as MantineSwitchProps,
 } from "@mantine/core"
+import clsx from "clsx"
 import React from "react"
 
 import { useFormFieldError } from "@/components/Form"
 
 import { InputWrapper } from "./InputWrapper"
+import * as classes from "./Switch.css"
 
 import { type BaseInputProps } from "."
-
 
 export interface SwitchProps extends MantineSwitchProps, Omit<BaseInputProps, "disableAutofill"> {
 	ref?: React.Ref<HTMLInputElement>
@@ -22,6 +23,7 @@ export function Switch({
 	wrapper,
 	wrapperProps,
 	error,
+	className,
 	ref,
 	...props
 }: SwitchProps) {
@@ -36,6 +38,7 @@ export function Switch({
 				name={ name }
 				required={ props.required }
 				error={ error ?? fieldError }
+				className={ clsx(classes.root, className) }
 				style={ [{ padding: "14px 10px" }, style] }
 				{ ...props }
 			/>

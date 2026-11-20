@@ -2,29 +2,37 @@
 #
 # Table name: employees
 #
-#  id                   :uuid             not null, primary key
-#  active_at            :date
-#  color                :string
-#  communication_notes  :text
-#  eligible_for_hire    :boolean          default(TRUE), not null
-#  inactive_at          :date
-#  ineligibility_reason :text
-#  number               :string
-#  preferred_language   :string
-#  slug                 :string           not null
-#  status               :integer
-#  termination_reason   :text
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#  person_id            :uuid             not null
+#  id                            :uuid             not null, primary key
+#  active_at                     :date
+#  application_source            :string
+#  color                         :string
+#  communication_notes           :text
+#  desired_compensation_cents    :integer
+#  desired_compensation_currency :string           default("USD"), not null
+#  desired_compensation_period   :integer
+#  eligible_for_hire             :boolean          default(TRUE), not null
+#  hiring_notes                  :text
+#  inactive_at                   :datetime
+#  ineligibility_reason          :text
+#  number                        :string
+#  preferred_language            :string
+#  slug                          :string           not null
+#  status                        :integer
+#  termination_reason            :text
+#  created_at                    :datetime         not null
+#  updated_at                    :datetime         not null
+#  desired_job_title_id          :uuid
+#  person_id                     :uuid             not null
 #
 # Indexes
 #
-#  index_employees_on_person_id  (person_id)
-#  index_employees_on_slug       (slug) UNIQUE
+#  index_employees_on_desired_job_title_id  (desired_job_title_id)
+#  index_employees_on_person_id             (person_id)
+#  index_employees_on_slug                  (slug) UNIQUE
 #
 # Foreign Keys
 #
+#  fk_rails_...  (desired_job_title_id => job_titles.id)
 #  fk_rails_...  (person_id => people.id)
 #
 class Employee < ApplicationRecord
@@ -37,6 +45,14 @@ class Employee < ApplicationRecord
   include Attachment::HasImages
   include Attachment::HasDocuments
   include Employee::StateMachine
+
+  has_one_attached :resume
+
+  monetize :desired_compensation_cents,
+    allow_nil: true,
+    numericality: { greater_than: 0, allow_nil: true }
+
+  enum :desired_compensation_period, { hourly: 0, salary: 1 }, prefix: :desired
 
   extend FriendlyId
 
@@ -59,8 +75,14 @@ class Employee < ApplicationRecord
     employed: 2,
     declined: 3,
     terminated: 4,
-    application_withdrawn: 5
+    withdrawn: 5
   }
+
+  WORKFORCE_STATUSES = %w[employed terminated].freeze
+  PIPELINE_STATUSES = %w[applicant offered declined withdrawn].freeze
+
+  scope :workforce, -> { where(status: WORKFORCE_STATUSES) }
+  scope :pipeline, -> { where(status: PIPELINE_STATUSES) }
 
   resourcify
 
@@ -78,7 +100,7 @@ class Employee < ApplicationRecord
     assign_job_title(new_job_title)
   end
 
-  def assign_job_title(new_job_title, starts_at: Time.current)
+  def assign_job_title(new_job_title, starts_at: Time.current, application_type: :new_hire)
     if new_job_title.is_a?(String) || new_job_title.is_a?(Symbol)
       search_term = new_job_title.to_s
       new_job_title = Employee::JobTitle.find_by(name: search_term.titleize) ||
@@ -93,7 +115,7 @@ class Employee < ApplicationRecord
       employees_job_titles.create!(
         job_title: new_job_title,
         starts_at: starts_at,
-        application_type: :new_hire,
+        application_type: application_type,
         offer_status: :accepted,
       )
     end
@@ -205,6 +227,8 @@ class Employee < ApplicationRecord
   has_many :credentials, class_name: "Employee::Credential", dependent: :destroy, inverse_of: :employee
   has_many :clearances, class_name: "Employee::Clearance", dependent: :destroy, inverse_of: :employee
   has_many :interviews, class_name: "Employee::Interview", dependent: :destroy, inverse_of: :employee
+  has_many :offers, class_name: "Employee::Offer", dependent: :destroy, inverse_of: :employee
+  belongs_to :desired_job_title, class_name: "Employee::JobTitle", optional: true
 
   ####################
   # Interview Notes  #
@@ -220,6 +244,7 @@ class Employee < ApplicationRecord
   scope :applicants, -> { where(status: :applicant) }
   scope :actively_employed, -> { where(status: :employed) }
   scope :terminated, -> { where(status: :terminated) }
+  scope :pending_termination, -> { actively_employed.where("inactive_at > ?", Time.current) }
   scope :eligible_for_hire, -> { where(eligible_for_hire: true) }
   scope :not_eligible_for_hire, -> { where(eligible_for_hire: false) }
 
@@ -239,7 +264,9 @@ class Employee < ApplicationRecord
       primary_manager: { person: :contact },
       employees_trainings: :training,
       support_contacts: { person: { contact: [:phones, :emails, :addresses] } },
-      interviews: [],
+      interviews: [:interview_notes, :interviewers],
+      offers: :job_title,
+      desired_job_title: [],
       person: { contact: { addresses: :category, emails: :category, phones: :category } },
     )
   }
@@ -259,10 +286,18 @@ class Employee < ApplicationRecord
     eligible_for_hire
   end
 
+  def pending_termination?
+    employed? && inactive_at.present? && inactive_at > Time.current
+  end
+
+  def pending_termination_at
+    pending_termination? ? inactive_at : nil
+  end
+
   validates :active_at, presence: true, if: -> { employed? }
   validates :inactive_at, presence: true, if: -> { terminated? }
   validates :termination_reason, presence: true, if: -> { terminated? }
-  validates :ineligibility_reason, presence: true, if: -> { application_withdrawn? }
+  validates :ineligibility_reason, presence: true, if: -> { withdrawn? || declined? }
 
   private
 

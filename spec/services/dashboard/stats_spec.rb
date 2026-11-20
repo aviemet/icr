@@ -56,6 +56,49 @@ RSpec.describe Dashboard::Stats do
       expect(payload.week_tracked_hours).to be_within(0.01).of(8.0)
       expect(payload.pending_timesheet_count).to eq(1)
       expect(payload.activity_items.map(&:kind)).to include("client", "employee")
+      expect(payload.pending_terminations).to eq([])
+    end
+
+    it "includes pending terminations for an admin" do
+      pending = create(:employee, :employed)
+      pending.update!(inactive_at: 2.days.from_now, termination_reason: "Leaving")
+
+      payload = described_class.new(admin).payload
+
+      expect(payload.pending_terminations.map(&:id)).to eq([pending.id])
+      expect(payload.pending_terminations.first.slug).to eq(pending.slug)
+    end
+
+    it "includes future open shifts for an admin and excludes past ones" do
+      client = create(:client)
+      future_event = create(:calendar_event, starts_at: 1.day.from_now, ends_at: 1.day.from_now + 2.hours)
+      create(:event_participant, calendar_event: future_event, participant: client)
+      future_shift = create(:shift, :open, calendar_event: future_event)
+
+      past_event = create(:calendar_event, starts_at: 1.day.ago, ends_at: 1.day.ago + 2.hours)
+      create(:event_participant, calendar_event: past_event, participant: client)
+      create(:shift, :open, calendar_event: past_event)
+
+      payload = described_class.new(admin).payload
+
+      expect(payload.open_shift_count).to eq(1)
+      expect(payload.open_shifts.map(&:id)).to eq([future_shift.id])
+      expect(payload.open_shifts.first.client_slug).to eq(client.slug)
+    end
+
+    it "returns empty open shifts for attendants" do
+      client = create(:client)
+      attendant_user = create(:user)
+      attendant = create(:employee, person: attendant_user.person)
+      create(:clients_attendant, client: client, attendant: attendant)
+      event = create(:calendar_event, starts_at: 1.day.from_now, ends_at: 1.day.from_now + 2.hours)
+      create(:event_participant, calendar_event: event, participant: client)
+      create(:shift, :open, calendar_event: event)
+
+      payload = described_class.new(attendant_user).payload
+
+      expect(payload.open_shift_count).to eq(0)
+      expect(payload.open_shifts).to eq([])
     end
   end
 end

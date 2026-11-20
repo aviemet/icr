@@ -13,7 +13,7 @@ import { type PopoverContentMap } from "@/components/Calendar/components/Calenda
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 import { NAVIGATION_ACTION, VIEW_NAMES } from "@/components/Calendar/views"
 import { EventPopoverContent } from "@/domains/Clients/EventPopoverContent"
-import { ensureViewName, Routes } from "@/lib"
+import { ensureViewName, Routes, vars } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
 import { useCalendarScheduleQueryInitialData, useLocation } from "@/lib/hooks"
@@ -29,6 +29,8 @@ type ScheduleResources = Record<string, object> & {
 	client?: Schema.ClientsPersisted
 	employee?: Schema.EmployeesPersisted
 }
+
+const OPEN_SHIFT_COLOR = vars.colors.red[6]
 
 function isScheduleResources(resources: EventResources | undefined): resources is ScheduleResources {
 	return resources !== undefined && ("client" in resources || "employee" in resources)
@@ -87,20 +89,27 @@ const Schedule = ({ household, schedules: initialSchedules }: ScheduleProps) => 
 			const end = ensureDate(schedule.ends_at)
 			const client = schedule.clients?.[0]
 			const employee = schedule.shift?.employee
+			const isOpenShift = employee === undefined || employee === null
 			const totalClients = schedule.clients?.length ?? 0
 			const clientInitial = client?.first_name?.trim()?.[0] || client?.full_name?.trim()?.[0] || client?.name?.trim()?.[0]
 			const indicatorLabel = totalClients > 1 ? "+" : (clientInitial ? clientInitial.toUpperCase() : undefined)
+			const resources: ScheduleResources = {}
+			if(client) resources.client = client
+			if(employee) resources.employee = employee
 
 			return {
 				id: schedule.id,
-				title: client ? (client.full_name || client.name) : (schedule.name ?? ""),
+				title: isOpenShift
+					? (schedule.name || "Open shift")
+					: (client ? (client.full_name || client.name) : (schedule.name ?? "")),
 				start,
 				end,
 				allDay: schedule.all_day,
-				color: employee?.color,
+				color: isOpenShift ? OPEN_SHIFT_COLOR : employee?.color,
+				open: isOpenShift,
 				indicatorColor: client?.color,
 				indicatorLabel,
-				resources: { client, employee },
+				resources,
 			}
 		}) ?? []
 	}, [data])

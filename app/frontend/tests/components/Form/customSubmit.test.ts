@@ -28,12 +28,15 @@ describe("components/Form/customSubmit", () => {
 		expect(defaultNormalizeSubmitError(null)).toEqual({})
 	})
 
-	it("ignores non-string error values", () => {
+	it("reads the first message from array error values", () => {
 		expect(defaultNormalizeSubmitError({
 			errors: {
 				email: ["is invalid"],
 				name: "required",
 			},
-		})).toEqual({ name: "required" })
+		})).toEqual({
+			email: "is invalid",
+			name: "required",
+		})
 	})
 })

@@ -67,7 +67,11 @@ export function RecordShowShell({
 						</div>
 
 						{ tabs.map(tab => (
-							<Tabs.Panel key={ tab.id } value={ tab.id }>
+							<Tabs.Panel
+								key={ tab.id }
+								value={ tab.id }
+								className={ pageChrome.panelWrapperSurface }
+							>
 								{ tab.panel }
 							</Tabs.Panel>
 						)) }

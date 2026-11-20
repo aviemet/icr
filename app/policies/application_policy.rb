@@ -35,7 +35,7 @@ class ApplicationPolicy
   def initialize(user, record)
     @user = user
     @record = record
-    @person = @user.person
+    @person = @user&.person
     @employee = @person&.employee
     @job_title = @employee&.job_title
     @client = @person&.client

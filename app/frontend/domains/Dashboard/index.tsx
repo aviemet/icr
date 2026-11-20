@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next"
 
-import { Box, Section, Text, Title } from "@/components"
+import { Box, Link, Section, Text, Title } from "@/components"
 import { CalendarIcon, ClockIcon, HomeIcon, PeopleIcon } from "@/components/Icons"
+import { PendingTerminationsList } from "@/domains/Employees/PendingTermination"
 import {
 	BoardActionGrid,
 	BoardActionTile,
@@ -26,6 +27,7 @@ export function DashboardBoard({ dashboard }: DashboardBoardProps) {
 	const user = auth.user
 	const hoursLabel = formatter.number.decimal(dashboard.week_tracked_hours, 1)
 	const timeTone = dashboard.pending_timesheet_count > 0 ? "alert" : "default"
+	const scheduleTone = dashboard.open_shift_count > 0 ? "alert" : "default"
 	const canViewClients = can("clients", "index")
 	const canCreateClients = can("clients", "create")
 	const canViewEmployees = can("employees", "index")
@@ -160,26 +162,59 @@ export function DashboardBoard({ dashboard }: DashboardBoardProps) {
 					</MetricTile>
 				</Box>
 
+				{ dashboard.pending_terminations.length > 0 && (
+					<PendingTerminationsList pendingTerminations={ dashboard.pending_terminations } />
+				) }
+
 				<Box className={ classes.secondaryRow }>
 					<MetricTile
 						title={ t("views.dashboard.schedule.title") }
+						tone={ scheduleTone }
 						icon={ <CalendarIcon size={ 16 } /> }
 					>
+						{ dashboard.open_shift_count > 0 && (
+							<MetricLine
+								label={ t("views.dashboard.schedule.open_shifts", { count: dashboard.open_shift_count }) }
+								value={ (
+									<CountChip
+										value={ dashboard.open_shift_count }
+										alert
+									/>
+								) }
+							/>
+						) }
 						<Box className={ classes.list }>
-							{ dashboard.upcoming_events.length === 0
+							{ dashboard.open_shifts.length > 0
 								? (
-									<Text size="sm" c="dimmed">{ t("views.dashboard.schedule.empty") }</Text>
-								)
-								: (
-									dashboard.upcoming_events.map((event) => (
-										<Box key={ event.id } className={ classes.listItem }>
-											<span>{ event.name }</span>
+									dashboard.open_shifts.map((shift) => (
+										<Box key={ shift.id } className={ classes.listItem }>
+											{ shift.client_slug
+												? (
+													<Link href={ Routes.scheduleClient(shift.client_slug) }>
+														{ shift.client_name }
+													</Link>
+												)
+												: <span>{ shift.client_name }</span> }
 											<span className={ classes.listMeta }>
-												{ formatter.datetime.timeShort(event.starts_at) }
+												{ formatter.datetime.timeShort(shift.starts_at) }
 											</span>
 										</Box>
 									))
-								) }
+								)
+								: dashboard.upcoming_events.length === 0
+									? (
+										<Text size="sm" c="dimmed">{ t("views.dashboard.schedule.empty") }</Text>
+									)
+									: (
+										dashboard.upcoming_events.map((event) => (
+											<Box key={ event.id } className={ classes.listItem }>
+												<span>{ event.name }</span>
+												<span className={ classes.listMeta }>
+													{ formatter.datetime.timeShort(event.starts_at) }
+												</span>
+											</Box>
+										))
+									) }
 						</Box>
 						{ canViewPayroll && (
 							<BoardActionGrid>

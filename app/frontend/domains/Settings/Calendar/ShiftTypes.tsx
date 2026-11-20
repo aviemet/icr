@@ -1,5 +1,4 @@
 import { router } from "@inertiajs/react"
-import clsx from "clsx"
 import { useState } from "react"
 
 import {
@@ -111,7 +110,6 @@ export function ShiftTypes({ shift_types }: ShiftTypesProps) {
 					withBorder
 					radius="md"
 					shadow="xs"
-					className={ classes.panel }
 					style={ { overflow: "hidden" } }
 				>
 					<Table.Provider>
@@ -146,7 +144,7 @@ export function ShiftTypes({ shift_types }: ShiftTypesProps) {
 					radius="md"
 					shadow="xs"
 					p="md"
-					className={ clsx(classes.panel, classes.addForm) }
+					className={ classes.addForm }
 				>
 					<Group align="flex-end" gap="sm" wrap="nowrap">
 						<TextInput

@@ -20,6 +20,7 @@ export interface BaseCalendarEvent<TEventResources extends EventResources = Even
 	end: Date
 	allDay?: boolean
 	color?: string
+	open?: boolean
 	indicatorColor?: string
 	indicatorLabel?: string
 	description?: string
@@ -27,7 +28,7 @@ export interface BaseCalendarEvent<TEventResources extends EventResources = Even
 	resourceId?: string | number
 }
 
-export type CalendarEventTitleCallback<TEventResources extends EventResources = EventResources> = (event: Pick<BaseCalendarEvent<TEventResources>, "start" | "end" | "allDay" | "title" | "resources" | "resourceId">) => string
+export type CalendarEventTitleCallback<TEventResources extends EventResources = EventResources> = (event: Pick<BaseCalendarEvent<TEventResources>, "start" | "end" | "allDay" | "title" | "open" | "resources" | "resourceId">) => string
 
 export type CalendarClickTarget =
 	| { type: "event", event: BaseCalendarEvent, element: HTMLElement }
@@ -40,6 +41,7 @@ interface CalendarContextValue {
 	upsertDraftEvent: (event: BaseCalendarEvent) => void
 	patchDraftEvent: (id: BaseCalendarEvent["id"], patch: Partial<BaseCalendarEvent>) => void
 	removeDraftEvent: (id: BaseCalendarEvent["id"]) => void
+	closePopover: () => void
 	localizer: CalendarLocalizer
 	handleViewChange: (view: VIEW_NAMES) => void
 	handleDateChange: (action: NAVIGATION_ACTION, newDate?: Date) => void

@@ -16,4 +16,3 @@ class Api::ClientsController < ApplicationController
     render json: schedules.render(:client)
   end
 end
-

@@ -16,6 +16,9 @@ import Profile from "./Profile"
 
 export interface ShowClientProps {
 	client: Schema.ClientsShow
+	can_update?: boolean
+	can_view_open_shifts?: boolean
+	open_shifts_count?: number
 }
 
 const ShowClient = ({ client }: ShowClientProps) => {

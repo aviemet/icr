@@ -243,6 +243,22 @@ RSpec.describe PayPeriod, type: :model do
         expect(pay_period.ends_at.to_date).to eq(Date.new(2024, 3, 31))
       end
     end
+
+    it "skips open shifts without an employee" do
+      travel_to Time.zone.local(2024, 3, 10, 12, 0, 0) do
+        expect {
+          create(
+            :shift,
+            :open,
+            calendar_event: create(
+              :calendar_event,
+              starts_at: Time.zone.local(2024, 3, 20, 9, 0, 0),
+              ends_at: Time.zone.local(2024, 3, 20, 17, 0, 0),
+            ),
+          )
+        }.not_to change(described_class, :count)
+      end
+    end
   end
 
   describe "#sync_shifts!" do

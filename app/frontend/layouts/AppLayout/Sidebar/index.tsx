@@ -8,7 +8,7 @@ import {
 	Text,
 	Divider,
 } from "@/components"
-import { ClientIcon, ClockIcon, DashboardIcon, EmployeeIcon, HelpingIcon, SettingsIcon } from "@/components/Icons"
+import { ClientIcon, ClockIcon, DashboardIcon, EmployeeIcon, HelpingIcon, PeopleIcon, SettingsIcon } from "@/components/Icons"
 import { IconProvider } from "@/layouts/Providers/IconProvider"
 import { matchesAtPosition, Routes } from "@/lib"
 import { useLocation, usePageProps, usePermissions } from "@/lib/hooks"
@@ -92,6 +92,11 @@ export function Sidebar() {
 								leftSection={ <EmployeeIcon /> }
 								active={ matchesAtPosition(paths, [0, "employees"]) }
 							>
+								<MenuLink
+									label="Applicants"
+									href={ Routes.applicants() }
+									active={ matchesAtPosition(paths, [1, "applicants"]) }
+								/>
 								{ can("requirement/requirements", "index") && (
 									<MenuLink
 										label="Documents"
@@ -105,6 +110,14 @@ export function Sidebar() {
 									/>
 								) }
 							</MenuLink>
+						) }
+						{ can("clients_managers", "index") && (
+							<MenuLink
+								label="Caseloads"
+								href={ Routes.caseloads() }
+								leftSection={ <PeopleIcon /> }
+								active={ matchesAtPosition(paths, [0, "caseloads"]) }
+							/>
 						) }
 						{ can("timesheets", "index") && (
 							<MenuLink

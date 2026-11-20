@@ -1,45 +1,80 @@
-import { Grid } from "@/components"
+import { Grid, Title } from "@/components"
 import { Form, Submit } from "@/components/Form"
-import { DateInput, Textarea } from "@/components/Inputs"
+import { Switch, Textarea } from "@/components/Inputs"
 import { Routes } from "@/lib"
+
+import {
+	OffboardingLastDayFields,
+	OffboardingScheduleNotice,
+	useOffboardingLastDayState,
+} from "./OffboardingLastDayFields"
+import { useOffboardSubmit } from "./useOffboardSubmit"
 
 export interface ResignationFormProps {
 	employee: Schema.EmployeesShow
 }
 
 export function ResignationForm({ employee }: ResignationFormProps) {
+	const lastDay = useOffboardingLastDayState()
+	const submitWith = useOffboardSubmit(employee.slug)
+
 	return (
 		<Form
 			action={ Routes.statusEmployee(employee.slug) }
+			method="put"
 			initialData={ {
 				employee: {
 					event: "terminate",
-					inactive_at: new Date(),
+					inactive_at: lastDay.date,
+					inactive_at_time: "",
+					eligible_for_hire: true,
+					termination_reason: "",
 				},
 			} }
-			method="put"
+			submitWith={ submitWith }
 		>
 			<Grid>
-				<Grid.Col span={ { xxs: 12 } }>
-					<DateInput
-						name="employee.inactive_at"
-						label="Last Day"
-						required
-						valueFormat="YYYY-MM-DD"
+				<Grid.Col span={ 12 }>
+					<Title>Processing Resignation</Title>
+				</Grid.Col>
+
+				<OffboardingLastDayFields
+					date={ lastDay.date }
+					time={ lastDay.time }
+					onDateChange={ lastDay.setDate }
+					onTimeChange={ lastDay.setTime }
+				/>
+
+				<Grid.Col
+					span={ { xxs: 12, xs: 4 } }
+					style={ { display: "flex", alignItems: "flex-end", justifyContent: "flex-end" } }
+				>
+					<Switch
+						name="employee.eligible_for_hire"
+						label="Eligible for rehire"
+						defaultChecked
 					/>
 				</Grid.Col>
 
 				<Grid.Col span={ { xxs: 12 } }>
 					<Textarea
 						name="employee.termination_reason"
-						label="Reason for Resignation"
+						label="Notes Regarding Resignation"
 						placeholder="Enter resignation details"
 						required
 					/>
 				</Grid.Col>
 
+				<Grid.Col span={ 12 }>
+					<OffboardingScheduleNotice
+						label="Resignation will be processed at"
+						date={ lastDay.date }
+						time={ lastDay.time }
+					/>
+				</Grid.Col>
+
 				<Grid.Col>
-					<Submit>Record Resignation</Submit>
+					<Submit>{ lastDay.isFuture ? "Schedule Resignation" : "Record Resignation" }</Submit>
 				</Grid.Col>
 			</Grid>
 		</Form>

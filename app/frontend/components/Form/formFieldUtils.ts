@@ -129,6 +129,8 @@ function setRadioNodeListValue(field: RadioNodeList, value: unknown) {
 }
 
 function setInputElementValue(field: HTMLInputElement, value: unknown) {
+	if(field.type === "file") return
+
 	if(field.type === "checkbox") {
 		field.checked = Boolean(value)
 	} else if(field.type === "radio") {

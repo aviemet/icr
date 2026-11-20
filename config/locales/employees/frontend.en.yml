@@ -5,7 +5,12 @@ en:
       edit:
         title: Edit Employee
       index:
+        employed: Employed
         new: New Employee
+        scope_menu: Employee list options
+        show_all_statuses: Show all statuses
+        show_terminated: Show terminated employees
+        terminated: Terminated
         title: Employees
       new:
         title: New Employee
@@ -37,6 +42,27 @@ en:
           upload_document: Upload Document
           upload_image: Upload Image
         edit: Edit Employee
+        hiring:
+          add_offer: Add Offer
+          desired_compensation: Desired Compensation
+          desired_job_title: Desired Job Title
+          details: Application
+          empty_interviews: No interviews.
+          empty_offers: No offers.
+          interviews: Interviews
+          notes: Hiring Notes
+          offer_statuses:
+            accepted: Accepted
+            declined: Declined
+            draft: Draft
+            extended: Extended
+            negotiating: Negotiating
+            withdrawn: Withdrawn
+          offers: Offers
+          proposed_start: Proposed Start
+          resume: Resume
+          source: Application Source
+          unscheduled: Unscheduled
         overview:
           alerts: Alerts
           assigned_clients: Assigned Clients
@@ -76,6 +102,7 @@ en:
           contacts: Contacts
           credentials: Credentials
           documents: Documents
+          hiring: Hiring
           overview: Overview
           pay: Pay
           profile: Profile
@@ -97,20 +124,38 @@ en:
         status_select_all: Select All
         statuses:
           applicant: Applicant
-          application_withdrawn: Application Withdrawn
-          declined: Declined
+          declined: Not Hired
           employed: Employed
           offered: Offered
           terminated: Terminated
+          withdrawn: Withdrawn
       status:
         change_for: Change Status for %{name}
         label: Status Change
+        process_offer:
+          accept: Accept Offer
+          effective: Effective
+          summary: "%{title} at %{rate} (%{period})"
+          withdraw: Withdraw Offer
+        promotion:
+          commit_apply: Apply now
+          commit_label: How to proceed
+          commit_offer: Create offer
+          current_rate: "Current %{rate} (%{period})"
+          new_job_title: New Job Title
+          submit_apply: Apply Position Change
+          submit_offer: Create Position Change Offer
+        select_action: Select an action
         title: Change Employee Status
         transitions:
           accept_offer: Accept Offer
           begin_onboarding: Begin Onboarding
-          close_application: Close Application
+          decline_application: Not Hired
+          make_offer: Make Offer
+          process_offer: Process Open Offer
           process_termination: Process Termination
+          promote: Offer or Apply Position Change
           reconsider: Reconsider
           record_resignation: Record Resignation
-          reject_offer: Reject Offer
+          reject_offer: Decline Offer
+          withdraw_application: Withdraw Application

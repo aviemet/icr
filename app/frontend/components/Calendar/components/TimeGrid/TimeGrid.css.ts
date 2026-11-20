@@ -159,6 +159,13 @@ export const dayColumn = css`
   }
  `
 
+export const slotAnchor = css`
+  position: absolute;
+  pointer-events: none;
+  visibility: hidden;
+  z-index: 0;
+`
+
 export const timeGridEvent = css`
   width: calc(100% - ${ rem(8) });
   grid-column: var(--column-start) / span var(--column-span);

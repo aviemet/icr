@@ -18,7 +18,7 @@ interface EventCalendarPopoverProps {
 }
 
 export function EventCalendarPopover({ client, selectedDate }: EventCalendarPopoverProps) {
-	const { upsertDraftEvent, patchDraftEvent, removeDraftEvent } = useCalendarContext()
+	const { upsertDraftEvent, patchDraftEvent, removeDraftEvent, closePopover } = useCalendarContext()
 	const draftIdRef = useRef<string>(crypto.randomUUID())
 	const { data: employees = [] } = useGetEmployeesAsOptions({ enabled: true })
 
@@ -45,6 +45,11 @@ export function EventCalendarPopover({ client, selectedDate }: EventCalendarPopo
 			if(selectedEmployee) {
 				patchData.resources = { employee: selectedEmployee, client }
 				patchData.color = selectedEmployee.color || undefined
+				patchData.title = selectedEmployee.name || "New shift"
+			} else {
+				patchData.resources = { employee: {}, client }
+				patchData.color = undefined
+				patchData.title = "New shift"
 			}
 		}
 
@@ -60,7 +65,7 @@ export function EventCalendarPopover({ client, selectedDate }: EventCalendarPopo
 			id: draftId,
 			title: "New shift",
 			start: selectedDate,
-			end: selectedDate,
+			end: dayjs(selectedDate).add(8, "hours").toDate(),
 			allDay: false,
 			resources: { client },
 		})
@@ -77,6 +82,7 @@ export function EventCalendarPopover({ client, selectedDate }: EventCalendarPopo
 			onChange={ handleFormChange }
 			onSuccess={ () => {
 				removeDraftEvent(draftIdRef.current)
+				closePopover()
 			} }
 		/>
 	)

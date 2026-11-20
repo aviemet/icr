@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next"
 
 import { Avatar, Badge, Link, ScheduleButton, Text } from "@/components"
 import { DateTimeFormatter } from "@/components/Formatters"
+import { employeeStatusBadgeColor } from "@/domains/Employees/employeeStatusBadgeColor"
 import { RecordShowShell } from "@/features"
 import { initials, Routes } from "@/lib"
 
@@ -9,6 +10,7 @@ import Assignments from "./Assignments"
 import Contacts from "./Contacts"
 import Credentials from "./Credentials"
 import Documents from "./Documents"
+import Hiring from "./Hiring"
 import Overview from "./Overview"
 import Pay from "./Pay"
 import Profile from "./Profile"
@@ -27,9 +29,7 @@ const ShowEmployee = ({ employee, can_update = false, trainingOptions = [] }: Sh
 	const statusLabel = employeeStatus
 		? t(`views.employees.table.statuses.${employeeStatus}`, { defaultValue: employeeStatus })
 		: ""
-	let statusColor = "blue"
-	if(employeeStatus === "employed") statusColor = "green"
-	if(employeeStatus === "terminated" || employeeStatus === "declined") statusColor = "red"
+	const statusColor = employeeStatus ? employeeStatusBadgeColor(employeeStatus) : "blue"
 
 	return (
 		<RecordShowShell
@@ -81,6 +81,7 @@ const ShowEmployee = ({ employee, can_update = false, trainingOptions = [] }: Sh
 				{ id: "credentials", label: t("views.employees.show.tabs.credentials"), panel: <Credentials employee={ employee } /> },
 				{ id: "assignments", label: t("views.employees.show.tabs.assignments"), panel: <Assignments employee={ employee } /> },
 				{ id: "trainings", label: t("views.employees.show.tabs.trainings"), panel: <Trainings employee={ employee } trainingOptions={ trainingOptions } /> },
+				{ id: "hiring", label: t("views.employees.show.tabs.hiring"), panel: <Hiring employee={ employee } /> },
 				{ id: "pay", label: t("views.employees.show.tabs.pay"), panel: <Pay employee={ employee } /> },
 				{ id: "documents", label: t("views.employees.show.tabs.documents"), panel: <Documents employee={ employee } /> },
 			] }

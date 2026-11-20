@@ -40,10 +40,14 @@ export function Event<TEventResources extends EventResources>({
 			displayProperties={ displayProperties }
 			className={ clsx(classes.timeGridEvent, className, {
 				[classes.allDayEvent]: event.allDay,
+				[classes.openShift]: event.open === true,
 			}) }
 			style={ {
 				"--event-color": eventColor,
 				"--contrasting-color": contrastingColor,
+				...(event.open === true
+					? { "--event-border-color": "var(--mantine-color-teal-6)" }
+					: {}),
 				...style,
 			} as React.CSSProperties }
 			onClick={ onEventClick }

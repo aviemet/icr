@@ -28,9 +28,10 @@ RSpec.describe "/employees" do
       expect(inertia.props[:employees].first[:slug]).to eq(employee.slug)
     end
 
-    it "defaults to employed employees when statuses is absent" do
+    it "defaults to employed employees and excludes applicants" do
       employed = create(:employee, :employed)
       create(:employee)
+      create(:employee, :terminated)
 
       get employees_url
 
@@ -38,30 +39,32 @@ RSpec.describe "/employees" do
       slugs = inertia.props[:employees].pluck(:slug)
       expect(slugs).to eq([employed.slug])
       expect(inertia.props[:pagination][:count]).to eq(1)
+      expect(inertia.props[:workforce_view]).to eq("employed")
+      expect(inertia.props[:can_scope_employees]).to be(true)
     end
 
-    it "filters by statuses[]" do
-      applicant = create(:employee)
+    it "returns terminated employees when workforce_view=terminated" do
+      terminated = create(:employee, :terminated)
       create(:employee, :employed)
 
-      get employees_url, params: { adv: "true", statuses: ["applicant"] }
+      get employees_url, params: { workforce_view: "terminated" }
 
       expect(response).to have_http_status(:ok)
       slugs = inertia.props[:employees].pluck(:slug)
-      expect(slugs).to eq([applicant.slug])
-      expect(inertia.props[:pagination][:count]).to eq(1)
+      expect(slugs).to eq([terminated.slug])
+      expect(inertia.props[:workforce_view]).to eq("terminated")
     end
 
-    it "returns all statuses when statuses is present but empty" do
+    it "returns all statuses when workforce_view=all" do
       applicant = create(:employee)
       employed = create(:employee, :employed)
 
-      get employees_url, params: { adv: "true", statuses: [""] }
+      get employees_url, params: { workforce_view: "all" }
 
       expect(response).to have_http_status(:ok)
       slugs = inertia.props[:employees].pluck(:slug)
       expect(slugs).to contain_exactly(applicant.slug, employed.slug)
-      expect(inertia.props[:pagination][:count]).to eq(2)
+      expect(inertia.props[:workforce_view]).to eq("all")
     end
 
     it "filters with advanced search by number" do
@@ -89,6 +92,22 @@ RSpec.describe "/employees" do
       expect(response).to have_http_status(:ok)
       slugs = inertia.props[:employees].pluck(:slug)
       expect(slugs).to eq([matching.slug])
+    end
+
+    it "filters by active_at date range" do
+      matching = create(:employee, :employed, active_at: Date.new(2024, 3, 15))
+      create(:employee, :employed, active_at: Date.new(2024, 1, 10))
+      create(:employee, :employed, active_at: Date.new(2024, 7, 1))
+
+      get employees_url, params: {
+        adv: "true",
+        active_at: { type: "range", start: "2024-03-01", end: "2024-03-31" }
+      }
+
+      expect(response).to have_http_status(:ok)
+      slugs = inertia.props[:employees].pluck(:slug)
+      expect(slugs).to eq([matching.slug])
+      expect(inertia.props[:pagination][:count]).to eq(1)
     end
 
     it "filters by first_name" do
@@ -212,14 +231,24 @@ RSpec.describe "/employees" do
       expect(employee.active_at).to eq(Date.current)
     end
 
-    it "closes an application via AASM" do
+    it "withdraws an application via AASM" do
       employee = create(:employee)
       put status_employee_url(employee), params: {
-        employee: { event: "close_application", ineligibility_reason: "Not a fit" }
+        employee: { event: "withdraw_application", ineligibility_reason: "Not a fit" }
       }
       expect(response).to redirect_to(employee_url(employee))
-      expect(employee.reload).to be_application_withdrawn
+      expect(employee.reload).to be_withdrawn
       expect(employee.ineligibility_reason).to eq("Not a fit")
+    end
+
+    it "marks an applicant not hired via AASM" do
+      employee = create(:employee)
+      put status_employee_url(employee), params: {
+        employee: { event: "decline_application", ineligibility_reason: "Role filled" }
+      }
+      expect(response).to redirect_to(employee_url(employee))
+      expect(employee.reload).to be_declined
+      expect(employee.ineligibility_reason).to eq("Role filled")
     end
 
     it "terminates employment via AASM" do
@@ -228,12 +257,47 @@ RSpec.describe "/employees" do
         employee: {
           event: "terminate",
           inactive_at: Date.current,
-          termination_reason: "Performance"
+          termination_reason: "Performance",
+          eligible_for_hire: false,
+          terminate_immediately: true,
         }
       }
       expect(response).to redirect_to(employee_url(employee))
       expect(employee.reload).to be_terminated
       expect(employee.termination_reason).to eq("Performance")
+      expect(employee.eligible_for_hire).to be(false)
+    end
+
+    it "schedules a future termination" do
+      employee = create(:employee, :employed)
+      put status_employee_url(employee), params: {
+        employee: {
+          event: "terminate",
+          inactive_at: Date.current + 5.days,
+          termination_reason: "Relocation",
+          eligible_for_hire: true,
+          terminate_immediately: false,
+        }
+      }
+      expect(response).to redirect_to(employee_url(employee))
+      employee.reload
+      expect(employee).to be_employed
+      expect(employee).to be_pending_termination
+      expect(employee.termination_reason).to eq("Relocation")
+    end
+
+    it "cancels a pending termination" do
+      employee = create(:employee, :employed)
+      Employee::Offboard.call(
+        employee: employee,
+        attrs: { inactive_at: Date.current + 5.days, termination_reason: "Leaving" },
+      )
+
+      delete pending_termination_employee_url(employee)
+      expect(response).to redirect_to(root_path)
+      employee.reload
+      expect(employee.inactive_at).to be_nil
+      expect(employee).to be_employed
     end
 
     it "accepts an offer via AASM" do
@@ -255,7 +319,7 @@ RSpec.describe "/employees" do
     end
 
     it "reconsiders a withdrawn application via AASM" do
-      employee = create(:employee, :application_withdrawn)
+      employee = create(:employee, :withdrawn)
       put status_employee_url(employee), params: {
         employee: { event: "reconsider", eligible_for_hire: true }
       }
@@ -312,6 +376,34 @@ RSpec.describe "/employees" do
       it "redirects to the created employee" do
         post employees_url, params: valid_attributes
         expect(response).to redirect_to(employee_url(Employee.last))
+      end
+
+      it "creates an applicant without a start date" do
+        attrs = valid_attributes
+        attrs[:employee][:status] = "applicant"
+        attrs[:employee].delete(:active_at)
+
+        expect {
+          post employees_url, params: attrs
+        }.to change(Employee, :count).by(1)
+
+        expect(Employee.last).to be_applicant
+        expect(Employee.last.active_at).to be_nil
+      end
+
+      it "assigns a job title from job_title_id" do
+        job_title = create(:job_title)
+        attrs = valid_attributes
+        attrs[:employee][:status] = "employed"
+        attrs[:employee][:active_at] = Date.current
+        attrs[:employee][:job_title_id] = job_title.id
+
+        expect {
+          post employees_url, params: attrs
+        }.to change(Employee::EmployeesJobTitle, :count).by(1)
+
+        employee = Employee.last
+        expect(employee.job_title).to eq(job_title)
       end
     end
 

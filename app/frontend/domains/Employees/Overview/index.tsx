@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next"
 import { Avatar, Box, Link, Text } from "@/components"
 import { DateTimeFormatter } from "@/components/Formatters"
 import { CalendarIcon, CheckIcon, UserGroupIcon, WarningTriangleIcon } from "@/components/Icons"
+import { PendingTerminationBanner } from "@/domains/Employees/PendingTermination"
 import {
 	BoardActionGrid,
 	BoardActionTile,
@@ -30,6 +31,8 @@ export function EmployeeOverview({ employee }: EmployeeOverviewProps) {
 
 	return (
 		<Box className={ classes.board }>
+			<PendingTerminationBanner employee={ employee } canCancel={ canUpdate } />
+
 			<Box className={ classes.tileRow }>
 				<MetricTile
 					title={ t("views.employees.show.overview.assignments") }

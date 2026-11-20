@@ -93,13 +93,17 @@ Rails.application.routes.draw do
 
   scope "/employees" do
     resources :trainings, path: "trainings"
-    resources :interviews, path: "interviews"
+    resources :interviews, path: "interviews" do
+      resources :interview_notes, only: [:create, :update, :destroy]
+    end
+    resources :applicants, only: [:index]
   end
 
   resources :employees, param: :slug, concerns: :schedulable do
     member do
       get :status
       put :status, action: :update_status
+      delete :pending_termination, action: :destroy_pending_termination
     end
     resources :support_contacts, controller: "employees/support_contacts", only: [:create, :update, :destroy]
     resources :credentials, controller: "employees/credentials", only: [:create, :update, :destroy]
@@ -112,11 +116,14 @@ Rails.application.routes.draw do
     resources :trainings, controller: "employees/trainings", only: [:create, :update, :destroy]
     resources :documents, controller: "employees/documents", only: [:create, :destroy]
     resources :images, controller: "employees/images", only: [:create, :destroy]
+    resources :offers, controller: "employees/offers", only: [:create, :update, :destroy]
   end
 
   resources :households, param: :slug, concerns: :schedulable
 
   resources :shift_templates
+
+  resources :caseloads, only: [:index, :create, :update]
 
   scope path: "payroll" do
     get "/", to: "pay_periods#index", as: :payroll_periods
@@ -152,10 +159,9 @@ Rails.application.routes.draw do
 
   draw(:api)
 
-  if Rails.env.development? || Rails.env.test?
+  if Rails.env.local?
     namespace :dev do
       resource :acts_as, only: [:create, :destroy], controller: "acts_as"
     end
   end
 end
-

@@ -1,6 +1,9 @@
+import clsx from "clsx"
+
 import { Box, Grid, Paper, Table, Text, Title } from "@/components"
 import { useFormField } from "@/components/Form"
 import { Switch } from "@/components/Inputs"
+import { pageChrome } from "@/components/PageChrome"
 import { aOrAn } from "@/lib/strings"
 
 import { ColumnToggle } from "./ColumnToggle"
@@ -26,7 +29,7 @@ export function PermissionsSection() {
 				<Paper
 					withBorder
 					radius="md"
-					className={ classes.panel }
+					className={ clsx(pageChrome.panelFill, classes.panel) }
 				>
 					<Table
 						wrapper={ false }

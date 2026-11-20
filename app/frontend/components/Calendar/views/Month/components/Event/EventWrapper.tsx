@@ -60,13 +60,18 @@ export function EventWrapper<P extends GridDisplayProperties = GridDisplayProper
 	return (
 		<Box
 			ref={ animationParent }
-			className={ clsx(classes.monthEventWrapper, displayProperties.className) }
+			className={ clsx(classes.monthEventWrapper, displayProperties.className, {
+				[classes.openShift]: event.open === true,
+			}) }
 			style={ {
 				"--column-start": displayProperties.columnStart,
 				"--column-span": displayProperties.columnSpan,
 				"--event-color": eventColor,
 				"--contrasting-color": contrastingColor,
 				"--hover-color": isLightColor(eventColor) ? lighten(eventColor, 0.15) : darken(eventColor, 0.15),
+				...(event.open === true
+					? { "--event-border-color": vars.colors.teal[6] }
+					: {}),
 				...style,
 			} as React.CSSProperties }
 			data-event-id={ event.id }

@@ -66,7 +66,6 @@ class Calendar::EventPolicy < ApplicationPolicy
 
   private
 
-
   def own_shift?
     record.shift&.employee_id == current_employee&.id
   end

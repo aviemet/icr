@@ -135,6 +135,11 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Relationship limits stay in Pundit scopes/policies: attendants via `ClientsAttendant`, managers via `ClientsManager` / `Employee::EmployeesManager`, self via own employee/timesheet/shift.
 - Shared Inertia `permissions` hash is built from Pundit policy methods and cached per user; job title role changes invalidate those cache keys.
 - Job-title "Grant all listed actions" checkbox expands to every catalogued resource action; it is not the same as user `:admin`.
+- Catalog resources used as Rolify targets need `resourcify` on the model (e.g. `ClientsManager`); without it, `SyncPermissions` fails with "Resource type Doesn't exist".
+
+### Caseloads
+- Org-wide facilitator caseloads are `ClientsManager` rows (`manager` = facilitator employee). `/caseloads` is gated on `permissions.clients_managers` (`ClientsManagerPolicy`). Nested employee/client manager tabs stay the per-record editors.
+- Facilitator roster query: join `Employee.actively_employed` through `Employee#active_employees_job_title` (uses `1.second.from_now`). Do not use `Employee::JobTitle#active_employees` for same-day assignments - that association compares `starts_at` to `Date.current` (midnight) and drops rows that started later the same day.
 
 ### Payroll Settings
 - Period types: weekly, bi-weekly, semi-monthly, monthly. Weekly/bi-weekly use a start weekday; monthly uses a configurable start date (including last day of month). Semi-monthly is fixed: 1st-15th and 16th-last.
@@ -195,7 +200,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 #### UI & Styling
 - Mantine; Linaria with .css.ts; clsx for class composition; theme supports dark/light.
 - clsx conditionals use the object map (`{ [classes.foo]: condition }`). Do not toggle classes with `condition && classes.foo` or ternaries inside `clsx(...)`.
-- Page chrome contract: `theme.other.page.maxWidth` is the shared content width. Panel surfaces use `pageChrome.panelSurface` (via `Section variant="panel"` or composed on identity chrome). That surface sets `--icr-field-bg` / `--icr-field-border` so Mantine inputs read as inset wells against the panel, not the same fill. Left accent stripes are status opt-in only. Do not add page background gradients or primary-tinted panel fills.
+- Page chrome contract: `theme.other.page.maxWidth` is the shared content width. Default panel fill is `light-dark(white, dark[6])` via `pageChrome.panelFill` / `pageChrome.panelSurface` (`Section variant="panel"`, show chrome, status desk, dense index shells). Outer shells that nest other panels use `wrapper` (`Section wrapper` / `pageChrome.panelWrapperSurface`: `gray[0]` / `dark[7]`). Mantine `Paper` and `Card` theme styles use the default fill. Do not invent per-page panel backgrounds; override only for a documented niche surface. `panelSurface` also sets `--icr-field-bg` / `--icr-field-border` so inputs read as inset wells. Left accent stripes are status opt-in only. Do not add page background gradients or primary-tinted panel fills.
 - Board metric/action UI lives in `features/RecordShow/Board` (`MetricLine`, `CountChip`, `MetricValue`, `BoardActionTile`, `BoardActionGrid`) with styles in `BoardPrimitives.css.ts`. Dashboard and Client/Employee Overview boards must use these shared components; do not redefine them locally.
 - Gotcha: Linaria-generated class order can make overrides between multiple classes on the same element unreliable. When a view-specific class must override a base class (e.g. base `event` plus TimeGrid `timeGridEvent`), prefer a combined selector like `&.${event} { ... }` in the overriding class so it wins regardless of CSS emission order.
 

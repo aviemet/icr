@@ -4,7 +4,7 @@ overview: Productize existing ClientsManager links as facilitator caseloads, and
 todos:
   - id: permissions-seeds
     content: Add ClientsManager to PermissionsCatalog, ClientsManagerPolicy, Facilitator/Director seed grants, nav gated on clients_managers
-    status: pending
+    status: in_progress
   - id: backend-caseloads
     content: Add CaseloadsController, routes, index query/serializer, assign/unassign mutations on ClientsManager
     status: pending

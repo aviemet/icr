@@ -26,6 +26,8 @@ export const eventWrapper = css`
 
 export const allDayEvent = css``
 
+export const openShift = css``
+
 export const timeGridEvent = css`
   background-color: var(--event-color);
   color: var(--contrasting-color);
@@ -42,6 +44,10 @@ export const timeGridEvent = css`
   gap: 0;
   min-width: 0;
   position: relative;
+
+  &.${ openShift } {
+    border-left: 3px solid var(--event-border-color, ${ vars.colors.teal[6] });
+  }
 
   &.${ event } {
     align-items: flex-start;

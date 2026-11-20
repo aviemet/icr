@@ -6,9 +6,9 @@ import { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { Box, Button, Group, Menu, Table, type TableProps, Text } from "@/components"
+import { confirmBusyAction } from "@/features"
 import { formatter, Routes, assertStatus, HTTP_STATUS } from "@/lib"
 
-import { confirmBusyAction } from "./confirmBusyAction"
 import { ReviewRow } from "./ReviewRow"
 import { nextSelectedShiftIds, selectedShiftIdsForToggleAll } from "./shiftSelection"
 

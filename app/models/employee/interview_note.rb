@@ -18,7 +18,7 @@
 # Foreign Keys
 #
 #  fk_rails_...  (employee_id => employees.id)
-#  fk_rails_...  (interview_id => employees.id)
+#  fk_rails_...  (interview_id => interviews.id)
 #
 class Employee::InterviewNote < ApplicationRecord
   self.table_name = "interview_notes"
@@ -35,7 +35,17 @@ class Employee::InterviewNote < ApplicationRecord
   resourcify
 
   belongs_to :employee
-  belongs_to :interview
+  belongs_to :interview, class_name: "Employee::Interview", inverse_of: :interview_notes
+
+  enum :recommendation, {
+    strong_yes: 0,
+    yes: 1,
+    neutral: 2,
+    no: 3,
+    strong_no: 4,
+  }
+
+  validates :note, presence: true
 
   scope :includes_associated, -> { includes([:employee, :interview]) }
 end

@@ -10,6 +10,7 @@ const fields: ServerTableFilterField[] = [
 	{ param: "first_name", kind: "text" },
 	{ param: "job_titles", kind: "multi" },
 	{ param: "statuses", kind: "multi", default: ["employed"] },
+	{ param: "active_at", kind: "date_range" },
 ]
 
 describe("readServerTableFilters", () => {
@@ -20,6 +21,7 @@ describe("readServerTableFilters", () => {
 			first_name: "",
 			job_titles: [],
 			statuses: ["employed"],
+			active_at: { start: "", end: "" },
 		})
 	})
 
@@ -32,12 +34,15 @@ describe("readServerTableFilters", () => {
 		expect(values.statuses).toEqual([])
 	})
 
-	it("reads text and multi params", () => {
+	it("reads text, multi, and date range params", () => {
 		const params = new URLSearchParams()
 		params.set("first_name", "Ada")
 		params.append("job_titles[]", "Attendant")
 		params.append("statuses[]", "applicant")
 		params.append("statuses[]", "employed")
+		params.set("active_at[start]", "2024-01-01")
+		params.set("active_at[end]", "2024-06-30")
+		params.set("active_at[type]", "range")
 
 		const values = readServerTableFilters(params, fields)
 
@@ -45,6 +50,7 @@ describe("readServerTableFilters", () => {
 			first_name: "Ada",
 			job_titles: ["Attendant"],
 			statuses: ["applicant", "employed"],
+			active_at: { start: "2024-01-01", end: "2024-06-30" },
 		})
 	})
 })
@@ -57,6 +63,7 @@ describe("writeServerTableFilters", () => {
 			first_name: "",
 			job_titles: [],
 			statuses: ["employed"],
+			active_at: { start: "", end: "" },
 		})
 
 		expect(url.searchParams.get("page")).toBeNull()
@@ -73,6 +80,7 @@ describe("writeServerTableFilters", () => {
 			first_name: "",
 			job_titles: [],
 			statuses: [],
+			active_at: { start: "", end: "" },
 		})
 
 		expect(url.searchParams.get("page")).toBeNull()
@@ -80,13 +88,14 @@ describe("writeServerTableFilters", () => {
 		expect(url.searchParams.getAll("statuses[]")).toEqual([""])
 	})
 
-	it("writes text and multi params and clears page", () => {
+	it("writes text, multi, and date range params and clears page", () => {
 		const url = new URL("http://example.test/items?page=4&sort=number")
 
 		writeServerTableFilters(url, fields, {
 			first_name: "Grace",
 			job_titles: ["Manager"],
 			statuses: ["applicant", "offered"],
+			active_at: { start: "2024-02-01", end: "2024-02-29" },
 		})
 
 		expect(url.searchParams.get("page")).toBeNull()
@@ -94,6 +103,9 @@ describe("writeServerTableFilters", () => {
 		expect(url.searchParams.get("first_name")).toBe("Grace")
 		expect(url.searchParams.getAll("job_titles[]")).toEqual(["Manager"])
 		expect(url.searchParams.getAll("statuses[]")).toEqual(["applicant", "offered"])
+		expect(url.searchParams.get("active_at[start]")).toBe("2024-02-01")
+		expect(url.searchParams.get("active_at[end]")).toBe("2024-02-29")
+		expect(url.searchParams.get("active_at[type]")).toBe("range")
 		expect(url.searchParams.get("sort")).toBe("number")
 	})
 
@@ -104,11 +116,27 @@ describe("writeServerTableFilters", () => {
 			first_name: "Ada",
 			job_titles: [],
 			statuses: ["employed"],
+			active_at: { start: "", end: "" },
 		})
 
 		expect(url.searchParams.get("adv")).toBe("true")
 		expect(url.searchParams.get("first_name")).toBe("Ada")
 		expect(url.searchParams.has("statuses")).toBe(false)
 		expect(url.searchParams.has("statuses[]")).toBe(false)
+	})
+
+	it("omits incomplete date ranges", () => {
+		const url = new URL("http://example.test/items")
+
+		writeServerTableFilters(url, fields, {
+			first_name: "",
+			job_titles: [],
+			statuses: ["employed"],
+			active_at: { start: "2024-01-01", end: "" },
+		})
+
+		expect(url.searchParams.get("adv")).toBeNull()
+		expect(url.searchParams.get("active_at[start]")).toBeNull()
+		expect(url.searchParams.get("active_at[end]")).toBeNull()
 	})
 })

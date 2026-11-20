@@ -18,6 +18,7 @@ function TestWrapper({ children }: { children: React.ReactNode }) {
 				upsertDraftEvent: () => {},
 				patchDraftEvent: () => {},
 				removeDraftEvent: () => {},
+				closePopover: () => {},
 				localizer,
 				handleViewChange: () => {},
 				handleDateChange: () => {},

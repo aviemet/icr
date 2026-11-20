@@ -8,8 +8,8 @@ declare global {
       id?: string
       calendar_event_id: string
       category: Category
-      employee: EmployeesPersisted
-      employee_id: string
+      employee?: EmployeesPersisted
+      employee_id?: string
     }
   }
 }

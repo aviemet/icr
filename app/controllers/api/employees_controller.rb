@@ -16,4 +16,3 @@ class Api::EmployeesController < Api::ApiController
     render json: schedules.render(:employee)
   end
 end
-

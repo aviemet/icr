@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next"
 import { Avatar, Badge, Box, Group, Link, Text } from "@/components"
 import { DateTimeFormatter } from "@/components/Formatters"
 import { CalendarIcon, CoinsIcon, HomeIcon, UserGroupIcon, WarningTriangleIcon } from "@/components/Icons"
+import { isPendingTermination } from "@/domains/Employees/PendingTermination/isPendingTermination"
 import {
 	BoardActionGrid,
 	BoardActionTile,
@@ -10,19 +11,34 @@ import {
 	MetricLine,
 	MetricTile,
 } from "@/features"
-import { initials, Routes } from "@/lib"
+import { formatter, initials, Routes } from "@/lib"
 
 import * as classes from "./Overview.css"
 
-interface ClientOverviewProps {
-	client: Schema.ClientsShow
+function lastDayBadge(employee: { status?: string, inactive_at?: Date | string | null }) {
+	if(!isPendingTermination(employee) || employee.inactive_at === undefined || employee.inactive_at === null) {
+		return undefined
+	}
+
+	return `Last day ${formatter.datetime.dateEnglish(employee.inactive_at)}`
 }
 
-export function ClientOverview({ client }: ClientOverviewProps) {
+interface ClientOverviewProps {
+	client: Schema.ClientsShow
+	canViewOpenShifts?: boolean
+	openShiftsCount?: number
+}
+
+export function ClientOverview({
+	client,
+	canViewOpenShifts = false,
+	openShiftsCount = 0,
+}: ClientOverviewProps) {
 	const { t } = useTranslation()
 	const healthTone = client.active_allergies_count > 0 || client.incident_reports_count > 0
 		? "alert"
 		: "default"
+	const scheduleTone = canViewOpenShifts && openShiftsCount > 0 ? "alert" : "default"
 
 	return (
 		<Box className={ classes.board }>
@@ -88,7 +104,9 @@ export function ClientOverview({ client }: ClientOverviewProps) {
 									<Box className={ classes.teamMeta }>
 										<GroupLabel
 											name={ client.current_manager.person.name }
-											badge="Lead"
+											badges={ ["Lead", lastDayBadge(client.current_manager)].filter(
+												(badge): badge is string => badge !== undefined,
+											) }
 										/>
 										<span className={ classes.teamRole }>
 											{ t("views.clients.show.overview.manager") }
@@ -106,7 +124,12 @@ export function ClientOverview({ client }: ClientOverviewProps) {
 									{ initials(attendant.person.name) ?? "?" }
 								</Avatar>
 								<Box className={ classes.teamMeta }>
-									<Text size="sm" fw={ 600 }>{ attendant.person.name }</Text>
+									<GroupLabel
+										name={ attendant.person.name }
+										badges={ [lastDayBadge(attendant)].filter(
+											(badge): badge is string => badge !== undefined,
+										) }
+									/>
 									<span className={ classes.teamRole }>
 										{ t("views.clients.show.overview.attendants") }
 									</span>
@@ -125,8 +148,20 @@ export function ClientOverview({ client }: ClientOverviewProps) {
 
 				<MetricTile
 					title={ t("views.clients.show.overview.quick_links") }
+					tone={ scheduleTone }
 					icon={ <CalendarIcon size={ 16 } /> }
 				>
+					{ canViewOpenShifts && (
+						<MetricLine
+							label={ t("views.clients.show.overview.open_shifts") }
+							value={ (
+								<CountChip
+									value={ openShiftsCount }
+									alert={ openShiftsCount > 0 }
+								/>
+							) }
+						/>
+					) }
 					<BoardActionGrid>
 						<BoardActionTile
 							href={ `${Routes.client(client.slug)}?tab=profile` }
@@ -165,11 +200,13 @@ export function ClientOverview({ client }: ClientOverviewProps) {
 	)
 }
 
-function GroupLabel({ name, badge }: { name: string, badge: string }) {
+function GroupLabel({ name, badges }: { name: string, badges: string[] }) {
 	return (
 		<Group gap="xs">
 			<Text size="sm" fw={ 600 }>{ name }</Text>
-			<Badge size="xs" variant="light">{ badge }</Badge>
+			{ badges.map(badge => (
+				<Badge key={ badge } size="xs" variant="light">{ badge }</Badge>
+			)) }
 		</Group>
 	)
 }

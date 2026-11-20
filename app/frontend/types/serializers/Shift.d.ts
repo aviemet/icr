@@ -7,7 +7,7 @@ declare global {
       id?: string
       calendar_event_id: string
       category: Category
-      employee_id: string
+      employee_id?: string
     }
   }
 }

@@ -2,12 +2,14 @@
 #
 # Table name: interviews
 #
-#  id           :uuid             not null, primary key
-#  notes        :text
-#  scheduled_at :datetime
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  employee_id  :uuid             not null
+#  id             :uuid             not null, primary key
+#  interview_type :string
+#  location       :string
+#  notes          :text
+#  scheduled_at   :datetime
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  employee_id    :uuid             not null
 #
 # Indexes
 #
@@ -20,5 +22,7 @@
 class Employee::InterviewSerializer < ApplicationSerializer
   object_as :employee_interview, model: "Employee::Interview"
 
-  attributes(:scheduled_at, :notes, :employee_id)
+  attributes(:scheduled_at, :notes, :employee_id, :location, :interview_type)
+
+  has_many :interview_notes, serializer: Employee::InterviewNotes::PersistedSerializer
 end

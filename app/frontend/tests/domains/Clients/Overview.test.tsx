@@ -101,4 +101,58 @@ describe("ClientOverview", () => {
 		expect(screen.getByText("views.clients.show.tabs.profile")).toBeInTheDocument()
 		expect(screen.getByText("views.clients.show.overview.schedule")).toBeInTheDocument()
 	})
+
+	it("shows a last-day badge for pending-termination care team members", () => {
+		render(
+			<MantineProvider theme={ theme }>
+				<ClientOverview
+					client={ buildClient({
+						current_attendants: [
+							{
+								id: "att-1",
+								slug: "aide-one",
+								name: "Aide One",
+								status: "employed",
+								inactive_at: new Date("2027-05-01T23:59:59Z"),
+								person: { id: "p-att", name: "Aide One" },
+							} as Schema.EmployeesPersisted,
+						],
+					}) }
+				/>
+			</MantineProvider>,
+		)
+
+		expect(screen.getByText(/Last day/)).toBeInTheDocument()
+	})
+
+	it("shows open shifts when the viewer can see them", () => {
+		render(
+			<MantineProvider theme={ theme }>
+				<ClientOverview
+					client={ buildClient({ active_allergies_count: 0 }) }
+					canViewOpenShifts
+					openShiftsCount={ 3 }
+				/>
+			</MantineProvider>,
+		)
+
+		expect(screen.getByText("views.clients.show.overview.open_shifts")).toBeInTheDocument()
+		expect(screen.getByText("3")).toBeInTheDocument()
+	})
+
+	it("hides open shifts when the viewer cannot see them", () => {
+		render(
+			<MantineProvider theme={ theme }>
+				<ClientOverview
+					client={ buildClient() }
+					canViewOpenShifts={ false }
+					openShiftsCount={ 2 }
+				/>
+			</MantineProvider>,
+		)
+
+		expect(screen.queryByText("views.clients.show.overview.open_shifts")).not.toBeInTheDocument()
+	})
 })
+
+
