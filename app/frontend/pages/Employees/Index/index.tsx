@@ -6,10 +6,7 @@ import {
 	EmployeeIndexScopeMenu,
 	type WorkforceView,
 } from "@/domains/Employees/Table/EmployeeIndexScopeMenu"
-import {
-	searchCluster,
-	searchWithLeading,
-} from "@/domains/Employees/Table/EmployeeIndexScopeMenu.css"
+import { searchWithLeading } from "@/domains/Employees/Table/EmployeeIndexScopeMenu.css"
 import { IndexPageTemplate } from "@/features"
 import { Routes } from "@/lib"
 import { usePermissions } from "@/lib/hooks"
@@ -50,7 +47,6 @@ const EmployeesIndex = ({
 			searchLeading={ can_scope_employees
 				? <EmployeeIndexScopeMenu value={ workforce_view } />
 				: undefined }
-			searchClusterClassName={ can_scope_employees ? searchCluster : undefined }
 			searchInputClassName={ can_scope_employees ? searchWithLeading : undefined }
 		>
 			<EmployeeTable

@@ -51,11 +51,19 @@ RSpec.describe Employee::JobTitle::SyncPermissions do
     it "grants all catalogued actions when admin is true" do
       described_class.call(job_title, { "admin" => true })
 
-      Employee::JobTitle::PermissionsCatalog::RESOURCES.each_value do |resource_class|
-        Employee::JobTitle::PermissionsCatalog::ACTIONS.each do |action|
+      Employee::JobTitle::PermissionsCatalog::RESOURCES.each do |key, resource_class|
+        Employee::JobTitle::PermissionsCatalog.actions_for(key).each do |action|
           expect(job_title.has_role?(action.to_sym, resource_class)).to be true
         end
       end
+    end
+
+    it "grants complete on employee_training when enabled" do
+      described_class.call(job_title, {
+        "employee_training" => { "complete" => true },
+      })
+
+      expect(job_title.has_role?(:complete, Employee::Training)).to be true
     end
 
     it "invalidates permission caches for users with the job title" do

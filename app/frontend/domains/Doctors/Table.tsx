@@ -24,6 +24,8 @@ export function DoctorTable({ records, model }: DoctorTableProps) {
 		{
 			accessor: "actions",
 			title: "Actions",
+			titleClassName: "actionsCell",
+			cellsClassName: "actionsCell",
 			sortable: false,
 			render: (doctor) => <EditButton href={ Routes.editDoctor(doctor.id) } />,
 		},

@@ -3,11 +3,10 @@
 # Table name: trainings
 #
 #  id                :uuid             not null, primary key
-#  active_on         :datetime
 #  description       :text
 #  estimated_minutes :integer
-#  inactive_on       :datetime
 #  name              :string
+#  status            :integer          default("active"), not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #
@@ -18,7 +17,6 @@ class Employee::TrainingSerializer < ApplicationSerializer
     :name,
     :description,
     :estimated_minutes,
-    :active_on,
-    :inactive_on,
+    :status,
   )
 end

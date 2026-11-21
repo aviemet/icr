@@ -2,19 +2,21 @@ import { css } from "@linaria/core"
 
 import { vars } from "@/lib/theme"
 
-export const panel = css`
-	overflow: hidden;
-`
-
 export const table = css`
 	table-layout: fixed;
 	color: light-dark(${ vars.colors.gray[8] }, ${ vars.colors.gray[0] });
+	border-collapse: separate;
+	border-spacing: 0;
 
 	thead tr {
 		background-color: light-dark(${ vars.colors.gray[1] }, ${ vars.colors.dark[4] });
 	}
 
 	th {
+		position: sticky;
+		top: 0;
+		z-index: 1;
+		background-color: light-dark(${ vars.colors.gray[1] }, ${ vars.colors.dark[4] });
 		color: light-dark(${ vars.colors.gray[8] }, ${ vars.colors.gray[0] });
 		font-size: ${ vars.fontSizes.sm };
 		font-weight: 600;

@@ -128,7 +128,7 @@ if Rails.env.development?
       training = Employee::Training.find_or_create_by!(name: "Orientation") do |record|
         record.description = "New hire orientation"
         record.estimated_minutes = 60
-        record.active_on = Date.current
+        record.status = :active
       end
       FactoryBot.create(:employees_training, employee: attendant, training: training, completed_at: nil, started_at: Time.current)
       FactoryBot.create(:employees_training, employee: facilitator, training: training, completed_at: Time.current)

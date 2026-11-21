@@ -33,6 +33,14 @@ export function DashboardBoard({ dashboard }: DashboardBoardProps) {
 	const canViewEmployees = can("employees", "index")
 	const canCreateEmployees = can("employees", "create")
 	const canViewPayroll = can("timesheets", "index")
+	const clientsHref = canViewClients ? Routes.clients() : undefined
+	const employeesHref = canViewEmployees ? Routes.employees() : undefined
+	const applicantsHref = canViewEmployees ? Routes.applicants() : undefined
+	const payrollHref = canViewPayroll ? Routes.payrollPeriods() : undefined
+	const firstOpenShiftClientSlug = dashboard.open_shifts.find((shift) => shift.client_slug)?.client_slug
+	const openShiftHref = firstOpenShiftClientSlug
+		? Routes.scheduleClient(firstOpenShiftClientSlug)
+		: undefined
 	const ownEmployeeHref = auth.own_employee_slug
 		? Routes.employee(auth.own_employee_slug)
 		: null
@@ -59,13 +67,16 @@ export function DashboardBoard({ dashboard }: DashboardBoardProps) {
 						title={ t("views.dashboard.clients.title") }
 						icon={ <HomeIcon size={ 16 } /> }
 					>
-						<MetricValue>{ dashboard.active_client_count }</MetricValue>
-						<Text size="sm" c="dimmed">
-							{ t("views.dashboard.clients.active_count", { count: dashboard.active_client_count }) }
-						</Text>
+						<MetricValue
+							label={ t("views.dashboard.clients.active_count") }
+							href={ clientsHref }
+						>
+							{ dashboard.active_client_count }
+						</MetricValue>
 						<MetricLine
-							label={ t("views.dashboard.clients.inactive_count", { count: dashboard.inactive_client_count }) }
+							label={ t("views.dashboard.clients.inactive_count") }
 							value={ <CountChip value={ dashboard.inactive_client_count } /> }
+							href={ clientsHref }
 						/>
 						<BoardActionGrid>
 							{ canViewClients && (
@@ -96,18 +107,21 @@ export function DashboardBoard({ dashboard }: DashboardBoardProps) {
 						title={ t("views.dashboard.team.title") }
 						icon={ <PeopleIcon size={ 16 } /> }
 					>
-						<MetricValue>{ dashboard.active_team_count }</MetricValue>
-						<Text size="sm" c="dimmed">
-							{ t("views.dashboard.team.member_count", { count: dashboard.active_team_count }) }
-						</Text>
+						<MetricValue
+							label={ t("views.dashboard.team.member_count") }
+							href={ employeesHref }
+						>
+							{ dashboard.active_team_count }
+						</MetricValue>
 						<MetricLine
-							label={ t("views.dashboard.team.hiring_pipeline", { count: dashboard.hiring_pipeline_count }) }
+							label={ t("views.dashboard.team.hiring_pipeline") }
 							value={ (
 								<CountChip
 									value={ dashboard.hiring_pipeline_count }
 									alert={ dashboard.hiring_pipeline_count > 0 }
 								/>
 							) }
+							href={ applicantsHref }
 						/>
 						<BoardActionGrid>
 							{ canViewEmployees && (
@@ -139,16 +153,21 @@ export function DashboardBoard({ dashboard }: DashboardBoardProps) {
 						tone={ timeTone }
 						icon={ <ClockIcon size={ 16 } /> }
 					>
-						<MetricValue>{ hoursLabel }</MetricValue>
-						<Text size="sm" c="dimmed">{ t("views.dashboard.time.total_hours_week") }</Text>
+						<MetricValue
+							label={ t("views.dashboard.time.total_hours_week") }
+							href={ payrollHref }
+						>
+							{ hoursLabel }
+						</MetricValue>
 						<MetricLine
-							label={ t("views.dashboard.time.pending_timesheets", { count: dashboard.pending_timesheet_count }) }
+							label={ t("views.dashboard.time.pending_timesheets") }
 							value={ (
 								<CountChip
 									value={ dashboard.pending_timesheet_count }
 									alert={ dashboard.pending_timesheet_count > 0 }
 								/>
 							) }
+							href={ payrollHref }
 						/>
 						{ canViewPayroll && (
 							<BoardActionGrid>
@@ -174,13 +193,14 @@ export function DashboardBoard({ dashboard }: DashboardBoardProps) {
 					>
 						{ dashboard.open_shift_count > 0 && (
 							<MetricLine
-								label={ t("views.dashboard.schedule.open_shifts", { count: dashboard.open_shift_count }) }
+								label={ t("views.dashboard.schedule.open_shifts") }
 								value={ (
 									<CountChip
 										value={ dashboard.open_shift_count }
 										alert
 									/>
 								) }
+								href={ openShiftHref }
 							/>
 						) }
 						<Box className={ classes.list }>

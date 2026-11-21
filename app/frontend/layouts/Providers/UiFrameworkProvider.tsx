@@ -8,7 +8,7 @@ import { useMemo } from "react"
 import { Flash } from "@/components"
 import { BRAND_PALETTE, clampBrandColor, DEFAULT_BRAND_COLOR } from "@/lib/brandColor"
 import { useInit, usePageProps } from "@/lib/hooks"
-import { theme as themeObject } from "@/lib/theme"
+import { cssVariablesResolver as themeCssVariablesResolver, theme as themeObject } from "@/lib/theme"
 
 import "./reset.css"
 import "@mantine/core/styles.css"
@@ -40,9 +40,10 @@ export function UiFrameworkProvider({ children }: { children: React.ReactNode })
 
 	const cssVariablesResolver = useMemo((): CSSVariablesResolver => {
 		return (resolverTheme) => {
-			const variables: Record<string, string> = {}
-			const dark: Record<string, string> = {}
-			const light: Record<string, string> = {}
+			const themeVariables = themeCssVariablesResolver(resolverTheme)
+			const variables: Record<string, string> = { ...themeVariables.variables }
+			const dark: Record<string, string> = { ...themeVariables.dark }
+			const light: Record<string, string> = { ...themeVariables.light }
 			const palette = resolverTheme.colors[BRAND_PALETTE]
 
 			palette?.forEach((value, index) => {

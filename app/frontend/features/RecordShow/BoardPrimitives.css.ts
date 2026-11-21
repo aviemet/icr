@@ -43,7 +43,24 @@ export const metricLine = css`
 `
 
 export const metricLabel = css`
-	color: light-dark(${ vars.colors.gray[6] }, ${ vars.colors.dark[1] });
+`
+
+export const metricLink = css`
+	text-decoration: none;
+	color: inherit;
+	border-radius: ${ vars.radius.sm };
+	transition: opacity 120ms ease;
+
+	&:hover {
+		opacity: 0.82;
+	}
+`
+
+export const metricValueRow = css`
+	display: flex;
+	align-items: baseline;
+	gap: ${ vars.spacing.sm };
+	flex-wrap: wrap;
 `
 
 export const metricValue = css`
@@ -51,6 +68,11 @@ export const metricValue = css`
 	font-weight: 700;
 	line-height: 1.2;
 	color: light-dark(${ vars.colors.primaryColors[8] }, ${ vars.colors.primaryColors[3] });
+`
+
+export const metricValueLabel = css`
+	font-size: ${ vars.fontSizes.sm };
+	line-height: 1.2;
 `
 
 export const chip = css`

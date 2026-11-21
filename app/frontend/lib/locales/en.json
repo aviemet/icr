@@ -673,9 +673,29 @@
             "incidents": "Incidents",
             "medications": "Medications",
             "overview": "Overview",
-            "profile": "Profile"
+            "profile": "Profile",
+            "trainings": "Trainings"
           },
-          "title": "Client"
+          "title": "Client",
+          "trainings": {
+            "associate": "Associate Training",
+            "columns": {
+              "actions": "Actions",
+              "description": "Description",
+              "duration": "Duration",
+              "name": "Name",
+              "required": "Required"
+            },
+            "empty": "No trainings associated with this client.",
+            "fields": {
+              "required": "Required for this client",
+              "training": "Training"
+            },
+            "required_no": false,
+            "required_yes": true,
+            "save": "Save",
+            "title": "Trainings"
+          }
         }
       },
       "dashboard": {
@@ -692,9 +712,9 @@
           "unnamed": "(no name)"
         },
         "clients": {
-          "active_count": "%{count} Active Clients",
+          "active_count": "Active clients",
           "add_new": "Add New Client",
-          "inactive_count": "%{count} inactive",
+          "inactive_count": "Inactive",
           "title": "Clients Overview",
           "view_all": "View All Clients"
         },
@@ -703,7 +723,7 @@
           "add": "Add Event",
           "empty": "No upcoming events in your view.",
           "open_shift": "Open shift",
-          "open_shifts": "%{count} open shifts to fill",
+          "open_shifts": "Open shifts to fill",
           "shift_for": "Shift - %{name}",
           "title": "Today's Schedule",
           "untitled_shift": "Shift",
@@ -712,13 +732,13 @@
         },
         "team": {
           "add_new": "Add New Employee",
-          "hiring_pipeline": "%{count} in hiring pipeline",
-          "member_count": "%{count} Team Members",
+          "hiring_pipeline": "In hiring pipeline",
+          "member_count": "Team members",
           "title": "Team Overview",
           "view_all": "View All Employees"
         },
         "time": {
-          "pending_timesheets": "%{count} timesheets pending approval",
+          "pending_timesheets": "Timesheets pending approval",
           "title": "Time Tracking",
           "total_hours": "%{hours} Hours",
           "total_hours_week": "Total hours tracked this week",
@@ -887,7 +907,15 @@
           "title": "Employee",
           "trainings": {
             "assign": "Assign Training",
+            "edit_dates": "Edit Dates",
             "empty": "No trainings assigned.",
+            "fields": {
+              "completed": "Completed",
+              "started": "Started",
+              "training": "Training"
+            },
+            "mark_complete": "Mark Complete",
+            "save_dates": "Save Dates",
             "title": "Trainings"
           }
         },
@@ -1149,6 +1177,62 @@
           "sick": "Sick",
           "total": "Total",
           "vacation": "Vacation"
+        }
+      },
+      "trainings": {
+        "actions": {
+          "offer_again": "Offer again",
+          "retire": "Retire"
+        },
+        "availability": {
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "edit": {
+          "title": "Edit Training"
+        },
+        "form": {
+          "client_ids": "Is this training for a specific client?",
+          "create": "Create Training",
+          "description": "Description",
+          "estimated_minutes": "Expected Duration (minutes)",
+          "name": "Name",
+          "update": "Update Training"
+        },
+        "index": {
+          "clients_select_all": "Select All",
+          "columns": {
+            "actions": "Actions",
+            "clients": "Clients",
+            "description": "Description",
+            "duration": "Duration",
+            "name": "Name",
+            "status": "Status"
+          },
+          "minutes": "%{count} min",
+          "new": "New Training",
+          "title": "Trainings"
+        },
+        "new": {
+          "title": "New Training"
+        },
+        "show": {
+          "assignments": "Assignments",
+          "delete": "Delete",
+          "description": "Description",
+          "duration": "Duration",
+          "edit": "Edit",
+          "linked_clients": "Linked Clients",
+          "no_assignments": "No employees assigned.",
+          "no_clients": "No clients linked.",
+          "required": "Required",
+          "status": "Status",
+          "title": "Training"
+        },
+        "status": {
+          "completed": "Completed",
+          "in_progress": "In progress",
+          "not_started": "Not started"
         }
       }
     }

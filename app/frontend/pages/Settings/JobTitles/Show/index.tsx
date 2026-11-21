@@ -16,6 +16,7 @@ const actionLabels: Record<keyof Permissions, string> = {
 	create: "Create",
 	update: "Edit",
 	delete: "Delete",
+	complete: "Complete",
 }
 
 function grantedActions(resourcePermissions: Permissions) {

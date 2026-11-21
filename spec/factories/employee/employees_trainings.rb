@@ -23,9 +23,14 @@
 #
 FactoryBot.define do
   factory :employees_training, class: "Employee::EmployeesTraining" do
-    completed_at { Time.current }
+    started_at { Time.current }
+    completed_at { nil }
 
     employee
     training
+
+    trait :completed do
+      completed_at { Time.current }
+    end
   end
 end

@@ -4,8 +4,7 @@ class CreateTrainings < ActiveRecord::Migration[7.2]
       t.string :name
       t.text :description
       t.integer :estimated_minutes
-      t.datetime :active_on
-      t.datetime :inactive_on
+      t.integer :status, null: false, default: 0
 
       t.timestamps
     end

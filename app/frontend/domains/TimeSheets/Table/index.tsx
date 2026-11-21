@@ -12,6 +12,8 @@ export function TimesheetTable({ records, model }: TimesheetTableProps) {
 		{
 			accessor: "actions",
 			title: "Actions",
+			titleClassName: "actionsCell",
+			cellsClassName: "actionsCell",
 			sortable: false,
 			render: (timesheet) => <EditButton href={ Routes.editTimesheet(timesheet.id) } />,
 		},

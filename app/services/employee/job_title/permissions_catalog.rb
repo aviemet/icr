@@ -1,5 +1,11 @@
 class Employee::JobTitle::PermissionsCatalog
-  ACTIONS = %w[index show create update destroy].freeze
+  CRUD_ACTIONS = %w[index show create update destroy].freeze
+
+  ACTIONS = CRUD_ACTIONS
+
+  EXTRA_ACTIONS = {
+    "employee_training" => %w[complete],
+  }.freeze
 
   FORM_ACTION_TO_ROLE = {
     "index" => :index,
@@ -8,6 +14,7 @@ class Employee::JobTitle::PermissionsCatalog
     "update" => :update,
     "delete" => :destroy,
     "destroy" => :destroy,
+    "complete" => :complete,
   }.freeze
 
   ROLE_TO_FORM_ACTION = {
@@ -16,6 +23,7 @@ class Employee::JobTitle::PermissionsCatalog
     create: "create",
     update: "update",
     destroy: "delete",
+    complete: "complete",
   }.freeze
 
   RESOURCES = {
@@ -30,6 +38,7 @@ class Employee::JobTitle::PermissionsCatalog
     "prescription" => Prescription,
     "medication" => Medication,
     "clients_manager" => ClientsManager,
+    "employee_training" => Employee::Training,
   }.freeze
 
   def self.resource_keys
@@ -38,6 +47,18 @@ class Employee::JobTitle::PermissionsCatalog
 
   def self.resource_class(key)
     RESOURCES[key.to_s]
+  end
+
+  def self.actions_for(resource_key)
+    CRUD_ACTIONS + Array(EXTRA_ACTIONS[resource_key.to_s])
+  end
+
+  def self.form_actions_for(resource_key)
+    actions_for(resource_key).filter_map { |action| form_action_for(action) }
+  end
+
+  def self.all_managed_actions
+    (CRUD_ACTIONS + EXTRA_ACTIONS.values.flatten).uniq
   end
 
   def self.role_name_for(form_action)
@@ -51,17 +72,21 @@ class Employee::JobTitle::PermissionsCatalog
   def self.empty_permissions
     {
       "admin" => false,
-      **RESOURCES.keys.index_with { empty_resource_permissions },
+      **RESOURCES.keys.index_with { |key| empty_resource_permissions(key) },
     }
   end
 
-  def self.empty_resource_permissions
-    {
-      "index" => false,
-      "show" => false,
-      "create" => false,
-      "update" => false,
-      "delete" => false,
-    }
+  def self.empty_resource_permissions(resource_key = nil)
+    form_actions = if resource_key
+      form_actions_for(resource_key)
+    else
+      %w[index show create update delete]
+    end
+
+    form_actions.index_with { false }
+  end
+
+  def self.permitted_form_actions_for(resource_key)
+    form_actions_for(resource_key).map(&:to_sym)
   end
 end

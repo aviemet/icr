@@ -89,6 +89,8 @@ RSpec.describe "/clients" do
       prescription = create(:prescription, client: client, doctor: doctor, medication: medication, dosage: dosage, starts_at: Date.current, ends_at: nil)
       vendor = create(:vendor)
       enrollment = create(:client_enrollment, client: client, vendor: vendor)
+      training = create(:training)
+      clients_training = create(:clients_training, client: client, training: training, required: true)
 
       get client_url(client)
 
@@ -101,6 +103,9 @@ RSpec.describe "/clients" do
       expect(props[:enrollments].pluck(:id)).to eq([enrollment.id])
       expect(props[:current_attendants].pluck(:id)).to eq([attendant.id])
       expect(props[:current_manager][:id]).to eq(manager.id)
+      expect(props[:clients_trainings].pluck(:id)).to eq([clients_training.id])
+      expect(props[:clients_trainings].pluck(:training_id)).to eq([training.id])
+      expect(props[:clients_trainings].first[:required]).to be(true)
       expect(props[:active_allergies_count]).to eq(1)
       expect(props[:active_prescriptions_count]).to eq(1)
       expect(props[:emergency_contacts_count]).to eq(1)

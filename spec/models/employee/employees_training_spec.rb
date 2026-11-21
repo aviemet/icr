@@ -38,6 +38,36 @@ RSpec.describe Employee::EmployeesTraining do
       expect(duplicate).not_to be_valid
       expect(duplicate.errors[:training_id]).to be_present
     end
+
+    it "rejects completed_at before started_at" do
+      expect(
+        build(
+          :employees_training,
+          started_at: Time.current,
+          completed_at: 1.day.ago,
+        ),
+      ).not_to be_valid
+    end
+
+    it "allows completed_at on the same second as started_at" do
+      started = Time.zone.parse("2026-01-15 10:00:00.500")
+      completed = Time.zone.parse("2026-01-15 10:00:00.000")
+      expect(build(:employees_training, started_at: started, completed_at: completed)).to be_valid
+    end
+  end
+
+  describe "#status" do
+    it "returns completed when completed_at is present" do
+      expect(build(:employees_training, completed_at: Time.current).status).to eq(:completed)
+    end
+
+    it "returns in_progress when started and not completed" do
+      expect(build(:employees_training, started_at: Time.current, completed_at: nil).status).to eq(:in_progress)
+    end
+
+    it "returns not_started when neither date is present" do
+      expect(build(:employees_training, started_at: nil, completed_at: nil).status).to eq(:not_started)
+    end
   end
 
   describe "Associations" do

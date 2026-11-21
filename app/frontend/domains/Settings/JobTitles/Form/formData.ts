@@ -4,6 +4,7 @@ export type Permissions = {
 	create?: boolean
 	update?: boolean
 	delete?: boolean
+	complete?: boolean
 }
 
 export type JobTitleFormData = {
@@ -18,6 +19,7 @@ export type JobTitleFormData = {
 		calendar_event: Permissions
 		setting: Permissions
 		incident_report: Permissions
+		employee_training: Permissions
 	}
 }
 
@@ -27,6 +29,11 @@ const emptyResourcePermissions: Permissions = {
 	create: false,
 	update: false,
 	delete: false,
+}
+
+const emptyTrainingPermissions: Permissions = {
+	...emptyResourcePermissions,
+	complete: false,
 }
 
 export const emptyPermissions: {
@@ -42,6 +49,7 @@ export const emptyPermissions: {
 		calendar_event: { ...emptyResourcePermissions },
 		setting: { ...emptyResourcePermissions },
 		incident_report: { ...emptyResourcePermissions },
+		employee_training: { ...emptyTrainingPermissions },
 	},
 }
 
@@ -57,6 +65,15 @@ export const emptyJobTitle: JobTitleFormData = {
 	},
 	...emptyPermissions,
 }
+
+export const permissionColumns: (keyof Permissions)[] = [
+	"index",
+	"show",
+	"create",
+	"update",
+	"delete",
+	"complete",
+]
 
 type TableRow = {
 	model: keyof Omit<JobTitleFormData["permissions"], "admin">
@@ -104,5 +121,10 @@ export const tableRows: TableRow[] = [
 		model: "incident_report",
 		label: "Incident Reports",
 		permissions: ["index", "show", "create", "update", "delete"],
+	},
+	{
+		model: "employee_training",
+		label: "Trainings",
+		permissions: ["index", "show", "create", "update", "delete", "complete"],
 	},
 ]

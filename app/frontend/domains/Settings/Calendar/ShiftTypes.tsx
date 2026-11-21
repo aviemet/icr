@@ -67,8 +67,8 @@ export function ShiftTypes({ shift_types }: ShiftTypesProps) {
 		{
 			accessor: "actions",
 			title: "Actions",
-			textAlign: "right",
-			width: 120,
+			titleClassName: "actionsCell",
+			cellsClassName: "actionsCell",
 			render: (shiftType) => {
 				const slug = shiftType.slug || shiftType.id
 				const isSystem = Boolean(shiftType.system)

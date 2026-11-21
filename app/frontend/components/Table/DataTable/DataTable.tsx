@@ -13,7 +13,6 @@ import { CheckIcon } from "@/components/Icons"
 import { useLocation } from "@/lib/hooks/useLocation"
 
 import * as classes from "./DataTable.css"
-import { withActionsColumnSizing } from "./withActionsColumnSizing"
 import { useTableContext, type TableContextColumn } from "../Provider"
 
 const isValidDirection = (value: string | undefined): value is "asc" | "desc" => {
@@ -94,13 +93,11 @@ export function DataTable<T extends object = Record<string, unknown>>({
 
 	const visibleColumns = useMemo(() => {
 		const columnHide = context?.columnHide ?? {}
-		const shownColumns = columns.filter(column => {
+		return columns.filter(column => {
 			const accessor = column.accessor
 			if(accessor === undefined || accessor === null) return true
 			return !columnHide[String(accessor)]
 		})
-
-		return withActionsColumnSizing(shownColumns)
 	}, [columns, context?.columnHide])
 
 	const sortStatus = useMemo<DataTableSortStatus<T>>(() => {

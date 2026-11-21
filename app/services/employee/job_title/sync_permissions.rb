@@ -31,8 +31,8 @@ class Employee::JobTitle::SyncPermissions
     roles = Set.new
 
     if ActiveModel::Type::Boolean.new.cast(permissions["admin"])
-      Employee::JobTitle::PermissionsCatalog::RESOURCES.each_value do |resource_class|
-        Employee::JobTitle::PermissionsCatalog::ACTIONS.each do |action|
+      Employee::JobTitle::PermissionsCatalog::RESOURCES.each do |key, resource_class|
+        Employee::JobTitle::PermissionsCatalog.actions_for(key).each do |action|
           roles << [action.to_sym, resource_class]
         end
       end
@@ -43,7 +43,10 @@ class Employee::JobTitle::SyncPermissions
       resource_permissions = permissions[key]
       next unless resource_permissions.is_a?(Hash)
 
+      allowed_form_actions = Employee::JobTitle::PermissionsCatalog.form_actions_for(key)
+
       resource_permissions.each do |form_action, enabled|
+        next unless allowed_form_actions.include?(form_action.to_s)
         next unless ActiveModel::Type::Boolean.new.cast(enabled)
 
         role_name = Employee::JobTitle::PermissionsCatalog.role_name_for(form_action)
@@ -70,11 +73,12 @@ class Employee::JobTitle::SyncPermissions
 
   def current_managed_roles
     managed_resource_types = Employee::JobTitle::PermissionsCatalog::RESOURCES.values.map(&:name)
+    managed_actions = Employee::JobTitle::PermissionsCatalog.all_managed_actions
 
     job_title.roles.each_with_object(Set.new) do |role, roles|
       next if role.resource_type.blank?
       next unless managed_resource_types.include?(role.resource_type)
-      next unless Employee::JobTitle::PermissionsCatalog::ACTIONS.include?(role.name)
+      next unless managed_actions.include?(role.name)
 
       resource_class = role.resource_type.constantize
       roles << [role.name.to_sym, resource_class]

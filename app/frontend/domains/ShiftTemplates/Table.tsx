@@ -18,6 +18,8 @@ export function ShiftTemplateTable({ records, model }: ShiftTemplateTableProps) 
 		{
 			accessor: "actions",
 			title: "Actions",
+			titleClassName: "actionsCell",
+			cellsClassName: "actionsCell",
 			sortable: false,
 			render: (shiftTemplate) => <EditButton href={ Routes.editShiftTemplate(shiftTemplate.id) } />,
 		},

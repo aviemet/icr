@@ -37,15 +37,14 @@ describe("RecordShow board primitives", () => {
 	it("renders metric line, value, chip, and action tile", () => {
 		render(
 			<MantineProvider theme={ theme } defaultColorScheme="dark">
-				<MetricValue>12</MetricValue>
-				<MetricLine label="Pending" value={ <CountChip value={ 3 } alert /> } />
+				<MetricValue label="Active clients" href="/clients">12</MetricValue>
+				<MetricLine label="Pending" value={ <CountChip value={ 3 } alert /> } href="/payroll" />
 				<BoardActionTile href="/clients" title="View clients" hint="Open list" />
 			</MantineProvider>,
 		)
 
-		expect(screen.getByText("12")).toBeInTheDocument()
-		expect(screen.getByText("Pending")).toBeInTheDocument()
-		expect(screen.getByText("3")).toBeInTheDocument()
+		expect(screen.getByRole("link", { name: /12 Active clients/i })).toHaveAttribute("href", "/clients")
+		expect(screen.getByRole("link", { name: /Pending 3/i })).toHaveAttribute("href", "/payroll")
 		expect(screen.getByRole("link", { name: /View clients/i })).toHaveAttribute("href", "/clients")
 		expect(screen.getByText("Open list")).toBeInTheDocument()
 	})

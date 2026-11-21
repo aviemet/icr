@@ -88,11 +88,16 @@ Rails.application.routes.draw do
     resources :doctors, controller: "clients/doctors", only: [:create, :destroy]
     resources :documents, controller: "clients/documents", only: [:create, :destroy]
     resources :images, controller: "clients/images", only: [:create, :destroy]
+    resources :trainings, controller: "clients/trainings", only: [:create, :update, :destroy]
     resource :life_detail, controller: "clients/life_details", only: [:update]
   end
 
   scope "/employees" do
-    resources :trainings, path: "trainings"
+    resources :trainings, path: "trainings" do
+      member do
+        put :status, action: :update_status
+      end
+    end
     resources :interviews, path: "interviews" do
       resources :interview_notes, only: [:create, :update, :destroy]
     end

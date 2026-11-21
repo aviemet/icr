@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_21_181113) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -256,6 +256,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
     t.index ["manager_id"], name: "index_clients_managers_on_manager_id"
   end
 
+  create_table "clients_trainings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "client_id", null: false
+    t.uuid "training_id", null: false
+    t.boolean "required", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id", "training_id"], name: "index_clients_trainings_on_client_id_and_training_id", unique: true
+    t.index ["client_id"], name: "index_clients_trainings_on_client_id"
+    t.index ["training_id"], name: "index_clients_trainings_on_training_id"
+  end
+
   create_table "companies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -394,15 +405,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
     t.text "termination_reason"
     t.string "preferred_language"
     t.text "communication_notes"
-    t.string "slug", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "application_source"
     t.integer "desired_compensation_cents"
     t.string "desired_compensation_currency", default: "USD", null: false
     t.integer "desired_compensation_period"
     t.text "hiring_notes"
     t.uuid "desired_job_title_id"
+    t.string "slug", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["desired_job_title_id"], name: "index_employees_on_desired_job_title_id"
     t.index ["person_id"], name: "index_employees_on_person_id"
     t.index ["slug"], name: "index_employees_on_slug", unique: true
@@ -662,11 +673,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
   create_table "interviews", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "employee_id", null: false
     t.datetime "scheduled_at"
+    t.string "location"
+    t.string "interview_type"
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "location"
-    t.string "interview_type"
     t.index ["employee_id"], name: "index_interviews_on_employee_id"
   end
 
@@ -903,10 +914,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
     t.string "name"
     t.text "description"
     t.integer "estimated_minutes"
-    t.datetime "active_on"
-    t.datetime "inactive_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "status", default: 0, null: false
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1016,6 +1026,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
   add_foreign_key "clients_attendants", "employees", column: "attendant_id"
   add_foreign_key "clients_managers", "clients"
   add_foreign_key "clients_managers", "employees", column: "manager_id"
+  add_foreign_key "clients_trainings", "clients"
+  add_foreign_key "clients_trainings", "trainings"
   add_foreign_key "contacts", "addresses", column: "primary_address_id"
   add_foreign_key "contacts", "emails", column: "primary_email_id"
   add_foreign_key "contacts", "phones", column: "primary_phone_id"

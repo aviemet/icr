@@ -81,6 +81,22 @@ en:
           title: Incidents
           empty: No incident reports for this client.
           view: View
+        trainings:
+          associate: Associate Training
+          columns:
+            actions: Actions
+            description: Description
+            duration: Duration
+            name: Name
+            required: Required
+          empty: No trainings associated with this client.
+          fields:
+            required: Required for this client
+            training: Training
+          required_no: No
+          required_yes: Yes
+          save: Save
+          title: Trainings
         edit: Edit Client
         tabs:
           overview: Overview
@@ -89,6 +105,7 @@ en:
           health: Health
           medications: Medications
           care: Care and Services
+          trainings: Trainings
           documents: Documents
           incidents: Incidents
         title: Client

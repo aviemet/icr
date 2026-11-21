@@ -14,6 +14,7 @@ class Clients::ShowSerializer < Clients::PersistedSerializer
   has_many :clients_managers, serializer: ClientsManagers::PersistedSerializer
   has_many :clients_attendants, serializer: ClientsAttendants::PersistedSerializer
   has_many :incident_reports, serializer: IncidentReports::PersistedSerializer
+  has_many :clients_trainings, serializer: ClientsTrainings::ShowRowSerializer
 
   type "Array<{ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date }>"
   def documents

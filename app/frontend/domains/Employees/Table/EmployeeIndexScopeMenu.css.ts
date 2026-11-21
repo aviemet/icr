@@ -12,13 +12,3 @@ export const searchWithLeading = css`
 		border-bottom-left-radius: 0;
 	}
 `
-
-export const searchCluster = css`
-	display: flex;
-	flex: 1 1 auto;
-	width: 100%;
-	max-width: 100%;
-	align-items: stretch;
-	height: 36px;
-	gap: 0;
-`

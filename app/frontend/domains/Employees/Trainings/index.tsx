@@ -12,9 +12,14 @@ import { useRecordCanUpdate } from "@/lib/hooks"
 interface EmployeeTrainingsProps {
 	employee: Schema.EmployeesShow
 	trainingOptions: Schema.EmployeeTrainingsOptions[]
+	canCompleteTrainings?: boolean
 }
 
-export function EmployeeTrainings({ employee, trainingOptions }: EmployeeTrainingsProps) {
+export function EmployeeTrainings({
+	employee,
+	trainingOptions,
+	canCompleteTrainings = false,
+}: EmployeeTrainingsProps) {
 	const { t } = useTranslation()
 	const canUpdate = useRecordCanUpdate()
 
@@ -45,10 +50,23 @@ export function EmployeeTrainings({ employee, trainingOptions }: EmployeeTrainin
 						} }
 					>
 						<Stack gap="sm">
-							<Select name="employees_training.training_id" label="Training" options={ options } required />
-							<DateInput name="employees_training.started_at" label="Started" />
-							<DateInput name="employees_training.completed_at" label="Completed" />
-							<Submit>Assign Training</Submit>
+							<Select
+								name="employees_training.training_id"
+								label={ t("views.employees.show.trainings.fields.training") }
+								options={ options }
+								required
+							/>
+							<DateInput
+								name="employees_training.started_at"
+								label={ t("views.employees.show.trainings.fields.started") }
+							/>
+							{ canCompleteTrainings && (
+								<DateInput
+									name="employees_training.completed_at"
+									label={ t("views.employees.show.trainings.fields.completed") }
+								/>
+							) }
+							<Submit>{ t("views.employees.show.trainings.assign") }</Submit>
 						</Stack>
 					</Form>
 				</CollectionAddModal>
@@ -61,16 +79,27 @@ export function EmployeeTrainings({ employee, trainingOptions }: EmployeeTrainin
 					title={ row.training.name }
 					meta={ (
 						<>
-							<span>{ row.status }</span>
+							<span>
+								{ t(`views.trainings.status.${row.status}`, { defaultValue: row.status }) }
+							</span>
+							{ row.started_at && (
+								<span>
+									{ t("views.employees.show.trainings.fields.started") }:{ " " }
+									<DateTimeFormatter>{ row.started_at }</DateTimeFormatter>
+								</span>
+							) }
 							{ row.completed_at && (
-								<span><DateTimeFormatter>{ row.completed_at }</DateTimeFormatter></span>
+								<span>
+									{ t("views.employees.show.trainings.fields.completed") }:{ " " }
+									<DateTimeFormatter>{ row.completed_at }</DateTimeFormatter>
+								</span>
 							) }
 						</>
 					) }
 					actions={ canUpdate
 						? (
 							<Group gap="xs">
-								{ !row.completed_at && (
+								{ !row.completed_at && canCompleteTrainings && (
 									<Form
 										action={ Routes.employeeTraining(employee.slug, row.id) }
 										method="put"
@@ -80,9 +109,44 @@ export function EmployeeTrainings({ employee, trainingOptions }: EmployeeTrainin
 											},
 										} }
 									>
-										<Submit size="xs" variant="light">Mark Complete</Submit>
+										<Submit size="xs" variant="light">
+											{ t("views.employees.show.trainings.mark_complete") }
+										</Submit>
 									</Form>
 								) }
+								<CollectionAddModal
+									canUpdate={ canUpdate }
+									label={ t("views.employees.show.trainings.edit_dates") }
+								>
+									<Form
+										action={ Routes.employeeTraining(employee.slug, row.id) }
+										method="put"
+										initialData={ {
+											employees_training: canCompleteTrainings
+												? {
+													started_at: row.started_at ?? "",
+													completed_at: row.completed_at ?? "",
+												}
+												: {
+													started_at: row.started_at ?? "",
+												},
+										} }
+									>
+										<Stack gap="sm">
+											<DateInput
+												name="employees_training.started_at"
+												label={ t("views.employees.show.trainings.fields.started") }
+											/>
+											{ canCompleteTrainings && (
+												<DateInput
+													name="employees_training.completed_at"
+													label={ t("views.employees.show.trainings.fields.completed") }
+												/>
+											) }
+											<Submit>{ t("views.employees.show.trainings.save_dates") }</Submit>
+										</Stack>
+									</Form>
+								</CollectionAddModal>
 								<DeleteButton
 									href={ Routes.employeeTraining(employee.slug, row.id) }
 									label={ row.training.name }

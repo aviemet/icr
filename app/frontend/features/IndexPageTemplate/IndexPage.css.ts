@@ -53,3 +53,13 @@ export const denseShell = css`
 		background-color: light-dark(${ vars.colors.gray[0] }, ${ vars.colors.dark[7] });
 	}
 `
+
+export const searchCluster = css`
+	display: flex;
+	flex: 1 1 auto;
+	width: 100%;
+	max-width: 100%;
+	align-items: stretch;
+	height: 36px;
+	gap: 0;
+`

@@ -2,6 +2,7 @@
 import type ClientAllergiesPersisted from '../Client/Allergies/Persisted'
 import type ClientsAttendantsPersisted from '../ClientsAttendants/Persisted'
 import type ClientsManagersPersisted from '../ClientsManagers/Persisted'
+import type ClientsTrainingsShowRow from '../ClientsTrainings/ShowRow'
 import type EmployeesPersisted from '../Employees/Persisted'
 import type ClientDiagnosesPersisted from '../Client/Diagnoses/Persisted'
 import type DoctorsPersisted from '../Doctors/Persisted'
@@ -23,6 +24,7 @@ declare global {
       allergies: ClientAllergiesPersisted[]
       clients_attendants: ClientsAttendantsPersisted[]
       clients_managers: ClientsManagersPersisted[]
+      clients_trainings: ClientsTrainingsShowRow[]
       color?: string
       color_mappings: Record<string, Record<string, string>>
       communication_notes?: string

@@ -110,7 +110,14 @@ en:
         title: Employee
         trainings:
           assign: Assign Training
+          edit_dates: Edit Dates
           empty: No trainings assigned.
+          fields:
+            completed: Completed
+            started: Started
+            training: Training
+          mark_complete: Mark Complete
+          save_dates: Save Dates
           title: Trainings
       table:
         actions: Actions

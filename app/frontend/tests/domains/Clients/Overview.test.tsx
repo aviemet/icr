@@ -53,6 +53,7 @@ function buildClient(overrides: Partial<Schema.ClientsShow> = {}): Schema.Client
 		allergies: [],
 		clients_attendants: [],
 		clients_managers: [],
+		clients_trainings: [],
 		color_mappings: {},
 		created_at: new Date("2024-01-01"),
 		diagnoses: [],

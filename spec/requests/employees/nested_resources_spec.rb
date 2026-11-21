@@ -149,6 +149,25 @@ RSpec.describe "Employees nested resources" do
       }.to change(Employee::EmployeesTraining, :count).by(1)
       expect(response).to redirect_to(employee_url(employee, tab: "trainings"))
     end
+
+    it "marks a training complete" do
+      row = create(:employees_training, employee: employee, completed_at: nil, started_at: 1.day.ago)
+
+      put employee_training_url(employee, row), params: {
+        employees_training: { completed_at: Time.current.iso8601 }
+      }
+
+      expect(response).to redirect_to(employee_url(employee, tab: "trainings"))
+      expect(row.reload.completed_at).to be_present
+    end
+
+    it "destroys a training assignment" do
+      row = create(:employees_training, employee: employee)
+      expect {
+        delete employee_training_url(employee, row)
+      }.to change(Employee::EmployeesTraining, :count).by(-1)
+      expect(response).to redirect_to(employee_url(employee, tab: "trainings"))
+    end
   end
 
   describe "documents" do

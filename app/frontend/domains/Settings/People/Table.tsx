@@ -67,6 +67,8 @@ export function PersonTable({ records, model }: PersonTableProps) {
 		{
 			accessor: "actions",
 			title: "Actions",
+			titleClassName: "actionsCell",
+			cellsClassName: "actionsCell",
 			sortable: false,
 			render: (person) => <EditButton href={ Routes.editSettingsPerson(person.slug) } />,
 		},

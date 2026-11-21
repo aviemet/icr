@@ -46,11 +46,9 @@ export const iconDanger = css`
 `
 
 export const title = css`
-	font-size: ${ vars.fontSizes.xs };
 	font-weight: 600;
 	letter-spacing: 0.04em;
 	text-transform: uppercase;
-	color: light-dark(${ vars.colors.gray[6] }, ${ vars.colors.dark[1] });
 `
 
 export const body = css`

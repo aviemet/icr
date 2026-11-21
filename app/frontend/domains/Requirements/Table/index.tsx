@@ -36,6 +36,8 @@ export function RequirementRequirementTable({ records, model }: RequirementRequi
 		{
 			accessor: "actions",
 			title: "Actions",
+			titleClassName: "actionsCell",
+			cellsClassName: "actionsCell",
 			sortable: false,
 			render: (requirement) => (
 				<Group wrap="nowrap" gap="xs">

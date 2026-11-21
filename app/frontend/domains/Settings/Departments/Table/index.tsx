@@ -38,13 +38,13 @@ export function DepartmentTable({ records }: DepartmentTableProps) {
 		{
 			accessor: "actions",
 			title: "Actions",
-			textAlign: "right",
-			width: 96,
+			titleClassName: "actionsCell",
+			cellsClassName: "actionsCell",
 			render: (department) => {
 				const slug = String(department.slug ?? "")
 				const name = String(department.name ?? "")
 				return (
-					<Group gap="xs" justify="flex-end" wrap="nowrap">
+					<Group gap="xs" wrap="nowrap">
 						<EditButton
 							href={ Routes.editSettingsDepartment(slug) }
 							label={ name }

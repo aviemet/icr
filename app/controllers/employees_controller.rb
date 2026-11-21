@@ -87,7 +87,11 @@ class EmployeesController < ApplicationController
     render inertia: "Employees/Show", props: {
       employee: -> { employee_for_show.render(:show) },
       can_update: -> { policy(employee).update? },
-      training_options: -> { Employee::Training.order(:name).render(:options) },
+      training_options: -> {
+        assigned_ids = employee_for_show.employees_trainings.map(&:training_id)
+        Employee::Training.active.where.not(id: assigned_ids).order(:name).render(:options)
+      },
+      can_complete_trainings: -> { Employee::TrainingPolicy.new(current_user, Employee::Training).complete? },
     }
   end
 

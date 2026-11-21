@@ -203,6 +203,8 @@ RSpec.describe "/employees" do
       expect(props[:assigned_clients_count]).to eq(1)
       expect(props[:primary_manager][:id]).to eq(manager.id)
       expect(props[:pay_rates].size).to eq(1)
+      expect(inertia.props[:can_complete_trainings]).to be(true)
+      expect(inertia.props[:training_options].pluck(:id)).not_to include(training.id)
     end
   end
 

@@ -108,6 +108,8 @@ export function EmployeesTable({
 		{
 			accessor: "actions",
 			title: t("views.timesheets.index.employees.actions"),
+			titleClassName: "actionsCell",
+			cellsClassName: "actionsCell",
 			sortable: false,
 			render: (employee) => {
 				const timesheetId = timesheetIdsByEmployee[employee.id]

@@ -133,6 +133,34 @@ RSpec.describe "Settings::JobTitles", type: :request do
       expect(job_title.has_role?(:index, Employee)).to be true
       expect(job_title.has_role?(:update, Client)).to be false
     end
+
+    it "persists complete on employee_training" do
+      job_title = create(:job_title, name: "Facilitator")
+
+      patch settings_job_title_url(job_title.slug), params: {
+        job_title: {
+          name: "Facilitator",
+          description: job_title.description,
+          department_id: job_title.department_id,
+        },
+        permissions: {
+          admin: false,
+          employee_training: {
+            index: true,
+            show: true,
+            create: false,
+            update: false,
+            delete: false,
+            complete: true,
+          },
+        },
+      }
+
+      expect(response).to redirect_to(settings_job_titles_path)
+      job_title.reload
+      expect(job_title.has_role?(:complete, Employee::Training)).to be true
+      expect(job_title.has_role?(:index, Employee::Training)).to be true
+    end
   end
 
   describe "DELETE /settings/job_titles/:slug" do

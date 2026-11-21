@@ -22,6 +22,8 @@ export function ScheduleTable({ records, model }: ScheduleTableProps) {
 		{
 			accessor: "actions",
 			title: "Actions",
+			titleClassName: "actionsCell",
+			cellsClassName: "actionsCell",
 			sortable: false,
 			render: (client) => <EditButton href={ Routes.editClient(client.slug) } />,
 		},
