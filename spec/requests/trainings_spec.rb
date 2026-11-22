@@ -89,6 +89,21 @@ RSpec.describe "/trainings", type: :request do
       expect(inertia.props[:training][:client_ids]).to eq([])
       expect(inertia.props[:client_options].pluck(:id)).to include(client.id)
     end
+
+    it "prefills policy-scoped client_ids from params" do
+      client = create(:client)
+      get new_training_url, params: { client_ids: [client.id] }
+
+      expect(response).to be_successful
+      expect(inertia.props[:training][:client_ids]).to eq([client.id.to_s])
+    end
+
+    it "ignores unknown client_ids when prefilling" do
+      get new_training_url, params: { client_ids: [SecureRandom.uuid] }
+
+      expect(response).to be_successful
+      expect(inertia.props[:training][:client_ids]).to eq([])
+    end
   end
 
   describe "GET /edit" do

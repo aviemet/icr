@@ -1,7 +1,7 @@
 class Employees::ClientAttendantsController < Employees::BaseController
   expose :clients_attendant, model: ClientsAttendant, scope: -> { employee.clients_attendants }
 
-  strong_params :clients_attendant, permit: [:client_id, :starts_at, :ends_at]
+  strong_params :clients_attendant, permit: [:client_id, :starts_at]
 
   # @route POST /employees/:employee_slug/client_attendants (employee_client_attendants)
   def create

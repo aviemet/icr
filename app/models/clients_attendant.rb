@@ -3,7 +3,6 @@
 # Table name: clients_attendants
 #
 #  id           :uuid             not null, primary key
-#  ends_at      :datetime
 #  starts_at    :datetime
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
@@ -14,7 +13,7 @@
 #
 #  index_clients_attendants_on_attendant_id      (attendant_id)
 #  index_clients_attendants_on_client_id         (client_id)
-#  index_clients_attendants_unique_relationship  (attendant_id,client_id) UNIQUE WHERE (ends_at IS NULL)
+#  index_clients_attendants_unique_relationship  (attendant_id,client_id) UNIQUE
 #
 # Foreign Keys
 #
@@ -28,29 +27,19 @@ class ClientsAttendant < ApplicationRecord
   attribute :starts_at, :datetime, default: -> { Time.current }
 
   validates :starts_at, presence: true
-  validate :ends_at_after_starts_at, if: :ends_at?
 
   validates :attendant_id, uniqueness: {
     scope: :client_id,
-    conditions: -> { where(ends_at: nil) },
     message: :already_attends
   }
 
   validate :requirement_gates_for_assignment, if: -> { new_record? || client_id_changed? }
 
-  scope :current, -> { where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current) }
+  scope :current, -> { where(starts_at: ..Time.current) }
 
   scope :includes_associated, -> { includes([:attendant, :client]) }
 
   private
-
-  def ends_at_after_starts_at
-    return if ends_at.blank?
-
-    if ends_at < starts_at
-      errors.add(:ends_at, "must be after starts_at")
-    end
-  end
 
   def requirement_gates_for_assignment
     return if attendant.blank? || client.blank?

@@ -6,6 +6,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 import { ClientTrainings } from "@/domains/Clients/Trainings"
 import { theme } from "@/lib/theme"
 
+let canCreateTraining = false
+
 vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
 		t: (key: string, options?: Record<string, string | number>) => {
@@ -28,6 +30,11 @@ vi.mock("@inertiajs/react", () => ({
 vi.mock("@/lib/hooks", async (importOriginal) => ({
 	...await importOriginal<typeof import("@/lib/hooks")>(),
 	useRecordCanUpdate: () => false,
+	usePermissions: () => ({
+		can: (resource: string, action: string) => (
+			resource === "employee/trainings" && action === "create" && canCreateTraining
+		),
+	}),
 }))
 
 function buildClient(overrides: Partial<Schema.ClientsShow> = {}): Schema.ClientsShow {
@@ -87,9 +94,20 @@ function buildClient(overrides: Partial<Schema.ClientsShow> = {}): Schema.Client
 	}
 }
 
+function renderClientTrainings(client = buildClient()) {
+	return render(
+		<MantineProvider theme={ theme }>
+			<ModalsProvider>
+				<ClientTrainings client={ client } trainingOptions={ [] } />
+			</ModalsProvider>
+		</MantineProvider>,
+	)
+}
+
 describe("ClientTrainings", () => {
 	beforeEach(() => {
 		cleanup()
+		canCreateTraining = false
 		Object.defineProperty(window, "matchMedia", {
 			writable: true,
 			value: () => ({
@@ -104,16 +122,27 @@ describe("ClientTrainings", () => {
 	})
 
 	it("renders associated trainings and required state", () => {
-		render(
-			<MantineProvider theme={ theme }>
-				<ModalsProvider>
-					<ClientTrainings client={ buildClient() } trainingOptions={ [] } />
-				</ModalsProvider>
-			</MantineProvider>,
-		)
+		renderClientTrainings()
 
 		expect(screen.getByText("Client-Specific Safety")).toBeTruthy()
 		expect(screen.getByText("views.clients.show.trainings.required_yes")).toBeTruthy()
 		expect(screen.getByText("45 min")).toBeTruthy()
+	})
+
+	it("hides New Training when create permission is false", () => {
+		renderClientTrainings()
+
+		expect(screen.queryByText("views.clients.show.trainings.new")).toBeNull()
+	})
+
+	it("shows New Training with client_ids prefill when create permission is true", () => {
+		canCreateTraining = true
+		const client = buildClient()
+		renderClientTrainings(client)
+
+		const link = screen.getByText("views.clients.show.trainings.new").closest("a")
+		expect(link).toBeTruthy()
+		expect(link?.getAttribute("href")).toContain(client.id)
+		expect(link?.getAttribute("href")).toContain("client_ids")
 	})
 })

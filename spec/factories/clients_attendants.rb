@@ -3,7 +3,6 @@
 # Table name: clients_attendants
 #
 #  id           :uuid             not null, primary key
-#  ends_at      :datetime
 #  starts_at    :datetime
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
@@ -14,7 +13,7 @@
 #
 #  index_clients_attendants_on_attendant_id      (attendant_id)
 #  index_clients_attendants_on_client_id         (client_id)
-#  index_clients_attendants_unique_relationship  (attendant_id,client_id) UNIQUE WHERE (ends_at IS NULL)
+#  index_clients_attendants_unique_relationship  (attendant_id,client_id) UNIQUE
 #
 # Foreign Keys
 #
@@ -26,6 +25,5 @@ FactoryBot.define do
     attendant factory: :employee
     client
     starts_at { Time.current }
-    ends_at { nil }
   end
 end

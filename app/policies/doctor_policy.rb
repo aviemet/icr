@@ -11,7 +11,7 @@ class DoctorPolicy < ApplicationPolicy
           scope.joins(:doctors_clients)
             .joins("INNER JOIN clients_attendants ON doctors_clients.client_id = clients_attendants.client_id")
             .where(clients_attendants: { attendant_id: user.person.employee.id })
-            .where("clients_attendants.starts_at <= ? AND (clients_attendants.ends_at IS NULL OR clients_attendants.ends_at >= ?)", Time.current, Time.current)
+            .where("clients_attendants.starts_at <= ?", Time.current)
             .distinct
         end
       when "Client"

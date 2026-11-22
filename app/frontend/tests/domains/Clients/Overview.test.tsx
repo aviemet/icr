@@ -101,8 +101,24 @@ describe("ClientOverview", () => {
 		expect(screen.getByText("UCI-9")).toBeInTheDocument()
 		expect(screen.getByText("Lead Manager")).toBeInTheDocument()
 		expect(screen.getByText("Aide One")).toBeInTheDocument()
+		expect(screen.getByText("views.clients.show.overview.household")).toBeInTheDocument()
+		expect(screen.getByText("Santos Home")).toBeInTheDocument()
 		expect(screen.getByText("views.clients.show.tabs.profile")).toBeInTheDocument()
 		expect(screen.getByText("views.clients.show.overview.schedule")).toBeInTheDocument()
+	})
+
+	it("hides household when the client has none", () => {
+		render(
+			<MantineProvider theme={ theme }>
+				<ClientOverview
+					client={ buildClient({
+						household: null as unknown as Schema.HouseholdsPersisted,
+					}) }
+				/>
+			</MantineProvider>,
+		)
+
+		expect(screen.queryByText("views.clients.show.overview.household")).not.toBeInTheDocument()
 	})
 
 	it("shows a last-day badge for pending-termination care team members", () => {

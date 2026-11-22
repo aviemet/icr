@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_21_171545) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_22_171421) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -254,10 +254,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_21_171545) do
     t.uuid "attendant_id", null: false
     t.uuid "client_id", null: false
     t.datetime "starts_at"
-    t.datetime "ends_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["attendant_id", "client_id"], name: "index_clients_attendants_unique_relationship", unique: true, where: "(ends_at IS NULL)"
+    t.index ["attendant_id", "client_id"], name: "index_clients_attendants_unique_relationship", unique: true
     t.index ["attendant_id"], name: "index_clients_attendants_on_attendant_id"
     t.index ["client_id"], name: "index_clients_attendants_on_client_id"
   end

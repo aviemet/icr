@@ -200,7 +200,7 @@ class Employee < ApplicationRecord
     source: :client
 
   has_many :active_clients_attendants, -> {
-    where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current)
+    where(starts_at: ..Time.current)
   },
     class_name: "ClientsAttendant",
     foreign_key: :attendant_id,

@@ -49,8 +49,11 @@ class TrainingsController < ApplicationController
   def new
     authorize Employee::Training.new, policy_class: Employee::TrainingPolicy
 
+    form = Employee::Training.new.render(:form_data)
+    form[:client_ids] = prefill_client_ids
+
     render inertia: "Trainings/New", props: {
-      training: Employee::Training.new.render(:form_data),
+      training: form,
       client_options: -> { training_client_options },
     }
   end
@@ -116,6 +119,13 @@ class TrainingsController < ApplicationController
 
   def advanced_search_params
     params.permit(client_ids: [])
+  end
+
+  def prefill_client_ids
+    ids = Array(params[:client_ids]).filter_map { |entry| entry.to_s.presence }.uniq
+    return [] if ids.empty?
+
+    policy_scope(Client).where(id: ids).pluck(:id).map(&:to_s)
   end
 
   def training_client_options

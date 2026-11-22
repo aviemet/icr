@@ -6,7 +6,7 @@ import { Form, Submit } from "@/components/Form"
 import { Checkbox, Select } from "@/components/Inputs"
 import { CollectionAddModal, CollectionPanel } from "@/features"
 import { Routes } from "@/lib"
-import { useRecordCanUpdate } from "@/lib/hooks"
+import { usePermissions, useRecordCanUpdate } from "@/lib/hooks"
 
 interface ClientTrainingsProps {
 	client: Schema.ClientsShow
@@ -16,6 +16,8 @@ interface ClientTrainingsProps {
 export function ClientTrainings({ client, trainingOptions }: ClientTrainingsProps) {
 	const { t } = useTranslation()
 	const canUpdate = useRecordCanUpdate()
+	const { can } = usePermissions()
+	const canCreateTraining = can("employee/trainings", "create")
 	const rows = client.clients_trainings ?? []
 
 	const options = trainingOptions.map(training => ({
@@ -29,35 +31,47 @@ export function ClientTrainings({ client, trainingOptions }: ClientTrainingsProp
 			count={ rows.length }
 			emptyLabel={ t("views.clients.show.trainings.empty") }
 			actions={ (
-				<CollectionAddModal
-					canUpdate={ canUpdate }
-					label={ t("views.clients.show.trainings.associate") }
-				>
-					<Form
-						action={ Routes.clientTrainings(client.slug) }
-						method="post"
-						initialData={ {
-							clients_training: {
-								training_id: "",
-								required: false,
-							},
-						} }
+				<Group gap="xs">
+					<CollectionAddModal
+						canUpdate={ canUpdate }
+						label={ t("views.clients.show.trainings.associate") }
 					>
-						<Stack gap="sm">
-							<Select
-								name="clients_training.training_id"
-								label={ t("views.clients.show.trainings.fields.training") }
-								options={ options }
-								required
-							/>
-							<Checkbox
-								name="clients_training.required"
-								label={ t("views.clients.show.trainings.fields.required") }
-							/>
-							<Submit>{ t("views.clients.show.trainings.associate") }</Submit>
-						</Stack>
-					</Form>
-				</CollectionAddModal>
+						<Form
+							action={ Routes.clientTrainings(client.slug) }
+							method="post"
+							initialData={ {
+								clients_training: {
+									training_id: "",
+									required: false,
+								},
+							} }
+						>
+							<Stack gap="sm">
+								<Select
+									name="clients_training.training_id"
+									label={ t("views.clients.show.trainings.fields.training") }
+									options={ options }
+									required
+								/>
+								<Checkbox
+									name="clients_training.required"
+									label={ t("views.clients.show.trainings.fields.required") }
+								/>
+								<Submit>{ t("views.clients.show.trainings.associate") }</Submit>
+							</Stack>
+						</Form>
+					</CollectionAddModal>
+					{ canCreateTraining && (
+						<Link
+							as="button"
+							href={ Routes.newTraining({ client_ids: [client.id] }) }
+							size="xs"
+							variant="light"
+						>
+							{ t("views.clients.show.trainings.new") }
+						</Link>
+					) }
+				</Group>
 			) }
 		>
 			{ rows.length > 0 && (

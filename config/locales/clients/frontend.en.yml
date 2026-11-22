@@ -126,6 +126,7 @@ en:
           view: View
         trainings:
           associate: Associate Training
+          new: New Training
           columns:
             actions: Actions
             description: Description

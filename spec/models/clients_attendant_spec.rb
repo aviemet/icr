@@ -3,7 +3,6 @@
 # Table name: clients_attendants
 #
 #  id           :uuid             not null, primary key
-#  ends_at      :datetime
 #  starts_at    :datetime
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
@@ -14,7 +13,7 @@
 #
 #  index_clients_attendants_on_attendant_id      (attendant_id)
 #  index_clients_attendants_on_client_id         (client_id)
-#  index_clients_attendants_unique_relationship  (attendant_id,client_id) UNIQUE WHERE (ends_at IS NULL)
+#  index_clients_attendants_unique_relationship  (attendant_id,client_id) UNIQUE
 #
 # Foreign Keys
 #
@@ -45,32 +44,9 @@ RSpec.describe ClientsAttendant, type: :model do
         clients_attendant.starts_at = 1.day.ago
       end
 
-      it "validates uniqueness of attendant_id scoped to client_id when ends_at is nil" do
+      it "validates uniqueness of attendant_id scoped to client_id" do
         expect(clients_attendant).not_to be_valid
         expect(clients_attendant.errors[:attendant_id]).to include("Already attends this client")
-      end
-
-      it "allows duplicate relationships when previous relationship has ended" do
-        described_class.last.update!(ends_at: Time.current)
-        expect(clients_attendant).to be_valid
-      end
-    end
-
-    describe "ends_at validation" do
-      it "is valid when ends_at is after starts_at" do
-        clients_attendant.ends_at = clients_attendant.starts_at + 1.day
-        expect(clients_attendant).to be_valid
-      end
-
-      it "is invalid when ends_at is before starts_at" do
-        clients_attendant.ends_at = clients_attendant.starts_at - 1.day
-        expect(clients_attendant).not_to be_valid
-        expect(clients_attendant.errors[:ends_at]).to include("must be after starts_at")
-      end
-
-      it "is valid when ends_at is nil" do
-        clients_attendant.ends_at = nil
-        expect(clients_attendant).to be_valid
       end
     end
   end
@@ -110,32 +86,16 @@ RSpec.describe ClientsAttendant, type: :model do
 
   describe "scopes" do
     describe ".current" do
-      let!(:past_relationship) do
-        create(:clients_attendant, starts_at: 2.days.ago, ends_at: 1.day.ago)
-      end
-
       let!(:future_relationship) do
         create(:clients_attendant, starts_at: 1.day.from_now)
       end
 
-      let!(:current_ended_relationship) do
-        create(:clients_attendant, starts_at: 1.day.ago, ends_at: 1.day.from_now)
-      end
-
-      let!(:current_ongoing_relationship) do
+      let!(:current_relationship) do
         create(:clients_attendant, starts_at: 1.day.ago)
       end
 
-      it "includes relationships that started in the past and haven't ended" do
-        expect(described_class.current).to include(current_ongoing_relationship)
-      end
-
-      it "includes relationships that started in the past and end in the future" do
-        expect(described_class.current).to include(current_ended_relationship)
-      end
-
-      it "excludes relationships that ended in the past" do
-        expect(described_class.current).not_to include(past_relationship)
+      it "includes relationships that started in the past" do
+        expect(described_class.current).to include(current_relationship)
       end
 
       it "excludes relationships that start in the future" do
