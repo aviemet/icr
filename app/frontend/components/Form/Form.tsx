@@ -163,7 +163,7 @@ function FormInner<TFormData extends Record<string, unknown>>({
 				if(!(payload instanceof FormData)) {
 					const base = mergeSlotPropsWithSyntheticFallback(latestSlotPropsRef.current)
 					runSubmitWithIntercept(
-						payload as Record<string, FormDataConvertible>,
+						payload,
 						(data) => submitWith(data as TFormData),
 						setSlotProps,
 						normalizeSubmitError,

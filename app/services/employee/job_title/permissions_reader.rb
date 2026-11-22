@@ -11,7 +11,7 @@ class Employee::JobTitle::PermissionsReader
     permissions = Employee::JobTitle::PermissionsCatalog.empty_permissions
 
     Employee::JobTitle::PermissionsCatalog::RESOURCES.each do |key, resource_class|
-      Employee::JobTitle::PermissionsCatalog::ACTIONS.each do |action|
+      Employee::JobTitle::PermissionsCatalog.actions_for(key).each do |action|
         form_action = Employee::JobTitle::PermissionsCatalog.form_action_for(action)
         next if form_action.nil?
 
@@ -29,7 +29,7 @@ class Employee::JobTitle::PermissionsReader
 
   def all_actions_granted?(permissions)
     Employee::JobTitle::PermissionsCatalog.resource_keys.all? do |key|
-      Employee::JobTitle::PermissionsCatalog.empty_resource_permissions.keys.all? do |form_action|
+      Employee::JobTitle::PermissionsCatalog.form_actions_for(key).all? do |form_action|
         permissions[key][form_action]
       end
     end

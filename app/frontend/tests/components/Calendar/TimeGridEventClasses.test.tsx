@@ -33,6 +33,7 @@ function TestWrapper({ children }: TestWrapperProps) {
 				groupByResource: false,
 				maxEvents: Infinity,
 				prevDate: new Date(),
+				currentView: "week",
 				getEventTitle: (event) => event.title,
 			} }
 		>

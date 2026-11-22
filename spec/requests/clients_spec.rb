@@ -83,12 +83,15 @@ RSpec.describe "/clients" do
       attendant = create(:employee)
       create(:clients_attendant, client: client, attendant: attendant)
       doctor = create(:doctor)
-      client.doctors << doctor
+      doctors_client = create(:doctors_client, client: client, doctor: doctor, notes: "PCP")
       medication = create(:medication)
       dosage = create(:dosage)
       prescription = create(:prescription, client: client, doctor: doctor, medication: medication, dosage: dosage, starts_at: Date.current, ends_at: nil)
+      hospital_visit = create(:client_hospital_visit, client: client, doctor: doctor)
       vendor = create(:vendor)
       enrollment = create(:client_enrollment, client: client, vendor: vendor)
+      training = create(:training)
+      clients_training = create(:clients_training, client: client, training: training, required: true)
 
       get client_url(client)
 
@@ -97,16 +100,24 @@ RSpec.describe "/clients" do
       expect(props[:allergies].pluck(:id)).to eq([allergy.id])
       expect(props[:diagnoses].pluck(:id)).to eq([diagnosis.id])
       expect(props[:support_contacts].pluck(:id)).to eq([support_contact.id])
+      expect(props[:doctors].pluck(:id)).to eq([doctor.id])
+      expect(props[:doctors_clients].pluck(:id)).to eq([doctors_client.id])
+      expect(props[:doctors_clients].pluck(:doctor_id)).to eq([doctor.id])
+      expect(props[:hospital_visits].pluck(:id)).to eq([hospital_visit.id])
       expect(props[:prescriptions].pluck(:id)).to eq([prescription.id])
       expect(props[:enrollments].pluck(:id)).to eq([enrollment.id])
       expect(props[:current_attendants].pluck(:id)).to eq([attendant.id])
       expect(props[:current_manager][:id]).to eq(manager.id)
+      expect(props[:clients_trainings].pluck(:id)).to eq([clients_training.id])
+      expect(props[:clients_trainings].pluck(:training_id)).to eq([training.id])
+      expect(props[:clients_trainings].first[:required]).to be(true)
       expect(props[:active_allergies_count]).to eq(1)
       expect(props[:active_prescriptions_count]).to eq(1)
       expect(props[:emergency_contacts_count]).to eq(1)
       expect(props[:uci_number]).to eq(client.uci_number)
       expect(props[:life_detail][:adls]).to be_present
     end
+
   end
 
   describe "GET /new" do
@@ -282,6 +293,41 @@ RSpec.describe "/clients" do
       schedule_ids = inertia.props[:schedules].map { |s| s[:id] } # rubocop:disable Rails/Pluck
       expect(schedule_ids).to include(in_range_event.id)
       expect(schedule_ids).not_to include(out_of_range_event.id)
+    end
+
+    it "expands recurring masters into occurrence rows with master_id and occurrence_starts_at" do
+      client = create(:client)
+      employee = create(:employee)
+      master = create(
+        :calendar_event,
+        starts_at: Time.zone.local(2026, 10, 1, 9, 0, 0),
+        ends_at: Time.zone.local(2026, 10, 1, 17, 0, 0),
+      )
+      create(
+        :calendar_recurring_pattern,
+        calendar_event: master,
+        recurring_type: :weekly,
+        offset: 1,
+        day_of_week: 1,
+        end_date: nil,
+        max_occurrences: nil,
+      )
+      create(:shift, employee:, calendar_event: master)
+      create(:event_participant, calendar_event: master, participant: client)
+
+      get schedule_client_url(client), params: { view: "month", date: "2026-11-22" }
+
+      expect(response).to have_http_status(:ok)
+      schedules = inertia.props[:schedules]
+      expect(schedules.length).to be >= 3
+      expect(schedules).to all(include(master_id: master.id, is_recurring: true))
+      expect(schedules.map { |row| row[:starts_at].to_date }).to include(
+        Date.new(2026, 11, 16),
+        Date.new(2026, 11, 23),
+        Date.new(2026, 11, 30),
+      )
+      expect(schedules.pluck(:id)).to all(include("#{master.id}__"))
+      expect(schedules.pluck(:occurrence_starts_at)).to all(be_present)
     end
   end
 end

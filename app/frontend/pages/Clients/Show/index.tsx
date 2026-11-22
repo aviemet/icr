@@ -8,20 +8,22 @@ import { initials, Routes } from "@/lib"
 import Care from "./Care"
 import Contacts from "./Contacts"
 import Documents from "./Documents"
-import Health from "./Health"
 import Incidents from "./Incidents"
-import Medications from "./Medications"
+import Medical from "./Medical"
 import Overview from "./Overview"
 import Profile from "./Profile"
+import Trainings from "./Trainings"
+
 
 export interface ShowClientProps {
 	client: Schema.ClientsShow
 	can_update?: boolean
 	can_view_open_shifts?: boolean
 	open_shifts_count?: number
+	trainingOptions?: Schema.EmployeeTrainingsOptions[]
 }
 
-const ShowClient = ({ client }: ShowClientProps) => {
+const ShowClient = ({ client, trainingOptions = [] }: ShowClientProps) => {
 	const { t } = useTranslation()
 	const title = client?.person?.name || t("views.clients.show.title")
 	const isActive = Boolean(client.active_at)
@@ -58,9 +60,14 @@ const ShowClient = ({ client }: ShowClientProps) => {
 				{ id: "overview", label: t("views.clients.show.tabs.overview"), panel: <Overview client={ client } /> },
 				{ id: "profile", label: t("views.clients.show.tabs.profile"), panel: <Profile client={ client } /> },
 				{ id: "contacts", label: t("views.clients.show.tabs.contacts"), panel: <Contacts client={ client } /> },
-				{ id: "health", label: t("views.clients.show.tabs.health"), panel: <Health client={ client } /> },
-				{ id: "medications", label: t("views.clients.show.tabs.medications"), panel: <Medications client={ client } /> },
+				{ id: "medical", label: t("views.clients.show.tabs.medical"), panel: <Medical client={ client } /> },
 				{ id: "care", label: t("views.clients.show.tabs.care"), panel: <Care client={ client } /> },
+
+				{
+					id: "trainings",
+					label: t("views.clients.show.tabs.trainings"),
+					panel: <Trainings client={ client } trainingOptions={ trainingOptions } />,
+				},
 				{ id: "documents", label: t("views.clients.show.tabs.documents"), panel: <Documents client={ client } /> },
 				{ id: "incidents", label: t("views.clients.show.tabs.incidents"), panel: <Incidents client={ client } /> },
 			] }

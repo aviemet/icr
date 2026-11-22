@@ -38,6 +38,8 @@ export function EmployeeInterviewTable({ records, model }: EmployeeInterviewTabl
 		{
 			accessor: "actions",
 			title: "Actions",
+			titleClassName: "actionsCell",
+			cellsClassName: "actionsCell",
 			sortable: false,
 			render: (employeeInterview) => <EditButton href={ Routes.editInterview(employeeInterview.id) } />,
 		},

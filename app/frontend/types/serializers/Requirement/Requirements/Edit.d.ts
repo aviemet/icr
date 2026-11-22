@@ -6,11 +6,14 @@ declare global {
     interface RequirementRequirementsEdit {
       id: string
       created_at: Date
+      credential_types: string[]
       description?: string
+      enforcement: "advisory" | "employment" | "client_schedule"
       name?: string
       requirement_type_id: string
-      scope_id?: number
+      scope_id?: string
       scope_type?: string
+      training_ids: string[]
       updated_at: Date
     }
   }

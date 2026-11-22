@@ -1,4 +1,4 @@
-class CreateVendors < ActiveRecord::Migration[7.1]
+class CreateVendors < ActiveRecord::Migration[8.0]
   def change
     create_table :vendors, id: :uuid do |t|
       t.string :name, null: false

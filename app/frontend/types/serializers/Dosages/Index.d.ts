@@ -5,6 +5,7 @@ declare global {
   namespace Schema {
     interface DosagesIndex {
       id: string
+      administration_method: "oral" | "sublingual" | "injection" | "topical" | "inhaled" | "rectal" | "other"
       amount?: string | number
       amount_unit: "mg" | "ml" | "tablet" | "capsule" | "unit" | "other"
       created_at: Date

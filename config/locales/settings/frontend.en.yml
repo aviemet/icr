@@ -1,0 +1,87 @@
+---
+en:
+  views:
+    settings:
+      save: Update settings
+      saving: Saving...
+      weekdays:
+        monday: Monday
+        tuesday: Tuesday
+        wednesday: Wednesday
+        thursday: Thursday
+        friday: Friday
+        saturday: Saturday
+        sunday: Sunday
+      general:
+        title: General
+        description: Locale defaults and site brand color.
+        locale_band_title: Locale
+        locale_band_description: Defaults used across the application.
+        default_language: Default Language
+        default_currency: Default Currency
+        default_timezone: Default Timezone
+        brand_band_title: Brand
+        brand_band_description: Primary accent used in navigation and panels.
+        primary_color: Primary color
+      company:
+        title: Company Details
+        description: Company name, addresses, and phone numbers.
+        save: Update company
+        name_band_title: Company
+        name_band_description: Legal or display name for the organization.
+        name_label: Company Name
+        addresses_title: Addresses
+        addresses_add: Add address
+        addresses_empty: No addresses yet.
+        phones_title: Phone numbers
+        phones_add: Add phone
+        phones_empty: No phone numbers yet.
+        add_entry: Add
+        fields:
+          address: Address
+          address_2: Address line 2
+          city: City
+          region: State / Region
+          postal: Postal code
+          category: Category
+          label: Label
+          number: Number
+          extension: Extension
+      calendar:
+        title: Calendar Display
+        description: Control how multi-day events appear on the calendar.
+        month_layout_title: Month layout
+        month_layout_description: How multi-day events are drawn in the Month view. Day and Week views always use a time grid.
+        strategy_label: Strategy
+        strategy_split: Split
+        strategy_stack: Stack
+        strategy_span: Span
+        strategy_split_help: Multi-day events are shown as one block per day. A 3-day event appears as three separate blocks (Mon, Tue, Wed). Best if you want to see each day's slice clearly.
+        strategy_stack_help: Multi-day events within a week appear as a single bar across those days. Single-day events appear as a small label or dot in their start column. Good balance of detail and space.
+        strategy_span_help: Like Stack, but events are only broken at week boundaries. Within a week, each event is one bar across the days it covers; it splits into a new bar only when it continues into the next week.
+        split_times_label: Show the full times for split events
+        split_times_info: How to display the times in a multi-day event when it's been visually split
+        shift_title_band_title: Shift title
+        shift_title_band_description: Template for how shift titles appear on the calendar.
+        shift_title_format_label: Shift Title Format
+        shift_title_example_result: Example Result
+        shift_title_help_prefix: Use curly brackets
+        shift_title_help_suffix: to add dynamic content.
+        shift_title_employee_info: "Employee Information:"
+        shift_title_time_formats: "Time Formats:"
+        shift_title_start_time: Start Time
+        shift_title_end_time: End Time
+        shift_types_title: Shift Types
+        shift_types_description: Categories for shifts used in scheduling and overtime exemption rules.
+        shift_types_existing_title: Existing types
+        shift_types_existing_description: System types ship with the app and stay put. Custom types can be removed.
+        shift_types_column_name: Shift Type
+        shift_types_column_actions: Actions
+        shift_types_system_badge: System
+        shift_types_protected: Protected
+        shift_types_empty: No shift types yet. Add one below.
+        shift_types_add_title: Add shift type
+        shift_types_add_description: Create a custom category for scheduling and overtime rules.
+        shift_types_name_label: Name
+        shift_types_name_placeholder: e.g. Training
+        shift_types_add_button: Add

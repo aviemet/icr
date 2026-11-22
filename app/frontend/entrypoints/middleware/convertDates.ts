@@ -3,19 +3,21 @@ import { isPlainObject } from "es-toolkit"
 /**
  * Recursively check each prop value and convert ISO strings to dates
  */
-export function convertDates<T extends string | Record<string, unknown> | Record<string, unknown>[]>(obj: T): T {
+export function convertDates<T>(obj: T): T {
 	if(Array.isArray(obj)) {
-		// Recurse over array values
-		return obj.map(convertDates) as unknown as T
-	} else if(isPlainObject(obj)) {
-		// Recurse over object values
-		return Object.keys(obj).reduce((acc, key) => {
-			(acc as any)[key] = convertDates((obj as any)[key])
-			return acc
-		}, {} as T)
-	} else if(typeof obj === "string" && isISODateString(obj)) {
-		// Case to convert the date object
-		return new Date(obj) as unknown as T
+		return obj.map((item) => convertDates(item)) as T
+	}
+
+	if(isPlainObject(obj)) {
+		const result: Record<string, unknown> = {}
+		for(const [key, value] of Object.entries(obj)) {
+			result[key] = convertDates(value)
+		}
+		return result as T
+	}
+
+	if(typeof obj === "string" && isISODateString(obj)) {
+		return new Date(obj) as T
 	}
 
 	return obj

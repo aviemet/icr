@@ -133,11 +133,16 @@ class PayPeriod < ApplicationRecord
   end
 
   def self.shifts_overlapping_period(pay_period)
-    Shift.joins(:calendar_event).where(
-      "calendar_events.starts_at <= ? AND calendar_events.ends_at >= ?",
-      pay_period.ends_at,
-      pay_period.starts_at,
-    )
+    event_ids = Calendar::Event
+      .for_schedule_range(pay_period.starts_at, pay_period.ends_at)
+      .select(:id)
+
+    Shift.where(calendar_event_id: event_ids)
+  end
+
+  def shift_occurrences(shifts)
+    Array(shifts).flat_map { |shift| shift.occurrences_in(self) }
+      .sort_by { |row| [row.starts_at, row.id.to_s] }
   end
 
   def self.attach_shift!(shift)
@@ -149,6 +154,8 @@ class PayPeriod < ApplicationRecord
     period_start, period_end = Payroll::Period.period_dates(shift_date)
     pay_period = for_period_dates(period_start, period_end)
     timesheet = pay_period.timesheets.find_or_create_by!(employee_id: shift.employee_id)
+    timesheet.update!(approved_at: nil) if timesheet.approved_at.present?
+    shift.clear_facilitator_approval! if shift.facilitator_approved?
     return pay_period if shift.timesheet_id == timesheet.id
 
     shift.update_column(:timesheet_id, timesheet.id) # rubocop:disable Rails/SkipsModelValidations
@@ -159,10 +166,13 @@ class PayPeriod < ApplicationRecord
     shifts_in_range = self.class.shifts_overlapping_period(self)
     return if shifts_in_range.empty?
 
+    recurring_event_ids = Calendar::Event.joins(:recurring_patterns).select(:id)
+
     shifts_in_range.distinct.pluck(:employee_id).compact.each do |employee_id|
       timesheet = timesheets.find_or_create_by!(employee_id: employee_id)
       employee_shifts = shifts_in_range.where(employee_id: employee_id)
-      misplaced = employee_shifts.left_outer_joins(:timesheet).where(
+      attachable = employee_shifts.where.not(calendar_event_id: recurring_event_ids)
+      misplaced = attachable.left_outer_joins(:timesheet).where(
         "shifts.timesheet_id IS NULL OR timesheets.pay_period_id IS DISTINCT FROM ?",
         id,
       )

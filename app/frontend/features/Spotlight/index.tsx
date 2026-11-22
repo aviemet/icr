@@ -131,7 +131,8 @@ export function SpotlightComponent() {
 					|| [item.first_name, item.last_name].filter(Boolean).join(" ")
 					|| "Unknown"
 
-				const description = (item.type as string).charAt(0).toUpperCase() + (item.type as string).slice(1)
+				const itemType = typeof item.type === "string" ? item.type : ""
+				const description = itemType.charAt(0).toUpperCase() + itemType.slice(1)
 
 				const visit = () => {
 					if("slug" in item && item.type === "employee") router.visit(Routes.employee(item.slug))

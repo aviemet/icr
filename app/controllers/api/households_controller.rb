@@ -5,8 +5,14 @@ class Api::HouseholdsController < ApplicationController
   def schedule
     authorize household, :schedule?
 
-    schedules = household.schedule_events_between(*DateRangeCalculator.new(params).call)
+    range_start, range_end = DateRangeCalculator.new(params).call
+    masters = household.schedule_events_between(range_start, range_end)
 
-    render json: schedules.render(:household)
+    render json: Calendar::RenderSchedule.call(
+      events: masters,
+      range_start: range_start,
+      range_end: range_end,
+      view: :household,
+    )
   end
 end

@@ -5,12 +5,11 @@ declare global {
   namespace Schema {
     interface EmployeeTrainingsPersisted {
       id: string
-      active_on?: Date
       created_at: Date
       description?: string
       estimated_minutes?: number
-      inactive_on?: Date
       name?: string
+      status: "active" | "inactive"
       updated_at: Date
     }
   }

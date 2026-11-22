@@ -1,4 +1,4 @@
-class CreateTimesheets < ActiveRecord::Migration[7.2]
+class CreateTimesheets < ActiveRecord::Migration[8.0]
   def change
     create_table :timesheets, id: :uuid do |t|
       t.integer :status

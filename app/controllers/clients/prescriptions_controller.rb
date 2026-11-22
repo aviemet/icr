@@ -3,7 +3,7 @@ class Clients::PrescriptionsController < Clients::BaseController
 
   strong_params :prescription, permit: [
     :medication_id, :doctor_id, :starts_at, :ends_at,
-    dosage_attributes: [:id, :amount, :amount_unit, :freq_amount, :freq_period, :notes],
+    dosage_attributes: [:id, :amount, :amount_unit, :freq_amount, :freq_period, :administration_method, :notes],
     medication_attributes: [:id, :name, :generic_name, :notes],
   ]
 
@@ -13,7 +13,7 @@ class Clients::PrescriptionsController < Clients::BaseController
     prescription.assign_attributes(prescription_create_params)
 
     prescription.save
-    redirect_to_client_tab("medications")
+    redirect_to_client_tab("medical")
   end
 
   # @route PATCH /clients/:client_slug/prescriptions/:id (client_prescription)
@@ -22,14 +22,14 @@ class Clients::PrescriptionsController < Clients::BaseController
     authorize_client_update!
 
     prescription.update(prescription_params)
-    redirect_to_client_tab("medications")
+    redirect_to_client_tab("medical")
   end
 
   # @route DELETE /clients/:client_slug/prescriptions/:id (client_prescription)
   def destroy
     authorize_client_update!
     prescription.destroy!
-    redirect_to_client_tab("medications")
+    redirect_to_client_tab("medical")
   end
 
   private

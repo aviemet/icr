@@ -1,5 +1,5 @@
 import { router } from "@inertiajs/react"
-import { Drawer, Stack, Text, Button, Group, UnstyledButton } from "@mantine/core"
+import { Drawer, Stack, Text, Button, Group, UnstyledButton, ActionIcon } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
 import clsx from "clsx"
 
@@ -22,7 +22,34 @@ function candidateLabel(candidate: ActsAsCandidate) {
 	return roleParts.length > 0 ? roleParts.join(" / ") : "User"
 }
 
-export function DevActsAs() {
+export function DevActsAsBanner() {
+	const { auth } = usePageProps()
+	const actsAs = auth.acts_as
+
+	if(!actsAs?.active || !actsAs.acting_user) return null
+
+	const actingUser = actsAs.acting_user
+
+	const stopActsAs = () => {
+		router.delete(Routes.devActsAs(), {
+			preserveScroll: true,
+		})
+	}
+
+	return (
+		<div className={ classes.banner }>
+			<Text size="sm">
+				Acting as { actingUser.name || actingUser.email }
+				{ actingUser.agency_role ? ` (${candidateLabel(actingUser)})` : "" }
+			</Text>
+			<Button size="compact-sm" variant="light" color="yellow" onClick={ stopActsAs }>
+				Stop
+			</Button>
+		</div>
+	)
+}
+
+export function DevActsAsButton() {
 	const { auth } = usePageProps()
 	const actsAs = auth.acts_as
 	const [opened, { open, close }] = useDisclosure(false)
@@ -48,26 +75,16 @@ export function DevActsAs() {
 
 	return (
 		<>
-			{ actsAs.active && actingUser && (
-				<div className={ classes.banner }>
-					<Text size="sm">
-						Acting as { actingUser.name || actingUser.email }
-						{ actingUser.agency_role ? ` (${candidateLabel(actingUser)})` : "" }
-					</Text>
-					<Button size="compact-sm" variant="light" color="yellow" onClick={ stopActsAs }>
-						Stop
-					</Button>
-				</div>
-			) }
-
-			<button
-				type="button"
-				className={ clsx(classes.fab, actsAs.active && classes.fabActive) }
+			<ActionIcon
+				size="sm"
+				variant={ actsAs.active ? "light" : "default" }
+				color={ actsAs.active ? "yellow" : "gray" }
 				onClick={ open }
 				aria-label="Dev acts as"
+				title="Act as user"
 			>
-				<UserSettingsIcon size={ 20 } />
-			</button>
+				<UserSettingsIcon size={ 18 } />
+			</ActionIcon>
 
 			<Drawer
 				opened={ opened }

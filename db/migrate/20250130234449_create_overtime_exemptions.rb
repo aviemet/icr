@@ -1,4 +1,4 @@
-class CreateOvertimeExemptions < ActiveRecord::Migration[7.2]
+class CreateOvertimeExemptions < ActiveRecord::Migration[8.0]
   def change
     create_table :overtime_exemptions, id: :uuid do |t|
       t.string :name, null: false

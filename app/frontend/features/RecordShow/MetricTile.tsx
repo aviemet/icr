@@ -1,6 +1,6 @@
 import clsx from "clsx"
 
-import { Box, Section } from "@/components"
+import { Box, Section, Title } from "@/components"
 import { pageChrome } from "@/components/PageChrome"
 
 import * as classes from "./MetricTile.css"
@@ -39,12 +39,8 @@ export function MetricTile({ title, children, tone = "default", icon, className 
 			className={ clsx(classes.tile, className) }
 		>
 			<Box className={ clsx(classes.titleRow) }>
-				{ icon && (
-					<span className={ clsx(iconClass) }>
-						{ icon }
-					</span>
-				) }
-				<Box className={ clsx(classes.title) }>{ title }</Box>
+				{ icon && <span className={ clsx(iconClass) }>{ icon }</span> }
+				<Title order={ 2 } size="sm" className={ clsx(classes.title) }>{ title }</Title>
 			</Box>
 			<Box className={ clsx(classes.body) }>{ children }</Box>
 		</Section>

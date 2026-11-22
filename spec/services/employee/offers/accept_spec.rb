@@ -41,6 +41,31 @@ RSpec.describe Employee::Offers::Accept do
         described_class.call(offer: offer)
       }.to raise_error(ArgumentError)
     end
+
+    it "blocks hire when employment requirements are unmet" do
+      employee.update!(desired_job_title: job_title)
+      requirement = create(:requirement, :employment, :for_job_title, scope: job_title, name: "Driver License")
+      create(:requirement_item, :credential, requirement: requirement, credential_type: :drivers_license)
+
+      expect {
+        described_class.call(offer: offer)
+      }.to raise_error(ArgumentError, /Driver License/)
+
+      expect(employee.reload).to be_applicant
+      expect(offer.reload).to be_extended
+    end
+
+    it "hires when employment requirements are met" do
+      employee.update!(desired_job_title: job_title)
+      requirement = create(:requirement, :employment, :for_job_title, scope: job_title, name: "Driver License")
+      create(:requirement_item, :credential, requirement: requirement, credential_type: :drivers_license)
+      create(:employee_credential, employee: employee, credential_type: :drivers_license, expires_on: 1.year.from_now)
+
+      described_class.call(offer: offer)
+
+      expect(employee.reload).to be_employed
+      expect(offer.reload).to be_accepted
+    end
   end
 
   describe "for employed promotions" do

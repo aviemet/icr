@@ -3,47 +3,39 @@ import {
 	type OvertimeExemptionCriterionValue,
 } from "@/types/OvertimeExemptionCriteria"
 
-export const FIELD_TYPES: Record<OvertimeExemptionCriterionField, {
-	label: string
-	operators: ReadonlyArray<{ value: string, label: string }>
-}> = {
-	category: {
-		label: "Category",
-		operators: [
-			{ value: "equals", label: "Equals" },
-			{ value: "not_equals", label: "Does not equal" },
-			{ value: "in", label: "In list" },
-		],
-	},
-	start_time: {
-		label: "Start Time",
-		operators: [
-			{ value: "equals", label: "At" },
-			{ value: "before", label: "Before" },
-			{ value: "after", label: "After" },
-			{ value: "between", label: "Between" },
-		],
-	},
-	end_time: {
-		label: "End Time",
-		operators: [
-			{ value: "equals", label: "At" },
-			{ value: "before", label: "Before" },
-			{ value: "after", label: "After" },
-			{ value: "between", label: "Between" },
-		],
-	},
-	duration: {
-		label: "Duration (hours)",
-		operators: [
-			{ value: "equals", label: "Equals" },
-			{ value: "greater_than", label: "Greater than" },
-			{ value: "less_than", label: "Less than" },
-			{ value: "greater_than_equal", label: "Greater than or equal" },
-			{ value: "less_than_equal", label: "Less than or equal" },
-			{ value: "between", label: "Between" },
-		],
-	},
+export const FIELD_OPERATORS: Record<OvertimeExemptionCriterionField, readonly string[]> = {
+	category: ["equals", "not_equals", "in"],
+	start_time: ["equals", "before", "after", "between"],
+	end_time: ["equals", "before", "after", "between"],
+	duration: [
+		"equals",
+		"greater_than",
+		"less_than",
+		"greater_than_equal",
+		"less_than_equal",
+		"between",
+	],
+}
+
+export const OPERATOR_LOCALE_KEYS: Record<string, string> = {
+	equals: "equals",
+	not_equals: "not_equals",
+	in: "in",
+	before: "before",
+	after: "after",
+	between: "between",
+	greater_than: "greater_than",
+	less_than: "less_than",
+	greater_than_equal: "greater_than_equal",
+	less_than_equal: "less_than_equal",
+}
+
+export function operatorLocaleKey(field: OvertimeExemptionCriterionField, operator: string): string {
+	if((field === "start_time" || field === "end_time") && operator === "equals") {
+		return "at"
+	}
+
+	return OPERATOR_LOCALE_KEYS[operator] ?? operator
 }
 
 export type CategoryOption = {
@@ -60,7 +52,7 @@ export function categoryOptionsFromShiftTypes(shiftTypes: Schema.Category[]): Ca
 }
 
 export function isFieldKey(field: string): field is OvertimeExemptionCriterionField {
-	return Object.hasOwn(FIELD_TYPES, field)
+	return Object.hasOwn(FIELD_OPERATORS, field)
 }
 
 export function isCriterionValue(value: unknown): value is OvertimeExemptionCriterionValue {
@@ -72,7 +64,7 @@ export function isCriterionValue(value: unknown): value is OvertimeExemptionCrit
 }
 
 export function fieldKeys(): OvertimeExemptionCriterionField[] {
-	return Object.keys(FIELD_TYPES).filter(isFieldKey)
+	return Object.keys(FIELD_OPERATORS).filter(isFieldKey)
 }
 
 export function toNumber(value: string | number): number {

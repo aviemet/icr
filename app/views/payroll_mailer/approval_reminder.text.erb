@@ -1,0 +1,10 @@
+<%= t("payroll_mailer.approval_reminder.greeting") %>
+
+<%= t(
+  "payroll_mailer.approval_reminder.body_text",
+  count: @pending_count,
+  period: @period_label,
+  due_date: l(@due_date, format: :long),
+) %>
+
+<%= t("payroll_mailer.approval_reminder.cta") %>: <%= @period_url %>

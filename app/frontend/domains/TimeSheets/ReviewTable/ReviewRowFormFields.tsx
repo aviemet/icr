@@ -36,6 +36,7 @@ export function ReviewRowFormFields({ initialData, onTimesChange }: ReviewRowFor
 				disabled={ slotProps?.processing }
 				wrapper={ false }
 				label=""
+				minutesStep={ 1 }
 			/>
 			&#8212;
 			<TimeInput
@@ -45,6 +46,7 @@ export function ReviewRowFormFields({ initialData, onTimesChange }: ReviewRowFor
 				disabled={ slotProps?.processing }
 				wrapper={ false }
 				label=""
+				minutesStep={ 1 }
 			/>
 			<Submit size="xs" loading={ slotProps?.processing } disabled={ slotProps?.processing || !isDirty }>
 				{ t("views.timesheets.employee_review.save_times") }

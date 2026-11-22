@@ -1,67 +1,70 @@
+import { useTranslation } from "react-i18next"
+
 import { Box, Stack } from "@/components"
-import { Form, Submit } from "@/components/Form"
+import { Form } from "@/components/Form"
 import { BrandColorInput } from "@/components/Inputs/BrandColorInput"
 import {
 	CurrenciesDropdown,
 	LanguagesDropdown,
 	TimezonesDropdown,
 } from "@/components/Inputs/Dropdowns"
+import { SettingsPageHeader } from "@/domains/Settings/SettingsPageHeader"
+import { SettingsSaveButton } from "@/domains/Settings/SettingsSaveButton"
 import { FormBand, FormBandStack } from "@/features"
 import { Routes, withLayout } from "@/lib"
 import { DEFAULT_BRAND_COLOR } from "@/lib/brandColor"
-
-import { SettingsPageHeader } from "../SettingsPageHeader"
 
 interface GeneralSettingsProps {
 	settings: Schema.Setting
 }
 
 const GeneralSettings = ({ settings }: GeneralSettingsProps) => {
+	const { t } = useTranslation()
+
 	return (
 		<Box>
-			<SettingsPageHeader
-				title="General"
-				description="Locale defaults and site brand color."
-			/>
-
 			<Form
 				action={ Routes.settings() }
 				method="patch"
 				initialData={ { settings } }
 			>
+				<SettingsPageHeader
+					title={ t("views.settings.general.title") }
+					description={ t("views.settings.general.description") }
+					actions={ <SettingsSaveButton /> }
+				/>
+
 				<FormBandStack>
 					<FormBand
-						title="Locale"
-						description="Defaults used across the application."
+						title={ t("views.settings.general.locale_band_title") }
+						description={ t("views.settings.general.locale_band_description") }
 					>
 						<Stack gap="sm">
 							<LanguagesDropdown
-								label="Default Language"
+								label={ t("views.settings.general.default_language") }
 								name="settings.default_language"
 							/>
 							<CurrenciesDropdown
-								label="Default Currency"
+								label={ t("views.settings.general.default_currency") }
 								name="settings.default_currency"
 							/>
 							<TimezonesDropdown
-								label="Default Timezone"
+								label={ t("views.settings.general.default_timezone") }
 								name="settings.default_timezone"
 							/>
 						</Stack>
 					</FormBand>
 
 					<FormBand
-						title="Brand"
-						description="Primary accent used in navigation and panels."
+						title={ t("views.settings.general.brand_band_title") }
+						description={ t("views.settings.general.brand_band_description") }
 					>
 						<BrandColorInput
-							label="Primary color"
+							label={ t("views.settings.general.primary_color") }
 							name="settings.primary_color"
 							initialValue={ settings.primary_color || DEFAULT_BRAND_COLOR }
 						/>
 					</FormBand>
-
-					<Submit>Update Settings</Submit>
 				</FormBandStack>
 			</Form>
 		</Box>

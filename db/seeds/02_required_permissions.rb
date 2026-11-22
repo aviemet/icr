@@ -37,6 +37,7 @@ job_title_defaults = [
       "calendar_event" => { "index" => true, "show" => true, "create" => false, "update" => false, "delete" => false },
       "setting" => { "index" => false, "show" => false, "create" => false, "update" => false, "delete" => false },
       "incident_report" => { "index" => true, "show" => true, "create" => true, "update" => true, "delete" => false },
+      "employee_training" => { "index" => true, "show" => true, "create" => false, "update" => false, "delete" => false, "complete" => true },
     },
   },
   {

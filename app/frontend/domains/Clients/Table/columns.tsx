@@ -124,6 +124,8 @@ export function useClientTableColumns({
 		{
 			accessor: "actions",
 			title: "Actions",
+			titleClassName: "actionsCell",
+			cellsClassName: "actionsCell",
 			sortable: false,
 			render: (client) => (
 				<Group wrap="nowrap" gap="xs">

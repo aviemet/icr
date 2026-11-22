@@ -9,6 +9,7 @@ declare global {
       client_id: string
       code?: string
       diagnosed_on?: Date
+      doctor_id?: string
       name: string
       notes?: string
     }

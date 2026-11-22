@@ -1,10 +1,12 @@
-import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
-import { Divider, Stack } from "@/components"
+import { Button, Modal } from "@/components"
+import { PlusIcon } from "@/components/Icons"
+import { FormBand } from "@/features"
 
 import { categoryOptionsFromShiftTypes } from "./criterionUtils"
-import { ExemptionForm, toFormValues } from "./ExemptionForm"
-import { ExemptionsList } from "./ExemptionsList"
+import { ExemptionFormModalBody } from "./ExemptionFormModalBody"
+import { ExemptionsTable } from "./ExemptionsTable"
 
 interface OvertimeExemptionsProps {
 	overtime_exemptions: Schema.OvertimeExemption[]
@@ -12,36 +14,31 @@ interface OvertimeExemptionsProps {
 }
 
 export function OvertimeExemptions({ overtime_exemptions, shift_types }: OvertimeExemptionsProps) {
-	const [editingExemption, setEditingExemption] = useState<Schema.OvertimeExemption>()
+	const { t } = useTranslation()
 	const categoryOptions = categoryOptionsFromShiftTypes(shift_types)
 
-	const clearEdit = () => {
-		setEditingExemption(undefined)
-	}
-
 	return (
-		<Stack gap="lg">
-			<ExemptionsList
+		<FormBand
+			title={ t("views.settings.payroll.overtime_exemptions.title") }
+			description={ t("views.settings.payroll.overtime_exemptions.description") }
+			actions={ (
+				<Modal
+					title={ t("views.settings.payroll.overtime_exemptions.form_title_create") }
+					size="xl"
+					trigger={ (
+						<Button size="xs" variant="light" leftSection={ <PlusIcon size={ 14 } /> }>
+							{ t("views.settings.payroll.overtime_exemptions.add") }
+						</Button>
+					) }
+				>
+					<ExemptionFormModalBody categoryOptions={ categoryOptions } />
+				</Modal>
+			) }
+		>
+			<ExemptionsTable
 				exemptions={ overtime_exemptions }
-				editingId={ editingExemption?.id }
-				onEdit={ setEditingExemption }
+				categoryOptions={ categoryOptions }
 			/>
-
-			<Divider />
-
-			{ editingExemption
-				? (
-					<ExemptionForm
-						key={ editingExemption.id }
-						exemption={ editingExemption }
-						initialValue={ toFormValues(editingExemption) }
-						categoryOptions={ categoryOptions }
-						onCancelEdit={ clearEdit }
-					/>
-				)
-				: (
-					<ExemptionForm key="create" categoryOptions={ categoryOptions } />
-				) }
-		</Stack>
+		</FormBand>
 	)
 }

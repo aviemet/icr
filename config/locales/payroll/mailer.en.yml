@@ -1,0 +1,12 @@
+---
+en:
+  payroll_mailer:
+    approval_reminder:
+      subject:
+        one: "%{count} timesheet still needs approval (%{period})"
+        other: "%{count} timesheets still need approval (%{period})"
+      greeting: Hello,
+      body_text:
+        one: "There is %{count} timesheet still waiting for approval for pay period %{period}. Payroll is due %{due_date}."
+        other: "There are %{count} timesheets still waiting for approval for pay period %{period}. Payroll is due %{due_date}."
+      cta: Review pay period

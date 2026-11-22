@@ -19,6 +19,7 @@ import { Modal, useModalContext } from "@/components/Modal"
 import { EventPopoverContent } from "@/domains/Clients/EventPopoverContent"
 import { EventForm } from "@/domains/Clients/schedule/EventForm"
 import { EventCalendarPopover } from "@/domains/Clients/schedule/NewEventCalendarPopover"
+import { recurrenceResources } from "@/features/CalendarSchedule"
 import { ensureViewName, Routes, vars } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
@@ -35,6 +36,8 @@ interface ScheduleResources {
 	[key: string]: object
 	employee: NonNullable<Schema.ShiftsClient["employee"]> | Record<string, never>
 	client: Schema.ClientsShow
+	recurrence: ReturnType<typeof recurrenceResources>
+	shift: { category_id: string }
 }
 
 const OPEN_SHIFT_COLOR = vars.colors.red[6]
@@ -105,26 +108,28 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 	}, [location.pathname, location.params])
 
 	const processedSchedules = useMemo((): BaseCalendarEvent<ScheduleResources>[] => {
-		return data?.map(schedule => {
-			const start = ensureDate(schedule.starts_at)
-			const end = ensureDate(schedule.ends_at)
-			const employee = schedule?.shift?.employee
+		if(!data) return []
+		return data.map((event) => {
+			const employee = event.shift?.employee
 			const isOpenShift = !hasAssignedEmployee(employee)
-
 			return {
-				id: schedule.id,
-				title: isOpenShift ? (schedule.name || "Open shift") : (schedule.name ?? ""),
-				start,
-				end,
-				allDay: schedule.all_day,
+				id: event.id,
+				title: isOpenShift ? (event.name || "Open shift") : (event.name ?? ""),
+				start: ensureDate(event.starts_at),
+				end: ensureDate(event.ends_at),
+				allDay: event.all_day,
 				color: isOpenShift ? OPEN_SHIFT_COLOR : employee?.color,
 				open: isOpenShift,
 				resources: {
 					employee: hasAssignedEmployee(employee) ? employee : {},
 					client,
+					recurrence: recurrenceResources(event),
+					shift: {
+						category_id: event.shift?.category?.slug ?? "",
+					},
 				},
 			}
-		}) ?? []
+		})
 	}, [client, data])
 
 	const breadcrumbs: Breadcrumb[] = [

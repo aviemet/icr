@@ -13,6 +13,48 @@ en:
       schedule:
         new_shift: New Shift
         title: "%{name}'s Schedule"
+        event_form:
+          shift_type: Shift Type
+          repeats: Repeats
+          frequency: Frequency
+          frequency_daily: Daily
+          frequency_weekly: Weekly
+          frequency_monthly: Monthly
+          frequency_yearly: Yearly
+          interval: Every %{unit}
+          interval_daily: day(s)
+          interval_weekly: week(s)
+          interval_monthly: month(s)
+          interval_yearly: year(s)
+          weekdays: Repeat on
+          monthly_mode: Monthly on
+          monthly_on_day: Day of the month
+          monthly_on_weekday: Weekday of the month
+          ends: Ends
+          ends_never: Never
+          ends_on_date: On date
+          ends_after: After
+          until: End date
+          occurrences: Occurrences
+          occurrences_hint: Including the first event
+          weekday_fri: Fri
+          weekday_mon: Mon
+          weekday_sat: Sat
+          weekday_sun: Sun
+          weekday_thu: Thu
+          weekday_tue: Tue
+          weekday_wed: Wed
+          edit_recurring_title: Edit repeating event
+          edit_recurring_body: Apply these changes to which events?
+          edit_all_events: All events
+          edit_this_and_future: This and all future events
+          edit_this_occurrence: Just this event
+          edit_scope_cancel: Back
+          delete_recurring_title: Delete repeating event
+          delete_recurring_body: Delete this occurrence, this and all future events, or the entire series?
+          delete_this_occurrence: This occurrence
+          delete_this_and_future: This and all future events
+          delete_entire_series: Entire series
       show:
         contacts:
           addresses: Addresses
@@ -51,7 +93,7 @@ en:
           life_details: Life Details
           communication: Communication
           save: Save Profile
-        health:
+        medical:
           allergies: Allergies
           diagnoses: Diagnoses
           doctors: Doctors
@@ -59,11 +101,13 @@ en:
           add_allergy: Add Allergy
           add_diagnosis: Add Diagnosis
           link_doctor: Link Doctor
-        medications:
-          active: Active Prescriptions
-          historical: Historical Prescriptions
-          add: Add Prescription
+          active_prescriptions: Active Prescriptions
+          historical_prescriptions: Historical Prescriptions
+          add_prescription: Add Prescription
+          hospital_visits: Hospital Visits
+          add_hospital_visit: Add Hospital Visit
         care:
+
           managers: Managers
           attendants: Attendants
           enrollments: Day Programs / Services
@@ -81,14 +125,31 @@ en:
           title: Incidents
           empty: No incident reports for this client.
           view: View
+        trainings:
+          associate: Associate Training
+          new: New Training
+          columns:
+            actions: Actions
+            description: Description
+            duration: Duration
+            name: Name
+            required: Required
+          empty: No trainings associated with this client.
+          fields:
+            required: Required for this client
+            training: Training
+          required_no: No
+          required_yes: Yes
+          save: Save
+          title: Trainings
         edit: Edit Client
         tabs:
           overview: Overview
           profile: Profile
           contacts: Contacts
-          health: Health
-          medications: Medications
+          medical: Medical
           care: Care and Services
+          trainings: Trainings
           documents: Documents
           incidents: Incidents
         title: Client

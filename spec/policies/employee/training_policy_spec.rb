@@ -92,4 +92,31 @@ RSpec.describe Employee::TrainingPolicy, type: :policy do
       expect(described_class.new(@admin_user, Employee::Training.new)).to authorize(:destroy)
     end
   end
+
+  permissions :complete? do
+    it "allows admin" do
+      expect(described_class.new(@admin_user, Employee::Training.new)).to authorize(:complete)
+    end
+
+    it "allows a job title with complete grant" do
+      title = create(:job_title, name: "Facilitator")
+      title.add_role(:complete, Employee::Training)
+      facilitator = create(:employee, :employed)
+      facilitator.assign_job_title(title)
+      facilitator.reload
+      user = create(:user, person: create(:person, employee: facilitator))
+
+      expect(described_class.new(user, Employee::Training.new)).to authorize(:complete)
+    end
+
+    it "denies a job title without complete grant" do
+      title = create(:job_title, name: "Attendant")
+      attendant = create(:employee, :employed)
+      attendant.assign_job_title(title)
+      attendant.reload
+      user = create(:user, person: create(:person, employee: attendant))
+
+      expect(described_class.new(user, Employee::Training.new)).not_to authorize(:complete)
+    end
+  end
 end

@@ -11,8 +11,14 @@ class Api::ClientsController < ApplicationController
   def schedule
     authorize client, :schedule?
 
-    schedules = client.schedule_events_between(*DateRangeCalculator.new(params).call)
+    range_start, range_end = DateRangeCalculator.new(params).call
+    masters = client.schedule_events_between(range_start, range_end)
 
-    render json: schedules.render(:client)
+    render json: Calendar::RenderSchedule.call(
+      events: masters,
+      range_start: range_start,
+      range_end: range_end,
+      view: :client,
+    )
   end
 end

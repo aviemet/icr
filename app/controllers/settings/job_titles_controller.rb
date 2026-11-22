@@ -91,8 +91,8 @@ class Settings::JobTitlesController < ApplicationController
   def permissions_params
     permitted = params.fetch(:permissions, {}).permit(
       :admin,
-      **Employee::JobTitle::PermissionsCatalog.resource_keys.index_with do
-        [:index, :show, :create, :update, :delete]
+      **Employee::JobTitle::PermissionsCatalog.resource_keys.index_with do |key|
+        Employee::JobTitle::PermissionsCatalog.permitted_form_actions_for(key)
       end,
     )
     permitted.to_h

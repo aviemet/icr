@@ -24,6 +24,11 @@ function dateRange(starts: string | Date | null | undefined, ends: string | Date
 	)
 }
 
+function startsAtMeta(starts: string | Date | null | undefined) {
+	if(!starts) return "-"
+	return <DateTimeFormatter>{ starts }</DateTimeFormatter>
+}
+
 export function EmployeeAssignments({ employee }: EmployeeAssignmentsProps) {
 	const { t } = useTranslation()
 	const canUpdate = useRecordCanUpdate()
@@ -97,14 +102,12 @@ export function EmployeeAssignments({ employee }: EmployeeAssignmentsProps) {
 								clients_attendant: {
 									client_id: "",
 									starts_at: "",
-									ends_at: "",
 								},
 							} }
 						>
 							<Stack gap="sm">
 								<ClientsDropdown name="clients_attendant.client_id" />
 								<DateInput name="clients_attendant.starts_at" label="Starts" />
-								<DateInput name="clients_attendant.ends_at" label="Ends" />
 								<Submit>Assign Client</Submit>
 							</Stack>
 						</Form>
@@ -115,7 +118,7 @@ export function EmployeeAssignments({ employee }: EmployeeAssignmentsProps) {
 					<RecordRow
 						key={ assignment.id }
 						title={ assignment.client.person.name }
-						meta={ dateRange(assignment.starts_at, assignment.ends_at) }
+						meta={ startsAtMeta(assignment.starts_at) }
 						actions={ canUpdate
 							? (
 								<DeleteButton

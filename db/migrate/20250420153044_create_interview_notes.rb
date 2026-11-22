@@ -1,4 +1,4 @@
-class CreateInterviewNotes < ActiveRecord::Migration[7.2]
+class CreateInterviewNotes < ActiveRecord::Migration[8.0]
   def change
     create_table :interview_notes, id: :uuid do |t|
       t.text :note

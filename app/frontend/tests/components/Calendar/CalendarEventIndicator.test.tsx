@@ -27,6 +27,7 @@ function TestWrapper({ children }: { children: React.ReactNode }) {
 				groupByResource: false,
 				maxEvents: Infinity,
 				prevDate: new Date(),
+				currentView: "month",
 				getEventTitle: (event) => event.title,
 			} }
 		>

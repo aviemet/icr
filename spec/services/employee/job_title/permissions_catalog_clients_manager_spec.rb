@@ -5,6 +5,19 @@ RSpec.describe Employee::JobTitle::PermissionsCatalog do
     expect(described_class::RESOURCES["clients_manager"]).to eq(ClientsManager)
   end
 
+  it "includes employee_training in RESOURCES" do
+    expect(described_class::RESOURCES["employee_training"]).to eq(Employee::Training)
+  end
+
+  it "includes requirement in RESOURCES" do
+    expect(described_class::RESOURCES["requirement"]).to eq(Requirement::Requirement)
+  end
+
+  it "includes complete as an extra action for employee_training" do
+    expect(described_class.actions_for("employee_training")).to include("complete")
+    expect(described_class.actions_for("client")).not_to include("complete")
+  end
+
   it "grants ClientsManager actions when admin sync runs" do
     job_title = create(:job_title)
     Employee::JobTitle::SyncPermissions.call(job_title, { "admin" => true })

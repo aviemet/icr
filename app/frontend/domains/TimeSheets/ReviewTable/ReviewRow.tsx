@@ -1,12 +1,14 @@
 import { router } from "@inertiajs/react"
-import { ActionIcon, Checkbox } from "@mantine/core"
+import { ActionIcon } from "@mantine/core"
 import dayjs from "dayjs"
 import { useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { Group, Table, Text, Tooltip } from "@/components"
+import { Badge, Button, Group, Table, Text, Tooltip } from "@/components"
 import { Form } from "@/components/Form"
 import { CalendarIcon, TrashIcon } from "@/components/Icons"
+import { CategoriesDropdown } from "@/components/Inputs/Dropdowns"
+import { LastEditorAvatar } from "@/domains/TimeSheets/LastEditorAvatar"
 import { formatter, Routes } from "@/lib"
 import { parseTimeString } from "@/lib/dates"
 import { useUpdateCalendarEvent } from "@/queries/calendarEvents/mutations"
@@ -32,13 +34,14 @@ interface ReviewRowProps {
 	shiftExceptionReasons: Record<string, string[]>
 	shiftOtHours: Record<string, number>
 	canEditTimes: boolean
-	selected: boolean
-	onSelectedChange: (selected: boolean) => void
 	onDelete: () => void
 	deleting: boolean
-	employeeId: string
 	employeeSlug: string
-	payPeriodId: string
+	reloadHref: string
+	showClientColumn: boolean
+	canFacilitatorApprove: boolean
+	canEditIhss: boolean
+	canEditShiftType: boolean
 }
 
 export function ReviewRow({
@@ -46,13 +49,14 @@ export function ReviewRow({
 	shiftExceptionReasons,
 	shiftOtHours,
 	canEditTimes,
-	selected,
-	onSelectedChange,
 	onDelete,
 	deleting,
-	employeeId,
 	employeeSlug,
-	payPeriodId,
+	reloadHref,
+	showClientColumn,
+	canFacilitatorApprove,
+	canEditIhss,
+	canEditShiftType,
 }: ReviewRowProps) {
 	const { t } = useTranslation()
 
@@ -66,10 +70,11 @@ export function ReviewRow({
 	const hours = shiftRowHours(displayStart, displayEnd)
 	const shiftDateParam = formatter.datetime.dateUrl(String(shift.starts_at))
 	const weekdayLabel = dayjs(String(shift.starts_at)).format("ddd")
+	const reviewed = Boolean(shift.facilitator_approved_at)
 
 	const reloadReview = useCallback(() => {
-		router.get(Routes.periodEmployeeReview(payPeriodId, employeeId))
-	}, [payPeriodId, employeeId])
+		router.get(reloadHref)
+	}, [reloadHref])
 
 	const updateEvent = useUpdateCalendarEvent({
 		params: { id: shift.calendar_event_id },
@@ -93,10 +98,16 @@ export function ReviewRow({
 				calendar_event: {
 					starts_at: startsAt.toISOString(),
 					ends_at: endsAt.toISOString(),
+					...(shift.is_recurring && shift.occurrence_starts_at
+						? {
+							edit_scope: "one" as const,
+							occurrence_starts_at: new Date(String(shift.occurrence_starts_at)).toISOString(),
+						}
+						: {}),
 				},
 			})
 		},
-		[startDate, endDate, updateEvent]
+		[startDate, endDate, updateEvent, shift.is_recurring, shift.occurrence_starts_at]
 	)
 
 	const onTimesChange = useCallback((start: string, end: string) => {
@@ -105,11 +116,11 @@ export function ReviewRow({
 	}, [])
 
 	const clientScheduleHref = shift.client_slug
-		? Routes.scheduleClient(shift.client_slug, { date: shiftDateParam, view: "week" })
+		? Routes.scheduleClient(shift.client_slug, { date: shiftDateParam, view: "month" })
 		: null
 	const employeeScheduleHref = Routes.scheduleEmployee(employeeSlug, {
 		date: shiftDateParam,
-		view: "week",
+		view: "month",
 	})
 	const clientCalendarLabel = t("views.timesheets.employee_review.client_calendar")
 	const employeeCalendarLabel = t("views.timesheets.employee_review.employee_calendar")
@@ -117,50 +128,80 @@ export function ReviewRow({
 
 	return (
 		<Table.Row key={ shift.id }>
-			{ canEditTimes && (
-				<Table.Cell>
-					<Checkbox
-						size="sm"
-						checked={ selected }
-						aria-label={ t("views.timesheets.employee_review.select_shift") }
-						onChange={ (event) => onSelectedChange(event.currentTarget.checked) }
-					/>
-				</Table.Cell>
-			) }
 			<Table.Cell>
 				<Group gap={ 6 } wrap="nowrap">
 					<Text size="sm">{ dayjs(String(shift.starts_at)).format("MMM D") }</Text>
 					<Text size="xs" c="dimmed">{ weekdayLabel }</Text>
 				</Group>
 			</Table.Cell>
+			{ showClientColumn && (
+				<Table.Cell>
+					<Text size="sm">{ shift.client_name ?? t("views.timesheets.index.no_value") }</Text>
+				</Table.Cell>
+			) }
 			<Table.Cell>
-				<Text size="sm">{ shift.client_name ?? t("views.timesheets.index.no_value") }</Text>
-			</Table.Cell>
-			<Table.Cell>
-				{ canEditTimes
-					? (
-						<Form
-							method="post"
-							action={ Routes.periodEmployeeReview(payPeriodId, employeeId) }
-							initialData={ initialData }
-							submitWith={ submitWith }
-							onBefore={ () => true }
-							railsAttributes={ false }
-						>
-							<ReviewRowFormFields initialData={ initialData } onTimesChange={ onTimesChange } />
-						</Form>
-					)
-					: (
-						<Text size="sm">
-							{ dayjs(String(shift.starts_at)).format("HH:mm") }
-							{ " - " }
-							{ dayjs(String(shift.ends_at)).format("HH:mm") }
-						</Text>
+				<Group gap={ 8 } wrap="nowrap" align="center">
+					{ canEditTimes
+						? (
+							<Form
+								method="post"
+								action={ reloadHref }
+								initialData={ initialData }
+								submitWith={ submitWith }
+								onBefore={ () => true }
+								railsAttributes={ false }
+							>
+								<ReviewRowFormFields initialData={ initialData } onTimesChange={ onTimesChange } />
+							</Form>
+						)
+						: (
+							<Text size="sm">
+								{ dayjs(String(shift.starts_at)).format("HH:mm") }
+								{ " - " }
+								{ dayjs(String(shift.ends_at)).format("HH:mm") }
+							</Text>
+						) }
+					{ shift.last_editor && (
+						<LastEditorAvatar editor={ shift.last_editor } />
 					) }
+				</Group>
 			</Table.Cell>
 			<Table.Cell>
 				<Text size="sm">{ formatter.number.decimal(hours, 2) }</Text>
 			</Table.Cell>
+			<Table.Cell>
+				{ canEditShiftType
+					? (
+						<CategoriesDropdown
+							label=""
+							categoryType="Shift"
+							valueKey="id"
+							value={ shift.category_id ?? shift.category?.id ?? null }
+							clearable={ false }
+							searchable
+							size="xs"
+							comboboxProps={ { withinPortal: true } }
+							onChange={ (nextValue) => {
+								if(!nextValue || nextValue === (shift.category_id ?? shift.category?.id)) return
+								router.patch(Routes.categoryShift(shift.shift_id), { category_id: nextValue })
+							} }
+						/>
+					)
+					: (
+						<Text size="sm">
+							{ shift.category?.name ?? t("views.timesheets.index.no_value") }
+						</Text>
+					) }
+			</Table.Cell>
+			{ canEditIhss && (
+				<Table.Cell>
+					<Badge variant="light" color={ shift.ihss ? "teal" : "gray" } size="sm">
+						{ shift.ihss
+							? t("views.timesheets.employee_review.ihss")
+							: t("views.timesheets.index.no_value") }
+					</Badge>
+				</Table.Cell>
+			) }
 			<Table.Cell>
 				<Text size="sm">{ formatter.number.decimal(shiftOtHours[shift.id] ?? 0, 2) }</Text>
 			</Table.Cell>
@@ -171,8 +212,49 @@ export function ReviewRow({
 						: t("views.timesheets.index.no_value") }
 				</Text>
 			</Table.Cell>
+			{ canFacilitatorApprove && (
+				<Table.Cell>
+					<Badge variant="light" color={ reviewed ? "green" : "yellow" } size="sm">
+						{ reviewed
+							? t("views.pay_periods.clients.status_reviewed")
+							: t("views.pay_periods.clients.status_pending") }
+					</Badge>
+				</Table.Cell>
+			) }
 			<Table.Cell>
 				<Group gap={ 4 } wrap="nowrap">
+					{ canEditIhss && (
+						<Button
+							size="xs"
+							variant={ shift.ihss ? "default" : "light" }
+							onClick={ () => router.patch(Routes.ihssShift(shift.shift_id), { ihss: !shift.ihss }) }
+						>
+							{ shift.ihss
+								? t("views.timesheets.employee_review.clear_ihss")
+								: t("views.timesheets.employee_review.mark_ihss") }
+						</Button>
+					) }
+					{ canFacilitatorApprove && (
+						reviewed
+							? (
+								<Button
+									size="xs"
+									variant="default"
+									onClick={ () => router.post(Routes.unapproveShift(shift.shift_id)) }
+								>
+									{ t("views.pay_periods.client_show.unapprove") }
+								</Button>
+							)
+							: (
+								<Button
+									size="xs"
+									variant="filled"
+									onClick={ () => router.post(Routes.approveShift(shift.shift_id)) }
+								>
+									{ t("views.pay_periods.client_show.approve") }
+								</Button>
+							)
+					) }
 					{ clientScheduleHref && (
 						<Tooltip label={ clientCalendarLabel } withArrow>
 							<ActionIcon

@@ -1,21 +1,11 @@
 import { MantineProvider } from "@mantine/core"
 import { cleanup, render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it } from "vitest"
 
 import { Form } from "@/components/Form"
 import { CurrencyInput } from "@/components/Inputs/CurrencyInput"
 import { theme } from "@/lib/theme"
-
-vi.mock("react-i18next", () => ({
-	useTranslation: () => ({
-		i18n: {
-			language: "en-US",
-			resolvedLanguage: "en-US",
-		},
-		t: (key: string) => key,
-	}),
-}))
 
 describe("CurrencyInput", () => {
 	beforeEach(() => {

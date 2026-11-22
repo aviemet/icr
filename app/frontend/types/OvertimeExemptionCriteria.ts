@@ -12,3 +12,5 @@ export type OvertimeExemptionCriterionGroup = Partial<
 >
 
 export type OvertimeExemptionCriteria = OvertimeExemptionCriterionGroup[]
+
+export type { OvertimeExemptionCriteria as default }

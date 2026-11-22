@@ -1,0 +1,48 @@
+en:
+  views:
+    trainings:
+      index:
+        title: Trainings
+        new: New Training
+        columns:
+          name: Name
+          status: Status
+          duration: Duration
+          clients: Clients
+          description: Description
+          actions: Actions
+        clients_select_all: Select All
+        minutes: "%{count} min"
+      form:
+        name: Name
+        description: Description
+        estimated_minutes: Expected Duration (minutes)
+        client_ids: Is this training for a specific client?
+        create: Create Training
+        update: Update Training
+      actions:
+        retire: Retire
+        offer_again: Offer again
+      availability:
+        active: Active
+        inactive: Inactive
+      show:
+        title: Training
+        edit: Edit
+        delete: Delete
+        duration: Duration
+        status: Status
+        description: Description
+        linked_clients: Linked Clients
+        no_clients: No clients linked.
+        required: Required
+        assignments: Assignments
+        no_assignments: No employees assigned.
+      new:
+        title: New Training
+      edit:
+        title: Edit Training
+      status:
+        not_started: Not started
+        in_progress: In progress
+        completed: Completed

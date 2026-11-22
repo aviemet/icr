@@ -72,6 +72,7 @@ en:
           expiring_credentials: Expiring Credentials
           hire_date: Hire Date
           incomplete_trainings: Incomplete Trainings
+          unmet_requirements: Unmet Requirements
           job_title: Job Title
           manager: Manager
           none: None
@@ -80,6 +81,15 @@ en:
           recent_interviews: Recent Interviews
           view_interview: View
           assignments: Assignments
+        requirements:
+          counts: "%{met} met / %{unmet} unmet / %{total} total"
+          empty: No requirements apply to this employee.
+          empty_title: Requirements
+          no_items: No fulfillable items.
+          status:
+            met: Met
+            unmet: Unmet
+          summary: Summary
         assignments:
           add_attended_client: Assign Attended Client
           add_managed_client: Assign Managed Client
@@ -106,11 +116,19 @@ en:
           overview: Overview
           pay: Pay
           profile: Profile
+          requirements: Requirements
           trainings: Trainings
         title: Employee
         trainings:
           assign: Assign Training
+          edit_dates: Edit Dates
           empty: No trainings assigned.
+          fields:
+            completed: Completed
+            started: Started
+            training: Training
+          mark_complete: Mark Complete
+          save_dates: Save Dates
           title: Trainings
       table:
         actions: Actions

@@ -3,6 +3,7 @@ import { PropsWithChildren, RefObject } from "react"
 
 import { useCalendarContext } from "@/components/Calendar"
 
+import { transitionPeriodKey } from "./transitionPeriodKey"
 import { useCalendarTransition } from "./useCalendarTransition"
 
 interface CalendarTransitionContainerProps<T extends HTMLElement = HTMLDivElement> extends PropsWithChildren {
@@ -24,13 +25,14 @@ export function CalendarTransitionContainer<T extends HTMLElement = HTMLDivEleme
 	className,
 	containerRef,
 }: CalendarTransitionContainerProps<T>) {
-	const { date } = useCalendarContext()
+	const { date, currentView, localizer } = useCalendarContext()
 	const { direction, variants } = useCalendarTransition({ containerRef })
+	const periodKey = transitionPeriodKey(date, currentView, localizer)
 
 	return (
 		<AnimatePresence initial={ false } mode="popLayout" custom={ direction }>
 			<motion.div
-				key={ date.toISOString() }
+				key={ periodKey }
 				custom={ direction }
 				variants={ variants }
 				initial="enter"

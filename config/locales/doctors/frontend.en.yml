@@ -1,0 +1,43 @@
+---
+en:
+  views:
+    doctors:
+      index:
+        title: Doctors
+        new: New Doctor
+      new:
+        title: New Doctor
+      edit:
+        title: Edit Doctor
+      show:
+        title: Doctor
+        tabs:
+          overview: Overview
+          clients: Clients
+          prescriptions: Prescriptions
+          diagnoses: Diagnoses
+          hospital_visits: Hospital Visits
+        overview:
+          specialty: Specialty
+          npi: NPI
+          practice: Practice
+          notes: Notes
+          phone: Phone
+          clients: Clients
+          prescriptions: Prescriptions
+          diagnoses: Diagnoses
+          hospital_visits: Hospital Visits
+          none: None
+        clients:
+          title: Clients
+          empty: No clients linked to this doctor.
+          notes: Notes
+        prescriptions:
+          title: Prescriptions
+          empty: No prescriptions for this doctor.
+        diagnoses:
+          title: Diagnoses
+          empty: No diagnoses attributed to this doctor.
+        hospital_visits:
+          title: Hospital Visits
+          empty: No hospital visits attributed to this doctor.

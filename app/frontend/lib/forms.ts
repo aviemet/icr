@@ -34,15 +34,15 @@ export function getInputOnChange<Value>(
 
 			if(currentTarget instanceof HTMLInputElement) {
 				if(currentTarget.type === "checkbox") {
-					setValue(currentTarget.checked as any)
+					setValue(currentTarget.checked as Value)
 				} else {
-					setValue(currentTarget.value as any)
+					setValue(currentTarget.value as Value)
 				}
 			} else if(
 				currentTarget instanceof HTMLTextAreaElement ||
         currentTarget instanceof HTMLSelectElement
 			) {
-				setValue(currentTarget.value as any)
+				setValue(currentTarget.value as Value)
 			}
 		} else {
 			setValue(val)

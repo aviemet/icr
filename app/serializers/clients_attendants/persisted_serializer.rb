@@ -6,7 +6,6 @@ class ClientsAttendants::PersistedSerializer < ApplicationSerializer
     :client_id,
     :attendant_id,
     :starts_at,
-    :ends_at,
   )
 
   belongs_to :attendant, serializer: Employees::PersistedSerializer

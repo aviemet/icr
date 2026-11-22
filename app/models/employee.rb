@@ -130,10 +130,8 @@ class Employee < ApplicationRecord
   has_many :shift_events, through: :shifts, class_name: "Calendar::Event", source: :calendar_event, dependent: :destroy
 
   def schedule_events_between(start_time, end_time)
-    all_events
-      .distinct
-      .with_schedule_association_preloads
-      .between(start_time, end_time)
+    ids = all_events.distinct.for_schedule_range(start_time, end_time).reselect("calendar_events.id")
+    Calendar::Event.where(id: ids).with_schedule_association_preloads
   end
 
   #############
@@ -202,7 +200,7 @@ class Employee < ApplicationRecord
     source: :client
 
   has_many :active_clients_attendants, -> {
-    where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current)
+    where(starts_at: ..Time.current)
   },
     class_name: "ClientsAttendant",
     foreign_key: :attendant_id,

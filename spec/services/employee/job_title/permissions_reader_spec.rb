@@ -20,8 +20,8 @@ RSpec.describe Employee::JobTitle::PermissionsReader do
   end
 
   it "marks admin true when every action is granted" do
-    Employee::JobTitle::PermissionsCatalog::RESOURCES.each_value do |resource_class|
-      Employee::JobTitle::PermissionsCatalog::ACTIONS.each do |action|
+    Employee::JobTitle::PermissionsCatalog::RESOURCES.each do |key, resource_class|
+      Employee::JobTitle::PermissionsCatalog.actions_for(key).each do |action|
         job_title.add_role(action.to_sym, resource_class)
       end
     end
@@ -29,5 +29,14 @@ RSpec.describe Employee::JobTitle::PermissionsReader do
     permissions = described_class.call(job_title)
 
     expect(permissions["admin"]).to be true
+  end
+
+  it "maps complete roles on employee_training" do
+    job_title.add_role(:complete, Employee::Training)
+
+    permissions = described_class.call(job_title)
+
+    expect(permissions["employee_training"]["complete"]).to be true
+    expect(permissions["admin"]).to be false
   end
 end

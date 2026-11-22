@@ -83,11 +83,17 @@ class EmployeesController < ApplicationController
     authorize employee
 
     employee_for_show = Employee.includes_show.find(employee.id)
+    requirement_fulfillments = Requirement::FulfillmentForEmployee.call(employee_for_show)
 
     render inertia: "Employees/Show", props: {
       employee: -> { employee_for_show.render(:show) },
       can_update: -> { policy(employee).update? },
-      training_options: -> { Employee::Training.order(:name).render(:options) },
+      training_options: -> {
+        assigned_ids = employee_for_show.employees_trainings.map(&:training_id)
+        Employee::Training.active.where.not(id: assigned_ids).order(:name).render(:options)
+      },
+      can_complete_trainings: -> { Employee::TrainingPolicy.new(current_user, Employee::Training).complete? },
+      requirement_fulfillments: -> { requirement_fulfillments.to_h },
     }
   end
 
@@ -113,13 +119,19 @@ class EmployeesController < ApplicationController
   def schedule
     authorize employee
 
-    schedules = employee.schedule_events_between(*DateRangeCalculator.new(params).call)
+    range_start, range_end = DateRangeCalculator.new(params).call
+    masters = employee.schedule_events_between(range_start, range_end)
 
     render inertia: "Employees/Schedule", props: {
       employee: -> { employee.render(:show) },
       can_update: -> { policy(employee).update? },
       schedules: lambda {
-        schedules.render(:employee)
+        Calendar::RenderSchedule.call(
+          events: masters,
+          range_start: range_start,
+          range_end: range_end,
+          view: :employee,
+        )
       },
     }
   end
@@ -157,7 +169,10 @@ class EmployeesController < ApplicationController
     end
 
     unless employee.aasm.may_fire_event?(event.to_sym)
-      redirect_to status_employee_path(employee), inertia: { errors: { event: ["cannot transition"] } }
+      employment_errors = employment_gate_errors_for(employee, event)
+      redirect_to status_employee_path(employee), inertia: {
+        errors: employment_errors.presence || { event: ["cannot transition"] },
+      }
       return
     end
 
@@ -172,9 +187,12 @@ class EmployeesController < ApplicationController
       }
     end
   rescue ArgumentError => e
-    redirect_to status_employee_path(employee), inertia: { errors: { inactive_at: [e.message] } }
+    redirect_to status_employee_path(employee), inertia: { errors: { base: [e.message] } }
   rescue AASM::InvalidTransition
-    redirect_to status_employee_path(employee), inertia: { errors: { event: ["cannot transition"] } }
+    employment_errors = employment_gate_errors_for(employee, event)
+    redirect_to status_employee_path(employee), inertia: {
+      errors: employment_errors.presence || { event: ["cannot transition"] },
+    }
   end
 
   # @route DELETE /employees/:slug/pending_termination (pending_termination_employee)
@@ -272,5 +290,21 @@ class EmployeesController < ApplicationController
 
   def can_scope_employees?
     current_user&.has_role?(:admin)
+  end
+
+  def employment_gate_errors_for(record, event)
+    return unless %w[begin_employment accept_offer].include?(event.to_s)
+
+    gate = Requirement::EmploymentGate.call(record)
+    return if gate.allowed?
+
+    {
+      base: [
+        I18n.t(
+          "requirements.gates.employment_blocked",
+          names: gate.unmet_names.to_sentence,
+        ),
+      ],
+    }
   end
 end

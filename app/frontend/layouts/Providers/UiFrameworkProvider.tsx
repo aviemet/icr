@@ -8,7 +8,9 @@ import { useMemo } from "react"
 import { Flash } from "@/components"
 import { BRAND_PALETTE, clampBrandColor, DEFAULT_BRAND_COLOR } from "@/lib/brandColor"
 import { useInit, usePageProps } from "@/lib/hooks"
-import { theme as themeObject } from "@/lib/theme"
+import { cssVariablesResolver as themeCssVariablesResolver, theme as themeObject } from "@/lib/theme"
+
+import { themeFontOverridesForPreferences } from "./fontFamilyForPreferences"
 
 import "./reset.css"
 import "@mantine/core/styles.css"
@@ -21,28 +23,43 @@ import "mantine-datatable/styles.css"
 import "./global.css"
 
 export function UiFrameworkProvider({ children }: { children: React.ReactNode }) {
-	const { settings } = usePageProps()
+	const { settings, auth } = usePageProps()
 	const brandHex = clampBrandColor(settings?.primary_color || DEFAULT_BRAND_COLOR)
+	const dyslexiaFont = auth?.user?.user_preferences?.dyslexia_font === true
 
 	const brandColors = useMemo(
-		() => generateColors(brandHex) as unknown as MantineColorsTuple,
+		(): MantineColorsTuple => generateColors(brandHex),
 		[brandHex],
 	)
 
-	const theme = useMemo(() => createTheme({
-		...themeObject,
-		colors: {
-			...themeObject.colors,
-			[BRAND_PALETTE]: brandColors,
-		},
-		primaryColor: BRAND_PALETTE,
-	}), [brandColors])
+	const theme = useMemo(() => {
+		const fontOverrides = themeFontOverridesForPreferences(dyslexiaFont)
+
+		return createTheme({
+			...themeObject,
+			...fontOverrides,
+			...(fontOverrides.headings
+				? {
+					headings: {
+						...themeObject.headings,
+						...fontOverrides.headings,
+					},
+				}
+				: {}),
+			colors: {
+				...themeObject.colors,
+				[BRAND_PALETTE]: brandColors,
+			},
+			primaryColor: BRAND_PALETTE,
+		})
+	}, [brandColors, dyslexiaFont])
 
 	const cssVariablesResolver = useMemo((): CSSVariablesResolver => {
 		return (resolverTheme) => {
-			const variables: Record<string, string> = {}
-			const dark: Record<string, string> = {}
-			const light: Record<string, string> = {}
+			const themeVariables = themeCssVariablesResolver(resolverTheme)
+			const variables: Record<string, string> = { ...themeVariables.variables }
+			const dark: Record<string, string> = { ...themeVariables.dark }
+			const light: Record<string, string> = { ...themeVariables.light }
 			const palette = resolverTheme.colors[BRAND_PALETTE]
 
 			palette?.forEach((value, index) => {

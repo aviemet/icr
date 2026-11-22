@@ -42,10 +42,35 @@ class CaseloadsController < ApplicationController
   def update
     authorize clients_manager
 
-    if clients_manager.update(ends_at: Time.current)
+    new_manager_id = params.dig(:clients_manager, :manager_id)
+
+    if new_manager_id.present?
+      reassign_caseload(new_manager_id)
+    elsif clients_manager.update(ends_at: Time.current)
       redirect_to caseloads_path, notice: t("templates.controllers.notices.updated", model: "Caseload assignment")
     else
       redirect_to caseloads_path, alert: clients_manager.errors.full_messages.to_sentence
     end
+  end
+
+  private
+
+  def reassign_caseload(new_manager_id)
+    if new_manager_id.to_s == clients_manager.manager_id.to_s
+      redirect_to caseloads_path
+      return
+    end
+
+    ActiveRecord::Base.transaction do
+      clients_manager.update!(ends_at: Time.current)
+      ClientsManager.create!(
+        client_id: clients_manager.client_id,
+        manager_id: new_manager_id,
+      )
+    end
+
+    redirect_to caseloads_path, notice: t("templates.controllers.notices.updated", model: "Caseload assignment")
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_to caseloads_path, alert: e.record.errors.full_messages.to_sentence
   end
 end

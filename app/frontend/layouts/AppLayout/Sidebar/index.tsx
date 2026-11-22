@@ -32,29 +32,39 @@ export function Sidebar() {
 				hidden={ !sidebarOpen }
 				className={ clsx(classes.navbar, { closed: !sidebarOpen }) }
 			>
-				{ /* Hamburger */ }
-				<AppShell.Section p="xs" mb="xs">
-					<Group justify="flex-end">
-						<ToggleSidebarButton />
-					</Group>
-
-					{ /* User menu and Logo */ }
-					<Group gap={ sidebarOpen ? "sm" : 0 } wrap="nowrap" justify="center">
-						<UserMenu />
-						<Flex
-							direction="column"
-							wrap="nowrap"
-							className={ clsx("hidden-when-closed") }
-						>
-							<Box><Text size="xl" fw={ 700 }>{ siteTitle }</Text></Box>
-							<Box><Text size="sm">{ user?.person?.name }</Text></Box>
-						</Flex>
-					</Group>
+				<AppShell.Section p="xs" mb={ sidebarOpen ? "xs" : 0 } className="header-section">
+					{ sidebarOpen
+						? (
+							<>
+								<Group justify="flex-end">
+									<ToggleSidebarButton />
+								</Group>
+								<Group gap="sm" wrap="nowrap" justify="center" align="center">
+									<UserMenu />
+									<Flex direction="column" wrap="nowrap" className="hidden-when-closed">
+										<Box><Text size="xl" fw={ 700 }>{ siteTitle }</Text></Box>
+										<Box><Text size="sm">{ user?.person?.name }</Text></Box>
+									</Flex>
+								</Group>
+							</>
+						)
+						: (
+							<Flex direction="column" align="center" gap="xxs">
+								<ToggleSidebarButton />
+								<UserMenu />
+							</Flex>
+						) }
 				</AppShell.Section>
 
 				<Divider />
 
-				<AppShell.Section mt="xs" p={ 0 } grow className={ clsx(classes.nav, "nav-section") }>
+				<AppShell.Section
+					p={ 0 }
+					pt={ sidebarOpen ? 0 : "xxs" }
+					mt={ sidebarOpen ? "xs" : 0 }
+					grow
+					className={ clsx(classes.nav, "nav-section") }
+				>
 					<ul>
 						<MenuLink
 							label="Dashboard"
@@ -67,7 +77,8 @@ export function Sidebar() {
 								label="Clients"
 								href={ Routes.clients() }
 								leftSection={ <ClientIcon /> }
-								active={ matchesAtPosition(paths, [0, "clients"]) || matchesAtPosition(paths, [0, "households"]) }
+								menuKey="clients"
+								active={ matchesAtPosition(paths, [0, "clients"]) }
 							>
 								{ can("households", "index") && (
 									<MenuLink
@@ -90,23 +101,23 @@ export function Sidebar() {
 								label="Employees"
 								href={ Routes.employees() }
 								leftSection={ <EmployeeIcon /> }
-								active={ matchesAtPosition(paths, [0, "employees"]) }
+								menuKey="employees"
+								active={
+									matchesAtPosition(paths, [0, "employees"]) &&
+									!matchesAtPosition(paths, [1, "applicants"]) &&
+									!matchesAtPosition(paths, [1, "trainings"])
+								}
 							>
 								<MenuLink
 									label="Applicants"
 									href={ Routes.applicants() }
 									active={ matchesAtPosition(paths, [1, "applicants"]) }
 								/>
-								{ can("requirement/requirements", "index") && (
-									<MenuLink
-										label="Documents"
-										href={ Routes.requirements() }
-									/>
-								) }
 								{ can("employee/trainings", "index") && (
 									<MenuLink
 										label="Training"
 										href={ Routes.trainings() }
+										active={ matchesAtPosition(paths, [1, "trainings"]) }
 									/>
 								) }
 							</MenuLink>

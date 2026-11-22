@@ -9,7 +9,7 @@ class Clients::AllergiesController < Clients::BaseController
     allergy.assign_attributes(allergy_params)
 
     allergy.save
-    redirect_to_client_tab("health")
+    redirect_to_client_tab("medical")
   end
 
   # @route PATCH /clients/:client_slug/allergies/:id (client_allergy)
@@ -18,13 +18,13 @@ class Clients::AllergiesController < Clients::BaseController
     authorize_client_update!
 
     allergy.update(allergy_params)
-    redirect_to_client_tab("health")
+    redirect_to_client_tab("medical")
   end
 
   # @route DELETE /clients/:client_slug/allergies/:id (client_allergy)
   def destroy
     authorize_client_update!
     allergy.destroy!
-    redirect_to_client_tab("health")
+    redirect_to_client_tab("medical")
   end
 end

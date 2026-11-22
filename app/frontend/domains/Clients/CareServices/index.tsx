@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 
-import { Link, Stack, Text } from "@/components"
+import { Link, Stack } from "@/components"
 import { DeleteButton } from "@/components/Button"
 import { Form, Submit } from "@/components/Form"
 import { DateTimeFormatter } from "@/components/Formatters"
@@ -28,17 +28,22 @@ function dateRange(starts: string | Date | null | undefined, ends: string | Date
 	)
 }
 
+function startsAtMeta(starts: string | Date | null | undefined) {
+	if(!starts) return "-"
+	return <DateTimeFormatter>{ starts }</DateTimeFormatter>
+}
+
 export function ClientCareServices({ client }: ClientCareServicesProps) {
 	const { t } = useTranslation()
 	const canUpdate = useRecordCanUpdate()
 
 	return (
 		<Stack gap="lg">
-			<MetricTile title={ t("views.clients.show.care.household") }>
-				{ client.household
-					? <Link href={ Routes.household(client.household.slug) }>{ client.household.name }</Link>
-					: <Text size="sm" c="dimmed">No household assigned.</Text> }
-			</MetricTile>
+			{ client.household && (
+				<MetricTile title={ t("views.clients.show.care.household") }>
+					<Link href={ Routes.household(client.household.slug) }>{ client.household.name }</Link>
+				</MetricTile>
+			) }
 
 			<CollectionPanel
 				title={ t("views.clients.show.care.managers") }
@@ -103,14 +108,12 @@ export function ClientCareServices({ client }: ClientCareServicesProps) {
 								clients_attendant: {
 									attendant_id: "",
 									starts_at: "",
-									ends_at: "",
 								},
 							} }
 						>
 							<Stack gap="sm">
 								<TextInput name="clients_attendant.attendant_id" label="Attendant Employee ID" required />
 								<DateInput name="clients_attendant.starts_at" label="Starts" />
-								<DateInput name="clients_attendant.ends_at" label="Ends" />
 								<Submit>Assign Attendant</Submit>
 							</Stack>
 						</Form>
@@ -121,7 +124,7 @@ export function ClientCareServices({ client }: ClientCareServicesProps) {
 					<RecordRow
 						key={ assignment.id }
 						title={ assignment.attendant.person.name }
-						meta={ dateRange(assignment.starts_at, assignment.ends_at, "Current") }
+						meta={ startsAtMeta(assignment.starts_at) }
 						actions={ canUpdate
 							? (
 								<DeleteButton

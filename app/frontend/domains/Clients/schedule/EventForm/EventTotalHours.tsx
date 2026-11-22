@@ -5,8 +5,9 @@ import { useFormField } from "@/components/Form/formFieldUtils"
 
 function parseDateTime(value: unknown): dayjs.Dayjs | null {
 	if(value === null || value === undefined || value === "") return null
+	if(typeof value !== "string" && !(value instanceof Date)) return null
 
-	const d = dayjs(value as string | Date)
+	const d = dayjs(value)
 	return d.isValid() ? d : null
 }
 

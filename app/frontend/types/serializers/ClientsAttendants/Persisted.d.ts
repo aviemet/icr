@@ -11,7 +11,6 @@ declare global {
       client: ClientsPersisted
       client_id: string
       created_at: Date
-      ends_at?: Date
       starts_at?: Date
       updated_at: Date
     }

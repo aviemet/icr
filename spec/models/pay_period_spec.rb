@@ -217,6 +217,31 @@ RSpec.describe PayPeriod, type: :model do
       expect(result).to include(inside, overlapping_start, overlapping_end)
       expect(result).not_to include(before, after)
     end
+
+    it "includes recurring masters that expand into the period" do
+      pay_period = create(
+        :pay_period,
+        starts_at: Time.zone.local(2026, 11, 16).beginning_of_day,
+        ends_at: Time.zone.local(2026, 11, 30).end_of_day,
+      )
+      master = create(
+        :calendar_event,
+        starts_at: Time.zone.local(2026, 10, 1, 9, 0, 0),
+        ends_at: Time.zone.local(2026, 10, 1, 17, 0, 0),
+      )
+      create(
+        :calendar_recurring_pattern,
+        calendar_event: master,
+        recurring_type: :weekly,
+        offset: 1,
+        day_of_week: 1,
+        end_date: nil,
+        max_occurrences: nil,
+      )
+      shift = create(:shift, calendar_event: master)
+
+      expect(described_class.shifts_overlapping_period(pay_period)).to include(shift)
+    end
   end
 
   describe ".attach_shift!" do
@@ -257,6 +282,35 @@ RSpec.describe PayPeriod, type: :model do
             ),
           )
         }.not_to change(described_class, :count)
+      end
+    end
+
+    it "clears approved_at when attaching a shift to an approved timesheet" do
+      travel_to Time.zone.local(2024, 3, 10, 12, 0, 0) do
+        employee = create(:employee)
+        first_shift = create(
+          :shift,
+          employee: employee,
+          calendar_event: create(
+            :calendar_event,
+            starts_at: Time.zone.local(2024, 3, 20, 9, 0, 0),
+            ends_at: Time.zone.local(2024, 3, 20, 17, 0, 0),
+          ),
+        )
+        timesheet = first_shift.reload.timesheet
+        timesheet.update!(approved_at: Time.current)
+
+        create(
+          :shift,
+          employee: employee,
+          calendar_event: create(
+            :calendar_event,
+            starts_at: Time.zone.local(2024, 3, 21, 9, 0, 0),
+            ends_at: Time.zone.local(2024, 3, 21, 17, 0, 0),
+          ),
+        )
+
+        expect(timesheet.reload.approved_at).to be_nil
       end
     end
   end
@@ -302,6 +356,39 @@ RSpec.describe PayPeriod, type: :model do
 
       expect { pay_period.sync_shifts! }.not_to raise_error
       expect(pay_period.timesheets.count).to eq(0)
+    end
+
+    it "creates employee timesheets for recurring masters that expand into the period without moving the master" do
+      travel_to Time.zone.local(2026, 11, 22, 12, 0, 0) do
+        pay_period = create(
+          :pay_period,
+          starts_at: Time.zone.local(2026, 11, 16).beginning_of_day,
+          ends_at: Time.zone.local(2026, 11, 30).end_of_day,
+        )
+        employee = create(:employee)
+        master = create(
+          :calendar_event,
+          starts_at: Time.zone.local(2026, 10, 1, 9, 0, 0),
+          ends_at: Time.zone.local(2026, 10, 1, 17, 0, 0),
+        )
+        create(
+          :calendar_recurring_pattern,
+          calendar_event: master,
+          recurring_type: :weekly,
+          offset: 1,
+          day_of_week: 1,
+          end_date: nil,
+          max_occurrences: nil,
+        )
+        shift = create(:shift, employee:, calendar_event: master)
+        original_timesheet_id = shift.reload.timesheet_id
+
+        pay_period.sync_shifts!
+
+        expect(pay_period.timesheets.find_by(employee:)).to be_present
+        expect(shift.reload.timesheet_id).to eq(original_timesheet_id)
+        expect(shift.timesheet.pay_period_id).not_to eq(pay_period.id)
+      end
     end
   end
 
@@ -429,6 +516,66 @@ RSpec.describe PayPeriod, type: :model do
 
       expect(adjustment).to be_persisted
       expect(adjustment.reason).to eq("Fix hours")
+    end
+  end
+
+  describe "#shift_occurrences" do
+    it "expands recurring masters into period occurrences with lockstep interval ids" do
+      pay_period = described_class.for_period_dates(Date.new(2024, 3, 16), Date.new(2024, 3, 31))
+      employee = create(:employee, :employed)
+      timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
+      event = create(
+        :calendar_event,
+        starts_at: Time.zone.local(2024, 3, 4, 9, 0, 0),
+        ends_at: Time.zone.local(2024, 3, 4, 17, 0, 0),
+      )
+      event.recurring_patterns.create!(
+        recurring_type: :weekly,
+        offset: 1,
+        day_of_week: 1,
+        end_date: Date.new(2024, 3, 31),
+      )
+      shift = create(:shift, employee: employee, timesheet: timesheet, calendar_event: event)
+
+      rows = pay_period.shift_occurrences([shift])
+
+      expect(rows.map { |row| row.starts_at.to_date }).to eq([
+        Date.new(2024, 3, 18),
+        Date.new(2024, 3, 25),
+      ])
+      expect(rows.map(&:shift_id).uniq).to eq([shift.id])
+      expect(rows.map { |row| row.id.to_s }).to eq(
+        rows.map { |row|
+          Payroll::ShiftOccurrence.interval_id(
+            shift.id,
+            Calendar::Recurring::ExpandOccurrences::Occurrence.new(
+              event: event,
+              original_starts_at: row.occurrence_starts_at,
+              starts_at: row.starts_at,
+              ends_at: row.ends_at,
+              recurring: true,
+            ),
+          )
+        },
+      )
+    end
+
+    it "keeps non-recurring shifts as a single in-range row" do
+      pay_period = described_class.for_period_dates(Date.new(2024, 3, 16), Date.new(2024, 3, 31))
+      employee = create(:employee, :employed)
+      timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
+      event = create(
+        :calendar_event,
+        starts_at: Time.zone.local(2024, 3, 18, 9, 0, 0),
+        ends_at: Time.zone.local(2024, 3, 18, 17, 0, 0),
+      )
+      shift = create(:shift, employee: employee, timesheet: timesheet, calendar_event: event)
+
+      rows = pay_period.shift_occurrences([shift])
+
+      expect(rows.size).to eq(1)
+      expect(rows.first.id.to_s).to eq(shift.id.to_s)
+      expect(rows.first.starts_at).to eq(event.starts_at)
     end
   end
 end

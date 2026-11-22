@@ -80,6 +80,13 @@ RSpec.describe Setting, type: :model do
       end
     end
 
+    describe "ihss_co_employer" do
+      it "has default value" do
+        expect(described_class.ihss_co_employer).to be(true)
+        expect(Setting::DEFAULT_SETTINGS[:ihss_co_employer]).to be(true)
+      end
+    end
+
     describe "shift_title_format" do
       it "has default value" do
         expect(described_class.shift_title_format).to eq(Setting::DEFAULT_SETTINGS[:shift_title_format])

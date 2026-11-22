@@ -1,18 +1,27 @@
 import { router } from "@inertiajs/react"
+import { useModals } from "@mantine/modals"
 import { useTranslation } from "react-i18next"
 
-import { Avatar, Badge, Button, Group, Link, Table, type TableColumn } from "@/components"
+import { Avatar, Badge, Button, Group, Link, Stack, Table, type TableColumn, Text } from "@/components"
+import { finalApproveWithWarning } from "@/domains/PayPeriods/finalApproveWithWarning"
 import { payrollApprovalStatus } from "@/domains/PayPeriods/payrollFilters"
 import { formatter, Routes } from "@/lib"
-
 
 interface EmployeeHoursMap {
 	regular_hours?: number
 	ot_hours?: number
+	ihss_hours?: number
+	company_hours?: number
 }
 
 interface EmployeeExceptionsMap {
 	exception_count?: number
+}
+
+interface UnreviewedShiftRow {
+	id: string
+	starts_at?: string
+	client_names: string[]
 }
 
 interface EmployeesTableProps {
@@ -23,6 +32,9 @@ interface EmployeesTableProps {
 	timesheetIdsByEmployee: Record<string, string>
 	approvedAtByEmployee: Record<string, string>
 	employeeExceptions: Record<string, EmployeeExceptionsMap>
+	facilitatorShiftCountByEmployee?: Record<string, number>
+	facilitatorReviewedShiftCountByEmployee?: Record<string, number>
+	unreviewedShiftsByTimesheet?: Record<string, UnreviewedShiftRow[]>
 }
 
 export function EmployeesTable({
@@ -33,8 +45,12 @@ export function EmployeesTable({
 	timesheetIdsByEmployee,
 	approvedAtByEmployee,
 	employeeExceptions,
+	facilitatorShiftCountByEmployee = {},
+	facilitatorReviewedShiftCountByEmployee = {},
+	unreviewedShiftsByTimesheet = {},
 }: EmployeesTableProps) {
 	const { t } = useTranslation()
+	const modals = useModals()
 	const noValue = t("views.timesheets.index.no_value")
 
 	const formatHours = (hours: number | undefined) =>
@@ -77,6 +93,18 @@ export function EmployeesTable({
 			render: (employee) => formatHours(employee_hours[employee.id]?.ot_hours),
 		},
 		{
+			accessor: "ihss_hours",
+			title: t("views.timesheets.index.employees.ihss_hours"),
+			sortable: false,
+			render: (employee) => formatHours(employee_hours[employee.id]?.ihss_hours),
+		},
+		{
+			accessor: "company_hours",
+			title: t("views.timesheets.index.employees.company_hours"),
+			sortable: false,
+			render: (employee) => formatHours(employee_hours[employee.id]?.company_hours),
+		},
+		{
 			accessor: "pto_sick",
 			title: t("views.timesheets.index.employees.pto_sick"),
 			sortable: false,
@@ -87,6 +115,22 @@ export function EmployeesTable({
 			title: t("views.timesheets.index.employees.exceptions"),
 			sortable: false,
 			render: (employee) => formatExceptionCount(employeeExceptions[employee.id]?.exception_count),
+		},
+		{
+			accessor: "facilitator_progress",
+			title: t("views.timesheets.index.employees.facilitator_progress"),
+			sortable: false,
+			render: (employee) => {
+				const total = facilitatorShiftCountByEmployee[employee.id] ?? 0
+				const reviewed = facilitatorReviewedShiftCountByEmployee[employee.id] ?? 0
+				if(total === 0) return noValue
+
+				return (
+					<Text size="sm">
+						{ t("views.pay_periods.show.facilitator_progress", { reviewed, total }) }
+					</Text>
+				)
+			},
 		},
 		{
 			accessor: "status",
@@ -108,6 +152,8 @@ export function EmployeesTable({
 		{
 			accessor: "actions",
 			title: t("views.timesheets.index.employees.actions"),
+			titleClassName: "actionsCell",
+			cellsClassName: "actionsCell",
 			sortable: false,
 			render: (employee) => {
 				const timesheetId = timesheetIdsByEmployee[employee.id]
@@ -126,7 +172,29 @@ export function EmployeesTable({
 							<Button
 								size="xs"
 								variant="filled"
-								onClick={ () => router.post(Routes.approveTimesheet(timesheetId)) }
+								onClick={ () => finalApproveWithWarning({
+									modals,
+									timesheetId,
+									unreviewedShifts: unreviewedShiftsByTimesheet[timesheetId] ?? [],
+									title: t("views.pay_periods.show.approve_with_gaps_title"),
+									confirmLabel: t("views.pay_periods.show.approve_with_gaps_confirm"),
+									cancelLabel: t("views.pay_periods.show.approve_with_gaps_cancel"),
+									buildBody: (shifts) => (
+										<Stack gap="xs">
+											<Text size="sm">{ t("views.pay_periods.show.approve_with_gaps_body") }</Text>
+											{ shifts.map(shift => (
+												<Text key={ shift.id } size="sm" c="dimmed">
+													{ t("views.pay_periods.show.unreviewed_shift_line", {
+														client: shift.client_names.join(", ") || noValue,
+														when: shift.starts_at
+															? formatter.datetime.dateShort(shift.starts_at)
+															: noValue,
+													}) }
+												</Text>
+											)) }
+										</Stack>
+									),
+								}) }
 							>
 								{ t("views.timesheets.index.employees.approve") }
 							</Button>

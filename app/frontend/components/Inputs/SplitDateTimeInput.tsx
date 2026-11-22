@@ -17,14 +17,21 @@ function parseValue(value: unknown): Date | undefined {
 export interface SplitDateTimeInputDateProps {
 	label: string
 	wrapper?: boolean
+	popoverProps?: React.ComponentProps<typeof DateInput>["popoverProps"]
 }
 
 export interface SplitDateTimeInputTimeProps {
 	label: string
 	wrapper?: boolean
+	popoverProps?: React.ComponentProps<typeof TimeInput>["popoverProps"]
+	minutesStep?: number
 }
 
-function SplitDateTimeInputDate({ label, wrapper = false }: SplitDateTimeInputDateProps) {
+function SplitDateTimeInputDate({
+	label,
+	wrapper = false,
+	popoverProps,
+}: SplitDateTimeInputDateProps) {
 	const context = useSplitDateTimeContext()
 	return (
 		<DateInput
@@ -34,12 +41,17 @@ function SplitDateTimeInputDate({ label, wrapper = false }: SplitDateTimeInputDa
 			onChange={ context.onDateChange }
 			wrapper={ wrapper }
 			clearable={ false }
-			popoverProps={ { withinPortal: false } }
+			popoverProps={ { withinPortal: false, ...popoverProps } }
 		/>
 	)
 }
 
-function SplitDateTimeInputTime({ label, wrapper = false }: SplitDateTimeInputTimeProps) {
+function SplitDateTimeInputTime({
+	label,
+	wrapper = false,
+	popoverProps,
+	minutesStep,
+}: SplitDateTimeInputTimeProps) {
 	const context = useSplitDateTimeContext()
 	return (
 		<TimeInput
@@ -48,6 +60,8 @@ function SplitDateTimeInputTime({ label, wrapper = false }: SplitDateTimeInputTi
 			value={ context.timeValue }
 			onChange={ context.onTimeChange }
 			wrapper={ wrapper }
+			minutesStep={ minutesStep }
+			popoverProps={ popoverProps }
 		/>
 	)
 }

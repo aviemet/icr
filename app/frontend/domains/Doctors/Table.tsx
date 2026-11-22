@@ -10,22 +10,30 @@ interface DoctorTableProps {
 export function DoctorTable({ records, model }: DoctorTableProps) {
 	const columns: TableColumn<Schema.DoctorsIndex>[] = [
 		{
-			accessor: "first_name",
-			title: "First_name",
+			accessor: "name",
+			title: "Name",
 			sortable: true,
-			render: (doctor) => <Link href={ Routes.doctor(doctor.id) }>{ doctor.first_name }</Link>,
+			render: (doctor) => <Link href={ Routes.doctor(doctor.slug) }>{ doctor.person?.name || doctor.name }</Link>,
 		},
 		{
-			accessor: "last_name",
-			title: "Last_name",
+			accessor: "specialty",
+			title: "Specialty",
 			sortable: true,
-			render: (doctor) => <Link href={ Routes.doctor(doctor.id) }>{ doctor.last_name }</Link>,
+			render: (doctor) => doctor.specialty || "-",
+		},
+		{
+			accessor: "practice_name",
+			title: "Practice",
+			sortable: true,
+			render: (doctor) => doctor.practice_name || "-",
 		},
 		{
 			accessor: "actions",
 			title: "Actions",
+			titleClassName: "actionsCell",
+			cellsClassName: "actionsCell",
 			sortable: false,
-			render: (doctor) => <EditButton href={ Routes.editDoctor(doctor.id) } />,
+			render: (doctor) => <EditButton href={ Routes.editDoctor(doctor.slug) } />,
 		},
 	]
 

@@ -19,13 +19,14 @@ export const shell = css`
 `
 
 export const chrome = css`
-	--settings-nav-gap: 4px;
+	--settings-nav-gap: 8px;
 
 	flex: 0 0 auto;
 	position: relative;
 	display: flex;
 	flex-direction: column;
 	gap: var(--settings-nav-gap);
+	padding: var(--settings-nav-gap);
 
 	.parentRow,
 	.childRow {
@@ -38,6 +39,18 @@ export const chrome = css`
 
 	.parentRow {
 		z-index: 2;
+	}
+
+	.companyLinks {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 2px;
+		min-width: 0;
+	}
+
+	.userSettingsLink {
+		margin-left: auto;
 	}
 
 	.childRow {
@@ -99,6 +112,16 @@ export const chrome = css`
 	.controlLabel {
 		position: relative;
 		z-index: 1;
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+	}
+
+	.controlIcon {
+		display: inline-flex;
+		flex-shrink: 0;
+		font-size: 0.875rem;
+		line-height: 1;
 	}
 
 	.indicator {
@@ -109,6 +132,8 @@ export const chrome = css`
 
 export const body = css`
 	flex: 1 1 auto;
+	min-width: 0;
 	min-height: 0;
-	overflow: auto;
+	overflow-x: hidden;
+	overflow-y: auto;
 `

@@ -1,22 +1,33 @@
 import dayjs from "dayjs"
 import { omit } from "es-toolkit"
-import { useMemo, useState } from "react"
+import { useMemo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { Box, Button, Grid, Group } from "@/components"
 import { BaseCalendarEvent } from "@/components/Calendar"
 import { Form, Submit, FormConsumer, type FormConsumerState } from "@/components/Form"
 import { TextInput, SplitDateTimeInput } from "@/components/Inputs"
 import { CategoriesDropdown, EmployeesDropdown } from "@/components/Inputs/Dropdowns"
+import { type ExpandablePattern, type ScheduleRecurrenceResources } from "@/features/CalendarSchedule"
 import { categorySlug, isSystemCategorySlug, isNonEmptyString } from "@/lib"
 import { type SystemCategorySlugsFor } from "@/lib/categories"
 import { nearestHalfHour } from "@/lib/dates"
-import { type CalendarEventData } from "@/queries/calendarEvents"
+import { type CalendarEventData, type CalendarEventEditScope } from "@/queries/calendarEvents"
 import { useCreateClientCalendarEvent, useUpdateClientCalendarEvent } from "@/queries/clients"
 
 import { EventTotalHours } from "./EventTotalHours"
+import {
+	buildRecurringPatternsAttributes,
+	defaultRecurrenceConfig,
+	recurrenceConfigFromPatterns,
+	type RecurrenceConfig,
+} from "./recurrenceConfig"
+import { RecurringEditScopePrompt } from "./RecurringEditScopePrompt"
+import { RepeatFields } from "./RepeatFields"
 
 const CALENDAR_EVENT_SHIFT = categorySlug("Calendar::Event", "Shift")
 const CALENDAR_EVENT_OTHER = categorySlug("Calendar::Event", "Other")
+const SHIFT_TYPE_REGULAR = categorySlug("Shift", "Regular")
 
 export type EventData = CalendarEventData
 
@@ -29,8 +40,53 @@ function isEventData(value: Record<string, unknown>): value is EventData {
 
 function getEmployeeIdFromResources(resources: BaseCalendarEvent["resources"]): string {
 	if(typeof resources !== "object" || resources === null || !("employee" in resources)) return ""
-	const employee = (resources as { employee?: { id?: string } }).employee
-	return typeof employee?.id === "string" ? employee.id : ""
+	const employee = resources.employee
+	if(typeof employee !== "object" || employee === null || !("id" in employee)) return ""
+	return typeof employee.id === "string" ? employee.id : ""
+}
+
+function getShiftCategoryIdFromResources(resources: BaseCalendarEvent["resources"]): string {
+	if(typeof resources !== "object" || resources === null || !("shift" in resources)) return ""
+	const shift = resources.shift
+	if(typeof shift !== "object" || shift === null || !("category_id" in shift)) return ""
+	return typeof shift.category_id === "string" ? shift.category_id : ""
+}
+
+function getRecurrenceResources(
+	resources: BaseCalendarEvent["resources"],
+): ScheduleRecurrenceResources | undefined {
+	if(typeof resources !== "object" || resources === null || !("recurrence" in resources)) return undefined
+	const recurrence = resources.recurrence
+	if(typeof recurrence !== "object" || recurrence === null) return undefined
+	if(!("masterId" in recurrence) || !("occurrenceStartsAt" in recurrence) || !("isRecurring" in recurrence)) {
+		return undefined
+	}
+	if(typeof recurrence.masterId !== "string") return undefined
+	if(typeof recurrence.occurrenceStartsAt !== "string") return undefined
+	if(typeof recurrence.isRecurring !== "boolean") return undefined
+
+	const patterns: ExpandablePattern[] = []
+	if("patterns" in recurrence && Array.isArray(recurrence.patterns)) {
+		for(const pattern of recurrence.patterns) {
+			if(typeof pattern === "object" && pattern !== null) {
+				patterns.push(pattern)
+			}
+		}
+	}
+
+	return {
+		masterId: recurrence.masterId,
+		occurrenceStartsAt: recurrence.occurrenceStartsAt,
+		isRecurring: recurrence.isRecurring,
+		patterns,
+	}
+}
+
+function isAbortError(error: unknown) {
+	return typeof error === "object"
+		&& error !== null
+		&& "name" in error
+		&& error.name === "AbortError"
 }
 
 interface ClientEventFormProps {
@@ -52,11 +108,24 @@ export function EventForm({
 	onChange,
 	onCancel,
 }: ClientEventFormProps) {
+	const { t } = useTranslation()
 	const isEdit = existingEvent !== undefined
+	const recurrence = existingEvent ? getRecurrenceResources(existingEvent.resources) : undefined
+	const masterEventId = recurrence?.masterId ?? (existingEvent ? String(existingEvent.id) : "")
 	const [eventType, setEventType] = useState<SystemCategorySlugsFor<"Calendar::Event">>(CALENDAR_EVENT_SHIFT)
+	const [repeatConfig, setRepeatConfig] = useState<RecurrenceConfig>(() => {
+		if(existingEvent) {
+			const resources = getRecurrenceResources(existingEvent.resources)
+			return recurrenceConfigFromPatterns(resources?.patterns, existingEvent.start)
+		}
+		return defaultRecurrenceConfig(selectedDate)
+	})
+	const [choosingScope, setChoosingScope] = useState(false)
+	const repeatConfigRef = useRef(repeatConfig)
+	const scopeResolverRef = useRef<((scope: CalendarEventEditScope | null) => void) | null>(null)
 	const createEvent = useCreateClientCalendarEvent({ params: { slug: client.slug } })
 	const updateEvent = useUpdateClientCalendarEvent({
-		params: { slug: client.slug, id: existingEvent ? String(existingEvent.id) : "" },
+		params: { slug: client.slug, id: masterEventId },
 	})
 
 	const initialData = useMemo<EventData>(() => {
@@ -65,15 +134,19 @@ export function EventForm({
 		]
 		if(isEdit && existingEvent) {
 			const employeeId = getEmployeeIdFromResources(existingEvent.resources)
+			const categoryId = getShiftCategoryIdFromResources(existingEvent.resources)
 			return {
 				calendar_event: {
-					id: String(existingEvent.id),
+					id: masterEventId,
 					category_slug: CALENDAR_EVENT_SHIFT,
 					name: existingEvent.title,
 					all_day: existingEvent.allDay ?? false,
 					starts_at: dayjs(existingEvent.start).toISOString(),
 					ends_at: dayjs(existingEvent.end).toISOString(),
-					shift: { employee_id: employeeId },
+					shift: {
+						employee_id: employeeId,
+						category_id: categoryId || SHIFT_TYPE_REGULAR,
+					},
 					event_participants: baseParticipants,
 				},
 			}
@@ -84,11 +157,11 @@ export function EventForm({
 				category_slug: CALENDAR_EVENT_SHIFT,
 				starts_at: dayjs(start).toISOString(),
 				ends_at: dayjs(start).add(8, "hours").toISOString(),
-				shift: { employee_id: "" },
+				shift: { employee_id: "", category_id: SHIFT_TYPE_REGULAR },
 				event_participants: baseParticipants,
 			},
 		}
-	}, [client.id, existingEvent, isEdit, selectedDate])
+	}, [client.id, existingEvent, isEdit, masterEventId, selectedDate])
 
 	const handleChange = (state: FormConsumerState) => {
 		const raw = state.getFormData()
@@ -101,11 +174,28 @@ export function EventForm({
 		onChange?.(data)
 	}
 
-	const submitWith = (data: EventData) => {
-		const calendarEvent = data.calendar_event as EventData["calendar_event"] & {
-			event_participants_attributes?: EventData["calendar_event"]["event_participants"]
-			shift_attributes?: EventData["calendar_event"]["shift"]
-		}
+	const handleRepeatChange = (next: RecurrenceConfig) => {
+		repeatConfigRef.current = next
+		setRepeatConfig(next)
+	}
+
+	const promptForEditScope = () => {
+		setChoosingScope(true)
+		return new Promise<CalendarEventEditScope | null>((resolve) => {
+			scopeResolverRef.current = (scope) => {
+				scopeResolverRef.current = null
+				setChoosingScope(false)
+				resolve(scope)
+			}
+		})
+	}
+
+	const resolveEditScope = (scope: CalendarEventEditScope | null) => {
+		scopeResolverRef.current?.(scope)
+	}
+
+	const submitWith = async (data: EventData) => {
+		const calendarEvent = data.calendar_event
 		const existingParticipants = calendarEvent.event_participants_attributes
 			?? calendarEvent.event_participants
 		const participants = (existingParticipants && existingParticipants.length > 0)
@@ -114,20 +204,75 @@ export function EventForm({
 		const usesRailsAttributes = Object.prototype.hasOwnProperty.call(calendarEvent, "shift_attributes")
 			|| Object.prototype.hasOwnProperty.call(calendarEvent, "event_participants_attributes")
 
-		const nextCalendarEvent = usesRailsAttributes
+		let editScope: CalendarEventEditScope = "all"
+		const wasRecurring = recurrence?.isRecurring === true
+		if(isEdit && wasRecurring) {
+			const chosen = await promptForEditScope()
+			if(chosen === null) {
+				const abortError = new Error("Aborted")
+				abortError.name = "AbortError"
+				throw abortError
+			}
+			editScope = chosen
+		}
+
+		const startsAt = calendarEvent.starts_at ?? existingEvent?.start ?? selectedDate
+		const builtPatterns = buildRecurringPatternsAttributes(
+			repeatConfigRef.current,
+			startsAt,
+			wasRecurring && recurrence
+				? { shiftWeekdaysFrom: recurrence.occurrenceStartsAt }
+				: undefined,
+		)
+		const includePatterns = !isEdit || editScope !== "one"
+		const recurringPatterns = includePatterns
+			? (builtPatterns ?? (wasRecurring || repeatConfigRef.current.enabled ? [] : undefined))
+			: undefined
+
+		const editFields = isEdit
 			? {
-				...omit(calendarEvent, ["event_participants"]),
+				edit_scope: editScope,
+				...(recurrence
+					? { occurrence_starts_at: recurrence.occurrenceStartsAt }
+					: {}),
+			}
+			: {}
+
+		const baseCalendarEvent = omit(calendarEvent, [
+			"event_participants",
+			"event_participants_attributes",
+			"recurring_patterns",
+			"recurring_patterns_attributes",
+		])
+
+		const nextCalendarEvent: EventData["calendar_event"] = usesRailsAttributes
+			? {
+				...baseCalendarEvent,
 				event_participants_attributes: participants,
+				...(calendarEvent.shift_attributes
+					? { shift_attributes: calendarEvent.shift_attributes }
+					: calendarEvent.shift
+						? { shift_attributes: calendarEvent.shift }
+						: {}),
+				...(recurringPatterns !== undefined
+					? { recurring_patterns_attributes: recurringPatterns }
+					: {}),
+				...editFields,
 			}
 			: {
-				...calendarEvent,
+				...baseCalendarEvent,
 				event_participants: participants,
+				...(calendarEvent.shift ? { shift: calendarEvent.shift } : {}),
+				...(recurringPatterns !== undefined
+					? { recurring_patterns: recurringPatterns }
+					: {}),
+				...editFields,
 			}
 
-		const payload = {
+		const payload: EventData = {
 			...data,
 			calendar_event: nextCalendarEvent,
-		} as EventData
+		}
 		const mutation = isEdit ? updateEvent.mutateAsync(payload) : createEvent.mutateAsync(payload)
 
 		return mutation
@@ -136,10 +281,14 @@ export function EventForm({
 				return undefined
 			})
 			.catch((error: unknown) => {
-				onError?.()
+				if(!isAbortError(error)) {
+					onError?.()
+				}
 				throw error
 			})
 	}
+
+	const repeatMinDate = dayjs(existingEvent?.start ?? selectedDate).startOf("day").toDate()
 
 	return (
 		<Form<EventData>
@@ -149,69 +298,97 @@ export function EventForm({
 		>
 			<FormConsumer onChange={ handleChange } />
 
-			<Grid>
-
-				<Grid.Col>
-					<CategoriesDropdown
-						label="Event Type"
-						name="calendar_event.category_slug"
-						categoryType="Calendar::Event"
-						valueKey="slug"
-						defaultValue={ CALENDAR_EVENT_SHIFT }
-						comboboxProps={ { withinPortal: false } }
-						clearable={ false }
+			{ choosingScope
+				? (
+					<RecurringEditScopePrompt
+						onChoose={ resolveEditScope }
+						onCancel={ () => resolveEditScope(null) }
 					/>
-				</Grid.Col>
+				)
+				: (
+					<Grid>
 
-				{ eventType === CALENDAR_EVENT_SHIFT &&
-					<Grid.Col>
-						<EmployeesDropdown
-							name="calendar_event.shift.employee_id"
-							clearable={ true }
-							comboboxProps={ { withinPortal: false } }
+						<Grid.Col>
+							<CategoriesDropdown
+								label="Event Type"
+								name="calendar_event.category_slug"
+								categoryType="Calendar::Event"
+								valueKey="slug"
+								defaultValue={ CALENDAR_EVENT_SHIFT }
+								comboboxProps={ { withinPortal: false } }
+								clearable={ false }
+							/>
+						</Grid.Col>
+
+						{ eventType === CALENDAR_EVENT_SHIFT &&
+							<>
+								<Grid.Col>
+									<EmployeesDropdown
+										name="calendar_event.shift.employee_id"
+										clearable={ true }
+										comboboxProps={ { withinPortal: false } }
+									/>
+								</Grid.Col>
+								<Grid.Col>
+									<CategoriesDropdown
+										label={ t("views.clients.schedule.event_form.shift_type") }
+										name="calendar_event.shift.category_id"
+										categoryType="Shift"
+										valueKey="slug"
+										defaultValue={ SHIFT_TYPE_REGULAR }
+										comboboxProps={ { withinPortal: false } }
+										clearable={ false }
+									/>
+								</Grid.Col>
+							</>
+						}
+
+						{ eventType === CALENDAR_EVENT_OTHER &&
+							<Grid.Col>
+								<TextInput label="Event Title" name="calendar_event.name" />
+							</Grid.Col>
+						}
+
+						<SplitDateTimeInput name="calendar_event.starts_at">
+							<Grid.Col span={ 6 }>
+								<SplitDateTimeInput.Date label="Start date" />
+							</Grid.Col>
+							<Grid.Col span={ 6 }>
+								<SplitDateTimeInput.Time label="Start time" />
+							</Grid.Col>
+						</SplitDateTimeInput>
+
+						<SplitDateTimeInput name="calendar_event.ends_at">
+							<Grid.Col span={ 6 }>
+								<SplitDateTimeInput.Date label="End date" />
+							</Grid.Col>
+							<Grid.Col span={ 6 }>
+								<SplitDateTimeInput.Time label="End time" />
+							</Grid.Col>
+						</SplitDateTimeInput>
+
+						<EventTotalHours />
+
+						<RepeatFields
+							value={ repeatConfig }
+							onChange={ handleRepeatChange }
+							minDate={ repeatMinDate }
 						/>
-					</Grid.Col>
-				}
 
-				{ eventType === CALENDAR_EVENT_OTHER &&
-					<Grid.Col>
-						<TextInput label="Event Title" name="calendar_event.name" />
-					</Grid.Col>
-				}
-
-				<SplitDateTimeInput name="calendar_event.starts_at">
-					<Grid.Col span={ 6 }>
-						<SplitDateTimeInput.Date label="Start date" />
-					</Grid.Col>
-					<Grid.Col span={ 6 }>
-						<SplitDateTimeInput.Time label="Start time" />
-					</Grid.Col>
-				</SplitDateTimeInput>
-
-				<SplitDateTimeInput name="calendar_event.ends_at">
-					<Grid.Col span={ 6 }>
-						<SplitDateTimeInput.Date label="End date" />
-					</Grid.Col>
-					<Grid.Col span={ 6 }>
-						<SplitDateTimeInput.Time label="End time" />
-					</Grid.Col>
-				</SplitDateTimeInput>
-
-				<EventTotalHours />
-
-				<Grid.Col>
-					<Group style={ { width: "100%" } }>
-						<Box style={ { flex: 1, minWidth: 0 } }>
-							<Submit>Save Shift</Submit>
-						</Box>
-						{ isEdit && onCancel && (
-							<Button variant="default" onClick={ onCancel } type="button">
-								Cancel
-							</Button>
-						) }
-					</Group>
-				</Grid.Col>
-			</Grid>
+						<Grid.Col>
+							<Group style={ { width: "100%" } }>
+								<Box style={ { flex: 1, minWidth: 0 } }>
+									<Submit>Save Shift</Submit>
+								</Box>
+								{ isEdit && onCancel && (
+									<Button variant="default" onClick={ onCancel } type="button">
+										Cancel
+									</Button>
+								) }
+							</Group>
+						</Grid.Col>
+					</Grid>
+				) }
 		</Form>
 	)
 }

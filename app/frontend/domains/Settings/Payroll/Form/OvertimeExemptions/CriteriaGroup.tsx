@@ -10,7 +10,6 @@ import {
 import { CriterionField } from "./CriterionField"
 import {
 	type CategoryOption,
-	FIELD_TYPES,
 	fieldKeys,
 	isFieldKey,
 } from "./criterionUtils"
@@ -75,7 +74,7 @@ export function CriteriaGroup({ group, categoryOptions, onUpdate, onRemove }: Cr
 							placeholder={ t("views.settings.payroll.overtime_exemptions.add_criterion") }
 							data={ unusedFields.map(field => ({
 								value: field,
-								label: FIELD_TYPES[field].label,
+								label: t(`views.settings.payroll.overtime_exemptions.fields.${field}`),
 							})) }
 							onChange={ addCriterion }
 							clearable

@@ -66,5 +66,15 @@ RSpec.describe UserPolicy, type: :policy do
     it "allows admin" do
       expect(described_class.new(@admin_user, User.new)).to authorize(:show)
     end
+
+    it "allows a user to view their own settings" do
+      expect(described_class.new(@employee_user, @employee_user)).to authorize(:show)
+    end
+  end
+
+  permissions :update? do
+    it "allows a user to update their own record" do
+      expect(described_class.new(@employee_user, @employee_user)).to authorize(:update)
+    end
   end
 end

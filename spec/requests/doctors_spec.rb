@@ -5,9 +5,12 @@ RSpec.describe "/doctors" do
   def valid_attributes
     {
       doctor: {
-        **attributes_for(:doctor),
-        person_attributes: attributes_for(:person)
-      }
+        specialty: "Family Medicine",
+        npi: "1987654321",
+        practice_name: "Main Street Clinic",
+        notes: "Accepts new patients",
+        person_attributes: attributes_for(:person),
+      },
     }
   end
 
@@ -34,6 +37,30 @@ RSpec.describe "/doctors" do
       doctor = create(:doctor)
       get doctor_url(doctor)
       expect(response).to be_successful
+    end
+
+    it "ships related medical collections in lockstep" do
+      doctor = create(:doctor, specialty: "Cardiology")
+      client = create(:client)
+      doctors_client = create(:doctors_client, doctor: doctor, client: client, notes: "Cardiology")
+      prescription = create(:prescription, doctor: doctor, client: client)
+      diagnosis = create(:client_diagnosis, doctor: doctor, client: client)
+      hospital_visit = create(:client_hospital_visit, doctor: doctor, client: client)
+
+      get doctor_url(doctor)
+
+      expect(response).to have_http_status(:ok)
+      props = inertia.props[:doctor]
+      expect(props[:specialty]).to eq("Cardiology")
+      expect(props[:doctors_clients].pluck(:id)).to eq([doctors_client.id])
+      expect(props[:clients].pluck(:id)).to eq([client.id])
+      expect(props[:prescriptions].pluck(:id)).to eq([prescription.id])
+      expect(props[:diagnoses].pluck(:id)).to eq([diagnosis.id])
+      expect(props[:hospital_visits].pluck(:id)).to eq([hospital_visit.id])
+      expect(props[:clients_count]).to eq(1)
+      expect(props[:prescriptions_count]).to eq(1)
+      expect(props[:diagnoses_count]).to eq(1)
+      expect(props[:hospital_visits_count]).to eq(1)
     end
   end
 
@@ -64,6 +91,12 @@ RSpec.describe "/doctors" do
         expect {
           post doctors_url, params: valid_attributes
         }.to change(Doctor, :count).by(1)
+
+        doctor = Doctor.last
+        expect(doctor.specialty).to eq("Family Medicine")
+        expect(doctor.npi).to eq("1987654321")
+        expect(doctor.practice_name).to eq("Main Street Clinic")
+        expect(doctor.notes).to eq("Accepts new patients")
       end
 
       it "redirects to the created doctor" do

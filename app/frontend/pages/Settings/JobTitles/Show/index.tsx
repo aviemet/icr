@@ -16,10 +16,20 @@ const actionLabels: Record<keyof Permissions, string> = {
 	create: "Create",
 	update: "Edit",
 	delete: "Delete",
+	complete: "Complete",
 }
 
+const permissionActions: Array<keyof Permissions> = [
+	"index",
+	"show",
+	"create",
+	"update",
+	"delete",
+	"complete",
+]
+
 function grantedActions(resourcePermissions: Permissions) {
-	return (Object.keys(actionLabels) as (keyof Permissions)[]).filter(
+	return permissionActions.filter(
 		(action) => resourcePermissions[action]
 	)
 }

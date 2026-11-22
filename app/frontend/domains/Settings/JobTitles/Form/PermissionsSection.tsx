@@ -1,5 +1,3 @@
-import clsx from "clsx"
-
 import { Box, Grid, Paper, Table, Text, Title } from "@/components"
 import { useFormField } from "@/components/Form"
 import { Switch } from "@/components/Inputs"
@@ -29,7 +27,7 @@ export function PermissionsSection() {
 				<Paper
 					withBorder
 					radius="md"
-					className={ clsx(pageChrome.panelFill, classes.panel) }
+					className={ pageChrome.panelFill }
 				>
 					<Table
 						wrapper={ false }
@@ -66,6 +64,10 @@ export function PermissionsSection() {
 
 								<Table.HeadCell>
 									<ColumnToggle permission="delete" label="Delete" />
+								</Table.HeadCell>
+
+								<Table.HeadCell>
+									<ColumnToggle permission="complete" label="Complete" />
 								</Table.HeadCell>
 							</Table.Row>
 						</Table.Head>

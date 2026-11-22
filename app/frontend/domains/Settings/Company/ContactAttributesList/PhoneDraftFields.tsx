@@ -1,15 +1,18 @@
+import { useTranslation } from "react-i18next"
+
 import { Grid } from "@/components"
 import { TextInput } from "@/components/Inputs"
 
-export function PhoneDraftFields(
-	draft: Record<string, string>,
-	setDraft: (next: Record<string, string>) => void,
-) {
+import { type DraftFieldsProps } from "./draftFieldsTypes"
+
+export function PhoneDraftFields({ draft, setDraft }: DraftFieldsProps) {
+	const { t } = useTranslation()
+
 	return (
 		<Grid>
 			<Grid.Col span={ { xs: 12, sm: 7 } }>
 				<TextInput
-					label="Number"
+					label={ t("views.settings.company.fields.number") }
 					required
 					value={ draft.number ?? "" }
 					onChange={ event => setDraft({ ...draft, number: event.currentTarget.value }) }
@@ -18,7 +21,7 @@ export function PhoneDraftFields(
 
 			<Grid.Col span={ { xs: 12, sm: 5 } }>
 				<TextInput
-					label="Extension"
+					label={ t("views.settings.company.fields.extension") }
 					value={ draft.extension ?? "" }
 					onChange={ event => setDraft({ ...draft, extension: event.currentTarget.value }) }
 				/>
@@ -26,7 +29,7 @@ export function PhoneDraftFields(
 
 			<Grid.Col span={ 12 }>
 				<TextInput
-					label="Label"
+					label={ t("views.settings.company.fields.label") }
 					value={ draft.name ?? "" }
 					onChange={ event => setDraft({ ...draft, name: event.currentTarget.value }) }
 				/>

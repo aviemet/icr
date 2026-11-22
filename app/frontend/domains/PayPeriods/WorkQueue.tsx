@@ -21,6 +21,12 @@ interface EmployeeExceptionsMap {
 	exception_count?: number
 }
 
+interface UnreviewedShiftRow {
+	id: string
+	starts_at?: string
+	client_names: string[]
+}
+
 interface WorkQueueProps {
 	payPeriodId: string
 	employees: Schema.EmployeesPersisted[]
@@ -29,6 +35,9 @@ interface WorkQueueProps {
 	timesheetIdsByEmployee: Record<string, string>
 	approvedAtByEmployee: Record<string, string>
 	employeeExceptions: Record<string, EmployeeExceptionsMap>
+	facilitatorShiftCountByEmployee?: Record<string, number>
+	facilitatorReviewedShiftCountByEmployee?: Record<string, number>
+	unreviewedShiftsByTimesheet?: Record<string, UnreviewedShiftRow[]>
 	pagination: Schema.Pagination
 	pendingCount: number
 	flaggedCount: number
@@ -43,6 +52,9 @@ export function WorkQueue({
 	timesheetIdsByEmployee,
 	approvedAtByEmployee,
 	employeeExceptions,
+	facilitatorShiftCountByEmployee = {},
+	facilitatorReviewedShiftCountByEmployee = {},
+	unreviewedShiftsByTimesheet = {},
 	pagination,
 	pendingCount,
 	flaggedCount,
@@ -121,6 +133,9 @@ export function WorkQueue({
 				timesheetIdsByEmployee={ timesheetIdsByEmployee }
 				approvedAtByEmployee={ approvedAtByEmployee }
 				employeeExceptions={ employeeExceptions }
+				facilitatorShiftCountByEmployee={ facilitatorShiftCountByEmployee }
+				facilitatorReviewedShiftCountByEmployee={ facilitatorReviewedShiftCountByEmployee }
+				unreviewedShiftsByTimesheet={ unreviewedShiftsByTimesheet }
 			/>
 
 			<Table.Pagination pagination={ pagination } model="employees" />

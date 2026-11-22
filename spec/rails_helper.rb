@@ -88,12 +88,14 @@ RSpec.configure do |config|
 
   # Request specs cannot use a transaction because Capybara runs in a
   # separate thread with a different database connection.
+  # Prefer deletion over truncation: TRUNCATE takes AccessExclusiveLock and
+  # deadlocks against concurrent writers (seeds, paper_trail, GoodJob).
   config.before type: :request do
-    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.strategy = :deletion
   end
 
-  # Reset so other non-request specs don't have to deal with slow truncation.
-  # Truncation wipes seeded system rows; restore required seed data afterward.
+  # Reset so other non-request specs don't have to deal with slow deletion.
+  # Deletion wipes seeded system rows; restore required seed data afterward.
   config.after type: :request  do
     DatabaseCleaner.strategy = :transaction
     Rails.root.glob("db/seeds/*required*.rb").each { |seed| load seed }

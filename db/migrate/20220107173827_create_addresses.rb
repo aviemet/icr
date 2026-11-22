@@ -1,4 +1,4 @@
-class CreateAddresses < ActiveRecord::Migration[7.0]
+class CreateAddresses < ActiveRecord::Migration[8.0]
   def change
     create_table :addresses, id: :uuid do |t|
       t.string :name

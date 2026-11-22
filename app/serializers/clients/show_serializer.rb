@@ -6,14 +6,17 @@ class Clients::ShowSerializer < Clients::PersistedSerializer
 
   has_many :current_attendants, serializer: Employees::PersistedSerializer
   has_many :doctors, serializer: Doctors::PersistedSerializer
+  has_many :doctors_clients, serializer: DoctorsClients::PersistedSerializer
   has_many :support_contacts, serializer: Client::SupportContacts::PersistedSerializer
   has_many :allergies, serializer: Client::Allergies::PersistedSerializer
   has_many :diagnoses, serializer: Client::Diagnoses::PersistedSerializer
+  has_many :hospital_visits, serializer: Client::HospitalVisits::PersistedSerializer
   has_many :enrollments, serializer: Client::Enrollments::PersistedSerializer
   has_many :prescriptions, serializer: Prescriptions::PersistedSerializer
   has_many :clients_managers, serializer: ClientsManagers::PersistedSerializer
   has_many :clients_attendants, serializer: ClientsAttendants::PersistedSerializer
   has_many :incident_reports, serializer: IncidentReports::PersistedSerializer
+  has_many :clients_trainings, serializer: ClientsTrainings::ShowRowSerializer
 
   type "Array<{ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date }>"
   def documents

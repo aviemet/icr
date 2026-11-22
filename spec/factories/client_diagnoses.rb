@@ -11,14 +11,17 @@
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  client_id    :uuid             not null
+#  doctor_id    :uuid
 #
 # Indexes
 #
 #  index_client_diagnoses_on_client_id  (client_id)
+#  index_client_diagnoses_on_doctor_id  (doctor_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (client_id => clients.id)
+#  fk_rails_...  (doctor_id => doctors.id)
 #
 FactoryBot.define do
   factory :client_diagnosis, class: "Client::Diagnosis" do

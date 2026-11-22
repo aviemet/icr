@@ -87,6 +87,7 @@ export function CaseloadsBoard({
 					/>
 					<FacilitatorClientList
 						facilitator={ focusedFacilitator }
+						facilitators={ facilitators }
 						clients={ focusedClients }
 						assignmentsByClientId={ assignmentsByClientId }
 					/>

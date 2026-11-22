@@ -49,9 +49,29 @@ RSpec.describe Calendar::Event do
 
     it { is_expected.to have_one(:shift) }
 
+    it { is_expected.to have_many(:children).dependent(:destroy) }
     it { is_expected.to have_many(:recurring_patterns) }
+    it { is_expected.to have_many(:event_exceptions).dependent(:destroy) }
     it { is_expected.to have_many(:clients).through(:event_participants) }
     it { is_expected.to have_many(:households).through(:event_participants) }
+  end
+
+  describe "series destroy" do
+    it "destroys children when the master is destroyed" do
+      master = create(:calendar_event)
+      child = create(:calendar_event, parent: master)
+
+      expect { master.destroy }.to change(described_class, :count).by(-2)
+      expect(described_class.exists?(child.id)).to be(false)
+    end
+
+    it "leaves the master when a child is destroyed" do
+      master = create(:calendar_event)
+      child = create(:calendar_event, parent: master)
+
+      expect { child.destroy }.to change(described_class, :count).by(-1)
+      expect(described_class.exists?(master.id)).to be(true)
+    end
   end
 
   describe "destroy" do
@@ -74,6 +94,83 @@ RSpec.describe Calendar::Event do
       expect(event.errors[:base]).to include(I18n.t("pay_periods.finalized_locked"))
       expect(described_class.exists?(event.id)).to be(true)
       expect(Shift.exists?(shift.id)).to be(true)
+    end
+  end
+
+  describe "pay period mutation lock" do
+    around do |example|
+      Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
+      example.run
+    end
+
+    it "rejects create when the containing pay period is finalized" do
+      travel_to Time.zone.local(2024, 3, 10, 12, 0, 0) do
+        employee = create(:employee)
+        period_start = Date.new(2024, 3, 16)
+        period_end = Date.new(2024, 3, 31)
+        pay_period = PayPeriod.for_period_dates(period_start, period_end)
+        pay_period.update!(finalized_at: Time.current)
+        shift_category = Category.type("Calendar::Event").find_or_create_by!(name: "Shift") { |category|
+          category.system = true
+        }
+
+        event = described_class.new(
+          starts_at: Time.zone.local(2024, 3, 20, 9, 0, 0),
+          ends_at: Time.zone.local(2024, 3, 20, 17, 0, 0),
+          category_id: shift_category.id,
+        )
+        event.build_shift(employee_id: employee.id)
+
+        expect(event.save).to be(false)
+        expect(event.errors[:base]).to include(I18n.t("pay_periods.finalized_locked"))
+      end
+    end
+
+    it "rejects update when the linked pay period is finalized" do
+      employee = create(:employee)
+      shift = create(:shift, employee: employee)
+      event = described_class.find(shift.calendar_event_id)
+      shift.timesheet.pay_period.update!(finalized_at: Time.current)
+
+      expect(event.update(starts_at: event.starts_at + 1.hour)).to be(false)
+      expect(event.errors[:base]).to include(I18n.t("pay_periods.finalized_locked"))
+    end
+  end
+
+  describe ".for_schedule_range" do
+    it "includes a recurring master that started before the visible range" do
+      shift_category = Category.type("Calendar::Event").find_or_create_by!(name: "Other") { |category| category.system = true }
+      master = create(
+        :calendar_event,
+        category_id: shift_category.id,
+        starts_at: Time.zone.parse("2026-11-16 09:00"),
+        ends_at: Time.zone.parse("2026-11-16 17:00"),
+      )
+      create(
+        :calendar_recurring_pattern,
+        calendar_event: master,
+        recurring_type: :weekly,
+        day_of_week: 1,
+        end_date: nil,
+      )
+
+      range_start = Time.zone.parse("2026-12-01 00:00")
+      range_end = Time.zone.parse("2026-12-31 23:59")
+
+      expect(described_class.for_schedule_range(range_start, range_end)).to include(master)
+    end
+
+    it "excludes non-recurring events outside the range" do
+      event = create(
+        :calendar_event,
+        starts_at: Time.zone.parse("2026-10-01 09:00"),
+        ends_at: Time.zone.parse("2026-10-01 17:00"),
+      )
+
+      range_start = Time.zone.parse("2026-12-01 00:00")
+      range_end = Time.zone.parse("2026-12-31 23:59")
+
+      expect(described_class.for_schedule_range(range_start, range_end)).not_to include(event)
     end
   end
 
@@ -137,5 +234,61 @@ RSpec.describe Calendar::Event do
       end
     end
 
+  end
+
+  describe "#occurrences_in" do
+    it "expands a recurring master into range occurrences" do
+      event = create(
+        :calendar_event,
+        starts_at: Time.zone.local(2024, 3, 4, 9, 0, 0),
+        ends_at: Time.zone.local(2024, 3, 4, 17, 0, 0),
+      )
+      event.recurring_patterns.create!(
+        recurring_type: :weekly,
+        offset: 1,
+        day_of_week: 1,
+        end_date: Date.new(2024, 3, 31),
+      )
+
+      rows = event.occurrences_in(
+        Time.zone.local(2024, 3, 16).beginning_of_day,
+        Time.zone.local(2024, 3, 31).end_of_day,
+      )
+
+      expect(rows.map { |row| row.starts_at.to_date }).to eq([
+        Date.new(2024, 3, 18),
+        Date.new(2024, 3, 25),
+      ])
+      expect(rows.map(&:recurring).uniq).to eq([true])
+    end
+  end
+
+  describe ".schedule_occurrences_in" do
+    it "returns schedule wrappers with occurrence display times" do
+      event = create(
+        :calendar_event,
+        starts_at: Time.zone.local(2024, 3, 4, 9, 0, 0),
+        ends_at: Time.zone.local(2024, 3, 4, 17, 0, 0),
+      )
+      event.recurring_patterns.create!(
+        recurring_type: :weekly,
+        offset: 1,
+        day_of_week: 1,
+        end_date: Date.new(2024, 3, 31),
+      )
+
+      rows = described_class.schedule_occurrences_in(
+        [event],
+        range_start: Time.zone.local(2024, 3, 16).beginning_of_day,
+        range_end: Time.zone.local(2024, 3, 31).end_of_day,
+      )
+
+      expect(rows).to all(be_a(Calendar::ScheduleOccurrence))
+      expect(rows.map(&:starts_at).map(&:to_date)).to eq([
+        Date.new(2024, 3, 18),
+        Date.new(2024, 3, 25),
+      ])
+      expect(rows.map(&:master_id).uniq).to eq([event.id])
+    end
   end
 end

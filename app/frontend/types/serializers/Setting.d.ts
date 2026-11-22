@@ -11,6 +11,9 @@ declare global {
       default_language: string
       default_timezone: string
       first_day_of_week: integer
+      ihss_assignment_mode: string
+      ihss_co_employer: boolean
+      notifications_payroll_approval_reminders: boolean
       overtime_daily_hours: integer
       overtime_weekly_hours: integer
       payroll_due_date_day_of_month: string

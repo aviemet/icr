@@ -12,6 +12,7 @@ export const wrapper = css`
 	overflow: auto;
 	height: calc(100vh - ${ theme.other.footer.height }px);
 	padding: ${ vars.spacing.sm };
+	padding-bottom: calc(${ vars.spacing.sm } + ${ theme.other.footer.height }px);
 	background-color: light-dark(${ vars.colors.gray[1] }, ${ vars.colors.gray[9] });
 `
 
@@ -37,7 +38,7 @@ export const topbar = css`
  */
 export const navbar = css`
 	transition: width 250ms ease-in-out, min-width 250ms ease-in-out;
-	overflow-y: clip;
+	overflow-y: auto;
 	
 	[data-mantine-color-scheme="light"] & {
 		border-right-color: ${ vars.colors.gray[2] };
@@ -53,9 +54,10 @@ export const navbar = css`
 		opacity: 1;
 		visibility: visible;
 		max-width: 14rem;
+		max-height: 4rem;
 		overflow: hidden;
 		white-space: nowrap;
-		transition: opacity 200ms ease, max-width 200ms ease, visibility 0s linear 0s;
+		transition: opacity 200ms ease, max-width 200ms ease, max-height 200ms ease, visibility 0s linear 0s;
 	}
 
 	.user-menu-trigger {
@@ -67,49 +69,82 @@ export const navbar = css`
 	}
 
 	&.closed {
+		overflow-y: clip;
+
 		.hidden-when-closed,
 		.label {
 			opacity: 0;
 			visibility: hidden;
 			max-width: 0;
-			transition: opacity 200ms ease, max-width 200ms ease, visibility 0s linear 200ms;
+			max-height: 0;
+			transition: opacity 200ms ease, max-width 200ms ease, max-height 200ms ease, visibility 0s linear 200ms;
 		}
 
 		.user-menu-trigger {
-			width: 1.75rem;
-			height: 1.75rem;
-			min-height: 1.75rem;
+			width: 1.5rem;
+			height: 1.5rem;
+			min-height: 1.5rem;
 		}
 
 		#user-menu {
-			width: 1.75rem;
-			height: 1.75rem;
-			min-width: 1.75rem;
+			width: 1.5rem;
+			height: 1.5rem;
+			min-width: 1.5rem;
+		}
+
+		.header-section {
+			padding: ${ vars.spacing.xs } ${ vars.spacing.xxs };
+			padding-bottom: ${ vars.spacing.xxs };
 		}
 
 		.nav-section {
-			padding-inline: ${ vars.spacing.xxs };
+			padding-inline: 0;
+			padding-block: ${ vars.spacing.xs };
 		}
 
 		.nav-link {
 			justify-content: center;
-			padding-inline: ${ vars.spacing.xxs };
+			padding: ${ vars.spacing.sm } 0;
+		}
+
+		.nav-link-anchor {
+			flex: none;
+			justify-content: center;
+			width: 100%;
 		}
 
 		.content {
 			gap: 0;
 			justify-content: center;
+			width: 100%;
 		}
 
-		.indicator {
-			opacity: 0;
-			visibility: hidden;
-			width: 0;
-			min-width: 0;
-			overflow: hidden;
+		.nav-section .nav-link svg {
+			width: 1.5rem;
+			height: 1.5rem;
 		}
 
 		.submenu {
+			display: none;
+			position: absolute;
+			left: 100%;
+			top: 0;
+			min-width: 200px;
+			padding: ${ vars.spacing.xs };
+			border-radius: ${ vars.radius.sm };
+			margin: 0;
+			padding-inline-start: ${ vars.spacing.xs };
+
+			[data-mantine-color-scheme="light"] & {
+				background-color: ${ vars.colors.white };
+				box-shadow: ${ vars.shadows.md };
+			}
+
+			[data-mantine-color-scheme="dark"] & {
+				background-color: ${ vars.colors.dark[8] };
+				box-shadow: ${ vars.shadows.md };
+			}
+
 			.label {
 				opacity: 1;
 				visibility: visible;
@@ -125,6 +160,10 @@ export const navbar = css`
 				gap: ${ vars.spacing.xs };
 				justify-content: flex-start;
 			}
+		}
+
+		li:hover > ul.submenu {
+			display: flex;
 		}
 	}
 
@@ -153,10 +192,6 @@ export const nav = css`
 
 	li {
 		position: relative;
-
-		&:hover > ul {
-			display: flex;
-		}
 	}
 `
 
@@ -173,6 +208,14 @@ export const navLink = css`
 		color: ${ vars.colors.white };
 	}
 
+	.nav-link-anchor {
+		display: flex;
+		flex: 1;
+		min-width: 0;
+		color: inherit;
+		text-decoration: none;
+	}
+
 	.content {
 		display: flex;
 		align-items: center;
@@ -180,9 +223,27 @@ export const navLink = css`
 	}
 
 	.indicator {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
 		width: 0.875rem;
 		height: 0.875rem;
+		padding: 0;
+		border: none;
+		background: transparent;
 		color: ${ vars.colors.gray[6] };
+		cursor: pointer;
+		transition: transform 150ms ease;
+	}
+
+	.collapse-toggle {
+		width: 1.25rem;
+		height: 1.25rem;
+
+		&.collapsed {
+			transform: rotate(-90deg);
+		}
 	}
 
 	&:hover {
@@ -201,24 +262,20 @@ export const navLink = css`
 `
 
 export const submenu = css`
-	display: none;
+	display: flex;
 	flex-direction: column;
 	gap: ${ vars.spacing.xs };
-	position: absolute;
-	left: 100%;
-	top: 0;
-	min-width: 200px;
-	padding: ${ vars.spacing.xs };
-	border-radius: ${ vars.radius.sm };
-	
-	[data-mantine-color-scheme="light"] & {
-		background-color: ${ vars.colors.white };
-		box-shadow: ${ vars.shadows.md };
-	}
+	position: static;
+	margin: 0;
+	padding: 0;
+	min-width: 0;
+	border-radius: 0;
+	background-color: transparent;
+	box-shadow: none;
+	list-style: none;
 
-	[data-mantine-color-scheme="dark"] & {
-		background-color: ${ vars.colors.dark[8] };
-		box-shadow: ${ vars.shadows.md };
+	> li > .nav-link {
+		padding-inline-start: calc(${ vars.spacing.sm } + ${ vars.spacing.md });
 	}
 `
 

@@ -13,6 +13,7 @@ import { type PopoverContentMap } from "@/components/Calendar/components/Calenda
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 import { NAVIGATION_ACTION, VIEW_NAMES } from "@/components/Calendar/views"
 import { EventPopoverContent } from "@/domains/Clients/EventPopoverContent"
+import { recurrenceResources } from "@/features/CalendarSchedule"
 import { ensureViewName, Routes, vars } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
@@ -28,6 +29,8 @@ interface ScheduleProps {
 type ScheduleResources = Record<string, object> & {
 	client?: Schema.ClientsPersisted
 	employee?: Schema.EmployeesPersisted
+	recurrence: ReturnType<typeof recurrenceResources>
+	shift?: { category_id: string }
 }
 
 const OPEN_SHIFT_COLOR = vars.colors.red[6]
@@ -84,34 +87,38 @@ const Schedule = ({ household, schedules: initialSchedules }: ScheduleProps) => 
 	}, [location.pathname, location.params])
 
 	const processedSchedules = useMemo((): BaseCalendarEvent<ScheduleResources>[] => {
-		return data?.map(schedule => {
-			const start = ensureDate(schedule.starts_at)
-			const end = ensureDate(schedule.ends_at)
-			const client = schedule.clients?.[0]
-			const employee = schedule.shift?.employee
+		if(!data) return []
+		return data.map((event) => {
+			const client = event.clients?.[0]
+			const employee = event.shift?.employee
 			const isOpenShift = employee === undefined || employee === null
-			const totalClients = schedule.clients?.length ?? 0
+			const totalClients = event.clients?.length ?? 0
 			const clientInitial = client?.first_name?.trim()?.[0] || client?.full_name?.trim()?.[0] || client?.name?.trim()?.[0]
 			const indicatorLabel = totalClients > 1 ? "+" : (clientInitial ? clientInitial.toUpperCase() : undefined)
-			const resources: ScheduleResources = {}
+			const resources: ScheduleResources = {
+				recurrence: recurrenceResources(event),
+				shift: {
+					category_id: event.shift?.category?.slug ?? "",
+				},
+			}
 			if(client) resources.client = client
 			if(employee) resources.employee = employee
 
 			return {
-				id: schedule.id,
+				id: event.id,
 				title: isOpenShift
-					? (schedule.name || "Open shift")
-					: (client ? (client.full_name || client.name) : (schedule.name ?? "")),
-				start,
-				end,
-				allDay: schedule.all_day,
+					? (event.name || "Open shift")
+					: (client ? (client.full_name || client.name) : (event.name ?? "")),
+				start: ensureDate(event.starts_at),
+				end: ensureDate(event.ends_at),
+				allDay: event.all_day,
 				color: isOpenShift ? OPEN_SHIFT_COLOR : employee?.color,
 				open: isOpenShift,
 				indicatorColor: client?.color,
 				indicatorLabel,
 				resources,
 			}
-		}) ?? []
+		})
 	}, [data])
 
 	const breadcrumbs: Breadcrumb[] = [

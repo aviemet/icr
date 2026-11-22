@@ -90,6 +90,7 @@ RSpec.describe "/payroll", type: :request do
           timesheet: Timesheet.find_by(employee: pending_employee),
           calendar_event: pending_event,
         )
+        Timesheet.find_by(employee: approved_employee).update!(approved_at: Date.new(2024, 3, 20))
 
         get period_url(pay_period)
 

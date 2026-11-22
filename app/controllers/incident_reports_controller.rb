@@ -6,7 +6,10 @@ class IncidentReportsController < ApplicationController
 
   sortable_fields %w(occurred_at reported_by_id client_id reported_at agency_notified_at reported_to_id location)
 
-  strong_params :incident_report, permit: [:occurred_at, :reported_by_id, :client_id, :reported_at, :agency_notified_at, :reported_to_id, :location]
+  strong_params :incident_report, permit: [
+    :occurred_at, :reported_by_id, :client_id, :reported_at, :agency_notified_at, :reported_to_id,
+    :location, :description, :category_id, :doctor_id,
+  ]
 
   # @route GET /incident_reports (incident_reports)
   def index

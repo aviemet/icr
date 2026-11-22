@@ -221,6 +221,7 @@ export function Calendar({
 		groupByResource,
 		maxEvents,
 		prevDate,
+		currentView,
 		defaultTitleBuilder,
 		getEventTitle,
 	}), [
@@ -239,6 +240,7 @@ export function Calendar({
 		groupByResource,
 		maxEvents,
 		prevDate,
+		currentView,
 		defaultTitleBuilder,
 		getEventTitle,
 	])

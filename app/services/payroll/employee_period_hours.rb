@@ -2,22 +2,10 @@
 
 module Payroll
   class EmployeePeriodHours
-    # Keep the public entrypoint stable while allowing callers to swap data sources
-    # (scheduled shifts, clock punches) without changing overtime math.
-    #
-    # @param pay_period [PayPeriod]
-    # @param employee_ids [Array<String, UUID>]
-    # @param collector [Payroll::WorkIntervalCollector]
     def self.call(pay_period, employee_ids, collector: WorkIntervalCollectors::ScheduledShifts.new)
       new(pay_period, employee_ids, collector: collector).call
     end
 
-    # Capture pay period boundaries and overtime settings once so the calculation
-    # is deterministic for the run and does not re-read settings per interval.
-    #
-    # @param pay_period [PayPeriod]
-    # @param employee_ids [Array<String, UUID>]
-    # @param collector [Payroll::WorkIntervalCollector]
     def initialize(pay_period, employee_ids, collector:)
       @pay_period = pay_period
       @employee_ids = employee_ids
@@ -28,15 +16,14 @@ module Payroll
       @weekly_threshold = Setting.overtime_weekly_hours
       @daily_threshold = Setting.overtime_daily_hours
       @exemptions = OvertimeExemption.where(active: true).to_a
+      @co_employer = Setting.ihss_co_employer
     end
 
-    # Return a per-employee summary hash that matches the frontend contract
-    # (string keys) while keeping the core math independent from how intervals
-    # are collected.
     def call
       return {} if @employee_ids.empty?
 
-      intervals = @collector.intervals_for(pay_period: @pay_period, employee_ids: @employee_ids)
+      collected = @collector.intervals_for(pay_period: @pay_period, employee_ids: @employee_ids)
+      intervals = IhssHourClassifier.call(pay_period: @pay_period, intervals: collected)
 
       intervals
         .group_by(&:employee_id)
@@ -47,14 +34,16 @@ module Payroll
 
     private
 
-    # Compute weekly and daily overtime using the configured thresholds, after
-    # splitting overnight intervals across dates so totals match pay rules.
     def hours_for_intervals(intervals)
+      ihss_hours = intervals.select(&:ihss?).sum(&:duration_hours).round(2)
+      company_hours = intervals.reject(&:ihss?).sum(&:duration_hours).round(2)
+      ot_eligible = ot_eligible_intervals(intervals)
+
       total_hours = 0.0
       daily_hours = Hash.new(0.0)
       weekly_hours = Hash.new(0.0)
 
-      intervals.each do |interval|
+      ot_eligible.each do |interval|
         next if exempt?(interval)
 
         hours_by_date(interval).each do |date, hours|
@@ -65,29 +54,41 @@ module Payroll
         end
       end
 
-      daily_ot_by_date = daily_hours.transform_values { |h| [h - @daily_threshold, 0].max }
-      weekly_ot_by_week = weekly_hours.transform_values { |h| [h - @weekly_threshold, 0].max }
+      daily_ot_by_date = daily_hours.transform_values { |hours| [hours - @daily_threshold, 0].max }
+      weekly_ot_by_week = weekly_hours.transform_values { |hours| [hours - @weekly_threshold, 0].max }
       ot_hours = (daily_ot_by_date.values.sum + weekly_ot_by_week.values.sum).round(2)
       regular_hours = (total_hours - ot_hours).round(2)
       regular_hours = 0.0 if regular_hours.negative?
 
       shift_ot_hours = shift_ot_hours_for_intervals(
-        intervals,
+        ot_eligible,
         daily_hours: daily_hours,
         weekly_hours: weekly_hours,
         daily_ot_by_date: daily_ot_by_date,
         weekly_ot_by_week: weekly_ot_by_week,
       )
 
-      { regular_hours: regular_hours, ot_hours: ot_hours, shift_ot_hours: shift_ot_hours }
+      {
+        regular_hours: regular_hours,
+        ot_hours: ot_hours,
+        shift_ot_hours: shift_ot_hours,
+        ihss_hours: ihss_hours,
+        company_hours: company_hours,
+      }
+    end
+
+    def ot_eligible_intervals(intervals)
+      return intervals if @co_employer
+
+      intervals.reject(&:ihss?)
     end
 
     def shift_ot_hours_for_intervals(intervals, daily_hours:, weekly_hours:, daily_ot_by_date:, weekly_ot_by_week:)
-      intervals.each_with_object({}) do |interval, hash|
+      intervals.each_with_object(Hash.new(0.0)) do |interval, hash|
         next if interval.id.blank?
 
         if exempt?(interval)
-          hash[interval.id.to_s] = 0.0
+          hash[interval.id.to_s] += 0.0
           next
         end
 
@@ -111,18 +112,14 @@ module Payroll
           interval_ot += (interval_w / total) * weekly_ot_by_week[week_start]
         end
 
-        hash[interval.id.to_s] = interval_ot.round(2)
+        hash[interval.id.to_s] += interval_ot.round(2)
       end
     end
 
-    # Allow business-configured exemption rules to remove some work from overtime
-    # calculations without requiring special-case logic in each collector.
     def exempt?(interval)
       @exemptions.any? { |exemption| exemption.matches?(interval) }
     end
 
-    # Overtime thresholds are day/week based, so a single interval must be
-    # allocated across all dates it spans (e.g., 10pm-6am counts on two days).
     def hours_by_date(interval)
       start_time = interval.start_time
       end_time = interval.end_time

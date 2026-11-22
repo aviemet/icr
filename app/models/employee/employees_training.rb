@@ -38,8 +38,8 @@ class Employee::EmployeesTraining < ApplicationRecord
   belongs_to :employee
   belongs_to :training
 
-  # Ensure an employee can only have one record per training
   validates :training_id, uniqueness: { scope: :employee_id }
+  validate :completed_at_after_started_at
 
   def status
     if completed_at.present?
@@ -52,4 +52,13 @@ class Employee::EmployeesTraining < ApplicationRecord
   end
 
   scope :includes_associated, -> { includes([:employee, :training]) }
+
+  private
+
+  def completed_at_after_started_at
+    return if started_at.blank? || completed_at.blank?
+    return if completed_at.to_i >= started_at.to_i
+
+    errors.add(:completed_at, "must be after started_at")
+  end
 end

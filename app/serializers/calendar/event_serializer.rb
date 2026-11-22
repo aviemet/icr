@@ -36,6 +36,7 @@ class Calendar::EventSerializer < ApplicationSerializer
   )
 
   has_many :recurring_patterns, serializer: Calendar::RecurringPatternSerializer
+  has_many :event_exceptions, serializer: Calendar::EventExceptionSerializer
   has_one :shift, serializer: ShiftSerializer
   has_many :event_participants, serializer: EventParticipantSerializer
 end

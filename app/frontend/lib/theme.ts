@@ -1,4 +1,4 @@
-import { createTheme, DEFAULT_THEME, MantineSpacingValues, mergeMantineTheme, type MantineTheme } from "@mantine/core"
+import { createTheme, DEFAULT_THEME, MantineSpacingValues, mergeMantineTheme, type CSSVariablesResolver, type MantineTheme } from "@mantine/core"
 import { themeToVars } from "@mantine/vanilla-extract"
 
 import breakpoints from "./breakpoints.js"
@@ -111,6 +111,11 @@ export const themeObject: Partial<CustomMantineTheme> = {
 				radius: "sm",
 				padding: "md",
 			},
+			styles: {
+				body: {
+					paddingTop: "var(--mantine-spacing-sm)",
+				},
+			},
 		},
 	},
 	other: {
@@ -139,3 +144,14 @@ export const themeObject: Partial<CustomMantineTheme> = {
 export const theme = mergeMantineTheme(DEFAULT_THEME, createTheme(themeObject))
 
 export const vars = themeToVars(theme)
+
+export const cssVariablesResolver: CSSVariablesResolver = () => ({
+	variables: {},
+	light: {
+		"--mantine-color-text": "var(--mantine-color-black)",
+	},
+	dark: {
+		"--mantine-color-text": "var(--mantine-color-white)",
+		"--mantine-color-dimmed": "var(--mantine-color-dark-1)",
+	},
+})

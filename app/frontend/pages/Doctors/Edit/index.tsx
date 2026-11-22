@@ -12,9 +12,10 @@ const EditDoctor = ({ doctor }: EditDoctorProps) => {
 	return (
 		<Page title={ title } breadcrumbs={ [
 			{ title: "Doctors", href: Routes.doctors() },
-			{ title: title, href: Routes.doctor(doctor.id) },
+			{ title: doctor.person?.name || doctor.name, href: Routes.doctor(doctor.slug) },
 			{ title },
 		] }>
+
 			<Section>
 				<Title>{ title }</Title>
 

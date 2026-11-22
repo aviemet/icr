@@ -16,11 +16,14 @@ en:
       clients:
         title: Caseload
         empty: No clients on this caseload
+        reassign: Reassign
+        reassign_title: Reassign client
+        reassign_confirm: Move %{client} from %{facilitator}'s caseload?
+        reassign_confirm_button: Reassign
+        reassign_cancel: Cancel
         unassign: Unassign
-        unassign_title: Unassign client
-        unassign_confirm: Remove %{client} from %{facilitator}'s caseload?
-        unassign_confirm_button: Unassign
-        unassign_cancel: Cancel
+        facilitator_label: Facilitator
+        pick_facilitator: Select a facilitator first
       unassigned:
         title: Unassigned clients
         empty: All active clients are on a facilitator caseload

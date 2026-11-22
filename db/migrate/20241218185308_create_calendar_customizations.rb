@@ -1,4 +1,4 @@
-class CreateCalendarCustomizations < ActiveRecord::Migration[7.2]
+class CreateCalendarCustomizations < ActiveRecord::Migration[8.0]
   def change
     create_table :calendar_customizations, id: :uuid do |t|
       t.references :customizer, polymorphic: true, null: false, type: :uuid

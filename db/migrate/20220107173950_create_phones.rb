@@ -1,4 +1,4 @@
-class CreatePhones < ActiveRecord::Migration[7.0]
+class CreatePhones < ActiveRecord::Migration[8.0]
   def change
     create_table :phones, id: :uuid do |t|
       t.string :name

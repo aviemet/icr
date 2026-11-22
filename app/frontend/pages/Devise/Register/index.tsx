@@ -18,9 +18,13 @@ const Register = () => {
 
 	const handleFormChange = (state: FormConsumerState) => {
 		const data = state.getFormData()
-		const user = data?.user as { password?: string, password_confirmation?: string } | undefined
-		const password = user?.password ?? ""
-		const confirmation = user?.password_confirmation ?? ""
+		const user = data.user
+		const password = typeof user === "object" && user !== null && "password" in user && typeof user.password === "string"
+			? user.password
+			: ""
+		const confirmation = typeof user === "object" && user !== null && "password_confirmation" in user && typeof user.password_confirmation === "string"
+			? user.password_confirmation
+			: ""
 		if(!state.slotProps) return
 		if(confirmation !== "" && password !== confirmation) {
 			state.slotProps.setError("user.password_confirmation", t("views.devise.register.errors.passwords_must_match"))

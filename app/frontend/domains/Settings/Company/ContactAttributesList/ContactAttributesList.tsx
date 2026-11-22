@@ -1,5 +1,5 @@
 import { set } from "es-toolkit/compat"
-import { useCallback, useState } from "react"
+import { useCallback, useState, type ComponentType } from "react"
 
 import { Button, Modal } from "@/components"
 import { useFormFieldContext } from "@/components/Form"
@@ -10,6 +10,7 @@ import { flattenToPaths } from "@/lib"
 
 import { AddEntryModalBody } from "./AddEntryModalBody"
 import * as classes from "./ContactAttributesList.css"
+import { type DraftFieldsProps } from "./draftFieldsTypes"
 import { getArrayAtPath } from "./helpers"
 
 interface ContactAttributeItem {
@@ -24,7 +25,7 @@ export interface ContactAttributesListProps {
 	initialItems: ContactAttributeItem[]
 	emptyData: Record<string, unknown>
 	children: (index: number, namePrefix: string) => React.ReactNode
-	draftFields: (draft: Record<string, string>, setDraft: (next: Record<string, string>) => void) => React.ReactNode
+	draftFields: ComponentType<DraftFieldsProps>
 }
 
 export function ContactAttributesList({

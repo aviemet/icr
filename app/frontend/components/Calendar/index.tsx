@@ -50,6 +50,7 @@ interface CalendarContextValue {
 	groupByResource: boolean
 	maxEvents: number
 	prevDate: Date
+	currentView: VIEW_NAMES
 	defaultTitleBuilder?: CalendarEventTitleCallback
 	getEventTitle: <TEventResources extends EventResources>(
 		event: BaseCalendarEvent<TEventResources>,

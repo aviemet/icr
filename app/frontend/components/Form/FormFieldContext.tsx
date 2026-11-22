@@ -100,7 +100,7 @@ export function FormFieldProvider({ children }: { children: React.ReactNode }) {
 
 				if(!form) return {}
 
-				return formDataToObject(new FormData(form)) as Record<string, unknown>
+				return { ...formDataToObject(new FormData(form)) }
 			},
 
 			clearPathsStartingWith(prefix: string) {

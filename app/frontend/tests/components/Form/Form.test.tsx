@@ -5,7 +5,7 @@ import React, { useState } from "react"
 import { beforeEach, describe, expect, it } from "vitest"
 
 import { Form } from "@/components/Form"
-import { NumberInput, Select, TextInput } from "@/components/Inputs"
+import { MultiSelect, NumberInput, Select, TextInput } from "@/components/Inputs"
 import { theme } from "@/lib/theme"
 
 describe("components/Form/Form", () => {
@@ -100,6 +100,38 @@ describe("components/Form/Form", () => {
 			const el = screen.getByLabelText("Weekly threshold")
 			if(!(el instanceof HTMLInputElement)) throw new Error("Expected input element")
 			expect(el.value).toBe("40")
+		})
+	})
+
+	it("applies initialData to MultiSelect inputs", async () => {
+		class ResizeObserverMock {
+			observe() {}
+			unobserve() {}
+			disconnect() {}
+		}
+		window.ResizeObserver = ResizeObserverMock
+
+		render(
+			<MantineProvider theme={ theme } defaultColorScheme="dark">
+				<Form
+					action="/test"
+					method="post"
+					initialData={ { training: { client_ids: ["client-1"] } } }
+				>
+					<MultiSelect
+						name="training.client_ids"
+						label="Clients"
+						options={ [
+							{ value: "client-1", label: "Ada Client" },
+							{ value: "client-2", label: "Other Client" },
+						] }
+					/>
+				</Form>
+			</MantineProvider>,
+		)
+
+		await waitFor(() => {
+			expect(screen.getByText("Ada Client")).toBeTruthy()
 		})
 	})
 

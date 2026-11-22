@@ -2,10 +2,13 @@
 import type ClientAllergiesPersisted from '../Client/Allergies/Persisted'
 import type ClientsAttendantsPersisted from '../ClientsAttendants/Persisted'
 import type ClientsManagersPersisted from '../ClientsManagers/Persisted'
+import type ClientsTrainingsShowRow from '../ClientsTrainings/ShowRow'
 import type EmployeesPersisted from '../Employees/Persisted'
 import type ClientDiagnosesPersisted from '../Client/Diagnoses/Persisted'
 import type DoctorsPersisted from '../Doctors/Persisted'
+import type DoctorsClientsPersisted from '../DoctorsClients/Persisted'
 import type ClientEnrollmentsPersisted from '../Client/Enrollments/Persisted'
+import type ClientHospitalVisitsPersisted from '../Client/HospitalVisits/Persisted'
 import type HouseholdsPersisted from '../Households/Persisted'
 import type IncidentReportsPersisted from '../IncidentReports/Persisted'
 import type ClientLifeDetailsPersisted from '../Client/LifeDetails/Persisted'
@@ -23,6 +26,7 @@ declare global {
       allergies: ClientAllergiesPersisted[]
       clients_attendants: ClientsAttendantsPersisted[]
       clients_managers: ClientsManagersPersisted[]
+      clients_trainings: ClientsTrainingsShowRow[]
       color?: string
       color_mappings: Record<string, Record<string, string>>
       communication_notes?: string
@@ -31,11 +35,13 @@ declare global {
       current_manager: EmployeesPersisted
       diagnoses: ClientDiagnosesPersisted[]
       doctors: DoctorsPersisted[]
+      doctors_clients: DoctorsClientsPersisted[]
       documents: Array<{ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date }>
       emergency_contacts_count: number
       enrollments: ClientEnrollmentsPersisted[]
       first_name: string
       full_name: string
+      hospital_visits: ClientHospitalVisitsPersisted[]
       household: HouseholdsPersisted
       ihss_authorized_hours?: string | number
       ihss_notes?: string

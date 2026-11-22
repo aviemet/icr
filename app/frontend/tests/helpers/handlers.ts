@@ -14,4 +14,10 @@ export const handlers = [
 		const body = await request.json().catch(() => ({}))
 		return HttpResponse.json({ id: "123", ...(typeof body === "object" && body ? body : {}) }, { status: 200 })
 	}),
+	http.get(Routes.apiEmployeesOptions(), () => {
+		return HttpResponse.json([])
+	}),
+	http.get(/\/api\/options\/categories\/.+/, () => {
+		return HttpResponse.json([])
+	}),
 ]

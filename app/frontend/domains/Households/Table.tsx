@@ -32,6 +32,8 @@ export function HouseholdTable({ records, model }: HouseholdTableProps) {
 		{
 			accessor: "actions",
 			title: "Actions",
+			titleClassName: "actionsCell",
+			cellsClassName: "actionsCell",
 			sortable: false,
 			render: (household) => (
 				<Group wrap="nowrap" gap="xs">

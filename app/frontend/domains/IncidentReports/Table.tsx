@@ -53,6 +53,8 @@ export function IncidentReportTable({ records, model }: IncidentReportTableProps
 		{
 			accessor: "actions",
 			title: "Actions",
+			titleClassName: "actionsCell",
+			cellsClassName: "actionsCell",
 			sortable: false,
 			render: (incidentReport) => <EditButton href={ Routes.editIncidentReport(incidentReport.id) } />,
 		},

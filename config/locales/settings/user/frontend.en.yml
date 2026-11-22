@@ -1,0 +1,15 @@
+---
+en:
+  views:
+    settings:
+      user:
+        title: User Settings
+        description: Preferences for your account.
+        appearance_band_title: Appearance
+        appearance_band_description: Choose how the application looks for you.
+        color_scheme:
+          label: Color scheme
+          description: Switch between light and dark mode.
+        dyslexia_font:
+          label: Dyslexia-friendly font
+          description: Use OpenDyslexic for easier reading.

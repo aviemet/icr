@@ -18,18 +18,32 @@ class TimesheetsController < ApplicationController
     record_to_authorize = timesheet || Timesheet.new(employee_id: employee.id)
     authorize record_to_authorize, :show?
 
-    shifts_scope = if timesheet
-                     timesheet.shifts.joins(:calendar_event).order("calendar_events.starts_at").includes(:category, calendar_event: { clients: :person })
-                   else
-                     Shift.none
-                   end
+    base_shifts = PayPeriod.shifts_overlapping_period(pay_period)
+      .assigned
+      .where(employee_id: employee.id)
+      .includes(
+        :category,
+        calendar_event: [
+          :recurring_patterns,
+          :event_exceptions,
+          { clients: :person },
+        ],
+      )
+      .to_a
+    shifts_list = pay_period.shift_occurrences(base_shifts)
+    last_editors = Payroll::ShiftLastEditors.call(base_shifts)
+    shifts_list.each do |shift|
+      shift.instance_variable_set(:@_last_editor, last_editors[shift.calendar_event_id.to_s])
+    end
 
     employee_hours = Payroll::EmployeePeriodHours.call(pay_period, [employee.id])
     period_end = pay_period.ends_at.to_date
     approval_window_open = !pay_period.finalized? && Payroll::Period.approval_window_open?(period_end)
-    shift_exception_reasons = Payroll::ShiftExceptions.call(shifts_scope)[:reasons_by_shift_id]
+    shift_exception_reasons = Payroll::ShiftExceptions.call(shifts_list)[:reasons_by_shift_id]
     hours_data = employee_hours[employee.id.to_s] || {}
     shift_ot_hours = hours_data[:shift_ot_hours] || {}
+    can_final_approve = timesheet.present? && !pay_period.finalized? && policy(timesheet).final_approve?
+    unreviewed_shifts = timesheet.present? ? Payroll::UnreviewedShifts.call(timesheet) : []
 
     render inertia: "Timesheets/EmployeeReview", props: {
       employee: -> { employee.render(:index) },
@@ -37,12 +51,15 @@ class TimesheetsController < ApplicationController
       period_dates: -> { [pay_period.starts_at, pay_period.ends_at].map { |date| date.strftime("%FT%T%:z") } },
       approval_window_open: -> { approval_window_open },
       finalized: -> { pay_period.finalized? },
-      can_approve: -> { !pay_period.finalized? },
+      can_approve: -> { can_final_approve },
       timesheet: -> { timesheet&.render(:show) },
-      shifts: -> { shifts_scope.render(:review) },
+      shifts: -> { shifts_list.map { |shift| shift.render(:review) } },
       shift_exception_reasons: -> { shift_exception_reasons },
       shift_ot_hours: -> { shift_ot_hours },
       employee_hours: -> { hours_data.except(:shift_ot_hours) },
+      unreviewed_shifts: -> { unreviewed_shifts },
+      ihss_assignment_mode: -> { Setting.ihss_assignment_mode },
+      can_edit_ihss: -> { !pay_period.finalized? && timesheet.present? && policy(timesheet).update? },
     }
   end
 
@@ -112,7 +129,7 @@ class TimesheetsController < ApplicationController
 
   # @route POST /payroll/timesheets/:id/approve (approve_timesheet)
   def approve
-    authorize timesheet, :update?
+    authorize timesheet, :final_approve?
     period = timesheet.pay_period
 
     if period.finalized?
@@ -126,7 +143,7 @@ class TimesheetsController < ApplicationController
 
   # @route POST /payroll/timesheets/:id/unapprove (unapprove_timesheet)
   def unapprove
-    authorize timesheet, :update?
+    authorize timesheet, :final_unapprove?
     period = timesheet.pay_period
 
     if period.finalized?
@@ -152,7 +169,7 @@ class TimesheetsController < ApplicationController
     ids = params[:timesheet_ids].presence || (params[:approve_all] ? scope.where(approved_at: nil).pluck(:id) : [])
     approved = 0
     scope.where(id: ids).find_each do |row|
-      authorize row, :update?
+      authorize row, :final_approve?
       next if row.approved_at.present?
 
       row.update!(approved_at: Time.current)

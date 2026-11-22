@@ -4,6 +4,8 @@ en:
     timesheets:
       employee_review:
         actions: Actions
+        add_shift: Add shift
+        add_shift_submit: Add shift
         approve: Approve timesheet
         unapprove: Remove approval
         back: Back
@@ -13,6 +15,12 @@ en:
         client_calendar: Client calendar
         date: Date
         delete_shift: Delete shift
+        edited_by: Edited by %{name}
+        edited_by_at: Edited by %{name} (%{at})
+        end_date: End date
+        end_time: End time
+        start_date: Start date
+        start_time: Start time
         delete_shift_confirm: This removes the shift from the timesheet and the calendar. This cannot be undone.
         delete_shift_confirm_button: Delete
         delete_shift_cancel: Cancel
@@ -36,6 +44,12 @@ en:
         ot: OT
         ot_hours: OT Hours
         overtime: Overtime
+        ihss: IHSS
+        ihss_hours: IHSS Hours
+        company_hours: Company Hours
+        mark_ihss: Mark IHSS
+        clear_ihss: Clear IHSS
+        shift_type: Shift Type
         period_label: Period
         pto_hours: PTO Hours
         regular_hours: Regular Hours
@@ -62,7 +76,10 @@ en:
           unapprove: Unapprove
           employee: Employee
           exceptions: Exceptions
+          facilitator_progress: Facilitator review
           ot_hours: OT Hours
+          ihss_hours: IHSS Hours
+          company_hours: Company Hours
           pto_sick: PTO / Sick
           regular_hours: Regular Hours
           review: Review

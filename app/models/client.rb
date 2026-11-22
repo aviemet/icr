@@ -86,7 +86,8 @@ class Client < ApplicationRecord
     through: :clients_attendants,
     source: :attendant
 
-  has_many :current_clients_attendants, -> { merge(ClientsAttendant.current) },
+  has_many :current_clients_attendants,
+    -> { merge(ClientsAttendant.current) },
     class_name: "ClientsAttendant",
     dependent: nil,
     inverse_of: :client
@@ -95,12 +96,39 @@ class Client < ApplicationRecord
     through: :current_clients_attendants,
     source: :attendant
 
-  has_many :support_contacts, class_name: "Client::SupportContact", dependent: :destroy, inverse_of: :client
-  has_many :allergies, class_name: "Client::Allergy", dependent: :destroy, inverse_of: :client
-  has_many :diagnoses, class_name: "Client::Diagnosis", dependent: :destroy, inverse_of: :client
-  has_one :life_detail, class_name: "Client::LifeDetail", dependent: :destroy, inverse_of: :client
-  has_many :enrollments, class_name: "Client::Enrollment", dependent: :destroy, inverse_of: :client
+  has_many :support_contacts,
+    class_name: "Client::SupportContact",
+    dependent: :destroy,
+    inverse_of: :client
+  has_many :allergies,
+    class_name: "Client::Allergy",
+    dependent: :destroy,
+    inverse_of: :client
+  has_many :diagnoses,
+    class_name: "Client::Diagnosis",
+    dependent: :destroy,
+    inverse_of: :client
+  has_many :hospital_visits,
+    class_name: "Client::HospitalVisit",
+    dependent: :destroy,
+    inverse_of: :client
+  has_one :life_detail,
+    class_name: "Client::LifeDetail",
+    dependent: :destroy,
+    inverse_of: :client
+  has_many :enrollments,
+    class_name: "Client::Enrollment",
+    dependent: :destroy,
+    inverse_of: :client
   has_many :incident_reports, dependent: :nullify
+
+  has_many :clients_trainings,
+    class_name: "ClientsTraining",
+    dependent: :destroy,
+    inverse_of: :client
+  has_many :trainings,
+    class_name: "Employee::Training",
+    through: :clients_trainings
 
   accepts_nested_attributes_for :life_detail
   accepts_nested_attributes_for :support_contacts, allow_destroy: true
@@ -121,23 +149,25 @@ class Client < ApplicationRecord
   scope :includes_show, -> {
     includes_associated.includes(
       :doctors,
+      :doctors_clients,
       :clients_managers,
       :clients_attendants,
       :managers,
       :attendants,
       support_contacts: { person: { contact: [:phones, :emails, :addresses] } },
       allergies: [],
-      diagnoses: [],
+      diagnoses: :doctor,
+      hospital_visits: [:doctor, :incident_report],
       enrollments: :vendor,
       prescriptions: [:medication, :dosage, :doctor],
-      incident_reports: [:category, :reported_by, :reported_to],
+      incident_reports: [:category, :reported_by, :reported_to, :doctor],
+      clients_trainings: :training,
     )
   }
 
   def schedule_events_between(start_time, end_time)
-    calendar_events
-      .with_schedule_association_preloads
-      .between(start_time, end_time)
+    ids = calendar_events.for_schedule_range(start_time, end_time).reselect("calendar_events.id")
+    Calendar::Event.where(id: ids).with_schedule_association_preloads
   end
 
   after_create -> { self.update(active_at: Time.current) }

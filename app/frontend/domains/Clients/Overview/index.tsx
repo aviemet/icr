@@ -137,12 +137,16 @@ export function ClientOverview({
 							</Box>
 						)) }
 
-						<MetricLine
-							label={ t("views.clients.show.overview.household") }
-							value={ client.household
-								? <Link href={ Routes.household(client.household.slug) }>{ client.household.name }</Link>
-								: "-" }
-						/>
+						{ client.household && (
+							<MetricLine
+								label={ t("views.clients.show.overview.household") }
+								value={ (
+									<Link href={ Routes.household(client.household.slug) }>
+										{ client.household.name }
+									</Link>
+								) }
+							/>
+						) }
 					</Box>
 				</MetricTile>
 
@@ -169,10 +173,11 @@ export function ClientOverview({
 							hint="View demographics"
 						/>
 						<BoardActionTile
-							href={ `${Routes.client(client.slug)}?tab=medications` }
-							title={ t("views.clients.show.tabs.medications") }
-							hint="Active prescriptions"
+							href={ `${Routes.client(client.slug)}?tab=medical` }
+							title={ t("views.clients.show.tabs.medical") }
+							hint="Doctors, meds, and visits"
 						/>
+
 						<BoardActionTile
 							href={ `${Routes.client(client.slug)}?tab=documents` }
 							title={ t("views.clients.show.tabs.documents") }

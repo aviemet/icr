@@ -5,11 +5,11 @@ declare global {
   namespace Schema {
     interface EmployeeTrainingsFormData {
       id?: string
-      active_on?: Date
+      client_ids: string[]
       description?: string
       estimated_minutes?: number
-      inactive_on?: Date
       name?: string
+      status: "active" | "inactive"
     }
   }
 }

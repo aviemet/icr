@@ -38,6 +38,39 @@ RSpec.describe "/timesheets", type: :request do
       expect(inertia.props[:can_approve]).to be(true)
       expect(inertia.props[:finalized]).to be(false)
       expect(inertia.props[:timesheet][:id]).to eq(timesheet.id.to_s)
+      expect(inertia.props[:unreviewed_shifts]).to eq([])
+    end
+
+    it "includes unreviewed shifts for the approve warning payload" do
+      Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
+      employee = create(:employee, :employed)
+      client = create(:client)
+      pay_period = nil
+      shift = nil
+
+      travel_to Time.zone.local(2024, 3, 20, 12, 0, 0) do
+        pay_period = PayPeriod.for_period_dates(Date.new(2024, 3, 16), Date.new(2024, 3, 31))
+        timesheet = create(:timesheet, pay_period: pay_period, employee: employee, approved_at: nil)
+        event = create(
+          :calendar_event,
+          starts_at: Time.zone.local(2024, 3, 18, 9, 0, 0),
+          ends_at: Time.zone.local(2024, 3, 18, 17, 0, 0),
+        )
+        event.event_participants.create!(participant: client)
+        shift = create(
+          :shift,
+          employee: employee,
+          timesheet: timesheet,
+          calendar_event: event,
+          facilitator_approved_at: nil,
+        )
+      end
+
+      get period_employee_review_path(period_id: pay_period.id, employee_id: employee.id)
+
+      expect(response).to have_http_status(:success)
+      expect(inertia.props[:unreviewed_shifts].pluck(:id)).to eq([shift.id.to_s])
+      expect(inertia.props[:can_approve]).to be(true)
     end
 
     it "keeps can_approve true after the due date while the period is open" do
@@ -61,6 +94,48 @@ RSpec.describe "/timesheets", type: :request do
         expect(inertia.props[:can_approve]).to be(true)
         expect(inertia.props[:timesheet][:id]).to eq(timesheet.id.to_s)
       end
+    end
+
+    it "includes last_editor on shifts after a times edit" do
+      Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
+      employee = create(:employee, :employed)
+      pay_period = nil
+      shift = nil
+      editor = create(:user)
+      editor.person.update!(first_name: "Grace", last_name: "Hopper")
+
+      travel_to Time.zone.local(2024, 3, 20, 12, 0, 0) do
+        pay_period = PayPeriod.for_period_dates(Date.new(2024, 3, 16), Date.new(2024, 3, 31))
+        timesheet = create(:timesheet, pay_period: pay_period, employee: employee, approved_at: nil)
+        shift = create(
+          :shift,
+          employee: employee,
+          timesheet: timesheet,
+          calendar_event: create(
+            :calendar_event,
+            starts_at: Time.zone.local(2024, 3, 18, 9, 0, 0),
+            ends_at: Time.zone.local(2024, 3, 18, 17, 0, 0),
+          ),
+        )
+
+        PaperTrail.request(whodunnit: editor.id) do
+          shift.calendar_event.update!(
+            starts_at: shift.calendar_event.starts_at + 30.minutes,
+            ends_at: shift.calendar_event.ends_at + 30.minutes,
+          )
+        end
+      end
+
+      get period_employee_review_path(period_id: pay_period.id, employee_id: employee.id)
+
+      expect(response).to have_http_status(:success)
+      review_shifts = inertia.props[:shifts]
+      expect(review_shifts.pluck(:id)).to eq([shift.id.to_s])
+      expect(review_shifts.first[:last_editor]).to include(
+        id: editor.id.to_s,
+        name: "Grace Hopper",
+        initials: "GH",
+      )
     end
   end
 

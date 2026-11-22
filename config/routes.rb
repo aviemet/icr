@@ -64,13 +64,20 @@ Rails.application.routes.draw do
     resources :departments, param: :slug do
       delete "", action: :destroy, on: :collection
     end
+    resources :requirements
+    resources :requirement_types
     get "payroll", to: redirect("/settings/payroll/schedule")
     scope path: "payroll", as: "payroll" do
       get "schedule", to: "payrolls#schedule"
       match "schedule", to: "payrolls#update_schedule", via: [:patch, :put]
       get "overtime", to: "payrolls#overtime"
       match "overtime", to: "payrolls#update_overtime", via: [:patch, :put]
+      get "ihss", to: "payrolls#ihss"
+      match "ihss", to: "payrolls#update_ihss", via: [:patch, :put]
     end
+    get "notifications", to: "notifications#show"
+    match "notifications", to: "notifications#update", via: [:patch, :put]
+    get "user", to: "users#show", as: :user
     resources :overtime_exemptions, only: [:create, :update]
   end
   resource :settings, param: :slug, except: [:new, :create, :destroy]
@@ -82,17 +89,23 @@ Rails.application.routes.draw do
     resources :allergies, controller: "clients/allergies", only: [:create, :update, :destroy]
     resources :diagnoses, controller: "clients/diagnoses", only: [:create, :update, :destroy]
     resources :prescriptions, controller: "clients/prescriptions", only: [:create, :update, :destroy]
+    resources :hospital_visits, controller: "clients/hospital_visits", only: [:create, :update, :destroy]
     resources :enrollments, controller: "clients/enrollments", only: [:create, :update, :destroy]
     resources :managers, controller: "clients/managers", only: [:create, :update, :destroy]
     resources :attendants, controller: "clients/attendants", only: [:create, :update, :destroy]
     resources :doctors, controller: "clients/doctors", only: [:create, :destroy]
     resources :documents, controller: "clients/documents", only: [:create, :destroy]
     resources :images, controller: "clients/images", only: [:create, :destroy]
+    resources :trainings, controller: "clients/trainings", only: [:create, :update, :destroy]
     resource :life_detail, controller: "clients/life_details", only: [:update]
   end
 
   scope "/employees" do
-    resources :trainings, path: "trainings"
+    resources :trainings, path: "trainings" do
+      member do
+        put :status, action: :update_status
+      end
+    end
     resources :interviews, path: "interviews" do
       resources :interview_notes, only: [:create, :update, :destroy]
     end
@@ -132,6 +145,10 @@ Rails.application.routes.draw do
       member do
         post :finalize
         get :export
+        get :clients
+        get "clients/:client_id", action: :client, as: :client
+        get :ihss, action: :ihss
+        match :ihss, action: :update_ihss, via: [:patch, :put]
       end
       post :adjustments, on: :member, action: :create_adjustment, as: :adjustments
       get "employees/:employee_id", to: "timesheets#employee_review", as: :employee_review
@@ -147,6 +164,18 @@ Rails.application.routes.draw do
         post :bulk_approve
       end
     end
+
+    resources :shifts, only: [], controller: "payroll/shifts" do
+      member do
+        post :approve
+        post :unapprove
+        patch :ihss, action: :update_ihss
+        patch :category, action: :update_category
+      end
+      collection do
+        post :bulk_approve
+      end
+    end
   end
 
   resources :vendors, param: :slug
@@ -155,7 +184,10 @@ Rails.application.routes.draw do
 
   resources :doctors, param: :slug
 
-  resources :requirements
+  get "requirements", to: redirect("/settings/requirements")
+  get "requirements/*path", to: redirect { |params, _req| "/settings/requirements/#{params[:path]}" }
+  get "requirement_types", to: redirect("/settings/requirement_types")
+  get "requirement_types/*path", to: redirect { |params, _req| "/settings/requirement_types/#{params[:path]}" }
 
   draw(:api)
 

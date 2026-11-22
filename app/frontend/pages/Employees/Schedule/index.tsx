@@ -13,6 +13,7 @@ import { type PopoverContentMap } from "@/components/Calendar/components/Calenda
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 import { NAVIGATION_ACTION, VIEW_NAMES } from "@/components/Calendar/views"
 import { EventPopoverContent } from "@/domains/Clients/EventPopoverContent"
+import { recurrenceResources } from "@/features/CalendarSchedule"
 import { ensureViewName, Routes } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
@@ -30,6 +31,8 @@ const DEFAULT_EVENT_COLOR = "#94a3b8"
 type ScheduleResources = Record<string, object> & {
 	employee?: Schema.EmployeesPersisted
 	client?: Schema.ClientsPersisted
+	recurrence: ReturnType<typeof recurrenceResources>
+	shift?: { category_id: string }
 }
 
 function isScheduleResources(resources: EventResources | undefined): resources is ScheduleResources {
@@ -84,25 +87,26 @@ const Schedule = ({ employee, schedules: initialSchedules }: ScheduleProps) => {
 	}, [location.pathname, location.params])
 
 	const processedSchedules = useMemo((): BaseCalendarEvent<ScheduleResources>[] => {
-		return data?.map(schedule => {
-			const start = ensureDate(schedule.starts_at)
-			const end = ensureDate(schedule.ends_at)
-			const client = schedule.clients?.[0]
-			const color = client?.color ?? DEFAULT_EVENT_COLOR
-			const title = client ? (client.full_name || client.name) : (schedule.name ?? "")
-
-			const resources: ScheduleResources = {}
+		if(!data) return []
+		return data.map((event) => {
+			const client = event.clients?.[0]
+			const resources: ScheduleResources = {
+				recurrence: recurrenceResources(event),
+				shift: {
+					category_id: event.shift?.category?.slug ?? "",
+				},
+			}
 			if(client) resources.client = client
 			return {
-				id: schedule.id,
-				title,
-				start,
-				end,
-				allDay: schedule.all_day,
-				color,
+				id: event.id,
+				title: client ? (client.full_name || client.name) : (event.name ?? ""),
+				start: ensureDate(event.starts_at),
+				end: ensureDate(event.ends_at),
+				allDay: event.all_day,
+				color: client?.color ?? DEFAULT_EVENT_COLOR,
 				resources,
 			}
-		}) ?? []
+		})
 	}, [data])
 
 	const breadcrumbs: Breadcrumb[] = [

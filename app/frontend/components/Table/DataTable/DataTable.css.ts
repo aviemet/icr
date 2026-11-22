@@ -14,6 +14,19 @@ export const table = css`
 	td:last-child {
 		padding-right: 14px;
 	}
+
+	th.actionsCell,
+	td.actionsCell {
+		width: 1%;
+		white-space: nowrap;
+		text-align: center;
+
+		& > * {
+			width: fit-content;
+			max-width: 100%;
+			margin-inline: auto;
+		}
+	}
 `
 
 export const header = css`

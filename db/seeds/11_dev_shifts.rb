@@ -2,22 +2,64 @@ if Rails.env.development?
 
   dev_password = "Complex1!"
   test_timezone = "America/Los_Angeles"
-  seed_start_date = Date.current.prev_month.beginning_of_month
-  seed_end_date = (seed_start_date + 2.months).end_of_month
-  seed_dates = (seed_start_date..seed_end_date).to_a
+  seed_anchor_date = Date.current.prev_month.beginning_of_month
+  seed_anchor_date += 1 until (1..5).cover?(seed_anchor_date.wday)
   attendant_job = Employee::JobTitle.find_by(slug: "attendant")
+
+  fulfill_client_schedule_requirements = lambda do |employee:, client:|
+    Requirement::Requirement.for_client_schedule_gate(employee, client).includes_associated.each do |requirement|
+      requirement.requirement_items.trainings.each do |item|
+        training = item.fulfillable
+        next if training.blank?
+
+        row = Employee::EmployeesTraining.find_or_initialize_by(employee: employee, training: training)
+        row.started_at ||= Time.current
+        row.completed_at ||= Time.current
+        row.save!
+      end
+    end
+  end
 
   create_shift_attendant = lambda do |client:|
     employee = FactoryBot.create(:employee, :employed)
     employee.assign_job_title(attendant_job)
     FactoryBot.create(:pay_rate, :active, employee: employee)
+    fulfill_client_schedule_requirements.call(employee: employee, client: client)
     FactoryBot.create(:clients_attendant, attendant: employee, client: client)
     employee
   end
 
+  create_recurring_shift = lambda do |client:, employee:, starts_at:, duration:, patterns:|
+    event_attrs = {
+      starts_at: starts_at,
+      ends_at: starts_at + duration,
+    }
+    event_attrs[:name] = "Open Shift" if employee.nil?
+    calendar_event = FactoryBot.create(:calendar_event, event_attrs)
+    shift_attrs = { calendar_event: calendar_event }
+    if employee.nil?
+      FactoryBot.create(:shift, :open, shift_attrs)
+    else
+      FactoryBot.create(:shift, shift_attrs.merge(employee: employee))
+    end
+    patterns.each do |pattern_attrs|
+      calendar_event.recurring_patterns.create!(pattern_attrs)
+    end
+    client.calendar_events << calendar_event
+    calendar_event
+  end
+
+  weekday_patterns = (1..5).map { |day_of_week|
+    {
+      recurring_type: :weekly,
+      offset: 1,
+      day_of_week: day_of_week,
+    }
+  }
+
   if Client.first.calendar_events.empty?
     ActiveRecord::Base.transaction do
-      shift_length = 6
+      shift_length = 6.hours
       client = Client.first
       first_attendant = nil
 
@@ -29,21 +71,19 @@ if Rails.env.development?
 
         first_attendant = employee if index == 1
 
-        seed_dates.each do |date|
-          next if date.saturday? || date.sunday?
+        starts_at = Time.zone.local(
+          seed_anchor_date.year,
+          seed_anchor_date.month,
+          seed_anchor_date.day,
+        ) + (index * shift_length)
 
-          starts_at = Time.zone.local(date.year, date.month, date.day) + (index * shift_length).hours
-
-          shift = FactoryBot.create(:shift, {
-            employee:,
-            calendar_event: FactoryBot.create(:calendar_event, {
-              starts_at:,
-              ends_at: starts_at + shift_length.hours,
-            })
-          })
-
-          client.calendar_events << shift.calendar_event
-        end
+        create_recurring_shift.call(
+          client: client,
+          employee: employee,
+          starts_at: starts_at,
+          duration: shift_length,
+          patterns: weekday_patterns,
+        )
       end
 
       unless User.exists?(email: "attendant@gmail.com")
@@ -57,29 +97,29 @@ if Rails.env.development?
       end
     end
 
-    Rails.logger.info "[seeds] shifts: client 1 + attendant user"
+    Rails.logger.info "[seeds] recurring weekday shifts: client 1 + attendant user"
   end
 
   if Shift.open.none? && Client.first.present?
     ActiveRecord::Base.transaction do
       client = Client.first
-      open_shift_dates = seed_dates.select { |date| date.monday? || date.wednesday? }.first(4)
+      open_anchor = seed_anchor_date
+      open_anchor += 1 until open_anchor.monday? || open_anchor.wednesday?
+      starts_at = Time.zone.local(open_anchor.year, open_anchor.month, open_anchor.day, 18, 0, 0)
 
-      open_shift_dates.each_with_index do |date, index|
-        starts_at = Time.zone.local(date.year, date.month, date.day) + (18 + index).hours
-
-        open_shift = FactoryBot.create(:shift, :open, {
-          calendar_event: FactoryBot.create(:calendar_event, {
-            starts_at:,
-            ends_at: starts_at + 6.hours,
-          })
-        })
-
-        client.calendar_events << open_shift.calendar_event
-      end
+      create_recurring_shift.call(
+        client: client,
+        employee: nil,
+        starts_at: starts_at,
+        duration: 6.hours,
+        patterns: [
+          { recurring_type: :weekly, offset: 1, day_of_week: 1 },
+          { recurring_type: :weekly, offset: 1, day_of_week: 3 },
+        ],
+      )
     end
 
-    Rails.logger.info "[seeds] open shifts: client 1"
+    Rails.logger.info "[seeds] recurring open shifts: client 1"
   end
 
   if Client.second.calendar_events.empty? && Client.third.calendar_events.empty?
@@ -87,54 +127,44 @@ if Rails.env.development?
       client_2 = Client.second
       client_3 = Client.third
 
-      shift_length = 8
-      shifts_per_day = 24 / shift_length
+      shift_length = 8.hours
+      shifts_per_day = 3
+      daily_pattern = [{ recurring_type: :daily, offset: 1 }]
 
-      employees_for_client_2 = 5.times.map { create_shift_attendant.call(client: client_2) }
-      employees_for_client_3 = 5.times.map { create_shift_attendant.call(client: client_3) }
+      employees_for_client_2 = shifts_per_day.times.map { create_shift_attendant.call(client: client_2) }
+      employees_for_client_3 = shifts_per_day.times.map { create_shift_attendant.call(client: client_3) }
 
-      seed_dates.each_with_index do |date, day_index|
-        day_start = Time.zone.local(date.year, date.month, date.day)
+      day_start = Time.zone.local(seed_anchor_date.year, seed_anchor_date.month, seed_anchor_date.day)
 
-        shifts_per_day.times do |shift_index|
-          base_shift_start = day_start + (shift_index * shift_length).hours
+      shifts_per_day.times do |shift_index|
+        base_shift_start = day_start + (shift_index * shift_length)
 
-          client_2_start = base_shift_start
-          client_3_start = base_shift_start + 1.hour
+        create_recurring_shift.call(
+          client: client_2,
+          employee: employees_for_client_2[shift_index],
+          starts_at: base_shift_start,
+          duration: shift_length,
+          patterns: daily_pattern,
+        )
 
-          client_2_employee = employees_for_client_2[(day_index + shift_index) % employees_for_client_2.length]
-          client_3_employee = employees_for_client_3[(day_index + shift_index) % employees_for_client_3.length]
-
-          client_2_shift = FactoryBot.create(:shift, {
-            employee: client_2_employee,
-            calendar_event: FactoryBot.create(:calendar_event, {
-              starts_at: client_2_start,
-              ends_at: client_2_start + shift_length.hours,
-            })
-          })
-
-          client_3_shift = FactoryBot.create(:shift, {
-            employee: client_3_employee,
-            calendar_event: FactoryBot.create(:calendar_event, {
-              starts_at: client_3_start,
-              ends_at: client_3_start + shift_length.hours,
-            })
-          })
-
-          client_2.calendar_events << client_2_shift.calendar_event
-          client_3.calendar_events << client_3_shift.calendar_event
-        end
+        create_recurring_shift.call(
+          client: client_3,
+          employee: employees_for_client_3[shift_index],
+          starts_at: base_shift_start + 1.hour,
+          duration: shift_length,
+          patterns: daily_pattern,
+        )
       end
     end
 
-    Rails.logger.info "[seeds] shifts: household clients 2/3"
+    Rails.logger.info "[seeds] recurring daily shifts: household clients 2/3"
   end
 
   if Client.fourth.calendar_events.empty?
     client = Client.fourth
 
     ActiveRecord::Base.transaction do
-      shift_length = 6
+      shift_length = 6.hours
 
       primary_employees = 5.times.map do
         employee = create_shift_attendant.call(client: client)
@@ -145,40 +175,36 @@ if Rails.env.development?
       end
 
       primary_employees.each_with_index do |employee, employee_index|
-        seed_dates.each_with_index do |date, day_index|
-          next if date.saturday? || date.sunday?
+        starts_at = Time.zone.local(
+          seed_anchor_date.year,
+          seed_anchor_date.month,
+          seed_anchor_date.day,
+        ) + (employee_index * shift_length)
 
-          starts_at = Time.zone.local(date.year, date.month, date.day) + (employee_index * shift_length).hours
-
-          shift = FactoryBot.create(:shift, {
-            employee:,
-            calendar_event: FactoryBot.create(:calendar_event, {
-              starts_at:,
-              ends_at: starts_at + shift_length.hours,
-            })
-          })
-
-          client.calendar_events << shift.calendar_event
-
-          next unless day_index % 10 == 0
-
-          overlap_start = starts_at + [*-2..2].sample.hours
-          overlap_end = shift.calendar_event.ends_at + [*-2..2].sample.hours
-          overlap_employee = create_shift_attendant.call(client: client)
-
-          overlap_shift = FactoryBot.create(:shift, {
-            employee: overlap_employee,
-            calendar_event: FactoryBot.create(:calendar_event, {
-              starts_at: overlap_start,
-              ends_at: overlap_end,
-            })
-          })
-
-          client.calendar_events << overlap_shift.calendar_event
-        end
+        create_recurring_shift.call(
+          client: client,
+          employee: employee,
+          starts_at: starts_at,
+          duration: shift_length,
+          patterns: weekday_patterns,
+        )
       end
+
+      overlap_date = seed_anchor_date + 14.days
+      overlap_date += 1 until (1..5).cover?(overlap_date.wday)
+      overlap_start = Time.zone.local(overlap_date.year, overlap_date.month, overlap_date.day, 8, 0, 0)
+      overlap_employee = create_shift_attendant.call(client: client)
+      overlap_event = FactoryBot.create(:calendar_event, {
+        starts_at: overlap_start,
+        ends_at: overlap_start + 8.hours,
+      })
+      FactoryBot.create(:shift, {
+        employee: overlap_employee,
+        calendar_event: overlap_event,
+      })
+      client.calendar_events << overlap_event
     end
 
-    Rails.logger.info "[seeds] shifts: client 4 + overlaps"
+    Rails.logger.info "[seeds] recurring weekday shifts: client 4 + one-off overlap"
   end
 end

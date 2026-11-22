@@ -10,6 +10,10 @@ declare global {
       full_name: string
       last_name: string
       name: string
+      notes?: string
+      npi?: string
+      practice_name?: string
+      specialty?: string
     }
   }
 }

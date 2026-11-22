@@ -72,7 +72,15 @@ class Setting < RailsSettings::Base
     payroll_due_date_day_of_week: "tuesday",
     payroll_due_date_day_of_month: "5",
     calendar_layout_style: "split",
-    calendar_split_events_show_original_times: false
+    calendar_split_events_show_original_times: false,
+    notifications_payroll_approval_reminders: true,
+    ihss_co_employer: true,
+    ihss_assignment_mode: "shift",
+  }.freeze
+
+  IHSS_ASSIGNMENT_MODES = {
+    shift: "shift",
+    period: "period",
   }.freeze
 
   field :company_name, type: :string, default: DEFAULT_SETTINGS[:company_name], validates: { presence: true }
@@ -153,5 +161,13 @@ class Setting < RailsSettings::Base
   field :first_day_of_week, type: :integer, default: 0, validates: {
     presence: true,
     inclusion: { in: (0..6).to_a }
+  }
+
+  field :notifications_payroll_approval_reminders, type: :boolean, default: DEFAULT_SETTINGS[:notifications_payroll_approval_reminders]
+
+  field :ihss_co_employer, type: :boolean, default: DEFAULT_SETTINGS[:ihss_co_employer]
+  field :ihss_assignment_mode, type: :string, default: DEFAULT_SETTINGS[:ihss_assignment_mode], validates: {
+    presence: true,
+    inclusion: { in: IHSS_ASSIGNMENT_MODES.values },
   }
 end

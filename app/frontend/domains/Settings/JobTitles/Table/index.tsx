@@ -50,13 +50,13 @@ export function JobTitleTable({ records }: JobTitleTableProps) {
 		{
 			accessor: "actions",
 			title: "Actions",
-			textAlign: "right",
-			width: 96,
+			titleClassName: "actionsCell",
+			cellsClassName: "actionsCell",
 			render: (jobTitle) => {
 				const slug = String(jobTitle.slug ?? "")
 				const name = String(jobTitle.name ?? "")
 				return (
-					<Group gap="xs" justify="flex-end" wrap="nowrap">
+					<Group gap="xs" wrap="nowrap">
 						<EditButton
 							href={ Routes.editSettingsJobTitle(slug) }
 							label={ name }

@@ -13,17 +13,21 @@ class PagesController < ApplicationController
     client = policy_scope(Client.includes([:person])).first
     authorize client, :schedule? if client
 
-    schedules = if client
-                  client.calendar_events
-                    .includes([:recurring_patterns, shift: [employee: [:person, :job_title, :calendar_customization]]])
-                    .between(*DateRangeCalculator.new(params).call)
-                else
-                  Calendar::Event.none
-                end
+    range_start, range_end = DateRangeCalculator.new(params).call
+    masters = if client
+                client.schedule_events_between(range_start, range_end)
+              else
+                Calendar::Event.none
+              end
 
     render inertia: "Home", props: {
       schedules: lambda {
-        schedules.render(:show)
+        Calendar::RenderSchedule.call(
+          events: masters,
+          range_start: range_start,
+          range_end: range_end,
+          view: :show,
+        )
       },
     }
   end

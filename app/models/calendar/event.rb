@@ -31,8 +31,18 @@ class Calendar::Event < ApplicationRecord
 
   belongs_to :parent, class_name: "Calendar::Event", optional: true
 
+  has_many :children,
+    class_name: "Calendar::Event",
+    foreign_key: :parent_id,
+    inverse_of: :parent,
+    dependent: :destroy
   has_many :recurring_patterns,
     class_name: "Calendar::RecurringPattern",
+    foreign_key: "calendar_event_id",
+    inverse_of: :calendar_event,
+    dependent: :destroy
+  has_many :event_exceptions,
+    class_name: "Calendar::EventException",
     foreign_key: "calendar_event_id",
     inverse_of: :calendar_event,
     dependent: :destroy
@@ -62,16 +72,53 @@ class Calendar::Event < ApplicationRecord
   before_validation :sanitize_all_day_times
   before_validation :set_shift_category_when_shift_present
   before_destroy :prevent_destroy_when_pay_period_finalized, prepend: true
+  after_commit :invalidate_shift_approvals_on_time_change, on: :update
 
   validates :starts_at, presence: true
   validates :ends_at, presence: true
 
   validate :starts_at_before_ends_at
   validate :has_name_or_shift
-  validate :pay_period_allows_mutation, on: :update
+  validate :pay_period_allows_mutation
+  validate :requirement_gates_for_schedule
 
   accepts_nested_attributes_for :shift
   accepts_nested_attributes_for :event_participants
+  accepts_nested_attributes_for :recurring_patterns
+
+  def master_id
+    id
+  end
+
+  def occurrence_starts_at
+    starts_at
+  end
+
+  def recurring?
+    false
+  end
+
+  def occurrences_in(range_start, range_end)
+    Calendar::Recurring::ExpandOccurrences.call(
+      event: self,
+      range_start: range_start,
+      range_end: range_end,
+    )
+  end
+
+  def self.occurrences_in(events, range_start:, range_end:)
+    Calendar::Recurring::ExpandOccurrences.for_events(
+      events: events,
+      range_start: range_start,
+      range_end: range_end,
+    )
+  end
+
+  def self.schedule_occurrences_in(events, range_start:, range_end:)
+    occurrences_in(events, range_start: range_start, range_end: range_end).map do |occurrence|
+      Calendar::ScheduleOccurrence.new(occurrence.event, occurrence)
+    end
+  end
 
   scope :includes_associated, -> { includes([shift: [employee: [:person]]]) }
 
@@ -81,10 +128,38 @@ class Calendar::Event < ApplicationRecord
     where("(starts_at < ? AND ends_at > ?) OR (all_day = TRUE AND starts_at < ? AND ends_at > ?)", end_time, start_time, end_time, start_time)
   }
   scope :all_day, ->{ where(all_day: true) }
+  scope :schedule_masters, -> { where(parent_id: nil) }
+
+  scope :for_schedule_range, ->(range_start, range_end) {
+    non_recurring_ids = schedule_masters
+      .left_outer_joins(:recurring_patterns)
+      .where(calendar_recurring_patterns: { id: nil })
+      .where(
+        <<~SQL.squish,
+          (calendar_events.starts_at < :range_end AND calendar_events.ends_at > :range_start)
+          OR (calendar_events.all_day = TRUE AND calendar_events.starts_at < :range_end AND calendar_events.ends_at > :range_start)
+        SQL
+        range_start: range_start,
+        range_end: range_end,
+      )
+      .reselect("calendar_events.id")
+
+    recurring_ids = schedule_masters
+      .joins(:recurring_patterns)
+      .where(calendar_events: { starts_at: ...range_end })
+      .where(
+        "calendar_recurring_patterns.end_date IS NULL OR calendar_recurring_patterns.end_date >= ?",
+        range_start.to_date,
+      )
+      .reselect("calendar_events.id")
+
+    where(id: non_recurring_ids).or(where(id: recurring_ids))
+  }
 
   scope :with_schedule_association_preloads, -> {
     includes([
       :recurring_patterns,
+      :event_exceptions,
       :event_participants,
       {
         clients: [
@@ -123,7 +198,17 @@ class Calendar::Event < ApplicationRecord
   end
 
   def pay_period_allows_mutation
-    return unless shift&.timesheet&.pay_period&.finalized?
+    if shift&.timesheet&.pay_period&.finalized?
+      errors.add(:base, I18n.t("pay_periods.finalized_locked"))
+      return
+    end
+
+    return if starts_at.blank?
+    return if shift.blank?
+
+    period_start_date, = Payroll::Period.period_dates(starts_at.to_date)
+    period = PayPeriod.where(starts_at: period_start_date.to_time.beginning_of_day.all_day).first
+    return unless period&.finalized?
 
     errors.add(:base, I18n.t("pay_periods.finalized_locked"))
   end
@@ -151,6 +236,38 @@ class Calendar::Event < ApplicationRecord
                    else
                      ends_at.end_of_day
                    end
+  end
+
+  def invalidate_shift_approvals_on_time_change
+    return unless previous_changes.key?("starts_at") || previous_changes.key?("ends_at")
+
+    Shift.find_by(calendar_event_id: id)&.invalidate_approvals!
+  end
+
+  def requirement_gates_for_schedule
+    employee = shift&.employee
+    return if employee.blank?
+
+    client_participants = event_participants.select { |row| row.participant_type == "Client" }
+    return if client_participants.empty?
+
+    client_participants.each do |row|
+      client = row.participant
+      next if client.blank?
+
+      gate = Requirement::ClientScheduleGate.call(employee: employee, client: client)
+      next if gate.allowed?
+
+      errors.add(
+        :base,
+        I18n.t(
+          "requirements.gates.client_schedule_blocked",
+          employee: employee.name,
+          client: client.name,
+          names: gate.unmet_names.to_sentence,
+        ),
+      )
+    end
   end
 
 end

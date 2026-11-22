@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_22_171843) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -120,7 +120,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
     t.integer "recurring_type", null: false
     t.integer "offset", default: 1, null: false
     t.integer "max_occurrences"
-    t.integer "end_date"
+    t.date "end_date"
     t.integer "day_of_week"
     t.integer "week_of_month"
     t.integer "day_of_month"
@@ -159,6 +159,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
 
   create_table "client_diagnoses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "client_id", null: false
+    t.uuid "doctor_id"
     t.string "name", null: false
     t.string "code"
     t.date "diagnosed_on"
@@ -167,6 +168,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_client_diagnoses_on_client_id"
+    t.index ["doctor_id"], name: "index_client_diagnoses_on_doctor_id"
   end
 
   create_table "client_enrollments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -180,6 +182,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
     t.index ["client_id", "vendor_id", "starts_on"], name: "idx_on_client_id_vendor_id_starts_on_6390a83a5d"
     t.index ["client_id"], name: "index_client_enrollments_on_client_id"
     t.index ["vendor_id"], name: "index_client_enrollments_on_vendor_id"
+  end
+
+  create_table "client_hospital_visits", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "client_id", null: false
+    t.uuid "doctor_id"
+    t.uuid "incident_report_id"
+    t.string "hospital_name", null: false
+    t.datetime "admitted_at"
+    t.datetime "discharged_at"
+    t.string "reason"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_client_hospital_visits_on_client_id"
+    t.index ["doctor_id"], name: "index_client_hospital_visits_on_doctor_id"
+    t.index ["incident_report_id"], name: "index_client_hospital_visits_on_incident_report_id"
   end
 
   create_table "client_life_details", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -236,10 +254,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
     t.uuid "attendant_id", null: false
     t.uuid "client_id", null: false
     t.datetime "starts_at"
-    t.datetime "ends_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["attendant_id", "client_id"], name: "index_clients_attendants_unique_relationship", unique: true, where: "(ends_at IS NULL)"
+    t.index ["attendant_id", "client_id"], name: "index_clients_attendants_unique_relationship", unique: true
     t.index ["attendant_id"], name: "index_clients_attendants_on_attendant_id"
     t.index ["client_id"], name: "index_clients_attendants_on_client_id"
   end
@@ -254,6 +271,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
     t.index ["client_id"], name: "index_clients_managers_on_client_id"
     t.index ["manager_id", "client_id"], name: "index_clients_managers_unique_relationship", unique: true, where: "(ends_at IS NULL)"
     t.index ["manager_id"], name: "index_clients_managers_on_manager_id"
+  end
+
+  create_table "clients_trainings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "client_id", null: false
+    t.uuid "training_id", null: false
+    t.boolean "required", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id", "training_id"], name: "index_clients_trainings_on_client_id_and_training_id", unique: true
+    t.index ["client_id"], name: "index_clients_trainings_on_client_id"
+    t.index ["training_id"], name: "index_clients_trainings_on_training_id"
   end
 
   create_table "companies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -288,6 +316,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
 
   create_table "doctors", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "person_id", null: false
+    t.string "specialty"
+    t.string "npi"
+    t.string "practice_name"
+    t.text "notes"
     t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -302,6 +334,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_doctors_clients_on_client_id"
+    t.index ["doctor_id", "client_id"], name: "index_doctors_clients_on_doctor_and_client", unique: true
     t.index ["doctor_id"], name: "index_doctors_clients_on_doctor_id"
   end
 
@@ -310,6 +343,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
     t.integer "amount_unit"
     t.decimal "freq_amount"
     t.integer "freq_period"
+    t.integer "administration_method"
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -394,15 +428,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
     t.text "termination_reason"
     t.string "preferred_language"
     t.text "communication_notes"
-    t.string "slug", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "application_source"
     t.integer "desired_compensation_cents"
     t.string "desired_compensation_currency", default: "USD", null: false
     t.integer "desired_compensation_period"
     t.text "hiring_notes"
     t.uuid "desired_job_title_id"
+    t.string "slug", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["desired_job_title_id"], name: "index_employees_on_desired_job_title_id"
     t.index ["person_id"], name: "index_employees_on_person_id"
     t.index ["slug"], name: "index_employees_on_slug", unique: true
@@ -620,6 +654,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
     t.index ["identificationable_type", "identificationable_id"], name: "index_identifications_on_identificationable"
   end
 
+  create_table "ihss_period_assignments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "pay_period_id", null: false
+    t.uuid "employee_id", null: false
+    t.uuid "client_id", null: false
+    t.decimal "hours", precision: 8, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_ihss_period_assignments_on_client_id"
+    t.index ["employee_id"], name: "index_ihss_period_assignments_on_employee_id"
+    t.index ["pay_period_id", "employee_id", "client_id"], name: "index_ihss_period_assignments_uniqueness", unique: true
+    t.index ["pay_period_id"], name: "index_ihss_period_assignments_on_pay_period_id"
+  end
+
   create_table "incident_reports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "occurred_at"
     t.datetime "reported_at"
@@ -627,6 +674,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
     t.string "location"
     t.text "description"
     t.uuid "client_id", null: false
+    t.uuid "doctor_id"
     t.uuid "reported_to_id", null: false
     t.uuid "reported_by_id", null: false
     t.uuid "category_id", null: false
@@ -634,6 +682,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_incident_reports_on_category_id"
     t.index ["client_id"], name: "index_incident_reports_on_client_id"
+    t.index ["doctor_id"], name: "index_incident_reports_on_doctor_id"
     t.index ["reported_by_id"], name: "index_incident_reports_on_reported_by_id"
     t.index ["reported_to_id"], name: "index_incident_reports_on_reported_to_id"
   end
@@ -662,11 +711,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
   create_table "interviews", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "employee_id", null: false
     t.datetime "scheduled_at"
+    t.string "location"
+    t.string "interview_type"
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "location"
-    t.string "interview_type"
     t.index ["employee_id"], name: "index_interviews_on_employee_id"
   end
 
@@ -801,12 +850,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
 
   create_table "requirement_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "requirement_id", null: false
-    t.string "fulfillable_type", null: false
-    t.uuid "fulfillable_id", null: false
+    t.string "fulfillable_type"
+    t.uuid "fulfillable_id"
+    t.integer "credential_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["fulfillable_type", "fulfillable_id"], name: "index_requirement_items_on_fulfillable"
-    t.index ["requirement_id", "fulfillable_type", "fulfillable_id"], name: "index_req_items_on_req_fulfillable_unique", unique: true
+    t.index ["requirement_id", "credential_type"], name: "index_req_items_on_req_credential_type_unique", unique: true, where: "(credential_type IS NOT NULL)"
+    t.index ["requirement_id", "fulfillable_type", "fulfillable_id"], name: "index_req_items_on_req_fulfillable_unique", unique: true, where: "(fulfillable_id IS NOT NULL)"
     t.index ["requirement_id"], name: "index_requirement_items_on_requirement_id"
   end
 
@@ -822,10 +873,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
     t.text "description"
     t.uuid "requirement_type_id", null: false
     t.string "scope_type"
-    t.integer "scope_id"
+    t.uuid "scope_id"
+    t.integer "enforcement", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["enforcement"], name: "index_requirements_on_enforcement"
     t.index ["requirement_type_id"], name: "index_requirements_on_requirement_type_id"
+    t.index ["scope_type", "scope_id"], name: "index_requirements_on_scope"
   end
 
   create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -874,9 +928,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
     t.uuid "employee_id"
     t.uuid "calendar_event_id", null: false
     t.uuid "timesheet_id"
+    t.date "facilitator_approved_at"
     t.uuid "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "ihss", default: false, null: false
     t.index ["calendar_event_id"], name: "index_shifts_on_calendar_event_id", unique: true
     t.index ["category_id"], name: "index_shifts_on_category_id"
     t.index ["employee_id"], name: "index_shifts_on_employee_id"
@@ -903,8 +959,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
     t.string "name"
     t.text "description"
     t.integer "estimated_minutes"
-    t.datetime "active_on"
-    t.datetime "inactive_on"
+    t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -1006,8 +1061,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
   add_foreign_key "categories", "categories", column: "parent_id"
   add_foreign_key "client_allergies", "clients"
   add_foreign_key "client_diagnoses", "clients"
+  add_foreign_key "client_diagnoses", "doctors"
   add_foreign_key "client_enrollments", "clients"
   add_foreign_key "client_enrollments", "vendors"
+  add_foreign_key "client_hospital_visits", "clients"
+  add_foreign_key "client_hospital_visits", "doctors"
+  add_foreign_key "client_hospital_visits", "incident_reports"
   add_foreign_key "client_life_details", "clients"
   add_foreign_key "client_support_contacts", "clients"
   add_foreign_key "client_support_contacts", "people"
@@ -1016,9 +1075,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
   add_foreign_key "clients_attendants", "employees", column: "attendant_id"
   add_foreign_key "clients_managers", "clients"
   add_foreign_key "clients_managers", "employees", column: "manager_id"
-  add_foreign_key "contacts", "addresses", column: "primary_address_id"
-  add_foreign_key "contacts", "emails", column: "primary_email_id"
-  add_foreign_key "contacts", "phones", column: "primary_phone_id"
+  add_foreign_key "clients_trainings", "clients"
+  add_foreign_key "clients_trainings", "trainings"
+  add_foreign_key "contacts", "addresses", column: "primary_address_id", on_delete: :nullify
+  add_foreign_key "contacts", "emails", column: "primary_email_id", on_delete: :nullify
+  add_foreign_key "contacts", "phones", column: "primary_phone_id", on_delete: :nullify
   add_foreign_key "doctors", "people"
   add_foreign_key "doctors_clients", "clients"
   add_foreign_key "doctors_clients", "doctors"
@@ -1046,8 +1107,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_194904) do
   add_foreign_key "households_clients", "clients"
   add_foreign_key "households_clients", "households"
   add_foreign_key "identifications", "categories"
+  add_foreign_key "ihss_period_assignments", "clients"
+  add_foreign_key "ihss_period_assignments", "employees"
+  add_foreign_key "ihss_period_assignments", "pay_periods"
   add_foreign_key "incident_reports", "categories"
   add_foreign_key "incident_reports", "clients"
+  add_foreign_key "incident_reports", "doctors"
   add_foreign_key "incident_reports", "people", column: "reported_by_id"
   add_foreign_key "incident_reports", "people", column: "reported_to_id"
   add_foreign_key "interview_notes", "employees"

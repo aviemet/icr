@@ -1,4 +1,4 @@
-class CreatePgSearchDocuments < ActiveRecord::Migration[7.1]
+class CreatePgSearchDocuments < ActiveRecord::Migration[8.0]
   def up
     execute "create extension pg_trgm;"
     enable_extension "unaccent"

@@ -24,6 +24,8 @@ export function VendorTable({ records, model }: VendorTableProps) {
 		{
 			accessor: "actions",
 			title: "Actions",
+			titleClassName: "actionsCell",
+			cellsClassName: "actionsCell",
 			sortable: false,
 			render: (vendor) => <EditButton href={ Routes.editVendor(vendor.id) } />,
 		},

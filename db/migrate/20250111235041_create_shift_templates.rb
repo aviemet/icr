@@ -1,4 +1,4 @@
-class CreateShiftTemplates < ActiveRecord::Migration[7.2]
+class CreateShiftTemplates < ActiveRecord::Migration[8.0]
   def change
     create_table :shift_templates, id: :uuid do |t|
       t.string :name

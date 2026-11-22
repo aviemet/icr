@@ -2,11 +2,15 @@
 #
 # Table name: doctors
 #
-#  id         :uuid             not null, primary key
-#  slug       :string           not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  person_id  :uuid             not null
+#  id            :uuid             not null, primary key
+#  notes         :text
+#  npi           :string
+#  practice_name :string
+#  slug          :string           not null
+#  specialty     :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  person_id     :uuid             not null
 #
 # Indexes
 #
@@ -41,5 +45,27 @@ RSpec.describe Doctor do
 
     it{ is_expected.to have_many(:clients).through(:doctors_clients) }
     it{ is_expected.to have_many(:prescriptions) }
+    it{ is_expected.to have_many(:diagnoses).class_name("Client::Diagnosis") }
+    it{ is_expected.to have_many(:hospital_visits).class_name("Client::HospitalVisit") }
+    it{ is_expected.to have_many(:incident_reports) }
+  end
+
+  describe "attributes" do
+    it "persists specialty, npi, practice_name, and notes" do
+      doctor = create(
+        :doctor,
+        specialty: "Psychiatry",
+        npi: "1234567890",
+        practice_name: "Valley Clinic",
+        notes: "Preferred for med reviews",
+      )
+
+      expect(doctor.reload).to have_attributes(
+        specialty: "Psychiatry",
+        npi: "1234567890",
+        practice_name: "Valley Clinic",
+        notes: "Preferred for med reviews",
+      )
+    end
   end
 end

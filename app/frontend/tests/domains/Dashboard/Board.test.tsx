@@ -10,10 +10,14 @@ vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
 		t: (key: string, options?: Record<string, string | number>) => {
 			if(key === "views.dashboard.command_center") return `${options?.company ?? ""} Command Center`
-			if(key === "views.dashboard.clients.active_count") return `${options?.count ?? 0} Active Clients`
-			if(key === "views.dashboard.team.member_count") return `${options?.count ?? 0} Team Members`
+			if(key === "views.dashboard.clients.active_count") return "Active clients"
+			if(key === "views.dashboard.clients.inactive_count") return "Inactive"
+			if(key === "views.dashboard.team.member_count") return "Team members"
+			if(key === "views.dashboard.team.hiring_pipeline") return "In hiring pipeline"
 			if(key === "views.dashboard.time.total_hours") return `${options?.hours ?? 0} Hours`
-			if(key === "views.dashboard.time.pending_timesheets") return `${options?.count ?? 0} timesheets pending approval`
+			if(key === "views.dashboard.time.total_hours_week") return "Total hours tracked this week"
+			if(key === "views.dashboard.time.pending_timesheets") return "Timesheets pending approval"
+			if(key === "views.dashboard.schedule.open_shifts") return "Open shifts to fill"
 			if(key === "views.dashboard.activity.item_employee") return `New employee: ${options?.name ?? ""}`
 			return key
 		},
@@ -95,6 +99,13 @@ describe("DashboardBoard", () => {
 		expect(screen.getByText("views.dashboard.clients.title")).toBeInTheDocument()
 		expect(screen.getByText("views.dashboard.team.title")).toBeInTheDocument()
 		expect(screen.getByText("views.dashboard.time.title")).toBeInTheDocument()
+		expect(screen.getByRole("link", { name: /4 Active clients/i })).toHaveAttribute("href", "/clients")
+		expect(screen.queryByText("4 Active Clients")).not.toBeInTheDocument()
+		expect(screen.getByRole("link", { name: /2 Team members/i })).toHaveAttribute("href", "/employees")
+		expect(screen.getByRole("link", { name: /Inactive/i })).toHaveAttribute("href", "/clients")
+		expect(screen.getByRole("link", { name: /In hiring pipeline/i })).toHaveAttribute("href", "/employees/applicants")
+		expect(screen.getByRole("link", { name: /Timesheets pending approval/i })).toHaveAttribute("href", "/payroll")
+		expect(screen.getByRole("link", { name: /40\.5 Total hours tracked this week/i })).toHaveAttribute("href", "/payroll")
 		expect(screen.getByText("Morning shift")).toBeInTheDocument()
 		expect(screen.getByText("New employee: Lawrence Schultz")).toBeInTheDocument()
 		expect(screen.getByText("views.dashboard.clients.view_all")).toBeInTheDocument()
@@ -123,7 +134,10 @@ describe("DashboardBoard", () => {
 			</MantineProvider>,
 		)
 
-		expect(screen.getByText("views.dashboard.schedule.open_shifts")).toBeInTheDocument()
+		expect(screen.getByRole("link", { name: /Open shifts to fill/i })).toHaveAttribute(
+			"href",
+			"/clients/maria-santos/schedule",
+		)
 		expect(screen.getByText("Maria Santos")).toBeInTheDocument()
 	})
 

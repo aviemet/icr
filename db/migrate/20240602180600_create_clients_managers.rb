@@ -1,4 +1,4 @@
-class CreateClientsManagers < ActiveRecord::Migration[7.2]
+class CreateClientsManagers < ActiveRecord::Migration[8.0]
   def change
     create_table :clients_managers, id: :uuid do |t|
       t.belongs_to :manager, type: :uuid, null: false, foreign_key: { to_table: :employees }

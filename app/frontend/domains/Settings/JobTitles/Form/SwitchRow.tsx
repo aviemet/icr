@@ -5,6 +5,8 @@ import { useFormField, useFormFieldContext } from "@/components/Form"
 import { Checkbox, Switch } from "@/components/Inputs"
 import { useCheckboxState } from "@/lib/hooks"
 
+import { permissionColumns } from "./formData"
+
 export interface SwitchRowProps {
 	label: string
 	model: string
@@ -45,14 +47,20 @@ export function SwitchRow({ label, model, permissions }: SwitchRowProps) {
 				/>
 			</Table.Cell>
 			<Table.Cell>{ label }</Table.Cell>
-			{ permissions.map(permission => (
-				<Table.Cell key={ `${model}_${permission}` }>
-					<Switch
-						name={ `permissions.${model}.${permission}` }
-						disabled={ Boolean(isAdmin) }
-					/>
-				</Table.Cell>
-			)) }
+			{ permissionColumns.map(permission => {
+				if(!permissions.includes(permission)) {
+					return <Table.Cell key={ `${model}_${permission}` } />
+				}
+
+				return (
+					<Table.Cell key={ `${model}_${permission}` }>
+						<Switch
+							name={ `permissions.${model}.${permission}` }
+							disabled={ Boolean(isAdmin) }
+						/>
+					</Table.Cell>
+				)
+			}) }
 		</Table.Row>
 	)
 }

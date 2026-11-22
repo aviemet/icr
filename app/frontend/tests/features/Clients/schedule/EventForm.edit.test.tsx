@@ -12,6 +12,88 @@ import { Routes } from "@/lib"
 import { theme } from "@/lib/theme"
 import { server } from "@/tests/helpers/mockServer"
 
+const eventFormCopy: Record<string, string> = {
+	"views.clients.schedule.event_form.shift_type": "Shift Type",
+	"views.clients.schedule.event_form.repeats": "Repeats",
+	"views.clients.schedule.event_form.frequency": "Frequency",
+	"views.clients.schedule.event_form.frequency_daily": "Daily",
+	"views.clients.schedule.event_form.frequency_weekly": "Weekly",
+	"views.clients.schedule.event_form.frequency_monthly": "Monthly",
+	"views.clients.schedule.event_form.frequency_yearly": "Yearly",
+	"views.clients.schedule.event_form.interval": "Every %{unit}",
+	"views.clients.schedule.event_form.interval_daily": "day(s)",
+	"views.clients.schedule.event_form.interval_weekly": "week(s)",
+	"views.clients.schedule.event_form.interval_monthly": "month(s)",
+	"views.clients.schedule.event_form.interval_yearly": "year(s)",
+	"views.clients.schedule.event_form.weekdays": "Repeat on",
+	"views.clients.schedule.event_form.monthly_mode": "Monthly on",
+	"views.clients.schedule.event_form.monthly_on_day": "Day of the month",
+	"views.clients.schedule.event_form.monthly_on_weekday": "Weekday of the month",
+	"views.clients.schedule.event_form.ends": "Ends",
+	"views.clients.schedule.event_form.ends_never": "Never",
+	"views.clients.schedule.event_form.ends_on_date": "On date",
+	"views.clients.schedule.event_form.ends_after": "After",
+	"views.clients.schedule.event_form.until": "End date",
+	"views.clients.schedule.event_form.occurrences": "Occurrences",
+	"views.clients.schedule.event_form.occurrences_hint": "Including the first event",
+	"views.clients.schedule.event_form.weekday_sun": "Sun",
+	"views.clients.schedule.event_form.weekday_mon": "Mon",
+	"views.clients.schedule.event_form.weekday_tue": "Tue",
+	"views.clients.schedule.event_form.weekday_wed": "Wed",
+	"views.clients.schedule.event_form.weekday_thu": "Thu",
+	"views.clients.schedule.event_form.weekday_fri": "Fri",
+	"views.clients.schedule.event_form.weekday_sat": "Sat",
+	"views.clients.schedule.event_form.edit_recurring_body": "Apply these changes to which events?",
+	"views.clients.schedule.event_form.edit_all_events": "All events",
+	"views.clients.schedule.event_form.edit_this_and_future": "This and all future events",
+	"views.clients.schedule.event_form.edit_this_occurrence": "Just this event",
+	"views.clients.schedule.event_form.edit_scope_cancel": "Back",
+}
+
+vi.mock("react-i18next", () => ({
+	useTranslation: () => ({
+		t: (key: string, options?: Record<string, string>) => {
+			const template = eventFormCopy[key] ?? key
+			if(!options) return template
+			return template.replace(/%\{(\w+)\}/g, (_, name: string) => options[name] ?? "")
+		},
+	}),
+}))
+
+vi.mock("@/components/Inputs", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@/components/Inputs")>()
+
+	function MockDateInput({
+		label,
+		value,
+		onChange,
+	}: {
+		label?: React.ReactNode
+		value?: string | Date | null
+		onChange?: (value: string | null) => void
+	}) {
+		const labelText = typeof label === "string" ? label : "Until"
+		const stringValue = typeof value === "string" ? value : ""
+		return (
+			<label>
+				{ labelText }
+				<input
+					aria-label={ labelText }
+					value={ stringValue }
+					onChange={ (event) => {
+						onChange?.(event.target.value === "" ? null : event.target.value)
+					} }
+				/>
+			</label>
+		)
+	}
+
+	return {
+		...actual,
+		DateInput: MockDateInput,
+	}
+})
+
 const employeeId = "emp-1"
 const employeeName = "Kristopher Fisher"
 const start = dayjs("2026-11-16T00:00:00.000").toDate()
@@ -173,6 +255,12 @@ describe("EventForm create participants", () => {
 			event_participants_attributes?: Array<{ participant_id: string, participant_type: string }>
 			event_participants?: Array<{ participant_id: string, participant_type: string }>
 			shift_attributes?: { employee_id?: string }
+			recurring_patterns_attributes?: Array<{
+				recurring_type: string
+				offset: number
+				day_of_week: number
+				end_date: string
+			}>
 		}
 		type PostedBody = { calendar_event: PostedCalendarEvent }
 		const captured: { body: PostedBody | null } = { body: null }
@@ -205,6 +293,8 @@ describe("EventForm create participants", () => {
 			expect(screen.getByRole("combobox", { name: "Employee" })).toBeInTheDocument()
 		})
 
+		expect(screen.getByRole("switch", { name: /^Repeats$/i })).toBeInTheDocument()
+
 		await user.click(screen.getByRole("button", { name: "Save Shift" }))
 
 		await waitFor(() => {
@@ -224,6 +314,283 @@ describe("EventForm create participants", () => {
 		])
 		expect(calendarEvent.event_participants).toBeUndefined()
 		expect(calendarEvent.shift_attributes).toBeDefined()
+		expect(calendarEvent.recurring_patterns_attributes).toBeUndefined()
+	})
+
+	it("includes recurring_patterns_attributes when repeat is enabled", async () => {
+		const user = userEvent.setup()
+		type PostedCalendarEvent = {
+			recurring_patterns_attributes?: Array<{
+				recurring_type: string
+				offset: number
+				day_of_week: number
+				end_date?: string
+				max_occurrences?: number
+			}>
+		}
+		type PostedBody = { calendar_event: PostedCalendarEvent }
+		const captured: { body: PostedBody | null } = { body: null }
+
+		server.use(
+			http.post(Routes.apiCalendarEvents(), async ({ request }) => {
+				captured.body = await request.json() as PostedBody
+				return HttpResponse.json({ id: "event-new" }, { status: 201 })
+			}),
+		)
+
+		const queryClient = new QueryClient({
+			defaultOptions: {
+				queries: { retry: false },
+				mutations: { retry: false },
+			},
+		})
+
+		render(
+			<QueryClientProvider client={ queryClient }>
+				<MantineProvider theme={ theme } defaultColorScheme="dark">
+					<DatesProvider settings={ { consistentWeeks: true } }>
+						<EventForm client={ client } selectedDate={ start } />
+					</DatesProvider>
+				</MantineProvider>
+			</QueryClientProvider>,
+		)
+
+		await waitFor(() => {
+			expect(screen.getByRole("switch", { name: /^Repeats$/i })).toBeInTheDocument()
+		})
+
+		await user.click(screen.getByRole("switch", { name: /^Repeats$/i }))
+
+		await waitFor(() => {
+			expect(screen.getByRole("combobox", { name: "Frequency" })).toBeInTheDocument()
+			expect(screen.getByRole("combobox", { name: "Ends" })).toBeInTheDocument()
+		})
+
+		await user.click(screen.getByRole("button", { name: "Save Shift" }))
+
+		await waitFor(() => {
+			if(captured.body === null) {
+				throw new Error("Expected create request body")
+			}
+		})
+
+		const postedBody = captured.body
+		if(postedBody === null) {
+			throw new Error("Expected create request body")
+		}
+
+		expect(postedBody.calendar_event.recurring_patterns_attributes).toEqual([
+			{
+				recurring_type: "weekly",
+				offset: 1,
+				day_of_week: start.getDay(),
+			},
+		])
+	})
+})
+
+describe("EventForm edit recurrence", () => {
+	it("shows hydrated repeat controls when editing a recurring occurrence", async () => {
+		const queryClient = new QueryClient({
+			defaultOptions: {
+				queries: { retry: false },
+				mutations: { retry: false },
+			},
+		})
+
+		render(
+			<QueryClientProvider client={ queryClient }>
+				<MantineProvider theme={ theme } defaultColorScheme="dark">
+					<DatesProvider settings={ { consistentWeeks: true } }>
+						<EventForm
+							client={ client }
+							event={ {
+								id: "master-1__occ",
+								title: "Shift",
+								start,
+								end,
+								resources: {
+									employee: { id: employeeId, name: employeeName },
+									client,
+									recurrence: {
+										masterId: "master-1",
+										occurrenceStartsAt: "2026-11-23T09:00:00.000Z",
+										isRecurring: true,
+										patterns: [
+											{
+												recurring_type: "weekly",
+												offset: 1,
+												day_of_week: start.getDay(),
+												end_date: "2026-12-31",
+											},
+										],
+									},
+								},
+							} }
+						/>
+					</DatesProvider>
+				</MantineProvider>
+			</QueryClientProvider>,
+		)
+
+		await waitFor(() => {
+			expect(screen.getByRole("switch", { name: /^Repeats$/i })).toBeChecked()
+			expect(screen.getByRole("combobox", { name: "Frequency" })).toBeInTheDocument()
+			expect(screen.getByRole("combobox", { name: "Ends" })).toBeInTheDocument()
+		})
+	})
+
+	it("prompts for edit scope after save on a recurring occurrence", async () => {
+		const user = userEvent.setup()
+		type PostedCalendarEvent = {
+			edit_scope?: string
+			occurrence_starts_at?: string
+		}
+		type PostedBody = { calendar_event: PostedCalendarEvent }
+		const captured: { body: PostedBody | null } = { body: null }
+		const occurrenceStartsAt = "2026-11-23T09:00:00.000Z"
+
+		server.use(
+			http.patch(Routes.apiCalendarEvent("master-1"), async ({ request }) => {
+				captured.body = await request.json() as PostedBody
+				return HttpResponse.json({ id: "master-1" }, { status: 201 })
+			}),
+		)
+
+		const queryClient = new QueryClient({
+			defaultOptions: {
+				queries: { retry: false },
+				mutations: { retry: false },
+			},
+		})
+
+		render(
+			<QueryClientProvider client={ queryClient }>
+				<MantineProvider theme={ theme } defaultColorScheme="dark">
+					<DatesProvider settings={ { consistentWeeks: true } }>
+						<EventForm
+							client={ client }
+							event={ {
+								id: "master-1__occ",
+								title: "Shift",
+								start,
+								end,
+								resources: {
+									employee: { id: employeeId, name: employeeName },
+									client,
+									recurrence: {
+										masterId: "master-1",
+										occurrenceStartsAt,
+										isRecurring: true,
+										patterns: [
+											{
+												recurring_type: "weekly",
+												offset: 1,
+												day_of_week: start.getDay(),
+											},
+										],
+									},
+								},
+							} }
+						/>
+					</DatesProvider>
+				</MantineProvider>
+			</QueryClientProvider>,
+		)
+
+		await waitFor(() => {
+			expect(screen.getByRole("button", { name: "Save Shift" })).toBeInTheDocument()
+		})
+
+		await user.click(screen.getByRole("button", { name: "Save Shift" }))
+
+		await waitFor(() => {
+			expect(screen.getByRole("button", { name: "All events" })).toBeInTheDocument()
+			expect(screen.getByRole("button", { name: "This and all future events" })).toBeInTheDocument()
+			expect(screen.getByRole("button", { name: "Just this event" })).toBeInTheDocument()
+		})
+
+		await user.click(screen.getByRole("button", { name: "Just this event" }))
+
+		await waitFor(() => {
+			if(captured.body === null) {
+				throw new Error("Expected update request body")
+			}
+		})
+
+		expect(captured.body?.calendar_event.edit_scope).toBe("one")
+		expect(captured.body?.calendar_event.occurrence_starts_at).toBe(occurrenceStartsAt)
+	})
+
+	it("sends occurrence_starts_at when saving all events on a recurring occurrence", async () => {
+		const user = userEvent.setup()
+		type PostedCalendarEvent = {
+			edit_scope?: string
+			occurrence_starts_at?: string
+		}
+		type PostedBody = { calendar_event: PostedCalendarEvent }
+		const captured: { body: PostedBody | null } = { body: null }
+		const occurrenceStartsAt = "2026-11-23T09:00:00.000Z"
+
+		server.use(
+			http.patch(Routes.apiCalendarEvent("master-1"), async ({ request }) => {
+				captured.body = await request.json() as PostedBody
+				return HttpResponse.json({ id: "master-1" }, { status: 201 })
+			}),
+		)
+
+		const queryClient = new QueryClient({
+			defaultOptions: {
+				queries: { retry: false },
+				mutations: { retry: false },
+			},
+		})
+
+		render(
+			<QueryClientProvider client={ queryClient }>
+				<MantineProvider theme={ theme } defaultColorScheme="dark">
+					<DatesProvider settings={ { consistentWeeks: true } }>
+						<EventForm
+							client={ client }
+							event={ {
+								id: "master-1__occ",
+								title: "Shift",
+								start,
+								end,
+								resources: {
+									employee: { id: employeeId, name: employeeName },
+									client,
+									recurrence: {
+										masterId: "master-1",
+										occurrenceStartsAt,
+										isRecurring: true,
+										patterns: [
+											{
+												recurring_type: "weekly",
+												offset: 1,
+												day_of_week: start.getDay(),
+											},
+										],
+									},
+								},
+							} }
+						/>
+					</DatesProvider>
+				</MantineProvider>
+			</QueryClientProvider>,
+		)
+
+		await user.click(await screen.findByRole("button", { name: "Save Shift" }))
+		await user.click(await screen.findByRole("button", { name: "All events" }))
+
+		await waitFor(() => {
+			if(captured.body === null) {
+				throw new Error("Expected update request body")
+			}
+		})
+
+		expect(captured.body?.calendar_event.edit_scope).toBe("all")
+		expect(captured.body?.calendar_event.occurrence_starts_at).toBe(occurrenceStartsAt)
 	})
 })
 

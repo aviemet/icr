@@ -1,0 +1,11 @@
+---
+en:
+  activerecord:
+    errors:
+      models:
+        calendar/recurring_pattern:
+          monthly_anchor_required: must include a day of month or weekday of month
+          yearly_anchor_required: must include a month and day
+          attributes:
+            end_date:
+              before_start: must be on or after the event start date

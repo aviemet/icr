@@ -23,7 +23,7 @@ module Employee::StateMachine
         transitions from: :applicant,
           to: :employed,
           after: :activate_employment,
-          guard: :eligible_for_hire?
+          guard: [:eligible_for_hire?, :requirements_met_for_employment?]
       end
 
       event :withdraw_application do
@@ -39,7 +39,8 @@ module Employee::StateMachine
       event :accept_offer do
         transitions from: :offered,
           to: :employed,
-          after: :activate_employment
+          after: :activate_employment,
+          guard: :requirements_met_for_employment?
       end
 
       event :reject_offer do
@@ -84,6 +85,20 @@ module Employee::StateMachine
 
     def offer_declined
       self.ineligibility_reason = ineligibility_reason.presence || "Offer declined"
+    end
+
+    def requirements_met_for_employment?
+      gate = Requirement::EmploymentGate.call(self)
+      return true if gate.allowed?
+
+      errors.add(
+        :base,
+        I18n.t(
+          "requirements.gates.employment_blocked",
+          names: gate.unmet_names.to_sentence,
+        ),
+      )
+      false
     end
   end
 end

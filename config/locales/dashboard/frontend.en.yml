@@ -13,9 +13,9 @@ en:
         title: Recent Activity
         unnamed: "(no name)"
       clients:
-        active_count: "%{count} Active Clients"
+        active_count: Active clients
         add_new: Add New Client
-        inactive_count: "%{count} inactive"
+        inactive_count: Inactive
         title: Clients Overview
         view_all: View All Clients
       command_center: "%{company} Command Center"
@@ -23,7 +23,7 @@ en:
         add: Add Event
         empty: No upcoming events in your view.
         open_shift: Open shift
-        open_shifts: "%{count} open shifts to fill"
+        open_shifts: Open shifts to fill
         shift_for: Shift - %{name}
         title: Today's Schedule
         untitled_shift: Shift
@@ -32,12 +32,12 @@ en:
 
       team:
         add_new: Add New Employee
-        hiring_pipeline: "%{count} in hiring pipeline"
-        member_count: "%{count} Team Members"
+        hiring_pipeline: In hiring pipeline
+        member_count: Team members
         title: Team Overview
         view_all: View All Employees
       time:
-        pending_timesheets: "%{count} timesheets pending approval"
+        pending_timesheets: Timesheets pending approval
         title: Time Tracking
         total_hours: "%{hours} Hours"
         total_hours_week: Total hours tracked this week

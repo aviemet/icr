@@ -1,4 +1,4 @@
-class CreateHouseholdsClients < ActiveRecord::Migration[7.1]
+class CreateHouseholdsClients < ActiveRecord::Migration[8.0]
   def change
     create_table :households_clients, id: :uuid do |t|
       t.belongs_to :household, type: :uuid, null: false, foreign_key: true

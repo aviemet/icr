@@ -203,6 +203,33 @@ RSpec.describe "/employees" do
       expect(props[:assigned_clients_count]).to eq(1)
       expect(props[:primary_manager][:id]).to eq(manager.id)
       expect(props[:pay_rates].size).to eq(1)
+      expect(inertia.props[:can_complete_trainings]).to be(true)
+      expect(inertia.props[:training_options].pluck(:id)).not_to include(training.id)
+    end
+
+    it "ships requirement fulfillments in lockstep with applicable requirements" do
+      job_title = create(:job_title)
+      employee = create(:employee, :employed)
+      employee.assign_job_title(job_title)
+      other_title = create(:job_title)
+      training = create(:training, name: "Orientation")
+      company_requirement = create(:requirement, name: "Company Onboarding")
+      create(:requirement_item, requirement: company_requirement, fulfillable: training)
+      matching_requirement = create(:requirement, :for_job_title, name: "Title Requirement", scope: job_title)
+      create(:requirement_item, requirement: matching_requirement, fulfillable: training)
+      other_requirement = create(:requirement, :for_job_title, name: "Other Title", scope: other_title)
+      create(:requirement_item, requirement: other_requirement, fulfillable: training)
+      create(:employees_training, :completed, employee: employee, training: training)
+
+      get employee_url(employee)
+
+      fulfillments = inertia.props[:requirement_fulfillments]
+      requirement_ids = fulfillments[:requirements].pluck(:requirement_id)
+      expect(requirement_ids).to contain_exactly(company_requirement.id, matching_requirement.id)
+      expect(fulfillments[:total_count]).to eq(requirement_ids.size)
+      expect(fulfillments[:met_count] + fulfillments[:unmet_count]).to eq(fulfillments[:total_count])
+      expect(fulfillments[:met_count]).to eq(2)
+      expect(fulfillments[:unmet_count]).to eq(0)
     end
   end
 
@@ -229,6 +256,36 @@ RSpec.describe "/employees" do
       expect(response).to redirect_to(employee_url(employee))
       expect(employee.reload).to be_employed
       expect(employee.active_at).to eq(Date.current)
+    end
+
+    it "blocks begin_employment when employment requirements are unmet" do
+      job_title = create(:job_title)
+      employee = create(:employee, desired_job_title: job_title)
+      requirement = create(:requirement, :employment, :for_job_title, scope: job_title, name: "Driver License")
+      create(:requirement_item, :credential, requirement: requirement, credential_type: :drivers_license)
+
+      put status_employee_url(employee), params: {
+        employee: { event: "begin_employment", active_at: Date.current }
+      }
+
+      expect(response).to redirect_to(status_employee_url(employee))
+      expect(session[:inertia_errors][:base].join).to include("Driver License")
+      expect(employee.reload).to be_applicant
+    end
+
+    it "begins employment when employment requirements are met" do
+      job_title = create(:job_title)
+      employee = create(:employee, desired_job_title: job_title)
+      requirement = create(:requirement, :employment, :for_job_title, scope: job_title, name: "Driver License")
+      create(:requirement_item, :credential, requirement: requirement, credential_type: :drivers_license)
+      create(:employee_credential, employee: employee, credential_type: :drivers_license, expires_on: 1.year.from_now)
+
+      put status_employee_url(employee), params: {
+        employee: { event: "begin_employment", active_at: Date.current }
+      }
+
+      expect(response).to redirect_to(employee_url(employee))
+      expect(employee.reload).to be_employed
     end
 
     it "withdraws an application via AASM" do

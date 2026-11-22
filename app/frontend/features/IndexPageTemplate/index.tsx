@@ -55,7 +55,7 @@ export function IndexPageTemplate({
 					>
 						<IndexTableTitleSection title={ title } actions={ actions } deleteRoute={ deleteRoute }>
 							{ (search || searchLeading) && (
-								<Box className={ searchClusterClassName }>
+								<Box className={ clsx(classes.searchCluster, searchClusterClassName) }>
 									{ searchLeading }
 									{ search && (
 										<Table.SearchInput

@@ -14,7 +14,7 @@ RSpec.describe "/clients/:client_slug/allergies" do
         }
       }.to change(Client::Allergy, :count).by(1)
 
-      expect(response).to redirect_to(client_url(client, tab: "health"))
+      expect(response).to redirect_to(client_url(client, tab: "medical"))
       expect(client.allergies.last.name).to eq("Peanuts")
     end
   end
@@ -28,7 +28,7 @@ RSpec.describe "/clients/:client_slug/allergies" do
         delete client_allergy_url(client, allergy)
       }.to change(Client::Allergy, :count).by(-1)
 
-      expect(response).to redirect_to(client_url(client, tab: "health"))
+      expect(response).to redirect_to(client_url(client, tab: "medical"))
     end
   end
 end

@@ -5,7 +5,7 @@
 #  id                :uuid             not null, primary key
 #  day_of_month      :integer
 #  day_of_week       :integer
-#  end_date          :integer
+#  end_date          :date
 #  max_occurrences   :integer
 #  month_of_year     :integer
 #  offset            :integer          default(1), not null

@@ -1,7 +1,7 @@
 class Clients::AttendantsController < Clients::BaseController
   expose :clients_attendant, model: ClientsAttendant, scope: -> { client.clients_attendants }
 
-  strong_params :clients_attendant, permit: [:attendant_id, :starts_at, :ends_at]
+  strong_params :clients_attendant, permit: [:attendant_id, :starts_at]
 
   # @route POST /clients/:client_slug/attendants (client_attendants)
   def create

@@ -67,6 +67,10 @@ class ClientsController < ApplicationController
       can_update: -> { policy(client).update? },
       can_view_open_shifts: -> { Shifts::OpenVisibility.can_view?(current_user, client) },
       open_shifts_count: -> { Shifts::OpenVisibility.future_open_count_for_client(current_user, client) },
+      training_options: -> {
+        linked_ids = client_for_show.clients_trainings.map(&:training_id)
+        Employee::Training.active.where.not(id: linked_ids).order(:name).render(:options)
+      },
     }
   end
 
@@ -94,13 +98,19 @@ class ClientsController < ApplicationController
 
     client_for_show = Client.includes_show.find(client.id)
 
-    schedules = client.schedule_events_between(*DateRangeCalculator.new(params).call)
+    range_start, range_end = DateRangeCalculator.new(params).call
+    masters = client.schedule_events_between(range_start, range_end)
 
     render inertia: "Clients/Schedule", props: {
       client: -> { client_for_show.render(:show) },
       can_update: -> { policy(client).update? },
       schedules: lambda {
-        schedules.render(:client)
+        Calendar::RenderSchedule.call(
+          events: masters,
+          range_start: range_start,
+          range_end: range_end,
+          view: :client,
+        )
       },
     }
   end

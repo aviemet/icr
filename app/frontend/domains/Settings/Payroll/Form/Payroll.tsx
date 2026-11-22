@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import { Grid } from "@/components"
 import { useFormField } from "@/components/Form"
 import { Select } from "@/components/Inputs"
@@ -14,6 +16,7 @@ function isPayrollPeriodType(value: unknown): value is PayrollPeriodType {
 const DEFAULT_PAYROLL_PERIOD: PayrollPeriodType = "bi_weekly"
 
 export function Payroll() {
+	const { t } = useTranslation()
 	const [payrollPeriod] = useFormField("settings.payroll_period_type")
 
 	return (
@@ -21,12 +24,12 @@ export function Payroll() {
 			<Grid.Col span={ { xs: 12, sm: 6 } }>
 				<Select
 					name="settings.payroll_period_type"
-					label="How often pay periods run"
+					label={ t("views.settings.payroll.schedule.period_type_label") }
 					options={ [
-						{ label: "Every 2 weeks", value: "bi_weekly" },
-						{ label: "Semi-monthly", value: "semi_monthly" },
-						{ label: "Monthly", value: "monthly" },
-						{ label: "Weekly", value: "weekly" },
+						{ label: t("views.settings.payroll.schedule.period_type_bi_weekly"), value: "bi_weekly" },
+						{ label: t("views.settings.payroll.schedule.period_type_semi_monthly"), value: "semi_monthly" },
+						{ label: t("views.settings.payroll.schedule.period_type_monthly"), value: "monthly" },
+						{ label: t("views.settings.payroll.schedule.period_type_weekly"), value: "weekly" },
 					] }
 				/>
 			</Grid.Col>

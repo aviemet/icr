@@ -1,4 +1,4 @@
-class CreatePayRates < ActiveRecord::Migration[7.1]
+class CreatePayRates < ActiveRecord::Migration[8.0]
   def change
     create_table :pay_rates, id: :uuid do |t|
       t.monetize :rate

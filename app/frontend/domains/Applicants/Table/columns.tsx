@@ -94,6 +94,8 @@ export function useApplicantTableColumns({
 		{
 			accessor: "actions",
 			title: t("views.employees.table.actions"),
+			titleClassName: "actionsCell",
+			cellsClassName: "actionsCell",
 			sortable: false,
 			render: (employee) => (
 				<Group wrap="nowrap" gap="xs">

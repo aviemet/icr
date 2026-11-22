@@ -2,13 +2,15 @@
 #
 # Table name: shifts
 #
-#  id                :uuid             not null, primary key
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  calendar_event_id :uuid             not null
-#  category_id       :uuid             not null
-#  employee_id       :uuid
-#  timesheet_id      :uuid
+#  id                      :uuid             not null, primary key
+#  facilitator_approved_at :date
+#  ihss                    :boolean          default(FALSE), not null
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  calendar_event_id       :uuid             not null
+#  category_id             :uuid             not null
+#  employee_id             :uuid
+#  timesheet_id            :uuid
 #
 # Indexes
 #
@@ -71,6 +73,34 @@ class Shift < ApplicationRecord
     joins(:calendar_event).where(calendar_events: { starts_at: Time.current.. })
   }
   scope :includes_associated, -> { includes(:calendar_event, :timesheet) }
+  scope :facilitator_approved, -> { where.not(facilitator_approved_at: nil) }
+  scope :facilitator_pending, -> { where(facilitator_approved_at: nil) }
+
+  def facilitator_approved?
+    facilitator_approved_at.present?
+  end
+
+  def occurrences_in(pay_period)
+    return [] if calendar_event.blank?
+
+    calendar_event.occurrences_in(pay_period.starts_at, pay_period.ends_at).map do |occurrence|
+      Payroll::ShiftOccurrence.new(self, occurrence)
+    end
+  end
+
+  def clear_facilitator_approval!
+    return if facilitator_approved_at.blank?
+
+    update!(facilitator_approved_at: nil)
+  end
+
+  def invalidate_approvals!
+    clear_facilitator_approval!
+    return if timesheet.blank?
+    return if timesheet.approved_at.blank?
+
+    timesheet.update!(approved_at: nil)
+  end
 
   private
 

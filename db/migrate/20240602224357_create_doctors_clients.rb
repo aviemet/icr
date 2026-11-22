@@ -1,4 +1,4 @@
-class CreateDoctorsClients < ActiveRecord::Migration[7.1]
+class CreateDoctorsClients < ActiveRecord::Migration[8.0]
   def change
     create_table :doctors_clients, id: :uuid do |t|
       t.belongs_to :doctor, type: :uuid, null: false, foreign_key: true
@@ -7,5 +7,7 @@ class CreateDoctorsClients < ActiveRecord::Migration[7.1]
 
       t.timestamps
     end
+
+    add_index :doctors_clients, [:doctor_id, :client_id], unique: true, name: "index_doctors_clients_on_doctor_and_client"
   end
 end

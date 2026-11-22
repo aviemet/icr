@@ -28,10 +28,58 @@ en:
           due_in_days: Due in %{count} days
           overdue_by_days: Overdue by %{count} days
           finalized_on: Finalized %{date}
+      clients:
+        title: Client review
+        help: Review shifts by client. Facilitators sign off hours for their caseload clients.
+        pending_shifts: "%{count} shifts awaiting facilitator review"
+        reviewed_of_total: "%{reviewed} / %{total}"
+        status_reviewed: Reviewed
+        status_pending: Needs review
+        review: Review
+        view_employees: Employee payroll
+        columns:
+          client: Client
+          pending: Pending
+          reviewed: Reviewed
+          ihss_used: IHSS used
+          authorized: Authorized
+          status: Status
+          actions: Action
+      ihss:
+        title: IHSS assignments
+        help: Enter IHSS hours for each employee and client for this pay period.
+        save: Save IHSS assignments
+        hours: IHSS hours
+        authorized: Authorized
+        employee: Employee
+        client: Client
+        empty: No employee and client pairs with shifts in this period.
+        back: Back to period
+      client_show:
+        help: Choose an employee to review their shifts for this client.
+        employee_label: Employee
+        employee_placeholder: Choose an employee
+        no_employees: No employees worked for this client in this period.
+        pending_count: "%{count} shifts need review"
+        finalized_locked: This period is closed. Shift review is locked.
+        approve: Mark reviewed
+        unapprove: Clear review
+        approve_all_pending: Mark all pending reviewed
+        back_to_clients: Back to clients
+        columns:
+          status: Status
       show:
         title: Pay period
         back_to_payroll: Back to Payroll
+        view_clients: Client review
+        view_ihss: IHSS assignments
         workflow_help: Review and approve each employee timesheet, then close the period to lock it.
+        facilitator_progress: "%{reviewed} / %{total} shifts reviewed"
+        approve_with_gaps_title: Approve with unreviewed shifts?
+        approve_with_gaps_body: Some shifts still need facilitator review. You can still approve this timesheet for payroll.
+        approve_with_gaps_confirm: Approve anyway
+        approve_with_gaps_cancel: Cancel
+        unreviewed_shift_line: "%{client} - %{when}"
         finalize: Close period
         finalize_blocked_before_period_end: Close is available after the period ends.
         finalize_blocked_pending: Approve all timesheets before closing.
