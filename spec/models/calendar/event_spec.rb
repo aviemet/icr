@@ -49,10 +49,31 @@ RSpec.describe Calendar::Event do
 
     it { is_expected.to have_one(:shift) }
 
+    it { is_expected.to have_many(:children).dependent(:destroy) }
     it { is_expected.to have_many(:recurring_patterns) }
+    it { is_expected.to have_many(:event_exceptions).dependent(:destroy) }
     it { is_expected.to have_many(:clients).through(:event_participants) }
     it { is_expected.to have_many(:households).through(:event_participants) }
   end
+
+  describe "series destroy" do
+    it "destroys children when the master is destroyed" do
+      master = create(:calendar_event)
+      child = create(:calendar_event, parent: master)
+
+      expect { master.destroy }.to change(described_class, :count).by(-2)
+      expect(described_class.exists?(child.id)).to be(false)
+    end
+
+    it "leaves the master when a child is destroyed" do
+      master = create(:calendar_event)
+      child = create(:calendar_event, parent: master)
+
+      expect { child.destroy }.to change(described_class, :count).by(-1)
+      expect(described_class.exists?(master.id)).to be(true)
+    end
+  end
+
 
   describe "destroy" do
     it "destroys the linked shift when the period is open" do
@@ -74,6 +95,43 @@ RSpec.describe Calendar::Event do
       expect(event.errors[:base]).to include(I18n.t("pay_periods.finalized_locked"))
       expect(described_class.exists?(event.id)).to be(true)
       expect(Shift.exists?(shift.id)).to be(true)
+    end
+  end
+
+  describe ".for_schedule_range" do
+    it "includes a recurring master that started before the visible range" do
+      shift_category = Category.type("Calendar::Event").find_or_create_by!(name: "Other") { |category| category.system = true }
+      master = create(
+        :calendar_event,
+        category_id: shift_category.id,
+        starts_at: Time.zone.parse("2026-11-16 09:00"),
+        ends_at: Time.zone.parse("2026-11-16 17:00"),
+      )
+      create(
+        :calendar_recurring_pattern,
+        calendar_event: master,
+        recurring_type: :weekly,
+        day_of_week: 1,
+        end_date: nil,
+      )
+
+      range_start = Time.zone.parse("2026-12-01 00:00")
+      range_end = Time.zone.parse("2026-12-31 23:59")
+
+      expect(described_class.for_schedule_range(range_start, range_end)).to include(master)
+    end
+
+    it "excludes non-recurring events outside the range" do
+      event = create(
+        :calendar_event,
+        starts_at: Time.zone.parse("2026-10-01 09:00"),
+        ends_at: Time.zone.parse("2026-10-01 17:00"),
+      )
+
+      range_start = Time.zone.parse("2026-12-01 00:00")
+      range_end = Time.zone.parse("2026-12-31 23:59")
+
+      expect(described_class.for_schedule_range(range_start, range_end)).not_to include(event)
     end
   end
 

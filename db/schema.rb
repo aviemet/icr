@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_21_181113) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_21_171545) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -120,7 +120,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_21_181113) do
     t.integer "recurring_type", null: false
     t.integer "offset", default: 1, null: false
     t.integer "max_occurrences"
-    t.integer "end_date"
+    t.date "end_date"
     t.integer "day_of_week"
     t.integer "week_of_month"
     t.integer "day_of_month"
@@ -914,9 +914,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_21_181113) do
     t.string "name"
     t.text "description"
     t.integer "estimated_minutes"
+    t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "status", default: 0, null: false
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

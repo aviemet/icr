@@ -5,7 +5,7 @@
 #  id                :uuid             not null, primary key
 #  day_of_month      :integer
 #  day_of_week       :integer
-#  end_date          :integer
+#  end_date          :date
 #  max_occurrences   :integer
 #  month_of_year     :integer
 #  offset            :integer          default(1), not null
@@ -25,14 +25,10 @@
 #
 FactoryBot.define do
   factory :calendar_recurring_pattern, class: "Calendar::RecurringPattern" do
-    recurring_type { 1 }
+    recurring_type { :weekly }
     offset { 1 }
-    # separation_count { 1 }
-    # max_occurrences { 1 }
-    # day_of_week { 1 }
-    # week_of_month { 1 }
-    # day_of_month { 1 }
-    # month_of_year { 1 }
+    day_of_week { 1 }
+    end_date { 2.weeks.from_now.to_date }
 
     calendar_event
   end

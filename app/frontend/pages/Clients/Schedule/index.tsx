@@ -19,6 +19,12 @@ import { Modal, useModalContext } from "@/components/Modal"
 import { EventPopoverContent } from "@/domains/Clients/EventPopoverContent"
 import { EventForm } from "@/domains/Clients/schedule/EventForm"
 import { EventCalendarPopover } from "@/domains/Clients/schedule/NewEventCalendarPopover"
+import {
+	calendarEventId,
+	expandRecurringEvents,
+	expansionWindow,
+	recurrenceResources,
+} from "@/features/CalendarSchedule"
 import { ensureViewName, Routes, vars } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
@@ -35,6 +41,7 @@ interface ScheduleResources {
 	[key: string]: object
 	employee: NonNullable<Schema.ShiftsClient["employee"]> | Record<string, never>
 	client: Schema.ClientsShow
+	recurrence: ReturnType<typeof recurrenceResources>
 }
 
 const OPEN_SHIFT_COLOR = vars.colors.red[6]
@@ -105,27 +112,38 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 	}, [location.pathname, location.params])
 
 	const processedSchedules = useMemo((): BaseCalendarEvent<ScheduleResources>[] => {
-		return data?.map(schedule => {
-			const start = ensureDate(schedule.starts_at)
-			const end = ensureDate(schedule.ends_at)
-			const employee = schedule?.shift?.employee
+		if(!data) return []
+		const window = expansionWindow(calendarDate, calendarView)
+		return expandRecurringEvents(data, window.start, window.end, ({
+			master,
+			originalOccurrenceStart,
+			displayStart,
+			displayEnd,
+			isRecurring,
+		}) => {
+			const employee = master.shift?.employee
 			const isOpenShift = !hasAssignedEmployee(employee)
-
 			return {
-				id: schedule.id,
-				title: isOpenShift ? (schedule.name || "Open shift") : (schedule.name ?? ""),
-				start,
-				end,
-				allDay: schedule.all_day,
+				id: calendarEventId(master.id, originalOccurrenceStart, isRecurring),
+				title: isOpenShift ? (master.name || "Open shift") : (master.name ?? ""),
+				start: displayStart,
+				end: displayEnd,
+				allDay: master.all_day,
 				color: isOpenShift ? OPEN_SHIFT_COLOR : employee?.color,
 				open: isOpenShift,
 				resources: {
 					employee: hasAssignedEmployee(employee) ? employee : {},
 					client,
+					recurrence: recurrenceResources(
+						master.id,
+						originalOccurrenceStart,
+						isRecurring,
+						master.recurring_patterns ?? [],
+					),
 				},
 			}
-		}) ?? []
-	}, [client, data])
+		})
+	}, [calendarDate, calendarView, client, data])
 
 	const breadcrumbs: Breadcrumb[] = [
 		{ title: "Clients", href: Routes.clients() },

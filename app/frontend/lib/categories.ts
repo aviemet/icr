@@ -12,12 +12,12 @@ export function categorySlug<T extends SystemCategoryType, N extends SystemCateg
 	type: T,
 	name: N,
 ): SystemCategorySlug<T, N> {
-	return SYSTEM_CATEGORY_SLUGS[type][name] as SystemCategorySlug<T, N>
+	return SYSTEM_CATEGORY_SLUGS[type][name]
 }
 
 export function isSystemCategorySlug<T extends SystemCategoryType>(
 	type: T,
 	slug: string,
 ): slug is SystemCategorySlugsFor<T> {
-	return (Object.values(SYSTEM_CATEGORY_SLUGS[type]) as string[]).includes(slug)
+	return Object.values(SYSTEM_CATEGORY_SLUGS[type]).some((value) => value === slug)
 }

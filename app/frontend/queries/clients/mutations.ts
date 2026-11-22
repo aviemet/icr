@@ -52,17 +52,30 @@ export const useUpdateClientCalendarEvent: ReactMutationFunction<
 	})
 }
 
+export type DeleteClientCalendarEventVariables = {
+	edit_scope?: "one" | "all"
+	occurrence_starts_at?: string
+}
+
 export const useDeleteClientCalendarEvent: ReactMutationFunction<
 	void,
-	void,
+	DeleteClientCalendarEventVariables | void,
 	{ slug: string, id: string }
 > = (options) => {
 	const queryClient = useQueryClient()
 	const { slug, id } = options.params
 
 	return useMutation({
-		mutationFn: async () => {
-			const res = await axios.delete(Routes.apiCalendarEvent(id))
+		mutationFn: async (variables) => {
+			const params = new URLSearchParams()
+			if(variables && variables.edit_scope) params.set("edit_scope", variables.edit_scope)
+			if(variables && variables.occurrence_starts_at) {
+				params.set("occurrence_starts_at", variables.occurrence_starts_at)
+			}
+			const query = params.toString()
+			const res = await axios.delete(
+				query === "" ? Routes.apiCalendarEvent(id) : `${Routes.apiCalendarEvent(id)}?${query}`,
+			)
 			assertStatus(res, HTTP_STATUS.NO_CONTENT)
 		},
 		mutationKey: ["clients", slug, "schedule", "delete", id],

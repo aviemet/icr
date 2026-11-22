@@ -31,8 +31,18 @@ class Calendar::Event < ApplicationRecord
 
   belongs_to :parent, class_name: "Calendar::Event", optional: true
 
+  has_many :children,
+    class_name: "Calendar::Event",
+    foreign_key: :parent_id,
+    inverse_of: :parent,
+    dependent: :destroy
   has_many :recurring_patterns,
     class_name: "Calendar::RecurringPattern",
+    foreign_key: "calendar_event_id",
+    inverse_of: :calendar_event,
+    dependent: :destroy
+  has_many :event_exceptions,
+    class_name: "Calendar::EventException",
     foreign_key: "calendar_event_id",
     inverse_of: :calendar_event,
     dependent: :destroy
@@ -72,6 +82,7 @@ class Calendar::Event < ApplicationRecord
 
   accepts_nested_attributes_for :shift
   accepts_nested_attributes_for :event_participants
+  accepts_nested_attributes_for :recurring_patterns
 
   scope :includes_associated, -> { includes([shift: [employee: [:person]]]) }
 
@@ -81,10 +92,38 @@ class Calendar::Event < ApplicationRecord
     where("(starts_at < ? AND ends_at > ?) OR (all_day = TRUE AND starts_at < ? AND ends_at > ?)", end_time, start_time, end_time, start_time)
   }
   scope :all_day, ->{ where(all_day: true) }
+  scope :schedule_masters, -> { where(parent_id: nil) }
+
+  scope :for_schedule_range, ->(range_start, range_end) {
+    non_recurring_ids = schedule_masters
+      .left_outer_joins(:recurring_patterns)
+      .where(calendar_recurring_patterns: { id: nil })
+      .where(
+        <<~SQL.squish,
+          (calendar_events.starts_at < :range_end AND calendar_events.ends_at > :range_start)
+          OR (calendar_events.all_day = TRUE AND calendar_events.starts_at < :range_end AND calendar_events.ends_at > :range_start)
+        SQL
+        range_start: range_start,
+        range_end: range_end,
+      )
+      .reselect("calendar_events.id")
+
+    recurring_ids = schedule_masters
+      .joins(:recurring_patterns)
+      .where("calendar_events.starts_at < ?", range_end)
+      .where(
+        "calendar_recurring_patterns.end_date IS NULL OR calendar_recurring_patterns.end_date >= ?",
+        range_start.to_date,
+      )
+      .reselect("calendar_events.id")
+
+    where(id: non_recurring_ids).or(where(id: recurring_ids))
+  }
 
   scope :with_schedule_association_preloads, -> {
     includes([
       :recurring_patterns,
+      :event_exceptions,
       :event_participants,
       {
         clients: [

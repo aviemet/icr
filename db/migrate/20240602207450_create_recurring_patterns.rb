@@ -4,7 +4,7 @@ class CreateRecurringPatterns < ActiveRecord::Migration[7.0]
       t.integer :recurring_type, null: false
       t.integer :offset, null: false, default: 1
       t.integer :max_occurrences
-      t.integer :end_date
+      t.date :end_date, using: "NULL"
       t.integer :day_of_week
       t.integer :week_of_month
       t.integer :day_of_month

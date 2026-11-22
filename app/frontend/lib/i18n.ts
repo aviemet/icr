@@ -7,12 +7,15 @@ const defaultLocale = "en"
 
 const localeContext = import.meta.glob<Record<string, Record<string, object>>>("./locales/*.json", { eager: true })
 
-const resources = Object.entries(localeContext).reduce((acc, [path, translation]) => {
+const resources = Object.entries(localeContext).reduce<Record<string, { translation: object }>>((acc, [path, translation]) => {
 	const locale = path.match(/\.\/locales\/(.+)\.json/)?.[1] || defaultLocale
+	const localeTranslation = translation[locale]
+	if(!localeTranslation) return acc
+
 	return {
 		...acc,
 		[locale]: {
-			translation: translation[locale] as object,
+			translation: localeTranslation,
 		},
 	}
 }, {})

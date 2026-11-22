@@ -8,7 +8,7 @@ export function useClickAwayListener(ref: React.RefObject<HTMLElement>, callback
 	}
 
 	const handleClickAway = (e: MouseEvent) => {
-		if(!ref.current?.contains(e.target as Node)) {
+		if(!(e.target instanceof Node) || !ref.current?.contains(e.target)) {
 			cancelClickListener(callback)
 		}
 	}

@@ -39,11 +39,9 @@ class Household < ApplicationRecord
       .joins(:clients)
       .where(clients: { id: clients.select(:id) })
       .distinct
-      .select(:id)
+      .for_schedule_range(start_time, end_time)
+      .reselect("calendar_events.id")
 
-    Calendar::Event
-      .where(id: calendar_event_ids)
-      .with_schedule_association_preloads
-      .between(start_time, end_time)
+    Calendar::Event.where(id: calendar_event_ids).with_schedule_association_preloads
   end
 end

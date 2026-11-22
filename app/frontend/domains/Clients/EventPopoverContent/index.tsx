@@ -1,14 +1,20 @@
+import { Button, Text } from "@mantine/core"
+import { modals } from "@mantine/modals"
 import clsx from "clsx"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
-import { Box, Group, Link, Stack, Text, Title } from "@/components"
+import { ActionIcon, Box, Group, Link, Stack, Title, Tooltip } from "@/components"
 import { DeleteButton, EditButton } from "@/components/Button"
 import { BaseCalendarEvent, useCalendarContext } from "@/components/Calendar"
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
+import { TrashIcon } from "@/components/Icons"
 import { EventForm } from "@/domains/Clients/schedule/EventForm"
+import { type ScheduleRecurrenceResources } from "@/features/CalendarSchedule"
 import { Routes } from "@/lib"
 import { useDeleteClientCalendarEvent } from "@/queries/clients"
 
+import * as iconActionClasses from "@/components/Button/IconActionButton.css"
 import * as classes from "./EventPopoverContent.css"
 
 export interface EventPopoverContentProps {
@@ -28,12 +34,39 @@ function isClientResource(value: unknown): value is Schema.ClientsPersisted {
 	if(typeof value !== "object" || value === null) return false
 	if(!("id" in value) || !("slug" in value)) return false
 
-	return typeof (value as { id: unknown }).id === "string" && typeof (value as { slug: unknown }).slug === "string"
+	return typeof value.id === "string" && typeof value.slug === "string"
+}
+
+function getRecurrenceResources(
+	resources: BaseCalendarEvent["resources"],
+): ScheduleRecurrenceResources | undefined {
+	if(typeof resources !== "object" || resources === null || !("recurrence" in resources)) return undefined
+	const recurrence = resources.recurrence
+	if(typeof recurrence !== "object" || recurrence === null) return undefined
+	if(!("masterId" in recurrence) || !("occurrenceStartsAt" in recurrence) || !("isRecurring" in recurrence)) {
+		return undefined
+	}
+	if(typeof recurrence.masterId !== "string") return undefined
+	if(typeof recurrence.occurrenceStartsAt !== "string") return undefined
+	if(typeof recurrence.isRecurring !== "boolean") return undefined
+	const patterns = ("patterns" in recurrence && Array.isArray(recurrence.patterns))
+		? recurrence.patterns.filter((pattern): pattern is NonNullable<typeof pattern> => {
+			return typeof pattern === "object" && pattern !== null
+		})
+		: []
+	return {
+		masterId: recurrence.masterId,
+		occurrenceStartsAt: recurrence.occurrenceStartsAt,
+		isRecurring: recurrence.isRecurring,
+		patterns,
+	}
 }
 
 export function EventPopoverContent({ event, localizer, primaryResource = "employee" }: EventPopoverContentProps) {
+	const { t } = useTranslation()
 	const [editing, setEditing] = useState(false)
 	const { closePopover } = useCalendarContext()
+	const recurrence = getRecurrenceResources(event.resources)
 
 	const color = event.color || "#000000"
 	const isOpenShift = event.open === true
@@ -56,8 +89,54 @@ export function EventPopoverContent({ event, localizer, primaryResource = "emplo
 	}
 
 	const deleteEvent = useDeleteClientCalendarEvent({
-		params: { slug: client?.slug ?? "", id: String(event.id) },
+		params: {
+			slug: client?.slug ?? "",
+			id: recurrence?.masterId ?? String(event.id),
+		},
 	})
+
+	const handleRecurringDelete = () => {
+		if(!recurrence) return
+
+		modals.open({
+			title: t("views.clients.schedule.event_form.delete_recurring_title"),
+			children: (
+				<Stack gap="md">
+					<Text size="sm">
+						{ t("views.clients.schedule.event_form.delete_recurring_body") }
+					</Text>
+					<Group justify="flex-end">
+						<Button
+							variant="default"
+							color="red"
+							onClick={ () => {
+								modals.closeAll()
+								deleteEvent.mutate({
+									edit_scope: "one",
+									occurrence_starts_at: recurrence.occurrenceStartsAt,
+								}, {
+									onSuccess: () => closePopover(),
+								})
+							} }
+						>
+							{ t("views.clients.schedule.event_form.delete_this_occurrence") }
+						</Button>
+						<Button
+							color="red"
+							onClick={ () => {
+								modals.closeAll()
+								deleteEvent.mutate({ edit_scope: "all" }, {
+									onSuccess: () => closePopover(),
+								})
+							} }
+						>
+							{ t("views.clients.schedule.event_form.delete_entire_series") }
+						</Button>
+					</Group>
+				</Stack>
+			),
+		})
+	}
 
 	if(editing && client) {
 		return (
@@ -94,10 +173,29 @@ export function EventPopoverContent({ event, localizer, primaryResource = "emplo
 				{ client && (
 					<Group gap="xs">
 						<EditButton label="shift" onClick={ () => setEditing(true) } />
-						<DeleteButton
-							label="shift"
-							onDelete={ () => deleteEvent.mutate() }
-						/>
+						{ recurrence?.isRecurring
+							? (
+								<Tooltip label={ t("views.clients.schedule.event_form.delete_recurring_title") } withArrow position="left">
+									<ActionIcon
+										variant="transparent"
+										aria-label={ t("views.clients.schedule.event_form.delete_recurring_title") }
+										className={ clsx(iconActionClasses.iconAction, iconActionClasses.deleteAction) }
+										onClick={ handleRecurringDelete }
+									>
+										<TrashIcon size={ 14 } />
+									</ActionIcon>
+								</Tooltip>
+							)
+							: (
+								<DeleteButton
+									label="shift"
+									onDelete={ () => {
+										deleteEvent.mutate(undefined, {
+											onSuccess: () => closePopover(),
+										})
+									} }
+								/>
+							) }
 					</Group>
 				) }
 			</Group>

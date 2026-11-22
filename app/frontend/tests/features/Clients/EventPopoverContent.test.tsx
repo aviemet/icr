@@ -1,9 +1,10 @@
 import { MantineProvider } from "@mantine/core"
 import { ModalsProvider } from "@mantine/modals"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { cleanup, render, screen } from "@testing-library/react"
+import { cleanup, render, screen, waitFor } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import dayjs from "dayjs"
-import { beforeEach, describe, expect, it } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { CalendarProvider } from "@/components/Calendar"
 import { dayJsLocalizer } from "@/components/Calendar/lib/localizers"
@@ -61,6 +62,7 @@ function TestWrapper({ children }: TestWrapperProps) {
 							groupByResource: false,
 							maxEvents: Infinity,
 							prevDate: new Date(),
+							currentView: "month",
 							getEventTitle: (event) => event.title,
 						} }
 					>
@@ -71,6 +73,12 @@ function TestWrapper({ children }: TestWrapperProps) {
 		</QueryClientProvider>
 	)
 }
+
+vi.mock("react-i18next", () => ({
+	useTranslation: () => ({
+		t: (key: string) => key,
+	}),
+}))
 
 describe("EventPopoverContent", () => {
 	it("shows both client and employee when client is primary", () => {
@@ -102,6 +110,52 @@ describe("EventPopoverContent", () => {
 
 		expect(screen.getByText("Client Full Name")).toBeInTheDocument()
 		expect(screen.getByText("Employee Name")).toBeInTheDocument()
+	})
+
+	it("opens the edit form immediately for recurring events", async () => {
+		const user = userEvent.setup()
+
+		render(
+			<EventPopoverContent
+				event={ {
+					id: "master-1__occ",
+					title: "Client Name",
+					start: new Date("2026-01-08T09:00:00.000Z"),
+					end: new Date("2026-01-08T10:00:00.000Z"),
+					resources: {
+						client: {
+							id: "client-id",
+							slug: "client-slug",
+							name: "Client Name",
+							full_name: "Client Full Name",
+						},
+						employee: {
+							id: "employee-id",
+							slug: "employee-slug",
+							name: "Employee Name",
+						},
+						recurrence: {
+							masterId: "master-1",
+							occurrenceStartsAt: "2026-01-08T09:00:00.000Z",
+							isRecurring: true,
+							patterns: [
+								{ recurring_type: "weekly", offset: 1, day_of_week: 4 },
+							],
+						},
+					},
+				} }
+				localizer={ localizer }
+				primaryResource="client"
+			/>,
+			{ wrapper: TestWrapper }
+		)
+
+		await user.click(screen.getByRole("button", { name: /edit/i }))
+
+		await waitFor(() => {
+			expect(screen.getByRole("button", { name: "Save Shift" })).toBeInTheDocument()
+		})
+		expect(screen.queryByText("views.clients.schedule.event_form.edit_recurring_body")).not.toBeInTheDocument()
 	})
 })
 

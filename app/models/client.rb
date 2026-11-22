@@ -160,9 +160,8 @@ class Client < ApplicationRecord
   }
 
   def schedule_events_between(start_time, end_time)
-    calendar_events
-      .with_schedule_association_preloads
-      .between(start_time, end_time)
+    ids = calendar_events.for_schedule_range(start_time, end_time).reselect("calendar_events.id")
+    Calendar::Event.where(id: ids).with_schedule_association_preloads
   end
 
   after_create -> { self.update(active_at: Time.current) }

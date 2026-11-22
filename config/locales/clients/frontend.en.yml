@@ -13,6 +13,46 @@ en:
       schedule:
         new_shift: New Shift
         title: "%{name}'s Schedule"
+        event_form:
+          repeats: Repeats
+          frequency: Frequency
+          frequency_daily: Daily
+          frequency_weekly: Weekly
+          frequency_monthly: Monthly
+          frequency_yearly: Yearly
+          interval: Every %{unit}
+          interval_daily: day(s)
+          interval_weekly: week(s)
+          interval_monthly: month(s)
+          interval_yearly: year(s)
+          weekdays: Repeat on
+          monthly_mode: Monthly on
+          monthly_on_day: Day of the month
+          monthly_on_weekday: Weekday of the month
+          ends: Ends
+          ends_never: Never
+          ends_on_date: On date
+          ends_after: After
+          until: End date
+          occurrences: Occurrences
+          occurrences_hint: Including the first event
+          weekday_fri: Fri
+          weekday_mon: Mon
+          weekday_sat: Sat
+          weekday_sun: Sun
+          weekday_thu: Thu
+          weekday_tue: Tue
+          weekday_wed: Wed
+          edit_recurring_title: Edit repeating event
+          edit_recurring_body: Apply these changes to which events?
+          edit_all_events: All events
+          edit_this_and_future: This and all future events
+          edit_this_occurrence: Just this event
+          edit_scope_cancel: Back
+          delete_recurring_title: Delete repeating event
+          delete_recurring_body: Delete only this occurrence, or the entire series?
+          delete_this_occurrence: This occurrence
+          delete_entire_series: Entire series
       show:
         contacts:
           addresses: Addresses

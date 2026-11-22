@@ -25,7 +25,7 @@ export function UiFrameworkProvider({ children }: { children: React.ReactNode })
 	const brandHex = clampBrandColor(settings?.primary_color || DEFAULT_BRAND_COLOR)
 
 	const brandColors = useMemo(
-		() => generateColors(brandHex) as unknown as MantineColorsTuple,
+		(): MantineColorsTuple => generateColors(brandHex),
 		[brandHex],
 	)
 

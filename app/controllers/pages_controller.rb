@@ -14,9 +14,7 @@ class PagesController < ApplicationController
     authorize client, :schedule? if client
 
     schedules = if client
-                  client.calendar_events
-                    .includes([:recurring_patterns, shift: [employee: [:person, :job_title, :calendar_customization]]])
-                    .between(*DateRangeCalculator.new(params).call)
+                  client.schedule_events_between(*DateRangeCalculator.new(params).call)
                 else
                   Calendar::Event.none
                 end

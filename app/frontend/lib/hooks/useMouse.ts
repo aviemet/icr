@@ -21,25 +21,25 @@ export function useMouse<T extends HTMLElement = HTMLElement>(
 		const element: Document | T = usedRef.current ? usedRef.current : document
 
 		const setMousePosition = (event: Event) => {
-			const mouseEvent = event as MouseEvent
-			const target = mouseEvent.currentTarget as HTMLElement | Document
+			if(!(event instanceof MouseEvent)) return
+			const target = event.currentTarget
 
 			if(usedRef.current && target instanceof HTMLElement) {
 				const rect = target.getBoundingClientRect()
 
 				const x = Math.max(
 					0,
-					Math.round(mouseEvent.pageX - rect.left - (window.pageXOffset || window.scrollX))
+					Math.round(event.pageX - rect.left - (window.pageXOffset || window.scrollX))
 				)
 
 				const y = Math.max(
 					0,
-					Math.round(mouseEvent.pageY - rect.top - (window.pageYOffset || window.scrollY))
+					Math.round(event.pageY - rect.top - (window.pageYOffset || window.scrollY))
 				)
 
 				setPosition({ x, y })
 			} else {
-				setPosition({ x: mouseEvent.clientX, y: mouseEvent.clientY })
+				setPosition({ x: event.clientX, y: event.clientY })
 			}
 		}
 

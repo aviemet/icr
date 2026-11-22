@@ -13,6 +13,12 @@ import { type PopoverContentMap } from "@/components/Calendar/components/Calenda
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 import { NAVIGATION_ACTION, VIEW_NAMES } from "@/components/Calendar/views"
 import { EventPopoverContent } from "@/domains/Clients/EventPopoverContent"
+import {
+	calendarEventId,
+	expandRecurringEvents,
+	expansionWindow,
+	recurrenceResources,
+} from "@/features/CalendarSchedule"
 import { ensureViewName, Routes } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
@@ -30,6 +36,7 @@ const DEFAULT_EVENT_COLOR = "#94a3b8"
 type ScheduleResources = Record<string, object> & {
 	employee?: Schema.EmployeesPersisted
 	client?: Schema.ClientsPersisted
+	recurrence: ReturnType<typeof recurrenceResources>
 }
 
 function isScheduleResources(resources: EventResources | undefined): resources is ScheduleResources {
@@ -84,26 +91,36 @@ const Schedule = ({ employee, schedules: initialSchedules }: ScheduleProps) => {
 	}, [location.pathname, location.params])
 
 	const processedSchedules = useMemo((): BaseCalendarEvent<ScheduleResources>[] => {
-		return data?.map(schedule => {
-			const start = ensureDate(schedule.starts_at)
-			const end = ensureDate(schedule.ends_at)
-			const client = schedule.clients?.[0]
-			const color = client?.color ?? DEFAULT_EVENT_COLOR
-			const title = client ? (client.full_name || client.name) : (schedule.name ?? "")
-
-			const resources: ScheduleResources = {}
+		if(!data) return []
+		const window = expansionWindow(calendarDate, calendarView)
+		return expandRecurringEvents(data, window.start, window.end, ({
+			master,
+			originalOccurrenceStart,
+			displayStart,
+			displayEnd,
+			isRecurring,
+		}) => {
+			const client = master.clients?.[0]
+			const resources: ScheduleResources = {
+				recurrence: recurrenceResources(
+					master.id,
+					originalOccurrenceStart,
+					isRecurring,
+					master.recurring_patterns ?? [],
+				),
+			}
 			if(client) resources.client = client
 			return {
-				id: schedule.id,
-				title,
-				start,
-				end,
-				allDay: schedule.all_day,
-				color,
+				id: calendarEventId(master.id, originalOccurrenceStart, isRecurring),
+				title: client ? (client.full_name || client.name) : (master.name ?? ""),
+				start: displayStart,
+				end: displayEnd,
+				allDay: master.all_day,
+				color: client?.color ?? DEFAULT_EVENT_COLOR,
 				resources,
 			}
-		}) ?? []
-	}, [data])
+		})
+	}, [calendarDate, calendarView, data])
 
 	const breadcrumbs: Breadcrumb[] = [
 		{ title: "Employees", href: Routes.employees() },

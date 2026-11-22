@@ -1,12 +1,11 @@
+import { omit } from "es-toolkit"
 import { isEmpty } from "es-toolkit/compat"
 
 import { Stack, Tooltip, type TooltipProps } from "@/components"
 import { ConditionalWrapper } from "@/components"
 import { formatter } from "@/lib"
 
-const datetimeSingleArg = Object.fromEntries(
-	Object.entries(formatter.datetime).filter(([key]) => key !== "range")
-) as Omit<typeof formatter.datetime, "range">
+const datetimeSingleArg = omit(formatter.datetime, ["range"])
 type DateTimeSingleArgKey = keyof typeof datetimeSingleArg
 
 export interface DateTimeFormatterProps {

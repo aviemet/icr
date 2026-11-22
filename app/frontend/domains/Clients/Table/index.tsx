@@ -1,4 +1,5 @@
 import { Table } from "@/components"
+import { type ServerTableFilterField } from "@/components/Table/serverTableFilters"
 import { useServerTableFilters } from "@/components/Table/useServerTableFilters"
 
 import { useClientTableColumns } from "./columns"
@@ -10,12 +11,12 @@ interface ClientTableProps {
 	serverFiltered?: boolean
 }
 
-const clientServerFilterFields = [
-	{ param: "first_name", kind: "text" as const },
-	{ param: "last_name", kind: "text" as const },
-	{ param: "number", kind: "text" as const },
-	{ param: "uci_number", kind: "text" as const },
-	{ param: "active_at", kind: "text" as const },
+const clientServerFilterFields: ServerTableFilterField[] = [
+	{ param: "first_name", kind: "text" },
+	{ param: "last_name", kind: "text" },
+	{ param: "number", kind: "text" },
+	{ param: "uci_number", kind: "text" },
+	{ param: "active_at", kind: "text" },
 ]
 
 export function ClientTable({ records, canUpdates = {}, model, serverFiltered = false }: ClientTableProps) {

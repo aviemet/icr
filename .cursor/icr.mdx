@@ -63,7 +63,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
   - [x] Multiple view strategies (day, week, month)
   - [x] Proper handling of overlapping events
 - [x] Event management
-  - [ ] Recurring event support (model/serializers exist; schedule UI does not create or expand patterns yet)
+  - [x] Recurring event support (master + pattern expand-on-read; this-occurrence vs series edit)
   - [x] Schedule conflict detection
   - [x] Schedule assignment for employees and clients
 - [x] Calendar access controls based on roles
@@ -157,6 +157,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 
 ### Calendar System
 - Multiple view strategies; timezones must be handled correctly; recurring events follow RFC 5545 (iCalendar).
+- Recurring events: one master `Calendar::Event` plus `Calendar::RecurringPattern` definition rows (daily/weekly/monthly/yearly, interval, ends never/on date/after N). Schedule APIs load masters via `for_schedule_range`. The frontend expands occurrences for the visible range and applies `Calendar::EventException` cancels/reschedules. Create and edit share one EventForm with Repeat fields (hydrated from series patterns on edit). On save of a recurring edit, choose all / this-and-future / just-this (`edit_scope` all|future|one). All shifts the master by `(form_starts_at - occurrence_starts_at)` so date moves apply to the whole series; future truncates and continues; just-this detaches. All/future can replace pattern rows.
 - One display-setting drives both month and time-grid views (month strategies vs overlap for day/week), so per-strategy behavior can be added without changing the public API.
 - Gotcha: The popover closes on click-outside. Date/time pickers or other inputs inside the popover must not use a portal, or the popover will close when the user selects a value.
 - Client schedule: Events come from React Query; mutations must invalidate the schedule query so the calendar refetches. If invalidation is skipped, the UI can show stale or duplicate events.

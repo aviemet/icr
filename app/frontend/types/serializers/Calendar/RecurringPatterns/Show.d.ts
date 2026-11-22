@@ -8,7 +8,7 @@ declare global {
       created_at: Date
       day_of_month?: number
       day_of_week?: number
-      end_date?: number
+      end_date?: Date
       max_occurrences?: number
       month_of_year?: number
       offset: number

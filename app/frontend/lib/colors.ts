@@ -1,4 +1,4 @@
-import { isLightColor, MantinePrimaryShade, MantineTheme } from "@mantine/core"
+import { isLightColor, MantineTheme } from "@mantine/core"
 
 export const calculateContrastingColor = (
 	color: string,
@@ -16,10 +16,10 @@ export const calculateContrastingColor = (
 		if(!theme || !colorScheme) return black
 
 		const colors = theme.colors
-		const primaryShade = theme.primaryShade as MantinePrimaryShade
+		const primaryShade = theme.primaryShade
+		const shade = typeof primaryShade === "number" ? primaryShade : primaryShade[colorScheme]
 
 		if(Object.keys(colors).includes(color)) {
-			const shade = primaryShade[colorScheme]
 			validatedColor = colors[color][shade]
 		}
 	}
