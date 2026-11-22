@@ -6,8 +6,12 @@ Rails.application.configure do
     enable_cron: true,
     cron: {
       schedule_shifts: {
-        cron: "0 0 * * *", # Midnight every day
+        cron: "0 0 * * *",
         class: "ScheduleUpcomingShiftsJob"
+      },
+      payroll_approval_reminders: {
+        cron: "0 8 * * *",
+        class: "Payroll::SendApprovalRemindersJob"
       }
     }
   }

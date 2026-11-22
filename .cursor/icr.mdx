@@ -70,16 +70,16 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 
 ### Phase 6: Timesheet Management
 - [ ] Timesheet generation system
-  - [ ] Automatic generation based on schedules
+  - [x] Automatic generation based on schedules
   - [ ] Manual entry support
 - [ ] Timesheet review workflow
   - [ ] Facilitator review and approval process
   - [ ] Manager final approval
-- [ ] Pay period management
-  - [ ] Configure pay period settings
-  - [ ] Automated reminders for approvals
-  - [ ] Deadline tracking
-- [ ] Overtime and overtime exception customization and options
+- [x] Pay period management
+  - [x] Configure pay period settings
+  - [x] Automated reminders for approvals
+  - [x] Deadline tracking
+- [x] Overtime and overtime exception customization and options
 
 ### Phase 7: IHSS Hours Management
 - [ ] IHSS hours tracking system
@@ -175,6 +175,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - PayPeriod create/sync: sync_shifts! attaches every overlapping shift onto this period's timesheets (one Timesheet per employee).
 - Payroll index hours: Payroll::EmployeePeriodHours computes per-employee regular_hours and ot_hours for a pay period. Uses Setting overtime_weekly_hours and overtime_daily_hours; splits work intervals by day (including overnight); applies active OvertimeExemption rules to exclude exempt intervals from OT; weekly OT and daily OT are summed. The calculator reads intervals via a collector interface (default: scheduled shifts), so payroll can later swap in a clock-in/out collector without changing overtime math or UI contracts.
 - Payroll approval UI: Approve / Unapprove / bulk approve stay available until the period is finalized (`can_approve = !finalized?`). The payroll due date and `approval_window_open` are deadline / urgency signals only (including overdue copy on payroll home and period show); they must never hard-block approval. Hard-close language in the older payroll redesign plan is superseded by this rule.
+- Approval reminder emails: `Payroll::SendApprovalReminders` (daily GoodJob cron) emails admins and Timesheet approvers for closed, unfinalized periods with pending timesheets. Org-wide enable/disable lives under Settings > Notifications (`Setting.notifications_payroll_approval_reminders`); managed-only approvers get a count scoped to their reports.
 
 ### Frontend Components
 #### UI Framework

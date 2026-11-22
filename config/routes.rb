@@ -71,6 +71,8 @@ Rails.application.routes.draw do
       get "overtime", to: "payrolls#overtime"
       match "overtime", to: "payrolls#update_overtime", via: [:patch, :put]
     end
+    get "notifications", to: "notifications#show"
+    match "notifications", to: "notifications#update", via: [:patch, :put]
     resources :overtime_exemptions, only: [:create, :update]
   end
   resource :settings, param: :slug, except: [:new, :create, :destroy]

@@ -58,6 +58,7 @@ const links: SettingsNavLinkItem[] = [
 			{ label: "Overtime", href: Routes.settingsPayrollOvertime() },
 		],
 	},
+	{ label: "Notifications", href: Routes.settingsNotifications() },
 ]
 
 function matchesPrefix(prefix: string, path: string) {

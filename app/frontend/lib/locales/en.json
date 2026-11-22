@@ -473,6 +473,20 @@
         "overlap": "Overlaps with shift on %{time}"
       }
     },
+    "payroll_mailer": {
+      "approval_reminder": {
+        "body_text": {
+          "one": "There is %{count} timesheet still waiting for approval for pay period %{period}. Payroll is due %{due_date}.",
+          "other": "There are %{count} timesheets still waiting for approval for pay period %{period}. Payroll is due %{due_date}."
+        },
+        "cta": "Review pay period",
+        "greeting": "Hello,",
+        "subject": {
+          "one": "%{count} timesheet still needs approval (%{period})",
+          "other": "%{count} timesheets still need approval (%{period})"
+        }
+      }
+    },
     "pundit": {
       "not_authorized": "You are not authorized to access this page."
     },
@@ -588,8 +602,9 @@
         "schedule": {
           "event_form": {
             "delete_entire_series": "Entire series",
-            "delete_recurring_body": "Delete only this occurrence, or the entire series?",
+            "delete_recurring_body": "Delete this occurrence, this and all future events, or the entire series?",
             "delete_recurring_title": "Delete repeating event",
+            "delete_this_and_future": "This and all future events",
             "delete_this_occurrence": "This occurrence",
             "edit_all_events": "All events",
             "edit_recurring_body": "Apply these changes to which events?",
@@ -1082,6 +1097,17 @@
         }
       },
       "settings": {
+        "notifications": {
+          "description": "Choose which email notifications the system sends.",
+          "email_band_description": "Automated messages sent to staff with approval access.",
+          "email_band_title": "Email",
+          "payroll_approval_reminders": {
+            "description": "Daily email when a closed pay period still has timesheets waiting for approval.",
+            "label": "Payroll approval reminders"
+          },
+          "submit": "Update settings",
+          "title": "Notifications"
+        },
         "payroll": {
           "overtime_exemptions": {
             "active": "Active",

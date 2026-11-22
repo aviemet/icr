@@ -3,6 +3,7 @@ if Rails.env.development?
     Setting.company_name = "ICR SLS"
     Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
     Setting.primary_color = "#228be6"
+    Setting.notifications_payroll_approval_reminders = true
 
     Rails.logger.info "[seeds] settings"
   end
