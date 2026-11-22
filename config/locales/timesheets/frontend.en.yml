@@ -49,6 +49,7 @@ en:
         company_hours: Company Hours
         mark_ihss: Mark IHSS
         clear_ihss: Clear IHSS
+        shift_type: Shift Type
         period_label: Period
         pto_hours: PTO Hours
         regular_hours: Regular Hours

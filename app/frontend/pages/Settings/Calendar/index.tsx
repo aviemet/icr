@@ -1,10 +1,13 @@
+import { useTranslation } from "react-i18next"
+
 import { Box, Grid, Information, Label, Stack, Text } from "@/components"
-import { Form, Submit } from "@/components/Form"
+import { Form } from "@/components/Form"
 import { Select, Switch } from "@/components/Inputs"
+import { SettingsPageHeader } from "@/domains/Settings/SettingsPageHeader"
+import { SettingsSaveButton } from "@/domains/Settings/SettingsSaveButton"
 import { FormBand, FormBandStack } from "@/features"
 import { Routes, withLayout } from "@/lib"
 
-import { SettingsPageHeader } from "../SettingsPageHeader"
 import ShiftTitleFormatInput from "./ShiftTitleFormatInput"
 
 interface CalendarSettingsProps {
@@ -14,44 +17,57 @@ interface CalendarSettingsProps {
 const splitEventsName = "settings.calendar_split_events_show_original_times"
 
 const CalendarSettings = ({ settings }: CalendarSettingsProps) => {
+	const { t } = useTranslation()
+
 	return (
 		<Box>
-			<SettingsPageHeader
-				title="Calendar Display"
-				description="Control how multi-day events appear on the calendar."
-			/>
-
 			<Form
 				action={ Routes.settingsCalendar() }
 				method="patch"
 				initialData={ { settings } }
 			>
+				<SettingsPageHeader
+					title={ t("views.settings.calendar.title") }
+					description={ t("views.settings.calendar.description") }
+					actions={ <SettingsSaveButton /> }
+				/>
+
 				<FormBandStack>
 					<FormBand
-						title="Month layout"
-						description="How multi-day events are drawn in the Month view. Day and Week views always use a time grid."
+						title={ t("views.settings.calendar.month_layout_title") }
+						description={ t("views.settings.calendar.month_layout_description") }
 					>
 						<Grid>
 							<Grid.Col span={ 12 }>
 								<Stack gap="xs">
 									<Text size="sm">
-										<strong>Split</strong> - Multi-day events are shown as one block per day. A 3-day event appears as three separate blocks (Mon, Tue, Wed). Best if you want to see each day's slice clearly.
+										<strong>{ t("views.settings.calendar.strategy_split") }</strong>
+										{ " - " }
+										{ t("views.settings.calendar.strategy_split_help") }
 									</Text>
 									<Text size="sm">
-										<strong>Stack</strong> - Multi-day events within a week appear as a single bar across those days. Single-day events appear as a small label or dot in their start column. Good balance of detail and space.
+										<strong>{ t("views.settings.calendar.strategy_stack") }</strong>
+										{ " - " }
+										{ t("views.settings.calendar.strategy_stack_help") }
 									</Text>
 									<Text size="sm">
-										<strong>Span</strong> - Like Stack, but events are only broken at week boundaries. Within a week, each event is one bar across the days it covers; it splits into a new bar only when it continues into the next week.
+										<strong>{ t("views.settings.calendar.strategy_span") }</strong>
+										{ " - " }
+										{ t("views.settings.calendar.strategy_span_help") }
 									</Text>
 								</Stack>
 							</Grid.Col>
 
 							<Grid.Col span={ { lg: 4, md: 6, xs: 12 } }>
-								<Select name="settings.calendar_layout_style" label="Strategy" options={ [
-									{ label: "Split", value: "split" },
-									{ label: "Stack", value: "stack" },
-									{ label: "Span", value: "span" },
-								] } />
+								<Select
+									name="settings.calendar_layout_style"
+									label={ t("views.settings.calendar.strategy_label") }
+									options={ [
+										{ label: t("views.settings.calendar.strategy_split"), value: "split" },
+										{ label: t("views.settings.calendar.strategy_stack"), value: "stack" },
+										{ label: t("views.settings.calendar.strategy_span"), value: "span" },
+									] }
+								/>
 							</Grid.Col>
 
 							<Grid.Col span={ { lg: 4, md: 6, xs: 12 } }>
@@ -59,8 +75,12 @@ const CalendarSettings = ({ settings }: CalendarSettingsProps) => {
 									display="flex"
 									style={ { alignItems: "center", gap: "0.25rem" } }
 								>
-									<Label htmlFor={ splitEventsName }>Show the full times for split events</Label>
-									<Information position="top">How to display the times in a multi-day event when it's been visually split</Information>
+									<Label htmlFor={ splitEventsName }>
+										{ t("views.settings.calendar.split_times_label") }
+									</Label>
+									<Information position="top">
+										{ t("views.settings.calendar.split_times_info") }
+									</Information>
 								</Box>
 								<Switch
 									id={ splitEventsName }
@@ -72,13 +92,11 @@ const CalendarSettings = ({ settings }: CalendarSettingsProps) => {
 					</FormBand>
 
 					<FormBand
-						title="Shift title"
-						description="Template for how shift titles appear on the calendar."
+						title={ t("views.settings.calendar.shift_title_band_title") }
+						description={ t("views.settings.calendar.shift_title_band_description") }
 					>
 						<ShiftTitleFormatInput settings={ settings } />
 					</FormBand>
-
-					<Submit>Update Settings</Submit>
 				</FormBandStack>
 			</Form>
 		</Box>

@@ -37,6 +37,7 @@ interface ScheduleResources {
 	employee: NonNullable<Schema.ShiftsClient["employee"]> | Record<string, never>
 	client: Schema.ClientsShow
 	recurrence: ReturnType<typeof recurrenceResources>
+	shift: { category_id: string }
 }
 
 const OPEN_SHIFT_COLOR = vars.colors.red[6]
@@ -123,6 +124,9 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 					employee: hasAssignedEmployee(employee) ? employee : {},
 					client,
 					recurrence: recurrenceResources(event),
+					shift: {
+						category_id: event.shift?.category?.slug ?? "",
+					},
 				},
 			}
 		})

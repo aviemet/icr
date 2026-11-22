@@ -3,16 +3,73 @@ en:
   views:
     settings:
       payroll:
+        schedule:
+          title: Pay Schedule
+          description: Define when pay periods run and when payroll is due.
+          period_band_title: Pay period
+          period_band_description: How often payroll runs and when each period starts.
+          due_date_band_title: Due date
+          due_date_band_description: When timesheets must be ready after a pay period closes.
+          period_type_label: How often pay periods run
+          period_type_weekly: Weekly
+          period_type_bi_weekly: Every 2 weeks
+          period_type_semi_monthly: Semi-monthly
+          period_type_monthly: Monthly
+          period_start_bi_weekly_prefix: Pay periods start every other
+          period_start_weekly_prefix: Pay periods start every
+          period_start_semi_monthly: Pay periods start on the 1st and the 16th of each month (1st-15th and 16th-last).
+          period_start_monthly_prefix: Pay periods start on the
+          period_start_monthly_suffix: of the month
+          day_of_month_1: 1st
+          day_of_month_5: 5th
+          day_of_month_15: 15th
+          day_of_month_20: 20th
+          day_of_month_last: Last
+          due_rule_label: When payroll is due
+          due_rule_days_after: Days after period ends
+          due_rule_weekday_after: Day of week after period ends
+          due_rule_day_of_month: Day of the month
+          due_days_label: Days after period ends
+          due_weekday_label: Day of week
+          due_day_of_month_label: Day of the month
+          due_day_of_month_1: 1st
+          due_day_of_month_5: 5th
+          due_day_of_month_10: 10th
+          due_day_of_month_15: 15th
+          due_day_of_month_20: 20th
+          due_day_of_month_25: 25th
+          due_day_of_month_last: Last
+        overtime:
+          title: Overtime
+          description: Set overtime thresholds and rules for shifts that should be excluded.
+          thresholds_band_title: Thresholds
+          thresholds_band_description: Hours above these counts in a week or day are paid as overtime.
+          weekly_label: Weekly threshold (hours)
+          weekly_description: Hours over this in a week are overtime
+          daily_label: Daily threshold (hours)
+          daily_description: Hours over this in a day are overtime
+        ihss:
+          title: IHSS
+          description: Co-employment and how IHSS hours are assigned for overtime and tracking.
+          band_title: Co-employment and assignment
+          band_description: These settings change how payroll classifies IHSS hours and calculates overtime.
+          co_employer_label: Treat IHSS as a co-employer
+          co_employer_description: When on, all hours count toward overtime. When off, only non-IHSS hours count toward overtime.
+          assignment_mode_label: How to assign IHSS hours
+          assignment_mode_description: Shift mode marks each shift in payroll. Period mode assigns hours once per employee and client for the pay period.
+          assignment_mode_shift: Assign by shift
+          assignment_mode_period: Assign by period
+          authorized_hours_note: Authorized hours stay on each client profile. Payroll shows IHSS hours used in the period next to that budget.
         overtime_exemptions:
           title: Overtime exemptions
           description: Shifts that match these rules are excluded from overtime calculation.
-          list_title: Existing exemptions
           empty: No overtime exemptions yet.
+          add: Add exemption
           name: Name
           active: Active
           inactive: Inactive
           edit: Edit
-          cancel_edit: Cancel
+          cancel: Cancel
           form_title_create: New overtime exemption
           form_title_edit: Edit overtime exemption
           criteria_groups: Criteria Groups
@@ -22,3 +79,28 @@ en:
           add_criterion: Add criterion
           save_create: Save Exemption
           save_update: Update Exemption
+          criteria_count:
+            one: "%{count} criteria group"
+            other: "%{count} criteria groups"
+          columns:
+            name: Name
+            status: Status
+            criteria: Criteria
+            actions: Actions
+          fields:
+            category: Category
+            start_time: Start Time
+            end_time: End Time
+            duration: Duration (hours)
+          operators:
+            equals: Equals
+            not_equals: Does not equal
+            in: In list
+            at: At
+            before: Before
+            after: After
+            between: Between
+            greater_than: Greater than
+            less_than: Less than
+            greater_than_equal: Greater than or equal
+            less_than_equal: Less than or equal

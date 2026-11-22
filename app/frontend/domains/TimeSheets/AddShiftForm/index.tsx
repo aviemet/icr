@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next"
 import { Grid } from "@/components"
 import { Form, Submit } from "@/components/Form"
 import { SplitDateTimeInput } from "@/components/Inputs"
-import { ClientsDropdown } from "@/components/Inputs/Dropdowns"
+import { CategoriesDropdown, ClientsDropdown } from "@/components/Inputs/Dropdowns"
 import { useModalContext } from "@/components/Modal"
 import { categorySlug, Routes } from "@/lib"
 import { nearestHalfHour } from "@/lib/dates"
@@ -14,6 +14,7 @@ import { useCreateCalendarEvent } from "@/queries/calendarEvents/mutations"
 
 type AddShiftFormData = {
 	client_id: string
+	category_id: string
 	starts_at: string
 	ends_at: string
 }
@@ -58,6 +59,7 @@ export function AddShiftForm({
 		const times = defaultShiftTimes(periodStart, periodEnd)
 		return {
 			client_id: "",
+			category_id: categorySlug("Shift", "Regular"),
 			starts_at: times.starts_at,
 			ends_at: times.ends_at,
 		}
@@ -74,7 +76,10 @@ export function AddShiftForm({
 					category_slug: categorySlug("Calendar::Event", "Shift"),
 					starts_at: data.starts_at,
 					ends_at: data.ends_at,
-					shift_attributes: { employee_id: employeeId },
+					shift_attributes: {
+						employee_id: employeeId,
+						category_id: data.category_id || categorySlug("Shift", "Regular"),
+					},
 					event_participants_attributes: [
 						{ participant_type: "Client", participant_id: data.client_id },
 					],
@@ -101,6 +106,16 @@ export function AddShiftForm({
 						name="client_id"
 						label={ t("views.timesheets.employee_review.client") }
 						required
+					/>
+				</Grid.Col>
+				<Grid.Col span={ 12 }>
+					<CategoriesDropdown
+						label={ t("views.timesheets.employee_review.shift_type") }
+						name="category_id"
+						categoryType="Shift"
+						valueKey="slug"
+						defaultValue={ categorySlug("Shift", "Regular") }
+						clearable={ false }
 					/>
 				</Grid.Col>
 				<Grid.Col span={ 12 }>

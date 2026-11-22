@@ -71,6 +71,7 @@ en:
     bulk_facilitator_approved: "%{count} shift(s) reviewed."
     ihss_updated: IHSS shift flag updated.
     ihss_shift_mode_required: Shift IHSS flags are only available when assignment mode is Assign by shift.
+    category_updated: Shift type updated.
   pay_periods:
     already_finalized: This pay period is already finalized.
     ihss_assignments_updated: IHSS period assignments saved.

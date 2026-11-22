@@ -143,4 +143,61 @@ RSpec.describe "/payroll/shifts", type: :request do
       expect(shift.reload.ihss).to be(false)
     end
   end
+
+  describe "PATCH /payroll/shifts/:id/category" do
+    login_user(:admin)
+
+    it "updates the shift type category" do
+      employee = create(:employee, :employed)
+      pay_period = create(:pay_period, finalized_at: nil)
+      timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
+      overnight = Category.type("Shift").find_or_create_by!(name: "Overnight") { |category|
+        category.system = false
+      }
+      shift = create(
+        :shift,
+        employee: employee,
+        timesheet: timesheet,
+        calendar_event: create(
+          :calendar_event,
+          starts_at: pay_period.starts_at + 1.day,
+          ends_at: pay_period.starts_at + 1.day + 8.hours,
+        ),
+      )
+      regular_id = shift.category_id
+
+      patch category_shift_url(shift), params: { category_id: overnight.id }
+
+      expect(response).to have_http_status(:redirect)
+      expect(shift.reload.category_id).to eq(overnight.id)
+      expect(shift.category_id).not_to eq(regular_id)
+    end
+
+    it "rejects category updates on a finalized period" do
+      Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:weekly]
+      Setting.payroll_period_day = "monday"
+      employee = create(:employee, :employed)
+      starts_at = Time.zone.local(2024, 3, 11).beginning_of_day
+      ends_at = Time.zone.local(2024, 3, 17).end_of_day
+      pay_period = PayPeriod.for_period_dates(starts_at.to_date, ends_at.to_date)
+      pay_period.update!(finalized_at: Time.current)
+      timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
+      overnight = Category.type("Shift").find_or_create_by!(name: "Overnight") { |category|
+        category.system = false
+      }
+      event = create(
+        :calendar_event,
+        starts_at: Time.zone.local(2024, 3, 12, 9, 0, 0),
+        ends_at: Time.zone.local(2024, 3, 12, 17, 0, 0),
+      )
+      shift = create(:shift, employee: employee, timesheet: timesheet, calendar_event: event)
+      shift.update_columns(timesheet_id: timesheet.id) # rubocop:disable Rails/SkipsModelValidations
+      original_category_id = shift.category_id
+
+      patch category_shift_url(shift), params: { category_id: overnight.id }
+
+      expect(response).to have_http_status(:redirect)
+      expect(shift.reload.category_id).to eq(original_category_id)
+    end
+  end
 end

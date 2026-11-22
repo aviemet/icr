@@ -1,15 +1,18 @@
+import { useTranslation } from "react-i18next"
+
 import { Grid } from "@/components"
 import { TextInput } from "@/components/Inputs"
 
-export function AddressDraftFields(
-	draft: Record<string, string>,
-	setDraft: (next: Record<string, string>) => void,
-) {
+import { type DraftFieldsProps } from "./draftFieldsTypes"
+
+export function AddressDraftFields({ draft, setDraft }: DraftFieldsProps) {
+	const { t } = useTranslation()
+
 	return (
 		<Grid>
 			<Grid.Col span={ 12 }>
 				<TextInput
-					label="Address"
+					label={ t("views.settings.company.fields.address") }
 					required
 					value={ draft.address ?? "" }
 					onChange={ event => setDraft({ ...draft, address: event.currentTarget.value }) }
@@ -18,7 +21,7 @@ export function AddressDraftFields(
 
 			<Grid.Col span={ 12 }>
 				<TextInput
-					label="Address line 2"
+					label={ t("views.settings.company.fields.address_2") }
 					value={ draft.address_2 ?? "" }
 					onChange={ event => setDraft({ ...draft, address_2: event.currentTarget.value }) }
 				/>
@@ -26,7 +29,7 @@ export function AddressDraftFields(
 
 			<Grid.Col span={ { xs: 12, sm: 4 } }>
 				<TextInput
-					label="City"
+					label={ t("views.settings.company.fields.city") }
 					value={ draft.city ?? "" }
 					onChange={ event => setDraft({ ...draft, city: event.currentTarget.value }) }
 				/>
@@ -34,7 +37,7 @@ export function AddressDraftFields(
 
 			<Grid.Col span={ { xs: 12, sm: 4 } }>
 				<TextInput
-					label="State / Region"
+					label={ t("views.settings.company.fields.region") }
 					value={ draft.region ?? "" }
 					onChange={ event => setDraft({ ...draft, region: event.currentTarget.value }) }
 				/>
@@ -42,7 +45,7 @@ export function AddressDraftFields(
 
 			<Grid.Col span={ { xs: 12, sm: 4 } }>
 				<TextInput
-					label="Postal code"
+					label={ t("views.settings.company.fields.postal") }
 					value={ draft.postal ?? "" }
 					onChange={ event => setDraft({ ...draft, postal: event.currentTarget.value }) }
 				/>
@@ -50,7 +53,7 @@ export function AddressDraftFields(
 
 			<Grid.Col span={ { xs: 12, sm: 6 } }>
 				<TextInput
-					label="Label"
+					label={ t("views.settings.company.fields.label") }
 					value={ draft.name ?? "" }
 					onChange={ event => setDraft({ ...draft, name: event.currentTarget.value }) }
 				/>

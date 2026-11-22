@@ -3,6 +3,7 @@ class Api::CalendarEventsController < Api::ApiController
   expose :calendar_event, model: Calendar::Event, scope: -> { policy_scope(Calendar::Event) }
 
   before_action :resolve_category_slug, only: [:create, :update]
+  before_action :resolve_shift_category, only: [:create, :update]
 
   strong_params :calendar_event, permit: [
     :name,
@@ -11,7 +12,7 @@ class Api::CalendarEventsController < Api::ApiController
     :parent_id,
     :category_id,
     :all_day,
-    shift_attributes: [:employee_id],
+    shift_attributes: [:employee_id, :category_id],
     event_participants_attributes: [:participant_id, :participant_type],
     recurring_patterns_attributes: [
       :recurring_type,
@@ -117,5 +118,19 @@ class Api::CalendarEventsController < Api::ApiController
 
     category = Category.find_by(id: id_or_slug) || Category.find_by!(slug: id_or_slug)
     params[:calendar_event][:category_id] = category.id
+  end
+
+  def resolve_shift_category
+    shift_params = params.dig(:calendar_event, :shift_attributes)
+    shift_params = params.dig(:calendar_event, :shift) if shift_params.blank?
+    return if shift_params.blank?
+
+    id_or_slug = shift_params[:category_id].presence || shift_params[:category_slug].presence
+    return if id_or_slug.blank?
+
+    category = Category.type("Shift").find_by(id: id_or_slug) ||
+      Category.type("Shift").find_by!(slug: id_or_slug)
+    shift_params[:category_id] = category.id
+    shift_params.delete(:category_slug)
   end
 end

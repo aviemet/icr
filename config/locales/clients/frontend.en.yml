@@ -14,6 +14,7 @@ en:
         new_shift: New Shift
         title: "%{name}'s Schedule"
         event_form:
+          shift_type: Shift Type
           repeats: Repeats
           frequency: Frequency
           frequency_daily: Daily

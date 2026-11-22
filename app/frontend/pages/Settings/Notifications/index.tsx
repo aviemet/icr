@@ -1,12 +1,12 @@
 import { useTranslation } from "react-i18next"
 
 import { Box } from "@/components"
-import { Form, Submit } from "@/components/Form"
+import { Form } from "@/components/Form"
 import { NotificationsForm } from "@/domains/Settings/Notifications/Form"
+import { SettingsPageHeader } from "@/domains/Settings/SettingsPageHeader"
+import { SettingsSaveButton } from "@/domains/Settings/SettingsSaveButton"
 import { FormBand, FormBandStack } from "@/features"
 import { Routes, withLayout } from "@/lib"
-
-import { SettingsPageHeader } from "../SettingsPageHeader"
 
 export interface NotificationsSettingsProps {
 	settings: Schema.Setting
@@ -17,16 +17,17 @@ const NotificationsSettings = ({ settings }: NotificationsSettingsProps) => {
 
 	return (
 		<Box>
-			<SettingsPageHeader
-				title={ t("views.settings.notifications.title") }
-				description={ t("views.settings.notifications.description") }
-			/>
-
 			<Form
 				action={ Routes.settingsNotifications() }
 				method="patch"
 				initialData={ { settings } }
 			>
+				<SettingsPageHeader
+					title={ t("views.settings.notifications.title") }
+					description={ t("views.settings.notifications.description") }
+					actions={ <SettingsSaveButton /> }
+				/>
+
 				<FormBandStack>
 					<FormBand
 						title={ t("views.settings.notifications.email_band_title") }
@@ -34,8 +35,6 @@ const NotificationsSettings = ({ settings }: NotificationsSettingsProps) => {
 					>
 						<NotificationsForm />
 					</FormBand>
-
-					<Submit>{ t("views.settings.notifications.submit") }</Submit>
 				</FormBandStack>
 			</Form>
 		</Box>

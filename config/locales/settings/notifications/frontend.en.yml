@@ -7,7 +7,6 @@ en:
         description: Choose which email notifications the system sends.
         email_band_title: Email
         email_band_description: Automated messages sent to staff with approval access.
-        submit: Update settings
         payroll_approval_reminders:
           label: Payroll approval reminders
           description: Daily email when a closed pay period still has timesheets waiting for approval.

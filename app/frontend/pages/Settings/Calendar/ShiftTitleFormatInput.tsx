@@ -1,6 +1,7 @@
 import clsx from "clsx"
 import dayjs from "dayjs"
 import { useMemo, useRef } from "react"
+import { useTranslation } from "react-i18next"
 
 import { Badge, Box, Code, Group, Paper } from "@/components"
 import { useFormField } from "@/components/Form"
@@ -25,18 +26,19 @@ const SAMPLE_DATA: Record<typeof ALLOWED_TEMPLATE_VARS[number], string> = {
 	last_initial: "S",
 } as const
 
-const TIME_FORMAT_EXAMPLES = [
-	{ label: "Start Time", format: "{start:h:mma}" },
-	{ label: "End Time", format: "{end:h:mma}" },
-] as const
-
 interface SettingIndexProps {
 	settings: Schema.Setting
 }
 
-const ShiftTitleFormatInput = ({ settings }: SettingIndexProps) => {
+const ShiftTitleFormatInput = ({ settings: _settings }: SettingIndexProps) => {
+	const { t } = useTranslation()
 	const [inputValue, setInputValue] = useFormField("settings.shift_title_format")
 	const inputRef = useRef<HTMLInputElement>(null)
+
+	const timeFormatExamples = [
+		{ label: t("views.settings.calendar.shift_title_start_time"), format: "{start:h:mma}" },
+		{ label: t("views.settings.calendar.shift_title_end_time"), format: "{end:h:mma}" },
+	] as const
 
 	const previewText = useMemo(
 		() => formatEventTitle(String(inputValue ?? ""), new Date(), dayjs().add(4, "hours").toDate(), SAMPLE_DATA),
@@ -61,7 +63,7 @@ const ShiftTitleFormatInput = ({ settings }: SettingIndexProps) => {
 			<TextInput
 				ref={ inputRef }
 				id="shift_title_format-search"
-				label="Shift Title Format"
+				label={ t("views.settings.calendar.shift_title_format_label") }
 				name="settings.shift_title_format"
 				value={ String(inputValue ?? "") }
 				onChange={ (e) => setInputValue(e.target.value) }
@@ -70,16 +72,20 @@ const ShiftTitleFormatInput = ({ settings }: SettingIndexProps) => {
 			/>
 
 			<Group mt="sm">
-				<Box>Example Result</Box>
+				<Box>{ t("views.settings.calendar.shift_title_example_result") }</Box>
 				<Code>{ previewText }</Code>
 			</Group>
 
 			<Paper mt="sm">
-				Use curly brackets <Code>&#123;&#125;</Code> to add dynamic content.
+				{ t("views.settings.calendar.shift_title_help_prefix") }
+				{ " " }
+				<Code>&#123;&#125;</Code>
+				{ " " }
+				{ t("views.settings.calendar.shift_title_help_suffix") }
 			</Paper>
 
 			<Box mt="sm">
-				<Box mb="sm">Employee Information:</Box>
+				<Box mb="sm">{ t("views.settings.calendar.shift_title_employee_info") }</Box>
 				{ ALLOWED_TEMPLATE_VARS.map((variable) => (
 					<Badge
 						key={ variable }
@@ -91,8 +97,8 @@ const ShiftTitleFormatInput = ({ settings }: SettingIndexProps) => {
 					</Badge>
 				)) }
 
-				<Box mt="lg" mb="sm">Time Formats:</Box>
-				{ TIME_FORMAT_EXAMPLES.map(({ label, format }) => (
+				<Box mt="lg" mb="sm">{ t("views.settings.calendar.shift_title_time_formats") }</Box>
+				{ timeFormatExamples.map(({ label, format }) => (
 					<Badge
 						key={ format }
 						m="sm"

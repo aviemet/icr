@@ -1,13 +1,13 @@
 import { useTranslation } from "react-i18next"
 
 import { Box, Grid } from "@/components"
-import { Form, Submit } from "@/components/Form"
+import { Form } from "@/components/Form"
 import { Overtime } from "@/domains/Settings/Payroll/Form/Overtime"
 import { OvertimeExemptions } from "@/domains/Settings/Payroll/Form/OvertimeExemptions"
+import { SettingsPageHeader } from "@/domains/Settings/SettingsPageHeader"
+import { SettingsSaveButton } from "@/domains/Settings/SettingsSaveButton"
 import { FormBand, FormBandStack } from "@/features"
 import { Routes, withLayout } from "@/lib"
-
-import { SettingsPageHeader } from "../../SettingsPageHeader"
 
 export interface PayrollOvertimeSettingsProps {
 	settings: Schema.Setting
@@ -24,40 +24,32 @@ const PayrollOvertimeSettings = ({
 
 	return (
 		<Box>
-			<SettingsPageHeader
-				title="Overtime"
-				description="Set overtime thresholds and rules for shifts that should be excluded."
-			/>
-
 			<FormBandStack>
 				<Form
 					action={ Routes.settingsPayrollOvertime() }
 					method="patch"
 					initialData={ { settings } }
 				>
-					<FormBandStack>
-						<FormBand
-							title="Thresholds"
-							description="Hours above these counts in a week or day are paid as overtime."
-						>
-							<Grid>
-								<Overtime />
-							</Grid>
-						</FormBand>
+					<SettingsPageHeader
+						title={ t("views.settings.payroll.overtime.title") }
+						description={ t("views.settings.payroll.overtime.description") }
+						actions={ <SettingsSaveButton /> }
+					/>
 
-						<Submit>Update settings</Submit>
-					</FormBandStack>
+					<FormBand
+						title={ t("views.settings.payroll.overtime.thresholds_band_title") }
+						description={ t("views.settings.payroll.overtime.thresholds_band_description") }
+					>
+						<Grid>
+							<Overtime />
+						</Grid>
+					</FormBand>
 				</Form>
 
-				<FormBand
-					title={ t("views.settings.payroll.overtime_exemptions.title") }
-					description={ t("views.settings.payroll.overtime_exemptions.description") }
-				>
-					<OvertimeExemptions
-						overtime_exemptions={ overtime_exemptions }
-						shift_types={ shift_types }
-					/>
-				</FormBand>
+				<OvertimeExemptions
+					overtime_exemptions={ overtime_exemptions }
+					shift_types={ shift_types }
+				/>
 			</FormBandStack>
 		</Box>
 	)

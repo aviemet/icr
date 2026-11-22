@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 
-import { Button, Group, Stack, Title } from "@/components"
+import { Button, Group, Stack } from "@/components"
 import { Form, Submit } from "@/components/Form"
 import { Switch, TextInput } from "@/components/Inputs"
 import { Routes, type HTTPVerb } from "@/lib"
@@ -26,7 +26,7 @@ interface ExemptionFormProps {
 	exemption?: Schema.OvertimeExemption
 	initialValue?: OvertimeExemptionFormValues
 	categoryOptions: CategoryOption[]
-	onCancelEdit?: () => void
+	onCancel: () => void
 }
 
 function emptyExemption(): OvertimeExemptionFormValues {
@@ -63,7 +63,7 @@ export function ExemptionForm({
 	exemption,
 	initialValue,
 	categoryOptions,
-	onCancelEdit,
+	onCancel,
 }: ExemptionFormProps) {
 	const { t } = useTranslation()
 	const isEdit = exemption !== undefined
@@ -84,12 +84,6 @@ export function ExemptionForm({
 			railsAttributes={ false }
 		>
 			<Stack>
-				<Title order={ 5 }>
-					{ isEdit
-						? t("views.settings.payroll.overtime_exemptions.form_title_edit")
-						: t("views.settings.payroll.overtime_exemptions.form_title_create") }
-				</Title>
-
 				<Group>
 					<TextInput
 						name="overtime_exemption.name"
@@ -112,11 +106,9 @@ export function ExemptionForm({
 							? t("views.settings.payroll.overtime_exemptions.save_update")
 							: t("views.settings.payroll.overtime_exemptions.save_create") }
 					</Submit>
-					{ isEdit && onCancelEdit && (
-						<Button variant="subtle" onClick={ onCancelEdit }>
-							{ t("views.settings.payroll.overtime_exemptions.cancel_edit") }
-						</Button>
-					) }
+					<Button variant="subtle" onClick={ onCancel }>
+						{ t("views.settings.payroll.overtime_exemptions.cancel") }
+					</Button>
 				</Group>
 			</Stack>
 		</Form>

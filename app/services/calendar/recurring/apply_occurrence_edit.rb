@@ -190,7 +190,15 @@ module Calendar
                       else
                         @event.shift.employee_id
                       end
-        target.build_shift(employee_id: employee_id.presence)
+        category_id = if shift_attrs&.key?(:category_id)
+                        shift_attrs[:category_id]
+                      else
+                        @event.shift&.category_id
+                      end
+        target.build_shift(
+          employee_id: employee_id.presence,
+          category_id: category_id.presence,
+        )
       end
 
       def continuation_pattern_attrs(pattern, form_starts_at, pattern_count)

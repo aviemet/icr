@@ -1,5 +1,6 @@
 import { router } from "@inertiajs/react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import {
 	Badge,
@@ -22,6 +23,7 @@ interface ShiftTypesProps {
 }
 
 export function ShiftTypes({ shift_types }: ShiftTypesProps) {
+	const { t } = useTranslation()
 	const [newName, setNewName] = useState("")
 	const createCategory = useCreateCategory()
 	const deleteCategory = useDeleteCategory()
@@ -49,13 +51,13 @@ export function ShiftTypes({ shift_types }: ShiftTypesProps) {
 	const columns: TableColumn<Schema.Category>[] = [
 		{
 			accessor: "name",
-			title: "Shift Type",
+			title: t("views.settings.calendar.shift_types_column_name"),
 			render: (shiftType) => (
 				<Group gap="sm">
 					<Text fw={ 500 }>{ shiftType.name }</Text>
 					{ Boolean(shiftType.system) && (
 						<Badge size="sm" variant="light" color="gray">
-							System
+							{ t("views.settings.calendar.shift_types_system_badge") }
 						</Badge>
 					) }
 				</Group>
@@ -63,7 +65,7 @@ export function ShiftTypes({ shift_types }: ShiftTypesProps) {
 		},
 		{
 			accessor: "actions",
-			title: "Actions",
+			title: t("views.settings.calendar.shift_types_column_actions"),
 			titleClassName: "actionsCell",
 			cellsClassName: "actionsCell",
 			render: (shiftType) => {
@@ -73,7 +75,7 @@ export function ShiftTypes({ shift_types }: ShiftTypesProps) {
 				if(isSystem) {
 					return (
 						<Text size="sm" c="dimmed">
-							Protected
+							{ t("views.settings.calendar.shift_types_protected") }
 						</Text>
 					)
 				}
@@ -96,8 +98,8 @@ export function ShiftTypes({ shift_types }: ShiftTypesProps) {
 	return (
 		<FormBandStack>
 			<FormBand
-				title="Existing types"
-				description="System types ship with the app and stay put. Custom types can be removed."
+				title={ t("views.settings.calendar.shift_types_existing_title") }
+				description={ t("views.settings.calendar.shift_types_existing_description") }
 			>
 				<Table.Provider>
 					<Table.DataTable
@@ -108,7 +110,7 @@ export function ShiftTypes({ shift_types }: ShiftTypesProps) {
 						height="auto"
 						emptyState={ (
 							<Text size="sm" c="dimmed">
-								No shift types yet. Add one below.
+								{ t("views.settings.calendar.shift_types_empty") }
 							</Text>
 						) }
 					/>
@@ -116,16 +118,16 @@ export function ShiftTypes({ shift_types }: ShiftTypesProps) {
 			</FormBand>
 
 			<FormBand
-				title="Add shift type"
-				description="Create a custom category for scheduling and overtime rules."
+				title={ t("views.settings.calendar.shift_types_add_title") }
+				description={ t("views.settings.calendar.shift_types_add_description") }
 			>
 				<Group align="flex-end" gap="sm" wrap="nowrap" className={ classes.addForm }>
 					<TextInput
 						id="new-shift-type-name"
-						label="Name"
+						label={ t("views.settings.calendar.shift_types_name_label") }
 						value={ newName }
 						onChange={ event => setNewName(event.currentTarget.value) }
-						placeholder="e.g. Training"
+						placeholder={ t("views.settings.calendar.shift_types_name_placeholder") }
 						style={ { flex: 1 } }
 						onKeyDown={ event => {
 							if(event.key === "Enter") {
@@ -140,7 +142,7 @@ export function ShiftTypes({ shift_types }: ShiftTypesProps) {
 						disabled={ newName.trim().length === 0 }
 						onClick={ handleCreate }
 					>
-						Add
+						{ t("views.settings.calendar.shift_types_add_button") }
 					</Button>
 				</Group>
 			</FormBand>

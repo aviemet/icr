@@ -1,39 +1,42 @@
+import { useTranslation } from "react-i18next"
+
 import { Box, Grid } from "@/components"
-import { Form, Submit } from "@/components/Form"
+import { Form } from "@/components/Form"
 import { Ihss } from "@/domains/Settings/Payroll/Form/Ihss"
+import { SettingsPageHeader } from "@/domains/Settings/SettingsPageHeader"
+import { SettingsSaveButton } from "@/domains/Settings/SettingsSaveButton"
 import { FormBand, FormBandStack } from "@/features"
 import { Routes, withLayout } from "@/lib"
-
-import { SettingsPageHeader } from "../../SettingsPageHeader"
 
 export interface PayrollIhssSettingsProps {
 	settings: Schema.Setting
 }
 
 const PayrollIhssSettings = ({ settings }: PayrollIhssSettingsProps) => {
+	const { t } = useTranslation()
+
 	return (
 		<Box>
-			<SettingsPageHeader
-				title="IHSS"
-				description="Co-employment and how IHSS hours are assigned for overtime and tracking."
-			/>
-
 			<Form
 				action={ Routes.settingsPayrollIhss() }
 				method="patch"
 				initialData={ { settings } }
 			>
+				<SettingsPageHeader
+					title={ t("views.settings.payroll.ihss.title") }
+					description={ t("views.settings.payroll.ihss.description") }
+					actions={ <SettingsSaveButton /> }
+				/>
+
 				<FormBandStack>
 					<FormBand
-						title="Co-employment and assignment"
-						description="These settings change how payroll classifies IHSS hours and calculates overtime."
+						title={ t("views.settings.payroll.ihss.band_title") }
+						description={ t("views.settings.payroll.ihss.band_description") }
 					>
 						<Grid>
 							<Ihss />
 						</Grid>
 					</FormBand>
-
-					<Submit>Update settings</Submit>
 				</FormBandStack>
 			</Form>
 		</Box>

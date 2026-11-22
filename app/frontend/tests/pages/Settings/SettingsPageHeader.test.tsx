@@ -3,8 +3,8 @@ import { cleanup, render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it } from "vitest"
 
 import * as sectionClasses from "@/components/Section/Section.css"
+import { SettingsPageHeader } from "@/domains/Settings/SettingsPageHeader"
 import { theme } from "@/lib/theme"
-import { SettingsPageHeader } from "@/pages/Settings/SettingsPageHeader"
 
 describe("SettingsPageHeader", () => {
 	beforeEach(() => {
@@ -40,5 +40,19 @@ describe("SettingsPageHeader", () => {
 		const panel = screen.getByText("Company Details").closest("section")
 		expect(panel?.className).toContain(sectionClasses.panel)
 		expect(panel?.className).not.toContain(sectionClasses.accent)
+	})
+
+	it("renders actions on the right of the title panel", () => {
+		render(
+			<MantineProvider theme={ theme }>
+				<SettingsPageHeader
+					title="General"
+					description="Locale defaults."
+					actions={ <button type="button">Update settings</button> }
+				/>
+			</MantineProvider>,
+		)
+
+		expect(screen.getByRole("button", { name: "Update settings" })).toBeInTheDocument()
 	})
 })

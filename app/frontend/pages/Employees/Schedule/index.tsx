@@ -32,6 +32,7 @@ type ScheduleResources = Record<string, object> & {
 	employee?: Schema.EmployeesPersisted
 	client?: Schema.ClientsPersisted
 	recurrence: ReturnType<typeof recurrenceResources>
+	shift?: { category_id: string }
 }
 
 function isScheduleResources(resources: EventResources | undefined): resources is ScheduleResources {
@@ -91,6 +92,9 @@ const Schedule = ({ employee, schedules: initialSchedules }: ScheduleProps) => {
 			const client = event.clients?.[0]
 			const resources: ScheduleResources = {
 				recurrence: recurrenceResources(event),
+				shift: {
+					category_id: event.shift?.category?.slug ?? "",
+				},
 			}
 			if(client) resources.client = client
 			return {

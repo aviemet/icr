@@ -1,4 +1,5 @@
 import { ActionIcon, Box, Group, Select } from "@mantine/core"
+import { useTranslation } from "react-i18next"
 
 import { TrashIcon } from "@/components/Icons"
 import {
@@ -6,7 +7,11 @@ import {
 	type OvertimeExemptionCriterionField,
 } from "@/types/OvertimeExemptionCriteria"
 
-import { type CategoryOption, FIELD_TYPES } from "./criterionUtils"
+import {
+	type CategoryOption,
+	FIELD_OPERATORS,
+	operatorLocaleKey,
+} from "./criterionUtils"
 import { CriterionValueInput } from "./CriterionValueInput"
 
 interface CriterionFieldProps {
@@ -24,13 +29,17 @@ export function CriterionField({
 	onChange,
 	onRemove,
 }: CriterionFieldProps) {
-	const fieldConfig = FIELD_TYPES[field]
+	const { t } = useTranslation()
+	const operators = FIELD_OPERATORS[field]
 
 	return (
 		<Group align="flex-start">
 			<Select
-				label={ fieldConfig.label }
-				data={ [...fieldConfig.operators] }
+				label={ t(`views.settings.payroll.overtime_exemptions.fields.${field}`) }
+				data={ operators.map(operator => ({
+					value: operator,
+					label: t(`views.settings.payroll.overtime_exemptions.operators.${operatorLocaleKey(field, operator)}`),
+				})) }
 				value={ condition.operator }
 				onChange={ (value) => onChange({ ...condition, operator: value || "" }) }
 				style={ { width: 200 } }

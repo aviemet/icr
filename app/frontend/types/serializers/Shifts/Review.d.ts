@@ -7,6 +7,7 @@ declare global {
       id: string
       calendar_event_id: string
       category: Category
+      category_id: string
       client_name: string
       client_slug: string
       created_at: Date

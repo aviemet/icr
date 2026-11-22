@@ -57,6 +57,38 @@ RSpec.describe "Api::CalendarEvents", type: :request do
       expect(shift.calendar_event.clients).to contain_exactly(client)
     end
 
+    it "persists nested shift category_id from slug" do
+      client = create(:client)
+      employee = create(:employee, :employed)
+      event_category = Category.type("Calendar::Event").find_or_create_by!(name: "Shift") { |category|
+        category.system = true
+      }
+      overnight = Category.type("Shift").find_or_create_by!(name: "Overnight") { |category|
+        category.system = false
+      }
+      params = {
+        calendar_event: {
+          starts_at: 1.day.from_now,
+          ends_at: 1.day.from_now + 8.hours,
+          category_id: event_category.id,
+          shift_attributes: {
+            employee_id: employee.id,
+            category_id: overnight.slug,
+          },
+          event_participants_attributes: [
+            { participant_id: client.id, participant_type: "Client" },
+          ],
+        },
+      }
+
+      expect {
+        post api_calendar_events_url, params: params
+      }.to change(Shift, :count).by(1)
+
+      expect(response).to have_http_status(:created)
+      expect(Shift.order(created_at: :desc).first.category_id).to eq(overnight.id)
+    end
+
     it "returns unprocessable content with string errors when invalid" do
       shift_category = Category.type("Calendar::Event").find_or_create_by!(name: "Shift") { |category|
         category.system = true

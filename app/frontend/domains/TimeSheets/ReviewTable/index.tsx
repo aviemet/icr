@@ -53,6 +53,7 @@ export function ReviewTable({
 		(showClientColumn ? 1 : 0) +
 		1 +
 		1 +
+		1 +
 		(canEditIhss ? 1 : 0)
 	const trailingColumnCount =
 		1 +
@@ -113,6 +114,7 @@ export function ReviewTable({
 							) }
 							<Table.HeadCell>{ t("views.timesheets.employee_review.in_out_times") }</Table.HeadCell>
 							<Table.HeadCell>{ t("views.timesheets.employee_review.hours") }</Table.HeadCell>
+							<Table.HeadCell>{ t("views.timesheets.employee_review.shift_type") }</Table.HeadCell>
 							{ canEditIhss && (
 								<Table.HeadCell>{ t("views.timesheets.employee_review.ihss") }</Table.HeadCell>
 							) }
@@ -149,6 +151,7 @@ export function ReviewTable({
 										showClientColumn={ showClientColumn }
 										canFacilitatorApprove={ canFacilitatorApprove }
 										canEditIhss={ canEditIhss }
+										canEditShiftType={ canEditTimes }
 									/>
 								))
 							) }

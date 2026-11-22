@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next"
 import { Badge, Button, Group, Table, Text, Tooltip } from "@/components"
 import { Form } from "@/components/Form"
 import { CalendarIcon, TrashIcon } from "@/components/Icons"
+import { CategoriesDropdown } from "@/components/Inputs/Dropdowns"
 import { LastEditorAvatar } from "@/domains/TimeSheets/LastEditorAvatar"
 import { formatter, Routes } from "@/lib"
 import { parseTimeString } from "@/lib/dates"
@@ -40,6 +41,7 @@ interface ReviewRowProps {
 	showClientColumn: boolean
 	canFacilitatorApprove: boolean
 	canEditIhss: boolean
+	canEditShiftType: boolean
 }
 
 export function ReviewRow({
@@ -54,6 +56,7 @@ export function ReviewRow({
 	showClientColumn,
 	canFacilitatorApprove,
 	canEditIhss,
+	canEditShiftType,
 }: ReviewRowProps) {
 	const { t } = useTranslation()
 
@@ -165,6 +168,30 @@ export function ReviewRow({
 			</Table.Cell>
 			<Table.Cell>
 				<Text size="sm">{ formatter.number.decimal(hours, 2) }</Text>
+			</Table.Cell>
+			<Table.Cell>
+				{ canEditShiftType
+					? (
+						<CategoriesDropdown
+							label=""
+							categoryType="Shift"
+							valueKey="id"
+							value={ shift.category_id ?? shift.category?.id ?? null }
+							clearable={ false }
+							searchable
+							size="xs"
+							comboboxProps={ { withinPortal: true } }
+							onChange={ (nextValue) => {
+								if(!nextValue || nextValue === (shift.category_id ?? shift.category?.id)) return
+								router.patch(Routes.categoryShift(shift.shift_id), { category_id: nextValue })
+							} }
+						/>
+					)
+					: (
+						<Text size="sm">
+							{ shift.category?.name ?? t("views.timesheets.index.no_value") }
+						</Text>
+					) }
 			</Table.Cell>
 			{ canEditIhss && (
 				<Table.Cell>

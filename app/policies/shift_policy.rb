@@ -20,6 +20,10 @@ class ShiftPolicy < ApplicationPolicy
     Pundit.policy!(user, record.timesheet).update?
   end
 
+  def update_category?
+    update_ihss?
+  end
+
   private
 
   def caseload_owns_all_clients?

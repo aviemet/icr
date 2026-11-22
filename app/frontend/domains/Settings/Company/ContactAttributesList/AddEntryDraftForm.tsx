@@ -1,34 +1,37 @@
-import { useState } from "react"
+import { useState, type ComponentType } from "react"
+import { useTranslation } from "react-i18next"
 
 import { Button, Stack } from "@/components"
 
+import { type DraftFieldsProps } from "./draftFieldsTypes"
 import { blankDraftFrom, draftToRecord } from "./helpers"
 
 export interface AddEntryDraftFormProps {
 	emptyData: Record<string, unknown>
-	draftFields: (draft: Record<string, string>, setDraft: (next: Record<string, string>) => void) => React.ReactNode
+	draftFields: ComponentType<DraftFieldsProps>
 	onAdd: (item: Record<string, unknown>) => void
 	close: () => void
 }
 
 export function AddEntryDraftForm({
 	emptyData,
-	draftFields,
+	draftFields: DraftFields,
 	onAdd,
 	close,
 }: AddEntryDraftFormProps) {
+	const { t } = useTranslation()
 	const [draft, setDraft] = useState<Record<string, string>>(() => blankDraftFrom(emptyData))
 
 	return (
 		<Stack gap="sm">
-			{ draftFields(draft, setDraft) }
+			<DraftFields draft={ draft } setDraft={ setDraft } />
 			<Button
 				onClick={ () => {
 					onAdd(draftToRecord(draft, emptyData))
 					close()
 				} }
 			>
-				Add
+				{ t("views.settings.company.add_entry") }
 			</Button>
 		</Stack>
 	)

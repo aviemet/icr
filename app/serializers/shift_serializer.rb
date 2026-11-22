@@ -32,6 +32,7 @@ class ShiftSerializer < ApplicationSerializer
   attributes(
     :employee_id,
     :calendar_event_id,
+    :category_id,
   )
 
   belongs_to :category, serializer: CategorySerializer

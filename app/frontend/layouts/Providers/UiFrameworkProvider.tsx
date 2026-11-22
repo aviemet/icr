@@ -38,12 +38,14 @@ export function UiFrameworkProvider({ children }: { children: React.ReactNode })
 		return createTheme({
 			...themeObject,
 			...fontOverrides,
-			...(fontOverrides.headings ? {
-				headings: {
-					...themeObject.headings,
-					...fontOverrides.headings,
-				},
-			} : {}),
+			...(fontOverrides.headings
+				? {
+					headings: {
+						...themeObject.headings,
+						...fontOverrides.headings,
+					},
+				}
+				: {}),
 			colors: {
 				...themeObject.colors,
 				[BRAND_PALETTE]: brandColors,

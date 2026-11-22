@@ -170,6 +170,7 @@ Rails.application.routes.draw do
         post :approve
         post :unapprove
         patch :ihss, action: :update_ihss
+        patch :category, action: :update_category
       end
       collection do
         post :bulk_approve

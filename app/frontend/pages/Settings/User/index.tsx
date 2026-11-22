@@ -1,11 +1,11 @@
 import { useTranslation } from "react-i18next"
 
 import { Box } from "@/components"
+import { SettingsPageHeader } from "@/domains/Settings/SettingsPageHeader"
 import { AppearanceSettings } from "@/domains/Settings/User/Appearance"
 import { FormBand, FormBandStack } from "@/features"
 import { withLayout } from "@/lib"
 
-import { SettingsPageHeader } from "../SettingsPageHeader"
 
 const UserSettings = () => {
 	const { t } = useTranslation()

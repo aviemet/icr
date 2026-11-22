@@ -13,6 +13,7 @@ import { theme } from "@/lib/theme"
 import { server } from "@/tests/helpers/mockServer"
 
 const eventFormCopy: Record<string, string> = {
+	"views.clients.schedule.event_form.shift_type": "Shift Type",
 	"views.clients.schedule.event_form.repeats": "Repeats",
 	"views.clients.schedule.event_form.frequency": "Frequency",
 	"views.clients.schedule.event_form.frequency_daily": "Daily",

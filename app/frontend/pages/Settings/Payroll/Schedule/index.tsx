@@ -1,33 +1,38 @@
+import { useTranslation } from "react-i18next"
+
 import { Box, Grid } from "@/components"
-import { Form, Submit } from "@/components/Form"
+import { Form } from "@/components/Form"
 import { DueDate } from "@/domains/Settings/Payroll/Form/DueDate"
 import { Payroll } from "@/domains/Settings/Payroll/Form/Payroll"
+import { SettingsPageHeader } from "@/domains/Settings/SettingsPageHeader"
+import { SettingsSaveButton } from "@/domains/Settings/SettingsSaveButton"
 import { FormBand, FormBandStack } from "@/features"
 import { Routes, withLayout } from "@/lib"
-
-import { SettingsPageHeader } from "../../SettingsPageHeader"
 
 export interface PayrollScheduleSettingsProps {
 	settings: Schema.Setting
 }
 
 const PayrollScheduleSettings = ({ settings }: PayrollScheduleSettingsProps) => {
+	const { t } = useTranslation()
+
 	return (
 		<Box>
-			<SettingsPageHeader
-				title="Pay Schedule"
-				description="Define when pay periods run and when payroll is due."
-			/>
-
 			<Form
 				action={ Routes.settingsPayrollSchedule() }
 				method="patch"
 				initialData={ { settings } }
 			>
+				<SettingsPageHeader
+					title={ t("views.settings.payroll.schedule.title") }
+					description={ t("views.settings.payroll.schedule.description") }
+					actions={ <SettingsSaveButton /> }
+				/>
+
 				<FormBandStack>
 					<FormBand
-						title="Pay period"
-						description="How often payroll runs and when each period starts."
+						title={ t("views.settings.payroll.schedule.period_band_title") }
+						description={ t("views.settings.payroll.schedule.period_band_description") }
 					>
 						<Grid>
 							<Payroll />
@@ -35,15 +40,13 @@ const PayrollScheduleSettings = ({ settings }: PayrollScheduleSettingsProps) => 
 					</FormBand>
 
 					<FormBand
-						title="Due date"
-						description="When timesheets must be ready after a pay period closes."
+						title={ t("views.settings.payroll.schedule.due_date_band_title") }
+						description={ t("views.settings.payroll.schedule.due_date_band_description") }
 					>
 						<Grid>
 							<DueDate />
 						</Grid>
 					</FormBand>
-
-					<Submit>Update settings</Submit>
 				</FormBandStack>
 			</Form>
 		</Box>

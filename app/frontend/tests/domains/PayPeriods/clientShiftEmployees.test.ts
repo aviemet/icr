@@ -13,6 +13,7 @@ function reviewShift(
 	return {
 		calendar_event_id: "event-1",
 		category: { id: "cat-1", name: "Direct", slug: "direct", system: false },
+		category_id: "cat-1",
 		client_name: "Client",
 		client_slug: "client",
 		created_at: new Date("2024-03-18T09:00:00Z"),
