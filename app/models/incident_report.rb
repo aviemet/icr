@@ -49,4 +49,3 @@ class IncidentReport < ApplicationRecord
 
   scope :includes_associated, -> { includes([:reported_by, :client, :reported_to, :doctor, :hospital_visits]) }
 end
-

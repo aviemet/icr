@@ -36,4 +36,3 @@ class Client::DiagnosisSerializer < ApplicationSerializer
     :active,
   )
 end
-

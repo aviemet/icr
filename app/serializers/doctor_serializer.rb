@@ -33,4 +33,3 @@ class DoctorSerializer < ApplicationSerializer
     :notes,
   )
 end
-

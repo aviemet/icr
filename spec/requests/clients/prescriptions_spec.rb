@@ -59,4 +59,3 @@ RSpec.describe "/clients/:client_slug/prescriptions" do
     end
   end
 end
-

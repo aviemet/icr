@@ -259,24 +259,24 @@ if Rails.env.development?
         dosage: active_dosage,
       )
 
-      if index.zero?
-        historical_dosage = FactoryBot.create(
-          :dosage,
-          amount: 5,
-          amount_unit: :mg,
-          freq_amount: 1,
-          freq_period: :day,
-          administration_method: :oral,
-        )
-        FactoryBot.create(
-          :prescription,
-          :historical,
-          client: client,
-          doctor: primary_care,
-          medication: lisinopril,
-          dosage: historical_dosage,
-        )
-      end
+      next unless index.zero?
+
+      historical_dosage = FactoryBot.create(
+        :dosage,
+        amount: 5,
+        amount_unit: :mg,
+        freq_amount: 1,
+        freq_period: :day,
+        administration_method: :oral,
+      )
+      FactoryBot.create(
+        :prescription,
+        :historical,
+        client: client,
+        doctor: primary_care,
+        medication: lisinopril,
+        dosage: historical_dosage,
+      )
     end
 
     facilitator = User.find_by(email: "facilitator@gmail.com")&.person&.employee

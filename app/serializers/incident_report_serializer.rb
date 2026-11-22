@@ -48,4 +48,3 @@ class IncidentReportSerializer < ApplicationSerializer
     :category_id,
   )
 end
-

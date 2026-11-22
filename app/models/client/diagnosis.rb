@@ -34,4 +34,3 @@ class Client::Diagnosis < ApplicationRecord
   scope :active, -> { where(active: true) }
   scope :includes_associated, -> { includes(:client, :doctor) }
 end
-

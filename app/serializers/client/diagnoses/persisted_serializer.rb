@@ -4,4 +4,3 @@ class Client::Diagnoses::PersistedSerializer < Client::DiagnosisSerializer
   belongs_to :doctor, serializer: Doctors::PersistedSerializer
   belongs_to :client, serializer: Clients::PersistedSerializer
 end
-

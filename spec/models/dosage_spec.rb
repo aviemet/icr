@@ -38,4 +38,3 @@ RSpec.describe Dosage do
     end
   end
 end
-

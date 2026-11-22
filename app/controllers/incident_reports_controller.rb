@@ -11,7 +11,6 @@ class IncidentReportsController < ApplicationController
     :location, :description, :category_id, :doctor_id,
   ]
 
-
   # @route GET /incident_reports (incident_reports)
   def index
     authorize incident_reports

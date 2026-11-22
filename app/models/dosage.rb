@@ -47,6 +47,5 @@ class Dosage < ApplicationRecord
   validates :amount, presence: true
   validates :freq_period, presence: true
 
-
   scope :includes_associated, -> { includes([:prescription]) }
 end

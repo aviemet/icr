@@ -13,7 +13,6 @@ import {
 	Textarea,
 } from "@/components/Inputs"
 import { DoctorsDropdown } from "@/components/Inputs/Dropdowns"
-
 import {
 	CollectionAddModal,
 	CollectionPanel,

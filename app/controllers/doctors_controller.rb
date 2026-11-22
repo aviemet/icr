@@ -64,7 +64,6 @@ class DoctorsController < ApplicationController
     }
   end
 
-
   # @route POST /doctors (doctors)
   def create
     authorize Doctor.new

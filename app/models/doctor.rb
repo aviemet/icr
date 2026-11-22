@@ -61,9 +61,7 @@ class Doctor < ApplicationRecord
     )
   }
 
-
   def name
     "#{person&.first_name} #{person&.last_name}"
   end
 end
-

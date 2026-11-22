@@ -17,4 +17,3 @@ class Clients::DoctorsController < Clients::BaseController
     redirect_to_client_tab("medical")
   end
 end
-

@@ -5,4 +5,3 @@ class Client::HospitalVisits::PersistedSerializer < Client::HospitalVisitSeriali
   belongs_to :doctor, serializer: Doctors::PersistedSerializer
   belongs_to :incident_report, serializer: IncidentReports::PersistedSerializer
 end
-

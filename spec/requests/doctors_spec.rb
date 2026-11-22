@@ -14,7 +14,6 @@ RSpec.describe "/doctors" do
     }
   end
 
-
   def invalid_attributes
     {
       doctor: { person_attributes: { first_name: nil, last_name: nil } }
@@ -65,7 +64,6 @@ RSpec.describe "/doctors" do
     end
   end
 
-
   describe "GET /new" do
     login_user(:admin)
 
@@ -106,7 +104,6 @@ RSpec.describe "/doctors" do
         expect(response).to redirect_to(doctor_url(Doctor.last))
       end
     end
-
 
     context "with invalid parameters" do
       it "does not create a new Doctor" do

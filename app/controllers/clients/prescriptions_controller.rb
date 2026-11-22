@@ -32,7 +32,6 @@ class Clients::PrescriptionsController < Clients::BaseController
     redirect_to_client_tab("medical")
   end
 
-
   private
 
   def prescription_create_params

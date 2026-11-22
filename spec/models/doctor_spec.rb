@@ -69,4 +69,3 @@ RSpec.describe Doctor do
     end
   end
 end
-

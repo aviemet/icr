@@ -18,7 +18,6 @@ class Clients::ShowSerializer < Clients::PersistedSerializer
   has_many :incident_reports, serializer: IncidentReports::PersistedSerializer
   has_many :clients_trainings, serializer: ClientsTrainings::ShowRowSerializer
 
-
   type "Array<{ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date }>"
   def documents
     Attachments::FileSerializer.many(@object.documents)

@@ -28,4 +28,3 @@ class Clients::DiagnosesController < Clients::BaseController
     redirect_to_client_tab("medical")
   end
 end
-

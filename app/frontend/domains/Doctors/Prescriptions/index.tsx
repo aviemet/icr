@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next"
 
 import { Link } from "@/components"
-
 import { DateTimeFormatter } from "@/components/Formatters"
 import { CollectionPanel, RecordRow } from "@/features"
 import { Routes } from "@/lib"

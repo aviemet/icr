@@ -55,4 +55,3 @@ RSpec.describe IncidentReport do
     it{ is_expected.to have_many(:hospital_visits).class_name("Client::HospitalVisit") }
   end
 end
-

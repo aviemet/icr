@@ -11,6 +11,6 @@ RSpec.describe "/api/options/doctors" do
 
     expect(response).to have_http_status(:ok)
     payload = response.parsed_body
-    expect(payload.map { |row| row["id"] }).to include(doctor.id)
+    expect(payload.pluck("id")).to include(doctor.id)
   end
 end
