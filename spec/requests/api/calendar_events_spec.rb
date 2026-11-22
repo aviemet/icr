@@ -77,6 +77,108 @@ RSpec.describe "Api::CalendarEvents", type: :request do
       expect(response.parsed_body["errors"]["ends_at"]).to be_a(String)
     end
 
+    it "attaches an assigned shift to the employee's timesheet for the period" do
+      Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
+      travel_to Time.zone.local(2024, 3, 10, 12, 0, 0) do
+        client = create(:client)
+        employee = create(:employee)
+        shift_category = Category.type("Calendar::Event").find_or_create_by!(name: "Shift") { |category|
+          category.system = true
+        }
+        params = {
+          calendar_event: {
+            starts_at: Time.zone.local(2024, 3, 20, 9, 0, 0),
+            ends_at: Time.zone.local(2024, 3, 20, 17, 0, 0),
+            category_id: shift_category.id,
+            shift_attributes: { employee_id: employee.id },
+            event_participants_attributes: [
+              { participant_id: client.id, participant_type: "Client" },
+            ],
+          },
+        }
+
+        post api_calendar_events_url, params: params
+
+        expect(response).to have_http_status(:created)
+        shift = Shift.order(created_at: :desc).first
+        expect(shift.employee_id).to eq(employee.id)
+        expect(shift.timesheet).to be_present
+        expect(shift.timesheet.employee_id).to eq(employee.id)
+        expect(shift.timesheet.pay_period.starts_at.to_date).to eq(Date.new(2024, 3, 16))
+        expect(shift.calendar_event.clients).to contain_exactly(client)
+      end
+    end
+
+    it "rejects create when the containing pay period is finalized" do
+      Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
+      travel_to Time.zone.local(2024, 3, 10, 12, 0, 0) do
+        employee = create(:employee)
+        client = create(:client)
+        pay_period = PayPeriod.for_period_dates(Date.new(2024, 3, 16), Date.new(2024, 3, 31))
+        pay_period.update!(finalized_at: Time.current)
+        shift_category = Category.type("Calendar::Event").find_or_create_by!(name: "Shift") { |category|
+          category.system = true
+        }
+        params = {
+          calendar_event: {
+            starts_at: Time.zone.local(2024, 3, 20, 9, 0, 0),
+            ends_at: Time.zone.local(2024, 3, 20, 17, 0, 0),
+            category_id: shift_category.id,
+            shift_attributes: { employee_id: employee.id },
+            event_participants_attributes: [
+              { participant_id: client.id, participant_type: "Client" },
+            ],
+          },
+        }
+
+        expect {
+          post api_calendar_events_url, params: params
+        }.not_to change(Shift, :count)
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body["errors"]["base"]).to eq(I18n.t("pay_periods.finalized_locked"))
+      end
+    end
+
+    it "clears timesheet approval when attaching a new shift" do
+      Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
+      travel_to Time.zone.local(2024, 3, 10, 12, 0, 0) do
+        client = create(:client)
+        employee = create(:employee)
+        existing = create(
+          :shift,
+          employee: employee,
+          calendar_event: create(
+            :calendar_event,
+            starts_at: Time.zone.local(2024, 3, 18, 9, 0, 0),
+            ends_at: Time.zone.local(2024, 3, 18, 17, 0, 0),
+          ),
+        )
+        timesheet = existing.reload.timesheet
+        timesheet.update!(approved_at: Time.current)
+        shift_category = Category.type("Calendar::Event").find_or_create_by!(name: "Shift") { |category|
+          category.system = true
+        }
+        params = {
+          calendar_event: {
+            starts_at: Time.zone.local(2024, 3, 20, 9, 0, 0),
+            ends_at: Time.zone.local(2024, 3, 20, 17, 0, 0),
+            category_id: shift_category.id,
+            shift_attributes: { employee_id: employee.id },
+            event_participants_attributes: [
+              { participant_id: client.id, participant_type: "Client" },
+            ],
+          },
+        }
+
+        post api_calendar_events_url, params: params
+
+        expect(response).to have_http_status(:created)
+        expect(timesheet.reload.approved_at).to be_nil
+      end
+    end
+
+
     it "stores recurring patterns without materializing child events" do
       client = create(:client)
       employee = create(:employee)

@@ -2,46 +2,47 @@ import { useModals } from "@mantine/modals"
 import { useTranslation } from "react-i18next"
 
 import { Box, Button, Link, Section, Text, Title } from "@/components"
-import { confirmBusyAction, RecordRow } from "@/features"
+import { RecordRow } from "@/features"
 import { Routes } from "@/lib"
 
 import * as classes from "./Board.css"
-import { unassignCaseload } from "./caseloadMutations"
+import { ReassignModalBody } from "./ReassignModalBody"
 
 interface FacilitatorClientListProps {
 	facilitator: Schema.CaseloadsFacilitator | null
+	facilitators: Schema.CaseloadsFacilitator[]
 	clients: Schema.CaseloadsClient[]
 	assignmentsByClientId: Record<string, Schema.CaseloadsAssignment>
 }
 
 export function FacilitatorClientList({
 	facilitator,
+	facilitators,
 	clients,
 	assignmentsByClientId,
 }: FacilitatorClientListProps) {
 	const { t } = useTranslation()
 	const modals = useModals()
 
-	const handleUnassign = (client: Schema.CaseloadsClient) => {
+	const handleReassign = (client: Schema.CaseloadsClient) => {
 		if(!facilitator) return
 
 		const assignment = assignmentsByClientId[client.id]
 		if(!assignment) return
 
-		confirmBusyAction({
-			modals,
-			title: t("views.caseloads.clients.unassign_title"),
+		let modalId = ""
+
+		modalId = modals.openModal({
+			title: t("views.caseloads.clients.reassign_title"),
 			children: (
-				<Text size="sm">
-					{ t("views.caseloads.clients.unassign_confirm", {
-						client: client.name,
-						facilitator: facilitator.name,
-					}) }
-				</Text>
+				<ReassignModalBody
+					client={ client }
+					facilitator={ facilitator }
+					facilitators={ facilitators }
+					assignmentId={ assignment.id }
+					onClose={ () => modals.closeModal(modalId) }
+				/>
 			),
-			confirmLabel: t("views.caseloads.clients.unassign_confirm_button"),
-			cancelLabel: t("views.caseloads.clients.unassign_cancel"),
-			run: () => unassignCaseload(assignment.id),
 		})
 	}
 
@@ -68,10 +69,10 @@ export function FacilitatorClientList({
 										<Button
 											size="compact-xs"
 											variant="light"
-											color="red"
-											onClick={ () => handleUnassign(client) }
+											color="orange"
+											onClick={ () => handleReassign(client) }
 										>
-											{ t("views.caseloads.clients.unassign") }
+											{ t("views.caseloads.clients.reassign") }
 										</Button>
 									) }
 								/>

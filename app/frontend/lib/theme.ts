@@ -111,6 +111,11 @@ export const themeObject: Partial<CustomMantineTheme> = {
 				radius: "sm",
 				padding: "md",
 			},
+			styles: {
+				body: {
+					paddingTop: "var(--mantine-spacing-sm)",
+				},
+			},
 		},
 	},
 	other: {

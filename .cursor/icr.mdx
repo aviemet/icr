@@ -22,7 +22,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
   - [x] Implement authorization policies
   - [x] UI visibility controls based on user permissions
 - [ ] Basic user profile management
-  - [ ] User settings page
+  - [x] User settings page
 
 ### Phase 2: Document Management System
 - [ ] Set up secure file storage system
@@ -71,7 +71,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 ### Phase 6: Timesheet Management
 - [ ] Timesheet generation system
   - [x] Automatic generation based on schedules
-  - [ ] Manual entry support
+  - [x] Manual entry support
 - [ ] Timesheet review workflow
   - [ ] Facilitator review and approval process
   - [ ] Manager final approval
@@ -176,6 +176,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Payroll index hours: Payroll::EmployeePeriodHours computes per-employee regular_hours and ot_hours for a pay period. Uses Setting overtime_weekly_hours and overtime_daily_hours; splits work intervals by day (including overnight); applies active OvertimeExemption rules to exclude exempt intervals from OT; weekly OT and daily OT are summed. The calculator reads intervals via a collector interface (default: scheduled shifts), so payroll can later swap in a clock-in/out collector without changing overtime math or UI contracts.
 - Payroll approval UI: Approve / Unapprove / bulk approve stay available until the period is finalized (`can_approve = !finalized?`). The payroll due date and `approval_window_open` are deadline / urgency signals only (including overdue copy on payroll home and period show); they must never hard-block approval. Hard-close language in the older payroll redesign plan is superseded by this rule.
 - Approval reminder emails: `Payroll::SendApprovalReminders` (daily GoodJob cron) emails admins and Timesheet approvers for closed, unfinalized periods with pending timesheets. Org-wide enable/disable lives under Settings > Notifications (`Setting.notifications_payroll_approval_reminders`); managed-only approvers get a count scoped to their reports.
+- Manual shift entry on employee payroll review creates a `Calendar::Event` + nested `Shift` via `POST /api/calendar_events` (same path as schedule); `PayPeriod.attach_shift!` wires the timesheet. Create into a finalized period is rejected. Attaching a shift clears `approved_at` on that timesheet. Review rows show `last_editor` from the latest paper_trail time update on the calendar event (initials avatar + tooltip).
 
 ### Frontend Components
 #### UI Framework

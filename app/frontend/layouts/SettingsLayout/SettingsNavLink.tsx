@@ -6,10 +6,12 @@ import { type LinkProps } from "@/components/Link"
 
 export interface SettingsNavLinkProps extends LinkProps {
 	ref?: React.Ref<HTMLAnchorElement>
+	icon?: React.ReactNode
 }
 
 export function SettingsNavLink({
 	children,
+	icon,
 	underline = "never",
 	ref,
 	...props
@@ -19,6 +21,9 @@ export function SettingsNavLink({
 		underline={ underline }
 		{ ...props }
 	>
-		<span className={ clsx("controlLabel") }>{ children }</span>
+		<span className={ clsx("controlLabel") }>
+			{ icon && <span className="controlIcon" aria-hidden="true">{ icon }</span> }
+			{ children }
+		</span>
 	</Link>
 }

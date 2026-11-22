@@ -555,12 +555,15 @@
       "caseloads": {
         "clients": {
           "empty": "No clients on this caseload",
+          "facilitator_label": "Facilitator",
+          "pick_facilitator": "Select a facilitator first",
+          "reassign": "Reassign",
+          "reassign_cancel": "Cancel",
+          "reassign_confirm": "Move %{client} from %{facilitator}'s caseload?",
+          "reassign_confirm_button": "Reassign",
+          "reassign_title": "Reassign client",
           "title": "Caseload",
-          "unassign": "Unassign",
-          "unassign_cancel": "Cancel",
-          "unassign_confirm": "Remove %{client} from %{facilitator}'s caseload?",
-          "unassign_confirm_button": "Unassign",
-          "unassign_title": "Unassign client"
+          "unassign": "Unassign"
         },
         "metrics": {
           "facilitators": "Facilitators",
@@ -1129,11 +1132,23 @@
             "save_update": "Update Exemption",
             "title": "Overtime exemptions"
           }
+        },
+        "user": {
+          "appearance_band_description": "Choose how the application looks for you.",
+          "appearance_band_title": "Appearance",
+          "color_scheme": {
+            "description": "Switch between light and dark mode.",
+            "label": "Color scheme"
+          },
+          "description": "Preferences for your account.",
+          "title": "User Settings"
         }
       },
       "timesheets": {
         "employee_review": {
           "actions": "Actions",
+          "add_shift": "Add shift",
+          "add_shift_submit": "Add shift",
           "approve": "Approve timesheet",
           "back": "Back",
           "back_to_payroll": "Back to Payroll",
@@ -1149,8 +1164,12 @@
           "delete_shift_cancel": "Cancel",
           "delete_shift_confirm": "This removes the shift from the timesheet and the calendar. This cannot be undone.",
           "delete_shift_confirm_button": "Delete",
+          "edited_by": "Edited by %{name}",
+          "edited_by_at": "Edited by %{name} (%{at})",
           "employee_calendar": "Employee calendar",
           "employee_label": "Employee",
+          "end_date": "End date",
+          "end_time": "End time",
           "exception": "Exception",
           "footer_overtime": "Overtime",
           "footer_regular": "Regular",
@@ -1172,6 +1191,8 @@
           "selected_count": "%{count} selected",
           "shift": "Shift",
           "sick_hours": "Sick",
+          "start_date": "Start date",
+          "start_time": "Start time",
           "status_approved": "Approved",
           "status_pending": "Pending",
           "status_submitted": "Submitted",

@@ -63,24 +63,32 @@ if Rails.env.development?
 
   if Employee.none?
     ActiveRecord::Base.transaction do
-      facilitator_user = User.create({
-        email: "facilitator@gmail.com",
-        password: dev_password,
-        confirmed_at: Time.zone.now,
-        time_zone: test_timezone,
-        person: FactoryBot.create(:person)
-      })
+      facilitator_job = Employee::JobTitle.find_by(slug: "facilitator")
+      facilitators = [
+        "facilitator@gmail.com",
+        "facilitator2@gmail.com",
+        "facilitator3@gmail.com",
+      ].map { |email|
+        facilitator_user = User.create({
+          email: email,
+          password: dev_password,
+          confirmed_at: Time.zone.now,
+          time_zone: test_timezone,
+          person: FactoryBot.create(:person)
+        })
 
-      facilitator = FactoryBot.create(:employee, {
-        person: facilitator_user.person,
-        status: :employed
-      })
+        facilitator = FactoryBot.create(:employee, {
+          person: facilitator_user.person,
+          status: :employed
+        })
 
-      facilitator.assign_job_title(Employee::JobTitle.find_by(slug: "facilitator"))
-      FactoryBot.create(:pay_rate, :active, employee: facilitator)
-
-      FactoryBot.create(:address, contact: facilitator.person.contact, category: Category.type("Contact::Address").sample)
-      FactoryBot.create(:phone, contact: facilitator.person.contact, category: Category.type("Contact::Phone").sample)
+        facilitator.assign_job_title(facilitator_job)
+        FactoryBot.create(:pay_rate, :active, employee: facilitator)
+        FactoryBot.create(:address, contact: facilitator.person.contact, category: Category.type("Contact::Address").sample)
+        FactoryBot.create(:phone, contact: facilitator.person.contact, category: Category.type("Contact::Phone").sample)
+        facilitator
+      }
+      facilitator = facilitators.first
 
       director_user = User.create({
         email: "director@gmail.com",
@@ -123,7 +131,9 @@ if Rails.env.development?
 
       if Client.any?
         FactoryBot.create(:clients_attendant, attendant: attendant, client: Client.first)
-        FactoryBot.create(:clients_manager, manager: facilitator, client: Client.first)
+        Client.find_each.with_index do |client, index|
+          FactoryBot.create(:clients_manager, manager: facilitators[index % facilitators.length], client: client)
+        end
       end
 
       training = Employee::Training.find_or_create_by!(name: "Orientation") do |record|
@@ -184,7 +194,7 @@ if Rails.env.development?
       offered_applicant.make_offer! if offered_applicant.may_make_offer?
     end
 
-    Rails.logger.info "[seeds] employees + facilitator/director/attendant users + HR sample data"
+    Rails.logger.info "[seeds] employees + 3 facilitators/director/attendant users + HR sample data"
   end
 
 end

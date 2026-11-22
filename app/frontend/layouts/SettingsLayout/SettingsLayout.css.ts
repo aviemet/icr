@@ -40,6 +40,18 @@ export const chrome = css`
 		z-index: 2;
 	}
 
+	.companyLinks {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 2px;
+		min-width: 0;
+	}
+
+	.userSettingsLink {
+		margin-left: auto;
+	}
+
 	.childRow {
 		z-index: 1;
 		padding-top: 6px;
@@ -99,6 +111,16 @@ export const chrome = css`
 	.controlLabel {
 		position: relative;
 		z-index: 1;
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+	}
+
+	.controlIcon {
+		display: inline-flex;
+		flex-shrink: 0;
+		font-size: 0.875rem;
+		line-height: 1;
 	}
 
 	.indicator {

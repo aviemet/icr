@@ -1,4 +1,4 @@
-import { Modal as MantineModal } from "@mantine/core"
+import { Modal as MantineModal, type ModalProps as MantineModalProps } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
 import React from "react"
 
@@ -16,7 +16,7 @@ type ModalDisclosureVariables = {
 const [useModalContext, ModalContextProvider] = createContext<ModalDisclosureVariables>()
 export { useModalContext }
 
-interface ModalProps {
+interface ModalProps extends Omit<MantineModalProps, "opened" | "onClose" | "title" | "children"> {
 	trigger: TriggerComponent
 	title: React.ReactNode
 	children: React.ReactNode

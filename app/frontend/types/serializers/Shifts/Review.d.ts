@@ -12,6 +12,7 @@ declare global {
       created_at: Date
       employee_id?: string
       ends_at: Date
+      last_editor?: ({ id: string, name: string, initials: string, edited_at: string } | null)
       starts_at: Date
       updated_at: Date
     }

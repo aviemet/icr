@@ -73,6 +73,7 @@ Rails.application.routes.draw do
     end
     get "notifications", to: "notifications#show"
     match "notifications", to: "notifications#update", via: [:patch, :put]
+    get "user", to: "users#show", as: :user
     resources :overtime_exemptions, only: [:create, :update]
   end
   resource :settings, param: :slug, except: [:new, :create, :destroy]

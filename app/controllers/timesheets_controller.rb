@@ -24,10 +24,16 @@ class TimesheetsController < ApplicationController
                      Shift.none
                    end
 
+    shifts_list = shifts_scope.to_a
+    last_editors = Payroll::ShiftLastEditors.call(shifts_list)
+    shifts_list.each do |shift|
+      shift.instance_variable_set(:@_last_editor, last_editors[shift.calendar_event_id.to_s])
+    end
+
     employee_hours = Payroll::EmployeePeriodHours.call(pay_period, [employee.id])
     period_end = pay_period.ends_at.to_date
     approval_window_open = !pay_period.finalized? && Payroll::Period.approval_window_open?(period_end)
-    shift_exception_reasons = Payroll::ShiftExceptions.call(shifts_scope)[:reasons_by_shift_id]
+    shift_exception_reasons = Payroll::ShiftExceptions.call(shifts_list)[:reasons_by_shift_id]
     hours_data = employee_hours[employee.id.to_s] || {}
     shift_ot_hours = hours_data[:shift_ot_hours] || {}
 
@@ -39,7 +45,7 @@ class TimesheetsController < ApplicationController
       finalized: -> { pay_period.finalized? },
       can_approve: -> { !pay_period.finalized? },
       timesheet: -> { timesheet&.render(:show) },
-      shifts: -> { shifts_scope.render(:review) },
+      shifts: -> { shifts_list.map { |shift| shift.render(:review) } },
       shift_exception_reasons: -> { shift_exception_reasons },
       shift_ot_hours: -> { shift_ot_hours },
       employee_hours: -> { hours_data.except(:shift_ot_hours) },

@@ -1,6 +1,7 @@
 import { MantineProvider } from "@mantine/core"
 import { ModalsProvider } from "@mantine/modals"
 import { cleanup, render, screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { CaseloadsBoard } from "@/domains/Caseloads"
@@ -17,9 +18,22 @@ vi.mock("react-i18next", () => ({
 			if(key === "views.caseloads.roster.title") return "Facilitators"
 			if(key === "views.caseloads.roster.caseload_size") return `${options?.count ?? 0} clients`
 			if(key === "views.caseloads.clients.title") return "Caseload"
+			if(key === "views.caseloads.clients.reassign") return "Reassign"
+			if(key === "views.caseloads.clients.reassign_title") return "Reassign client"
+			if(key === "views.caseloads.clients.reassign_confirm") {
+				return `Move ${options?.client ?? ""} from ${options?.facilitator ?? ""}'s caseload?`
+			}
+			if(key === "views.caseloads.clients.reassign_confirm_button") return "Reassign"
+			if(key === "views.caseloads.clients.reassign_cancel") return "Cancel"
 			if(key === "views.caseloads.clients.unassign") return "Unassign"
+			if(key === "views.caseloads.clients.facilitator_label") return "Facilitator"
 			if(key === "views.caseloads.unassigned.title") return "Unassigned clients"
 			if(key === "views.caseloads.unassigned.assign") return "Assign"
+			if(key === "views.caseloads.unassigned.assign_title") return "Assign client"
+			if(key === "views.caseloads.unassigned.assign_confirm") return `Assign ${options?.client ?? ""} to a facilitator?`
+			if(key === "views.caseloads.unassigned.assign_confirm_button") return "Assign"
+			if(key === "views.caseloads.unassigned.assign_cancel") return "Cancel"
+			if(key === "views.caseloads.unassigned.facilitator_label") return "Facilitator"
 			return key
 		},
 	}),
@@ -137,7 +151,43 @@ describe("CaseloadsBoard", () => {
 		expect(screen.getByText("Ada Facilitator")).toBeTruthy()
 		expect(screen.getByText("Casey Client")).toBeTruthy()
 		expect(screen.getByText("Una Client")).toBeTruthy()
-		expect(screen.getByText("Unassign")).toBeTruthy()
+		expect(screen.getByText("Reassign")).toBeTruthy()
 		expect(screen.getByText("Assign")).toBeTruthy()
+	})
+
+	it("opens the assign confirm modal from an unassigned client action", async () => {
+		const user = userEvent.setup()
+
+		render(
+			<MantineProvider theme={ theme }>
+				<ModalsProvider>
+					<CaseloadsBoard { ...buildBoardProps() } />
+				</ModalsProvider>
+			</MantineProvider>,
+		)
+
+		await user.click(screen.getByRole("button", { name: "Assign" }))
+
+		expect(await screen.findByText("Assign client")).toBeTruthy()
+		expect(screen.getByText("Assign Una Client to a facilitator?")).toBeTruthy()
+	})
+
+	it("opens the reassign modal with facilitator options and unassign", async () => {
+		const user = userEvent.setup()
+
+		render(
+			<MantineProvider theme={ theme }>
+				<ModalsProvider>
+					<CaseloadsBoard { ...buildBoardProps() } />
+				</ModalsProvider>
+			</MantineProvider>,
+		)
+
+		await user.click(screen.getByRole("button", { name: "Reassign" }))
+
+		expect(await screen.findByText("Reassign client")).toBeTruthy()
+		expect(screen.getByText("Move Casey Client from Ada Facilitator's caseload?")).toBeTruthy()
+		expect(screen.getByLabelText("Facilitator")).toBeTruthy()
+		expect(screen.getByRole("button", { name: "Unassign" })).toBeTruthy()
 	})
 })

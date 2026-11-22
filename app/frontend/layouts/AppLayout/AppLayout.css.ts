@@ -12,6 +12,7 @@ export const wrapper = css`
 	overflow: auto;
 	height: calc(100vh - ${ theme.other.footer.height }px);
 	padding: ${ vars.spacing.sm };
+	padding-bottom: calc(${ vars.spacing.sm } + ${ theme.other.footer.height }px);
 	background-color: light-dark(${ vars.colors.gray[1] }, ${ vars.colors.gray[9] });
 `
 

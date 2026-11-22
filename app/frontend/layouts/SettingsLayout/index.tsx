@@ -3,6 +3,15 @@ import clsx from "clsx"
 import { useState } from "react"
 
 import { Box } from "@/components"
+import {
+	AdjustmentsIcon,
+	BuildingIcon,
+	CalendarIcon,
+	ClockIcon,
+	NotificationIcon,
+	PeopleIcon,
+	UserSettingsIcon,
+} from "@/components/Icons"
 import { pageChrome } from "@/components/PageChrome"
 import { Routes } from "@/lib"
 import { useLocation } from "@/lib/hooks"
@@ -23,15 +32,17 @@ type SettingsNavChild = {
 type SettingsNavLinkItem = {
 	label: string
 	href: string
+	icon: React.ReactNode
 	matchPrefixes?: string[]
 	children?: SettingsNavChild[]
 }
 
 const links: SettingsNavLinkItem[] = [
-	{ label: "General", href: Routes.settingsGeneral() },
+	{ label: "General", href: Routes.settingsGeneral(), icon: <AdjustmentsIcon /> },
 	{
 		label: "Calendar",
 		href: Routes.settingsCalendar(),
+		icon: <CalendarIcon />,
 		matchPrefixes: ["/settings/calendar"],
 		children: [
 			{ label: "Display", href: Routes.settingsCalendar() },
@@ -41,6 +52,7 @@ const links: SettingsNavLinkItem[] = [
 	{
 		label: "Company",
 		href: Routes.settingsCompany(),
+		icon: <BuildingIcon />,
 		matchPrefixes: ["/settings/company", "/settings/job_titles", "/settings/departments"],
 		children: [
 			{ label: "Details", href: Routes.settingsCompany() },
@@ -48,18 +60,25 @@ const links: SettingsNavLinkItem[] = [
 			{ label: "Departments", href: Routes.settingsDepartments() },
 		],
 	},
-	{ label: "People", href: Routes.settingsPeople() },
+	{ label: "People", href: Routes.settingsPeople(), icon: <PeopleIcon /> },
 	{
 		label: "Payroll",
 		href: Routes.settingsPayrollSchedule(),
+		icon: <ClockIcon />,
 		matchPrefixes: ["/settings/payroll"],
 		children: [
 			{ label: "Pay Schedule", href: Routes.settingsPayrollSchedule() },
 			{ label: "Overtime", href: Routes.settingsPayrollOvertime() },
 		],
 	},
-	{ label: "Notifications", href: Routes.settingsNotifications() },
+	{ label: "Notifications", href: Routes.settingsNotifications(), icon: <NotificationIcon /> },
 ]
+
+const userSettingsLink = {
+	label: "User Settings",
+	href: Routes.settingsUser(),
+	icon: <UserSettingsIcon />,
+}
 
 function matchesPrefix(prefix: string, path: string) {
 	return path === prefix || path.startsWith(`${prefix}/`)
@@ -94,10 +113,13 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
 
 	const [rootRef, setRootRef] = useState<HTMLElement | null>(null)
 	const [controlsRefs, setControlsRefs] = useState<Record<string, HTMLAnchorElement | null>>({})
+	const [userControlRef, setUserControlRef] = useState<HTMLAnchorElement | null>(null)
 	const active = linkIndex(pathname)
-	const activeLink = links[active]
+	const userActive = matchesPrefix(userSettingsLink.href, pathname)
+	const activeLink = userActive ? undefined : links[active]
 	const subLinks = activeLink?.children
 	const activeSubIndex = subLinks ? activeChildIndex(subLinks, pathname) : -1
+	const indicatorTarget = userActive ? userControlRef : controlsRefs[active]
 
 	const setControlRef = (index: number) => (node: HTMLAnchorElement) => {
 		controlsRefs[index] = node
@@ -110,20 +132,33 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
 				<div className={ classes.shell }>
 					<nav className={ clsx(pageChrome.panelSurface, classes.chrome) }>
 						<Box className="parentRow" ref={ setRootRef }>
-							{ links.map((link, index) => (
-								<SettingsNavLink
-									ref={ setControlRef(index) }
-									key={ link.label }
-									href={ link.href }
-									className={ clsx("control") }
-									mod={ { active: active === index } }
-								>
-									{ link.label }
-								</SettingsNavLink>
-							)) }
+							<div className="companyLinks">
+								{ links.map((link, index) => (
+									<SettingsNavLink
+										ref={ setControlRef(index) }
+										key={ link.label }
+										href={ link.href }
+										icon={ link.icon }
+										className={ clsx("control") }
+										mod={ { active: !userActive && active === index } }
+									>
+										{ link.label }
+									</SettingsNavLink>
+								)) }
+							</div>
+
+							<SettingsNavLink
+								ref={ setUserControlRef }
+								href={ userSettingsLink.href }
+								icon={ userSettingsLink.icon }
+								className={ clsx("control", "userSettingsLink") }
+								mod={ { active: userActive } }
+							>
+								{ userSettingsLink.label }
+							</SettingsNavLink>
 
 							<FloatingIndicator
-								target={ controlsRefs[active] }
+								target={ indicatorTarget }
 								parent={ rootRef }
 								className={ clsx("indicator") }
 							/>

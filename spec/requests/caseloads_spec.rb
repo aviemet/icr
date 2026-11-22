@@ -9,6 +9,12 @@ RSpec.describe "/caseloads" do
       employee.reload
     end
   end
+  let!(:other_facilitator) do
+    create(:employee, :employed).tap do |employee|
+      employee.assign_job_title(facilitator_title)
+      employee.reload
+    end
+  end
   let!(:assigned_client) { create(:client) }
   let!(:unassigned_client) { create(:client) }
   let!(:assignment) do
@@ -69,6 +75,24 @@ RSpec.describe "/caseloads" do
 
         expect(response).to redirect_to(caseloads_url)
         expect(assignment.reload.ends_at).to be_present
+      end
+
+      it "reassigns the client to another facilitator" do
+        expect {
+          patch caseload_url(assignment), params: {
+            clients_manager: {
+              manager_id: other_facilitator.id,
+            },
+          }
+        }.to change(ClientsManager, :count).by(1)
+
+        expect(response).to redirect_to(caseloads_url)
+        expect(assignment.reload.ends_at).to be_present
+
+        created = ClientsManager.order(:created_at).last
+        expect(created.client_id).to eq(assigned_client.id)
+        expect(created.manager_id).to eq(other_facilitator.id)
+        expect(created.ends_at).to be_nil
       end
     end
   end

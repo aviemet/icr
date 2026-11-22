@@ -1,12 +1,14 @@
 import { Box, AppShell, Group } from "@mantine/core"
 
-import { ToggleColorSchemeButton } from "@/components/Button"
+import { DevActsAsButton } from "@/features/DevActsAs"
+
+import * as classes from "./Footer.css"
 
 export function Footer() {
 	return (
-		<AppShell.Footer py={ 4 } px={ 8 }>
+		<AppShell.Footer py={ 4 } px={ 8 } className={ classes.footer }>
 			<Group>
-				<ToggleColorSchemeButton />
+				<DevActsAsButton />
 				<Box id="footer-portal" />
 				<Box style={ { marginLeft: "auto" } }>
 					©{ (new Date).getFullYear() }

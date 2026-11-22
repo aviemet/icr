@@ -31,7 +31,7 @@ export function UserMenu() {
 					</Menu.Link>
 				) }
 				<Menu.Link
-					href="/settings/user"
+					href={ Routes.settingsUser() }
 					leftSection={ <UserSettingsIcon /> }
 				>
 					User Settings

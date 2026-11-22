@@ -9,13 +9,15 @@ import {
 	Container,
 	Group,
 	Link,
+	Modal,
 	Page,
 	Section,
 	Stack,
 	Text,
 	Title,
 } from "@/components"
-import { PreviousIcon } from "@/components/Icons"
+import { PlusIcon, PreviousIcon } from "@/components/Icons"
+import { AddShiftForm } from "@/domains/TimeSheets/AddShiftForm"
 import { ReviewTable } from "@/domains/TimeSheets/ReviewTable"
 import { formatter, Routes } from "@/lib"
 
@@ -157,6 +159,29 @@ export default function TimesheetsEmployeeReview({
 							</Card>
 						</Group>
 					</Group>
+
+					{ !finalized && (
+						<Group justify="flex-end" mb="md">
+							<Modal
+								title={ t("views.timesheets.employee_review.add_shift") }
+								styles={ { content: { overflow: "visible" } } }
+								trigger={ (
+									<Button
+										variant="light"
+										leftSection={ <PlusIcon size={ 16 } /> }
+									>
+										{ t("views.timesheets.employee_review.add_shift") }
+									</Button>
+								) }
+							>
+								<AddShiftForm
+									employeeId={ employee.id }
+									payPeriodId={ pay_period_id }
+									periodDates={ period_dates }
+								/>
+							</Modal>
+						</Group>
+					) }
 
 					<ReviewTable
 						shifts={ shifts }

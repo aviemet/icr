@@ -5,7 +5,7 @@ import { useEffect } from "react"
 
 import "@mantine/tiptap/styles.css"
 import { AppShell } from "@/components"
-import { DevActsAs } from "@/features/DevActsAs"
+import { DevActsAsBanner } from "@/features/DevActsAs"
 import { useStore } from "@/lib/store"
 
 import * as classes from "./AppLayout.css"
@@ -50,7 +50,7 @@ export function AppLayout({ children }: LayoutProps) {
 			<Sidebar />
 			<AppShell.Main className={ clsx(classes.main) }>
 				<Box className={ clsx(classes.wrapper) }>
-					<DevActsAs />
+					<DevActsAsBanner />
 					<Box id="above-content-portal" />
 					{ children }
 				</Box>

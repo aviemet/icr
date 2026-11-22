@@ -78,7 +78,7 @@ class Calendar::Event < ApplicationRecord
 
   validate :starts_at_before_ends_at
   validate :has_name_or_shift
-  validate :pay_period_allows_mutation, on: :update
+  validate :pay_period_allows_mutation
 
   accepts_nested_attributes_for :shift
   accepts_nested_attributes_for :event_participants
@@ -162,7 +162,17 @@ class Calendar::Event < ApplicationRecord
   end
 
   def pay_period_allows_mutation
-    return unless shift&.timesheet&.pay_period&.finalized?
+    if shift&.timesheet&.pay_period&.finalized?
+      errors.add(:base, I18n.t("pay_periods.finalized_locked"))
+      return
+    end
+
+    return if starts_at.blank?
+    return if shift.blank?
+
+    period_start_date, = Payroll::Period.period_dates(starts_at.to_date)
+    period = PayPeriod.where(starts_at: period_start_date.to_time.beginning_of_day.all_day).first
+    return unless period&.finalized?
 
     errors.add(:base, I18n.t("pay_periods.finalized_locked"))
   end

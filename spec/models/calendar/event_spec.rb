@@ -98,6 +98,47 @@ RSpec.describe Calendar::Event do
     end
   end
 
+  describe "pay period mutation lock" do
+    around do |example|
+      Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
+      example.run
+    end
+
+    it "rejects create when the containing pay period is finalized" do
+      travel_to Time.zone.local(2024, 3, 10, 12, 0, 0) do
+        employee = create(:employee)
+        period_start = Date.new(2024, 3, 16)
+        period_end = Date.new(2024, 3, 31)
+        pay_period = PayPeriod.for_period_dates(period_start, period_end)
+        pay_period.update!(finalized_at: Time.current)
+        shift_category = Category.type("Calendar::Event").find_or_create_by!(name: "Shift") { |category|
+          category.system = true
+        }
+
+        event = described_class.new(
+          starts_at: Time.zone.local(2024, 3, 20, 9, 0, 0),
+          ends_at: Time.zone.local(2024, 3, 20, 17, 0, 0),
+          category_id: shift_category.id,
+        )
+        event.build_shift(employee_id: employee.id)
+
+        expect(event.save).to be(false)
+        expect(event.errors[:base]).to include(I18n.t("pay_periods.finalized_locked"))
+      end
+    end
+
+    it "rejects update when the linked pay period is finalized" do
+      employee = create(:employee)
+      shift = create(:shift, employee: employee)
+      event = described_class.find(shift.calendar_event_id)
+      shift.timesheet.pay_period.update!(finalized_at: Time.current)
+
+      expect(event.update(starts_at: event.starts_at + 1.hour)).to be(false)
+      expect(event.errors[:base]).to include(I18n.t("pay_periods.finalized_locked"))
+    end
+  end
+
+
   describe ".for_schedule_range" do
     it "includes a recurring master that started before the visible range" do
       shift_category = Category.type("Calendar::Event").find_or_create_by!(name: "Other") { |category| category.system = true }

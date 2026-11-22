@@ -259,7 +259,37 @@ RSpec.describe PayPeriod, type: :model do
         }.not_to change(described_class, :count)
       end
     end
+
+    it "clears approved_at when attaching a shift to an approved timesheet" do
+      travel_to Time.zone.local(2024, 3, 10, 12, 0, 0) do
+        employee = create(:employee)
+        first_shift = create(
+          :shift,
+          employee: employee,
+          calendar_event: create(
+            :calendar_event,
+            starts_at: Time.zone.local(2024, 3, 20, 9, 0, 0),
+            ends_at: Time.zone.local(2024, 3, 20, 17, 0, 0),
+          ),
+        )
+        timesheet = first_shift.reload.timesheet
+        timesheet.update!(approved_at: Time.current)
+
+        create(
+          :shift,
+          employee: employee,
+          calendar_event: create(
+            :calendar_event,
+            starts_at: Time.zone.local(2024, 3, 21, 9, 0, 0),
+            ends_at: Time.zone.local(2024, 3, 21, 17, 0, 0),
+          ),
+        )
+
+        expect(timesheet.reload.approved_at).to be_nil
+      end
+    end
   end
+
 
   describe "#sync_shifts!" do
     it "associates shifts that overlap the period but have nil timesheet_id" do

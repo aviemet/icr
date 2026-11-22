@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next"
 import { Group, Table, Text, Tooltip } from "@/components"
 import { Form } from "@/components/Form"
 import { CalendarIcon, TrashIcon } from "@/components/Icons"
+import { LastEditorAvatar } from "@/domains/TimeSheets/LastEditorAvatar"
 import { formatter, Routes } from "@/lib"
 import { parseTimeString } from "@/lib/dates"
 import { useUpdateCalendarEvent } from "@/queries/calendarEvents/mutations"
@@ -137,26 +138,31 @@ export function ReviewRow({
 				<Text size="sm">{ shift.client_name ?? t("views.timesheets.index.no_value") }</Text>
 			</Table.Cell>
 			<Table.Cell>
-				{ canEditTimes
-					? (
-						<Form
-							method="post"
-							action={ Routes.periodEmployeeReview(payPeriodId, employeeId) }
-							initialData={ initialData }
-							submitWith={ submitWith }
-							onBefore={ () => true }
-							railsAttributes={ false }
-						>
-							<ReviewRowFormFields initialData={ initialData } onTimesChange={ onTimesChange } />
-						</Form>
-					)
-					: (
-						<Text size="sm">
-							{ dayjs(String(shift.starts_at)).format("HH:mm") }
-							{ " - " }
-							{ dayjs(String(shift.ends_at)).format("HH:mm") }
-						</Text>
+				<Group gap={ 8 } wrap="nowrap" align="center">
+					{ canEditTimes
+						? (
+							<Form
+								method="post"
+								action={ Routes.periodEmployeeReview(payPeriodId, employeeId) }
+								initialData={ initialData }
+								submitWith={ submitWith }
+								onBefore={ () => true }
+								railsAttributes={ false }
+							>
+								<ReviewRowFormFields initialData={ initialData } onTimesChange={ onTimesChange } />
+							</Form>
+						)
+						: (
+							<Text size="sm">
+								{ dayjs(String(shift.starts_at)).format("HH:mm") }
+								{ " - " }
+								{ dayjs(String(shift.ends_at)).format("HH:mm") }
+							</Text>
+						) }
+					{ shift.last_editor && (
+						<LastEditorAvatar editor={ shift.last_editor } />
 					) }
+				</Group>
 			</Table.Cell>
 			<Table.Cell>
 				<Text size="sm">{ formatter.number.decimal(hours, 2) }</Text>

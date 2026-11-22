@@ -62,7 +62,44 @@ RSpec.describe "/timesheets", type: :request do
         expect(inertia.props[:timesheet][:id]).to eq(timesheet.id.to_s)
       end
     end
+
+    it "includes last_editor on shifts after a times edit" do
+      pay_period = create(:pay_period, finalized_at: nil, approved_at: nil)
+      employee = create(:employee)
+      timesheet = create(:timesheet, pay_period: pay_period, employee: employee, approved_at: nil)
+      shift = create(
+        :shift,
+        employee: employee,
+        timesheet: timesheet,
+        calendar_event: create(
+          :calendar_event,
+          starts_at: pay_period.starts_at + 1.day,
+          ends_at: pay_period.starts_at + 1.day + 8.hours,
+        ),
+      )
+      editor = create(:user)
+      editor.person.update!(first_name: "Grace", last_name: "Hopper")
+
+      PaperTrail.request(whodunnit: editor.id) do
+        shift.calendar_event.update!(
+          starts_at: shift.calendar_event.starts_at + 30.minutes,
+          ends_at: shift.calendar_event.ends_at + 30.minutes,
+        )
+      end
+
+      get period_employee_review_path(period_id: pay_period.id, employee_id: employee.id)
+
+      expect(response).to have_http_status(:success)
+      review_shifts = inertia.props[:shifts]
+      expect(review_shifts.map { |row| row[:id] }).to eq([shift.id.to_s])
+      expect(review_shifts.first[:last_editor]).to include(
+        id: editor.id.to_s,
+        name: "Grace Hopper",
+        initials: "GH",
+      )
+    end
   end
+
 
   describe "GET /show" do
     it "renders a successful response" do
