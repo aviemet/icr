@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_22_050545) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_21_171545) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -159,6 +159,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_22_050545) do
 
   create_table "client_diagnoses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "client_id", null: false
+    t.uuid "doctor_id"
     t.string "name", null: false
     t.string "code"
     t.date "diagnosed_on"
@@ -166,7 +167,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_22_050545) do
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "doctor_id"
     t.index ["client_id"], name: "index_client_diagnoses_on_client_id"
     t.index ["doctor_id"], name: "index_client_diagnoses_on_doctor_id"
   end
@@ -317,13 +317,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_22_050545) do
 
   create_table "doctors", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "person_id", null: false
-    t.string "slug", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "specialty"
     t.string "npi"
     t.string "practice_name"
     t.text "notes"
+    t.string "slug", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["person_id"], name: "index_doctors_on_person_id"
     t.index ["slug"], name: "index_doctors_on_slug", unique: true
   end
@@ -344,10 +344,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_22_050545) do
     t.integer "amount_unit"
     t.decimal "freq_amount"
     t.integer "freq_period"
+    t.integer "administration_method"
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "administration_method"
   end
 
   create_table "emails", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -662,12 +662,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_22_050545) do
     t.string "location"
     t.text "description"
     t.uuid "client_id", null: false
+    t.uuid "doctor_id"
     t.uuid "reported_to_id", null: false
     t.uuid "reported_by_id", null: false
     t.uuid "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "doctor_id"
     t.index ["category_id"], name: "index_incident_reports_on_category_id"
     t.index ["client_id"], name: "index_incident_reports_on_client_id"
     t.index ["doctor_id"], name: "index_incident_reports_on_doctor_id"
@@ -840,9 +840,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_22_050545) do
     t.uuid "requirement_id", null: false
     t.string "fulfillable_type"
     t.uuid "fulfillable_id"
+    t.integer "credential_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "credential_type"
     t.index ["fulfillable_type", "fulfillable_id"], name: "index_requirement_items_on_fulfillable"
     t.index ["requirement_id", "credential_type"], name: "index_req_items_on_req_credential_type_unique", unique: true, where: "(credential_type IS NOT NULL)"
     t.index ["requirement_id", "fulfillable_type", "fulfillable_id"], name: "index_req_items_on_req_fulfillable_unique", unique: true, where: "(fulfillable_id IS NOT NULL)"
@@ -862,9 +862,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_22_050545) do
     t.uuid "requirement_type_id", null: false
     t.string "scope_type"
     t.uuid "scope_id"
+    t.integer "enforcement", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "enforcement", default: 0, null: false
     t.index ["enforcement"], name: "index_requirements_on_enforcement"
     t.index ["requirement_type_id"], name: "index_requirements_on_requirement_type_id"
     t.index ["scope_type", "scope_id"], name: "index_requirements_on_scope"

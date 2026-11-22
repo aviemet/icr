@@ -6,20 +6,37 @@ if Rails.env.development?
   seed_anchor_date += 1 until (1..5).cover?(seed_anchor_date.wday)
   attendant_job = Employee::JobTitle.find_by(slug: "attendant")
 
+  fulfill_client_schedule_requirements = lambda do |employee:, client:|
+    Requirement::Requirement.for_client_schedule_gate(employee, client).includes_associated.each do |requirement|
+      requirement.requirement_items.trainings.each do |item|
+        training = item.fulfillable
+        next if training.blank?
+
+        row = Employee::EmployeesTraining.find_or_initialize_by(employee: employee, training: training)
+        row.started_at ||= Time.current
+        row.completed_at ||= Time.current
+        row.save!
+      end
+    end
+  end
+
+
   create_shift_attendant = lambda do |client:|
     employee = FactoryBot.create(:employee, :employed)
     employee.assign_job_title(attendant_job)
     FactoryBot.create(:pay_rate, :active, employee: employee)
+    fulfill_client_schedule_requirements.call(employee: employee, client: client)
     FactoryBot.create(:clients_attendant, attendant: employee, client: client)
     employee
   end
+
 
   create_recurring_shift = lambda do |client:, employee:, starts_at:, duration:, patterns:|
     event_attrs = {
       starts_at: starts_at,
       ends_at: starts_at + duration,
     }
-    event_attrs[:name] = nil if employee.nil?
+    event_attrs[:name] = "Open Shift" if employee.nil?
     calendar_event = FactoryBot.create(:calendar_event, event_attrs)
     shift_attrs = { calendar_event: calendar_event }
     if employee.nil?
