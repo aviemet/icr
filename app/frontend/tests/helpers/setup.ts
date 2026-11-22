@@ -14,6 +14,7 @@ if(typeof globalThis.ResizeObserver === "undefined") {
 }
 
 if(!i18n.isInitialized) {
+	// eslint-disable-next-line import/no-named-as-default-member
 	void i18n.use(initReactI18next).init({
 		lng: "en-US",
 		fallbackLng: "en-US",

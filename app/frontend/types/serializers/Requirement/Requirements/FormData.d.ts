@@ -5,11 +5,14 @@ declare global {
   namespace Schema {
     interface RequirementRequirementsFormData {
       id?: string
+      credential_types: string[]
       description?: string
+      enforcement: "advisory" | "employment" | "client_schedule"
       name?: string
       requirement_type_id: string
       scope_id?: string
       scope_type?: string
+      training_ids: string[]
     }
   }
 }

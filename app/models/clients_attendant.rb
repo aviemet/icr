@@ -36,6 +36,8 @@ class ClientsAttendant < ApplicationRecord
     message: :already_attends
   }
 
+  validate :requirement_gates_for_assignment, if: -> { new_record? || client_id_changed? }
+
   scope :current, -> { where("starts_at <= ? AND (ends_at IS NULL OR ends_at >= ?)", Time.current, Time.current) }
 
   scope :includes_associated, -> { includes([:attendant, :client]) }
@@ -48,5 +50,22 @@ class ClientsAttendant < ApplicationRecord
     if ends_at < starts_at
       errors.add(:ends_at, "must be after starts_at")
     end
+  end
+
+  def requirement_gates_for_assignment
+    return if attendant.blank? || client.blank?
+
+    gate = Requirement::ClientScheduleGate.call(employee: attendant, client: client)
+    return if gate.allowed?
+
+    errors.add(
+      :base,
+      I18n.t(
+        "requirements.gates.client_schedule_blocked",
+        employee: attendant.name,
+        client: client.name,
+        names: gate.unmet_names.to_sentence,
+      ),
+    )
   end
 end

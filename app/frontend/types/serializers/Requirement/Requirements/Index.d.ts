@@ -6,11 +6,16 @@ declare global {
     interface RequirementRequirementsIndex {
       id: string
       created_at: Date
+      credentials_count: number
       description?: string
+      enforcement: "advisory" | "employment" | "client_schedule"
       name?: string
       requirement_type_id: string
       scope_id?: string
+      scope_label: string
       scope_type?: string
+      trainings_count: number
+      type_name?: string
       updated_at: Date
     }
   }

@@ -4,6 +4,7 @@
 #
 #  id                  :uuid             not null, primary key
 #  description         :text
+#  enforcement         :integer          default("advisory"), not null
 #  name                :string
 #  scope_type          :string
 #  created_at          :datetime         not null
@@ -13,7 +14,9 @@
 #
 # Indexes
 #
+#  index_requirements_on_enforcement          (enforcement)
 #  index_requirements_on_requirement_type_id  (requirement_type_id)
+#  index_requirements_on_scope                (scope_type,scope_id)
 #
 # Foreign Keys
 #
@@ -28,5 +31,6 @@ class Requirement::RequirementSerializer < ApplicationSerializer
     :requirement_type_id,
     :scope_type,
     :scope_id,
+    :enforcement,
   )
 end

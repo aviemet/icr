@@ -77,6 +77,64 @@ RSpec.describe "Api::CalendarEvents", type: :request do
       expect(response.parsed_body["errors"]["ends_at"]).to be_a(String)
     end
 
+    it "rejects create when client schedule requirements are unmet" do
+      client = create(:client)
+      employee = create(:employee, :employed)
+      training = create(:training, name: "Household Protocol")
+      requirement = create(:requirement, :for_client, scope: client, name: "Protocol")
+      create(:requirement_item, requirement: requirement, fulfillable: training)
+      shift_category = Category.type("Calendar::Event").find_or_create_by!(name: "Shift") { |category|
+        category.system = true
+      }
+      params = {
+        calendar_event: {
+          starts_at: 1.day.from_now,
+          ends_at: 1.day.from_now + 8.hours,
+          category_id: shift_category.id,
+          shift_attributes: { employee_id: employee.id },
+          event_participants_attributes: [
+            { participant_id: client.id, participant_type: "Client" },
+          ],
+        },
+      }
+
+      expect {
+        post api_calendar_events_url, params: params
+      }.not_to change(Calendar::Event, :count)
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.parsed_body["errors"]["base"]).to include("Protocol")
+    end
+
+    it "creates when client schedule requirements are met" do
+      client = create(:client)
+      employee = create(:employee, :employed)
+      training = create(:training, name: "Household Protocol")
+      requirement = create(:requirement, :for_client, scope: client, name: "Protocol")
+      create(:requirement_item, requirement: requirement, fulfillable: training)
+      create(:employees_training, :completed, employee: employee, training: training)
+      shift_category = Category.type("Calendar::Event").find_or_create_by!(name: "Shift") { |category|
+        category.system = true
+      }
+      params = {
+        calendar_event: {
+          starts_at: 1.day.from_now,
+          ends_at: 1.day.from_now + 8.hours,
+          category_id: shift_category.id,
+          shift_attributes: { employee_id: employee.id },
+          event_participants_attributes: [
+            { participant_id: client.id, participant_type: "Client" },
+          ],
+        },
+      }
+
+      expect {
+        post api_calendar_events_url, params: params
+      }.to change(Calendar::Event, :count).by(1)
+
+      expect(response).to have_http_status(:created)
+    end
+
     it "attaches an assigned shift to the employee's timesheet for the period" do
       Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
       travel_to Time.zone.local(2024, 3, 10, 12, 0, 0) do

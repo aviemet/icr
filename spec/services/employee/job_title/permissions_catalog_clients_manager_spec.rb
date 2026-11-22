@@ -9,6 +9,10 @@ RSpec.describe Employee::JobTitle::PermissionsCatalog do
     expect(described_class::RESOURCES["employee_training"]).to eq(Employee::Training)
   end
 
+  it "includes requirement in RESOURCES" do
+    expect(described_class::RESOURCES["requirement"]).to eq(Requirement::Requirement)
+  end
+
   it "includes complete as an extra action for employee_training" do
     expect(described_class.actions_for("employee_training")).to include("complete")
     expect(described_class.actions_for("client")).not_to include("complete")

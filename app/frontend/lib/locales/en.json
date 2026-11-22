@@ -490,6 +490,12 @@
     "pundit": {
       "not_authorized": "You are not authorized to access this page."
     },
+    "requirements": {
+      "gates": {
+        "client_schedule_blocked": "%{employee} cannot be scheduled with %{client} until requirements are met: %{names}",
+        "employment_blocked": "Cannot complete employment until requirements are met: %{names}"
+      }
+    },
     "role": "Role",
     "save": "Save",
     "settings": {
@@ -943,6 +949,7 @@
             "payroll_review": "Current Payroll Review",
             "quick_links": "Quick Links",
             "recent_interviews": "Recent Interviews",
+            "unmet_requirements": "Unmet Requirements",
             "view_interview": "View"
           },
           "pay": {
@@ -957,6 +964,17 @@
             "employment": "Employment",
             "save": "Save Profile"
           },
+          "requirements": {
+            "counts": "%{met} met / %{unmet} unmet / %{total} total",
+            "empty": "No requirements apply to this employee.",
+            "empty_title": "Requirements",
+            "no_items": "No fulfillable items.",
+            "status": {
+              "met": "Met",
+              "unmet": "Unmet"
+            },
+            "summary": "Summary"
+          },
           "tabs": {
             "assignments": "Assignments",
             "contacts": "Contacts",
@@ -966,6 +984,7 @@
             "overview": "Overview",
             "pay": "Pay",
             "profile": "Profile",
+            "requirements": "Requirements",
             "trainings": "Trainings"
           },
           "title": "Employee",
@@ -1141,6 +1160,87 @@
           "unreviewed_shift_line": "%{client} - %{when}",
           "view_clients": "Client review",
           "workflow_help": "Review and approve each employee timesheet, then close the period to lock it."
+        }
+      },
+      "requirement_types": {
+        "edit": {
+          "title": "Edit Requirement Type"
+        },
+        "form": {
+          "create": "Create Requirement Type",
+          "description": "Description",
+          "name": "Name",
+          "update": "Update Requirement Type"
+        },
+        "index": {
+          "columns": {
+            "actions": "Actions",
+            "description": "Description",
+            "name": "Name"
+          },
+          "new": "New Requirement Type",
+          "title": "Requirement Types"
+        },
+        "new": {
+          "title": "New Requirement Type"
+        },
+        "show": {
+          "description": "Description",
+          "title": "Requirement Type"
+        }
+      },
+      "requirements": {
+        "edit": {
+          "title": "Edit Requirement"
+        },
+        "form": {
+          "client": "Client",
+          "create": "Create Requirement",
+          "credentials": "Credentials",
+          "description": "Description",
+          "details_description": "Name, category, enforcement, and who this requirement applies to.",
+          "details_title": "Details",
+          "enforcement": "Enforcement",
+          "enforcement_advisory": "Advisory",
+          "enforcement_client_schedule": "Client schedule",
+          "enforcement_employment": "Employment",
+          "fulfillables_description": "An employee meets this requirement when every listed training is completed and every listed credential is on file and unexpired.",
+          "fulfillables_title": "Fulfillable items",
+          "job_title": "Job Title",
+          "name": "Name",
+          "scope": "Scope",
+          "scope_client": "Client",
+          "scope_company": "Company-wide",
+          "scope_job_title": "Job title",
+          "trainings": "Trainings",
+          "type": "Type",
+          "update": "Update Requirement"
+        },
+        "index": {
+          "columns": {
+            "actions": "Actions",
+            "credentials": "Credentials",
+            "enforcement": "Enforcement",
+            "name": "Name",
+            "scope": "Scope",
+            "trainings": "Trainings",
+            "type": "Type"
+          },
+          "new": "New Requirement",
+          "title": "Requirements",
+          "types": "Requirement Types"
+        },
+        "new": {
+          "title": "New Requirement"
+        },
+        "show": {
+          "description": "Description",
+          "enforcement": "Enforcement",
+          "items": "Fulfillable items",
+          "no_items": "No fulfillable items linked.",
+          "scope": "Scope",
+          "title": "Requirement",
+          "type": "Type"
         }
       },
       "settings": {

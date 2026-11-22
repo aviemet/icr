@@ -80,6 +80,7 @@ class Calendar::Event < ApplicationRecord
   validate :starts_at_before_ends_at
   validate :has_name_or_shift
   validate :pay_period_allows_mutation
+  validate :requirement_gates_for_schedule
 
   accepts_nested_attributes_for :shift
   accepts_nested_attributes_for :event_participants
@@ -207,6 +208,32 @@ class Calendar::Event < ApplicationRecord
     return unless previous_changes.key?("starts_at") || previous_changes.key?("ends_at")
 
     Shift.find_by(calendar_event_id: id)&.invalidate_approvals!
+  end
+
+  def requirement_gates_for_schedule
+    employee = shift&.employee
+    return if employee.blank?
+
+    client_participants = event_participants.select { |row| row.participant_type == "Client" }
+    return if client_participants.empty?
+
+    client_participants.each do |row|
+      client = row.participant
+      next if client.blank?
+
+      gate = Requirement::ClientScheduleGate.call(employee: employee, client: client)
+      next if gate.allowed?
+
+      errors.add(
+        :base,
+        I18n.t(
+          "requirements.gates.client_schedule_blocked",
+          employee: employee.name,
+          client: client.name,
+          names: gate.unmet_names.to_sentence,
+        ),
+      )
+    end
   end
 
 end

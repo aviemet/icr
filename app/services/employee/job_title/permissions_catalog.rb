@@ -39,6 +39,7 @@ class Employee::JobTitle::PermissionsCatalog
     "medication" => Medication,
     "clients_manager" => ClientsManager,
     "employee_training" => Employee::Training,
+    "requirement" => Requirement::Requirement,
   }.freeze
 
   def self.resource_keys

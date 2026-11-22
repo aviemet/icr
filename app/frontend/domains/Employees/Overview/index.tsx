@@ -4,6 +4,7 @@ import { Avatar, Box, Link, Text } from "@/components"
 import { DateTimeFormatter } from "@/components/Formatters"
 import { CalendarIcon, CheckIcon, UserGroupIcon, WarningTriangleIcon } from "@/components/Icons"
 import { PendingTerminationBanner } from "@/domains/Employees/PendingTermination"
+import { type RequirementFulfillmentsPayload } from "@/domains/Employees/Requirements/types"
 import {
 	BoardActionGrid,
 	BoardActionTile,
@@ -19,14 +20,20 @@ import * as classes from "./Overview.css"
 
 interface EmployeeOverviewProps {
 	employee: Schema.EmployeesShow
+	requirementFulfillments?: RequirementFulfillmentsPayload
 }
 
-export function EmployeeOverview({ employee }: EmployeeOverviewProps) {
+export function EmployeeOverview({
+	employee,
+	requirementFulfillments,
+}: EmployeeOverviewProps) {
 	const { t } = useTranslation()
 	const canUpdate = useRecordCanUpdate()
+	const unmetRequirementsCount = requirementFulfillments?.unmet_count ?? 0
 	const alertCount = employee.incomplete_trainings_count
 		+ employee.expiring_credentials_count
 		+ employee.expiring_clearances_count
+		+ unmetRequirementsCount
 	const alertTone = alertCount > 0 ? "alert" : "default"
 
 	return (
@@ -78,6 +85,15 @@ export function EmployeeOverview({ employee }: EmployeeOverviewProps) {
 						) }
 					/>
 					<MetricLine
+						label={ t("views.employees.show.overview.unmet_requirements") }
+						value={ (
+							<CountChip
+								value={ unmetRequirementsCount }
+								alert={ unmetRequirementsCount > 0 }
+							/>
+						) }
+					/>
+					<MetricLine
 						label={ t("views.employees.show.overview.expiring_credentials") }
 						value={ (
 							<CountChip
@@ -120,6 +136,11 @@ export function EmployeeOverview({ employee }: EmployeeOverviewProps) {
 							href={ `${Routes.employee(employee.slug)}?tab=trainings` }
 							title={ t("views.employees.show.tabs.trainings") }
 							hint="Completion status"
+						/>
+						<BoardActionTile
+							href={ `${Routes.employee(employee.slug)}?tab=requirements` }
+							title={ t("views.employees.show.tabs.requirements") }
+							hint="Fulfillment status"
 						/>
 						{ employee.current_pay_period_id && (
 							<BoardActionTile

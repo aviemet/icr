@@ -6,6 +6,7 @@ declare global {
     interface RequirementRequirement {
       id?: string
       description?: string
+      enforcement: "advisory" | "employment" | "client_schedule"
       name?: string
       requirement_type_id: string
       scope_id?: string

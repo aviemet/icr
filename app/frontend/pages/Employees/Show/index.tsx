@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next"
 import { Avatar, Badge, Link, ScheduleButton, Text } from "@/components"
 import { DateTimeFormatter } from "@/components/Formatters"
 import { employeeStatusBadgeColor } from "@/domains/Employees/employeeStatusBadgeColor"
+import { type RequirementFulfillmentsPayload } from "@/domains/Employees/Requirements/types"
 import { RecordShowShell } from "@/features"
 import { initials, Routes } from "@/lib"
 
@@ -14,6 +15,7 @@ import Hiring from "./Hiring"
 import Overview from "./Overview"
 import Pay from "./Pay"
 import Profile from "./Profile"
+import Requirements from "./Requirements"
 import Trainings from "./Trainings"
 
 export interface ShowEmployeeProps {
@@ -21,6 +23,14 @@ export interface ShowEmployeeProps {
 	can_update?: boolean
 	can_complete_trainings?: boolean
 	trainingOptions?: Schema.EmployeeTrainingsOptions[]
+	requirement_fulfillments?: RequirementFulfillmentsPayload
+}
+
+const emptyFulfillments: RequirementFulfillmentsPayload = {
+	requirements: [],
+	met_count: 0,
+	unmet_count: 0,
+	total_count: 0,
 }
 
 const ShowEmployee = ({
@@ -28,6 +38,7 @@ const ShowEmployee = ({
 	can_update = false,
 	can_complete_trainings = false,
 	trainingOptions = [],
+	requirement_fulfillments = emptyFulfillments,
 }: ShowEmployeeProps) => {
 	const { t } = useTranslation()
 	const title = employee?.person?.name || t("views.employees.show.title")
@@ -81,7 +92,16 @@ const ShowEmployee = ({
 				</>
 			) }
 			tabs={ [
-				{ id: "overview", label: t("views.employees.show.tabs.overview"), panel: <Overview employee={ employee } /> },
+				{
+					id: "overview",
+					label: t("views.employees.show.tabs.overview"),
+					panel: (
+						<Overview
+							employee={ employee }
+							requirement_fulfillments={ requirement_fulfillments }
+						/>
+					),
+				},
 				{ id: "profile", label: t("views.employees.show.tabs.profile"), panel: <Profile employee={ employee } /> },
 				{ id: "contacts", label: t("views.employees.show.tabs.contacts"), panel: <Contacts employee={ employee } /> },
 				{ id: "credentials", label: t("views.employees.show.tabs.credentials"), panel: <Credentials employee={ employee } /> },
@@ -96,6 +116,11 @@ const ShowEmployee = ({
 							can_complete_trainings={ can_complete_trainings }
 						/>
 					),
+				},
+				{
+					id: "requirements",
+					label: t("views.employees.show.tabs.requirements"),
+					panel: <Requirements fulfillments={ requirement_fulfillments } />,
 				},
 				{ id: "hiring", label: t("views.employees.show.tabs.hiring"), panel: <Hiring employee={ employee } /> },
 				{ id: "pay", label: t("views.employees.show.tabs.pay"), panel: <Pay employee={ employee } /> },

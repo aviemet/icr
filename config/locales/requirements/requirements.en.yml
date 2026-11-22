@@ -1,0 +1,5 @@
+en:
+  requirements:
+    gates:
+      employment_blocked: "Cannot complete employment until requirements are met: %{names}"
+      client_schedule_blocked: "%{employee} cannot be scheduled with %{client} until requirements are met: %{names}"

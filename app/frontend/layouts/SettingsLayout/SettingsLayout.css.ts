@@ -19,13 +19,14 @@ export const shell = css`
 `
 
 export const chrome = css`
-	--settings-nav-gap: 4px;
+	--settings-nav-gap: 8px;
 
 	flex: 0 0 auto;
 	position: relative;
 	display: flex;
 	flex-direction: column;
 	gap: var(--settings-nav-gap);
+	padding: var(--settings-nav-gap);
 
 	.parentRow,
 	.childRow {

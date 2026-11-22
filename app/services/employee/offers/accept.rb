@@ -29,6 +29,16 @@ class Employee::Offers::Accept
   attr_reader :offer, :employee
 
   def apply_hire_terms!
+    employee.desired_job_title ||= offer.job_title
+
+    gate = Requirement::EmploymentGate.call(employee)
+    unless gate.allowed?
+      raise ArgumentError, I18n.t(
+        "requirements.gates.employment_blocked",
+        names: gate.unmet_names.to_sentence,
+      )
+    end
+
     employee.assign_attributes(
       active_at: offer.proposed_start_on.presence || employee.active_at,
       number: offer.employee_number.presence || employee.number,

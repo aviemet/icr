@@ -113,13 +113,6 @@ export function Sidebar() {
 									href={ Routes.applicants() }
 									active={ matchesAtPosition(paths, [1, "applicants"]) }
 								/>
-								{ can("requirement/requirements", "index") && (
-									<MenuLink
-										label="Documents"
-										href={ Routes.requirements() }
-										active={ matchesAtPosition(paths, [0, "requirements"]) }
-									/>
-								) }
 								{ can("employee/trainings", "index") && (
 									<MenuLink
 										label="Training"

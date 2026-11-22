@@ -1,0 +1,69 @@
+en:
+  views:
+    requirements:
+      index:
+        title: Requirements
+        new: New Requirement
+        types: Requirement Types
+        columns:
+          name: Name
+          type: Type
+          scope: Scope
+          enforcement: Enforcement
+          trainings: Trainings
+          credentials: Credentials
+          actions: Actions
+      form:
+        name: Name
+        description: Description
+        type: Type
+        enforcement: Enforcement
+        enforcement_advisory: Advisory
+        enforcement_employment: Employment
+        enforcement_client_schedule: Client schedule
+        scope: Scope
+        scope_company: Company-wide
+        scope_job_title: Job title
+        scope_client: Client
+        job_title: Job Title
+        client: Client
+        trainings: Trainings
+        credentials: Credentials
+        create: Create Requirement
+        update: Update Requirement
+        details_title: Details
+        details_description: Name, category, enforcement, and who this requirement applies to.
+        fulfillables_title: Fulfillable items
+        fulfillables_description: An employee meets this requirement when every listed training is completed and every listed credential is on file and unexpired.
+      show:
+        title: Requirement
+        type: Type
+        scope: Scope
+        enforcement: Enforcement
+        items: Fulfillable items
+        no_items: No fulfillable items linked.
+        description: Description
+      new:
+        title: New Requirement
+      edit:
+        title: Edit Requirement
+    requirement_types:
+      index:
+        title: Requirement Types
+        new: New Requirement Type
+        columns:
+          name: Name
+          description: Description
+          actions: Actions
+      form:
+        name: Name
+        description: Description
+        create: Create Requirement Type
+        update: Update Requirement Type
+      show:
+        title: Requirement Type
+        description: Description
+      new:
+        title: New Requirement Type
+      edit:
+        title: Edit Requirement Type

@@ -64,6 +64,8 @@ Rails.application.routes.draw do
     resources :departments, param: :slug do
       delete "", action: :destroy, on: :collection
     end
+    resources :requirements
+    resources :requirement_types
     get "payroll", to: redirect("/settings/payroll/schedule")
     scope path: "payroll", as: "payroll" do
       get "schedule", to: "payrolls#schedule"
@@ -175,7 +177,10 @@ Rails.application.routes.draw do
 
   resources :doctors, param: :slug
 
-  resources :requirements
+  get "requirements", to: redirect("/settings/requirements")
+  get "requirements/*path", to: redirect { |params, _req| "/settings/requirements/#{params[:path]}" }
+  get "requirement_types", to: redirect("/settings/requirement_types")
+  get "requirement_types/*path", to: redirect { |params, _req| "/settings/requirement_types/#{params[:path]}" }
 
   draw(:api)
 

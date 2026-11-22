@@ -18,9 +18,15 @@ import {
 } from "@/domains/Employees/StatusChange"
 import { StatusDesk } from "@/features"
 import { Routes } from "@/lib"
+import { usePageProps } from "@/lib/hooks"
 
 interface StatusProps {
 	employee: Schema.EmployeesShow
+}
+
+type StatusPageErrors = {
+	base?: string | string[]
+	event?: string | string[]
 }
 
 const OPEN_OFFER_STATUSES = new Set(["draft", "extended", "negotiating"])
@@ -29,10 +35,22 @@ function openOfferFor(employee: Schema.EmployeesShow) {
 	return employee.offers.find(offer => OPEN_OFFER_STATUSES.has(offer.status)) ?? null
 }
 
+function errorMessages(errors: StatusPageErrors | undefined) {
+	if(!errors) return []
+
+	return Object.values(errors).flatMap((value) => {
+		if(Array.isArray(value)) return value
+		if(typeof value === "string") return [value]
+		return []
+	})
+}
+
 const Status = ({ employee }: StatusProps) => {
 	const { t } = useTranslation()
+	const page = usePageProps()
 	const [selectedTransition, setSelectedTransition] = useState("")
 	const openOffer = openOfferFor(employee)
+	const gateErrors = errorMessages(page.errors)
 
 	const availableTransitions = useMemo(() => {
 		switch(employee.status) {
@@ -133,6 +151,13 @@ const Status = ({ employee }: StatusProps) => {
 			value={ selectedTransition }
 			onChange={ setSelectedTransition }
 		>
+			{ gateErrors.length > 0 && (
+				<>
+					{ gateErrors.map(message => (
+						<Text key={ message } c="red" size="sm" mb="sm">{ message }</Text>
+					)) }
+				</>
+			) }
 			{ form }
 		</StatusDesk>
 	)

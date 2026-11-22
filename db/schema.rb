@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_21_171545) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_22_041250) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -812,12 +812,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_21_171545) do
 
   create_table "requirement_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "requirement_id", null: false
-    t.string "fulfillable_type", null: false
-    t.uuid "fulfillable_id", null: false
+    t.string "fulfillable_type"
+    t.uuid "fulfillable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "credential_type"
     t.index ["fulfillable_type", "fulfillable_id"], name: "index_requirement_items_on_fulfillable"
-    t.index ["requirement_id", "fulfillable_type", "fulfillable_id"], name: "index_req_items_on_req_fulfillable_unique", unique: true
+    t.index ["requirement_id", "credential_type"], name: "index_req_items_on_req_credential_type_unique", unique: true, where: "(credential_type IS NOT NULL)"
+    t.index ["requirement_id", "fulfillable_type", "fulfillable_id"], name: "index_req_items_on_req_fulfillable_unique", unique: true, where: "(fulfillable_id IS NOT NULL)"
     t.index ["requirement_id"], name: "index_requirement_items_on_requirement_id"
   end
 
@@ -836,7 +838,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_21_171545) do
     t.uuid "scope_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "enforcement", default: 0, null: false
+    t.index ["enforcement"], name: "index_requirements_on_enforcement"
     t.index ["requirement_type_id"], name: "index_requirements_on_requirement_type_id"
+    t.index ["scope_type", "scope_id"], name: "index_requirements_on_scope"
   end
 
   create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

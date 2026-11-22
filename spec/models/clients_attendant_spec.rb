@@ -75,6 +75,31 @@ RSpec.describe ClientsAttendant, type: :model do
     end
   end
 
+  describe "requirement gates" do
+    let(:attendant) { create(:employee, :employed) }
+    let(:client) { create(:client) }
+    let(:training) { create(:training, name: "Client Protocol") }
+
+    before do
+      requirement = create(:requirement, :for_client, scope: client, name: "Protocol")
+      create(:requirement_item, requirement: requirement, fulfillable: training)
+    end
+
+    it "rejects create when client schedule requirements are unmet" do
+      record = build(:clients_attendant, attendant: attendant, client: client)
+
+      expect(record.valid?(:create)).to be(false)
+      expect(record.errors[:base].join).to include("Protocol")
+    end
+
+    it "allows create when client schedule requirements are met" do
+      create(:employees_training, :completed, employee: attendant, training: training)
+      record = build(:clients_attendant, attendant: attendant, client: client)
+
+      expect(record.valid?(:create)).to be(true)
+    end
+  end
+
   describe "defaults" do
     it "sets starts_at to current time by default" do
       freeze_time do

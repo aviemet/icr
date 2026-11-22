@@ -22,8 +22,8 @@ class Employees::OffersController < Employees::BaseController
       end
     end
     redirect_after_offer
-  rescue ActiveRecord::RecordInvalid, ArgumentError
-    redirect_after_offer
+  rescue ActiveRecord::RecordInvalid, ArgumentError => e
+    redirect_after_offer(errors: { base: [e.message] })
   end
 
   # @route PATCH /employees/:employee_slug/offers/:id (employee_offer)
@@ -44,8 +44,8 @@ class Employees::OffersController < Employees::BaseController
     end
 
     redirect_after_offer
-  rescue ActiveRecord::RecordInvalid, ArgumentError
-    redirect_after_offer
+  rescue ActiveRecord::RecordInvalid, ArgumentError => e
+    redirect_after_offer(errors: { base: [e.message] })
   end
 
   # @route DELETE /employees/:employee_slug/offers/:id (employee_offer)
@@ -65,9 +65,13 @@ class Employees::OffersController < Employees::BaseController
     offer_params.to_h.symbolize_keys.except(:commit)
   end
 
-  def redirect_after_offer
+  def redirect_after_offer(errors: nil)
     if params[:return_to].to_s == "status"
-      redirect_to status_employee_path(employee)
+      if errors.present?
+        redirect_to status_employee_path(employee), inertia: { errors: errors }
+      else
+        redirect_to status_employee_path(employee)
+      end
     else
       redirect_to_employee_tab("hiring")
     end

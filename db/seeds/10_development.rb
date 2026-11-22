@@ -197,4 +197,87 @@ if Rails.env.development?
     Rails.logger.info "[seeds] employees + 3 facilitators/director/attendant users + HR sample data"
   end
 
+  if Employee.any? && Client.any? && Requirement::Type.any?
+    attendant_job = Employee::JobTitle.find_by(slug: "attendant")
+    onboarding_type = Requirement::Type.find_by!(name: "Onboarding")
+    certification_type = Requirement::Type.find_by!(name: "Certification")
+    first_client = Client.order(:created_at).first
+    attendant = User.find_by(email: "attendant@gmail.com")&.person&.employee
+    facilitator = User.find_by(email: "facilitator@gmail.com")&.person&.employee
+    offered_applicant = Employee.where(status: :offered).order(:created_at).last
+
+    if attendant_job && facilitator && !facilitator.credentials.exists?(credential_type: :drivers_license)
+      FactoryBot.create(
+        :employee_credential,
+        employee: facilitator,
+        name: "Driver License",
+        credential_type: :drivers_license,
+        number: "DL-FACILITATOR",
+        expires_on: 2.years.from_now,
+      )
+    end
+
+    if attendant_job
+      dl_requirement = Requirement::Requirement.find_or_create_by!(name: "Driver's License") do |record|
+        record.description = "Valid driver's license required before employment as an attendant."
+        record.requirement_type = onboarding_type
+        record.scope = attendant_job
+        record.enforcement = :employment
+      end
+      dl_requirement.update!(enforcement: :employment, scope: attendant_job) if dl_requirement.persisted?
+      dl_requirement.sync_credential_types!(["drivers_license"])
+    end
+
+    if first_client
+      protocol_training = Employee::Training.find_or_create_by!(name: "Household Protocol - #{first_client.name}") do |record|
+        record.description = "Client-specific household protocol for #{first_client.name}"
+        record.estimated_minutes = 45
+        record.status = :active
+      end
+
+      ClientsTraining.find_or_create_by!(client: first_client, training: protocol_training) do |row|
+        row.required = true
+      end.tap { |row| row.update!(required: true) if row.persisted? && !row.required? }
+
+      protocol_requirement = Requirement::Requirement.find_or_create_by!(name: "Client Protocol - #{first_client.name}") do |record|
+        record.description = "Complete household protocol training before scheduling with this client."
+        record.requirement_type = onboarding_type
+        record.scope = first_client
+        record.enforcement = :client_schedule
+      end
+      protocol_requirement.update!(enforcement: :client_schedule, scope: first_client)
+      protocol_requirement.sync_training_ids!([protocol_training.id])
+
+      if attendant
+        Employee::EmployeesTraining.find_or_create_by!(employee: attendant, training: protocol_training) do |row|
+          row.started_at = Time.current
+          row.completed_at = nil
+        end
+      end
+
+      if facilitator
+        Employee::EmployeesTraining.find_or_create_by!(employee: facilitator, training: protocol_training) do |row|
+          row.started_at = Time.current
+          row.completed_at = Time.current
+        end.tap do |row|
+          row.update!(completed_at: Time.current) if row.completed_at.blank?
+        end
+      end
+    end
+
+    if attendant_job
+      first_aid_requirement = Requirement::Requirement.find_or_create_by!(name: "First Aid on File") do |record|
+        record.description = "First Aid credential on file for attendants (advisory)."
+        record.requirement_type = certification_type
+        record.scope = attendant_job
+        record.enforcement = :advisory
+      end
+      first_aid_requirement.update!(enforcement: :advisory, scope: attendant_job)
+      first_aid_requirement.sync_credential_types!(["first_aid"])
+    end
+
+    Rails.logger.info "[seeds] requirement gates (DL employment, client protocol, First Aid advisory)"
+    Rails.logger.info "[seeds] offered applicant without DL: #{offered_applicant&.person&.name}" if offered_applicant
+  end
+
 end

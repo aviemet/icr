@@ -20,6 +20,7 @@ export type JobTitleFormData = {
 		setting: Permissions
 		incident_report: Permissions
 		employee_training: Permissions
+		requirement: Permissions
 	}
 }
 
@@ -50,6 +51,7 @@ export const emptyPermissions: {
 		setting: { ...emptyResourcePermissions },
 		incident_report: { ...emptyResourcePermissions },
 		employee_training: { ...emptyTrainingPermissions },
+		requirement: { ...emptyResourcePermissions },
 	},
 }
 
@@ -126,5 +128,10 @@ export const tableRows: TableRow[] = [
 		model: "employee_training",
 		label: "Trainings",
 		permissions: ["index", "show", "create", "update", "delete", "complete"],
+	},
+	{
+		model: "requirement",
+		label: "Requirements",
+		permissions: ["index", "show", "create", "update", "delete"],
 	},
 ]

@@ -15,10 +15,12 @@ if Rails.env.development?
   end
 
   create_recurring_shift = lambda do |client:, employee:, starts_at:, duration:, patterns:|
-    calendar_event = FactoryBot.create(:calendar_event, {
+    event_attrs = {
       starts_at: starts_at,
       ends_at: starts_at + duration,
-    })
+    }
+    event_attrs[:name] = nil if employee.nil?
+    calendar_event = FactoryBot.create(:calendar_event, event_attrs)
     shift_attrs = { calendar_event: calendar_event }
     if employee.nil?
       FactoryBot.create(:shift, :open, shift_attrs)
