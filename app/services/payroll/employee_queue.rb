@@ -60,17 +60,16 @@ module Payroll
     def facilitator_progress_for(employee_ids)
       return {} if employee_ids.empty?
 
-      rows = PayPeriod.shifts_overlapping_period(@period)
+      base_shifts = PayPeriod.shifts_overlapping_period(@period)
         .where(employee_id: employee_ids)
-        .group(:employee_id)
-        .pluck(
-          :employee_id,
-          Arel.sql("COUNT(*)"),
-          Arel.sql("COUNT(*) FILTER (WHERE facilitator_approved_at IS NOT NULL)"),
-        )
+        .includes(calendar_event: [:recurring_patterns, :event_exceptions])
+        .to_a
 
-      rows.each_with_object({}) do |(employee_id, total, reviewed), hash|
-        hash[employee_id.to_s] = { total: total.to_i, reviewed: reviewed.to_i }
+      @period.shift_occurrences(base_shifts).each_with_object({}) do |occurrence, hash|
+        key = occurrence.employee_id.to_s
+        entry = hash[key] ||= { total: 0, reviewed: 0 }
+        entry[:total] += 1
+        entry[:reviewed] += 1 if occurrence.facilitator_approved?
       end
     end
 

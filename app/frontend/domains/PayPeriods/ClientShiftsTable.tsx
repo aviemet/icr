@@ -43,10 +43,12 @@ export function ClientShiftsTable({
 		() => shiftsForEmployee(shifts, selectedEmployeeId),
 		[shifts, selectedEmployeeId],
 	)
-	const pendingIds = selectedShifts
-		.filter(shift => !shift.facilitator_approved_at)
-		.map(shift => shift.id)
-	const pendingCount = pendingIds.length
+	const pendingIds = [...new Set(
+		selectedShifts
+			.filter(shift => !shift.facilitator_approved_at)
+			.map(shift => shift.shift_id),
+	)]
+	const pendingCount = selectedShifts.filter(shift => !shift.facilitator_approved_at).length
 	const { regularHours, otHours } = useMemo(
 		() => hoursForShifts(selectedShifts, shiftOtHours),
 		[selectedShifts, shiftOtHours],

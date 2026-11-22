@@ -63,7 +63,7 @@ module Payroll
 
     def split_interval(interval, ihss_hours)
       total = interval.duration_hours
-      ihss_hours = [[ihss_hours, 0.0].max, total].min
+      ihss_hours = ihss_hours.clamp(0.0, total)
       company_hours = total - ihss_hours
 
       return [with_ihss(interval, false)] if ihss_hours <= 0

@@ -5,7 +5,7 @@ class PayPeriodsController < ApplicationController
   expose :employees, -> {
     search(
       Employee.includes_associated
-        .where(id: pay_period.timesheets.select(:employee_id))
+        .where(id: PayPeriod.shifts_overlapping_period(pay_period).assigned.select(:employee_id))
         .order("employees.id"),
     )
   }
@@ -265,7 +265,7 @@ class PayPeriodsController < ApplicationController
   private
 
   def period_employee_ids(period)
-    period.timesheets.distinct.pluck(:employee_id)
+    PayPeriod.shifts_overlapping_period(period).assigned.distinct.pluck(:employee_id)
   end
 
   def employee_combined_access?

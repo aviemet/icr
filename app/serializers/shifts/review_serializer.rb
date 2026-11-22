@@ -9,6 +9,22 @@ class Shifts::ReviewSerializer < ShiftSerializer
   )
 
   type :string
+  def shift_id
+    shift.respond_to?(:shift_id) ? shift.shift_id.to_s : shift.id.to_s
+  end
+
+  attribute :is_recurring, type: :boolean do
+    shift.respond_to?(:recurring_occurrence?) ? shift.recurring_occurrence? : false
+  end
+
+  type "Date", optional: true
+  def occurrence_starts_at
+    return unless shift.respond_to?(:occurrence_starts_at)
+
+    shift.occurrence_starts_at
+  end
+
+  type :string
   def client_name
     clients = shift.calendar_event&.clients
 

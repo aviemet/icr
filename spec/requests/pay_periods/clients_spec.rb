@@ -133,6 +133,7 @@ RSpec.describe "pay period clients views", type: :request do
       expect_inertia.to render_component "PayPeriods/Client"
       expect(inertia.props[:period_client][:id]).to eq(client.id.to_s)
       expect(inertia.props[:shifts].pluck(:id)).to eq([shift.id.to_s])
+      expect(inertia.props[:shifts].first[:shift_id]).to eq(shift.id.to_s)
       expect(inertia.props[:shifts].first[:employee_id]).to eq(employee.id.to_s)
       expect(inertia.props[:shifts].first[:employee_name]).to be_present
       employee_ids = inertia.props[:period_employees].map { |row| row[:id].to_s }
@@ -143,6 +144,43 @@ RSpec.describe "pay period clients views", type: :request do
       )
       expect(inertia.props[:shift_exception_reasons]).to be_a(Hash)
       expect(inertia.props[:shift_ot_hours]).to be_a(Hash)
+    end
+
+    it "expands recurring masters into in-period occurrence rows" do
+      Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
+      client = create(:client)
+      employee = create(:employee, :employed)
+
+      travel_to Time.zone.local(2024, 3, 20, 12, 0, 0) do
+        pay_period = PayPeriod.for_period_dates(Date.new(2024, 3, 16), Date.new(2024, 3, 31))
+        timesheet = create(:timesheet, pay_period: pay_period, employee: employee, approved_at: nil)
+        event = create(
+          :calendar_event,
+          starts_at: Time.zone.local(2024, 3, 4, 9, 0, 0),
+          ends_at: Time.zone.local(2024, 3, 4, 17, 0, 0),
+        )
+        event.recurring_patterns.create!(
+          recurring_type: :weekly,
+          offset: 1,
+          day_of_week: 1,
+          end_date: Date.new(2024, 3, 31),
+        )
+        event.event_participants.create!(participant: client)
+        shift = create(:shift, employee: employee, timesheet: timesheet, calendar_event: event)
+
+        get client_period_path(pay_period, client.id)
+
+        expect(response).to have_http_status(:success)
+        starts = inertia.props[:shifts].map { |row| Time.zone.parse(row[:starts_at].to_s).to_date }
+        expect(starts).to eq([
+          Date.new(2024, 3, 18),
+          Date.new(2024, 3, 25),
+        ])
+        expect(inertia.props[:shifts].pluck(:shift_id).uniq).to eq([shift.id.to_s])
+        expect(inertia.props[:shifts].pluck(:is_recurring).uniq).to eq([true])
+        expect(inertia.props[:shifts].pluck(:id)).to all(include("#{shift.id}:"))
+        expect(inertia.props[:shift_ot_hours].keys).to match_array(inertia.props[:shifts].map { |row| row[:id].to_s })
+      end
     end
   end
 

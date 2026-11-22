@@ -24,7 +24,7 @@ class Calendar::ScheduleOccurrence < SimpleDelegator
     @occurrence.original_starts_at
   end
 
-  def is_recurring
+  def recurring?
     @occurrence.recurring
   end
 

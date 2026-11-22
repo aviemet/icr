@@ -18,14 +18,20 @@ class TimesheetsController < ApplicationController
     record_to_authorize = timesheet || Timesheet.new(employee_id: employee.id)
     authorize record_to_authorize, :show?
 
-    shifts_scope = if timesheet
-                     timesheet.shifts.joins(:calendar_event).order("calendar_events.starts_at").includes(:category, calendar_event: { clients: :person })
-                   else
-                     Shift.none
-                   end
-
-    shifts_list = shifts_scope.to_a
-    last_editors = Payroll::ShiftLastEditors.call(shifts_list)
+    base_shifts = PayPeriod.shifts_overlapping_period(pay_period)
+      .assigned
+      .where(employee_id: employee.id)
+      .includes(
+        :category,
+        calendar_event: [
+          :recurring_patterns,
+          :event_exceptions,
+          { clients: :person },
+        ],
+      )
+      .to_a
+    shifts_list = pay_period.shift_occurrences(base_shifts)
+    last_editors = Payroll::ShiftLastEditors.call(base_shifts)
     shifts_list.each do |shift|
       shift.instance_variable_set(:@_last_editor, last_editors[shift.calendar_event_id.to_s])
     end

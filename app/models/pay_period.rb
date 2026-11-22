@@ -140,6 +140,11 @@ class PayPeriod < ApplicationRecord
     Shift.where(calendar_event_id: event_ids)
   end
 
+  def shift_occurrences(shifts)
+    Array(shifts).flat_map { |shift| shift.occurrences_in(self) }
+      .sort_by { |row| [row.starts_at, row.id.to_s] }
+  end
+
   def self.attach_shift!(shift)
     return if shift.employee_id.blank?
 

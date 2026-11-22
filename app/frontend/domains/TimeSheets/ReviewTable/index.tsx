@@ -65,10 +65,17 @@ export function ReviewTable({
 		router.get(resolvedReloadHref)
 	}
 
-	const deleteShiftByCalendarEventId = async (calendarEventId: string) => {
+	const deleteShift = async (shift: Schema.ShiftsReview) => {
 		setBusy(true)
 		try {
-			const response = await axios.delete(Routes.apiCalendarEvent(calendarEventId))
+			const response = await axios.delete(Routes.apiCalendarEvent(shift.calendar_event_id), {
+				params: shift.is_recurring && shift.occurrence_starts_at
+					? {
+						edit_scope: "one",
+						occurrence_starts_at: new Date(String(shift.occurrence_starts_at)).toISOString(),
+					}
+					: undefined,
+			})
 			assertStatus(response, HTTP_STATUS.NO_CONTENT)
 			reloadReview()
 		} catch (error) {
@@ -88,7 +95,7 @@ export function ReviewTable({
 			),
 			confirmLabel: t("views.timesheets.employee_review.delete_shift_confirm_button"),
 			cancelLabel: t("views.timesheets.employee_review.delete_shift_cancel"),
-			run: () => deleteShiftByCalendarEventId(shift.calendar_event_id),
+			run: () => deleteShift(shift),
 		})
 	}
 

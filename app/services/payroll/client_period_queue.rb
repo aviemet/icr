@@ -30,6 +30,12 @@ module Payroll
     end
 
     def shifts_for(client_id)
+      @period.shift_occurrences(base_shifts_for(client_id))
+    end
+
+    private
+
+    def base_shifts_for(client_id)
       shift_ids = shifts_in_period
         .joins(calendar_event: :event_participants)
         .where(
@@ -42,13 +48,17 @@ module Payroll
         .pluck(:id)
 
       Shift.where(id: shift_ids)
-        .includes(:category, :employee, calendar_event: { clients: :person })
-        .joins(:calendar_event)
-        .order("calendar_events.starts_at")
+        .includes(
+          :category,
+          :employee,
+          calendar_event: [
+            :recurring_patterns,
+            :event_exceptions,
+            { clients: :person },
+          ],
+        )
         .to_a
     end
-
-    private
 
     def shifts_in_period
       PayPeriod.shifts_overlapping_period(@period).assigned
@@ -57,7 +67,7 @@ module Payroll
     def shift_counts_by_client
       return {} if @client_ids.empty?
 
-      rows = shifts_in_period
+      shifts = shifts_in_period
         .joins(calendar_event: :event_participants)
         .where(
           event_participants: {
@@ -65,19 +75,24 @@ module Payroll
             participant_id: @client_ids,
           },
         )
-        .group("event_participants.participant_id")
-        .pluck(
-          Arel.sql("event_participants.participant_id"),
-          Arel.sql("COUNT(DISTINCT shifts.id)"),
-          Arel.sql("COUNT(DISTINCT shifts.id) FILTER (WHERE shifts.facilitator_approved_at IS NOT NULL)"),
-        )
+        .includes(calendar_event: [:recurring_patterns, :event_exceptions, :clients])
+        .distinct
+        .to_a
+      scoped_client_ids = @client_ids.to_set(&:to_s)
 
-      rows.each_with_object({}) do |(client_id, total, reviewed), hash|
-        hash[client_id.to_s] = {
-          total: total.to_i,
-          reviewed: reviewed.to_i,
-          pending: total.to_i - reviewed.to_i,
-        }
+      @period.shift_occurrences(shifts).each_with_object({}) do |occurrence, hash|
+        occurrence.calendar_event.clients.each do |client|
+          client_id = client.id.to_s
+          next unless scoped_client_ids.include?(client_id)
+
+          entry = hash[client_id] ||= { total: 0, reviewed: 0, pending: 0 }
+          entry[:total] += 1
+          if occurrence.facilitator_approved?
+            entry[:reviewed] += 1
+          else
+            entry[:pending] += 1
+          end
+        end
       end
     end
 

@@ -80,6 +80,14 @@ class Shift < ApplicationRecord
     facilitator_approved_at.present?
   end
 
+  def occurrences_in(pay_period)
+    return [] if calendar_event.blank?
+
+    calendar_event.occurrences_in(pay_period.starts_at, pay_period.ends_at).map do |occurrence|
+      Payroll::ShiftOccurrence.new(self, occurrence)
+    end
+  end
+
   def clear_facilitator_approval!
     return if facilitator_approved_at.blank?
 

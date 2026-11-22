@@ -235,4 +235,60 @@ RSpec.describe Calendar::Event do
     end
 
   end
+
+  describe "#occurrences_in" do
+    it "expands a recurring master into range occurrences" do
+      event = create(
+        :calendar_event,
+        starts_at: Time.zone.local(2024, 3, 4, 9, 0, 0),
+        ends_at: Time.zone.local(2024, 3, 4, 17, 0, 0),
+      )
+      event.recurring_patterns.create!(
+        recurring_type: :weekly,
+        offset: 1,
+        day_of_week: 1,
+        end_date: Date.new(2024, 3, 31),
+      )
+
+      rows = event.occurrences_in(
+        Time.zone.local(2024, 3, 16).beginning_of_day,
+        Time.zone.local(2024, 3, 31).end_of_day,
+      )
+
+      expect(rows.map { |row| row.starts_at.to_date }).to eq([
+        Date.new(2024, 3, 18),
+        Date.new(2024, 3, 25),
+      ])
+      expect(rows.map(&:recurring).uniq).to eq([true])
+    end
+  end
+
+  describe ".schedule_occurrences_in" do
+    it "returns schedule wrappers with occurrence display times" do
+      event = create(
+        :calendar_event,
+        starts_at: Time.zone.local(2024, 3, 4, 9, 0, 0),
+        ends_at: Time.zone.local(2024, 3, 4, 17, 0, 0),
+      )
+      event.recurring_patterns.create!(
+        recurring_type: :weekly,
+        offset: 1,
+        day_of_week: 1,
+        end_date: Date.new(2024, 3, 31),
+      )
+
+      rows = described_class.schedule_occurrences_in(
+        [event],
+        range_start: Time.zone.local(2024, 3, 16).beginning_of_day,
+        range_end: Time.zone.local(2024, 3, 31).end_of_day,
+      )
+
+      expect(rows).to all(be_a(Calendar::ScheduleOccurrence))
+      expect(rows.map(&:starts_at).map(&:to_date)).to eq([
+        Date.new(2024, 3, 18),
+        Date.new(2024, 3, 25),
+      ])
+      expect(rows.map(&:master_id).uniq).to eq([event.id])
+    end
+  end
 end

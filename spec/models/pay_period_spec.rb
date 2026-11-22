@@ -518,4 +518,64 @@ RSpec.describe PayPeriod, type: :model do
       expect(adjustment.reason).to eq("Fix hours")
     end
   end
+
+  describe "#shift_occurrences" do
+    it "expands recurring masters into period occurrences with lockstep interval ids" do
+      pay_period = described_class.for_period_dates(Date.new(2024, 3, 16), Date.new(2024, 3, 31))
+      employee = create(:employee, :employed)
+      timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
+      event = create(
+        :calendar_event,
+        starts_at: Time.zone.local(2024, 3, 4, 9, 0, 0),
+        ends_at: Time.zone.local(2024, 3, 4, 17, 0, 0),
+      )
+      event.recurring_patterns.create!(
+        recurring_type: :weekly,
+        offset: 1,
+        day_of_week: 1,
+        end_date: Date.new(2024, 3, 31),
+      )
+      shift = create(:shift, employee: employee, timesheet: timesheet, calendar_event: event)
+
+      rows = pay_period.shift_occurrences([shift])
+
+      expect(rows.map { |row| row.starts_at.to_date }).to eq([
+        Date.new(2024, 3, 18),
+        Date.new(2024, 3, 25),
+      ])
+      expect(rows.map(&:shift_id).uniq).to eq([shift.id])
+      expect(rows.map { |row| row.id.to_s }).to eq(
+        rows.map { |row|
+          Payroll::ShiftOccurrence.interval_id(
+            shift.id,
+            Calendar::Recurring::ExpandOccurrences::Occurrence.new(
+              event: event,
+              original_starts_at: row.occurrence_starts_at,
+              starts_at: row.starts_at,
+              ends_at: row.ends_at,
+              recurring: true,
+            ),
+          )
+        },
+      )
+    end
+
+    it "keeps non-recurring shifts as a single in-range row" do
+      pay_period = described_class.for_period_dates(Date.new(2024, 3, 16), Date.new(2024, 3, 31))
+      employee = create(:employee, :employed)
+      timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
+      event = create(
+        :calendar_event,
+        starts_at: Time.zone.local(2024, 3, 18, 9, 0, 0),
+        ends_at: Time.zone.local(2024, 3, 18, 17, 0, 0),
+      )
+      shift = create(:shift, employee: employee, timesheet: timesheet, calendar_event: event)
+
+      rows = pay_period.shift_occurrences([shift])
+
+      expect(rows.size).to eq(1)
+      expect(rows.first.id.to_s).to eq(shift.id.to_s)
+      expect(rows.first.starts_at).to eq(event.starts_at)
+    end
+  end
 end

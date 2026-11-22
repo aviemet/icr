@@ -6,6 +6,9 @@ class Calendar::Events::PersistedSerializer < Calendar::EventSerializer
     ends_at: { type: "Date", optional: false },
     master_id: { type: :string },
     occurrence_starts_at: { type: "Date" },
-    is_recurring: { type: :boolean },
   )
+
+  attribute :is_recurring, type: :boolean do
+    @object.recurring?
+  end
 end

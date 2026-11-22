@@ -95,10 +95,16 @@ export function ReviewRow({
 				calendar_event: {
 					starts_at: startsAt.toISOString(),
 					ends_at: endsAt.toISOString(),
+					...(shift.is_recurring && shift.occurrence_starts_at
+						? {
+							edit_scope: "one" as const,
+							occurrence_starts_at: new Date(String(shift.occurrence_starts_at)).toISOString(),
+						}
+						: {}),
 				},
 			})
 		},
-		[startDate, endDate, updateEvent]
+		[startDate, endDate, updateEvent, shift.is_recurring, shift.occurrence_starts_at]
 	)
 
 	const onTimesChange = useCallback((start: string, end: string) => {
@@ -194,7 +200,7 @@ export function ReviewRow({
 						<Button
 							size="xs"
 							variant={ shift.ihss ? "default" : "light" }
-							onClick={ () => router.patch(Routes.ihssShift(shift.id), { ihss: !shift.ihss }) }
+							onClick={ () => router.patch(Routes.ihssShift(shift.shift_id), { ihss: !shift.ihss }) }
 						>
 							{ shift.ihss
 								? t("views.timesheets.employee_review.clear_ihss")
@@ -207,7 +213,7 @@ export function ReviewRow({
 								<Button
 									size="xs"
 									variant="default"
-									onClick={ () => router.post(Routes.unapproveShift(shift.id)) }
+									onClick={ () => router.post(Routes.unapproveShift(shift.shift_id)) }
 								>
 									{ t("views.pay_periods.client_show.unapprove") }
 								</Button>
@@ -216,7 +222,7 @@ export function ReviewRow({
 								<Button
 									size="xs"
 									variant="filled"
-									onClick={ () => router.post(Routes.approveShift(shift.id)) }
+									onClick={ () => router.post(Routes.approveShift(shift.shift_id)) }
 								>
 									{ t("views.pay_periods.client_show.approve") }
 								</Button>

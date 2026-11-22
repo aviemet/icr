@@ -17,7 +17,7 @@ module Payroll
       shifts = shifts_for_clients
       return @client_ids.index_with { 0.0 }.transform_keys(&:to_s) if shifts.empty?
 
-      collected = shifts.flat_map { |shift| intervals_for_shift(shift) }
+      collected = @pay_period.shift_occurrences(shifts).filter_map { |row| interval_for(row) }
       intervals = IhssHourClassifier.call(pay_period: @pay_period, intervals: collected)
 
       totals = @client_ids.index_with { 0.0 }
@@ -53,32 +53,19 @@ module Payroll
       )
     end
 
-    def intervals_for_shift(shift)
-      event = shift.calendar_event
-      return [] if event.blank?
+    def interval_for(row)
+      client_ids = row.calendar_event.clients.map(&:id)
+      return unless client_ids.intersect?(@client_ids)
 
-      Calendar::Recurring::ExpandOccurrences
-        .call(event:, range_start: @pay_period.starts_at, range_end: @pay_period.ends_at)
-        .filter_map do |occurrence|
-          client_ids = occurrence.event.clients.map(&:id)
-          next if !client_ids.intersect?(@client_ids)
-
-          WorkInterval.new(
-            id: interval_id(shift, occurrence),
-            employee_id: shift.employee_id,
-            starts_at: occurrence.starts_at,
-            ends_at: occurrence.ends_at,
-            category: shift.category,
-            ihss: shift.ihss,
-            client_ids: client_ids,
-          )
-        end
-    end
-
-    def interval_id(shift, occurrence)
-      return shift.id unless occurrence.recurring
-
-      "#{shift.id}:#{occurrence.original_starts_at.utc.iso8601(3)}"
+      WorkInterval.new(
+        id: row.id,
+        employee_id: row.employee_id,
+        starts_at: row.starts_at,
+        ends_at: row.ends_at,
+        category: row.category,
+        ihss: row.ihss,
+        client_ids: client_ids,
+      )
     end
   end
 end

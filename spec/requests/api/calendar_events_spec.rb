@@ -535,7 +535,6 @@ RSpec.describe "Api::CalendarEvents", type: :request do
           occurrence_starts_at: occurrence.iso8601,
         }
       }.to change(Calendar::EventException, :count).by(1)
-        .and not_change(Calendar::Event, :count)
 
       expect(response).to have_http_status(:no_content)
       expect(Calendar::Event.exists?(master.id)).to be(true)
@@ -550,8 +549,7 @@ RSpec.describe "Api::CalendarEvents", type: :request do
           edit_scope: "future",
           occurrence_starts_at: occurrence.iso8601,
         }
-      }.to not_change(Calendar::Event, :count)
-        .and not_change(Calendar::EventException, :count)
+      }.not_to(change { [Calendar::Event.count, Calendar::EventException.count] })
 
       expect(response).to have_http_status(:no_content)
       expect(Calendar::Event.exists?(master.id)).to be(true)

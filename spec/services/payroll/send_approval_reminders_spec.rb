@@ -18,10 +18,17 @@ RSpec.describe Payroll::SendApprovalReminders do
   end
 
   def create_closed_period(**attrs)
+    cursor = 20.days.ago.to_date
+    starts_on, ends_on = Payroll::Period.period_dates(cursor)
+    while ends_on >= Date.current
+      cursor -= 15.days
+      starts_on, ends_on = Payroll::Period.period_dates(cursor)
+    end
+
     create(
       :pay_period,
-      starts_at: period_start,
-      ends_at: period_end,
+      starts_at: starts_on.beginning_of_day,
+      ends_at: ends_on.end_of_day,
       finalized_at: nil,
       **attrs,
     )
@@ -129,13 +136,14 @@ RSpec.describe Payroll::SendApprovalReminders do
       unmanaged = create(:employee, :employed)
 
       pay_period = create_closed_period
+      shift_day = pay_period.starts_at.to_date + 1.day
       managed_timesheet = create(:timesheet, pay_period: pay_period, employee: managed, approved_at: nil)
       unmanaged_timesheet = create(:timesheet, pay_period: pay_period, employee: unmanaged, approved_at: nil)
 
       managed_event = create(
         :calendar_event,
-        starts_at: period_start + 1.day,
-        ends_at: period_start + 1.day + 8.hours,
+        starts_at: Time.zone.local(shift_day.year, shift_day.month, shift_day.day, 9, 0, 0),
+        ends_at: Time.zone.local(shift_day.year, shift_day.month, shift_day.day, 17, 0, 0),
       )
       managed_event.event_participants.create!(participant: caseload_client)
       create(
@@ -146,10 +154,11 @@ RSpec.describe Payroll::SendApprovalReminders do
         facilitator_approved_at: nil,
       )
 
+      other_day = pay_period.starts_at.to_date + 2.days
       other_event = create(
         :calendar_event,
-        starts_at: period_start + 2.days,
-        ends_at: period_start + 2.days + 8.hours,
+        starts_at: Time.zone.local(other_day.year, other_day.month, other_day.day, 9, 0, 0),
+        ends_at: Time.zone.local(other_day.year, other_day.month, other_day.day, 17, 0, 0),
       )
       other_event.event_participants.create!(participant: other_client)
       create(

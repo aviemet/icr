@@ -14,12 +14,11 @@ module Calendar
     end
 
     def call
-      occurrences = Recurring::ExpandOccurrences.for_events(
-        events: @events,
+      rows = Event.schedule_occurrences_in(
+        @events,
         range_start: @range_start,
         range_end: @range_end,
       )
-      rows = occurrences.map { |occurrence| ScheduleOccurrence.new(occurrence.event, occurrence) }
       serializer_class.render(rows)
     end
 

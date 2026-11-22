@@ -94,8 +94,30 @@ class Calendar::Event < ApplicationRecord
     starts_at
   end
 
-  def is_recurring
+  def recurring?
     false
+  end
+
+  def occurrences_in(range_start, range_end)
+    Calendar::Recurring::ExpandOccurrences.call(
+      event: self,
+      range_start: range_start,
+      range_end: range_end,
+    )
+  end
+
+  def self.occurrences_in(events, range_start:, range_end:)
+    Calendar::Recurring::ExpandOccurrences.for_events(
+      events: events,
+      range_start: range_start,
+      range_end: range_end,
+    )
+  end
+
+  def self.schedule_occurrences_in(events, range_start:, range_end:)
+    occurrences_in(events, range_start: range_start, range_end: range_end).map do |occurrence|
+      Calendar::ScheduleOccurrence.new(occurrence.event, occurrence)
+    end
   end
 
   scope :includes_associated, -> { includes([shift: [employee: [:person]]]) }
