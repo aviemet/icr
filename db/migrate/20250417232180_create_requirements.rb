@@ -5,7 +5,7 @@ class CreateRequirements < ActiveRecord::Migration[8.0]
       t.text :description
       t.references :requirement_type, null: false, foreign_key: true, type: :uuid
       t.string :scope_type
-      t.integer :scope_id
+      t.uuid :scope_id
 
       t.timestamps
     end

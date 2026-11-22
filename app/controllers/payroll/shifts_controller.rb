@@ -3,7 +3,7 @@
 class Payroll::ShiftsController < ApplicationController
   expose :shift, scope: -> { Shift.includes(calendar_event: :clients, timesheet: :pay_period) }
 
-  # @route POST /payroll/shifts/:id/approve (approve_payroll_shift)
+  # @route POST /payroll/shifts/:id/approve (approve_shift)
   def approve
     authorize shift, :facilitator_approve?
 
@@ -17,7 +17,7 @@ class Payroll::ShiftsController < ApplicationController
     redirect_back_or_to(fallback_period_path(period), notice: t("shifts.facilitator_approved"))
   end
 
-  # @route POST /payroll/shifts/:id/unapprove (unapprove_payroll_shift)
+  # @route POST /payroll/shifts/:id/unapprove (unapprove_shift)
   def unapprove
     authorize shift, :facilitator_unapprove?
 
@@ -31,7 +31,7 @@ class Payroll::ShiftsController < ApplicationController
     redirect_back_or_to(fallback_period_path(period), notice: t("shifts.facilitator_unapproved"))
   end
 
-  # @route POST /payroll/shifts/bulk_approve (bulk_approve_payroll_shifts)
+  # @route POST /payroll/shifts/bulk_approve (bulk_approve_shifts)
   def bulk_approve
     period = PayPeriod.find(params.require(:pay_period_id))
     authorize period, :show?

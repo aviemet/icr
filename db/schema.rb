@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_22_020653) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_21_171545) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -833,7 +833,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_22_020653) do
     t.text "description"
     t.uuid "requirement_type_id", null: false
     t.string "scope_type"
-    t.integer "scope_id"
+    t.uuid "scope_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["requirement_type_id"], name: "index_requirements_on_requirement_type_id"
@@ -885,10 +885,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_22_020653) do
     t.uuid "employee_id"
     t.uuid "calendar_event_id", null: false
     t.uuid "timesheet_id"
+    t.date "facilitator_approved_at"
     t.uuid "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.date "facilitator_approved_at"
     t.index ["calendar_event_id"], name: "index_shifts_on_calendar_event_id", unique: true
     t.index ["category_id"], name: "index_shifts_on_category_id"
     t.index ["employee_id"], name: "index_shifts_on_employee_id"
@@ -1029,9 +1029,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_22_020653) do
   add_foreign_key "clients_managers", "employees", column: "manager_id"
   add_foreign_key "clients_trainings", "clients"
   add_foreign_key "clients_trainings", "trainings"
-  add_foreign_key "contacts", "addresses", column: "primary_address_id"
-  add_foreign_key "contacts", "emails", column: "primary_email_id"
-  add_foreign_key "contacts", "phones", column: "primary_phone_id"
+  add_foreign_key "contacts", "addresses", column: "primary_address_id", on_delete: :nullify
+  add_foreign_key "contacts", "emails", column: "primary_email_id", on_delete: :nullify
+  add_foreign_key "contacts", "phones", column: "primary_phone_id", on_delete: :nullify
   add_foreign_key "doctors", "people"
   add_foreign_key "doctors_clients", "clients"
   add_foreign_key "doctors_clients", "doctors"

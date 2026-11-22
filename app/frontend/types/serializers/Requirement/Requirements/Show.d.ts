@@ -9,7 +9,7 @@ declare global {
       description?: string
       name?: string
       requirement_type_id: string
-      scope_id?: number
+      scope_id?: string
       scope_type?: string
       updated_at: Date
     }

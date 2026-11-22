@@ -9,7 +9,7 @@
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  requirement_type_id :uuid             not null
-#  scope_id            :integer
+#  scope_id            :uuid
 #
 # Indexes
 #

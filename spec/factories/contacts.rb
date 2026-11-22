@@ -21,9 +21,9 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (primary_address_id => addresses.id)
-#  fk_rails_...  (primary_email_id => emails.id)
-#  fk_rails_...  (primary_phone_id => phones.id)
+#  fk_rails_...  (primary_address_id => addresses.id) ON DELETE => nullify
+#  fk_rails_...  (primary_email_id => emails.id) ON DELETE => nullify
+#  fk_rails_...  (primary_phone_id => phones.id) ON DELETE => nullify
 #
 FactoryBot.define do
   factory :contact do

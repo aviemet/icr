@@ -75,7 +75,7 @@ class PayPeriodsController < ApplicationController
     }
   end
 
-  # @route GET /payroll/periods/:id/clients (period_clients)
+  # @route GET /payroll/periods/:id/clients (clients_period)
   def clients
     authorize pay_period, :show?
     pay_period.sync_shifts! unless pay_period.finalized?
@@ -101,7 +101,7 @@ class PayPeriodsController < ApplicationController
     }
   end
 
-  # @route GET /payroll/periods/:id/clients/:client_id (period_client)
+  # @route GET /payroll/periods/:id/clients/:client_id (client_period)
   def client
     authorize pay_period, :show?
     pay_period.sync_shifts! unless pay_period.finalized?
