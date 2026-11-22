@@ -1,4 +1,4 @@
-class CreatePrescriptions < ActiveRecord::Migration[7.1]
+class CreatePrescriptions < ActiveRecord::Migration[8.0]
   def change
     create_table :prescriptions, id: :uuid do |t|
       t.belongs_to :medication, type: :uuid, null: false, foreign_key: true

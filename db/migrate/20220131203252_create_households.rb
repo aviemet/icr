@@ -1,4 +1,4 @@
-class CreateHouseholds < ActiveRecord::Migration[7.0]
+class CreateHouseholds < ActiveRecord::Migration[8.0]
   def change
     create_table :households, id: :uuid do |t|
       t.string :name, null: false

@@ -72,6 +72,7 @@ class Calendar::Event < ApplicationRecord
   before_validation :sanitize_all_day_times
   before_validation :set_shift_category_when_shift_present
   before_destroy :prevent_destroy_when_pay_period_finalized, prepend: true
+  after_commit :invalidate_shift_approvals_on_time_change, on: :update
 
   validates :starts_at, presence: true
   validates :ends_at, presence: true
@@ -110,7 +111,7 @@ class Calendar::Event < ApplicationRecord
 
     recurring_ids = schedule_masters
       .joins(:recurring_patterns)
-      .where("calendar_events.starts_at < ?", range_end)
+      .where(calendar_events: { starts_at: ...range_end })
       .where(
         "calendar_recurring_patterns.end_date IS NULL OR calendar_recurring_patterns.end_date >= ?",
         range_start.to_date,
@@ -200,6 +201,12 @@ class Calendar::Event < ApplicationRecord
                    else
                      ends_at.end_of_day
                    end
+  end
+
+  def invalidate_shift_approvals_on_time_change
+    return unless previous_changes.key?("starts_at") || previous_changes.key?("ends_at")
+
+    Shift.find_by(calendar_event_id: id)&.invalidate_approvals!
   end
 
 end

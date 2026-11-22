@@ -20,7 +20,10 @@ export interface RichTextEditorProps extends Omit<MantineRTEProps, "children" | 
 export function RichTextEditor({ children, onChange, ref }: RichTextEditorProps) {
 	const editor = useEditor({
 		extensions: [
-			StarterKit,
+			StarterKit.configure({
+				link: false,
+				underline: false,
+			}),
 			Underline,
 			Link,
 			Superscript,

@@ -1,4 +1,4 @@
-class CreateEmploymentStatuses < ActiveRecord::Migration[7.2]
+class CreateEmploymentStatuses < ActiveRecord::Migration[8.0]
   def change
     create_table :employment_statuses, id: :uuid do |t|
       t.string :name

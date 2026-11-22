@@ -1,4 +1,4 @@
-class CreateRequirements < ActiveRecord::Migration[7.2]
+class CreateRequirements < ActiveRecord::Migration[8.0]
   def change
     create_table :requirements, id: :uuid do |t|
       t.string :name

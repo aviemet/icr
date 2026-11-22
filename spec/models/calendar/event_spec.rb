@@ -74,7 +74,6 @@ RSpec.describe Calendar::Event do
     end
   end
 
-
   describe "destroy" do
     it "destroys the linked shift when the period is open" do
       employee = create(:employee)
@@ -137,7 +136,6 @@ RSpec.describe Calendar::Event do
       expect(event.errors[:base]).to include(I18n.t("pay_periods.finalized_locked"))
     end
   end
-
 
   describe ".for_schedule_range" do
     it "includes a recurring master that started before the visible range" do

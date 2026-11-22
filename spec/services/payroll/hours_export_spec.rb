@@ -7,15 +7,10 @@ RSpec.describe Payroll::HoursExport do
       Setting.payroll_period_day = "monday"
 
       travel_to Time.zone.local(2024, 3, 20, 12, 0, 0) do
-        pay_period = create(
-          :pay_period,
-          starts_at: Date.new(2024, 3, 11).beginning_of_day,
-          ends_at: Date.new(2024, 3, 17).end_of_day,
-          finalized_at: Date.new(2024, 3, 19),
-        )
+        pay_period = PayPeriod.for_period_dates(Date.new(2024, 3, 11), Date.new(2024, 3, 17))
         approved_employee = create(:employee, number: "E-100")
         pending_employee = create(:employee, number: "E-200")
-        create(:timesheet, pay_period: pay_period, employee: approved_employee, approved_at: Date.new(2024, 3, 18))
+        approved_timesheet = create(:timesheet, pay_period: pay_period, employee: approved_employee, approved_at: nil)
         create(:timesheet, pay_period: pay_period, employee: pending_employee, approved_at: nil)
         event = create(
           :calendar_event,
@@ -25,9 +20,11 @@ RSpec.describe Payroll::HoursExport do
         create(
           :shift,
           employee: approved_employee,
-          timesheet: Timesheet.find_by(employee: approved_employee),
+          timesheet: approved_timesheet,
           calendar_event: event,
         )
+        approved_timesheet.update!(approved_at: Date.new(2024, 3, 18))
+        pay_period.update!(finalized_at: Date.new(2024, 3, 19))
 
         csv = described_class.call(pay_period)
         rows = CSV.parse(csv, headers: true)

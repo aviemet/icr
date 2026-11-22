@@ -1,4 +1,4 @@
-class DeviseInvitableAddToUsers < ActiveRecord::Migration[7.0]
+class DeviseInvitableAddToUsers < ActiveRecord::Migration[8.0]
   def up
     change_table :users, bulk: true do |t|
       t.string     :invitation_token

@@ -36,6 +36,8 @@ class TimesheetsController < ApplicationController
     shift_exception_reasons = Payroll::ShiftExceptions.call(shifts_list)[:reasons_by_shift_id]
     hours_data = employee_hours[employee.id.to_s] || {}
     shift_ot_hours = hours_data[:shift_ot_hours] || {}
+    can_final_approve = timesheet.present? && !pay_period.finalized? && policy(timesheet).final_approve?
+    unreviewed_shifts = timesheet.present? ? Payroll::UnreviewedShifts.call(timesheet) : []
 
     render inertia: "Timesheets/EmployeeReview", props: {
       employee: -> { employee.render(:index) },
@@ -43,12 +45,13 @@ class TimesheetsController < ApplicationController
       period_dates: -> { [pay_period.starts_at, pay_period.ends_at].map { |date| date.strftime("%FT%T%:z") } },
       approval_window_open: -> { approval_window_open },
       finalized: -> { pay_period.finalized? },
-      can_approve: -> { !pay_period.finalized? },
+      can_approve: -> { can_final_approve },
       timesheet: -> { timesheet&.render(:show) },
       shifts: -> { shifts_list.map { |shift| shift.render(:review) } },
       shift_exception_reasons: -> { shift_exception_reasons },
       shift_ot_hours: -> { shift_ot_hours },
       employee_hours: -> { hours_data.except(:shift_ot_hours) },
+      unreviewed_shifts: -> { unreviewed_shifts },
     }
   end
 
@@ -118,7 +121,7 @@ class TimesheetsController < ApplicationController
 
   # @route POST /payroll/timesheets/:id/approve (approve_timesheet)
   def approve
-    authorize timesheet, :update?
+    authorize timesheet, :final_approve?
     period = timesheet.pay_period
 
     if period.finalized?
@@ -132,7 +135,7 @@ class TimesheetsController < ApplicationController
 
   # @route POST /payroll/timesheets/:id/unapprove (unapprove_timesheet)
   def unapprove
-    authorize timesheet, :update?
+    authorize timesheet, :final_unapprove?
     period = timesheet.pay_period
 
     if period.finalized?
@@ -158,7 +161,7 @@ class TimesheetsController < ApplicationController
     ids = params[:timesheet_ids].presence || (params[:approve_all] ? scope.where(approved_at: nil).pluck(:id) : [])
     approved = 0
     scope.where(id: ids).find_each do |row|
-      authorize row, :update?
+      authorize row, :final_approve?
       next if row.approved_at.present?
 
       row.update!(approved_at: Time.current)

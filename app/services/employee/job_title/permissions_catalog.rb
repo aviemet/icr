@@ -78,10 +78,10 @@ class Employee::JobTitle::PermissionsCatalog
 
   def self.empty_resource_permissions(resource_key = nil)
     form_actions = if resource_key
-      form_actions_for(resource_key)
-    else
-      %w[index show create update delete]
-    end
+                     form_actions_for(resource_key)
+                   else
+                     %w[index show create update delete]
+                   end
 
     form_actions.index_with { false }
   end

@@ -1,4 +1,4 @@
-class CreateIncidentReports < ActiveRecord::Migration[7.1]
+class CreateIncidentReports < ActiveRecord::Migration[8.0]
   def change
     create_table :incident_reports, id: :uuid do |t|
       t.datetime :occurred_at

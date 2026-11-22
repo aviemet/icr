@@ -500,6 +500,11 @@
         "updated": "Settings have been updated successfully."
       }
     },
+    "shifts": {
+      "bulk_facilitator_approved": "%{count} shift(s) reviewed.",
+      "facilitator_approved": "Shift reviewed.",
+      "facilitator_unapproved": "Shift review removed."
+    },
     "starts_at": "Starts At",
     "support": {
       "array": {
@@ -1050,6 +1055,38 @@
         "truncate": "&hellip;"
       },
       "pay_periods": {
+        "client_show": {
+          "approve": "Mark reviewed",
+          "approve_all_pending": "Mark all pending reviewed",
+          "back_to_clients": "Back to clients",
+          "columns": {
+            "status": "Status"
+          },
+          "employee_label": "Employee",
+          "employee_placeholder": "Choose an employee",
+          "finalized_locked": "This period is closed. Shift review is locked.",
+          "help": "Choose an employee to review their shifts for this client.",
+          "no_employees": "No employees worked for this client in this period.",
+          "pending_count": "%{count} shifts need review",
+          "unapprove": "Clear review"
+        },
+        "clients": {
+          "columns": {
+            "actions": "Action",
+            "client": "Client",
+            "pending": "Pending",
+            "reviewed": "Reviewed",
+            "status": "Status"
+          },
+          "help": "Review shifts by client. Facilitators sign off hours for their caseload clients.",
+          "pending_shifts": "%{count} shifts awaiting facilitator review",
+          "review": "Review",
+          "reviewed_of_total": "%{reviewed} / %{total}",
+          "status_pending": "Needs review",
+          "status_reviewed": "Reviewed",
+          "title": "Client review",
+          "view_employees": "Employee payroll"
+        },
         "index": {
           "columns": {
             "approved": "Approved",
@@ -1086,8 +1123,13 @@
           "adjustment_submit": "Record adjustment",
           "adjustment_timesheet_id": "Timesheet ID",
           "adjustments_title": "Adjustments",
+          "approve_with_gaps_body": "Some shifts still need facilitator review. You can still approve this timesheet for payroll.",
+          "approve_with_gaps_cancel": "Cancel",
+          "approve_with_gaps_confirm": "Approve anyway",
+          "approve_with_gaps_title": "Approve with unreviewed shifts?",
           "back_to_payroll": "Back to Payroll",
           "export": "Export",
+          "facilitator_progress": "%{reviewed} / %{total} shifts reviewed",
           "finalize": "Close period",
           "finalize_blocked_before_period_end": "Close is available after the period ends.",
           "finalize_blocked_no_timesheets": "No employee timesheets to close.",
@@ -1096,6 +1138,8 @@
           "hours": "%{count} hrs",
           "no_adjustments": "No adjustments recorded",
           "title": "Pay period",
+          "unreviewed_shift_line": "%{client} - %{when}",
+          "view_clients": "Client review",
           "workflow_help": "Review and approve each employee timesheet, then close the period to lock it."
         }
       },
@@ -1212,6 +1256,7 @@
             "approve": "Approve",
             "employee": "Employee",
             "exceptions": "Exceptions",
+            "facilitator_progress": "Facilitator review",
             "ot_hours": "OT Hours",
             "pto_sick": "PTO / Sick",
             "regular_hours": "Regular Hours",

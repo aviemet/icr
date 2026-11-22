@@ -1,5 +1,8 @@
 import "@testing-library/jest-dom/vitest"
 
+import i18n from "i18next"
+import { initReactI18next } from "react-i18next"
+
 class ResizeObserverStub {
 	observe() {}
 	unobserve() {}
@@ -10,3 +13,19 @@ if(typeof globalThis.ResizeObserver === "undefined") {
 	globalThis.ResizeObserver = ResizeObserverStub
 }
 
+if(!i18n.isInitialized) {
+	void i18n.use(initReactI18next).init({
+		lng: "en-US",
+		fallbackLng: "en-US",
+		resources: {
+			"en-US": {
+				translation: {},
+			},
+		},
+		interpolation: {
+			escapeValue: false,
+			prefix: "%{",
+			suffix: "}",
+		},
+	})
+}

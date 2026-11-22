@@ -1,4 +1,4 @@
-class CreateContacts < ActiveRecord::Migration[7.0]
+class CreateContacts < ActiveRecord::Migration[8.0]
   def change
     create_table :contacts, id: :uuid do |t|
       t.text :notes

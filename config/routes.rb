@@ -140,6 +140,8 @@ Rails.application.routes.draw do
       member do
         post :finalize
         get :export
+        get :clients
+        get "clients/:client_id", action: :client, as: :client
       end
       post :adjustments, on: :member, action: :create_adjustment, as: :adjustments
       get "employees/:employee_id", to: "timesheets#employee_review", as: :employee_review
@@ -151,6 +153,16 @@ Rails.application.routes.draw do
         post :unapprove
       end
 
+      collection do
+        post :bulk_approve
+      end
+    end
+
+    resources :shifts, only: [], controller: "payroll/shifts" do
+      member do
+        post :approve
+        post :unapprove
+      end
       collection do
         post :bulk_approve
       end

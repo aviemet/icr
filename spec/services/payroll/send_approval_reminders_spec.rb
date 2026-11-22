@@ -114,21 +114,51 @@ RSpec.describe Payroll::SendApprovalReminders do
       expect(ActionMailer::Base.deliveries.last.subject).to include("2 timesheets")
     end
 
-    it "emails managed-only approvers with scoped pending count" do
+    it "emails caseload facilitators with pending shift count for their clients" do
       job_title = create(:job_title)
       job_title.add_role(:update, Timesheet)
-      manager = create(:employee, :employed)
-      manager.assign_job_title(job_title)
-      manager.reload
-      user = link_user(manager)
+      facilitator = create(:employee, :employed)
+      facilitator.assign_job_title(job_title)
+      facilitator.reload
+      user = link_user(facilitator)
 
+      caseload_client = create(:client)
+      other_client = create(:client)
+      create(:clients_manager, manager: facilitator, client: caseload_client, starts_at: 1.week.ago)
       managed = create(:employee, :employed)
       unmanaged = create(:employee, :employed)
-      create(:employees_manager, manager: manager, employee: managed, starts_at: 1.day.ago)
 
       pay_period = create_closed_period
-      create(:timesheet, pay_period: pay_period, employee: managed, approved_at: nil)
-      create(:timesheet, pay_period: pay_period, employee: unmanaged, approved_at: nil)
+      managed_timesheet = create(:timesheet, pay_period: pay_period, employee: managed, approved_at: nil)
+      unmanaged_timesheet = create(:timesheet, pay_period: pay_period, employee: unmanaged, approved_at: nil)
+
+      managed_event = create(
+        :calendar_event,
+        starts_at: period_start + 1.day,
+        ends_at: period_start + 1.day + 8.hours,
+      )
+      managed_event.event_participants.create!(participant: caseload_client)
+      create(
+        :shift,
+        employee: managed,
+        timesheet: managed_timesheet,
+        calendar_event: managed_event,
+        facilitator_approved_at: nil,
+      )
+
+      other_event = create(
+        :calendar_event,
+        starts_at: period_start + 2.days,
+        ends_at: period_start + 2.days + 8.hours,
+      )
+      other_event.event_participants.create!(participant: other_client)
+      create(
+        :shift,
+        employee: unmanaged,
+        timesheet: unmanaged_timesheet,
+        calendar_event: other_event,
+        facilitator_approved_at: nil,
+      )
 
       perform_enqueued_jobs { described_class.call }
 
@@ -136,13 +166,13 @@ RSpec.describe Payroll::SendApprovalReminders do
       expect(ActionMailer::Base.deliveries.last.subject).to include("1 timesheet")
     end
 
-    it "skips managed-only approvers with no pending reports" do
+    it "skips facilitators with no pending caseload shifts" do
       job_title = create(:job_title)
       job_title.add_role(:update, Timesheet)
-      manager = create(:employee, :employed)
-      manager.assign_job_title(job_title)
-      manager.reload
-      link_user(manager)
+      facilitator = create(:employee, :employed)
+      facilitator.assign_job_title(job_title)
+      facilitator.reload
+      link_user(facilitator)
 
       unmanaged = create(:employee, :employed)
       pay_period = create_closed_period

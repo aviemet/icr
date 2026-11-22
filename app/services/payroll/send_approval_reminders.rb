@@ -10,9 +10,6 @@ module Payroll
       return unless Setting.notifications_payroll_approval_reminders
 
       candidate_periods.find_each do |pay_period|
-        pending_employee_ids = pending_employee_ids_for(pay_period)
-        next if pending_employee_ids.empty?
-
         due_date = Period.payroll_due_date(pay_period.ends_at.to_date)
         period_url = Rails.application.routes.url_helpers.period_url(
           pay_period,
@@ -21,7 +18,7 @@ module Payroll
           protocol: default_protocol,
         )
 
-        recipients_for(pending_employee_ids).each do |user, pending_count|
+        recipients_for(pay_period).each do |user, pending_count|
           next if pending_count < 1
           next if user.email.blank?
 
@@ -42,23 +39,21 @@ module Payroll
       PayPeriod
         .where(finalized_at: nil)
         .where(ends_at: ...Date.current.beginning_of_day)
-        .where(id: Timesheet.where(approved_at: nil).select(:pay_period_id))
+        .where(
+          id: Timesheet.where(approved_at: nil).select(:pay_period_id),
+        )
     end
 
-    def pending_employee_ids_for(pay_period)
-      Timesheet
-        .where(pay_period_id: pay_period.id, approved_at: nil)
-        .pluck(:employee_id)
-    end
-
-    def recipients_for(pending_employee_ids)
+    def recipients_for(pay_period)
       results = {}
+      director_pending_ids = director_pending_employee_ids(pay_period)
+      return results if director_pending_ids.empty?
 
       admin_users.find_each do |user|
-        results[user] = pending_employee_ids.size
+        results[user] = director_pending_ids.size
       end
 
-      Employee.where(id: approver_employee_ids).includes(:person, :job_title, :managed_employees_managers).find_each do |employee|
+      Employee.where(id: approver_employee_ids).includes(:person, :job_title, :managed_employees_managers, :active_clients_managers).find_each do |employee|
         user = employee.person&.user
         next if user.blank?
         next if results.key?(user)
@@ -68,16 +63,38 @@ module Payroll
         next unless job_title.has_role?(:update, Timesheet)
 
         pending_count = if job_title.has_role?(:index, Timesheet)
-          pending_employee_ids.size
-        else
-          managed_ids = employee.managed_employees_managers.current.pluck(:employee_id)
-          (pending_employee_ids & managed_ids).size
-        end
+                          director_pending_ids.size
+                        else
+                          facilitator_pending_shift_count(pay_period, employee, director_pending_ids)
+                        end
 
         results[user] = pending_count
       end
 
       results
+    end
+
+    def director_pending_employee_ids(pay_period)
+      Timesheet
+        .where(pay_period_id: pay_period.id, approved_at: nil)
+        .pluck(:employee_id)
+    end
+
+    def facilitator_pending_shift_count(pay_period, employee, director_pending_ids)
+      managed_client_ids = employee.managed_clients.pluck(:id)
+      return 0 if managed_client_ids.empty?
+
+      PayPeriod.shifts_overlapping_period(pay_period)
+        .where(employee_id: director_pending_ids, facilitator_approved_at: nil)
+        .joins(calendar_event: :event_participants)
+        .where(
+          event_participants: {
+            participant_type: "Client",
+            participant_id: managed_client_ids,
+          },
+        )
+        .distinct
+        .count
     end
 
     def admin_users

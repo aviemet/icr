@@ -116,4 +116,31 @@ RSpec.describe TimesheetPolicy, type: :policy do
       expect(described_class.new(@employee_user_with_permission, timesheet)).to authorize(:update)
     end
   end
+
+  permissions :final_approve? do
+    it "allows admin" do
+      timesheet = create(:timesheet, pay_period: create(:pay_period, finalized_at: nil))
+
+      expect(described_class.new(@admin_user, timesheet)).to authorize(:final_approve)
+    end
+
+    it "allows index holders to final-approve without facilitator review" do
+      @job_title.add_role(:index, Timesheet)
+      @job_title.add_role(:update, Timesheet)
+      @employee_with_permission.reload
+      timesheet = create(:timesheet, pay_period: create(:pay_period, finalized_at: nil))
+
+      expect(described_class.new(@employee_user_with_permission, timesheet)).to authorize(:final_approve)
+    end
+
+    it "denies facilitators with update but no index" do
+      @job_title.add_role(:update, Timesheet)
+      @employee_with_permission.reload
+      managed = create(:employee, :employed)
+      create(:employees_manager, manager: @employee_with_permission, employee: managed, starts_at: 1.day.ago)
+      timesheet = create(:timesheet, employee: managed, pay_period: create(:pay_period, finalized_at: nil))
+
+      expect(described_class.new(@employee_user_with_permission, timesheet)).not_to authorize(:final_approve)
+    end
+  end
 end

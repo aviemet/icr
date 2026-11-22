@@ -1,4 +1,4 @@
-class CreateCalendarEvents < ActiveRecord::Migration[7.0]
+class CreateCalendarEvents < ActiveRecord::Migration[8.0]
   def change
     create_table :calendar_events, id: :uuid do |t|
       t.string :name

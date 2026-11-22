@@ -11,7 +11,9 @@ declare global {
       client_slug: string
       created_at: Date
       employee_id?: string
+      employee_name: string
       ends_at: Date
+      facilitator_approved_at?: Date
       last_editor?: ({ id: string, name: string, initials: string, edited_at: string } | null)
       starts_at: Date
       updated_at: Date

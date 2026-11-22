@@ -150,6 +150,7 @@ class PayPeriod < ApplicationRecord
     pay_period = for_period_dates(period_start, period_end)
     timesheet = pay_period.timesheets.find_or_create_by!(employee_id: shift.employee_id)
     timesheet.update!(approved_at: nil) if timesheet.approved_at.present?
+    shift.clear_facilitator_approval! if shift.facilitator_approved?
     return pay_period if shift.timesheet_id == timesheet.id
 
     shift.update_column(:timesheet_id, timesheet.id) # rubocop:disable Rails/SkipsModelValidations

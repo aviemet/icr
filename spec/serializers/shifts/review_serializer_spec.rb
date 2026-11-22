@@ -36,4 +36,3 @@ RSpec.describe Shifts::ReviewSerializer do
     expect(payload[:last_editor]).to be_nil
   end
 end
-

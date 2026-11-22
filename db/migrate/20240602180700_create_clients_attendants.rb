@@ -1,4 +1,4 @@
-class CreateClientsAttendants < ActiveRecord::Migration[7.2]
+class CreateClientsAttendants < ActiveRecord::Migration[8.0]
   def change
     create_table :clients_attendants, id: :uuid do |t|
       t.belongs_to :attendant, type: :uuid, null: false, foreign_key: { to_table: :employees }

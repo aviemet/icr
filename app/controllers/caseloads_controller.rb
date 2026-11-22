@@ -65,12 +65,12 @@ class CaseloadsController < ApplicationController
       clients_manager.update!(ends_at: Time.current)
       ClientsManager.create!(
         client_id: clients_manager.client_id,
-        manager_id: new_manager_id
+        manager_id: new_manager_id,
       )
     end
 
     redirect_to caseloads_path, notice: t("templates.controllers.notices.updated", model: "Caseload assignment")
-  rescue ActiveRecord::RecordInvalid => error
-    redirect_to caseloads_path, alert: error.record.errors.full_messages.to_sentence
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_to caseloads_path, alert: e.record.errors.full_messages.to_sentence
   end
 end

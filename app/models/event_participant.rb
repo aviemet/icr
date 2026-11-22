@@ -23,4 +23,12 @@ class EventParticipant < ApplicationRecord
 
   belongs_to :calendar_event, class_name: "Calendar::Event"
   belongs_to :participant, polymorphic: true
+
+  after_commit :invalidate_shift_approvals, on: [:create, :destroy]
+
+  private
+
+  def invalidate_shift_approvals
+    calendar_event&.shift&.invalidate_approvals!
+  end
 end

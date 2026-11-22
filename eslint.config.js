@@ -15,6 +15,7 @@ const importLintGlobs = [
 const ignores = [
 	"app/javascript/**/*",
 	"app/frontend/types/serializers/**/*",
+	"app/frontend/types/**/*.generated.ts",
 	"app/frontend/lib/routes/urlParams.ts",
 	"app/frontend/lib/routes/routes.js",
 	"app/frontend/lib/routes/routes.d.ts",

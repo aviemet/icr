@@ -1,4 +1,4 @@
-class CreateIdentifications < ActiveRecord::Migration[7.1]
+class CreateIdentifications < ActiveRecord::Migration[8.0]
   def change
     create_table :identifications, id: :uuid do |t|
       t.belongs_to :identificationable, type: :uuid, polymorphic: true, null: false

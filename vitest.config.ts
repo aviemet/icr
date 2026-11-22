@@ -47,10 +47,19 @@ export default defineConfig({
 		react(),
 	],
 	resolve: {
-		dedupe: ["axios"],
+		dedupe: [
+			"axios",
+			"i18next",
+			"react-i18next",
+			"prosemirror-model",
+			"prosemirror-state",
+			"prosemirror-view",
+			"prosemirror-transform",
+		],
 		tsconfigPaths: true,
 		alias: {
 			"@": frontendRoot,
+			"prosemirror-model": path.resolve(import.meta.dirname, "node_modules/prosemirror-model"),
 		},
 	},
 	server: {

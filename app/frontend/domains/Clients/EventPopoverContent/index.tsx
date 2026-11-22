@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next"
 
 import { ActionIcon, Box, Group, Link, Stack, Title, Tooltip } from "@/components"
 import { DeleteButton, EditButton } from "@/components/Button"
+import * as iconActionClasses from "@/components/Button/IconActionButton.css"
 import { BaseCalendarEvent, useCalendarContext } from "@/components/Calendar"
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 import { TrashIcon } from "@/components/Icons"
@@ -14,7 +15,6 @@ import { type ScheduleRecurrenceResources } from "@/features/CalendarSchedule"
 import { Routes } from "@/lib"
 import { useDeleteClientCalendarEvent } from "@/queries/clients"
 
-import * as iconActionClasses from "@/components/Button/IconActionButton.css"
 import * as classes from "./EventPopoverContent.css"
 
 export interface EventPopoverContentProps {

@@ -2,6 +2,7 @@ class Shifts::ReviewSerializer < ShiftSerializer
   include Persisted
 
   attributes(
+    :facilitator_approved_at,
     starts_at: { type: "Date" },
     ends_at: { type: "Date" },
   )
@@ -16,6 +17,11 @@ class Shifts::ReviewSerializer < ShiftSerializer
   type :string
   def client_slug
     shift.calendar_event&.clients&.first&.slug
+  end
+
+  type :string
+  def employee_name
+    shift.employee&.full_name.presence || shift.employee&.name || "-"
   end
 
   type "({ id: string, name: string, initials: string, edited_at: string } | null)", optional: true

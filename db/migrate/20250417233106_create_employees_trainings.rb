@@ -1,4 +1,4 @@
-class CreateEmployeesTrainings < ActiveRecord::Migration[7.2]
+class CreateEmployeesTrainings < ActiveRecord::Migration[8.0]
   def change
     create_table :employees_trainings, id: :uuid do |t|
       t.references :employee, null: false, type: :uuid, foreign_key: true

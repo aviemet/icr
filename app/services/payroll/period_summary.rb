@@ -7,6 +7,7 @@ module Payroll
       approved_count
       pending_count
       flagged_count
+      facilitator_pending_shift_count
       overtime_hours
       payroll_due_date
     ].freeze
@@ -16,6 +17,7 @@ module Payroll
       approved_count
       pending_count
       flagged_count
+      facilitator_pending_shift_count
     ].freeze
 
     def self.call(pay_period, employee_ids: nil)
@@ -78,9 +80,16 @@ module Payroll
         approved_count: approved_count,
         pending_count: total_count - approved_count,
         flagged_count: exceptions.count { |_id, data| data[:exception_count].to_i.positive? },
+        facilitator_pending_shift_count: facilitator_pending_shift_count,
         overtime_hours: overtime_hours,
         exception_counts: exceptions,
       }
+    end
+
+    def facilitator_pending_shift_count
+      PayPeriod.shifts_overlapping_period(@pay_period)
+        .where(employee_id: @employee_ids, facilitator_approved_at: nil)
+        .count
     end
 
     def exception_counts

@@ -290,7 +290,6 @@ RSpec.describe PayPeriod, type: :model do
     end
   end
 
-
   describe "#sync_shifts!" do
     it "associates shifts that overlap the period but have nil timesheet_id" do
       period_start = 1.day.from_now.beginning_of_day

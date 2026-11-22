@@ -360,7 +360,7 @@ function occurrenceStartsForPatterns(
 
 export function expandRecurringEvents<
 	TMaster extends ExpandableScheduleEvent,
-	TResources extends EventResources,
+	TResources extends EventResources
 >(
 	masters: TMaster[],
 	rangeStart: Date,

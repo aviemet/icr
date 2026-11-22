@@ -50,6 +50,18 @@ class TimesheetPolicy < ApplicationPolicy
     update?
   end
 
+  def final_approve?
+    return true if admin?
+    return false unless user.person&.employee?
+    return false unless job_title_allows?(:update, Timesheet)
+
+    job_title_allows?(:index, Timesheet) && in_scope?
+  end
+
+  def final_unapprove?
+    final_approve?
+  end
+
   private
 
   def in_scope?

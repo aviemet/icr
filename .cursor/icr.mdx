@@ -47,6 +47,8 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
   - [ ] Trainings and other fulfillable items can satisfy requirements
   - [ ] Use requirements as custom criteria for employee eligibility, assignments, etc.
   - [ ] Track requirement fulfillment status per employee
+- [ ] Workflow for assigning an Employee to a client
+  - [ ] Allow the use of requirements and/or trainings to gate allowing employee to be scheduled with client
 
 ### Phase 4: Client Management
 - [x] Client onboarding workflow
@@ -72,9 +74,9 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - [ ] Timesheet generation system
   - [x] Automatic generation based on schedules
   - [x] Manual entry support
-- [ ] Timesheet review workflow
-  - [ ] Facilitator review and approval process
-  - [ ] Manager final approval
+- [x] Timesheet review workflow
+  - [x] Facilitator review and approval process
+  - [x] Manager final approval
 - [x] Pay period management
   - [x] Configure pay period settings
   - [x] Automated reminders for approvals
@@ -94,6 +96,13 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 ### Phase 8: Customization
 - [x] Color choice for site accent color
 - [ ] Dyslexia font option
+
+## General Todo List
+- [ ] Remove the mention of a household from client views who are not part of a household
+- [ ] Attendant assignments don't have an end date, that doesn't make sense
+- [ ] In the Clients > Trainings view there must be a button to go to a new training form
+  - [ ] The form should be pre-filled with the client's relevant data when navigating using that link
+
 
 ## Conventions
 ### Architecture
@@ -167,16 +176,18 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 
 ### Timesheet System
 - Payroll is a time-approval and period-integrity workflow (approve timesheets, finalize/lock the period). A vendor-neutral hours export is available after finalize. EVV is deferred; keep shift and calendar_event identity intact as the future attachment point.
-- Payroll IA: `/payroll` is an attention home (counts + CTA into the current period); `/payroll/periods/:id` is the only employee roster for a period; employee review is the timecard drill-down.
-- Employee payroll review: per-employee view for a pay period; authorization follows timesheet show.
+- Two view families per period: **clients-first** (`/payroll/periods/:id/clients` and client drill-down) for facilitator caseload review and Director oversight; **employee-combined** (`/payroll/periods/:id` plus employee review) for Director final approve, finalize, and export. Facilitators without Timesheet `index` are redirected from the employee-combined period show to the clients board.
+- Facilitator review is shift-level (`shifts.facilitator_approved_at`), authorized when every Client on the event is on the facilitator's active `ClientsManager` caseload. Director final approval is timesheet-level (`timesheets.approved_at`). Directors may final-approve with unreviewed shifts; the UI warns with the gap list. Finalize and export never wait on facilitator stamps.
+- Payroll IA: `/payroll` is an attention home (counts + CTA into the current period); employee review is the timecard drill-down for the combined sheet.
+- Employee payroll review: per-employee view for a pay period; authorization follows timesheet show; Director final approve uses `final_approve?` (Timesheet `index`).
 - PayPeriod: one per (starts_at, ends_at); no overlapping periods; derived from settings. Use PayPeriod.for_period_dates(start_date, end_date) to resolve a period: it reuses a period that starts on the same calendar day (snapping end to the canonical range; timezone-safe), or creates one and shrinks any predecessor that overlapped into that range. Shrinking reattaches out-of-range shifts via PayPeriod.attach_shift!.
-- Timesheet: pre-submittal; tracks approval; belongs to PayPeriod and Employee; has many Shifts.
+- Timesheet: pre-submittal; tracks Director approval; belongs to PayPeriod and Employee; has many Shifts.
 - Shift create: PayPeriod.attach_shift! finds or creates the pay period that contains the shift date and attaches a timesheet. Pay periods appear because shifts are scheduled into them.
 - PayPeriod create/sync: sync_shifts! attaches every overlapping shift onto this period's timesheets (one Timesheet per employee).
 - Payroll index hours: Payroll::EmployeePeriodHours computes per-employee regular_hours and ot_hours for a pay period. Uses Setting overtime_weekly_hours and overtime_daily_hours; splits work intervals by day (including overnight); applies active OvertimeExemption rules to exclude exempt intervals from OT; weekly OT and daily OT are summed. The calculator reads intervals via a collector interface (default: scheduled shifts), so payroll can later swap in a clock-in/out collector without changing overtime math or UI contracts.
-- Payroll approval UI: Approve / Unapprove / bulk approve stay available until the period is finalized (`can_approve = !finalized?`). The payroll due date and `approval_window_open` are deadline / urgency signals only (including overdue copy on payroll home and period show); they must never hard-block approval. Hard-close language in the older payroll redesign plan is superseded by this rule.
-- Approval reminder emails: `Payroll::SendApprovalReminders` (daily GoodJob cron) emails admins and Timesheet approvers for closed, unfinalized periods with pending timesheets. Org-wide enable/disable lives under Settings > Notifications (`Setting.notifications_payroll_approval_reminders`); managed-only approvers get a count scoped to their reports.
-- Manual shift entry on employee payroll review creates a `Calendar::Event` + nested `Shift` via `POST /api/calendar_events` (same path as schedule); `PayPeriod.attach_shift!` wires the timesheet. Create into a finalized period is rejected. Attaching a shift clears `approved_at` on that timesheet. Review rows show `last_editor` from the latest paper_trail time update on the calendar event (initials avatar + tooltip).
+- Payroll approval UI: Director Approve / Unapprove / bulk approve stay available until the period is finalized (`can_approve = !finalized?` for index holders). The payroll due date and `approval_window_open` are deadline / urgency signals only; they must never hard-block approval. Hard-close language in the older payroll redesign plan is superseded by this rule.
+- Approval reminder emails: `Payroll::SendApprovalReminders` (daily GoodJob cron) emails admins and Timesheet approvers for closed, unfinalized periods with pending Director approvals. Facilitators (update without index) get a count of pending caseload shifts. Org-wide enable/disable lives under Settings > Notifications (`Setting.notifications_payroll_approval_reminders`).
+- Manual shift entry on employee payroll review creates a `Calendar::Event` + nested `Shift` via `POST /api/calendar_events` (same path as schedule); `PayPeriod.attach_shift!` wires the timesheet. Create into a finalized period is rejected. Attaching a shift or changing event times/participants clears timesheet `approved_at` and shift `facilitator_approved_at`. Review rows show `last_editor` from the latest paper_trail time update on the calendar event (initials avatar + tooltip).
 
 ### Frontend Components
 #### UI Framework

@@ -1,4 +1,4 @@
-class CreateRequirementItems < ActiveRecord::Migration[7.2]
+class CreateRequirementItems < ActiveRecord::Migration[8.0]
   def change
     create_table :requirement_items, id: :uuid do |t|
       t.references :requirement, null: false, foreign_key: true, type: :uuid

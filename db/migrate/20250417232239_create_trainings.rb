@@ -1,4 +1,4 @@
-class CreateTrainings < ActiveRecord::Migration[7.2]
+class CreateTrainings < ActiveRecord::Migration[8.0]
   def change
     create_table :trainings, id: :uuid do |t|
       t.string :name

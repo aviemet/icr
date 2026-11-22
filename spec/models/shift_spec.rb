@@ -6,13 +6,14 @@ require "rails_helper"
 #
 # Table name: shifts
 #
-#  id                :uuid             not null, primary key
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  calendar_event_id :uuid             not null
-#  category_id       :uuid             not null
-#  employee_id       :uuid
-#  timesheet_id      :uuid
+#  id                      :uuid             not null, primary key
+#  facilitator_approved_at :date
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  calendar_event_id       :uuid             not null
+#  category_id             :uuid             not null
+#  employee_id             :uuid
+#  timesheet_id            :uuid
 #
 # Indexes
 #

@@ -65,6 +65,10 @@ en:
     approved: Timesheet approved.
     unapproved: Timesheet approval removed.
     bulk_approved: "%{count} timesheet(s) approved."
+  shifts:
+    facilitator_approved: Shift reviewed.
+    facilitator_unapproved: Shift review removed.
+    bulk_facilitator_approved: "%{count} shift(s) reviewed."
   pay_periods:
     already_finalized: This pay period is already finalized.
     finalize_before_period_end: Close is available after the pay period ends.

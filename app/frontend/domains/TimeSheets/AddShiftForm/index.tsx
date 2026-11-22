@@ -93,7 +93,6 @@ export function AddShiftForm({
 			method="post"
 			initialData={ initialData }
 			submitWith={ submitWith }
-			remember={ false }
 			railsAttributes={ false }
 		>
 			<Grid>

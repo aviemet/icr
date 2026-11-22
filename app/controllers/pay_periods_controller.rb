@@ -38,6 +38,11 @@ class PayPeriodsController < ApplicationController
   # @route GET /payroll/periods/:id (period)
   def show
     authorize pay_period
+    unless employee_combined_access?
+      redirect_to clients_period_path(pay_period)
+      return
+    end
+
     pay_period.sync_shifts! unless pay_period.finalized?
 
     summary_service = Payroll::PeriodSummary.new(pay_period, employee_ids: employees.pluck(:id))
@@ -59,13 +64,84 @@ class PayPeriodsController < ApplicationController
       approval_window_open: -> { summary[:approval_window_open] },
       workflow_status: -> { summary[:workflow_status] },
       finalized: -> { pay_period.finalized? },
-      can_approve: -> { eligibility[:can_approve] },
+      can_approve: -> { eligibility[:can_approve] && employee_combined_access? },
       can_finalize: -> { eligibility[:can_finalize] },
       finalize_blocked_reason: -> { eligibility[:finalize_blocked_reason] },
       can_export: -> { eligibility[:can_export] },
+      can_view_clients: -> { true },
       summary: -> { summary_service.show_counts },
       adjustments: -> { pay_period.adjustments.order(created_at: :desc).limit(50).map(&:render) },
       **queue.transform_values { |value| -> { value } },
+    }
+  end
+
+  # @route GET /payroll/periods/:id/clients (period_clients)
+  def clients
+    authorize pay_period, :show?
+    pay_period.sync_shifts! unless pay_period.finalized?
+
+    client_scope = Payroll::ClientScopeForUser.call(user: current_user, period: pay_period)
+    client_ids = client_scope.pluck(:id)
+    summary_service = Payroll::PeriodSummary.new(pay_period, employee_ids: period_employee_ids(pay_period))
+    summary = summary_service.call
+    queue = Payroll::ClientPeriodQueue.call(period: pay_period, client_ids: client_ids)
+
+    render inertia: "PayPeriods/Clients", props: {
+      pay_period: -> { pay_period.render },
+      period_dates: -> { [pay_period.starts_at, pay_period.ends_at].map { |date| date.strftime("%FT%T%:z") } },
+      payroll_due_date: -> { summary[:payroll_due_date] },
+      finalized: -> { pay_period.finalized? },
+      can_facilitator_approve: -> { !pay_period.finalized? && facilitator_approve_access? },
+      can_view_employees: -> { employee_combined_access? },
+      summary: -> { summary_service.show_counts },
+      period_clients: -> { queue[:period_clients] },
+      pending_shift_count_by_client: -> { queue[:pending_shift_count_by_client] },
+      reviewed_shift_count_by_client: -> { queue[:reviewed_shift_count_by_client] },
+      total_shift_count_by_client: -> { queue[:total_shift_count_by_client] },
+    }
+  end
+
+  # @route GET /payroll/periods/:id/clients/:client_id (period_client)
+  def client
+    authorize pay_period, :show?
+    pay_period.sync_shifts! unless pay_period.finalized?
+
+    scoped_clients = Payroll::ClientScopeForUser.call(user: current_user, period: pay_period)
+    client_record = scoped_clients.find(params.expect(:client_id))
+    shifts_list = Payroll::ClientPeriodQueue.shifts_for_client(period: pay_period, client_id: client_record.id)
+    last_editors = Payroll::ShiftLastEditors.call(shifts_list)
+    shifts_list.each do |shift|
+      shift.instance_variable_set(:@_last_editor, last_editors[shift.calendar_event_id.to_s])
+    end
+    shift_exception_reasons = Payroll::ShiftExceptions.call(shifts_list)[:reasons_by_shift_id]
+    employee_ids = shifts_list.map(&:employee_id).compact.uniq
+    employees_list = Employee.where(id: employee_ids).includes(:person).to_a
+    hours_by_employee = Payroll::EmployeePeriodHours.call(pay_period, employee_ids)
+    shift_ot_hours = hours_by_employee.each_with_object({}) do |(_employee_id, hours_data), hash|
+      hash.merge!(hours_data[:shift_ot_hours] || {})
+    end
+
+    render inertia: "PayPeriods/Client", props: {
+      pay_period: -> { pay_period.render },
+      period_dates: -> { [pay_period.starts_at, pay_period.ends_at].map { |date| date.strftime("%FT%T%:z") } },
+      finalized: -> { pay_period.finalized? },
+      can_facilitator_approve: -> { !pay_period.finalized? && facilitator_approve_access? },
+      can_view_employees: -> { employee_combined_access? },
+      period_client: -> { client_record.render(:persisted) },
+      period_employees: -> {
+        employees_list
+          .map { |employee|
+            {
+              id: employee.id.to_s,
+              name: employee.full_name.presence || employee.name || "-",
+              slug: employee.slug,
+            }
+          }
+          .sort_by { |row| row[:name].to_s.downcase }
+      },
+      shifts: -> { shifts_list.map { |row| row.render(:review) } },
+      shift_exception_reasons: -> { shift_exception_reasons },
+      shift_ot_hours: -> { shift_ot_hours.transform_keys(&:to_s) },
     }
   end
 
@@ -142,5 +218,25 @@ class PayPeriodsController < ApplicationController
 
   def period_employee_ids(period)
     period.timesheets.joins(:shifts).distinct.pluck(:employee_id)
+  end
+
+  def employee_combined_access?
+    return true if current_user.has_role?(:admin)
+
+    policy(pay_period).update?
+  end
+
+  def facilitator_approve_access?
+    return true if current_user.has_role?(:admin)
+
+    employee = current_user.person&.employee
+    return false if employee.blank?
+
+    job_title = employee.job_title
+    return false if job_title.blank?
+    return false unless job_title.has_role?(:update, Timesheet)
+    return false if job_title.has_role?(:index, Timesheet)
+
+    true
   end
 end

@@ -1,4 +1,4 @@
-class CreateDosages < ActiveRecord::Migration[7.1]
+class CreateDosages < ActiveRecord::Migration[8.0]
   def change
     create_table :dosages, id: :uuid do |t|
       t.decimal :amount

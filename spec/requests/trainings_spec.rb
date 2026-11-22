@@ -231,4 +231,3 @@ RSpec.describe "/trainings", type: :request do
     end
   end
 end
-

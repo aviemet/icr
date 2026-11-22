@@ -171,6 +171,7 @@ RSpec.describe Payroll::PeriodSummary do
           approved_count: 1,
           pending_count: 0,
           flagged_count: 0,
+          facilitator_pending_shift_count: 0,
         )
       end
     end

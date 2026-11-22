@@ -178,7 +178,6 @@ RSpec.describe "Api::CalendarEvents", type: :request do
       end
     end
 
-
     it "stores recurring patterns without materializing child events" do
       client = create(:client)
       employee = create(:employee)
@@ -478,7 +477,7 @@ RSpec.describe "Api::CalendarEvents", type: :request do
           occurrence_starts_at: occurrence.iso8601,
         }
       }.to change(Calendar::EventException, :count).by(1)
-        .and change(Calendar::Event, :count).by(0)
+        .and not_change(Calendar::Event, :count)
 
       expect(response).to have_http_status(:no_content)
       expect(Calendar::Event.exists?(master.id)).to be(true)
@@ -493,8 +492,8 @@ RSpec.describe "Api::CalendarEvents", type: :request do
           edit_scope: "future",
           occurrence_starts_at: occurrence.iso8601,
         }
-      }.to change(Calendar::Event, :count).by(0)
-        .and change(Calendar::EventException, :count).by(0)
+      }.to not_change(Calendar::Event, :count)
+        .and not_change(Calendar::EventException, :count)
 
       expect(response).to have_http_status(:no_content)
       expect(Calendar::Event.exists?(master.id)).to be(true)
@@ -513,7 +512,6 @@ RSpec.describe "Api::CalendarEvents", type: :request do
       expect(Calendar::Event.exists?(master.id)).to be(false)
     end
   end
-
 
   describe "DELETE /api/calendar_events/:id" do
     it "destroys a shift event and its shift while the period is open" do

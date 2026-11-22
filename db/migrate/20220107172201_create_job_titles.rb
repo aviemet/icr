@@ -1,4 +1,4 @@
-class CreateJobTitles < ActiveRecord::Migration[7.1]
+class CreateJobTitles < ActiveRecord::Migration[8.0]
   def change
     create_table :job_titles, id: :uuid do |t|
       t.string :name, null: false

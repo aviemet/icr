@@ -30,9 +30,7 @@ export function FacilitatorClientList({
 		const assignment = assignmentsByClientId[client.id]
 		if(!assignment) return
 
-		let modalId = ""
-
-		modalId = modals.openModal({
+		modals.openModal({
 			title: t("views.caseloads.clients.reassign_title"),
 			children: (
 				<ReassignModalBody
@@ -40,7 +38,7 @@ export function FacilitatorClientList({
 					facilitator={ facilitator }
 					facilitators={ facilitators }
 					assignmentId={ assignment.id }
-					onClose={ () => modals.closeModal(modalId) }
+					onClose={ () => modals.closeAll() }
 				/>
 			),
 		})

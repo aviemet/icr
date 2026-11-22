@@ -1,3 +1,4 @@
+import { type RequestPayload } from "@inertiajs/core"
 import { router } from "@inertiajs/react"
 
 import { Routes } from "@/lib"
@@ -46,7 +47,7 @@ export function reassignCaseload(assignmentId: string, managerId: string) {
 
 function patchCaseload(
 	assignmentId: string,
-	data: Record<string, unknown>,
+	data: RequestPayload,
 	errorMessage: string,
 ) {
 	return new Promise<void>((resolve, reject) => {
