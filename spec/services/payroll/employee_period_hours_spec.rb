@@ -445,6 +445,33 @@ RSpec.describe Payroll::EmployeePeriodHours do
         expect(hours[:ot_hours]).to eq(0.0)
       end
     end
+
+    it "counts recurring shift occurrences that fall in the pay period" do
+      Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
+      pay_period = PayPeriod.for_period_dates(Date.new(2026, 11, 16), Date.new(2026, 11, 30))
+      employee = create(:employee)
+      master = create(
+        :calendar_event,
+        starts_at: Time.zone.local(2026, 10, 1, 9, 0, 0),
+        ends_at: Time.zone.local(2026, 10, 1, 17, 0, 0),
+      )
+      create(
+        :calendar_recurring_pattern,
+        calendar_event: master,
+        recurring_type: :weekly,
+        offset: 1,
+        day_of_week: 1,
+        end_date: nil,
+        max_occurrences: nil,
+      )
+      create(:shift, employee:, calendar_event: master)
+
+      result = described_class.call(pay_period, [employee.id])
+
+      expect(result[employee.id.to_s][:regular_hours]).to eq(24.0)
+      expect(result[employee.id.to_s][:company_hours]).to eq(24.0)
+      expect(result[employee.id.to_s][:ot_hours]).to eq(0.0)
+    end
   end
 
   def stub_collector(intervals)
@@ -470,4 +497,3 @@ RSpec.describe Payroll::EmployeePeriodHours do
     )
   end
 end
-

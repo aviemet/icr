@@ -11,8 +11,14 @@ class Api::EmployeesController < Api::ApiController
   def schedule
     authorize employee, :schedule?
 
-    schedules = employee.schedule_events_between(*DateRangeCalculator.new(params).call)
+    range_start, range_end = DateRangeCalculator.new(params).call
+    masters = employee.schedule_events_between(range_start, range_end)
 
-    render json: schedules.render(:employee)
+    render json: Calendar::RenderSchedule.call(
+      events: masters,
+      range_start: range_start,
+      range_end: range_end,
+      view: :employee,
+    )
   end
 end

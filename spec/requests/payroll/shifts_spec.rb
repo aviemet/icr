@@ -144,5 +144,3 @@ RSpec.describe "/payroll/shifts", type: :request do
     end
   end
 end
-
-

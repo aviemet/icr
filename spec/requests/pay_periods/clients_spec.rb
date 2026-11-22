@@ -193,4 +193,3 @@ RSpec.describe "pay period clients views", type: :request do
     end
   end
 end
-

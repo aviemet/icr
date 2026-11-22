@@ -39,7 +39,7 @@ export function Switch({
 				required={ props.required }
 				error={ error ?? fieldError }
 				className={ clsx(classes.root, className) }
-				style={ [{ padding: "14px 10px" }, style] }
+				style={ [{ paddingBlock: 14 }, style] }
 				{ ...props }
 			/>
 		</InputWrapper>

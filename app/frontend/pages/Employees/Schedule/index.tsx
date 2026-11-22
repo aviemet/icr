@@ -13,12 +13,7 @@ import { type PopoverContentMap } from "@/components/Calendar/components/Calenda
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 import { NAVIGATION_ACTION, VIEW_NAMES } from "@/components/Calendar/views"
 import { EventPopoverContent } from "@/domains/Clients/EventPopoverContent"
-import {
-	calendarEventId,
-	expandRecurringEvents,
-	expansionWindow,
-	recurrenceResources,
-} from "@/features/CalendarSchedule"
+import { recurrenceResources } from "@/features/CalendarSchedule"
 import { ensureViewName, Routes } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
@@ -92,35 +87,23 @@ const Schedule = ({ employee, schedules: initialSchedules }: ScheduleProps) => {
 
 	const processedSchedules = useMemo((): BaseCalendarEvent<ScheduleResources>[] => {
 		if(!data) return []
-		const window = expansionWindow(calendarDate, calendarView)
-		return expandRecurringEvents(data, window.start, window.end, ({
-			master,
-			originalOccurrenceStart,
-			displayStart,
-			displayEnd,
-			isRecurring,
-		}) => {
-			const client = master.clients?.[0]
+		return data.map((event) => {
+			const client = event.clients?.[0]
 			const resources: ScheduleResources = {
-				recurrence: recurrenceResources(
-					master.id,
-					originalOccurrenceStart,
-					isRecurring,
-					master.recurring_patterns ?? [],
-				),
+				recurrence: recurrenceResources(event),
 			}
 			if(client) resources.client = client
 			return {
-				id: calendarEventId(master.id, originalOccurrenceStart, isRecurring),
-				title: client ? (client.full_name || client.name) : (master.name ?? ""),
-				start: displayStart,
-				end: displayEnd,
-				allDay: master.all_day,
+				id: event.id,
+				title: client ? (client.full_name || client.name) : (event.name ?? ""),
+				start: ensureDate(event.starts_at),
+				end: ensureDate(event.ends_at),
+				allDay: event.all_day,
 				color: client?.color ?? DEFAULT_EVENT_COLOR,
 				resources,
 			}
 		})
-	}, [calendarDate, calendarView, data])
+	}, [data])
 
 	const breadcrumbs: Breadcrumb[] = [
 		{ title: "Employees", href: Routes.employees() },

@@ -17,6 +17,7 @@ function reviewShift(
 		client_slug: "client",
 		created_at: new Date("2024-03-18T09:00:00Z"),
 		ends_at: new Date("2024-03-18T17:00:00Z"),
+		ihss: false,
 		starts_at: new Date("2024-03-18T09:00:00Z"),
 		updated_at: new Date("2024-03-18T09:00:00Z"),
 		...overrides,

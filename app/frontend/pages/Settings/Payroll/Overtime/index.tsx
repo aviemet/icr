@@ -1,9 +1,10 @@
 import { useTranslation } from "react-i18next"
 
-import { Box, Divider, Grid, Stack, Text, Title } from "@/components"
+import { Box, Grid } from "@/components"
 import { Form, Submit } from "@/components/Form"
 import { Overtime } from "@/domains/Settings/Payroll/Form/Overtime"
 import { OvertimeExemptions } from "@/domains/Settings/Payroll/Form/OvertimeExemptions"
+import { FormBand, FormBandStack } from "@/features"
 import { Routes, withLayout } from "@/lib"
 
 import { SettingsPageHeader } from "../../SettingsPageHeader"
@@ -28,39 +29,36 @@ const PayrollOvertimeSettings = ({
 				description="Set overtime thresholds and rules for shifts that should be excluded."
 			/>
 
-			<Stack gap="xl">
+			<FormBandStack>
 				<Form
 					action={ Routes.settingsPayrollOvertime() }
 					method="patch"
 					initialData={ { settings } }
 				>
-					<Stack gap="md">
-						<Title order={ 4 }>Thresholds</Title>
-						<Text size="sm" c="dimmed">
-							Hours above these counts in a week or day are paid as overtime.
-						</Text>
-						<Grid>
-							<Overtime />
-						</Grid>
+					<FormBandStack>
+						<FormBand
+							title="Thresholds"
+							description="Hours above these counts in a week or day are paid as overtime."
+						>
+							<Grid>
+								<Overtime />
+							</Grid>
+						</FormBand>
+
 						<Submit>Update settings</Submit>
-					</Stack>
+					</FormBandStack>
 				</Form>
 
-				<Divider />
-
-				<Stack gap="md">
-					<Title order={ 4 }>
-						{ t("views.settings.payroll.overtime_exemptions.title") }
-					</Title>
-					<Text size="sm" c="dimmed">
-						{ t("views.settings.payroll.overtime_exemptions.description") }
-					</Text>
+				<FormBand
+					title={ t("views.settings.payroll.overtime_exemptions.title") }
+					description={ t("views.settings.payroll.overtime_exemptions.description") }
+				>
 					<OvertimeExemptions
 						overtime_exemptions={ overtime_exemptions }
 						shift_types={ shift_types }
 					/>
-				</Stack>
-			</Stack>
+				</FormBand>
+			</FormBandStack>
 		</Box>
 	)
 }

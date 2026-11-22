@@ -25,4 +25,3 @@ RSpec.describe Payroll::ClientPeriodIhssHours do
     expect(result[client.id.to_s]).to eq(8.0)
   end
 end
-

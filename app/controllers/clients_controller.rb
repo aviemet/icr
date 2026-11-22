@@ -98,13 +98,19 @@ class ClientsController < ApplicationController
 
     client_for_show = Client.includes_show.find(client.id)
 
-    schedules = client.schedule_events_between(*DateRangeCalculator.new(params).call)
+    range_start, range_end = DateRangeCalculator.new(params).call
+    masters = client.schedule_events_between(range_start, range_end)
 
     render inertia: "Clients/Schedule", props: {
       client: -> { client_for_show.render(:show) },
       can_update: -> { policy(client).update? },
       schedules: lambda {
-        schedules.render(:client)
+        Calendar::RenderSchedule.call(
+          events: masters,
+          range_start: range_start,
+          range_end: range_end,
+          view: :client,
+        )
       },
     }
   end

@@ -74,7 +74,7 @@ class Setting < RailsSettings::Base
     calendar_layout_style: "split",
     calendar_split_events_show_original_times: false,
     notifications_payroll_approval_reminders: true,
-    ihss_co_employer: false,
+    ihss_co_employer: true,
     ihss_assignment_mode: "shift",
   }.freeze
 

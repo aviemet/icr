@@ -17,22 +17,7 @@ module Payroll
       shifts = shifts_for_clients
       return @client_ids.index_with { 0.0 }.transform_keys(&:to_s) if shifts.empty?
 
-      collected = shifts.filter_map do |shift|
-        starts_at = shift.start_time
-        ends_at = shift.end_time
-        next if starts_at.blank? || ends_at.blank?
-
-        WorkInterval.new(
-          id: shift.id,
-          employee_id: shift.employee_id,
-          starts_at: starts_at,
-          ends_at: ends_at,
-          category: shift.category,
-          ihss: shift.ihss,
-          client_ids: shift.calendar_event&.clients&.map(&:id) || [],
-        )
-      end
-
+      collected = shifts.flat_map { |shift| intervals_for_shift(shift) }
       intervals = IhssHourClassifier.call(pay_period: @pay_period, intervals: collected)
 
       totals = @client_ids.index_with { 0.0 }
@@ -62,7 +47,38 @@ module Payroll
         .distinct
         .pluck(:id)
 
-      Shift.where(id: shift_ids).includes(:category, calendar_event: :clients)
+      Shift.where(id: shift_ids).includes(
+        :category,
+        calendar_event: [:clients, :recurring_patterns, :event_exceptions],
+      )
+    end
+
+    def intervals_for_shift(shift)
+      event = shift.calendar_event
+      return [] if event.blank?
+
+      Calendar::Recurring::ExpandOccurrences
+        .call(event:, range_start: @pay_period.starts_at, range_end: @pay_period.ends_at)
+        .filter_map do |occurrence|
+          client_ids = occurrence.event.clients.map(&:id)
+          next if !client_ids.intersect?(@client_ids)
+
+          WorkInterval.new(
+            id: interval_id(shift, occurrence),
+            employee_id: shift.employee_id,
+            starts_at: occurrence.starts_at,
+            ends_at: occurrence.ends_at,
+            category: shift.category,
+            ihss: shift.ihss,
+            client_ids: client_ids,
+          )
+        end
+    end
+
+    def interval_id(shift, occurrence)
+      return shift.id unless occurrence.recurring
+
+      "#{shift.id}:#{occurrence.original_starts_at.utc.iso8601(3)}"
     end
   end
 end

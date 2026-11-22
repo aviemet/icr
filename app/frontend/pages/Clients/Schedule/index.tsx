@@ -19,12 +19,7 @@ import { Modal, useModalContext } from "@/components/Modal"
 import { EventPopoverContent } from "@/domains/Clients/EventPopoverContent"
 import { EventForm } from "@/domains/Clients/schedule/EventForm"
 import { EventCalendarPopover } from "@/domains/Clients/schedule/NewEventCalendarPopover"
-import {
-	calendarEventId,
-	expandRecurringEvents,
-	expansionWindow,
-	recurrenceResources,
-} from "@/features/CalendarSchedule"
+import { recurrenceResources } from "@/features/CalendarSchedule"
 import { ensureViewName, Routes, vars } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
@@ -113,37 +108,25 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 
 	const processedSchedules = useMemo((): BaseCalendarEvent<ScheduleResources>[] => {
 		if(!data) return []
-		const window = expansionWindow(calendarDate, calendarView)
-		return expandRecurringEvents(data, window.start, window.end, ({
-			master,
-			originalOccurrenceStart,
-			displayStart,
-			displayEnd,
-			isRecurring,
-		}) => {
-			const employee = master.shift?.employee
+		return data.map((event) => {
+			const employee = event.shift?.employee
 			const isOpenShift = !hasAssignedEmployee(employee)
 			return {
-				id: calendarEventId(master.id, originalOccurrenceStart, isRecurring),
-				title: isOpenShift ? (master.name || "Open shift") : (master.name ?? ""),
-				start: displayStart,
-				end: displayEnd,
-				allDay: master.all_day,
+				id: event.id,
+				title: isOpenShift ? (event.name || "Open shift") : (event.name ?? ""),
+				start: ensureDate(event.starts_at),
+				end: ensureDate(event.ends_at),
+				allDay: event.all_day,
 				color: isOpenShift ? OPEN_SHIFT_COLOR : employee?.color,
 				open: isOpenShift,
 				resources: {
 					employee: hasAssignedEmployee(employee) ? employee : {},
 					client,
-					recurrence: recurrenceResources(
-						master.id,
-						originalOccurrenceStart,
-						isRecurring,
-						master.recurring_patterns ?? [],
-					),
+					recurrence: recurrenceResources(event),
 				},
 			}
 		})
-	}, [calendarDate, calendarView, client, data])
+	}, [client, data])
 
 	const breadcrumbs: Breadcrumb[] = [
 		{ title: "Clients", href: Routes.clients() },

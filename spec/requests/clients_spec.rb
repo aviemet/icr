@@ -294,5 +294,40 @@ RSpec.describe "/clients" do
       expect(schedule_ids).to include(in_range_event.id)
       expect(schedule_ids).not_to include(out_of_range_event.id)
     end
+
+    it "expands recurring masters into occurrence rows with master_id and occurrence_starts_at" do
+      client = create(:client)
+      employee = create(:employee)
+      master = create(
+        :calendar_event,
+        starts_at: Time.zone.local(2026, 10, 1, 9, 0, 0),
+        ends_at: Time.zone.local(2026, 10, 1, 17, 0, 0),
+      )
+      create(
+        :calendar_recurring_pattern,
+        calendar_event: master,
+        recurring_type: :weekly,
+        offset: 1,
+        day_of_week: 1,
+        end_date: nil,
+        max_occurrences: nil,
+      )
+      create(:shift, employee:, calendar_event: master)
+      create(:event_participant, calendar_event: master, participant: client)
+
+      get schedule_client_url(client), params: { view: "month", date: "2026-11-22" }
+
+      expect(response).to have_http_status(:ok)
+      schedules = inertia.props[:schedules]
+      expect(schedules.length).to be >= 3
+      expect(schedules).to all(include(master_id: master.id, is_recurring: true))
+      expect(schedules.map { |row| row[:starts_at].to_date }).to include(
+        Date.new(2026, 11, 16),
+        Date.new(2026, 11, 23),
+        Date.new(2026, 11, 30),
+      )
+      expect(schedules.pluck(:id)).to all(include("#{master.id}__"))
+      expect(schedules.pluck(:occurrence_starts_at)).to all(be_present)
+    end
   end
 end

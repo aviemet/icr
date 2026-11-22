@@ -25,7 +25,7 @@ module Payroll
             employee_name: row[:employee_name],
             client_id: row[:client_id].to_s,
             client_name: row[:client_name],
-            hours: assignment&.hours&.to_f || 0.0,
+            hours: assignment&.hours.to_f,
             authorized_hours: row[:authorized_hours],
           }
         end,

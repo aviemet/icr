@@ -86,6 +86,18 @@ class Calendar::Event < ApplicationRecord
   accepts_nested_attributes_for :event_participants
   accepts_nested_attributes_for :recurring_patterns
 
+  def master_id
+    id
+  end
+
+  def occurrence_starts_at
+    starts_at
+  end
+
+  def is_recurring
+    false
+  end
+
   scope :includes_associated, -> { includes([shift: [employee: [:person]]]) }
 
   scope :before, ->(time) { where(starts_at: ...time) }

@@ -20,7 +20,6 @@ if Rails.env.development?
     end
   end
 
-
   create_shift_attendant = lambda do |client:|
     employee = FactoryBot.create(:employee, :employed)
     employee.assign_job_title(attendant_job)
@@ -29,7 +28,6 @@ if Rails.env.development?
     FactoryBot.create(:clients_attendant, attendant: employee, client: client)
     employee
   end
-
 
   create_recurring_shift = lambda do |client:, employee:, starts_at:, duration:, patterns:|
     event_attrs = {

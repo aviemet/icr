@@ -15,7 +15,10 @@ declare global {
       ends_at: Date
       event_exceptions: CalendarEventException[]
       event_participants: EventParticipant[]
+      is_recurring: boolean
+      master_id: string
       name?: string
+      occurrence_starts_at: Date
       parent_id?: string
       recurring_patterns: CalendarRecurringPattern[]
       shift: ShiftsClient

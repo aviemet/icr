@@ -119,13 +119,19 @@ class EmployeesController < ApplicationController
   def schedule
     authorize employee
 
-    schedules = employee.schedule_events_between(*DateRangeCalculator.new(params).call)
+    range_start, range_end = DateRangeCalculator.new(params).call
+    masters = employee.schedule_events_between(range_start, range_end)
 
     render inertia: "Employees/Schedule", props: {
       employee: -> { employee.render(:show) },
       can_update: -> { policy(employee).update? },
       schedules: lambda {
-        schedules.render(:employee)
+        Calendar::RenderSchedule.call(
+          events: masters,
+          range_start: range_start,
+          range_end: range_end,
+          view: :employee,
+        )
       },
     }
   end

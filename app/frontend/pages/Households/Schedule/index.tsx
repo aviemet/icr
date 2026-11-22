@@ -13,12 +13,7 @@ import { type PopoverContentMap } from "@/components/Calendar/components/Calenda
 import { CalendarLocalizer } from "@/components/Calendar/lib/localizers"
 import { NAVIGATION_ACTION, VIEW_NAMES } from "@/components/Calendar/views"
 import { EventPopoverContent } from "@/domains/Clients/EventPopoverContent"
-import {
-	calendarEventId,
-	expandRecurringEvents,
-	expansionWindow,
-	recurrenceResources,
-} from "@/features/CalendarSchedule"
+import { recurrenceResources } from "@/features/CalendarSchedule"
 import { ensureViewName, Routes, vars } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
@@ -92,39 +87,27 @@ const Schedule = ({ household, schedules: initialSchedules }: ScheduleProps) => 
 
 	const processedSchedules = useMemo((): BaseCalendarEvent<ScheduleResources>[] => {
 		if(!data) return []
-		const window = expansionWindow(calendarDate, calendarView)
-		return expandRecurringEvents(data, window.start, window.end, ({
-			master,
-			originalOccurrenceStart,
-			displayStart,
-			displayEnd,
-			isRecurring,
-		}) => {
-			const client = master.clients?.[0]
-			const employee = master.shift?.employee
+		return data.map((event) => {
+			const client = event.clients?.[0]
+			const employee = event.shift?.employee
 			const isOpenShift = employee === undefined || employee === null
-			const totalClients = master.clients?.length ?? 0
+			const totalClients = event.clients?.length ?? 0
 			const clientInitial = client?.first_name?.trim()?.[0] || client?.full_name?.trim()?.[0] || client?.name?.trim()?.[0]
 			const indicatorLabel = totalClients > 1 ? "+" : (clientInitial ? clientInitial.toUpperCase() : undefined)
 			const resources: ScheduleResources = {
-				recurrence: recurrenceResources(
-					master.id,
-					originalOccurrenceStart,
-					isRecurring,
-					master.recurring_patterns ?? [],
-				),
+				recurrence: recurrenceResources(event),
 			}
 			if(client) resources.client = client
 			if(employee) resources.employee = employee
 
 			return {
-				id: calendarEventId(master.id, originalOccurrenceStart, isRecurring),
+				id: event.id,
 				title: isOpenShift
-					? (master.name || "Open shift")
-					: (client ? (client.full_name || client.name) : (master.name ?? "")),
-				start: displayStart,
-				end: displayEnd,
-				allDay: master.all_day,
+					? (event.name || "Open shift")
+					: (client ? (client.full_name || client.name) : (event.name ?? "")),
+				start: ensureDate(event.starts_at),
+				end: ensureDate(event.ends_at),
+				allDay: event.all_day,
 				color: isOpenShift ? OPEN_SHIFT_COLOR : employee?.color,
 				open: isOpenShift,
 				indicatorColor: client?.color,
@@ -132,7 +115,7 @@ const Schedule = ({ household, schedules: initialSchedules }: ScheduleProps) => 
 				resources,
 			}
 		})
-	}, [calendarDate, calendarView, data])
+	}, [data])
 
 	const breadcrumbs: Breadcrumb[] = [
 		{ title: "Households", href: Routes.households() },

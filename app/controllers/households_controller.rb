@@ -52,11 +52,19 @@ class HouseholdsController < ApplicationController
     authorize household
 
     household_for_show = Household.includes(clients: [:person]).find(household.id)
-    schedules = household.schedule_events_between(*DateRangeCalculator.new(params).call)
+    range_start, range_end = DateRangeCalculator.new(params).call
+    masters = household.schedule_events_between(range_start, range_end)
 
     render inertia: "Households/Schedule", props: {
       household: -> { household_for_show.render(:show) },
-      schedules: -> { schedules.render(:household) },
+      schedules: -> {
+        Calendar::RenderSchedule.call(
+          events: masters,
+          range_start: range_start,
+          range_end: range_end,
+          view: :household,
+        )
+      },
     }
   end
 

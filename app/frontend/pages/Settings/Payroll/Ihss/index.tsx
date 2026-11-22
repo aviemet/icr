@@ -1,6 +1,7 @@
-import { Box, Grid, Stack, Text, Title } from "@/components"
+import { Box, Grid } from "@/components"
 import { Form, Submit } from "@/components/Form"
 import { Ihss } from "@/domains/Settings/Payroll/Form/Ihss"
+import { FormBand, FormBandStack } from "@/features"
 import { Routes, withLayout } from "@/lib"
 
 import { SettingsPageHeader } from "../../SettingsPageHeader"
@@ -22,16 +23,18 @@ const PayrollIhssSettings = ({ settings }: PayrollIhssSettingsProps) => {
 				method="patch"
 				initialData={ { settings } }
 			>
-				<Stack gap="md">
-					<Title order={ 4 }>Co-employment and assignment</Title>
-					<Text size="sm" c="dimmed">
-						These settings change how payroll classifies IHSS hours and calculates overtime.
-					</Text>
-					<Grid>
-						<Ihss />
-					</Grid>
+				<FormBandStack>
+					<FormBand
+						title="Co-employment and assignment"
+						description="These settings change how payroll classifies IHSS hours and calculates overtime."
+					>
+						<Grid>
+							<Ihss />
+						</Grid>
+					</FormBand>
+
 					<Submit>Update settings</Submit>
-				</Stack>
+				</FormBandStack>
 			</Form>
 		</Box>
 	)

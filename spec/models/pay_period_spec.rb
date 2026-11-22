@@ -217,6 +217,31 @@ RSpec.describe PayPeriod, type: :model do
       expect(result).to include(inside, overlapping_start, overlapping_end)
       expect(result).not_to include(before, after)
     end
+
+    it "includes recurring masters that expand into the period" do
+      pay_period = create(
+        :pay_period,
+        starts_at: Time.zone.local(2026, 11, 16).beginning_of_day,
+        ends_at: Time.zone.local(2026, 11, 30).end_of_day,
+      )
+      master = create(
+        :calendar_event,
+        starts_at: Time.zone.local(2026, 10, 1, 9, 0, 0),
+        ends_at: Time.zone.local(2026, 10, 1, 17, 0, 0),
+      )
+      create(
+        :calendar_recurring_pattern,
+        calendar_event: master,
+        recurring_type: :weekly,
+        offset: 1,
+        day_of_week: 1,
+        end_date: nil,
+        max_occurrences: nil,
+      )
+      shift = create(:shift, calendar_event: master)
+
+      expect(described_class.shifts_overlapping_period(pay_period)).to include(shift)
+    end
   end
 
   describe ".attach_shift!" do
@@ -331,6 +356,39 @@ RSpec.describe PayPeriod, type: :model do
 
       expect { pay_period.sync_shifts! }.not_to raise_error
       expect(pay_period.timesheets.count).to eq(0)
+    end
+
+    it "creates employee timesheets for recurring masters that expand into the period without moving the master" do
+      travel_to Time.zone.local(2026, 11, 22, 12, 0, 0) do
+        pay_period = create(
+          :pay_period,
+          starts_at: Time.zone.local(2026, 11, 16).beginning_of_day,
+          ends_at: Time.zone.local(2026, 11, 30).end_of_day,
+        )
+        employee = create(:employee)
+        master = create(
+          :calendar_event,
+          starts_at: Time.zone.local(2026, 10, 1, 9, 0, 0),
+          ends_at: Time.zone.local(2026, 10, 1, 17, 0, 0),
+        )
+        create(
+          :calendar_recurring_pattern,
+          calendar_event: master,
+          recurring_type: :weekly,
+          offset: 1,
+          day_of_week: 1,
+          end_date: nil,
+          max_occurrences: nil,
+        )
+        shift = create(:shift, employee:, calendar_event: master)
+        original_timesheet_id = shift.reload.timesheet_id
+
+        pay_period.sync_shifts!
+
+        expect(pay_period.timesheets.find_by(employee:)).to be_present
+        expect(shift.reload.timesheet_id).to eq(original_timesheet_id)
+        expect(shift.timesheet.pay_period_id).not_to eq(pay_period.id)
+      end
     end
   end
 

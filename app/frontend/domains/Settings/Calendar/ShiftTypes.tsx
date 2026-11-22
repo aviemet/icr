@@ -4,18 +4,15 @@ import { useState } from "react"
 import {
 	Badge,
 	Button,
-	Divider,
 	Group,
-	Paper,
-	Stack,
-	Table,
 	Text,
-	Title,
 	type TableColumn,
+	Table,
 } from "@/components"
 import { DeleteButton } from "@/components/Button"
 import { PlusIcon } from "@/components/Icons"
 import { TextInput } from "@/components/Inputs"
+import { FormBand, FormBandStack } from "@/features"
 import { useCreateCategory, useDeleteCategory } from "@/queries"
 
 import * as classes from "./ShiftTypes.css"
@@ -97,81 +94,56 @@ export function ShiftTypes({ shift_types }: ShiftTypesProps) {
 	]
 
 	return (
-		<Stack gap="xl">
-			<Stack gap="md">
-				<Stack gap={ 4 }>
-					<Title order={ 4 }>Existing types</Title>
-					<Text size="sm" c="dimmed">
-						System types ship with the app and stay put. Custom types can be removed.
-					</Text>
-				</Stack>
+		<FormBandStack>
+			<FormBand
+				title="Existing types"
+				description="System types ship with the app and stay put. Custom types can be removed."
+			>
+				<Table.Provider>
+					<Table.DataTable
+						classNames={ { table: classes.table } }
+						columns={ columns }
+						records={ shift_types }
+						selectable={ false }
+						height="auto"
+						emptyState={ (
+							<Text size="sm" c="dimmed">
+								No shift types yet. Add one below.
+							</Text>
+						) }
+					/>
+				</Table.Provider>
+			</FormBand>
 
-				<Paper
-					withBorder
-					radius="md"
-					shadow="xs"
-					style={ { overflow: "hidden" } }
-				>
-					<Table.Provider>
-						<Table.DataTable
-							classNames={ { table: classes.table } }
-							columns={ columns }
-							records={ shift_types }
-							selectable={ false }
-							height="auto"
-							emptyState={ (
-								<Text size="sm" c="dimmed">
-									No shift types yet. Add one below.
-								</Text>
-							) }
-						/>
-					</Table.Provider>
-				</Paper>
-			</Stack>
-
-			<Divider />
-
-			<Stack gap="md">
-				<Stack gap={ 4 }>
-					<Title order={ 4 }>Add shift type</Title>
-					<Text size="sm" c="dimmed">
-						Create a custom category for scheduling and overtime rules.
-					</Text>
-				</Stack>
-
-				<Paper
-					withBorder
-					radius="md"
-					shadow="xs"
-					p="md"
-					className={ classes.addForm }
-				>
-					<Group align="flex-end" gap="sm" wrap="nowrap">
-						<TextInput
-							id="new-shift-type-name"
-							label="Name"
-							value={ newName }
-							onChange={ event => setNewName(event.currentTarget.value) }
-							placeholder="e.g. Training"
-							style={ { flex: 1 } }
-							onKeyDown={ event => {
-								if(event.key === "Enter") {
-									event.preventDefault()
-									handleCreate()
-								}
-							} }
-						/>
-						<Button
-							leftSection={ <PlusIcon size={ 16 } /> }
-							loading={ createCategory.isPending }
-							disabled={ newName.trim().length === 0 }
-							onClick={ handleCreate }
-						>
-							Add
-						</Button>
-					</Group>
-				</Paper>
-			</Stack>
-		</Stack>
+			<FormBand
+				title="Add shift type"
+				description="Create a custom category for scheduling and overtime rules."
+			>
+				<Group align="flex-end" gap="sm" wrap="nowrap" className={ classes.addForm }>
+					<TextInput
+						id="new-shift-type-name"
+						label="Name"
+						value={ newName }
+						onChange={ event => setNewName(event.currentTarget.value) }
+						placeholder="e.g. Training"
+						style={ { flex: 1 } }
+						onKeyDown={ event => {
+							if(event.key === "Enter") {
+								event.preventDefault()
+								handleCreate()
+							}
+						} }
+					/>
+					<Button
+						leftSection={ <PlusIcon size={ 16 } /> }
+						loading={ createCategory.isPending }
+						disabled={ newName.trim().length === 0 }
+						onClick={ handleCreate }
+					>
+						Add
+					</Button>
+				</Group>
+			</FormBand>
+		</FormBandStack>
 	)
 }

@@ -132,6 +132,8 @@ export const chrome = css`
 
 export const body = css`
 	flex: 1 1 auto;
+	min-width: 0;
 	min-height: 0;
-	overflow: auto;
+	overflow-x: hidden;
+	overflow-y: auto;
 `

@@ -14,7 +14,7 @@ class Calendar::EventPolicy < ApplicationPolicy
             .joins("INNER JOIN clients_attendants ON event_participants.participant_id = clients_attendants.client_id")
             .where(event_participants: { participant_type: "Client" })
             .where(clients_attendants: { attendant_id: employee_id })
-            .where("clients_attendants.starts_at <= ?", Time.current)
+            .where(clients_attendants: { starts_at: ..Time.current })
             .select(:id)
             .to_sql
 

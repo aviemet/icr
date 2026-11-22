@@ -97,10 +97,40 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - [x] Color choice for site accent color
 - [ ] Dyslexia font option
 
-## General Todo List
-- [x] Remove the mention of a household from client views who are not part of a household
-- [x] Attendant assignments don't have an end date, that doesn't make sense
+### Phase 9: Service Types and Authorizations
+- [ ] Configurable service types (billable/payable, multi-client, notes/mileage flags, calendar colors)
+- [ ] Client authorization hours ledger (authorized vs delivered)
+- [ ] Authorization and utilization reporting
 
+### Phase 10: Care Planning and Client Clinical Depth
+- [ ] Emergency Assistance Plan (EAP) structured fields and printable face/EAP sheets
+- [ ] Health passport / ADL and matching tags (expand beyond free-text `Client::LifeDetail`)
+- [ ] ISP / person-centered plans (templates, objectives, quarterly review cadence)
+- [ ] Service planning: Client Connect logs, QA, assessments, client training guides
+- [ ] Appointments worksheet (staff + clinician sections; link to doctors and incidents)
+- [ ] Deepen incident reporting: FIR (incl. med-error) and SIR (RC-style categories, witnesses, treatment, finalize) on top of existing `IncidentReport`
+
+### Phase 11: Medication Administration (MAR)
+- [ ] Administration logs, missed-med tracking, notifications (expands Phase 4 MAR item)
+- [ ] Med administration and notification reports
+
+### Phase 12: Forms, Notes, and Reports Engine
+- [ ] Daily service notes and compliance form capture
+- [ ] Async report queue (PDF/XLS) for face sheets, contacts, requirement expiration, timesheets, IHSS/OT/auth utilization, payroll processing variants
+- [ ] ADP-style and condensed payroll processing report variants as needed
+
+### Phase 13: HR Extras and Workplace Comms
+- [ ] Employee benefits enrollment records
+- [ ] Expenses / mileage / holiday and sick-time preferences
+- [ ] Employee timesheet attestation and sign-off
+- [ ] Internal messaging, announcements, time-off requests
+- [ ] LMS-style training lessons/quizzes (beyond catalog + completion dates)
+
+### Phase 14: Clock and EVV (back burner)
+- [ ] Clock-in/out foundation attached to existing `Calendar::Event` / `Shift` identity
+- [ ] Geofence / location and revision-reason settings (GPS and device sensor integrations)
+- [ ] Aggregator credentials, service-code mapping, unverified/pending/history queues
+- [ ] Daily clock and EVV dashboards
 
 ## Conventions
 ### Architecture
@@ -172,7 +202,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 
 ### Calendar System
 - Multiple view strategies; timezones must be handled correctly; recurring events follow RFC 5545 (iCalendar).
-- Recurring events: one master `Calendar::Event` plus `Calendar::RecurringPattern` definition rows (daily/weekly/monthly/yearly, interval, ends never/on date/after N). Schedule APIs load masters via `for_schedule_range`. The frontend expands occurrences for the visible range and applies `Calendar::EventException` cancels/reschedules. Create and edit share one EventForm with Repeat fields (hydrated from series patterns on edit). On save of a recurring edit, choose all / this-and-future / just-this (`edit_scope` all|future|one). All shifts the master by `(form_starts_at - occurrence_starts_at)` so date moves apply to the whole series; future truncates and continues; just-this detaches. All/future can replace pattern rows.
+- Recurring events: one master `Calendar::Event` plus `Calendar::RecurringPattern` definition rows (daily/weekly/monthly/yearly, interval, ends never/on date/after N). Schedule APIs load masters via `for_schedule_range`, then `Calendar::RenderSchedule` expands occurrences with `Calendar::Recurring::ExpandOccurrences` (cancels/reschedules applied) and sends occurrence rows over the wire (`master_id`, `occurrence_starts_at`, `is_recurring`, display `starts_at`/`ends_at`). The calendar frontend maps those rows; it does not expand recurrence in JS. Create and edit share one EventForm with Repeat fields (hydrated from series patterns on edit). On save of a recurring edit, choose all / this-and-future / just-this (`edit_scope` all|future|one). All shifts the master by `(form_starts_at - occurrence_starts_at)` so date moves apply to the whole series; future truncates and continues; just-this detaches. All/future can replace pattern rows.
 - One display-setting drives both month and time-grid views (month strategies vs overlap for day/week), so per-strategy behavior can be added without changing the public API.
 - Gotcha: The popover closes on click-outside. Date/time pickers or other inputs inside the popover must not use a portal, or the popover will close when the user selects a value.
 - Client schedule: Events come from React Query; mutations must invalidate the schedule query so the calendar refetches. If invalidation is skipped, the UI can show stale or duplicate events.
@@ -188,8 +218,9 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - PayPeriod: one per (starts_at, ends_at); no overlapping periods; derived from settings. Use PayPeriod.for_period_dates(start_date, end_date) to resolve a period: it reuses a period that starts on the same calendar day (snapping end to the canonical range; timezone-safe), or creates one and shrinks any predecessor that overlapped into that range. Shrinking reattaches out-of-range shifts via PayPeriod.attach_shift!.
 - Timesheet: pre-submittal; tracks Director approval; belongs to PayPeriod and Employee; has many Shifts.
 - Shift create: PayPeriod.attach_shift! finds or creates the pay period that contains the shift date and attaches a timesheet. Pay periods appear because shifts are scheduled into them.
-- PayPeriod create/sync: sync_shifts! attaches every overlapping shift onto this period's timesheets (one Timesheet per employee).
+- PayPeriod create/sync: sync_shifts! finds shifts via `Calendar::Event.for_schedule_range` (so recurring masters that expand into the period count). Non-recurring overlapping shifts are attached to this period's timesheets; recurring masters keep their original timesheet, and the period still gets an employee timesheet row so they appear in payroll.
 - Payroll index hours: Payroll::EmployeePeriodHours computes per-employee regular_hours, ot_hours, ihss_hours, and company_hours for a pay period. Uses Setting overtime_weekly_hours and overtime_daily_hours; splits work intervals by day (including overnight); applies active OvertimeExemption rules to exclude exempt intervals from OT; weekly OT and daily OT are summed. IHSS classification runs first via Payroll::IhssHourClassifier (shift flag or period assignments). When Setting.ihss_co_employer is false, only company hours feed OT math; when true, all hours feed OT. The calculator reads intervals via a collector interface (default: scheduled shifts), so payroll can later swap in a clock-in/out collector without changing overtime math or UI contracts.
+- Recurring shifts in payroll: same Ruby expand-on-read path as schedule APIs (`Calendar::Recurring::ExpandOccurrences`). `Payroll::WorkIntervalCollectors::ScheduledShifts` expands masters into period occurrences for hours; it does not require the master `timesheet_id` to point at the current period.
 - IHSS settings (Settings > Payroll > IHSS): `ihss_co_employer` and `ihss_assignment_mode` (`shift` | `period`). Shift mode toggles `shifts.ihss` in payroll review. Period mode stores `Payroll::IhssPeriodAssignment` rows (pay period + employee + client + hours) and consumes those hours chronologically against matching client shifts. Client payroll boards show IHSS hours used in the period next to `clients.ihss_authorized_hours`.
 - Payroll approval UI: Director Approve / Unapprove / bulk approve stay available until the period is finalized (`can_approve = !finalized?` for index holders). The payroll due date and `approval_window_open` are deadline / urgency signals only; they must never hard-block approval. Hard-close language in the older payroll redesign plan is superseded by this rule.
 - Approval reminder emails: `Payroll::SendApprovalReminders` (daily GoodJob cron) emails admins and Timesheet approvers for closed, unfinalized periods with pending Director approvals. Facilitators (update without index) get a count of pending caseload shifts. Org-wide enable/disable lives under Settings > Notifications (`Setting.notifications_payroll_approval_reminders`).
