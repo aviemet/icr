@@ -73,6 +73,23 @@ class Api::CalendarEventsController < Api::ApiController
       return
     end
 
+    if edit_scope.to_s == "future" && calendar_event.recurring_patterns.any? && occurrence_starts_at.present?
+      begin
+        result = Calendar::Recurring::EndSeriesFrom.call(
+          calendar_event,
+          occurrence_starts_at: occurrence_starts_at,
+        )
+      rescue ArgumentError => e
+        render json: { errors: { base: e.message } }, status: :unprocessable_content
+        return
+      end
+
+      if result == :truncated
+        head :no_content
+        return
+      end
+    end
+
     if calendar_event.destroy
       head :no_content
     else

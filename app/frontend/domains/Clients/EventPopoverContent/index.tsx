@@ -122,6 +122,21 @@ export function EventPopoverContent({ event, localizer, primaryResource = "emplo
 							{ t("views.clients.schedule.event_form.delete_this_occurrence") }
 						</Button>
 						<Button
+							variant="default"
+							color="red"
+							onClick={ () => {
+								modals.closeAll()
+								deleteEvent.mutate({
+									edit_scope: "future",
+									occurrence_starts_at: recurrence.occurrenceStartsAt,
+								}, {
+									onSuccess: () => closePopover(),
+								})
+							} }
+						>
+							{ t("views.clients.schedule.event_form.delete_this_and_future") }
+						</Button>
+						<Button
 							color="red"
 							onClick={ () => {
 								modals.closeAll()

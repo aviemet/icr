@@ -50,8 +50,9 @@ en:
           edit_this_occurrence: Just this event
           edit_scope_cancel: Back
           delete_recurring_title: Delete repeating event
-          delete_recurring_body: Delete only this occurrence, or the entire series?
+          delete_recurring_body: Delete this occurrence, this and all future events, or the entire series?
           delete_this_occurrence: This occurrence
+          delete_this_and_future: This and all future events
           delete_entire_series: Entire series
       show:
         contacts:

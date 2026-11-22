@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
 
 import { Routes, exclude, assertStatus, HTTP_STATUS } from "@/lib"
-import { type CalendarEventData } from "@/queries/calendarEvents"
+import { type CalendarEventData, type CalendarEventEditScope } from "@/queries/calendarEvents"
 
 import { ReactMutationFunction } from ".."
 
@@ -53,7 +53,7 @@ export const useUpdateClientCalendarEvent: ReactMutationFunction<
 }
 
 export type DeleteClientCalendarEventVariables = {
-	edit_scope?: "one" | "all"
+	edit_scope?: CalendarEventEditScope
 	occurrence_starts_at?: string
 }
 

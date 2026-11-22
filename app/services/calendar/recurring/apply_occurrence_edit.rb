@@ -92,30 +92,13 @@ module Calendar
                                 end
 
         ActiveRecord::Base.transaction do
-          truncate_series_before!(@occurrence_starts_at)
+          TruncateSeriesBefore.call(@event, occurrence_starts_at: @occurrence_starts_at)
           build_continuation_event(
             form_starts_at,
             form_ends_at,
             continuation_patterns,
             from_form: pattern_attrs_provided?,
           ).save!
-        end
-      end
-
-      def truncate_series_before!(occurrence_starts_at)
-        last_day = occurrence_starts_at.in_time_zone.to_date - 1.day
-
-        @event.recurring_patterns.each do |pattern|
-          next_end = if pattern.end_date.present?
-                       [pattern.end_date, last_day].min
-                     else
-                       last_day
-                     end
-
-          pattern.update!(
-            end_date: next_end,
-            max_occurrences: nil,
-          )
         end
       end
 

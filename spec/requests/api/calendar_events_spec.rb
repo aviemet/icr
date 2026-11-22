@@ -381,7 +381,37 @@ RSpec.describe "Api::CalendarEvents", type: :request do
       expect(response).to have_http_status(:no_content)
       expect(Calendar::Event.exists?(master.id)).to be(true)
     end
+
+    it "truncates the series for this and future without destroying the master" do
+      occurrence = Time.zone.parse("2026-11-23 09:00")
+      master.recurring_patterns.sole.update!(end_date: Date.parse("2026-12-31"))
+
+      expect {
+        delete api_calendar_event_url(master), params: {
+          edit_scope: "future",
+          occurrence_starts_at: occurrence.iso8601,
+        }
+      }.to change(Calendar::Event, :count).by(0)
+        .and change(Calendar::EventException, :count).by(0)
+
+      expect(response).to have_http_status(:no_content)
+      expect(Calendar::Event.exists?(master.id)).to be(true)
+      expect(master.reload.recurring_patterns.sole.end_date).to eq(Date.parse("2026-11-22"))
+    end
+
+    it "destroys the master when this and future targets the series start" do
+      expect {
+        delete api_calendar_event_url(master), params: {
+          edit_scope: "future",
+          occurrence_starts_at: master.starts_at.iso8601,
+        }
+      }.to change(Calendar::Event, :count).by(-1)
+
+      expect(response).to have_http_status(:no_content)
+      expect(Calendar::Event.exists?(master.id)).to be(false)
+    end
   end
+
 
   describe "DELETE /api/calendar_events/:id" do
     it "destroys a shift event and its shift while the period is open" do
