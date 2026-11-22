@@ -41,8 +41,20 @@ en:
           client: Client
           pending: Pending
           reviewed: Reviewed
+          ihss_used: IHSS used
+          authorized: Authorized
           status: Status
           actions: Action
+      ihss:
+        title: IHSS assignments
+        help: Enter IHSS hours for each employee and client for this pay period.
+        save: Save IHSS assignments
+        hours: IHSS hours
+        authorized: Authorized
+        employee: Employee
+        client: Client
+        empty: No employee and client pairs with shifts in this period.
+        back: Back to period
       client_show:
         help: Choose an employee to review their shifts for this client.
         employee_label: Employee
@@ -60,6 +72,7 @@ en:
         title: Pay period
         back_to_payroll: Back to Payroll
         view_clients: Client review
+        view_ihss: IHSS assignments
         workflow_help: Review and approve each employee timesheet, then close the period to lock it.
         facilitator_progress: "%{reviewed} / %{total} shifts reviewed"
         approve_with_gaps_title: Approve with unreviewed shifts?

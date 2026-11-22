@@ -140,7 +140,7 @@ app/
 | Calendar and scheduling | In place (recurring UI still expanding) |
 | Payroll / timesheet workflow | Active build |
 | Documents | Active Storage in use; deeper versioning planned |
-| IHSS hours engine | Planned |
+| IHSS hours engine | In place (co-employer OT + shift/period assignment) |
 
 The app is already the place where staff live day to day. Payroll and hours depth are the current edge of the roadmap.
 

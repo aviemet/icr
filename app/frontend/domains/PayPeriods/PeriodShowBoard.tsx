@@ -27,6 +27,8 @@ import { WorkQueue } from "./WorkQueue"
 interface EmployeeHoursMap {
 	regular_hours?: number
 	ot_hours?: number
+	ihss_hours?: number
+	company_hours?: number
 }
 
 interface EmployeeExceptionsMap {
@@ -70,6 +72,7 @@ export interface PeriodShowBoardProps {
 	finalize_blocked_reason: FinalizeBlockedReason
 	can_export: boolean
 	can_view_clients?: boolean
+	ihss_assignment_mode?: string
 	timesheet_ids_by_employee: Record<string, string>
 	approved_at_by_employee: Record<string, string>
 	employee_exceptions: Record<string, EmployeeExceptionsMap>
@@ -110,6 +113,7 @@ export function PeriodShowBoard({
 	finalize_blocked_reason,
 	can_export,
 	can_view_clients = true,
+	ihss_assignment_mode = "shift",
 	timesheet_ids_by_employee = {},
 	approved_at_by_employee = {},
 	employee_exceptions = {},
@@ -208,6 +212,15 @@ export function PeriodShowBoard({
 								buttonProps={ { variant: "light" } }
 							>
 								{ t("views.pay_periods.show.view_clients") }
+							</Link>
+						) }
+						{ ihss_assignment_mode === "period" && (
+							<Link
+								as="button"
+								href={ Routes.ihssPeriod(payPeriodId) }
+								buttonProps={ { variant: "light" } }
+							>
+								{ t("views.pay_periods.show.view_ihss") }
 							</Link>
 						) }
 					</Group>

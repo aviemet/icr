@@ -35,6 +35,22 @@ class Settings::PayrollsController < ApplicationController
     update_settings(settings_payroll_overtime_path)
   end
 
+  # @route GET /settings/payroll/ihss (settings_payroll_ihss)
+  def ihss
+    authorize Setting, :show?
+
+    render inertia: "Settings/Payroll/Ihss", props: {
+      settings: -> { Setting.render },
+    }
+  end
+
+  # @route PUT /settings/payroll/ihss (settings_payroll_ihss)
+  # @route PATCH /settings/payroll/ihss (settings_payroll_ihss)
+  def update_ihss
+    authorize Setting, :update?
+    update_settings(settings_payroll_ihss_path)
+  end
+
   private
 
   def update_settings(redirect_path)

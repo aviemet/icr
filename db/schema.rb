@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_22_171421) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_22_171843) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -654,6 +654,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_22_171421) do
     t.index ["identificationable_type", "identificationable_id"], name: "index_identifications_on_identificationable"
   end
 
+  create_table "ihss_period_assignments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "pay_period_id", null: false
+    t.uuid "employee_id", null: false
+    t.uuid "client_id", null: false
+    t.decimal "hours", precision: 8, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_ihss_period_assignments_on_client_id"
+    t.index ["employee_id"], name: "index_ihss_period_assignments_on_employee_id"
+    t.index ["pay_period_id", "employee_id", "client_id"], name: "index_ihss_period_assignments_uniqueness", unique: true
+    t.index ["pay_period_id"], name: "index_ihss_period_assignments_on_pay_period_id"
+  end
+
   create_table "incident_reports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "occurred_at"
     t.datetime "reported_at"
@@ -919,6 +932,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_22_171421) do
     t.uuid "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "ihss", default: false, null: false
     t.index ["calendar_event_id"], name: "index_shifts_on_calendar_event_id", unique: true
     t.index ["category_id"], name: "index_shifts_on_category_id"
     t.index ["employee_id"], name: "index_shifts_on_employee_id"
@@ -1093,6 +1107,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_22_171421) do
   add_foreign_key "households_clients", "clients"
   add_foreign_key "households_clients", "households"
   add_foreign_key "identifications", "categories"
+  add_foreign_key "ihss_period_assignments", "clients"
+  add_foreign_key "ihss_period_assignments", "employees"
+  add_foreign_key "ihss_period_assignments", "pay_periods"
   add_foreign_key "incident_reports", "categories"
   add_foreign_key "incident_reports", "clients"
   add_foreign_key "incident_reports", "doctors"

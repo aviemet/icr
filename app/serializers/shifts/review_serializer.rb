@@ -3,6 +3,7 @@ class Shifts::ReviewSerializer < ShiftSerializer
 
   attributes(
     :facilitator_approved_at,
+    :ihss,
     starts_at: { type: "Date" },
     ends_at: { type: "Date" },
   )

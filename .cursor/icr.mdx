@@ -84,14 +84,14 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - [x] Overtime and overtime exception customization and options
 
 ### Phase 7: IHSS Hours Management
-- [ ] IHSS hours tracking system
-  - [ ] Manual hour assignment
+- [x] IHSS hours tracking system
+  - [x] Manual hour assignment (by shift or by period, per Settings)
   - [ ] Automated assignment rules
-- [ ] Hours calculation engine
-  - [ ] Standard hours tracking
-  - [ ] IHSS hours tracking
-  - [ ] Overtime calculation for both types
-- [ ] Co-employment settings and rules
+- [x] Hours calculation engine
+  - [x] Standard hours tracking
+  - [x] IHSS hours tracking
+  - [x] Overtime calculation for both types (co-employer setting)
+- [x] Co-employment settings and rules
 
 ### Phase 8: Customization
 - [x] Color choice for site accent color
@@ -189,7 +189,8 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Timesheet: pre-submittal; tracks Director approval; belongs to PayPeriod and Employee; has many Shifts.
 - Shift create: PayPeriod.attach_shift! finds or creates the pay period that contains the shift date and attaches a timesheet. Pay periods appear because shifts are scheduled into them.
 - PayPeriod create/sync: sync_shifts! attaches every overlapping shift onto this period's timesheets (one Timesheet per employee).
-- Payroll index hours: Payroll::EmployeePeriodHours computes per-employee regular_hours and ot_hours for a pay period. Uses Setting overtime_weekly_hours and overtime_daily_hours; splits work intervals by day (including overnight); applies active OvertimeExemption rules to exclude exempt intervals from OT; weekly OT and daily OT are summed. The calculator reads intervals via a collector interface (default: scheduled shifts), so payroll can later swap in a clock-in/out collector without changing overtime math or UI contracts.
+- Payroll index hours: Payroll::EmployeePeriodHours computes per-employee regular_hours, ot_hours, ihss_hours, and company_hours for a pay period. Uses Setting overtime_weekly_hours and overtime_daily_hours; splits work intervals by day (including overnight); applies active OvertimeExemption rules to exclude exempt intervals from OT; weekly OT and daily OT are summed. IHSS classification runs first via Payroll::IhssHourClassifier (shift flag or period assignments). When Setting.ihss_co_employer is false, only company hours feed OT math; when true, all hours feed OT. The calculator reads intervals via a collector interface (default: scheduled shifts), so payroll can later swap in a clock-in/out collector without changing overtime math or UI contracts.
+- IHSS settings (Settings > Payroll > IHSS): `ihss_co_employer` and `ihss_assignment_mode` (`shift` | `period`). Shift mode toggles `shifts.ihss` in payroll review. Period mode stores `Payroll::IhssPeriodAssignment` rows (pay period + employee + client + hours) and consumes those hours chronologically against matching client shifts. Client payroll boards show IHSS hours used in the period next to `clients.ihss_authorized_hours`.
 - Payroll approval UI: Director Approve / Unapprove / bulk approve stay available until the period is finalized (`can_approve = !finalized?` for index holders). The payroll due date and `approval_window_open` are deadline / urgency signals only; they must never hard-block approval. Hard-close language in the older payroll redesign plan is superseded by this rule.
 - Approval reminder emails: `Payroll::SendApprovalReminders` (daily GoodJob cron) emails admins and Timesheet approvers for closed, unfinalized periods with pending Director approvals. Facilitators (update without index) get a count of pending caseload shifts. Org-wide enable/disable lives under Settings > Notifications (`Setting.notifications_payroll_approval_reminders`).
 - Manual shift entry on employee payroll review creates a `Calendar::Event` + nested `Shift` via `POST /api/calendar_events` (same path as schedule); `PayPeriod.attach_shift!` wires the timesheet. Create into a finalized period is rejected. Attaching a shift or changing event times/participants clears timesheet `approved_at` and shift `facilitator_approved_at`. Review rows show `last_editor` from the latest paper_trail time update on the calendar event (initials avatar + tooltip).

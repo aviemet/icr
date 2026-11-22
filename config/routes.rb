@@ -72,6 +72,8 @@ Rails.application.routes.draw do
       match "schedule", to: "payrolls#update_schedule", via: [:patch, :put]
       get "overtime", to: "payrolls#overtime"
       match "overtime", to: "payrolls#update_overtime", via: [:patch, :put]
+      get "ihss", to: "payrolls#ihss"
+      match "ihss", to: "payrolls#update_ihss", via: [:patch, :put]
     end
     get "notifications", to: "notifications#show"
     match "notifications", to: "notifications#update", via: [:patch, :put]
@@ -145,6 +147,8 @@ Rails.application.routes.draw do
         get :export
         get :clients
         get "clients/:client_id", action: :client, as: :client
+        get :ihss, action: :ihss
+        match :ihss, action: :update_ihss, via: [:patch, :put]
       end
       post :adjustments, on: :member, action: :create_adjustment, as: :adjustments
       get "employees/:employee_id", to: "timesheets#employee_review", as: :employee_review
@@ -165,6 +169,7 @@ Rails.application.routes.draw do
       member do
         post :approve
         post :unapprove
+        patch :ihss, action: :update_ihss
       end
       collection do
         post :bulk_approve

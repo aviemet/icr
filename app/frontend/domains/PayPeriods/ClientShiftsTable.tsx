@@ -22,6 +22,7 @@ interface ClientShiftsTableProps {
 	shiftOtHours: Record<string, number>
 	canFacilitatorApprove: boolean
 	canEditTimes: boolean
+	canEditIhss?: boolean
 }
 
 export function ClientShiftsTable({
@@ -34,6 +35,7 @@ export function ClientShiftsTable({
 	shiftOtHours,
 	canFacilitatorApprove,
 	canEditTimes,
+	canEditIhss = false,
 }: ClientShiftsTableProps) {
 	const { t } = useTranslation()
 	const selectedEmployee = employees.find(employee => employee.id === selectedEmployeeId) ?? null
@@ -109,6 +111,7 @@ export function ClientShiftsTable({
 				reloadHref={ reloadHref }
 				showClientColumn={ false }
 				canFacilitatorApprove={ canFacilitatorApprove }
+				canEditIhss={ canEditIhss }
 			/>
 		</Stack>
 	)

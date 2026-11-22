@@ -140,20 +140,334 @@ RSpec.describe Payroll::EmployeePeriodHours do
         category: nil,
       )
 
-      collector = Class.new(Payroll::WorkIntervalCollector) do
-        def initialize(intervals)
-          @intervals = intervals
-        end
-
-        def intervals_for(pay_period:, employee_ids:) # rubocop:disable Lint/UnusedMethodArgument
-          @intervals.select { |work_interval| employee_ids.include?(work_interval.employee_id) }
-        end
-      end.new([interval])
+      collector = stub_collector([interval])
 
       result = described_class.call(pay_period, [employee.id], collector: collector)
 
       expect(result[employee.id.to_s][:regular_hours]).to eq(8.0)
       expect(result[employee.id.to_s][:ot_hours]).to eq(1.0)
+      expect(result[employee.id.to_s][:ihss_hours]).to eq(0.0)
+      expect(result[employee.id.to_s][:company_hours]).to eq(9.0)
+    end
+
+    it "applies weekly OT when a week exceeds the weekly threshold without daily OT" do
+      pay_period = pay_period_for(Date.new(2024, 3, 11))
+      employee = create(:employee)
+      intervals = (0..5).map do |day_offset|
+        date = Date.new(2024, 3, 11) + day_offset
+        Payroll::WorkInterval.new(
+          id: SecureRandom.uuid,
+          employee_id: employee.id,
+          starts_at: Time.zone.local(date.year, date.month, date.day, 9, 0, 0),
+          ends_at: Time.zone.local(date.year, date.month, date.day, 17, 0, 0),
+          category: nil,
+        )
+      end
+
+      result = described_class.call(pay_period, [employee.id], collector: stub_collector(intervals))
+
+      expect(result[employee.id.to_s][:regular_hours]).to eq(40.0)
+      expect(result[employee.id.to_s][:ot_hours]).to eq(8.0)
+    end
+
+    it "sums daily and weekly OT in the same period" do
+      pay_period = pay_period_for(Date.new(2024, 3, 11))
+      employee = create(:employee)
+      monday = Payroll::WorkInterval.new(
+        id: SecureRandom.uuid,
+        employee_id: employee.id,
+        starts_at: Time.zone.local(2024, 3, 11, 9, 0, 0),
+        ends_at: Time.zone.local(2024, 3, 11, 20, 0, 0),
+        category: nil,
+      )
+      rest = (1..4).map do |day_offset|
+        date = Date.new(2024, 3, 11) + day_offset
+        Payroll::WorkInterval.new(
+          id: SecureRandom.uuid,
+          employee_id: employee.id,
+          starts_at: Time.zone.local(date.year, date.month, date.day, 9, 0, 0),
+          ends_at: Time.zone.local(date.year, date.month, date.day, 17, 0, 0),
+          category: nil,
+        )
+      end
+
+      result = described_class.call(pay_period, [employee.id], collector: stub_collector([monday, *rest]))
+      hours = result[employee.id.to_s]
+
+      expect(hours[:ot_hours]).to eq(6.0)
+      expect(hours[:regular_hours]).to eq(37.0)
+    end
+
+    it "excludes active overtime exemption matches from OT through the engine" do
+      pay_period = pay_period_for(Date.new(2024, 3, 15))
+      employee = create(:employee)
+      category = Category.type("Shift").find_or_create_by!(name: "Sleep Shift") { |row| row.system = true }
+      create(
+        :overtime_exemption,
+        name: "Sleep exempt",
+        active: true,
+        criteria: [{ "category" => { "operator" => "equals", "value" => category.slug } }],
+      )
+      interval = Payroll::WorkInterval.new(
+        id: SecureRandom.uuid,
+        employee_id: employee.id,
+        starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0),
+        ends_at: Time.zone.local(2024, 3, 15, 21, 0, 0),
+        category: category,
+      )
+
+      result = described_class.call(pay_period, [employee.id], collector: stub_collector([interval]))
+
+      expect(result[employee.id.to_s][:ot_hours]).to eq(0.0)
+      expect(result[employee.id.to_s][:regular_hours]).to eq(0.0)
+      expect(result[employee.id.to_s][:company_hours]).to eq(12.0)
+    end
+
+    it "ignores inactive overtime exemptions" do
+      pay_period = pay_period_for(Date.new(2024, 3, 15))
+      employee = create(:employee)
+      category = Category.type("Shift").find_or_create_by!(name: "Sleep Shift") { |row| row.system = true }
+      create(
+        :overtime_exemption,
+        name: "Sleep inactive",
+        active: false,
+        criteria: [{ "category" => { "operator" => "equals", "value" => category.slug } }],
+      )
+      interval = Payroll::WorkInterval.new(
+        id: SecureRandom.uuid,
+        employee_id: employee.id,
+        starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0),
+        ends_at: Time.zone.local(2024, 3, 15, 19, 0, 0),
+        category: category,
+      )
+
+      result = described_class.call(pay_period, [employee.id], collector: stub_collector([interval]))
+
+      expect(result[employee.id.to_s][:ot_hours]).to eq(2.0)
+    end
+
+    it "isolates hours for multiple employees in one call" do
+      pay_period = pay_period_for(Date.new(2024, 3, 15))
+      first = create(:employee)
+      second = create(:employee)
+      intervals = [
+        Payroll::WorkInterval.new(
+          id: SecureRandom.uuid,
+          employee_id: first.id,
+          starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0),
+          ends_at: Time.zone.local(2024, 3, 15, 19, 0, 0),
+          category: nil,
+        ),
+        Payroll::WorkInterval.new(
+          id: SecureRandom.uuid,
+          employee_id: second.id,
+          starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0),
+          ends_at: Time.zone.local(2024, 3, 15, 17, 0, 0),
+          category: nil,
+        ),
+      ]
+
+      result = described_class.call(pay_period, [first.id, second.id], collector: stub_collector(intervals))
+
+      expect(result[first.id.to_s][:ot_hours]).to eq(2.0)
+      expect(result[second.id.to_s][:ot_hours]).to eq(0.0)
+    end
+
+    it "honors non-default daily and weekly thresholds" do
+      Setting.overtime_daily_hours = 10
+      Setting.overtime_weekly_hours = 45
+      pay_period = pay_period_for(Date.new(2024, 3, 15))
+      employee = create(:employee)
+      interval = Payroll::WorkInterval.new(
+        id: SecureRandom.uuid,
+        employee_id: employee.id,
+        starts_at: Time.zone.local(2024, 3, 15, 8, 0, 0),
+        ends_at: Time.zone.local(2024, 3, 15, 20, 0, 0),
+        category: nil,
+      )
+
+      result = described_class.call(pay_period, [employee.id], collector: stub_collector([interval]))
+
+      expect(result[employee.id.to_s][:regular_hours]).to eq(10.0)
+      expect(result[employee.id.to_s][:ot_hours]).to eq(2.0)
+    end
+
+    context "with IHSS classification and co-employer settings" do
+      before do
+        Setting.ihss_assignment_mode = "shift"
+      end
+
+      it "returns 0 agency OT when co-employer is off and company hours stay under thresholds" do
+        Setting.ihss_co_employer = false
+        pay_period = pay_period_for(Date.new(2024, 3, 11))
+        employee = create(:employee)
+        intervals = [
+          work_interval(employee, Date.new(2024, 3, 11), 9, 17, ihss: true),
+          work_interval(employee, Date.new(2024, 3, 12), 9, 17, ihss: true),
+          work_interval(employee, Date.new(2024, 3, 13), 9, 17, ihss: true),
+          work_interval(employee, Date.new(2024, 3, 14), 9, 15, ihss: true),
+          work_interval(employee, Date.new(2024, 3, 15), 9, 14, ihss: false),
+        ]
+
+        result = described_class.call(pay_period, [employee.id], collector: stub_collector(intervals))
+        hours = result[employee.id.to_s]
+
+        expect(hours[:ihss_hours]).to eq(30.0)
+        expect(hours[:company_hours]).to eq(5.0)
+        expect(hours[:ot_hours]).to eq(0.0)
+        expect(hours[:regular_hours]).to eq(5.0)
+      end
+
+      it "calculates daily OT from company hours only when co-employer is off" do
+        Setting.ihss_co_employer = false
+        pay_period = pay_period_for(Date.new(2024, 3, 15))
+        employee = create(:employee)
+        intervals = [
+          work_interval(employee, Date.new(2024, 3, 15), 6, 12, ihss: true),
+          work_interval(employee, Date.new(2024, 3, 15), 12, 22, ihss: false),
+        ]
+
+        result = described_class.call(pay_period, [employee.id], collector: stub_collector(intervals))
+        hours = result[employee.id.to_s]
+
+        expect(hours[:ihss_hours]).to eq(6.0)
+        expect(hours[:company_hours]).to eq(10.0)
+        expect(hours[:ot_hours]).to eq(2.0)
+        expect(hours[:regular_hours]).to eq(8.0)
+      end
+
+      it "returns 0 agency OT for IHSS-only hours over the daily threshold when co-employer is off" do
+        Setting.ihss_co_employer = false
+        pay_period = pay_period_for(Date.new(2024, 3, 15))
+        employee = create(:employee)
+        intervals = [work_interval(employee, Date.new(2024, 3, 15), 8, 18, ihss: true)]
+
+        result = described_class.call(pay_period, [employee.id], collector: stub_collector(intervals))
+        hours = result[employee.id.to_s]
+
+        expect(hours[:ihss_hours]).to eq(10.0)
+        expect(hours[:company_hours]).to eq(0.0)
+        expect(hours[:ot_hours]).to eq(0.0)
+        expect(hours[:regular_hours]).to eq(0.0)
+      end
+
+      it "counts all hours toward weekly OT when co-employer is on" do
+        Setting.ihss_co_employer = true
+        pay_period = pay_period_for(Date.new(2024, 3, 11))
+        employee = create(:employee)
+        intervals = [
+          work_interval(employee, Date.new(2024, 3, 11), 9, 16, ihss: true),
+          work_interval(employee, Date.new(2024, 3, 12), 9, 16, ihss: true),
+          work_interval(employee, Date.new(2024, 3, 13), 9, 16, ihss: true),
+          work_interval(employee, Date.new(2024, 3, 14), 9, 16, ihss: true),
+          work_interval(employee, Date.new(2024, 3, 15), 9, 16, ihss: true),
+          work_interval(employee, Date.new(2024, 3, 16), 9, 17, ihss: false),
+          work_interval(employee, Date.new(2024, 3, 17), 9, 11, ihss: false),
+        ]
+
+        result = described_class.call(pay_period, [employee.id], collector: stub_collector(intervals))
+        hours = result[employee.id.to_s]
+
+        expect(hours[:ihss_hours]).to eq(35.0)
+        expect(hours[:company_hours]).to eq(10.0)
+        expect(hours[:ot_hours]).to eq(5.0)
+        expect(hours[:regular_hours]).to eq(40.0)
+      end
+
+      it "ignores IHSS hours for weekly OT when co-employer is off with the same mix" do
+        Setting.ihss_co_employer = false
+        pay_period = pay_period_for(Date.new(2024, 3, 11))
+        employee = create(:employee)
+        intervals = [
+          work_interval(employee, Date.new(2024, 3, 11), 9, 16, ihss: true),
+          work_interval(employee, Date.new(2024, 3, 12), 9, 16, ihss: true),
+          work_interval(employee, Date.new(2024, 3, 13), 9, 16, ihss: true),
+          work_interval(employee, Date.new(2024, 3, 14), 9, 16, ihss: true),
+          work_interval(employee, Date.new(2024, 3, 15), 9, 16, ihss: true),
+          work_interval(employee, Date.new(2024, 3, 16), 9, 17, ihss: false),
+          work_interval(employee, Date.new(2024, 3, 17), 9, 11, ihss: false),
+        ]
+
+        result = described_class.call(pay_period, [employee.id], collector: stub_collector(intervals))
+        hours = result[employee.id.to_s]
+
+        expect(hours[:ihss_hours]).to eq(35.0)
+        expect(hours[:company_hours]).to eq(10.0)
+        expect(hours[:ot_hours]).to eq(0.0)
+        expect(hours[:regular_hours]).to eq(10.0)
+      end
+
+      it "includes IHSS hours in daily OT when co-employer is on" do
+        Setting.ihss_co_employer = true
+        pay_period = pay_period_for(Date.new(2024, 3, 15))
+        employee = create(:employee)
+        intervals = [
+          work_interval(employee, Date.new(2024, 3, 15), 6, 12, ihss: true),
+          work_interval(employee, Date.new(2024, 3, 15), 12, 18, ihss: false),
+        ]
+
+        result = described_class.call(pay_period, [employee.id], collector: stub_collector(intervals))
+        hours = result[employee.id.to_s]
+
+        expect(hours[:ihss_hours]).to eq(6.0)
+        expect(hours[:company_hours]).to eq(6.0)
+        expect(hours[:ot_hours]).to eq(4.0)
+        expect(hours[:regular_hours]).to eq(8.0)
+      end
+
+      it "keeps classification totals when an exempt interval is removed from OT" do
+        Setting.ihss_co_employer = true
+        pay_period = pay_period_for(Date.new(2024, 3, 15))
+        employee = create(:employee)
+        category = Category.type("Shift").find_or_create_by!(name: "Sleep Shift") { |row| row.system = true }
+        create(
+          :overtime_exemption,
+          name: "Sleep with IHSS",
+          active: true,
+          criteria: [{ "category" => { "operator" => "equals", "value" => category.slug } }],
+        )
+        intervals = [
+          Payroll::WorkInterval.new(
+            id: SecureRandom.uuid,
+            employee_id: employee.id,
+            starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0),
+            ends_at: Time.zone.local(2024, 3, 15, 21, 0, 0),
+            category: category,
+            ihss: true,
+          ),
+        ]
+
+        result = described_class.call(pay_period, [employee.id], collector: stub_collector(intervals))
+        hours = result[employee.id.to_s]
+
+        expect(hours[:ihss_hours]).to eq(12.0)
+        expect(hours[:company_hours]).to eq(0.0)
+        expect(hours[:ot_hours]).to eq(0.0)
+      end
     end
   end
+
+  def stub_collector(intervals)
+    Class.new(Payroll::WorkIntervalCollector) do
+      def initialize(rows)
+        @intervals = rows
+      end
+
+      def intervals_for(pay_period:, employee_ids:) # rubocop:disable Lint/UnusedMethodArgument
+        @intervals.select { |work_interval| employee_ids.include?(work_interval.employee_id) }
+      end
+    end.new(intervals)
+  end
+
+  def work_interval(employee, date, start_hour, end_hour, ihss:)
+    Payroll::WorkInterval.new(
+      id: SecureRandom.uuid,
+      employee_id: employee.id,
+      starts_at: Time.zone.local(date.year, date.month, date.day, start_hour, 0, 0),
+      ends_at: Time.zone.local(date.year, date.month, date.day, end_hour, 0, 0),
+      category: nil,
+      ihss: ihss,
+    )
+  end
 end
+

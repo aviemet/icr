@@ -25,6 +25,7 @@ export interface ClientsBoardProps {
 	pendingShiftCountByClient: Record<string, number>
 	reviewedShiftCountByClient: Record<string, number>
 	totalShiftCountByClient: Record<string, number>
+	ihssHoursByClient?: Record<string, number>
 }
 
 export function ClientsBoard({
@@ -37,6 +38,7 @@ export function ClientsBoard({
 	pendingShiftCountByClient,
 	reviewedShiftCountByClient,
 	totalShiftCountByClient,
+	ihssHoursByClient = {},
 }: ClientsBoardProps) {
 	const { t } = useTranslation()
 	const [periodStart, periodEnd] = periodDates
@@ -89,6 +91,7 @@ export function ClientsBoard({
 						pendingShiftCountByClient={ pendingShiftCountByClient }
 						reviewedShiftCountByClient={ reviewedShiftCountByClient }
 						totalShiftCountByClient={ totalShiftCountByClient }
+						ihssHoursByClient={ ihssHoursByClient }
 					/>
 				</Section>
 

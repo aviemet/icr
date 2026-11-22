@@ -12,6 +12,14 @@ class ShiftPolicy < ApplicationPolicy
     facilitator_approve?
   end
 
+  def update_ihss?
+    return true if admin?
+    return false unless user.person&.employee?
+    return false if record.timesheet.blank?
+
+    Pundit.policy!(user, record.timesheet).update?
+  end
+
   private
 
   def caseload_owns_all_clients?

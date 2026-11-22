@@ -27,6 +27,8 @@ import { ReviewTable } from "./ReviewTable"
 interface EmployeeHoursMap {
 	regular_hours?: number
 	ot_hours?: number
+	ihss_hours?: number
+	company_hours?: number
 }
 
 interface UnreviewedShiftRow {
@@ -47,6 +49,8 @@ export interface EmployeeReviewBoardProps {
 	shiftOtHours: Record<string, number>
 	employeeHours: EmployeeHoursMap
 	unreviewedShifts?: UnreviewedShiftRow[]
+	ihssAssignmentMode?: string
+	canEditIhss?: boolean
 }
 
 export function EmployeeReviewBoard({
@@ -61,6 +65,8 @@ export function EmployeeReviewBoard({
 	shiftOtHours,
 	employeeHours,
 	unreviewedShifts = [],
+	ihssAssignmentMode = "shift",
+	canEditIhss = false,
 }: EmployeeReviewBoardProps) {
 	const { t } = useTranslation()
 	const modals = useModals()
@@ -69,7 +75,10 @@ export function EmployeeReviewBoard({
 		periodStart && periodEnd ? formatter.datetime.range(periodStart, periodEnd) : ""
 	const regularHours = employeeHours.regular_hours ?? 0
 	const otHours = employeeHours.ot_hours ?? 0
-	const totalHours = regularHours + otHours
+	const ihssHours = employeeHours.ihss_hours ?? 0
+	const companyHours = employeeHours.company_hours ?? 0
+	const totalHours = ihssHours + companyHours
+	const showIhssToggle = canEditIhss && ihssAssignmentMode === "shift"
 	const isApproved = Boolean(timesheet?.approved_at)
 	const noValue = t("views.timesheets.index.no_value")
 	const employeeName = employee.full_name ?? employee.name ?? "-"
@@ -182,10 +191,20 @@ export function EmployeeReviewBoard({
 						</MetricValue>
 					</MetricTile>
 					<MetricTile
-						title={ t("views.timesheets.employee_review.pto_hours") }
+						title={ t("views.timesheets.employee_review.ihss_hours") }
 						icon={ <ClockIcon size={ 16 } /> }
 					>
-						<MetricValue>{ noValue }</MetricValue>
+						<MetricValue>
+							{ formatter.number.decimal(ihssHours, 2) } hrs
+						</MetricValue>
+					</MetricTile>
+					<MetricTile
+						title={ t("views.timesheets.employee_review.company_hours") }
+						icon={ <ClockIcon size={ 16 } /> }
+					>
+						<MetricValue>
+							{ formatter.number.decimal(companyHours, 2) } hrs
+						</MetricValue>
 					</MetricTile>
 					<MetricTile
 						title={ t("views.timesheets.employee_review.total") }
@@ -208,6 +227,7 @@ export function EmployeeReviewBoard({
 						employeeId={ employee.id }
 						employeeSlug={ employee.slug }
 						payPeriodId={ payPeriodId }
+						canEditIhss={ showIhssToggle }
 					/>
 				</Section>
 

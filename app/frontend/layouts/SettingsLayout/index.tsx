@@ -76,6 +76,7 @@ const links: SettingsNavLinkItem[] = [
 		children: [
 			{ label: "Pay Schedule", href: Routes.settingsPayrollSchedule() },
 			{ label: "Overtime", href: Routes.settingsPayrollOvertime() },
+			{ label: "IHSS", href: Routes.settingsPayrollIhss() },
 		],
 	},
 	{ label: "Notifications", href: Routes.settingsNotifications(), icon: <NotificationIcon /> },

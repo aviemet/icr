@@ -39,6 +39,7 @@ interface ReviewRowProps {
 	reloadHref: string
 	showClientColumn: boolean
 	canFacilitatorApprove: boolean
+	canEditIhss: boolean
 }
 
 export function ReviewRow({
@@ -52,6 +53,7 @@ export function ReviewRow({
 	reloadHref,
 	showClientColumn,
 	canFacilitatorApprove,
+	canEditIhss,
 }: ReviewRowProps) {
 	const { t } = useTranslation()
 
@@ -158,6 +160,15 @@ export function ReviewRow({
 			<Table.Cell>
 				<Text size="sm">{ formatter.number.decimal(hours, 2) }</Text>
 			</Table.Cell>
+			{ canEditIhss && (
+				<Table.Cell>
+					<Badge variant="light" color={ shift.ihss ? "teal" : "gray" } size="sm">
+						{ shift.ihss
+							? t("views.timesheets.employee_review.ihss")
+							: t("views.timesheets.index.no_value") }
+					</Badge>
+				</Table.Cell>
+			) }
 			<Table.Cell>
 				<Text size="sm">{ formatter.number.decimal(shiftOtHours[shift.id] ?? 0, 2) }</Text>
 			</Table.Cell>
@@ -179,6 +190,17 @@ export function ReviewRow({
 			) }
 			<Table.Cell>
 				<Group gap={ 4 } wrap="nowrap">
+					{ canEditIhss && (
+						<Button
+							size="xs"
+							variant={ shift.ihss ? "default" : "light" }
+							onClick={ () => router.patch(Routes.ihssShift(shift.id), { ihss: !shift.ihss }) }
+						>
+							{ shift.ihss
+								? t("views.timesheets.employee_review.clear_ihss")
+								: t("views.timesheets.employee_review.mark_ihss") }
+						</Button>
+					) }
 					{ canFacilitatorApprove && (
 						reviewed
 							? (

@@ -31,6 +31,9 @@ export interface ClientReviewBoardProps {
 	shifts: Schema.ShiftsReview[]
 	shiftExceptionReasons: Record<string, string[]>
 	shiftOtHours: Record<string, number>
+	ihssHoursUsed?: number
+	ihssAssignmentMode?: string
+	canEditIhss?: boolean
 }
 
 export function ClientReviewBoard({
@@ -44,6 +47,9 @@ export function ClientReviewBoard({
 	shifts,
 	shiftExceptionReasons,
 	shiftOtHours,
+	ihssHoursUsed = 0,
+	ihssAssignmentMode = "shift",
+	canEditIhss = false,
 }: ClientReviewBoardProps) {
 	const { t } = useTranslation()
 	const [periodStart, periodEnd] = periodDates
@@ -79,6 +85,11 @@ export function ClientReviewBoard({
 								{ t("views.pay_periods.client_show.finalized_locked") }
 							</span>
 						) }
+						<span className={ classes.subtitle }>
+							{ t("views.pay_periods.clients.columns.ihss_used") }: { ihssHoursUsed }
+							{ " / " }
+							{ periodClient.ihss_authorized_hours ?? "-" }
+						</span>
 						{ employeeOptions.length > 0
 							? (
 								<Select
@@ -111,6 +122,7 @@ export function ClientReviewBoard({
 						shiftOtHours={ shiftOtHours }
 						canFacilitatorApprove={ canFacilitatorApprove }
 						canEditTimes={ !finalized }
+						canEditIhss={ canEditIhss && ihssAssignmentMode === "shift" }
 					/>
 				</Section>
 

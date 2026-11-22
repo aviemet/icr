@@ -163,6 +163,34 @@ RSpec.describe "pay period clients views", type: :request do
       expect(inertia.props[:facilitator_reviewed_shift_count_by_employee].keys).to match_array(employee_ids)
       expect(inertia.props[:timesheet_ids_by_employee].keys).to match_array(employee_ids)
       expect(inertia.props[:employee_hours].keys).to match_array(employee_ids)
+      employee_ids.each do |employee_id|
+        expect(inertia.props[:employee_hours][employee_id]).to include(
+          :regular_hours,
+          :ot_hours,
+          :ihss_hours,
+          :company_hours,
+        )
+      end
+    end
+  end
+
+  describe "GET /payroll/periods/:id/clients IHSS utilization" do
+    login_user(:admin)
+
+    it "keeps ihss_hours_by_client keys lockstep with period_clients" do
+      Setting.ihss_assignment_mode = "shift"
+      client = create(:client, ihss_authorized_hours: 40)
+      employee = create(:employee, :employed)
+      pay_period, shift = create_period_with_client_shift(client: client, employee: employee)
+      shift.update!(ihss: true)
+
+      get clients_period_path(pay_period)
+
+      expect(response).to have_http_status(:success)
+      client_ids = inertia.props[:period_clients].pluck(:id)
+      expect(inertia.props[:ihss_hours_by_client].keys).to match_array(client_ids)
+      expect(inertia.props[:ihss_hours_by_client][client.id.to_s]).to eq(8.0)
     end
   end
 end
+

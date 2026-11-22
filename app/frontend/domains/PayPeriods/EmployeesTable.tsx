@@ -10,6 +10,8 @@ import { formatter, Routes } from "@/lib"
 interface EmployeeHoursMap {
 	regular_hours?: number
 	ot_hours?: number
+	ihss_hours?: number
+	company_hours?: number
 }
 
 interface EmployeeExceptionsMap {
@@ -89,6 +91,18 @@ export function EmployeesTable({
 			title: t("views.timesheets.index.employees.ot_hours"),
 			sortable: false,
 			render: (employee) => formatHours(employee_hours[employee.id]?.ot_hours),
+		},
+		{
+			accessor: "ihss_hours",
+			title: t("views.timesheets.index.employees.ihss_hours"),
+			sortable: false,
+			render: (employee) => formatHours(employee_hours[employee.id]?.ihss_hours),
+		},
+		{
+			accessor: "company_hours",
+			title: t("views.timesheets.index.employees.company_hours"),
+			sortable: false,
+			render: (employee) => formatHours(employee_hours[employee.id]?.company_hours),
 		},
 		{
 			accessor: "pto_sick",

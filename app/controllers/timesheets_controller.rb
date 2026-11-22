@@ -52,6 +52,8 @@ class TimesheetsController < ApplicationController
       shift_ot_hours: -> { shift_ot_hours },
       employee_hours: -> { hours_data.except(:shift_ot_hours) },
       unreviewed_shifts: -> { unreviewed_shifts },
+      ihss_assignment_mode: -> { Setting.ihss_assignment_mode },
+      can_edit_ihss: -> { !pay_period.finalized? && timesheet.present? && policy(timesheet).update? },
     }
   end
 

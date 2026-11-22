@@ -31,6 +31,26 @@ class Payroll::ShiftsController < ApplicationController
     redirect_back_or_to(fallback_period_path(period), notice: t("shifts.facilitator_unapproved"))
   end
 
+  # @route PATCH /payroll/shifts/:id/ihss (ihss_shift)
+  def update_ihss
+    authorize shift, :update_ihss?
+
+    period = shift.timesheet&.pay_period
+    period = period&.reload if period.present?
+    if period.blank? || period.finalized?
+      redirect_back_or_to(fallback_period_path(period), alert: t("pay_periods.finalized_locked"))
+      return
+    end
+
+    if Setting.ihss_assignment_mode != Setting::IHSS_ASSIGNMENT_MODES[:shift]
+      redirect_back_or_to(fallback_period_path(period), alert: t("shifts.ihss_shift_mode_required"))
+      return
+    end
+
+    shift.update!(ihss: ActiveModel::Type::Boolean.new.cast(params.require(:ihss)))
+    redirect_back_or_to(fallback_period_path(period), notice: t("shifts.ihss_updated"))
+  end
+
   # @route POST /payroll/shifts/bulk_approve (bulk_approve_shifts)
   def bulk_approve
     period = PayPeriod.find(params.require(:pay_period_id))

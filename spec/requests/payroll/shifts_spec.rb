@@ -92,4 +92,57 @@ RSpec.describe "/payroll/shifts", type: :request do
       expect(shift.reload.facilitator_approved_at).to be_present
     end
   end
+
+  describe "PATCH /payroll/shifts/:id/ihss" do
+    login_user(:admin)
+
+    it "marks a shift as IHSS when assignment mode is shift" do
+      Setting.ihss_assignment_mode = "shift"
+      employee = create(:employee, :employed)
+      pay_period = create(:pay_period, finalized_at: nil)
+      timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
+      shift = create(
+        :shift,
+        employee: employee,
+        timesheet: timesheet,
+        calendar_event: create(
+          :calendar_event,
+          starts_at: pay_period.starts_at + 1.day,
+          ends_at: pay_period.starts_at + 1.day + 8.hours,
+        ),
+        ihss: false,
+      )
+
+      patch ihss_shift_url(shift), params: { ihss: true }
+
+      expect(response).to have_http_status(:redirect)
+      expect(shift.reload.ihss).to be(true)
+    end
+
+    it "rejects IHSS updates on a finalized period" do
+      Setting.ihss_assignment_mode = "shift"
+      Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:weekly]
+      Setting.payroll_period_day = "monday"
+      employee = create(:employee, :employed)
+      starts_at = Time.zone.local(2024, 3, 11).beginning_of_day
+      ends_at = Time.zone.local(2024, 3, 17).end_of_day
+      pay_period = PayPeriod.for_period_dates(starts_at.to_date, ends_at.to_date)
+      pay_period.update!(finalized_at: Time.current)
+      timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
+      event = create(
+        :calendar_event,
+        starts_at: Time.zone.local(2024, 3, 12, 9, 0, 0),
+        ends_at: Time.zone.local(2024, 3, 12, 17, 0, 0),
+      )
+      shift = create(:shift, employee: employee, timesheet: timesheet, calendar_event: event, ihss: false)
+      shift.update_columns(timesheet_id: timesheet.id) # rubocop:disable Rails/SkipsModelValidations
+
+      patch ihss_shift_url(shift), params: { ihss: true }
+
+      expect(response).to have_http_status(:redirect)
+      expect(shift.reload.ihss).to be(false)
+    end
+  end
 end
+
+

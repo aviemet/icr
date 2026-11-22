@@ -7,7 +7,7 @@ module Payroll
         shift_records = Shift
           .where(employee_id: employee_ids)
           .where(timesheet_id: Timesheet.where(pay_period_id: pay_period.id, employee_id: employee_ids).select(:id))
-          .includes(:category, :calendar_event)
+          .includes(:category, calendar_event: :clients)
 
         shift_records.filter_map do |shift|
           starts_at = shift.start_time
@@ -20,6 +20,8 @@ module Payroll
             starts_at: starts_at,
             ends_at: ends_at,
             category: shift.category,
+            ihss: shift.ihss,
+            client_ids: shift.calendar_event&.clients&.map(&:id) || [],
           )
         end
       end

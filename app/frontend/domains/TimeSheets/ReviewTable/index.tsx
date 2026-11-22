@@ -24,6 +24,7 @@ interface ReviewTableProps extends TableProps {
 	reloadHref?: string
 	showClientColumn?: boolean
 	canFacilitatorApprove?: boolean
+	canEditIhss?: boolean
 }
 
 export function ReviewTable({
@@ -39,6 +40,7 @@ export function ReviewTable({
 	reloadHref,
 	showClientColumn = true,
 	canFacilitatorApprove = false,
+	canEditIhss = false,
 	...props
 }: ReviewTableProps) {
 	const { t } = useTranslation()
@@ -50,7 +52,8 @@ export function ReviewTable({
 		1 +
 		(showClientColumn ? 1 : 0) +
 		1 +
-		1
+		1 +
+		(canEditIhss ? 1 : 0)
 	const trailingColumnCount =
 		1 +
 		1 +
@@ -103,6 +106,9 @@ export function ReviewTable({
 							) }
 							<Table.HeadCell>{ t("views.timesheets.employee_review.in_out_times") }</Table.HeadCell>
 							<Table.HeadCell>{ t("views.timesheets.employee_review.hours") }</Table.HeadCell>
+							{ canEditIhss && (
+								<Table.HeadCell>{ t("views.timesheets.employee_review.ihss") }</Table.HeadCell>
+							) }
 							<Table.HeadCell>{ t("views.timesheets.employee_review.ot") }</Table.HeadCell>
 							<Table.HeadCell>{ t("views.timesheets.employee_review.exception") }</Table.HeadCell>
 							{ canFacilitatorApprove && (
@@ -135,6 +141,7 @@ export function ReviewTable({
 										reloadHref={ resolvedReloadHref }
 										showClientColumn={ showClientColumn }
 										canFacilitatorApprove={ canFacilitatorApprove }
+										canEditIhss={ canEditIhss }
 									/>
 								))
 							) }

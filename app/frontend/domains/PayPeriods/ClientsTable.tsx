@@ -9,6 +9,7 @@ interface ClientsTableProps {
 	pendingShiftCountByClient: Record<string, number>
 	reviewedShiftCountByClient: Record<string, number>
 	totalShiftCountByClient: Record<string, number>
+	ihssHoursByClient?: Record<string, number>
 }
 
 export function ClientsTable({
@@ -17,6 +18,7 @@ export function ClientsTable({
 	pendingShiftCountByClient,
 	reviewedShiftCountByClient,
 	totalShiftCountByClient,
+	ihssHoursByClient = {},
 }: ClientsTableProps) {
 	const { t } = useTranslation()
 
@@ -51,6 +53,22 @@ export function ClientsTable({
 					<Text size="sm">{ t("views.pay_periods.clients.reviewed_of_total", { reviewed, total }) }</Text>
 				)
 			},
+		},
+		{
+			accessor: "ihss_used",
+			title: t("views.pay_periods.clients.columns.ihss_used"),
+			sortable: false,
+			render: (client) => (
+				<Text size="sm">{ ihssHoursByClient[client.id] ?? 0 }</Text>
+			),
+		},
+		{
+			accessor: "authorized",
+			title: t("views.pay_periods.clients.columns.authorized"),
+			sortable: false,
+			render: (client) => (
+				<Text size="sm">{ client.ihss_authorized_hours ?? "-" }</Text>
+			),
 		},
 		{
 			accessor: "status",

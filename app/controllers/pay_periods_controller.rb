@@ -71,6 +71,7 @@ class PayPeriodsController < ApplicationController
       can_view_clients: -> { true },
       summary: -> { summary_service.show_counts },
       adjustments: -> { pay_period.adjustments.order(created_at: :desc).limit(50).map(&:render) },
+      ihss_assignment_mode: -> { Setting.ihss_assignment_mode },
       **queue.transform_values { |value| -> { value } },
     }
   end
@@ -85,6 +86,7 @@ class PayPeriodsController < ApplicationController
     summary_service = Payroll::PeriodSummary.new(pay_period, employee_ids: period_employee_ids(pay_period))
     summary = summary_service.call
     queue = Payroll::ClientPeriodQueue.call(period: pay_period, client_ids: client_ids)
+    ihss_hours_by_client = Payroll::ClientPeriodIhssHours.call(pay_period: pay_period, client_ids: client_ids)
 
     render inertia: "PayPeriods/Clients", props: {
       pay_period: -> { pay_period.render },
@@ -98,6 +100,8 @@ class PayPeriodsController < ApplicationController
       pending_shift_count_by_client: -> { queue[:pending_shift_count_by_client] },
       reviewed_shift_count_by_client: -> { queue[:reviewed_shift_count_by_client] },
       total_shift_count_by_client: -> { queue[:total_shift_count_by_client] },
+      ihss_hours_by_client: -> { ihss_hours_by_client },
+      ihss_assignment_mode: -> { Setting.ihss_assignment_mode },
     }
   end
 
@@ -142,7 +146,51 @@ class PayPeriodsController < ApplicationController
       shifts: -> { shifts_list.map { |row| row.render(:review) } },
       shift_exception_reasons: -> { shift_exception_reasons },
       shift_ot_hours: -> { shift_ot_hours.transform_keys(&:to_s) },
+      ihss_hours_used: -> {
+        Payroll::ClientPeriodIhssHours.call(pay_period: pay_period, client_ids: [client_record.id])[client_record.id.to_s] || 0.0
+      },
+      ihss_assignment_mode: -> { Setting.ihss_assignment_mode },
+      can_edit_ihss: -> { !pay_period.finalized? && employee_combined_access? },
     }
+  end
+
+  # @route GET /payroll/periods/:id/ihss (ihss_period)
+  def ihss
+    authorize pay_period, :update?
+
+    if Setting.ihss_assignment_mode != Setting::IHSS_ASSIGNMENT_MODES[:period]
+      redirect_to period_path(pay_period), alert: t("pay_periods.ihss_period_mode_required")
+      return
+    end
+
+    board = Payroll::IhssPeriodAssignmentBoard.call(period: pay_period)
+
+    render inertia: "PayPeriods/Ihss", props: {
+      pay_period: -> { pay_period.render },
+      period_dates: -> { [pay_period.starts_at, pay_period.ends_at].map { |date| date.strftime("%FT%T%:z") } },
+      finalized: -> { pay_period.finalized? },
+      assignment_rows: -> { board[:assignment_rows] },
+    }
+  end
+
+  # @route PATCH /payroll/periods/:id/ihss (ihss_period)
+  # @route PUT /payroll/periods/:id/ihss (ihss_period)
+  def update_ihss
+    authorize pay_period, :update?
+
+    if pay_period.finalized?
+      redirect_to ihss_period_path(pay_period), alert: t("pay_periods.finalized_locked")
+      return
+    end
+
+    if Setting.ihss_assignment_mode != Setting::IHSS_ASSIGNMENT_MODES[:period]
+      redirect_to period_path(pay_period), alert: t("pay_periods.ihss_period_mode_required")
+      return
+    end
+
+    rows = params.permit(assignments: [:employee_id, :client_id, :hours]).fetch(:assignments, [])
+    Payroll::ReplaceIhssPeriodAssignments.call(period: pay_period, rows: rows)
+    redirect_to ihss_period_path(pay_period), notice: t("pay_periods.ihss_assignments_updated")
   end
 
   # @route POST /payroll/periods/:id/finalize (finalize_period)

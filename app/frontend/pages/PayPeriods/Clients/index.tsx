@@ -22,6 +22,7 @@ interface PayPeriodsClientsProps {
 	pending_shift_count_by_client: Record<string, number>
 	reviewed_shift_count_by_client: Record<string, number>
 	total_shift_count_by_client: Record<string, number>
+	ihss_hours_by_client?: Record<string, number>
 }
 
 export default function PayPeriodsClients({
@@ -34,6 +35,7 @@ export default function PayPeriodsClients({
 	pending_shift_count_by_client = {},
 	reviewed_shift_count_by_client = {},
 	total_shift_count_by_client = {},
+	ihss_hours_by_client = {},
 }: PayPeriodsClientsProps) {
 	const { t } = useTranslation()
 	const [periodStart, periodEnd] = period_dates
@@ -58,6 +60,7 @@ export default function PayPeriodsClients({
 				pendingShiftCountByClient={ pending_shift_count_by_client }
 				reviewedShiftCountByClient={ reviewed_shift_count_by_client }
 				totalShiftCountByClient={ total_shift_count_by_client }
+				ihssHoursByClient={ ihss_hours_by_client }
 			/>
 		</Page>
 	)
