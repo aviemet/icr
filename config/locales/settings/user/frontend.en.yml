@@ -10,3 +10,6 @@ en:
         color_scheme:
           label: Color scheme
           description: Switch between light and dark mode.
+        dyslexia_font:
+          label: Dyslexia-friendly font
+          description: Use OpenDyslexic for easier reading.

@@ -86,7 +86,7 @@ class User < ApplicationRecord
   #  and :omniauthable
   devise :database_authenticatable, :registerable, :confirmable, :lockable, :timeoutable, :trackable, :recoverable, :rememberable, :validatable
 
-  store_accessor :user_preferences, :dark_mode
+  store_accessor :user_preferences, :dark_mode, :dyslexia_font
 
   has_one :person, dependent: :nullify
 
@@ -117,6 +117,7 @@ class User < ApplicationRecord
 
   def coerce_json
     self.dark_mode = ActiveModel::Type::Boolean.new.cast(self.dark_mode) if self.dark_mode
+    self.dyslexia_font = ActiveModel::Type::Boolean.new.cast(self.dyslexia_font) if self.dyslexia_font
   end
 
   def synchronize_email_with_contact

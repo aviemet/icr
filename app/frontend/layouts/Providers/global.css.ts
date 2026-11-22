@@ -56,4 +56,32 @@ export const globals = css`
 		font-style: italic;
 	}
 
+	@font-face {
+		font-family: 'OpenDyslexic';
+		src: url('/fonts/opendyslexic/OpenDyslexic-Regular.otf') format('opentype');
+		font-weight: 400;
+		font-style: normal;
+	}
+
+	@font-face {
+		font-family: 'OpenDyslexic';
+		src: url('/fonts/opendyslexic/OpenDyslexic-Bold.otf') format('opentype');
+		font-weight: 700;
+		font-style: normal;
+	}
+
+	@font-face {
+		font-family: 'OpenDyslexic';
+		src: url('/fonts/opendyslexic/OpenDyslexic-Italic.otf') format('opentype');
+		font-weight: 400;
+		font-style: italic;
+	}
+
+	@font-face {
+		font-family: 'OpenDyslexic';
+		src: url('/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf') format('opentype');
+		font-weight: 700;
+		font-style: italic;
+	}
+
 `

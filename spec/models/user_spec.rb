@@ -96,9 +96,11 @@ RSpec.describe User, type: :model do
       it "coerces user_preferences store_accessor values" do
         user = create(:user)
         user.dark_mode = 0
+        user.dyslexia_font = 1
         user.save
 
         expect(user.dark_mode).to be(false)
+        expect(user.dyslexia_font).to be(true)
       end
     end
 

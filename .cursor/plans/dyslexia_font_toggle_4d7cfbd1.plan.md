@@ -4,19 +4,19 @@ overview: Add a per-user Dyslexia font Switch on User Settings Appearance that p
 todos:
   - id: backend-pref
     content: Add dyslexia_font store_accessor + boolean coerce + model spec
-    status: pending
+    status: completed
   - id: font-assets
     content: Vendor OpenDyslexic under public/fonts/opendyslexic and @font-face in global.css.ts
-    status: pending
+    status: completed
   - id: theme-apply
     content: UiFrameworkProvider reads auth preference and sets fontFamily
-    status: pending
+    status: completed
   - id: appearance-ui
     content: Appearance Switch + i18n + useUpdateUserPreferences + auth reload
-    status: pending
+    status: completed
   - id: tests-checklist
     content: Appearance/theme specs; check off Phase 8 item in icr.mdx
-    status: pending
+    status: completed
 isProject: false
 ---
 

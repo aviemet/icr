@@ -1354,6 +1354,10 @@
             "label": "Color scheme"
           },
           "description": "Preferences for your account.",
+          "dyslexia_font": {
+            "description": "Use OpenDyslexic for easier reading.",
+            "label": "Dyslexia-friendly font"
+          },
           "title": "User Settings"
         }
       },
