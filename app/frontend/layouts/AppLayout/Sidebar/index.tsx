@@ -8,7 +8,7 @@ import {
 	Text,
 	Divider,
 } from "@/components"
-import { ClientIcon, ClockIcon, DashboardIcon, EmployeeIcon, HelpingIcon, PeopleIcon, SettingsIcon } from "@/components/Icons"
+import { ClientIcon, ClockIcon, ColumnsIcon, DashboardIcon, EmployeeIcon, HelpingIcon, PeopleIcon, SettingsIcon } from "@/components/Icons"
 import { IconProvider } from "@/layouts/Providers/IconProvider"
 import { matchesAtPosition, Routes } from "@/lib"
 import { useLocation, usePageProps, usePermissions } from "@/lib/hooks"
@@ -137,6 +137,26 @@ export function Sidebar() {
 								leftSection={ <ClockIcon /> }
 								active={ matchesAtPosition(paths, [0, "payroll"]) }
 							/>
+						) }
+						{ can("report_definitions", "index") && (
+							<MenuLink
+								label="Reports"
+								href={ Routes.reportDefinitions() }
+								leftSection={ <ColumnsIcon /> }
+								menuKey="reports"
+								active={
+									matchesAtPosition(paths, [0, "reports"]) ||
+									matchesAtPosition(paths, [0, "report_requests"])
+								}
+							>
+								{ can("report_requests", "index") && (
+									<MenuLink
+										label="Queue"
+										href={ Routes.reportRequests() }
+										active={ matchesAtPosition(paths, [0, "report_requests"]) }
+									/>
+								) }
+							</MenuLink>
 						) }
 						{ can("vendors", "index") && (
 							<MenuLink

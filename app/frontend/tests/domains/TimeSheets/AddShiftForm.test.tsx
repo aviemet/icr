@@ -129,7 +129,10 @@ describe("AddShiftForm", () => {
 		})
 
 		const payload = mutateAsync.mock.calls[0][0]
-		expect(payload.calendar_event.shift_attributes).toEqual({ employee_id: "employee-1" })
+		expect(payload.calendar_event.shift_attributes).toEqual({
+			employee_id: "employee-1",
+			category_id: "calendar-event-shift",
+		})
 		expect(payload.calendar_event.event_participants_attributes).toEqual([
 			{ participant_type: "Client", participant_id: "client-1" },
 		])

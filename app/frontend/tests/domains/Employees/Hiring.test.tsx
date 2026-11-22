@@ -38,13 +38,21 @@ function buildEmployee(overrides: Partial<Schema.EmployeesShow> = {}): Schema.Em
 		desired_compensation_currency: "USD",
 		desired_compensation_period: "hourly",
 		desired_job_title: { id: "jt-1", name: "Caregiver" } as Schema.EmployeeJobTitle,
-		hiring_notes: "Strong references",
+		hiring_notes: "<p>Strong references</p>",
 		resume: {
 			id: "resume-1",
 			filename: "ada.pdf",
 			content_type: "application/pdf",
 			byte_size: 10,
 			url: "/files/ada.pdf",
+			created_at: new Date("2024-01-01"),
+		},
+		cover_letter: {
+			id: "cover-1",
+			filename: "cover.pdf",
+			content_type: "application/pdf",
+			byte_size: 10,
+			url: "/files/cover.pdf",
 			created_at: new Date("2024-01-01"),
 		},
 		assigned_clients_count: 0,
@@ -131,6 +139,7 @@ describe("EmployeeHiring", () => {
 		expect(screen.getByText("$22.00 (hourly)")).toBeInTheDocument()
 		expect(screen.getByText("Strong references")).toBeInTheDocument()
 		expect(screen.getByRole("link", { name: "ada.pdf" })).toHaveAttribute("href", "/files/ada.pdf")
+		expect(screen.getByRole("link", { name: "cover.pdf" })).toHaveAttribute("href", "/files/cover.pdf")
 		expect(screen.getByText("Caregiver - $22.00 (hourly)")).toBeInTheDocument()
 		expect(screen.getByText("views.employees.show.hiring.offer_statuses.extended")).toBeInTheDocument()
 		expect(screen.getByText("Phone - Zoom")).toBeInTheDocument()
@@ -150,7 +159,7 @@ describe("EmployeeHiring", () => {
 	it("shows empty states without offers or interviews", () => {
 		render(
 			<MantineProvider theme={ theme }>
-				<EmployeeHiring employee={ buildEmployee({ offers: [], interviews: [], resume: null }) } />
+				<EmployeeHiring employee={ buildEmployee({ offers: [], interviews: [], resume: null, cover_letter: null }) } />
 			</MantineProvider>,
 		)
 

@@ -3,7 +3,7 @@ import React from "react"
 import { Button, Grid, Group, Tooltip } from "@/components"
 import { useFormField, Submit } from "@/components/Form"
 import { RandomizeIcon } from "@/components/Icons"
-import { ColorPickerInput, CurrencyInput, DateInput, FileInput, Select, Textarea, TextInput } from "@/components/Inputs"
+import { ColorPickerInput, CurrencyInput, DateInput, FileInput, RadioGroup, RichText, Select, TextInput } from "@/components/Inputs"
 import { type DateInputValue } from "@/components/Inputs"
 import { JobTitlesDropdown } from "@/components/Inputs/Dropdowns"
 import { FormBand, FormBandStack } from "@/features"
@@ -31,7 +31,7 @@ export function Inputs({ employee, jobTitles = [] }: EmployeeInputProps) {
 		{ value: "employed", label: "Employee" },
 	]
 
-	const compensationPeriodOptions = [
+	const compensationFrequencyOptions = [
 		{ value: "hourly", label: "Hourly" },
 		{ value: "salary", label: "Salary" },
 	]
@@ -102,33 +102,49 @@ export function Inputs({ employee, jobTitles = [] }: EmployeeInputProps) {
 							</Tooltip>
 						</ColorPickerInput>
 					</Grid.Col>
+					{ status === "applicant" && (
+						<>
+							<Grid.Col span={ { xxs: 12, sm: 6 } }>
+								<CurrencyInput name="employee.desired_compensation" label="Desired Compensation" decimalScale={ 2 } />
+							</Grid.Col>
+							<Grid.Col span={ { xxs: 12, sm: 6 } }>
+								<RadioGroup
+									name="employee.desired_compensation_period"
+									label="Frequency"
+									options={ compensationFrequencyOptions }
+								/>
+							</Grid.Col>
+						</>
+					) }
 				</Grid>
 			</FormBand>
 
 			{ status === "applicant" && (
 				<FormBand title="Application">
 					<Grid gap="lg">
-						<Grid.Col span={ { xxs: 12, sm: 6 } }>
-							<TextInput name="employee.application_source" label="Application Source" />
+						<Grid.Col span={ 12 }>
+							<Grid>
+								<Grid.Col span={ { xxs: 12, sm: 6 } }>
+									<TextInput name="employee.application_source" label="Application Source" />
+								</Grid.Col>
+							</Grid>
 						</Grid.Col>
-						<Grid.Col span={ { xxs: 12, sm: 6 } }>
-							<JobTitlesDropdown name="employee.desired_job_title_id" label="Desired Job Title" />
+						<Grid.Col span={ 12 }>
+							<Grid>
+								<Grid.Col span={ { xxs: 12, sm: 6 } }>
+									<FileInput name="employee.resume" label="Resume" accept=".pdf,.doc,.docx" />
+								</Grid.Col>
+							</Grid>
 						</Grid.Col>
-						<Grid.Col span={ { xxs: 12, sm: 6 } }>
-							<CurrencyInput name="employee.desired_compensation" label="Desired Compensation" decimalScale={ 2 } />
-						</Grid.Col>
-						<Grid.Col span={ { xxs: 12, sm: 6 } }>
-							<Select
-								name="employee.desired_compensation_period"
-								label="Compensation Period"
-								options={ compensationPeriodOptions }
-							/>
+						<Grid.Col span={ 12 }>
+							<Grid>
+								<Grid.Col span={ { xxs: 12, sm: 6 } }>
+									<FileInput name="employee.cover_letter" label="Cover Letter" accept=".pdf,.doc,.docx" />
+								</Grid.Col>
+							</Grid>
 						</Grid.Col>
 						<Grid.Col span={ { xxs: 12 } }>
-							<FileInput name="employee.resume" label="Resume" accept=".pdf,.doc,.docx" />
-						</Grid.Col>
-						<Grid.Col span={ { xxs: 12 } }>
-							<Textarea name="employee.hiring_notes" label="Hiring Notes" minRows={ 3 } />
+							<RichText name="employee.hiring_notes" label="Hiring Notes" />
 						</Grid.Col>
 					</Grid>
 				</FormBand>

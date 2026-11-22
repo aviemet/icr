@@ -182,6 +182,13 @@ Rails.application.routes.draw do
 
   resources :incident_reports
 
+  resources :report_definitions, only: [:index, :show], path: "reports"
+  resources :report_requests, only: [:index, :create], path: "report_requests" do
+    member do
+      get :download
+    end
+  end
+
   resources :doctors, param: :slug
 
   get "requirements", to: redirect("/settings/requirements")

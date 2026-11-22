@@ -84,3 +84,5 @@ en:
     adjustment_change_set_required: Adjustment must include the values that changed.
     adjustment_recorded: Adjustment recorded.
     adjustment_failed: Could not record adjustment.
+  reports:
+    not_ready: Report file is not ready

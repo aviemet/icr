@@ -1,0 +1,23 @@
+---
+en:
+  views:
+    reports:
+      definitions:
+        title: Reports
+        empty: No reports available
+        run: Run report
+        queue: Report queue
+        columns: Columns
+        filters: Filters
+        format: Format
+      queue:
+        title: Report Queue
+        empty: No report requests yet
+        name: Report
+        status: Status
+        requested_by: Requested by
+        requested_at: Requested
+        completed_at: Completed
+        download: Download
+        back_to_reports: All reports
+        retention: Completed reports are removed after 30 days

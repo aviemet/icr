@@ -462,6 +462,27 @@ RSpec.describe "/employees" do
         employee = Employee.last
         expect(employee.job_title).to eq(job_title)
       end
+
+      it "attaches a cover letter and stores hiring notes" do
+        cover_letter = fixture_file_upload(
+          Rails.root.join("spec/fixtures/files/sample.pdf"),
+          "application/pdf",
+        )
+        attrs = valid_attributes
+        attrs[:employee][:status] = "applicant"
+        attrs[:employee].delete(:active_at)
+        attrs[:employee][:hiring_notes] = "<p>Strong references</p>"
+        attrs[:employee][:cover_letter] = cover_letter
+
+        expect {
+          post employees_url, params: attrs
+        }.to change(Employee, :count).by(1)
+
+        employee = Employee.last
+        expect(employee.cover_letter).to be_attached
+        expect(employee.cover_letter.filename.to_s).to eq("sample.pdf")
+        expect(employee.hiring_notes).to eq("<p>Strong references</p>")
+      end
     end
 
     context "with invalid parameters" do

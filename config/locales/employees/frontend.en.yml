@@ -44,6 +44,7 @@ en:
         edit: Edit Employee
         hiring:
           add_offer: Add Offer
+          cover_letter: Cover Letter
           desired_compensation: Desired Compensation
           desired_job_title: Desired Job Title
           details: Application

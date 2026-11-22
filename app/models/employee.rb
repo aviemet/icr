@@ -47,6 +47,7 @@ class Employee < ApplicationRecord
   include Employee::StateMachine
 
   has_one_attached :resume
+  has_one_attached :cover_letter
 
   monetize :desired_compensation_cents,
     allow_nil: true,

@@ -29,6 +29,7 @@ declare global {
       color?: string
       color_mappings: Record<string, Record<string, string>>
       communication_notes?: string
+      cover_letter?: ({ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date } | null)
       created_at: Date
       credentials: EmployeeCredentialsPersisted[]
       current_pay_period_id?: string
@@ -66,6 +67,7 @@ declare global {
       person_id: string
       preferred_language?: string
       primary_manager: EmployeesPersisted
+      cover_letter?: ({ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date } | null)
       resume?: ({ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date } | null)
       slug: string
       status: "applicant" | "offered" | "employed" | "declined" | "terminated" | "withdrawn"

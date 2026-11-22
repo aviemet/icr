@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_22_171843) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_22_211500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -848,6 +848,42 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_22_171843) do
     t.index ["medication_id"], name: "index_prescriptions_on_medication_id"
   end
 
+  create_table "report_definitions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.string "resource_key", null: false
+    t.string "mode", default: "list", null: false
+    t.string "format", default: "xlsx", null: false
+    t.jsonb "columns", default: [], null: false
+    t.jsonb "default_filters", default: {}, null: false
+    t.jsonb "grouper_keys", default: [], null: false
+    t.jsonb "aggregator_keys", default: [], null: false
+    t.boolean "system", default: false, null: false
+    t.uuid "created_by_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_report_definitions_on_created_by_id"
+    t.index ["resource_key"], name: "index_report_definitions_on_resource_key"
+    t.index ["slug"], name: "index_report_definitions_on_slug", unique: true
+    t.index ["system"], name: "index_report_definitions_on_system"
+  end
+
+  create_table "report_requests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "report_definition_id", null: false
+    t.string "status", default: "pending", null: false
+    t.jsonb "params", default: {}, null: false
+    t.jsonb "definition_snapshot", default: {}, null: false
+    t.uuid "requested_by_id", null: false
+    t.text "error_message"
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["completed_at"], name: "index_report_requests_on_completed_at"
+    t.index ["report_definition_id"], name: "index_report_requests_on_report_definition_id"
+    t.index ["requested_by_id"], name: "index_report_requests_on_requested_by_id"
+    t.index ["status"], name: "index_report_requests_on_status"
+  end
+
   create_table "requirement_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "requirement_id", null: false
     t.string "fulfillable_type"
@@ -1133,6 +1169,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_22_171843) do
   add_foreign_key "prescriptions", "doctors"
   add_foreign_key "prescriptions", "dosages"
   add_foreign_key "prescriptions", "medications"
+  add_foreign_key "report_definitions", "users", column: "created_by_id"
+  add_foreign_key "report_requests", "report_definitions"
+  add_foreign_key "report_requests", "users", column: "requested_by_id"
   add_foreign_key "requirement_items", "requirements"
   add_foreign_key "requirements", "requirement_types"
   add_foreign_key "shift_template_entries", "employees"

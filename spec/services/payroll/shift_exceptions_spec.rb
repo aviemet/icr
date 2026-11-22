@@ -31,7 +31,7 @@ RSpec.describe Payroll::ShiftExceptions do
       shift2 = build_shift(base + 4.hours, base + 12.hours, validate: false)
       shifts = [shift1, shift2]
 
-      result = described_class.call(shifts)
+      result = I18n.with_locale(:en) { described_class.call(shifts) }
 
       expect(result[:exception_count]).to eq(2)
       expect(result[:reasons_by_shift_id].keys).to contain_exactly(shift1.id.to_s, shift2.id.to_s)

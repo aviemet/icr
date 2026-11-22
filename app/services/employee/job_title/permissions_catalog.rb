@@ -40,6 +40,8 @@ class Employee::JobTitle::PermissionsCatalog
     "clients_manager" => ClientsManager,
     "employee_training" => Employee::Training,
     "requirement" => Requirement::Requirement,
+    "report_definition" => ReportDefinition,
+    "report_request" => ReportRequest,
   }.freeze
 
   def self.resource_keys

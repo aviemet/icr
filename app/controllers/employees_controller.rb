@@ -38,7 +38,7 @@ class EmployeesController < ApplicationController
     :ineligibility_reason, :termination_reason, :job_title_id,
     :application_source, :desired_compensation, :desired_compensation_cents,
     :desired_compensation_currency, :desired_compensation_period,
-    :desired_job_title_id, :hiring_notes, :resume,
+    :desired_job_title_id, :hiring_notes, :resume, :cover_letter,
     person_attributes: [
       :id, :first_name, :middle_name, :last_name, :nick_name, :dob,
       contact_attributes: [

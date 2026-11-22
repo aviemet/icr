@@ -21,9 +21,10 @@ RSpec.describe "Settings::OvertimeExemptions", type: :request do
       expect_inertia.to render_component "Settings/Payroll/Overtime"
       listed = inertia.props[:overtime_exemptions]
       expect(listed).to be_an(Array)
-      expect(listed.first[:id]).to eq(exemption.id)
-      expect(listed.first[:name]).to eq("Sleep Shift OT")
-      expect(listed.first[:criteria]).to eq(valid_criteria)
+      row = listed.find { |entry| entry[:id] == exemption.id }
+      expect(row).to be_present
+      expect(row[:name]).to eq("Sleep Shift OT")
+      expect(row[:criteria]).to eq(valid_criteria)
     end
   end
 

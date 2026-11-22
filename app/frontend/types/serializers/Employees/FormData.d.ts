@@ -12,6 +12,7 @@ declare global {
       color?: string
       color_mappings: Record<string, Record<string, string>>
       communication_notes?: string
+      cover_letter?: ({ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date } | null)
       desired_compensation?: string
       desired_compensation_cents?: number
       desired_compensation_currency: string
@@ -31,6 +32,7 @@ declare global {
       person: Person
       person_id: string
       preferred_language?: string
+      cover_letter?: ({ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date } | null)
       resume?: ({ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date } | null)
       status: "applicant" | "offered" | "employed" | "declined" | "terminated" | "withdrawn"
       termination_reason?: string

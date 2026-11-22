@@ -116,8 +116,11 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 
 ### Phase 12: Forms, Notes, and Reports Engine
 - [ ] Daily service notes and compliance form capture
-- [ ] Async report queue (PDF/XLS) for face sheets, contacts, requirement expiration, timesheets, IHSS/OT/auth utilization, payroll processing variants
+- [x] Definition-driven report engine (ReportDefinition + ReportRequest queue, registry whitelist, list runner, caxlsx/CSV, 30-day purge)
+- [x] Stock report: Employee Requirement Expiration (employee_credential resource)
+- [ ] Additional stock reports (contacts, timesheets, IHSS/OT/auth utilization, payroll processing variants)
 - [ ] ADP-style and condensed payroll processing report variants as needed
+- [ ] B-lite builder UI (definitions already support it; no UI yet)
 
 ### Phase 13: HR Extras and Workplace Comms
 - [ ] Employee benefits enrollment records
@@ -186,6 +189,9 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 ### Caseloads
 - Org-wide facilitator caseloads are `ClientsManager` rows (`manager` = facilitator employee). `/caseloads` is gated on `permissions.clients_managers` (`ClientsManagerPolicy`). Nested employee/client manager tabs stay the per-record editors.
 - Facilitator roster query: join `Employee.actively_employed` through `Employee#active_employees_job_title` (uses `1.second.from_now`). Do not use `Employee::JobTitle#active_employees` for same-day assignments - that association compares `starts_at` to `Date.current` (midnight) and drops rows that started later the same day.
+
+### Reports
+- Definition-driven engine: stock reports are `ReportDefinition` rows (seeded, `system: true`) that pick column/filter keys from a code whitelist in `Reports::Catalog` / `Reports::Resources::*`. Runs create `ReportRequest` with a frozen `definition_snapshot`, enqueue `Reports::GenerateJob`, and attach XLS/CSV via ActiveStorage. Completed requests older than 30 days are purged by `Reports::PurgeExpiredJob`. List mode uses AR + registry extractors; aggregate mode is reserved for active_reporter mappings. B-lite (staff column picker) should only add UI that writes non-system `ReportDefinition` rows through the same registry validation - do not add one-off `send_data` exporters for new stock reports. Permissions keys: `report_definition`, `report_request`. UI: `/reports` (definitions) and `/report_requests` (queue).
 
 ### Payroll Settings
 - Period types: weekly, bi-weekly, semi-monthly, monthly. Weekly/bi-weekly use a start weekday; monthly uses a configurable start date (including last day of month). Semi-monthly is fixed: 1st-15th and 16th-last.

@@ -3,7 +3,7 @@ import { Loader } from "@mantine/core"
 import { Spotlight, type SpotlightActionData } from "@mantine/spotlight"
 import React, { useMemo, useState } from "react"
 
-import { SearchIcon, DashboardIcon, ClientIcon, EmployeeIcon, SettingsIcon, ClockIcon, HelpingIcon, PeopleIcon } from "@/components/Icons"
+import { SearchIcon, DashboardIcon, ClientIcon, EmployeeIcon, SettingsIcon, ClockIcon, HelpingIcon, PeopleIcon, ColumnsIcon } from "@/components/Icons"
 import { Routes } from "@/lib"
 import { useDebouncedValue, usePermissions } from "@/lib/hooks"
 import { useGetSpotlights } from "@/queries"
@@ -89,6 +89,26 @@ export function SpotlightComponent() {
 				description: "View payroll",
 				onClick: () => router.visit(Routes.payrollPeriods()),
 				leftSection: <ClockIcon />,
+			})
+		}
+
+		if(can("report_definitions", "index")) {
+			spotlightStaticActions.push({
+				id: "reports",
+				label: "Reports",
+				description: "Run reports",
+				onClick: () => router.visit(Routes.reportDefinitions()),
+				leftSection: <ColumnsIcon />,
+			})
+		}
+
+		if(can("report_requests", "index")) {
+			spotlightStaticActions.push({
+				id: "report-queue",
+				label: "Report queue",
+				description: "View report queue",
+				onClick: () => router.visit(Routes.reportRequests()),
+				leftSection: <ColumnsIcon />,
 			})
 		}
 

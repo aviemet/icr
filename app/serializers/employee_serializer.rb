@@ -75,6 +75,13 @@ class EmployeeSerializer < ApplicationSerializer
     Attachments::FileSerializer.one(@object.resume)
   end
 
+  type "({ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date } | null)", optional: true
+  def cover_letter
+    return nil unless @object.cover_letter.attached?
+
+    Attachments::FileSerializer.one(@object.cover_letter)
+  end
+
   belongs_to :person, serializer: PersonSerializer
   has_one :job_title, serializer: Employee::JobTitleSerializer
   belongs_to :desired_job_title, serializer: Employee::JobTitleSerializer, optional: true

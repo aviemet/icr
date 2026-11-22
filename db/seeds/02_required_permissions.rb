@@ -38,6 +38,8 @@ job_title_defaults = [
       "setting" => { "index" => false, "show" => false, "create" => false, "update" => false, "delete" => false },
       "incident_report" => { "index" => true, "show" => true, "create" => true, "update" => true, "delete" => false },
       "employee_training" => { "index" => true, "show" => true, "create" => false, "update" => false, "delete" => false, "complete" => true },
+      "report_definition" => { "index" => true, "show" => true, "create" => false, "update" => false, "delete" => false },
+      "report_request" => { "index" => true, "show" => true, "create" => true, "update" => false, "delete" => false },
     },
   },
   {

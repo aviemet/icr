@@ -12,6 +12,10 @@ Rails.application.configure do
       payroll_approval_reminders: {
         cron: "0 8 * * *",
         class: "Payroll::SendApprovalRemindersJob"
+      },
+      reports_purge_expired: {
+        cron: "15 3 * * *",
+        class: "Reports::PurgeExpiredJob"
       }
     }
   }
