@@ -101,6 +101,12 @@ export function flattenToPaths(value: Record<string, unknown>) {
 		}
 
 		if(Array.isArray(current)) {
+			const hasNestedStructure = current.some(child => isRecord(child) || Array.isArray(child))
+			if(!hasNestedStructure) {
+				if(prefix) entries.push([prefix, current])
+				return
+			}
+
 			current.forEach((child, index) => {
 				const path = prefix ? `${prefix}.${index}` : String(index)
 				walk(child, path)

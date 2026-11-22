@@ -2,11 +2,15 @@
 #
 # Table name: doctors
 #
-#  id         :uuid             not null, primary key
-#  slug       :string           not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  person_id  :uuid             not null
+#  id            :uuid             not null, primary key
+#  notes         :text
+#  npi           :string
+#  practice_name :string
+#  slug          :string           not null
+#  specialty     :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  person_id     :uuid             not null
 #
 # Indexes
 #

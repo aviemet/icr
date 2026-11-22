@@ -11,8 +11,9 @@
 #
 # Indexes
 #
-#  index_doctors_clients_on_client_id  (client_id)
-#  index_doctors_clients_on_doctor_id  (doctor_id)
+#  index_doctors_clients_on_client_id          (client_id)
+#  index_doctors_clients_on_doctor_and_client  (doctor_id,client_id) UNIQUE
+#  index_doctors_clients_on_doctor_id          (doctor_id)
 #
 # Foreign Keys
 #

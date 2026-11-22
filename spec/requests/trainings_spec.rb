@@ -98,7 +98,7 @@ RSpec.describe "/trainings", type: :request do
       expect(response).to be_successful
     end
 
-    it "ships associated client_ids" do
+    it "ships associated client_ids lockstep with client options" do
       training = create(:training)
       client = create(:client)
       create(:clients_training, client: client, training: training)
@@ -106,7 +106,11 @@ RSpec.describe "/trainings", type: :request do
       get edit_training_url(training)
 
       expect(response).to be_successful
-      expect(inertia.props[:training][:client_ids]).to eq([client.id])
+      client_ids = inertia.props[:training][:client_ids]
+      option_ids = inertia.props[:client_options].pluck(:id)
+      expect(client_ids).to eq([client.id.to_s])
+      expect(option_ids).to include(client.id.to_s)
+      expect(option_ids & client_ids).to eq(client_ids)
     end
   end
 

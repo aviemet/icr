@@ -197,6 +197,138 @@ if Rails.env.development?
     Rails.logger.info "[seeds] employees + 3 facilitators/director/attendant users + HR sample data"
   end
 
+  if Doctor.none? && Client.any?
+    phone_category = Category.type("Contact::Phone").find_by(name: "Office") ||
+      Category.type("Contact::Phone").sample
+
+    primary_care = FactoryBot.create(
+      :doctor,
+      specialty: "Family Medicine",
+      npi: "1234567890",
+      practice_name: "Valley Primary Care",
+      notes: "Preferred PCP for medication reviews.",
+    )
+    FactoryBot.create(:phone, contact: primary_care.person.contact, category: phone_category)
+
+    psychiatrist = FactoryBot.create(
+      :doctor,
+      specialty: "Psychiatry",
+      npi: "1987654321",
+      practice_name: "Coast Behavioral Health",
+      notes: "Handles psychotropic medications.",
+    )
+    FactoryBot.create(:phone, contact: psychiatrist.person.contact, category: phone_category)
+
+    clients = Client.order(:created_at).to_a
+    doctors = [primary_care, psychiatrist]
+
+    clients.each_with_index do |client, index|
+      doctor = doctors[index % doctors.length]
+      FactoryBot.create(
+        :doctors_client,
+        client: client,
+        doctor: doctor,
+        notes: index.even? ? "Primary care physician" : "Psychiatry / behavioral health",
+      )
+
+      client.diagnoses.where(doctor_id: nil).find_each do |diagnosis|
+        diagnosis.update!(doctor_id: doctor.id)
+      end
+
+      lisinopril = Medication.find_or_create_by!(name: "Lisinopril") do |medication|
+        medication.generic_name = "lisinopril"
+      end
+      sertraline = Medication.find_or_create_by!(name: "Sertraline") do |medication|
+        medication.generic_name = "sertraline"
+      end
+
+      active_dosage = FactoryBot.create(
+        :dosage,
+        amount: 10,
+        amount_unit: :mg,
+        freq_amount: 1,
+        freq_period: :day,
+        administration_method: :oral,
+      )
+      FactoryBot.create(
+        :prescription,
+        :active,
+        client: client,
+        doctor: doctor,
+        medication: index.even? ? lisinopril : sertraline,
+        dosage: active_dosage,
+      )
+
+      if index.zero?
+        historical_dosage = FactoryBot.create(
+          :dosage,
+          amount: 5,
+          amount_unit: :mg,
+          freq_amount: 1,
+          freq_period: :day,
+          administration_method: :oral,
+        )
+        FactoryBot.create(
+          :prescription,
+          :historical,
+          client: client,
+          doctor: primary_care,
+          medication: lisinopril,
+          dosage: historical_dosage,
+        )
+      end
+    end
+
+    facilitator = User.find_by(email: "facilitator@gmail.com")&.person&.employee
+    director = User.find_by(email: "director@gmail.com")&.person&.employee
+    first_client = clients.first
+    hospitalization_category = Category.type("IncidentReport").find_by(name: "Hospitalizations") ||
+      Category.type("IncidentReport").first
+
+    if facilitator && director && first_client && hospitalization_category
+      incident = FactoryBot.create(
+        :incident_report,
+        client: first_client,
+        doctor: primary_care,
+        category: hospitalization_category,
+        reported_by_employee: facilitator,
+        reported_to_employee: director,
+        location: first_client.preferred_hospital.presence || "County General ER",
+        description: "Client transported for evaluation after a fall at home.",
+        occurred_at: 3.days.ago,
+        reported_at: 3.days.ago,
+      )
+
+      FactoryBot.create(
+        :client_hospital_visit,
+        client: first_client,
+        doctor: primary_care,
+        incident_report: incident,
+        hospital_name: first_client.preferred_hospital.presence || "County General",
+        admitted_at: 3.days.ago,
+        discharged_at: 2.days.ago,
+        reason: "Fall evaluation / observation",
+        notes: "Cleared for return home with increased attendant support.",
+      )
+    end
+
+    second_client = clients.second
+    if second_client
+      FactoryBot.create(
+        :client_hospital_visit,
+        client: second_client,
+        doctor: psychiatrist,
+        hospital_name: "Regional Medical Center",
+        admitted_at: 2.weeks.ago,
+        discharged_at: 12.days.ago,
+        reason: "Medication adjustment",
+        notes: "Psych consult completed; dosage changed on discharge.",
+      )
+    end
+
+    Rails.logger.info "[seeds] doctors (2) + client links, prescriptions, diagnoses, incidents, hospital visits"
+  end
+
   if Employee.any? && Client.any? && Requirement::Type.any?
     attendant_job = Employee::JobTitle.find_by(slug: "attendant")
     onboarding_type = Requirement::Type.find_by!(name: "Onboarding")

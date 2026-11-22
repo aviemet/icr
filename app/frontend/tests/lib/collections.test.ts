@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest"
 import {
 	coerceArray,
 	exclude,
+	flattenToPaths,
 	hasUniqueValues,
 	matchesAtPosition,
 	NestedObject,
@@ -115,6 +116,36 @@ describe("hasUniqueValues", () => {
 
 	it("returns true for empty array", () => {
 		expect(hasUniqueValues([], "id")).toBe(true)
+	})
+})
+
+describe("flattenToPaths", () => {
+	it("keeps primitive arrays as a single field value", () => {
+		expect(flattenToPaths({
+			training: { client_ids: ["client-1", "client-2"] },
+		})).toEqual([
+			["training.client_ids", ["client-1", "client-2"]],
+		])
+	})
+
+	it("keeps empty arrays as a single field value", () => {
+		expect(flattenToPaths({
+			training: { client_ids: [] },
+		})).toEqual([
+			["training.client_ids", []],
+		])
+	})
+
+	it("indexes into arrays of objects for nested fields", () => {
+		expect(flattenToPaths({
+			phones: [
+				{ number: "555-0100" },
+				{ number: "555-0199" },
+			],
+		})).toEqual([
+			["phones.0.number", "555-0100"],
+			["phones.1.number", "555-0199"],
+		])
 	})
 })
 

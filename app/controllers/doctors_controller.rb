@@ -2,11 +2,24 @@ class DoctorsController < ApplicationController
   include Searchable
 
   expose :doctors, -> { search(Doctor.includes_associated) }
-  expose :doctor, id: ->{ params[:slug] }, scope: ->{ Doctor.includes_associated }, find_by: :slug
+  expose :doctor, id: -> { params[:slug] }, scope: -> { Doctor.includes_show }, find_by: :slug
 
-  sortable_fields %w(first_name last_name notes)
+  sortable_fields %w[first_name last_name specialty practice_name]
 
-  strong_params :doctor, permit: [person_attributes: [:id, :first_name, :last_name, :middle_name, :nick_name, :dob, :characteristics]]
+  strong_params :doctor, permit: [
+    :specialty, :npi, :practice_name, :notes,
+    person_attributes: [
+      :id, :first_name, :last_name, :middle_name, :nick_name, :dob, :characteristics,
+      contact_attributes: [
+        :id,
+        phones_attributes: [:id, :name, :number, :extension, :notes, :category_id, :_destroy],
+        emails_attributes: [:id, :name, :email, :notes, :category_id, :_destroy],
+        addresses_attributes: [
+          :id, :name, :address, :address_2, :city, :region, :postal, :country, :notes, :category_id, :_destroy,
+        ],
+      ],
+    ],
+  ]
 
   # @route GET /doctors (doctors)
   def index
@@ -28,7 +41,8 @@ class DoctorsController < ApplicationController
     authorize doctor
 
     render inertia: "Doctors/Show", props: {
-      doctor: -> { doctor.render(:show) }
+      doctor: -> { doctor.render(:show) },
+      can_update: -> { policy(doctor).update? }
     }
   end
 
@@ -49,6 +63,7 @@ class DoctorsController < ApplicationController
       doctor: doctor.render(:edit)
     }
   end
+
 
   # @route POST /doctors (doctors)
   def create

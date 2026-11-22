@@ -1,5 +1,5 @@
 import { MantineProvider } from "@mantine/core"
-import { cleanup, render, screen } from "@testing-library/react"
+import { cleanup, render, screen, waitFor } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { pageChrome } from "@/components/PageChrome"
@@ -61,5 +61,37 @@ describe("TrainingForm", () => {
 
 		const clientsBand = screen.getByText("Clients").closest("section")
 		expect(clientsBand?.className).toContain(pageChrome.panelSurface)
+	})
+
+	it("loads selected clients into the clients multiselect", async () => {
+		class ResizeObserverMock {
+			observe() {}
+			unobserve() {}
+			disconnect() {}
+		}
+		window.ResizeObserver = ResizeObserverMock
+
+		render(
+			<MantineProvider theme={ theme }>
+				<TrainingForm
+					method="put"
+					to="/employees/trainings/training-1"
+					training={ {
+						id: "training-1",
+						name: "Orientation",
+						client_ids: ["client-1"],
+						status: "active",
+					} }
+					clientOptions={ [
+						{ id: "client-1", name: "Ada Client" },
+						{ id: "client-2", name: "Other Client" },
+					] }
+				/>
+			</MantineProvider>,
+		)
+
+		await waitFor(() => {
+			expect(screen.getByText("Ada Client")).toBeTruthy()
+		})
 	})
 })

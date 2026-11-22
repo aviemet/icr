@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_21_171545) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_22_050545) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -166,7 +166,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_21_171545) do
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "doctor_id"
     t.index ["client_id"], name: "index_client_diagnoses_on_client_id"
+    t.index ["doctor_id"], name: "index_client_diagnoses_on_doctor_id"
   end
 
   create_table "client_enrollments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -180,6 +182,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_21_171545) do
     t.index ["client_id", "vendor_id", "starts_on"], name: "idx_on_client_id_vendor_id_starts_on_6390a83a5d"
     t.index ["client_id"], name: "index_client_enrollments_on_client_id"
     t.index ["vendor_id"], name: "index_client_enrollments_on_vendor_id"
+  end
+
+  create_table "client_hospital_visits", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "client_id", null: false
+    t.uuid "doctor_id"
+    t.uuid "incident_report_id"
+    t.string "hospital_name", null: false
+    t.datetime "admitted_at"
+    t.datetime "discharged_at"
+    t.string "reason"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_client_hospital_visits_on_client_id"
+    t.index ["doctor_id"], name: "index_client_hospital_visits_on_doctor_id"
+    t.index ["incident_report_id"], name: "index_client_hospital_visits_on_incident_report_id"
   end
 
   create_table "client_life_details", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -302,6 +320,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_21_171545) do
     t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "specialty"
+    t.string "npi"
+    t.string "practice_name"
+    t.text "notes"
     t.index ["person_id"], name: "index_doctors_on_person_id"
     t.index ["slug"], name: "index_doctors_on_slug", unique: true
   end
@@ -313,6 +335,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_21_171545) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_doctors_clients_on_client_id"
+    t.index ["doctor_id", "client_id"], name: "index_doctors_clients_on_doctor_and_client", unique: true
     t.index ["doctor_id"], name: "index_doctors_clients_on_doctor_id"
   end
 
@@ -324,6 +347,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_21_171545) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "administration_method"
   end
 
   create_table "emails", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -643,8 +667,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_21_171545) do
     t.uuid "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "doctor_id"
     t.index ["category_id"], name: "index_incident_reports_on_category_id"
     t.index ["client_id"], name: "index_incident_reports_on_client_id"
+    t.index ["doctor_id"], name: "index_incident_reports_on_doctor_id"
     t.index ["reported_by_id"], name: "index_incident_reports_on_reported_by_id"
     t.index ["reported_to_id"], name: "index_incident_reports_on_reported_to_id"
   end
@@ -1022,8 +1048,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_21_171545) do
   add_foreign_key "categories", "categories", column: "parent_id"
   add_foreign_key "client_allergies", "clients"
   add_foreign_key "client_diagnoses", "clients"
+  add_foreign_key "client_diagnoses", "doctors"
   add_foreign_key "client_enrollments", "clients"
   add_foreign_key "client_enrollments", "vendors"
+  add_foreign_key "client_hospital_visits", "clients"
+  add_foreign_key "client_hospital_visits", "doctors"
+  add_foreign_key "client_hospital_visits", "incident_reports"
   add_foreign_key "client_life_details", "clients"
   add_foreign_key "client_support_contacts", "clients"
   add_foreign_key "client_support_contacts", "people"
@@ -1066,6 +1096,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_21_171545) do
   add_foreign_key "identifications", "categories"
   add_foreign_key "incident_reports", "categories"
   add_foreign_key "incident_reports", "clients"
+  add_foreign_key "incident_reports", "doctors"
   add_foreign_key "incident_reports", "people", column: "reported_by_id"
   add_foreign_key "incident_reports", "people", column: "reported_to_id"
   add_foreign_key "interview_notes", "employees"

@@ -10,8 +10,12 @@ declare global {
       full_name: string
       last_name: string
       name: string
+      notes?: string
+      npi?: string
       person: PeoplePersisted
+      practice_name?: string
       slug: string
+      specialty?: string
       updated_at: Date
     }
   }

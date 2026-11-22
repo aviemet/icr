@@ -87,6 +87,7 @@ Rails.application.routes.draw do
     resources :allergies, controller: "clients/allergies", only: [:create, :update, :destroy]
     resources :diagnoses, controller: "clients/diagnoses", only: [:create, :update, :destroy]
     resources :prescriptions, controller: "clients/prescriptions", only: [:create, :update, :destroy]
+    resources :hospital_visits, controller: "clients/hospital_visits", only: [:create, :update, :destroy]
     resources :enrollments, controller: "clients/enrollments", only: [:create, :update, :destroy]
     resources :managers, controller: "clients/managers", only: [:create, :update, :destroy]
     resources :attendants, controller: "clients/attendants", only: [:create, :update, :destroy]

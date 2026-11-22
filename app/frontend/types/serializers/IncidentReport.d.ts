@@ -9,6 +9,7 @@ declare global {
       category_id: string
       client_id: string
       description?: string
+      doctor_id?: string
       location?: string
       occurred_at?: Date
       reported_at?: Date

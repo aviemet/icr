@@ -7,5 +7,7 @@ class CreateDoctorsClients < ActiveRecord::Migration[8.0]
 
       t.timestamps
     end
+
+    add_index :doctors_clients, [:doctor_id, :client_id], unique: true, name: "index_doctors_clients_on_doctor_and_client"
   end
 end

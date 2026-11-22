@@ -92,7 +92,7 @@ en:
           life_details: Life Details
           communication: Communication
           save: Save Profile
-        health:
+        medical:
           allergies: Allergies
           diagnoses: Diagnoses
           doctors: Doctors
@@ -100,11 +100,13 @@ en:
           add_allergy: Add Allergy
           add_diagnosis: Add Diagnosis
           link_doctor: Link Doctor
-        medications:
-          active: Active Prescriptions
-          historical: Historical Prescriptions
-          add: Add Prescription
+          active_prescriptions: Active Prescriptions
+          historical_prescriptions: Historical Prescriptions
+          add_prescription: Add Prescription
+          hospital_visits: Hospital Visits
+          add_hospital_visit: Add Hospital Visit
         care:
+
           managers: Managers
           attendants: Attendants
           enrollments: Day Programs / Services
@@ -143,8 +145,7 @@ en:
           overview: Overview
           profile: Profile
           contacts: Contacts
-          health: Health
-          medications: Medications
+          medical: Medical
           care: Care and Services
           trainings: Trainings
           documents: Documents

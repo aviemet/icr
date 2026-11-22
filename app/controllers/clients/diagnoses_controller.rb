@@ -1,7 +1,7 @@
 class Clients::DiagnosesController < Clients::BaseController
   expose :diagnosis, model: Client::Diagnosis, scope: -> { client.diagnoses }
 
-  strong_params :diagnosis, permit: [:name, :code, :diagnosed_on, :notes, :active]
+  strong_params :diagnosis, permit: [:name, :code, :diagnosed_on, :notes, :active, :doctor_id]
 
   # @route POST /clients/:client_slug/diagnoses (client_diagnoses)
   def create
@@ -9,7 +9,7 @@ class Clients::DiagnosesController < Clients::BaseController
     diagnosis.assign_attributes(diagnosis_params)
 
     diagnosis.save
-    redirect_to_client_tab("health")
+    redirect_to_client_tab("medical")
   end
 
   # @route PATCH /clients/:client_slug/diagnoses/:id (client_diagnosis)
@@ -18,13 +18,14 @@ class Clients::DiagnosesController < Clients::BaseController
     authorize_client_update!
 
     diagnosis.update(diagnosis_params)
-    redirect_to_client_tab("health")
+    redirect_to_client_tab("medical")
   end
 
   # @route DELETE /clients/:client_slug/diagnoses/:id (client_diagnosis)
   def destroy
     authorize_client_update!
     diagnosis.destroy!
-    redirect_to_client_tab("health")
+    redirect_to_client_tab("medical")
   end
 end
+

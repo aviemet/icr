@@ -1,3 +1,3 @@
 class Doctors::FormDataSerializer < DoctorSerializer
-  attributes
+  has_one :person, serializer: People::FormDataSerializer
 end

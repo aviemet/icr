@@ -83,10 +83,11 @@ RSpec.describe "/clients" do
       attendant = create(:employee)
       create(:clients_attendant, client: client, attendant: attendant)
       doctor = create(:doctor)
-      client.doctors << doctor
+      doctors_client = create(:doctors_client, client: client, doctor: doctor, notes: "PCP")
       medication = create(:medication)
       dosage = create(:dosage)
       prescription = create(:prescription, client: client, doctor: doctor, medication: medication, dosage: dosage, starts_at: Date.current, ends_at: nil)
+      hospital_visit = create(:client_hospital_visit, client: client, doctor: doctor)
       vendor = create(:vendor)
       enrollment = create(:client_enrollment, client: client, vendor: vendor)
       training = create(:training)
@@ -99,6 +100,10 @@ RSpec.describe "/clients" do
       expect(props[:allergies].pluck(:id)).to eq([allergy.id])
       expect(props[:diagnoses].pluck(:id)).to eq([diagnosis.id])
       expect(props[:support_contacts].pluck(:id)).to eq([support_contact.id])
+      expect(props[:doctors].pluck(:id)).to eq([doctor.id])
+      expect(props[:doctors_clients].pluck(:id)).to eq([doctors_client.id])
+      expect(props[:doctors_clients].pluck(:doctor_id)).to eq([doctor.id])
+      expect(props[:hospital_visits].pluck(:id)).to eq([hospital_visit.id])
       expect(props[:prescriptions].pluck(:id)).to eq([prescription.id])
       expect(props[:enrollments].pluck(:id)).to eq([enrollment.id])
       expect(props[:current_attendants].pluck(:id)).to eq([attendant.id])
@@ -112,6 +117,7 @@ RSpec.describe "/clients" do
       expect(props[:uci_number]).to eq(client.uci_number)
       expect(props[:life_detail][:adls]).to be_present
     end
+
   end
 
   describe "GET /new" do

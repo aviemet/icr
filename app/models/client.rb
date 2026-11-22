@@ -108,6 +108,10 @@ class Client < ApplicationRecord
     class_name: "Client::Diagnosis",
     dependent: :destroy,
     inverse_of: :client
+  has_many :hospital_visits,
+    class_name: "Client::HospitalVisit",
+    dependent: :destroy,
+    inverse_of: :client
   has_one :life_detail,
     class_name: "Client::LifeDetail",
     dependent: :destroy,
@@ -145,16 +149,18 @@ class Client < ApplicationRecord
   scope :includes_show, -> {
     includes_associated.includes(
       :doctors,
+      :doctors_clients,
       :clients_managers,
       :clients_attendants,
       :managers,
       :attendants,
       support_contacts: { person: { contact: [:phones, :emails, :addresses] } },
       allergies: [],
-      diagnoses: [],
+      diagnoses: :doctor,
+      hospital_visits: [:doctor, :incident_report],
       enrollments: :vendor,
       prescriptions: [:medication, :dosage, :doctor],
-      incident_reports: [:category, :reported_by, :reported_to],
+      incident_reports: [:category, :reported_by, :reported_to, :doctor],
       clients_trainings: :training,
     )
   }

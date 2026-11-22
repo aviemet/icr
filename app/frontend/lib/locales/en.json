@@ -686,24 +686,24 @@
             "upload_image": "Upload Image"
           },
           "edit": "Edit Client",
-          "health": {
-            "add_allergy": "Add Allergy",
-            "add_diagnosis": "Add Diagnosis",
-            "allergies": "Allergies",
-            "diagnoses": "Diagnoses",
-            "doctors": "Doctors",
-            "link_doctor": "Link Doctor",
-            "preferred_hospital": "Preferred Hospital"
-          },
           "incidents": {
             "empty": "No incident reports for this client.",
             "title": "Incidents",
             "view": "View"
           },
-          "medications": {
-            "active": "Active Prescriptions",
-            "add": "Add Prescription",
-            "historical": "Historical Prescriptions"
+          "medical": {
+            "active_prescriptions": "Active Prescriptions",
+            "add_allergy": "Add Allergy",
+            "add_diagnosis": "Add Diagnosis",
+            "add_hospital_visit": "Add Hospital Visit",
+            "add_prescription": "Add Prescription",
+            "allergies": "Allergies",
+            "diagnoses": "Diagnoses",
+            "doctors": "Doctors",
+            "historical_prescriptions": "Historical Prescriptions",
+            "hospital_visits": "Hospital Visits",
+            "link_doctor": "Link Doctor",
+            "preferred_hospital": "Preferred Hospital"
           },
           "overview": {
             "active_meds": "Active medications",
@@ -739,9 +739,8 @@
             "care": "Care and Services",
             "contacts": "Contacts",
             "documents": "Documents",
-            "health": "Health",
             "incidents": "Incidents",
-            "medications": "Medications",
+            "medical": "Medical",
             "overview": "Overview",
             "profile": "Profile",
             "trainings": "Trainings"
@@ -852,6 +851,57 @@
         "shared": {
           "email": "Email",
           "login": "Log In Instead"
+        }
+      },
+      "doctors": {
+        "edit": {
+          "title": "Edit Doctor"
+        },
+        "index": {
+          "new": "New Doctor",
+          "title": "Doctors"
+        },
+        "new": {
+          "title": "New Doctor"
+        },
+        "show": {
+          "clients": {
+            "empty": "No clients linked to this doctor.",
+            "notes": "Notes",
+            "title": "Clients"
+          },
+          "diagnoses": {
+            "empty": "No diagnoses attributed to this doctor.",
+            "title": "Diagnoses"
+          },
+          "hospital_visits": {
+            "empty": "No hospital visits attributed to this doctor.",
+            "title": "Hospital Visits"
+          },
+          "overview": {
+            "clients": "Clients",
+            "diagnoses": "Diagnoses",
+            "hospital_visits": "Hospital Visits",
+            "none": "None",
+            "notes": "Notes",
+            "npi": "NPI",
+            "phone": "Phone",
+            "practice": "Practice",
+            "prescriptions": "Prescriptions",
+            "specialty": "Specialty"
+          },
+          "prescriptions": {
+            "empty": "No prescriptions for this doctor.",
+            "title": "Prescriptions"
+          },
+          "tabs": {
+            "clients": "Clients",
+            "diagnoses": "Diagnoses",
+            "hospital_visits": "Hospital Visits",
+            "overview": "Overview",
+            "prescriptions": "Prescriptions"
+          },
+          "title": "Doctor"
         }
       },
       "employees": {

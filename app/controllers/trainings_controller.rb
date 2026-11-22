@@ -123,7 +123,7 @@ class TrainingsController < ApplicationController
       name = client.name.presence || client.slug
       next if name.blank?
 
-      { id: client.id, name: name }
+      { id: client.id.to_s, name: name }
     end.sort_by { |option| option[:name].downcase }
   end
 

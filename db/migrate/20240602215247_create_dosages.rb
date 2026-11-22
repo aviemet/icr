@@ -5,6 +5,7 @@ class CreateDosages < ActiveRecord::Migration[8.0]
       t.integer :amount_unit
       t.decimal :freq_amount
       t.integer :freq_period
+      t.integer :administration_method
       t.text :notes
 
       t.timestamps
