@@ -10,6 +10,8 @@ import { BRAND_PALETTE, clampBrandColor, DEFAULT_BRAND_COLOR } from "@/lib/brand
 import { useInit, usePageProps } from "@/lib/hooks"
 import { cssVariablesResolver as themeCssVariablesResolver, theme as themeObject } from "@/lib/theme"
 
+import { themeFontOverridesForPreferences } from "./fontFamilyForPreferences"
+
 import "./reset.css"
 import "@mantine/core/styles.css"
 import "@mantine/tiptap/styles.css"
@@ -21,22 +23,34 @@ import "mantine-datatable/styles.css"
 import "./global.css"
 
 export function UiFrameworkProvider({ children }: { children: React.ReactNode }) {
-	const { settings } = usePageProps()
+	const { settings, auth } = usePageProps()
 	const brandHex = clampBrandColor(settings?.primary_color || DEFAULT_BRAND_COLOR)
+	const dyslexiaFont = auth?.user?.user_preferences?.dyslexia_font === true
 
 	const brandColors = useMemo(
 		(): MantineColorsTuple => generateColors(brandHex),
 		[brandHex],
 	)
 
-	const theme = useMemo(() => createTheme({
-		...themeObject,
-		colors: {
-			...themeObject.colors,
-			[BRAND_PALETTE]: brandColors,
-		},
-		primaryColor: BRAND_PALETTE,
-	}), [brandColors])
+	const theme = useMemo(() => {
+		const fontOverrides = themeFontOverridesForPreferences(dyslexiaFont)
+
+		return createTheme({
+			...themeObject,
+			...fontOverrides,
+			...(fontOverrides.headings ? {
+				headings: {
+					...themeObject.headings,
+					...fontOverrides.headings,
+				},
+			} : {}),
+			colors: {
+				...themeObject.colors,
+				[BRAND_PALETTE]: brandColors,
+			},
+			primaryColor: BRAND_PALETTE,
+		})
+	}, [brandColors, dyslexiaFont])
 
 	const cssVariablesResolver = useMemo((): CSSVariablesResolver => {
 		return (resolverTheme) => {
