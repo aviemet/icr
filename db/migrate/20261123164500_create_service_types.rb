@@ -49,8 +49,10 @@ class CreateServiceTypes < ActiveRecord::Migration[8.1]
     backfill_shift_service_types!
     remap_overtime_exemption_category_values!(slug_map)
 
-    change_column_null :shifts, :service_type_id, false
-    change_column_null :shifts, :category_id, true
+    change_table :shifts, bulk: true do |t|
+      t.change_null :service_type_id, false
+      t.change_null :category_id, true
+    end
   end
 
   def down
@@ -133,10 +135,10 @@ class CreateServiceTypes < ActiveRecord::Migration[8.1]
       service_type = ServiceType.find_by(name: category.name)
       next if service_type.blank?
 
-      Shift.where(category_id: category.id, service_type_id: nil).update_all(service_type_id: service_type.id)
+      Shift.where(category_id: category.id, service_type_id: nil).update_all(service_type_id: service_type.id) # rubocop:disable Rails/SkipsModelValidations
     end
 
-    Shift.where(service_type_id: nil).update_all(service_type_id: default_service_type.id)
+    Shift.where(service_type_id: nil).update_all(service_type_id: default_service_type.id) # rubocop:disable Rails/SkipsModelValidations
   end
 
   def remap_overtime_exemption_category_values!(slug_map)
@@ -163,7 +165,7 @@ class CreateServiceTypes < ActiveRecord::Migration[8.1]
 
       next if remapped == criteria
 
-      exemption.update_columns(criteria: remapped, updated_at: Time.current)
+      exemption.update_columns(criteria: remapped, updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
     end
   end
 end

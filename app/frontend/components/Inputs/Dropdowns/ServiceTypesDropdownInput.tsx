@@ -2,7 +2,7 @@ import { isEmpty } from "es-toolkit/compat"
 import { useMemo } from "react"
 
 import { Select } from "@/components/Inputs"
-import { useGetServiceTypesAsOptions } from "@/queries/serviceTypes"
+import { useGetServiceTypesAsOptions } from "@/queries"
 
 import { type AsyncDropdown } from "."
 
@@ -24,13 +24,12 @@ export function ServiceTypesDropdown({
 	activeOnly = true,
 	...props
 }: ServiceTypesDropdownProps) {
-	const { data, isStale, refetch } = useGetServiceTypesAsOptions(
-		undefined,
-		{ initialData },
-	)
+	const { data, isStale, refetch } = useGetServiceTypesAsOptions({
+		initialData,
+	})
 
 	const options = useMemo(() => {
-		if(!data) return []
+		if(!Array.isArray(data)) return []
 		const key = valueKey === "slug" ? "slug" : "id"
 		return data
 			.filter(serviceType => !activeOnly || serviceType.active !== false)
@@ -41,7 +40,7 @@ export function ServiceTypesDropdown({
 	}, [activeOnly, data, valueKey])
 
 	const resolvedDefault = useMemo(() => {
-		if(!defaultValue || !data) return undefined
+		if(!defaultValue || !Array.isArray(data)) return undefined
 		if(valueKey === "slug") return defaultValue
 		return data.find(serviceType => serviceType.slug === defaultValue || serviceType.id === defaultValue)?.id
 	}, [defaultValue, data, valueKey])

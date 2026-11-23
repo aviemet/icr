@@ -7,7 +7,7 @@ import { type ReactQueryFunction } from ".."
 
 export const useGetServiceTypesAsOptions: ReactQueryFunction<
 	Schema.ServiceTypesOptions[]
-> = (_params, options) => {
+> = (options) => {
 	return useQuery({
 		queryKey: ["service_types", "options"],
 		queryFn: async () => {
@@ -18,7 +18,7 @@ export const useGetServiceTypesAsOptions: ReactQueryFunction<
 	})
 }
 
-export const useGetServiceTypes: ReactQueryFunction<Schema.ServiceType[]> = (_params, options) => {
+export const useGetServiceTypes: ReactQueryFunction<Schema.ServiceType[]> = (options) => {
 	return useQuery({
 		queryKey: ["service_types"],
 		queryFn: async () => {

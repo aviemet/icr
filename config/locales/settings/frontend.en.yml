@@ -101,9 +101,16 @@ en:
         service_types_name_label: Name
         service_types_name_placeholder: e.g. Community Outing
         service_types_color_label: Color
+        service_types_flag_active: Active
         service_types_flag_billable: Billable
         service_types_flag_payable: Payable
         service_types_flag_multi_client: Multi-client
         service_types_flag_notes: Notes required
         service_types_flag_mileage: Tracks mileage
+        service_types_add: Add service type
         service_types_add_button: Add
+        service_types_form_title_create: New service type
+        service_types_form_title_edit: Edit service type
+        service_types_save_create: Create service type
+        service_types_save_update: Update service type
+        service_types_cancel: Cancel

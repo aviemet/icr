@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe OvertimeExemption, "service type matching", type: :model do
+RSpec.describe OvertimeExemption, "#matches?", type: :model do
   it "matches on service_type slug for category criteria" do
     service_type = ServiceType.find_or_create_by!(name: "Overnight") do |row|
       row.color = "#15803D"

@@ -12,11 +12,11 @@ RSpec.describe "Settings::Calendars", type: :request do
     end
   end
 
-  describe "GET /settings/calendar/shift_types" do
+  describe "GET /settings/calendar/service_types" do
     it "renders a successful response" do
-      get settings_calendar_shift_types_url
+      get settings_service_types_url
       expect(response).to be_successful
-      expect_inertia.to render_component "Settings/Calendar/ShiftTypes"
+      expect_inertia.to render_component "Settings/Calendar/ServiceTypes"
     end
   end
 end

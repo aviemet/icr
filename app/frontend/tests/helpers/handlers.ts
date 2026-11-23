@@ -20,4 +20,22 @@ export const handlers = [
 	http.get(/\/api\/options\/categories\/.+/, () => {
 		return HttpResponse.json([])
 	}),
+	http.get(Routes.apiServiceTypesOptions(), () => {
+		return HttpResponse.json([
+			{
+				id: "st-1",
+				name: "Regular",
+				slug: "regular",
+				active: true,
+				color: "#15803D",
+				billable: true,
+				payable: true,
+				allows_multi_client: false,
+				requires_notes: false,
+				tracks_mileage: false,
+				created_at: new Date().toISOString(),
+				updated_at: new Date().toISOString(),
+			},
+		])
+	}),
 ]

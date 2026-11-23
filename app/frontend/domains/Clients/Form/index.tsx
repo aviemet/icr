@@ -43,13 +43,13 @@ export function ClientForm({ method = "post", to, client, ...props }: ClientForm
 				>
 					<Grid>
 						<Grid.Col span={ { xxs: 12, sm: 4 } }>
-							<TextInput name="client.person.first_name" label="First Name" />
+							<TextInput name="client.person.first_name" label="First Name" required />
 						</Grid.Col>
 						<Grid.Col span={ { xxs: 12, sm: 4 } }>
 							<TextInput name="client.person.middle_name" label="Middle Name" />
 						</Grid.Col>
 						<Grid.Col span={ { xxs: 12, sm: 4 } }>
-							<TextInput name="client.person.last_name" label="Last Name" />
+							<TextInput name="client.person.last_name" label="Last Name" required />
 						</Grid.Col>
 						<Grid.Col span={ { xxs: 12, sm: 4 } }>
 							<TextInput name="client.number" label="Client #" />
