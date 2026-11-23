@@ -42,6 +42,8 @@ class Employee::JobTitle::PermissionsCatalog
     "requirement" => Requirement::Requirement,
     "report_definition" => ReportDefinition,
     "report_request" => ReportRequest,
+    "compliance_form_template" => Compliance::FormTemplate,
+    "compliance_form_submission" => Compliance::FormSubmission,
   }.freeze
 
   def self.resource_keys

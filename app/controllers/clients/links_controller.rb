@@ -3,6 +3,7 @@ class Clients::LinksController < Clients::BaseController
 
   strong_params :link, permit: [:title, :url]
 
+  # @route POST /clients/:client_slug/links (client_links)
   def create
     authorize_client_update!
     link.assign_attributes(link_params)
@@ -14,6 +15,8 @@ class Clients::LinksController < Clients::BaseController
     end
   end
 
+  # @route PATCH /clients/:client_slug/links/:id (client_link)
+  # @route PUT /clients/:client_slug/links/:id (client_link)
   def update
     authorize_client_update!
 
@@ -24,6 +27,7 @@ class Clients::LinksController < Clients::BaseController
     end
   end
 
+  # @route DELETE /clients/:client_slug/links/:id (client_link)
   def destroy
     authorize_client_update!
     link.destroy!

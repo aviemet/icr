@@ -48,6 +48,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
   - [x] Employment and client-schedule enforcement gates
   - [x] Track requirement fulfillment status per employee
 - [ ] Workflow for assigning an Employee to a client
+- [ ] Mark employees as backup options for a client
 - [x] Allow the use of requirements and/or trainings to gate allowing employee to be scheduled with client
 
 ### Phase 4: Client Management
@@ -58,6 +59,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - [x] Client profile management
   - [x] Service history tracking
   - [x] Document management for client-specific files
+- [ ] Natural support people for a client (non-employee family/friends; unpaid presence that counts as the client not being alone)
 - [ ] MAR / controlled-substance logs (Future Feature)
 
 ### Phase 5: Calendar and Scheduling
@@ -68,6 +70,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
   - [x] Recurring event support (master + pattern expand-on-read; this-occurrence vs series edit)
   - [x] Schedule conflict detection
   - [x] Schedule assignment for employees and clients
+- [ ] Schedule any person associated with the client: directors, that client's facilitator, approved attendants, natural support, and backup employees
 - [x] Calendar access controls based on roles
 
 ### Phase 6: Timesheet Management
@@ -115,7 +118,12 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - [ ] Med administration and notification reports
 
 ### Phase 12: Forms, Notes, and Reports Engine
-- [ ] Daily service notes and compliance form capture
+- [ ] Daily service notes (same Compliance:: form engine; separate template; ship after hazard assessment)
+- [x] Compliance form engine (FormTemplate / Section / Item / Submission / Answer / CorrectiveAction; household-or-client subject; paper_trail)
+- [x] Hazard Assessment and Correction Record (seeded home-safety checklist; submission capture; Client Show Compliance tab when flagged on)
+- [ ] Compliance form builder UI (Settings CRUD for sections/items; system templates stay seed-owned; SurveyJS Creator is a later licensed option, not the default path)
+- [ ] Compliance due/overdue work queue as a product surface (route exists under `/compliance/form_submissions`; flag-gated; not main-nav)
+- [ ] Enable `compliance_forms` Flipper flag by default once builder + Client-tab UX are ready
 - [x] Definition-driven report engine (ReportDefinition + ReportRequest queue, registry whitelist, list runner, caxlsx/CSV, 30-day purge)
 - [x] Stock report: Employee Requirement Expiration (employee_credential resource)
 - [ ] Additional stock reports (contacts, timesheets, IHSS/OT/auth utilization, payroll processing variants)
@@ -165,7 +173,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - Root Inertia page loads `dashboard` props from `Dashboard::StatsSerializer.render(Dashboard::Stats#payload)` so the payload matches `Schema.DashboardStats` from TypesFromSerializers. When `user` is nil, `Dashboard::Stats` uses `Client.none`, `Employee.none`, `Calendar::Event.none`, and `Timesheet.none` instead of calling Pundit, so counts and lists collapse to empty without a separate blank payload path. Nested rows are `Struct` instances; use `Payload#to_h` for plain hashes. `Dashboard::StatsSerializer` and its nested serializers subclass `BaseSerializer` (not `ApplicationSerializer`) so the root DTO is not forced through `identifier`/ActiveRecord-oriented hooks. Counts and lists use `Pundit.policy_scope` for `Client`, `Employee`, `Calendar::Event`, and `Timesheet` so the numbers match what that user could list in those areas. Week hours sum shift lengths (calendar event duration) for scoped employees in the current calendar week. Pending timesheets are unapproved rows for the current pay period when that `PayPeriod` row already exists (GET does not create periods). Recent activity is derived from the newest clients and employees in scope, not from the activity table.
 
 ### Client Show
-- Client show is URL-tabbed (Overview, Profile, Contacts, Medical, Care and Services, Trainings, Documents, Incidents). Schedule stays a member route. Nested writes live under `/clients/:client_slug/...` and authorize through `ClientPolicy#update?` (show for read). Overview counts and sibling collections come from one `Client.includes_show` load via `Clients::ShowSerializer` so allergy/prescription/support-contact/enrollment/attendant/training/doctor/hospital-visit ids stay lockstep. Medical tab owns preferred hospital, linked doctors (`doctors_clients` notes), allergies, diagnoses (optional `doctor_id`), prescriptions (dosage amount/frequency/`administration_method`), and `Client::HospitalVisit` rows (optional doctor + incident link). CA-aware profile fields and IHSS profile fields live on `clients`; day programs are `Client::Enrollment` rows linked to `Vendor`. Support contacts use Personable (name and Contactable phones/emails/addresses live on Person). Document/image UI uses ActiveStorage `HasDocuments`/`HasImages` list/upload/purge (Phase 2 versioning still open). Client Trainings tab lists `ClientsTraining` join rows (optional link from catalog `Employee::Training`, with `required` for working with that client). Client-schedule requirements gate pairing via `ClientsAttendant` and calendar shifts that include that client.
+- Client show is URL-tabbed (Overview, Profile, Contacts, Medical, Care and Services, Trainings, Documents, Incidents). Schedule stays a member route. Nested writes live under `/clients/:client_slug/...` and authorize through `ClientPolicy#update?` (show for read). Overview counts and sibling collections come from one `Client.includes_show` load via `Clients::ShowSerializer` so allergy/prescription/support-contact/enrollment/attendant/training/doctor/hospital-visit ids stay lockstep. Tabs that declare `sections` on `RecordShowShell` add a `RecordShowSubNav` row under the primary tabs, keyed by `?section=` (primary tab changes clear `section`). Medical uses Overview (preferred hospital, linked doctors, allergies, diagnoses), Medications (prescriptions / dosage), and Hospital Visits (`Client::HospitalVisit`); nested prescription and hospital-visit redirects pass the matching section. CA-aware profile fields and IHSS profile fields live on `clients`; day programs are `Client::Enrollment` rows linked to `Vendor`. Support contacts use Personable (name and Contactable phones/emails/addresses live on Person). Document/image UI uses ActiveStorage `HasDocuments`/`HasImages` list/upload/purge (Phase 2 versioning still open). Client Trainings tab lists `ClientsTraining` join rows (optional link from catalog `Employee::Training`, with `required` for working with that client). Client-schedule requirements gate pairing via `ClientsAttendant` and calendar shifts that include that client.
 
 ### Doctors
 - Doctors are Personable records with specialty, NPI, practice name, and notes. Show is URL-tabbed (Overview, Clients, Prescriptions, Diagnoses, Hospital Visits) from one `Doctor.includes_show` load. Client linking and prescription/diagnosis/hospital-visit attribution use `DoctorsDropdown` via `GET /api/options/doctors`. Incident reports may reference a doctor; hospital visits may reference an incident. MAR administration logs remain deferred.
@@ -192,6 +200,13 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 
 ### Reports
 - Definition-driven engine: stock reports are `ReportDefinition` rows (seeded, `system: true`) that pick column/filter keys from a code whitelist in `Reports::Catalog` / `Reports::Resources::*`. Runs create `ReportRequest` with a frozen `definition_snapshot`, enqueue `Reports::GenerateJob`, and attach XLS/CSV via ActiveStorage. Completed requests older than 30 days are purged by `Reports::PurgeExpiredJob`. List mode uses AR + registry extractors; aggregate mode is reserved for active_reporter mappings. B-lite (staff column picker) should only add UI that writes non-system `ReportDefinition` rows through the same registry validation - do not add one-off `send_data` exporters for new stock reports. Permissions keys: `report_definition`, `report_request`. UI: `/reports` (definitions) and `/report_requests` (queue).
+
+### Compliance forms
+- Namespace `Compliance::`: `FormTemplate` / `FormSection` / `FormItem` define checklists; `FormSubmission` / `FormAnswer` / `CorrectiveAction` capture completions. Prefer `household` as subject (fallback `client`). Template `form_version` is the checklist revision column - do not name it `version` (PaperTrail owns that association name).
+- First seeded template: Hazard Assessment and Correction Record (`Compliance::HazardAssessmentSeed`, slug `hazard-assessment-correction-record`), quarterly cadence. `Compliance::EnsureDueSubmissions` opens the next draft from last submitted/closed + cadence interval; incomplete drafts use `incomplete` scope (draft only), while the queue uses `open_statuses` (draft + submitted).
+- Feature flag: Flipper key `compliance_forms` (default off). Controllers use `require_feature :compliance_forms`. Inertia shares `features.compliance_forms`; frontend `useFeatures()`. Toggle at `/admin/flipper` (admin role). No Sidebar or Spotlight entry.
+- UI when flagged on: Client Show **Compliance** tab (`ComplianceHistory` start/history); Settings > Company > Compliance forms (template metadata + read-only section/item list - no builder yet); deep-link queue at `/compliance/form_submissions`. Permissions catalog keys: `compliance_form_template`, `compliance_form_submission` (frontend `can` paths `compliance/form_templates`, `compliance/form_submissions`). Corrective actions may optionally link an `IncidentReport`.
+- Unfinished: first-party Settings section/item CRUD builder (preferred). SurveyJS Creator is commercial and schema-mismatched - only consider later if a licensed drag-drop editor is required.
 
 ### Payroll Settings
 - Period types: weekly, bi-weekly, semi-monthly, monthly. Weekly/bi-weekly use a start weekday; monthly uses a configurable start date (including last day of month). Semi-monthly is fixed: 1st-15th and 16th-last.

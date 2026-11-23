@@ -10,7 +10,7 @@ class Clients::HospitalVisitsController < Clients::BaseController
     authorize_client_update!
     hospital_visit.assign_attributes(hospital_visit_params)
     hospital_visit.save
-    redirect_to_client_tab("medical")
+    redirect_to_client_tab("medical", section: "hospital_visits")
   end
 
   # @route PATCH /clients/:client_slug/hospital_visits/:id (client_hospital_visit)
@@ -18,13 +18,13 @@ class Clients::HospitalVisitsController < Clients::BaseController
   def update
     authorize_client_update!
     hospital_visit.update(hospital_visit_params)
-    redirect_to_client_tab("medical")
+    redirect_to_client_tab("medical", section: "hospital_visits")
   end
 
   # @route DELETE /clients/:client_slug/hospital_visits/:id (client_hospital_visit)
   def destroy
     authorize_client_update!
     hospital_visit.destroy!
-    redirect_to_client_tab("medical")
+    redirect_to_client_tab("medical", section: "hospital_visits")
   end
 end

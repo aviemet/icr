@@ -9,6 +9,7 @@ export { useInit } from "./useInit"
 export { useAuth } from "./useAuth"
 export { useCurrency, type UseCurrencyOptions } from "./useCurrency"
 export { usePermissions } from "./usePermissions"
+export { useFeatures, type FeatureKey } from "./useFeatures"
 export { useRecordCanUpdate, useRecordCanUpdates } from "./useRecordCanUpdate"
 
 

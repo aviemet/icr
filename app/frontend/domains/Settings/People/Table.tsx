@@ -1,7 +1,9 @@
-import { Table, Link, type TableColumn } from "@/components"
+import { Group, Link, Paper, Table, Text, type TableColumn } from "@/components"
 import { EditButton } from "@/components/Button"
 import { CheckIcon } from "@/components/Icons"
 import { Routes } from "@/lib"
+
+import * as classes from "./PeopleTable.css"
 
 const personLink = (person: Schema.PeopleIndex) => {
 	if(person.agency_role === "Client") {
@@ -18,23 +20,24 @@ const personLink = (person: Schema.PeopleIndex) => {
 interface PersonTableProps {
 	records: Schema.PeopleIndex[]
 	model?: string
+	pagination?: Schema.Pagination
 }
 
-export function PersonTable({ records, model }: PersonTableProps) {
+export function PersonTable({ records, model, pagination }: PersonTableProps) {
 	const columns: TableColumn<Schema.PeopleIndex>[] = [
 		{
 			accessor: "first_name",
-			title: "FirstName",
+			title: "First Name",
 			sortable: true,
 			render: (person) => (
 				<Link href={ personLink(person) }>
-					{ person.first_name }
+					<Text fw={ 500 } span>{ person.first_name }</Text>
 				</Link>
 			),
 		},
 		{
 			accessor: "last_name",
-			title: "LastName",
+			title: "Last Name",
 			sortable: true,
 			render: (person) => (
 				<Link href={ personLink(person) }>
@@ -60,7 +63,7 @@ export function PersonTable({ records, model }: PersonTableProps) {
 		},
 		{
 			accessor: "role",
-			title: "Roll",
+			title: "Role",
 			sortable: true,
 			render: (person) => person.agency_role,
 		},
@@ -70,16 +73,43 @@ export function PersonTable({ records, model }: PersonTableProps) {
 			titleClassName: "actionsCell",
 			cellsClassName: "actionsCell",
 			sortable: false,
-			render: (person) => <EditButton href={ Routes.editSettingsPerson(person.slug) } />,
+			render: (person) => (
+				<Group gap="xs" wrap="nowrap">
+					<EditButton href={ Routes.editSettingsPerson(person.slug) } />
+				</Group>
+			),
 		},
 	]
 
 	return (
-		<Table.DataTable
-			columns={ columns }
-			records={ records }
-			model={ model }
-			selectable
-		/>
+		<Paper
+			withBorder
+			radius="md"
+			shadow="xs"
+			style={ { overflow: "hidden" } }
+		>
+			<Table.Provider
+				selectable
+				model={ model }
+				pagination={ pagination }
+			>
+				<Table.DataTable
+					classNames={ { table: classes.table } }
+					columns={ columns }
+					records={ records }
+					model={ model }
+					selectable
+					height="auto"
+					emptyState={ (
+						<Text size="sm" c="dimmed">
+							No people yet. Create one to get started.
+						</Text>
+					) }
+				/>
+				{ pagination && model && (
+					<Table.Pagination pagination={ pagination } model={ model } />
+				) }
+			</Table.Provider>
+		</Paper>
 	)
 }

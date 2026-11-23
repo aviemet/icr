@@ -1,6 +1,6 @@
 import { FloatingIndicator } from "@mantine/core"
 import clsx from "clsx"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 
 import { Box } from "@/components"
 import {
@@ -14,7 +14,7 @@ import {
 } from "@/components/Icons"
 import { pageChrome } from "@/components/PageChrome"
 import { Routes } from "@/lib"
-import { useLocation } from "@/lib/hooks"
+import { useFeatures, useLocation } from "@/lib/hooks"
 
 import { SettingsNavLink } from "./SettingsNavLink"
 import { AppLayout } from "../AppLayout"
@@ -37,50 +37,60 @@ type SettingsNavLinkItem = {
 	children?: SettingsNavChild[]
 }
 
-const links: SettingsNavLinkItem[] = [
-	{ label: "General", href: Routes.settingsGeneral(), icon: <AdjustmentsIcon /> },
-	{
-		label: "Calendar",
-		href: Routes.settingsCalendar(),
-		icon: <CalendarIcon />,
-		matchPrefixes: ["/settings/calendar"],
-		children: [
-			{ label: "Display", href: Routes.settingsCalendar() },
-			{ label: "Shift Types", href: Routes.settingsCalendarShiftTypes() },
-		],
-	},
-	{
-		label: "Company",
-		href: Routes.settingsCompany(),
-		icon: <BuildingIcon />,
-		matchPrefixes: [
-			"/settings/company",
-			"/settings/job_titles",
-			"/settings/departments",
-			"/settings/requirements",
-			"/settings/requirement_types",
-		],
-		children: [
-			{ label: "Details", href: Routes.settingsCompany() },
-			{ label: "Job Titles", href: Routes.settingsJobTitles() },
-			{ label: "Departments", href: Routes.settingsDepartments() },
-			{ label: "Requirements", href: Routes.settingsRequirements() },
-		],
-	},
-	{ label: "People", href: Routes.settingsPeople(), icon: <PeopleIcon /> },
-	{
-		label: "Payroll",
-		href: Routes.settingsPayrollSchedule(),
-		icon: <ClockIcon />,
-		matchPrefixes: ["/settings/payroll"],
-		children: [
-			{ label: "Pay Schedule", href: Routes.settingsPayrollSchedule() },
-			{ label: "Overtime", href: Routes.settingsPayrollOvertime() },
-			{ label: "IHSS", href: Routes.settingsPayrollIhss() },
-		],
-	},
-	{ label: "Notifications", href: Routes.settingsNotifications(), icon: <NotificationIcon /> },
-]
+function buildSettingsLinks(complianceFormsEnabled: boolean): SettingsNavLinkItem[] {
+	const companyMatchPrefixes = [
+		"/settings/company",
+		"/settings/job_titles",
+		"/settings/departments",
+		"/settings/requirements",
+		"/settings/requirement_types",
+	]
+	const companyChildren: SettingsNavChild[] = [
+		{ label: "Details", href: Routes.settingsCompany() },
+		{ label: "Job Titles", href: Routes.settingsJobTitles() },
+		{ label: "Departments", href: Routes.settingsDepartments() },
+		{ label: "Requirements", href: Routes.settingsRequirements() },
+	]
+
+	if(complianceFormsEnabled) {
+		companyMatchPrefixes.push("/settings/compliance_form_templates")
+		companyChildren.push({ label: "Compliance forms", href: Routes.settingsComplianceFormTemplates() })
+	}
+
+	return [
+		{ label: "General", href: Routes.settingsGeneral(), icon: <AdjustmentsIcon /> },
+		{
+			label: "Calendar",
+			href: Routes.settingsCalendar(),
+			icon: <CalendarIcon />,
+			matchPrefixes: ["/settings/calendar"],
+			children: [
+				{ label: "Display", href: Routes.settingsCalendar() },
+				{ label: "Shift Types", href: Routes.settingsCalendarShiftTypes() },
+			],
+		},
+		{
+			label: "Company",
+			href: Routes.settingsCompany(),
+			icon: <BuildingIcon />,
+			matchPrefixes: companyMatchPrefixes,
+			children: companyChildren,
+		},
+		{ label: "People", href: Routes.settingsPeople(), icon: <PeopleIcon /> },
+		{
+			label: "Payroll",
+			href: Routes.settingsPayrollSchedule(),
+			icon: <ClockIcon />,
+			matchPrefixes: ["/settings/payroll"],
+			children: [
+				{ label: "Pay Schedule", href: Routes.settingsPayrollSchedule() },
+				{ label: "Overtime", href: Routes.settingsPayrollOvertime() },
+				{ label: "IHSS", href: Routes.settingsPayrollIhss() },
+			],
+		},
+		{ label: "Notifications", href: Routes.settingsNotifications(), icon: <NotificationIcon /> },
+	]
+}
 
 const userSettingsLink = {
 	label: "User Settings",
@@ -114,15 +124,15 @@ function activeChildIndex(subLinks: SettingsNavChild[], path: string) {
 	return Math.max(0, bestIndex)
 }
 
-const linkIndex = (path: string) => links.findIndex(link => isParentActive(link, path))
-
 export function SettingsLayout({ children }: SettingsLayoutProps) {
 	const { pathname } = useLocation()
+	const { enabled } = useFeatures()
+	const links = useMemo(() => buildSettingsLinks(enabled("compliance_forms")), [enabled])
 
 	const [rootRef, setRootRef] = useState<HTMLElement | null>(null)
 	const [controlsRefs, setControlsRefs] = useState<Record<string, HTMLAnchorElement | null>>({})
 	const [userControlRef, setUserControlRef] = useState<HTMLAnchorElement | null>(null)
-	const active = linkIndex(pathname)
+	const active = links.findIndex(link => isParentActive(link, pathname))
 	const userActive = matchesPrefix(userSettingsLink.href, pathname)
 	const activeLink = userActive ? undefined : links[active]
 	const subLinks = activeLink?.children

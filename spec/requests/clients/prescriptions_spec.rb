@@ -28,7 +28,7 @@ RSpec.describe "/clients/:client_slug/prescriptions" do
         .and change(Medication, :count).by(1)
         .and change(Dosage, :count).by(1)
 
-      expect(response).to redirect_to(client_url(client, tab: "medical"))
+      expect(response).to redirect_to(client_url(client, tab: "medical", section: "medications"))
       prescription = client.prescriptions.last
       expect(prescription.medication.name).to eq("Lisinopril")
       expect(prescription.dosage.amount).to eq(10)
@@ -54,7 +54,7 @@ RSpec.describe "/clients/:client_slug/prescriptions" do
         },
       }
 
-      expect(response).to redirect_to(client_url(client, tab: "medical"))
+      expect(response).to redirect_to(client_url(client, tab: "medical", section: "medications"))
       expect(client.prescriptions.last.dosage.administration_method).to eq("injection")
     end
   end

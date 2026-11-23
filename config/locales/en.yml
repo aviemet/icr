@@ -50,6 +50,9 @@ en:
   role: Role
   save: Save
   starts_at: Starts At
+  compliance:
+    alerts:
+      hazard_template_missing: Hazard assessment template is not configured.
   templates:
     controllers:
       notices:

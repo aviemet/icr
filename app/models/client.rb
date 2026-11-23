@@ -125,6 +125,10 @@ class Client < ApplicationRecord
     dependent: :destroy,
     inverse_of: :client
   has_many :incident_reports, dependent: :nullify
+  has_many :compliance_form_submissions,
+    class_name: "Compliance::FormSubmission",
+    dependent: :nullify,
+    inverse_of: :client
 
   has_many :clients_trainings,
     class_name: "ClientsTraining",
@@ -167,6 +171,7 @@ class Client < ApplicationRecord
       prescriptions: [:medication, :dosage, :doctor],
       incident_reports: [:category, :reported_by, :reported_to, :doctor],
       clients_trainings: :training,
+      compliance_form_submissions: [:form_template, :conducted_by, :corrective_actions],
     )
   }
 

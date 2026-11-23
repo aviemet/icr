@@ -3,6 +3,7 @@ import type ClientAllergiesPersisted from '../Client/Allergies/Persisted'
 import type ClientsAttendantsPersisted from '../ClientsAttendants/Persisted'
 import type ClientsManagersPersisted from '../ClientsManagers/Persisted'
 import type ClientsTrainingsShowRow from '../ClientsTrainings/ShowRow'
+import type ComplianceFormSubmissionsPersisted from '../Compliance/FormSubmissions/Persisted'
 import type EmployeesPersisted from '../Employees/Persisted'
 import type ClientDiagnosesPersisted from '../Client/Diagnoses/Persisted'
 import type DoctorsPersisted from '../Doctors/Persisted'
@@ -31,6 +32,7 @@ declare global {
       color?: string
       color_mappings: Record<string, Record<string, string>>
       communication_notes?: string
+      compliance_form_submissions: ComplianceFormSubmissionsPersisted[]
       created_at: Date
       current_attendants: EmployeesPersisted[]
       current_manager: EmployeesPersisted

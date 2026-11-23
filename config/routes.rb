@@ -66,6 +66,7 @@ Rails.application.routes.draw do
     end
     resources :requirements
     resources :requirement_types
+    resources :compliance_form_templates, param: :slug, only: [:index, :show, :update]
     get "payroll", to: redirect("/settings/payroll/schedule")
     scope path: "payroll", as: "payroll" do
       get "schedule", to: "payrolls#schedule"
@@ -101,6 +102,7 @@ Rails.application.routes.draw do
     resources :documents, controller: "clients/documents", only: [:create, :destroy]
     resources :images, controller: "clients/images", only: [:create, :destroy]
     resources :trainings, controller: "clients/trainings", only: [:create, :update, :destroy]
+    resources :compliance_form_submissions, controller: "clients/compliance_form_submissions", only: [:create]
     resource :life_detail, controller: "clients/life_details", only: [:update]
   end
 
@@ -186,6 +188,20 @@ Rails.application.routes.draw do
 
   resources :incident_reports
 
+  namespace :compliance do
+    resources :form_submissions, only: [:index, :show, :edit, :update] do
+      member do
+        post :submit
+        post :close
+      end
+      resources :corrective_actions, only: [:create, :update] do
+        member do
+          post :close
+        end
+      end
+    end
+  end
+
   resources :report_definitions, only: [:index, :show], path: "reports"
   resources :report_requests, only: [:index, :create], path: "report_requests" do
     member do
@@ -201,6 +217,10 @@ Rails.application.routes.draw do
   get "requirement_types/*path", to: redirect { |params, _req| "/settings/requirement_types/#{params[:path]}" }
 
   draw(:api)
+
+  authenticate :user, ->(user) { user.has_role?(:admin) } do
+    mount Flipper::UI.app(Flipper) => "/admin/flipper"
+  end
 
   if Rails.env.local?
     namespace :dev do

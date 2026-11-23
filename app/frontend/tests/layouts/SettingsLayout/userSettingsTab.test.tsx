@@ -11,6 +11,10 @@ vi.mock("@/lib/hooks", () => ({
 		pathname: mockPathname(),
 		paths: ["settings", "user"],
 	}),
+	useFeatures: () => ({
+		enabled: () => false,
+		features: { compliance_forms: false },
+	}),
 }))
 
 vi.mock("@/layouts/AppLayout", () => ({

@@ -88,4 +88,64 @@ describe("RecordShowShell", () => {
 		expect(screen.getByText("Overview board")).toBeInTheDocument()
 		expect(screen.getByText("Overview board").closest(`.${pageChrome.panelWrapperSurface}`)).toBeTruthy()
 	})
+
+	it("renders section subnav and default section panel for sectioned tabs", () => {
+		window.history.pushState({}, "", "/clients/maria?tab=medical")
+
+		render(
+			<MantineProvider theme={ theme } defaultColorScheme="dark">
+				<RecordShowShell
+					title="Maria Santos"
+					breadcrumbs={ [{ title: "Clients", href: "/clients" }] }
+					tabs={ [
+						{ id: "overview", label: "Overview", panel: <div>Overview board</div> },
+						{
+							id: "medical",
+							label: "Medical",
+							defaultSection: "overview",
+							sections: [
+								{ id: "overview", label: "Overview", panel: <div>Medical overview</div> },
+								{ id: "medications", label: "Medications", panel: <div>Medications board</div> },
+								{ id: "hospital_visits", label: "Hospital Visits", panel: <div>Hospital visits board</div> },
+							],
+						},
+					] }
+					defaultTab="medical"
+				/>
+			</MantineProvider>,
+		)
+
+		expect(screen.getByRole("tab", { name: "Medications" })).toBeInTheDocument()
+		expect(screen.getByRole("tab", { name: "Hospital Visits" })).toBeInTheDocument()
+		expect(screen.getByText("Medical overview")).toBeInTheDocument()
+	})
+
+	it("opens the section from the URL query param", () => {
+		window.history.pushState({}, "", "/clients/maria?tab=medical&section=hospital_visits")
+
+		render(
+			<MantineProvider theme={ theme } defaultColorScheme="dark">
+				<RecordShowShell
+					title="Maria Santos"
+					breadcrumbs={ [{ title: "Clients", href: "/clients" }] }
+					tabs={ [
+						{
+							id: "medical",
+							label: "Medical",
+							defaultSection: "overview",
+							sections: [
+								{ id: "overview", label: "Overview", panel: <div>Medical overview</div> },
+								{ id: "medications", label: "Medications", panel: <div>Medications board</div> },
+								{ id: "hospital_visits", label: "Hospital Visits", panel: <div>Hospital visits board</div> },
+							],
+						},
+					] }
+					defaultTab="medical"
+				/>
+			</MantineProvider>,
+		)
+
+		expect(screen.getByText("Hospital visits board")).toBeInTheDocument()
+		expect(screen.getByRole("tab", { name: "Hospital Visits" })).toHaveAttribute("aria-selected", "true")
+	})
 })

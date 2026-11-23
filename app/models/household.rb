@@ -31,6 +31,10 @@ class Household < ApplicationRecord
   has_many :households_clients, dependent: :nullify
   has_many :clients, through: :households_clients, dependent: :nullify
   has_many :people, through: :clients, source: :person
+  has_many :compliance_form_submissions,
+    class_name: "Compliance::FormSubmission",
+    dependent: :nullify,
+    inverse_of: :household
 
   validates :name, presence: true
 

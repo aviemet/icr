@@ -13,7 +13,7 @@ class Clients::PrescriptionsController < Clients::BaseController
     prescription.assign_attributes(prescription_create_params)
 
     prescription.save
-    redirect_to_client_tab("medical")
+    redirect_to_client_tab("medical", section: "medications")
   end
 
   # @route PATCH /clients/:client_slug/prescriptions/:id (client_prescription)
@@ -22,14 +22,14 @@ class Clients::PrescriptionsController < Clients::BaseController
     authorize_client_update!
 
     prescription.update(prescription_params)
-    redirect_to_client_tab("medical")
+    redirect_to_client_tab("medical", section: "medications")
   end
 
   # @route DELETE /clients/:client_slug/prescriptions/:id (client_prescription)
   def destroy
     authorize_client_update!
     prescription.destroy!
-    redirect_to_client_tab("medical")
+    redirect_to_client_tab("medical", section: "medications")
   end
 
   private

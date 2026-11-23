@@ -16,6 +16,8 @@ class ApplicationController < ActionController::Base
   include InertiaShare::Menu
   include InertiaShare::Settings
   include InertiaShare::Permissions
+  include InertiaShare::Features
 
+  include FeatureFlagged
   include ErrorHandling
 end

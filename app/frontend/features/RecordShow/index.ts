@@ -1,4 +1,14 @@
-export { RecordShowShell, type RecordShowShellProps, type RecordShowTab } from "./RecordShowShell"
+export {
+	RecordShowShell,
+	type RecordShowShellProps,
+	type RecordShowTab,
+	type RecordShowSection,
+} from "./RecordShowShell"
+export {
+	RecordShowSubNav,
+	type RecordShowSubNavProps,
+	type RecordShowSubNavItem,
+} from "./RecordShowSubNav"
 export { MetricTile, type MetricTileProps, type MetricTileTone } from "./MetricTile"
 export {
 	MetricLine,

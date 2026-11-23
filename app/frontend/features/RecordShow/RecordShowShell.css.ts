@@ -25,6 +25,11 @@ export const chrome = css`
 	gap: ${ vars.spacing.sm };
 `
 
+export const chromeWithSubnav = css`
+	padding-bottom: ${ vars.spacing.xs };
+	gap: ${ vars.spacing.xs };
+`
+
 export const header = css`
 	display: flex;
 	flex-wrap: wrap;

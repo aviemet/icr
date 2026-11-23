@@ -2,14 +2,20 @@ import { useTranslation } from "react-i18next"
 
 import { Avatar, Badge, ScheduleButton, Text } from "@/components"
 import { DateTimeFormatter } from "@/components/Formatters"
+import {
+	MedicalHospitalVisits,
+	MedicalMedications,
+	MedicalOverview,
+} from "@/domains/Clients/Medical"
 import { RecordShowShell } from "@/features"
 import { initials, Routes } from "@/lib"
+import { useFeatures, usePermissions } from "@/lib/hooks"
 
 import Care from "./Care"
+import Compliance from "./Compliance"
 import Contacts from "./Contacts"
 import Documents from "./Documents"
 import Incidents from "./Incidents"
-import Medical from "./Medical"
 import Overview from "./Overview"
 import Profile from "./Profile"
 import Trainings from "./Trainings"
@@ -25,8 +31,13 @@ export interface ShowClientProps {
 
 const ShowClient = ({ client, trainingOptions = [] }: ShowClientProps) => {
 	const { t } = useTranslation()
+	const { can } = usePermissions()
+	const { enabled } = useFeatures()
 	const title = client?.person?.name || t("views.clients.show.title")
 	const isActive = Boolean(client.active_at)
+	const showCompliance = enabled("compliance_forms") && (
+		can("compliance/form_submissions", "index") || can("compliance/form_submissions", "show")
+	)
 
 	return (
 		<RecordShowShell
@@ -60,9 +71,32 @@ const ShowClient = ({ client, trainingOptions = [] }: ShowClientProps) => {
 				{ id: "overview", label: t("views.clients.show.tabs.overview"), panel: <Overview client={ client } /> },
 				{ id: "profile", label: t("views.clients.show.tabs.profile"), panel: <Profile client={ client } /> },
 				{ id: "contacts", label: t("views.clients.show.tabs.contacts"), panel: <Contacts client={ client } /> },
-				{ id: "medical", label: t("views.clients.show.tabs.medical"), panel: <Medical client={ client } /> },
+				{
+					id: "medical",
+					label: t("views.clients.show.tabs.medical"),
+					defaultSection: "overview",
+					sections: [
+						{
+							id: "overview",
+							label: t("views.clients.show.medical.sections.overview"),
+							panel: <MedicalOverview client={ client } />,
+						},
+						{
+							id: "medications",
+							label: t("views.clients.show.medical.sections.medications"),
+							panel: <MedicalMedications client={ client } />,
+						},
+						{
+							id: "hospital_visits",
+							label: t("views.clients.show.medical.sections.hospital_visits"),
+							panel: <MedicalHospitalVisits client={ client } />,
+						},
+					],
+				},
 				{ id: "care", label: t("views.clients.show.tabs.care"), panel: <Care client={ client } /> },
-
+				...(showCompliance
+					? [{ id: "compliance", label: t("views.clients.show.tabs.compliance"), panel: <Compliance client={ client } /> }]
+					: []),
 				{
 					id: "trainings",
 					label: t("views.clients.show.tabs.trainings"),

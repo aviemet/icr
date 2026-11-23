@@ -5,6 +5,7 @@ export { confirmBusyAction } from "./ConfirmBusyAction"
 export * as Dashboard from "./Dashboard"
 export {
 	RecordShowShell,
+	RecordShowSubNav,
 	MetricTile,
 	MetricLine,
 	CountChip,

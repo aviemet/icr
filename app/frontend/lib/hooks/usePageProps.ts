@@ -33,6 +33,9 @@ export interface SharedInertiaProps extends PageProps {
 	errors: Errors & ErrorBag
 	settings: Schema.Setting
 	permissions: Record<string, Record<string, boolean>>
+	features: {
+		compliance_forms: boolean
+	}
 	can_update?: boolean
 	can_updates?: Record<string, boolean>
 }

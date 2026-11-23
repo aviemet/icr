@@ -72,6 +72,7 @@ function buildClient(overrides: Partial<Schema.ClientsShow> = {}): Schema.Client
 			},
 		],
 		color_mappings: {},
+		compliance_form_submissions: [],
 		created_at: new Date("2024-01-01"),
 		current_attendants: [],
 		current_manager: null as unknown as Schema.EmployeesPersisted,

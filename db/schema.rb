@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_23_004719) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_23_022416) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -299,6 +299,101 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_004719) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "compliance_corrective_actions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "form_submission_id", null: false
+    t.uuid "incident_report_id"
+    t.text "description", null: false
+    t.text "root_cause"
+    t.text "remedy"
+    t.date "due_on"
+    t.datetime "closed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["closed_at"], name: "index_compliance_corrective_actions_on_closed_at"
+    t.index ["form_submission_id"], name: "index_compliance_corrective_actions_on_form_submission_id"
+    t.index ["incident_report_id"], name: "index_compliance_corrective_actions_on_incident_report_id"
+  end
+
+  create_table "compliance_form_answers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "form_submission_id", null: false
+    t.uuid "form_item_id", null: false
+    t.integer "check_value"
+    t.text "text_value"
+    t.date "date_value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["form_item_id"], name: "index_compliance_form_answers_on_form_item_id"
+    t.index ["form_submission_id", "form_item_id"], name: "index_compliance_form_answers_on_submission_and_item", unique: true
+    t.index ["form_submission_id"], name: "index_compliance_form_answers_on_form_submission_id"
+  end
+
+  create_table "compliance_form_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "form_section_id", null: false
+    t.string "key", null: false
+    t.string "label", null: false
+    t.integer "kind", default: 0, null: false
+    t.integer "position", default: 0, null: false
+    t.boolean "required", default: true, null: false
+    t.string "show_when"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["form_section_id", "key"], name: "index_compliance_form_items_on_form_section_id_and_key", unique: true
+    t.index ["form_section_id", "position"], name: "index_compliance_form_items_on_form_section_id_and_position"
+    t.index ["form_section_id"], name: "index_compliance_form_items_on_form_section_id"
+  end
+
+  create_table "compliance_form_sections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "form_template_id", null: false
+    t.string "name", null: false
+    t.string "key", null: false
+    t.integer "position", default: 0, null: false
+    t.string "show_when"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["form_template_id", "key"], name: "index_compliance_form_sections_on_form_template_id_and_key", unique: true
+    t.index ["form_template_id", "position"], name: "idx_on_form_template_id_position_4ed1c1dca9"
+    t.index ["form_template_id"], name: "index_compliance_form_sections_on_form_template_id"
+  end
+
+  create_table "compliance_form_submissions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "form_template_id", null: false
+    t.uuid "household_id"
+    t.uuid "client_id"
+    t.uuid "conducted_by_id"
+    t.date "inspected_on"
+    t.date "due_on"
+    t.integer "status", default: 0, null: false
+    t.integer "started_via", default: 0, null: false
+    t.integer "template_version", default: 1, null: false
+    t.datetime "submitted_at"
+    t.datetime "closed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_compliance_form_submissions_on_client_id"
+    t.index ["conducted_by_id"], name: "index_compliance_form_submissions_on_conducted_by_id"
+    t.index ["due_on"], name: "index_compliance_form_submissions_on_due_on"
+    t.index ["form_template_id", "client_id", "status"], name: "idx_on_form_template_id_client_id_status_362b89fc42"
+    t.index ["form_template_id", "household_id", "status"], name: "idx_on_form_template_id_household_id_status_cf1550f51b"
+    t.index ["form_template_id"], name: "index_compliance_form_submissions_on_form_template_id"
+    t.index ["household_id"], name: "index_compliance_form_submissions_on_household_id"
+    t.index ["status"], name: "index_compliance_form_submissions_on_status"
+  end
+
+  create_table "compliance_form_templates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.text "description"
+    t.integer "form_version", default: 1, null: false
+    t.integer "cadence", default: 0, null: false
+    t.integer "subject_type", default: 0, null: false
+    t.boolean "active", default: true, null: false
+    t.boolean "system", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["active"], name: "index_compliance_form_templates_on_active"
+    t.index ["slug"], name: "index_compliance_form_templates_on_slug", unique: true
+  end
+
   create_table "contacts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "notes"
     t.string "contactable_type", null: false
@@ -526,6 +621,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_004719) do
     t.datetime "updated_at", null: false
     t.index ["calendar_event_id"], name: "index_event_participants_on_calendar_event_id"
     t.index ["participant_type", "participant_id"], name: "index_event_participants_on_participant"
+  end
+
+  create_table "flipper_features", force: :cascade do |t|
+    t.string "key", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key"], name: "index_flipper_features_on_key", unique: true
+  end
+
+  create_table "flipper_gates", force: :cascade do |t|
+    t.string "feature_key", null: false
+    t.string "key", null: false
+    t.text "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["feature_key", "key", "value"], name: "index_flipper_gates_on_feature_key_and_key_and_value", unique: true
   end
 
   create_table "friendly_id_slugs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1123,6 +1234,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_004719) do
   add_foreign_key "clients_managers", "employees", column: "manager_id"
   add_foreign_key "clients_trainings", "clients"
   add_foreign_key "clients_trainings", "trainings"
+  add_foreign_key "compliance_corrective_actions", "compliance_form_submissions", column: "form_submission_id"
+  add_foreign_key "compliance_corrective_actions", "incident_reports"
+  add_foreign_key "compliance_form_answers", "compliance_form_items", column: "form_item_id"
+  add_foreign_key "compliance_form_answers", "compliance_form_submissions", column: "form_submission_id"
+  add_foreign_key "compliance_form_items", "compliance_form_sections", column: "form_section_id"
+  add_foreign_key "compliance_form_sections", "compliance_form_templates", column: "form_template_id"
+  add_foreign_key "compliance_form_submissions", "clients"
+  add_foreign_key "compliance_form_submissions", "compliance_form_templates", column: "form_template_id"
+  add_foreign_key "compliance_form_submissions", "employees", column: "conducted_by_id"
+  add_foreign_key "compliance_form_submissions", "households"
   add_foreign_key "contacts", "addresses", column: "primary_address_id", on_delete: :nullify
   add_foreign_key "contacts", "emails", column: "primary_email_id", on_delete: :nullify
   add_foreign_key "contacts", "phones", column: "primary_phone_id", on_delete: :nullify

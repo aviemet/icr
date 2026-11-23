@@ -713,7 +713,12 @@
             "historical_prescriptions": "Historical Prescriptions",
             "hospital_visits": "Hospital Visits",
             "link_doctor": "Link Doctor",
-            "preferred_hospital": "Preferred Hospital"
+            "preferred_hospital": "Preferred Hospital",
+            "sections": {
+              "hospital_visits": "Hospital Visits",
+              "medications": "Medications",
+              "overview": "Overview"
+            }
           },
           "overview": {
             "active_meds": "Active medications",
@@ -760,6 +765,7 @@
           },
           "tabs": {
             "care": "Care and Services",
+            "compliance": "Compliance",
             "contacts": "Contacts",
             "documents": "Documents",
             "incidents": "Incidents",

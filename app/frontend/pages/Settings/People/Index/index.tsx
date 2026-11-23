@@ -1,8 +1,9 @@
-import { NewIcon } from "@/components/Icons"
+import { Box, Button, Link } from "@/components"
+import { PlusIcon } from "@/components/Icons"
 import { PersonTable } from "@/domains/Settings/People/Table"
-import { IndexPageTemplate } from "@/features"
-import { Routes } from "@/lib"
-import { withLayout } from "@/lib/withLayout"
+import { Routes, withLayout } from "@/lib"
+
+import { SettingsPageHeader } from "../../SettingsPageHeader"
 
 interface PersonIndexProps {
 	people: Schema.PeopleIndex[]
@@ -11,16 +12,22 @@ interface PersonIndexProps {
 
 const PeopleIndex = ({ people, pagination }: PersonIndexProps) => {
 	return (
-		<IndexPageTemplate
-			title="People"
-			model="people"
-			pagination={ pagination }
-			actions={ [
-				{ label: "New Person", href: Routes.newSettingsPerson(), icon: <NewIcon /> },
-			] }
-		>
-			<PersonTable records={ people } model="people" />
-		</IndexPageTemplate>
+		<Box>
+			<SettingsPageHeader
+				title="People"
+				description="Person records linked to clients, employees, and login accounts."
+				actions={ (
+					<Button
+						component={ Link }
+						href={ Routes.newSettingsPerson() }
+						leftSection={ <PlusIcon size={ 16 } /> }
+					>
+						New Person
+					</Button>
+				) }
+			/>
+			<PersonTable records={ people } model="people" pagination={ pagination } />
+		</Box>
 	)
 }
 

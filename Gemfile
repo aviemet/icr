@@ -132,3 +132,7 @@ group :test do
   gem "simplecov", ">= 0.22.0"
   gem "pundit-matchers", ">= 3.1"
 end
+
+gem "flipper", "~> 1.4"
+gem "flipper-active_record", "~> 1.4"
+gem "flipper-ui", "~> 1.4"

@@ -23,7 +23,7 @@ RSpec.describe "/clients/:client_slug/hospital_visits" do
         }
       }.to change(Client::HospitalVisit, :count).by(1)
 
-      expect(response).to redirect_to(client_url(client, tab: "medical"))
+      expect(response).to redirect_to(client_url(client, tab: "medical", section: "hospital_visits"))
       visit = client.hospital_visits.last
       expect(visit.hospital_name).to eq("County General")
       expect(visit.doctor_id).to eq(doctor.id)
@@ -40,7 +40,7 @@ RSpec.describe "/clients/:client_slug/hospital_visits" do
         delete client_hospital_visit_url(client, visit)
       }.to change(Client::HospitalVisit, :count).by(-1)
 
-      expect(response).to redirect_to(client_url(client, tab: "medical"))
+      expect(response).to redirect_to(client_url(client, tab: "medical", section: "hospital_visits"))
     end
   end
 end

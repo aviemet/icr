@@ -40,6 +40,8 @@ job_title_defaults = [
       "employee_training" => { "index" => true, "show" => true, "create" => false, "update" => false, "delete" => false, "complete" => true },
       "report_definition" => { "index" => true, "show" => true, "create" => false, "update" => false, "delete" => false },
       "report_request" => { "index" => true, "show" => true, "create" => true, "update" => false, "delete" => false },
+      "compliance_form_template" => { "index" => true, "show" => true, "create" => false, "update" => false, "delete" => false },
+      "compliance_form_submission" => { "index" => true, "show" => true, "create" => true, "update" => true, "delete" => false },
     },
   },
   {

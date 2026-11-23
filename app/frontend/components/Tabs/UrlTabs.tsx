@@ -15,10 +15,22 @@ export function UrlTabs({ children, onChange, defaultValue, dependencies, ...pro
 			only = coerceArray(dependencies[value])
 		}
 
-		router.reload(Object.assign({
+		const url = new URL(window.location.href)
+		const currentTab = url.searchParams.get("tab")
+		const tabChanged = value !== currentTab
+
+		if(value) {
+			url.searchParams.set("tab", value)
+		} else {
+			url.searchParams.delete("tab")
+		}
+		if(tabChanged) {
+			url.searchParams.delete("section")
+		}
+
+		router.visit(`${url.pathname}${url.search}`, Object.assign({
 			preserveState: true,
 			preserveScroll: true,
-			data: { tab: value },
 			only,
 		}, options || {}))
 	}, [dependencies])

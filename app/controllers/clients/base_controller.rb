@@ -15,7 +15,7 @@ class Clients::BaseController < ApplicationController
     authorize client, :update?
   end
 
-  def redirect_to_client_tab(tab)
-    redirect_to client_path(client, tab: tab)
+  def redirect_to_client_tab(tab, section: nil, **)
+    redirect_to(client_path(client, { tab: tab, section: section }.compact), **)
   end
 end

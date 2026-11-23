@@ -1,5 +1,6 @@
 import { Box, Group, Link, Text } from "@/components"
 import { EditButton } from "@/components/Button"
+import { FormBand, FormBandStack } from "@/features"
 import { Routes, withLayout } from "@/lib"
 
 import { SettingsPageHeader } from "../../SettingsPageHeader"
@@ -29,9 +30,13 @@ const ShowPerson = ({ person }: ShowPersonProps) => {
 					</Group>
 				) }
 			/>
-			<Text size="sm" c="dimmed">
-				Role: { person.agency_role || "-" }
-			</Text>
+			<FormBandStack>
+				<FormBand title="Details" description="Role and identity for this person.">
+					<Text size="sm">
+						Role: { person.agency_role || "-" }
+					</Text>
+				</FormBand>
+			</FormBandStack>
 		</Box>
 	)
 }

@@ -108,6 +108,10 @@ en:
           communication: Communication
           save: Save Profile
         medical:
+          sections:
+            overview: Overview
+            medications: Medications
+            hospital_visits: Hospital Visits
           allergies: Allergies
           diagnoses: Diagnoses
           doctors: Doctors
@@ -163,6 +167,7 @@ en:
           contacts: Contacts
           medical: Medical
           care: Care and Services
+          compliance: Compliance
           trainings: Trainings
           documents: Documents
           incidents: Incidents
