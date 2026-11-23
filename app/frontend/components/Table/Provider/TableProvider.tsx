@@ -14,6 +14,17 @@ interface TableProviderProps {
 	pagination?: Schema.Pagination
 }
 
+function columnsEqual(left: TableContextColumn[], right: TableContextColumn[]) {
+	if(left.length !== right.length) return false
+
+	return left.every((column, index) => {
+		const other = right[index]
+		return column.accessor === other.accessor &&
+			column.title === other.title &&
+			column.hideable === other.hideable
+	})
+}
+
 export function TableProvider({
 	children,
 	model,
@@ -31,7 +42,7 @@ export function TableProvider({
 	}, [])
 
 	const setColumns = useCallback((nextColumns: TableContextColumn[]) => {
-		setColumnsState(nextColumns)
+		setColumnsState(current => (columnsEqual(current, nextColumns) ? current : nextColumns))
 	}, [])
 
 	return (
