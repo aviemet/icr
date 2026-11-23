@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next"
 import { Badge, Button, Group, Table, Text, Tooltip } from "@/components"
 import { Form } from "@/components/Form"
 import { CalendarIcon, TrashIcon } from "@/components/Icons"
-import { CategoriesDropdown } from "@/components/Inputs/Dropdowns"
+import { ServiceTypesDropdown } from "@/components/Inputs/Dropdowns"
 import { LastEditorAvatar } from "@/domains/TimeSheets/LastEditorAvatar"
 import { formatter, Routes } from "@/lib"
 import { parseTimeString } from "@/lib/dates"
@@ -172,24 +172,23 @@ export function ReviewRow({
 			<Table.Cell>
 				{ canEditShiftType
 					? (
-						<CategoriesDropdown
+						<ServiceTypesDropdown
 							label=""
-							categoryType="Shift"
 							valueKey="id"
-							value={ shift.category_id ?? shift.category?.id ?? null }
+							value={ shift.service_type_id ?? shift.service_type?.id ?? null }
 							clearable={ false }
 							searchable
 							size="xs"
 							comboboxProps={ { withinPortal: true } }
 							onChange={ (nextValue) => {
-								if(!nextValue || nextValue === (shift.category_id ?? shift.category?.id)) return
-								router.patch(Routes.categoryShift(shift.shift_id), { category_id: nextValue })
+								if(!nextValue || nextValue === (shift.service_type_id ?? shift.service_type?.id)) return
+								router.patch(Routes.serviceTypeShift(shift.shift_id), { service_type_id: nextValue })
 							} }
 						/>
 					)
 					: (
 						<Text size="sm">
-							{ shift.category?.name ?? t("views.timesheets.index.no_value") }
+							{ shift.service_type?.name ?? t("views.timesheets.index.no_value") }
 						</Text>
 					) }
 			</Table.Cell>

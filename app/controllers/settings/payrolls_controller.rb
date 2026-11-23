@@ -23,7 +23,8 @@ class Settings::PayrollsController < ApplicationController
 
     render inertia: "Settings/Payroll/Overtime", props: {
       settings: -> { Setting.render },
-      shift_types: -> { Category.type("Shift").render },
+      shift_types: -> { ServiceType.ordered.render },
+      service_types: -> { ServiceType.ordered.render },
       overtime_exemptions: -> { OvertimeExemption.order(:name).map(&:render) },
     }
   end

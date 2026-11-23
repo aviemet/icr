@@ -86,15 +86,6 @@ model_category_types = {
     "Social Security Card",
     "Other",
   ],
-  Shift: [
-    "Regular",
-    "On-Call",
-    "No Service",
-    "Holiday",
-    "Vacation",
-    "Sick",
-    "Other",
-  ],
   "Calendar::Event": [
     "Shift",
     "Day Program",

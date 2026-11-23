@@ -7,13 +7,15 @@ import { Box, Button, Grid, Group } from "@/components"
 import { BaseCalendarEvent } from "@/components/Calendar"
 import { Form, Submit, FormConsumer, type FormConsumerState } from "@/components/Form"
 import { TextInput, SplitDateTimeInput } from "@/components/Inputs"
-import { CategoriesDropdown, EmployeesDropdown } from "@/components/Inputs/Dropdowns"
+import { CategoriesDropdown, EmployeesDropdown, ServiceTypesDropdown } from "@/components/Inputs/Dropdowns"
 import { type ExpandablePattern, type ScheduleRecurrenceResources } from "@/features/CalendarSchedule"
 import { categorySlug, isSystemCategorySlug, isNonEmptyString } from "@/lib"
 import { type SystemCategorySlugsFor } from "@/lib/categories"
 import { nearestHalfHour } from "@/lib/dates"
 import { type CalendarEventData, type CalendarEventEditScope } from "@/queries/calendarEvents"
 import { useCreateClientCalendarEvent, useUpdateClientCalendarEvent } from "@/queries/clients"
+
+const DEFAULT_SERVICE_TYPE_SLUG = "regular"
 
 import { EventTotalHours } from "./EventTotalHours"
 import {
@@ -27,7 +29,6 @@ import { RepeatFields } from "./RepeatFields"
 
 const CALENDAR_EVENT_SHIFT = categorySlug("Calendar::Event", "Shift")
 const CALENDAR_EVENT_OTHER = categorySlug("Calendar::Event", "Other")
-const SHIFT_TYPE_REGULAR = categorySlug("Shift", "Regular")
 
 export type EventData = CalendarEventData
 
@@ -45,11 +46,11 @@ function getEmployeeIdFromResources(resources: BaseCalendarEvent["resources"]): 
 	return typeof employee.id === "string" ? employee.id : ""
 }
 
-function getShiftCategoryIdFromResources(resources: BaseCalendarEvent["resources"]): string {
+function getShiftServiceTypeIdFromResources(resources: BaseCalendarEvent["resources"]): string {
 	if(typeof resources !== "object" || resources === null || !("shift" in resources)) return ""
 	const shift = resources.shift
-	if(typeof shift !== "object" || shift === null || !("category_id" in shift)) return ""
-	return typeof shift.category_id === "string" ? shift.category_id : ""
+	if(typeof shift !== "object" || shift === null || !("service_type_id" in shift)) return ""
+	return typeof shift.service_type_id === "string" ? shift.service_type_id : ""
 }
 
 function getRecurrenceResources(
@@ -134,7 +135,7 @@ export function EventForm({
 		]
 		if(isEdit && existingEvent) {
 			const employeeId = getEmployeeIdFromResources(existingEvent.resources)
-			const categoryId = getShiftCategoryIdFromResources(existingEvent.resources)
+			const serviceTypeId = getShiftServiceTypeIdFromResources(existingEvent.resources)
 			return {
 				calendar_event: {
 					id: masterEventId,
@@ -143,9 +144,11 @@ export function EventForm({
 					all_day: existingEvent.allDay ?? false,
 					starts_at: dayjs(existingEvent.start).toISOString(),
 					ends_at: dayjs(existingEvent.end).toISOString(),
+					notes: "",
+					mileage: null,
 					shift: {
 						employee_id: employeeId,
-						category_id: categoryId || SHIFT_TYPE_REGULAR,
+						service_type_id: serviceTypeId || DEFAULT_SERVICE_TYPE_SLUG,
 					},
 					event_participants: baseParticipants,
 				},
@@ -157,7 +160,9 @@ export function EventForm({
 				category_slug: CALENDAR_EVENT_SHIFT,
 				starts_at: dayjs(start).toISOString(),
 				ends_at: dayjs(start).add(8, "hours").toISOString(),
-				shift: { employee_id: "", category_id: SHIFT_TYPE_REGULAR },
+				notes: "",
+				mileage: null,
+				shift: { employee_id: "", service_type_id: DEFAULT_SERVICE_TYPE_SLUG },
 				event_participants: baseParticipants,
 			},
 		}
@@ -330,14 +335,25 @@ export function EventForm({
 									/>
 								</Grid.Col>
 								<Grid.Col>
-									<CategoriesDropdown
+									<ServiceTypesDropdown
 										label={ t("views.clients.schedule.event_form.shift_type") }
-										name="calendar_event.shift.category_id"
-										categoryType="Shift"
+										name="calendar_event.shift.service_type_id"
 										valueKey="slug"
-										defaultValue={ SHIFT_TYPE_REGULAR }
+										defaultValue={ DEFAULT_SERVICE_TYPE_SLUG }
 										comboboxProps={ { withinPortal: false } }
 										clearable={ false }
+									/>
+								</Grid.Col>
+								<Grid.Col>
+									<TextInput
+										label={ t("views.clients.schedule.event_form.notes") }
+										name="calendar_event.notes"
+									/>
+								</Grid.Col>
+								<Grid.Col>
+									<TextInput
+										label={ t("views.clients.schedule.event_form.mileage") }
+										name="calendar_event.mileage"
 									/>
 								</Grid.Col>
 							</>

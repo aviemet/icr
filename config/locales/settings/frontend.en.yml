@@ -85,3 +85,25 @@ en:
         shift_types_name_label: Name
         shift_types_name_placeholder: e.g. Training
         shift_types_add_button: Add
+        service_types_title: Service Types
+        service_types_description: Configurable kinds of scheduled work with billing, payroll, and calendar rules.
+        service_types_existing_title: Existing types
+        service_types_existing_description: System types ship with the app and cannot be deleted. Custom types can be removed.
+        service_types_column_name: Service Type
+        service_types_column_flags: Flags
+        service_types_column_actions: Actions
+        service_types_system_badge: System
+        service_types_inactive_badge: Inactive
+        service_types_protected: Protected
+        service_types_empty: No service types yet. Add one below.
+        service_types_add_title: Add service type
+        service_types_add_description: Create a type for scheduling, overtime rules, and calendar colors.
+        service_types_name_label: Name
+        service_types_name_placeholder: e.g. Community Outing
+        service_types_color_label: Color
+        service_types_flag_billable: Billable
+        service_types_flag_payable: Payable
+        service_types_flag_multi_client: Multi-client
+        service_types_flag_notes: Notes required
+        service_types_flag_mileage: Tracks mileage
+        service_types_add_button: Add

@@ -1,1 +1,1 @@
-export type CategoryType = "Calendar::Event" | "Shift" | "Contact::Address" | "Contact::Email" | "Contact::Phone" | "Contact::Website" | "Vendor" | "IncidentReport" | "Identification" | "Employee::EmploymentStatus"
+export type CategoryType = "Calendar::Event" | "Contact::Address" | "Contact::Email" | "Contact::Phone" | "Contact::Website" | "Vendor" | "IncidentReport" | "Identification" | "Employee::EmploymentStatus"

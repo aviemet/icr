@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_23_022416) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_23_170000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -112,6 +112,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_022416) do
     t.uuid "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "notes"
+    t.decimal "mileage", precision: 8, scale: 2
     t.index ["category_id"], name: "index_calendar_events_on_category_id"
     t.index ["parent_id"], name: "index_calendar_events_on_parent_id"
   end
@@ -1048,6 +1050,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_022416) do
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
   end
 
+  create_table "service_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.boolean "active", default: true, null: false
+    t.boolean "system", default: false, null: false
+    t.integer "position", default: 0, null: false
+    t.boolean "billable", default: true, null: false
+    t.boolean "payable", default: true, null: false
+    t.boolean "allows_multi_client", default: false, null: false
+    t.boolean "requires_notes", default: false, null: false
+    t.boolean "tracks_mileage", default: false, null: false
+    t.string "color", default: "#2F6FED", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["active"], name: "index_service_types_on_active"
+    t.index ["name"], name: "index_service_types_on_name", unique: true
+    t.index ["position"], name: "index_service_types_on_position"
+    t.index ["slug"], name: "index_service_types_on_slug", unique: true
+  end
+
   create_table "settings", force: :cascade do |t|
     t.string "var", null: false
     t.text "value"
@@ -1085,13 +1107,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_022416) do
     t.uuid "calendar_event_id", null: false
     t.uuid "timesheet_id"
     t.date "facilitator_approved_at"
-    t.uuid "category_id", null: false
+    t.uuid "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "ihss", default: false, null: false
+    t.uuid "service_type_id", null: false
     t.index ["calendar_event_id"], name: "index_shifts_on_calendar_event_id", unique: true
     t.index ["category_id"], name: "index_shifts_on_category_id"
     t.index ["employee_id"], name: "index_shifts_on_employee_id"
+    t.index ["service_type_id"], name: "index_shifts_on_service_type_id"
     t.index ["timesheet_id"], name: "index_shifts_on_timesheet_id"
   end
 
@@ -1311,6 +1335,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_022416) do
   add_foreign_key "shifts", "calendar_events"
   add_foreign_key "shifts", "categories"
   add_foreign_key "shifts", "employees"
+  add_foreign_key "shifts", "service_types"
   add_foreign_key "shifts", "timesheets"
   add_foreign_key "timesheets", "employees"
   add_foreign_key "timesheets", "pay_periods"

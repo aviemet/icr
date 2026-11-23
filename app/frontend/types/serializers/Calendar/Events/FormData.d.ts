@@ -13,7 +13,9 @@ declare global {
       ends_at?: Date
       event_exceptions: CalendarEventException[]
       event_participants: EventParticipant[]
+      mileage?: string | number
       name?: string
+      notes?: string
       parent_id?: string
       recurring_patterns: CalendarRecurringPattern[]
       shift: Shift

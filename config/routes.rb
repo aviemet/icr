@@ -57,7 +57,8 @@ Rails.application.routes.draw do
   namespace :settings do
     get "", to: redirect("/settings/general")
     resource :calendars, path: :calendar, only: [:show, :update], as: :calendar
-    get "calendar/shift_types", to: "calendars#shift_types", as: :calendar_shift_types
+    get "calendar/shift_types", to: redirect("/settings/calendar/service_types")
+    resources :service_types, path: "calendar/service_types", param: :slug, only: [:index, :create, :update, :destroy]
     resources :people, param: :slug
     resource :company, only: [:show, :update]
     resources :job_titles, param: :slug
@@ -176,7 +177,8 @@ Rails.application.routes.draw do
         post :approve
         post :unapprove
         patch :ihss, action: :update_ihss
-        patch :category, action: :update_category
+        patch :service_type, action: :update_service_type
+        patch :category, action: :update_service_type
       end
       collection do
         post :bulk_approve

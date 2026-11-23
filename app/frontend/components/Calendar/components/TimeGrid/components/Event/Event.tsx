@@ -46,7 +46,7 @@ export function Event<TEventResources extends EventResources>({
 				"--event-color": eventColor,
 				"--contrasting-color": contrastingColor,
 				...(event.open === true
-					? { "--event-border-color": "var(--mantine-color-teal-6)" }
+					? { "--event-border-color": event.borderColor || "var(--mantine-color-teal-6)" }
 					: {}),
 				...style,
 			} as React.CSSProperties }

@@ -32,6 +32,8 @@ export type CalendarEventData = {
 		all_day?: boolean
 		starts_at?: Date | string
 		ends_at?: Date | string
+		notes?: string
+		mileage?: number | string | null
 		shift?: PartialDeep<Schema.Shift>
 		shift_attributes?: PartialDeep<Schema.Shift>
 		event_participants?: CalendarEventParticipantAttributes[]

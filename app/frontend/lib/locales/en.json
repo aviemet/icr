@@ -17,6 +17,11 @@
         }
       }
     },
+    "compliance": {
+      "alerts": {
+        "hazard_template_missing": "Hazard assessment template is not configured."
+      }
+    },
     "date": {
       "abbr_day_names": [
         "Sun",
@@ -504,6 +509,13 @@
     },
     "role": "Role",
     "save": "Save",
+    "service_types": {
+      "errors": {
+        "multi_client_not_allowed": "This service type allows only one client.",
+        "notes_required": "Notes are required for this service type.",
+        "system_protected": "System service types cannot be deleted."
+      }
+    },
     "settings": {
       "errors": {
         "update_failed": "Updating settings failed. Please notify your site administrator."
@@ -518,7 +530,8 @@
       "facilitator_approved": "Shift reviewed.",
       "facilitator_unapproved": "Shift review removed.",
       "ihss_shift_mode_required": "Shift IHSS flags are only available when assignment mode is Assign by shift.",
-      "ihss_updated": "IHSS shift flag updated."
+      "ihss_updated": "IHSS shift flag updated.",
+      "service_type_updated": "Service type updated."
     },
     "starts_at": "Starts At",
     "support": {
@@ -649,13 +662,15 @@
             "interval_monthly": "month(s)",
             "interval_weekly": "week(s)",
             "interval_yearly": "year(s)",
+            "mileage": "Mileage",
             "monthly_mode": "Monthly on",
             "monthly_on_day": "Day of the month",
             "monthly_on_weekday": "Weekday of the month",
+            "notes": "Notes",
             "occurrences": "Occurrences",
             "occurrences_hint": "Including the first event",
             "repeats": "Repeats",
-            "shift_type": "Shift Type",
+            "shift_type": "Service Type",
             "until": "End date",
             "weekday_fri": "Fri",
             "weekday_mon": "Mon",
@@ -1366,6 +1381,32 @@
           "description": "Control how multi-day events appear on the calendar.",
           "month_layout_description": "How multi-day events are drawn in the Month view. Day and Week views always use a time grid.",
           "month_layout_title": "Month layout",
+          "service_types_add": "Add service type",
+          "service_types_cancel": "Cancel",
+          "service_types_color_label": "Color",
+          "service_types_column_actions": "Actions",
+          "service_types_column_flags": "Flags",
+          "service_types_column_name": "Service Type",
+          "service_types_description": "Configurable kinds of scheduled work with billing, payroll, and calendar rules.",
+          "service_types_edit": "Edit",
+          "service_types_empty": "No service types yet. Add one to get started.",
+          "service_types_existing_description": "System types ship with the app and cannot be deleted. Custom types can be removed.",
+          "service_types_existing_title": "Service types",
+          "service_types_flag_active": "Active",
+          "service_types_flag_billable": "Billable",
+          "service_types_flag_mileage": "Tracks mileage",
+          "service_types_flag_multi_client": "Multi-client",
+          "service_types_flag_notes": "Notes required",
+          "service_types_flag_payable": "Payable",
+          "service_types_form_title_create": "New service type",
+          "service_types_form_title_edit": "Edit service type",
+          "service_types_inactive_badge": "Inactive",
+          "service_types_name_label": "Name",
+          "service_types_name_placeholder": "e.g. Community Outing",
+          "service_types_save_create": "Create service type",
+          "service_types_save_update": "Save changes",
+          "service_types_system_badge": "System",
+          "service_types_title": "Service Types",
           "shift_title_band_description": "Template for how shift titles appear on the calendar.",
           "shift_title_band_title": "Shift title",
           "shift_title_employee_info": "Employee Information:",

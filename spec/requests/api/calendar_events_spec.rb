@@ -57,15 +57,17 @@ RSpec.describe "Api::CalendarEvents", type: :request do
       expect(shift.calendar_event.clients).to contain_exactly(client)
     end
 
-    it "persists nested shift category_id from slug" do
+    it "persists nested shift service_type_id from slug" do
       client = create(:client)
       employee = create(:employee, :employed)
       event_category = Category.type("Calendar::Event").find_or_create_by!(name: "Shift") { |category|
         category.system = true
       }
-      overnight = Category.type("Shift").find_or_create_by!(name: "Overnight") { |category|
-        category.system = false
-      }
+      overnight = ServiceType.find_or_create_by!(name: "Overnight") do |row|
+        row.color = "#15803D"
+        row.billable = true
+        row.payable = true
+      end
       params = {
         calendar_event: {
           starts_at: 1.day.from_now,
@@ -73,7 +75,7 @@ RSpec.describe "Api::CalendarEvents", type: :request do
           category_id: event_category.id,
           shift_attributes: {
             employee_id: employee.id,
-            category_id: overnight.slug,
+            service_type_id: overnight.slug,
           },
           event_participants_attributes: [
             { participant_id: client.id, participant_type: "Client" },
@@ -86,7 +88,66 @@ RSpec.describe "Api::CalendarEvents", type: :request do
       }.to change(Shift, :count).by(1)
 
       expect(response).to have_http_status(:created)
-      expect(Shift.order(created_at: :desc).first.category_id).to eq(overnight.id)
+      expect(Shift.order(created_at: :desc).first.service_type_id).to eq(overnight.id)
+    end
+
+    it "rejects multi-client participants when the service type disallows them" do
+      client_one = create(:client)
+      client_two = create(:client)
+      employee = create(:employee, :employed)
+      event_category = Category.type("Calendar::Event").find_or_create_by!(name: "Shift") { |category|
+        category.system = true
+      }
+      service_type = create(:service_type, allows_multi_client: false)
+      params = {
+        calendar_event: {
+          starts_at: 1.day.from_now,
+          ends_at: 1.day.from_now + 8.hours,
+          category_id: event_category.id,
+          shift_attributes: {
+            employee_id: employee.id,
+            service_type_id: service_type.id,
+          },
+          event_participants_attributes: [
+            { participant_id: client_one.id, participant_type: "Client" },
+            { participant_id: client_two.id, participant_type: "Client" },
+          ],
+        },
+      }
+
+      post api_calendar_events_url, params: params
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.parsed_body.dig("errors", "base")).to be_present
+    end
+
+    it "requires notes when the service type requires them" do
+      client = create(:client)
+      employee = create(:employee, :employed)
+      event_category = Category.type("Calendar::Event").find_or_create_by!(name: "Shift") { |category|
+        category.system = true
+      }
+      service_type = create(:service_type, :notes_required)
+      params = {
+        calendar_event: {
+          starts_at: 1.day.from_now,
+          ends_at: 1.day.from_now + 8.hours,
+          category_id: event_category.id,
+          notes: "",
+          shift_attributes: {
+            employee_id: employee.id,
+            service_type_id: service_type.id,
+          },
+          event_participants_attributes: [
+            { participant_id: client.id, participant_type: "Client" },
+          ],
+        },
+      }
+
+      post api_calendar_events_url, params: params
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.parsed_body.dig("errors", "notes")).to be_present
     end
 
     it "returns unprocessable content with string errors when invalid" do

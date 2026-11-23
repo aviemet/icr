@@ -21,6 +21,10 @@ class ShiftPolicy < ApplicationPolicy
   end
 
   def update_category?
+    update_service_type?
+  end
+
+  def update_service_type?
     update_ihss?
   end
 

@@ -29,14 +29,16 @@ if Rails.env.development?
     employee
   end
 
-  create_recurring_shift = lambda do |client:, employee:, starts_at:, duration:, patterns:|
+  create_recurring_shift = lambda do |client:, employee:, starts_at:, duration:, patterns:, service_type: nil, name: nil|
     event_attrs = {
       starts_at: starts_at,
       ends_at: starts_at + duration,
     }
-    event_attrs[:name] = "Open Shift" if employee.nil?
+    event_attrs[:name] = name if name.present?
+    event_attrs[:name] = "Open Shift" if employee.nil? && event_attrs[:name].blank?
     calendar_event = FactoryBot.create(:calendar_event, event_attrs)
     shift_attrs = { calendar_event: calendar_event }
+    shift_attrs[:service_type] = service_type if service_type.present?
     if employee.nil?
       FactoryBot.create(:shift, :open, shift_attrs)
     else
@@ -206,5 +208,53 @@ if Rails.env.development?
     end
 
     Rails.logger.info "[seeds] recurring weekday shifts: client 4 + one-off overlap"
+  end
+
+  day_program = ServiceType.find_by(name: "Day Program")
+  natural_support = ServiceType.find_by(name: "Natural Support")
+  training = ServiceType.find_by(name: "Training")
+  special_event_names = ["Day Program", "Natural Support", "Training"]
+
+  if Client.first.present? && day_program.present? && natural_support.present? && training.present? && !Calendar::Event.exists?(name: special_event_names)
+    ActiveRecord::Base.transaction do
+      client = Client.first
+      special_anchor = seed_anchor_date
+      special_anchor += 1 until special_anchor.tuesday?
+
+      day_program_start = Time.zone.local(special_anchor.year, special_anchor.month, special_anchor.day, 9, 0, 0)
+      create_recurring_shift.call(
+        client: client,
+        employee: nil,
+        starts_at: day_program_start,
+        duration: 6.hours,
+        service_type: day_program,
+        name: "Day Program",
+        patterns: [{ recurring_type: :weekly, offset: 1, day_of_week: 2 }],
+      )
+
+      natural_start = Time.zone.local(special_anchor.year, special_anchor.month, special_anchor.day, 14, 0, 0)
+      create_recurring_shift.call(
+        client: client,
+        employee: nil,
+        starts_at: natural_start,
+        duration: 3.hours,
+        service_type: natural_support,
+        name: "Natural Support",
+        patterns: [{ recurring_type: :weekly, offset: 1, day_of_week: 4 }],
+      )
+
+      training_start = Time.zone.local(special_anchor.year, special_anchor.month, special_anchor.day, 10, 0, 0) + 1.day
+      create_recurring_shift.call(
+        client: client,
+        employee: nil,
+        starts_at: training_start,
+        duration: 4.hours,
+        service_type: training,
+        name: "Training",
+        patterns: [{ recurring_type: :weekly, offset: 1, day_of_week: 3 }],
+      )
+    end
+
+    Rails.logger.info "[seeds] special service type events: day program, natural support, training"
   end
 end

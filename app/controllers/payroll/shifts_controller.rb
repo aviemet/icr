@@ -51,9 +51,10 @@ class Payroll::ShiftsController < ApplicationController
     redirect_back_or_to(fallback_period_path(period), notice: t("shifts.ihss_updated"))
   end
 
+  # @route PATCH /payroll/shifts/:id/service_type (service_type_shift)
   # @route PATCH /payroll/shifts/:id/category (category_shift)
-  def update_category
-    authorize shift, :update_category?
+  def update_service_type
+    authorize shift, :update_service_type?
 
     period = shift.timesheet&.pay_period
     period = period&.reload if period.present?
@@ -62,9 +63,11 @@ class Payroll::ShiftsController < ApplicationController
       return
     end
 
-    category = Category.type("Shift").find(params.require(:category_id))
-    shift.update!(category: category)
-    redirect_back_or_to(fallback_period_path(period), notice: t("shifts.category_updated"))
+    id_or_slug = params[:service_type_id].presence || params[:category_id].presence
+    service_type = ServiceType.active.find_by(id: id_or_slug) ||
+      ServiceType.active.find_by!(slug: id_or_slug)
+    shift.update!(service_type: service_type)
+    redirect_back_or_to(fallback_period_path(period), notice: t("shifts.service_type_updated"))
   end
 
   # @route POST /payroll/shifts/bulk_approve (bulk_approve_shifts)

@@ -70,7 +70,7 @@ export function EventWrapper<P extends GridDisplayProperties = GridDisplayProper
 				"--contrasting-color": contrastingColor,
 				"--hover-color": isLightColor(eventColor) ? lighten(eventColor, 0.15) : darken(eventColor, 0.15),
 				...(event.open === true
-					? { "--event-border-color": vars.colors.teal[6] }
+					? { "--event-border-color": event.borderColor || vars.colors.teal[6] }
 					: {}),
 				...style,
 			} as React.CSSProperties }

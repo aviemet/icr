@@ -48,7 +48,7 @@ module Payroll
         .pluck(:id)
 
       Shift.where(id: shift_ids).includes(
-        :category,
+        :service_type,
         calendar_event: [:clients, :recurring_patterns, :event_exceptions],
       )
     end
@@ -62,7 +62,7 @@ module Payroll
         employee_id: row.employee_id,
         starts_at: row.starts_at,
         ends_at: row.ends_at,
-        category: row.category,
+        category: row.service_type,
         ihss: row.ihss,
         client_ids: client_ids,
       )

@@ -66,7 +66,7 @@ function buildSettingsLinks(complianceFormsEnabled: boolean): SettingsNavLinkIte
 			matchPrefixes: ["/settings/calendar"],
 			children: [
 				{ label: "Display", href: Routes.settingsCalendar() },
-				{ label: "Shift Types", href: Routes.settingsCalendarShiftTypes() },
+				{ label: "Service Types", href: Routes.settingsServiceTypes() },
 			],
 		},
 		{

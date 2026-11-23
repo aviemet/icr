@@ -10,7 +10,7 @@ import { ExemptionsTable } from "./ExemptionsTable"
 
 interface OvertimeExemptionsProps {
 	overtime_exemptions: Schema.OvertimeExemption[]
-	shift_types: Schema.Category[]
+	shift_types: Schema.ServiceType[]
 }
 
 export function OvertimeExemptions({ overtime_exemptions, shift_types }: OvertimeExemptionsProps) {

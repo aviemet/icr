@@ -49,7 +49,7 @@ module Payroll
 
       Shift.where(id: shift_ids)
         .includes(
-          :category,
+          :service_type,
           :employee,
           calendar_event: [
             :recurring_patterns,

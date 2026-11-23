@@ -4,19 +4,19 @@ overview: "Ship Phase 9.1: a first-class ServiceType model that replaces thin Sh
 todos:
   - id: model-migrate
     content: Add ServiceType model + migration; backfill from Shift categories; shifts.service_type_id
-    status: pending
+    status: completed
   - id: settings-crud
     content: Replace Shift Types settings with Service Types CRUD, policy, seeds, i18n
-    status: pending
+    status: completed
   - id: calendar-shift-wire
     content: Wire EventForm/API/payroll shift updates to service_type; colors + multi-client/notes/mileage flags
-    status: pending
+    status: completed
   - id: ot-exemptions
     content: Remap OvertimeExemption category matching to service type slugs
-    status: pending
+    status: completed
   - id: specs-docs
     content: Specs for migrate/CRUD/calendar flags/OT remap; Phase 9.1 checklist + Feature Documentation
-    status: pending
+    status: completed
 isProject: false
 ---
 

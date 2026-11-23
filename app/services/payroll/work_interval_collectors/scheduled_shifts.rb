@@ -20,7 +20,7 @@ module Payroll
 
         Shift
           .where(employee_id: employee_ids, calendar_event_id: event_ids)
-          .includes(:category, calendar_event: [:clients, :recurring_patterns, :event_exceptions])
+          .includes(:service_type, calendar_event: [:clients, :recurring_patterns, :event_exceptions])
       end
 
       def work_interval_for(row)
@@ -29,7 +29,7 @@ module Payroll
           employee_id: row.employee_id,
           starts_at: row.starts_at,
           ends_at: row.ends_at,
-          category: row.category,
+          category: row.service_type,
           ihss: row.ihss,
           client_ids: row.calendar_event.clients.map(&:id),
         )

@@ -3,7 +3,8 @@ class Api::CalendarEventsController < Api::ApiController
   expose :calendar_event, model: Calendar::Event, scope: -> { policy_scope(Calendar::Event) }
 
   before_action :resolve_category_slug, only: [:create, :update]
-  before_action :resolve_shift_category, only: [:create, :update]
+  before_action :resolve_shift_service_type, only: [:create, :update]
+  before_action :enforce_service_type_rules, only: [:create, :update]
 
   strong_params :calendar_event, permit: [
     :name,
@@ -12,7 +13,9 @@ class Api::CalendarEventsController < Api::ApiController
     :parent_id,
     :category_id,
     :all_day,
-    shift_attributes: [:employee_id, :category_id],
+    :notes,
+    :mileage,
+    shift_attributes: [:employee_id, :service_type_id],
     event_participants_attributes: [:participant_id, :participant_type],
     recurring_patterns_attributes: [
       :recurring_type,
@@ -120,17 +123,48 @@ class Api::CalendarEventsController < Api::ApiController
     params[:calendar_event][:category_id] = category.id
   end
 
-  def resolve_shift_category
+  def resolve_shift_service_type
     shift_params = params.dig(:calendar_event, :shift_attributes)
     shift_params = params.dig(:calendar_event, :shift) if shift_params.blank?
     return if shift_params.blank?
 
-    id_or_slug = shift_params[:category_id].presence || shift_params[:category_slug].presence
+    id_or_slug = shift_params[:service_type_id].presence ||
+      shift_params[:service_type_slug].presence ||
+      shift_params[:category_id].presence ||
+      shift_params[:category_slug].presence
     return if id_or_slug.blank?
 
-    category = Category.type("Shift").find_by(id: id_or_slug) ||
-      Category.type("Shift").find_by!(slug: id_or_slug)
-    shift_params[:category_id] = category.id
+    service_type = ServiceType.find_by(id: id_or_slug) || ServiceType.find_by!(slug: id_or_slug)
+    shift_params[:service_type_id] = service_type.id
+    shift_params.delete(:service_type_slug)
+    shift_params.delete(:category_id)
     shift_params.delete(:category_slug)
+  end
+
+  def enforce_service_type_rules
+    shift_params = params.dig(:calendar_event, :shift_attributes)
+    shift_params = params.dig(:calendar_event, :shift) if shift_params.blank?
+    return if shift_params.blank?
+
+    service_type_id = shift_params[:service_type_id]
+    return if service_type_id.blank?
+
+    service_type = ServiceType.find_by(id: service_type_id)
+    return if service_type.blank?
+
+    participants = Array(params.dig(:calendar_event, :event_participants_attributes))
+    client_count = participants.count { |row| row[:participant_type].to_s == "Client" && row[:participant_id].present? }
+
+    if !service_type.allows_multi_client? && client_count > 1
+      render json: { errors: { base: I18n.t("service_types.errors.multi_client_not_allowed") } },
+        status: :unprocessable_content
+      return
+    end
+
+    notes = params.dig(:calendar_event, :notes).to_s.strip
+    if service_type.requires_notes? && notes.blank?
+      render json: { errors: { notes: I18n.t("service_types.errors.notes_required") } },
+        status: :unprocessable_content
+    end
   end
 end

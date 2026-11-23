@@ -42,6 +42,7 @@ job_title_defaults = [
       "report_request" => { "index" => true, "show" => true, "create" => true, "update" => false, "delete" => false },
       "compliance_form_template" => { "index" => true, "show" => true, "create" => false, "update" => false, "delete" => false },
       "compliance_form_submission" => { "index" => true, "show" => true, "create" => true, "update" => true, "delete" => false },
+      "service_type" => { "index" => true, "show" => true, "create" => false, "update" => false, "delete" => false },
     },
   },
   {

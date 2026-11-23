@@ -54,6 +54,7 @@ export type ReactMutationFunction<
  */
 export * from "./calendarEvents"
 export * from "./categories"
+export * from "./serviceTypes"
 export * from "./clients"
 export * from "./employees"
 export * from "./households"

@@ -53,7 +53,7 @@ function AgendaViewComponent<TEventResources extends EventResources>({
 				}) }
 				style={ event.open === true
 					? {
-						borderLeftColor: "var(--mantine-color-teal-6)",
+						borderLeftColor: event.borderColor || "var(--mantine-color-teal-6)",
 						backgroundColor: event.color,
 					}
 					: (event.color ? { borderLeftColor: event.color } : undefined) }

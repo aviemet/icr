@@ -128,8 +128,7 @@ class Dev::SeedShifts
       ends_at: ends_at,
       category_id: event_category_id,
     )
-    shift = FactoryBot.build(:shift, employee:, calendar_event:)
-    shift.category = regular_shift_category
+    shift = FactoryBot.build(:shift, employee:, calendar_event:, service_type: regular_service_type)
     shift.save!
     calendar_event.reload.update!(name: nil)
     client.calendar_events << calendar_event
@@ -142,8 +141,8 @@ class Dev::SeedShifts
     @event_category_id ||= Category.type("Calendar::Event").find_by!(name: "Shift").id
   end
 
-  def regular_shift_category
-    @regular_shift_category ||= Category.type("Shift").find_by!(name: "Regular")
+  def regular_service_type
+    @regular_service_type ||= ServiceType.find_by!(name: "Regular")
   end
 
   def overlaps?(employee_id, starts_at, ends_at)

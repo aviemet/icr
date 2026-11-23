@@ -57,6 +57,13 @@ vi.mock("@/queries", () => ({
 		isStale: false,
 		refetch: vi.fn(),
 	}),
+	useGetServiceTypesAsOptions: () => ({
+		data: [
+			{ id: "service-1", name: "Regular", slug: "regular", active: true },
+		],
+		isStale: false,
+		refetch: vi.fn(),
+	}),
 }))
 
 vi.mock("@/lib", async () => {
@@ -131,7 +138,7 @@ describe("AddShiftForm", () => {
 		const payload = mutateAsync.mock.calls[0][0]
 		expect(payload.calendar_event.shift_attributes).toEqual({
 			employee_id: "employee-1",
-			category_id: "calendar-event-shift",
+			service_type_id: "regular",
 		})
 		expect(payload.calendar_event.event_participants_attributes).toEqual([
 			{ participant_type: "Client", participant_id: "client-1" },

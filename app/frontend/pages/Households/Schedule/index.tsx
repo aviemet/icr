@@ -30,7 +30,7 @@ type ScheduleResources = Record<string, object> & {
 	client?: Schema.ClientsPersisted
 	employee?: Schema.EmployeesPersisted
 	recurrence: ReturnType<typeof recurrenceResources>
-	shift?: { category_id: string }
+	shift?: { service_type_id: string }
 }
 
 const OPEN_SHIFT_COLOR = vars.colors.red[6]
@@ -98,7 +98,7 @@ const Schedule = ({ household, schedules: initialSchedules }: ScheduleProps) => 
 			const resources: ScheduleResources = {
 				recurrence: recurrenceResources(event),
 				shift: {
-					category_id: event.shift?.category?.slug ?? "",
+					service_type_id: event.shift?.service_type?.slug ?? event.shift?.service_type_id ?? "",
 				},
 			}
 			if(client) resources.client = client
@@ -114,6 +114,7 @@ const Schedule = ({ household, schedules: initialSchedules }: ScheduleProps) => 
 				allDay: event.all_day,
 				color: isOpenShift ? OPEN_SHIFT_COLOR : employee?.color,
 				open: isOpenShift,
+				borderColor: isOpenShift ? event.shift?.service_type?.color : undefined,
 				indicatorColor: client?.color,
 				indicatorLabel,
 				resources,

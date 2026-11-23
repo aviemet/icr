@@ -8,8 +8,9 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  calendar_event_id       :uuid             not null
-#  category_id             :uuid             not null
+#  category_id             :uuid
 #  employee_id             :uuid
+#  service_type_id         :uuid             not null
 #  timesheet_id            :uuid
 #
 # Indexes
@@ -17,6 +18,7 @@
 #  index_shifts_on_calendar_event_id  (calendar_event_id) UNIQUE
 #  index_shifts_on_category_id        (category_id)
 #  index_shifts_on_employee_id        (employee_id)
+#  index_shifts_on_service_type_id    (service_type_id)
 #  index_shifts_on_timesheet_id       (timesheet_id)
 #
 # Foreign Keys
@@ -24,11 +26,11 @@
 #  fk_rails_...  (calendar_event_id => calendar_events.id)
 #  fk_rails_...  (category_id => categories.id)
 #  fk_rails_...  (employee_id => employees.id)
+#  fk_rails_...  (service_type_id => service_types.id)
 #  fk_rails_...  (timesheet_id => timesheets.id)
 #
 class Shift < ApplicationRecord
   include PgSearchable
-  include Categorizable
 
   pg_search_config(against: [:employee_id])
 
@@ -37,11 +39,14 @@ class Shift < ApplicationRecord
   belongs_to :employee, optional: true
   belongs_to :calendar_event, class_name: "Calendar::Event"
   belongs_to :timesheet, optional: true
+  belongs_to :service_type
+  belongs_to :category, optional: true
 
   validates :calendar_event_id, uniqueness: true
   validate :no_overlapping_shifts_for_employee
 
   before_validation :normalize_blank_employee_id
+  before_validation :assign_default_service_type
 
   after_create :attach_to_containing_pay_period
 
@@ -72,7 +77,7 @@ class Shift < ApplicationRecord
   scope :future, -> {
     joins(:calendar_event).where(calendar_events: { starts_at: Time.current.. })
   }
-  scope :includes_associated, -> { includes(:calendar_event, :timesheet) }
+  scope :includes_associated, -> { includes(:calendar_event, :timesheet, :service_type) }
   scope :facilitator_approved, -> { where.not(facilitator_approved_at: nil) }
   scope :facilitator_pending, -> { where(facilitator_approved_at: nil) }
 
@@ -106,6 +111,12 @@ class Shift < ApplicationRecord
 
   def normalize_blank_employee_id
     self.employee_id = nil if employee_id.blank?
+  end
+
+  def assign_default_service_type
+    return if service_type_id.present?
+
+    self.service_type = ServiceType.default
   end
 
   def no_overlapping_shifts_for_employee

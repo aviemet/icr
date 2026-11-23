@@ -12,8 +12,9 @@ require "rails_helper"
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  calendar_event_id       :uuid             not null
-#  category_id             :uuid             not null
+#  category_id             :uuid
 #  employee_id             :uuid
+#  service_type_id         :uuid             not null
 #  timesheet_id            :uuid
 #
 # Indexes
@@ -21,6 +22,7 @@ require "rails_helper"
 #  index_shifts_on_calendar_event_id  (calendar_event_id) UNIQUE
 #  index_shifts_on_category_id        (category_id)
 #  index_shifts_on_employee_id        (employee_id)
+#  index_shifts_on_service_type_id    (service_type_id)
 #  index_shifts_on_timesheet_id       (timesheet_id)
 #
 # Foreign Keys
@@ -28,6 +30,7 @@ require "rails_helper"
 #  fk_rails_...  (calendar_event_id => calendar_events.id)
 #  fk_rails_...  (category_id => categories.id)
 #  fk_rails_...  (employee_id => employees.id)
+#  fk_rails_...  (service_type_id => service_types.id)
 #  fk_rails_...  (timesheet_id => timesheets.id)
 #
 RSpec.describe Shift, type: :model do

@@ -101,7 +101,7 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
   - [x] Dyslexia font option
 
 ### Phase 9: Service Types and Authorizations
-- [ ] Configurable service types (billable/payable, multi-client, notes/mileage flags, calendar colors)
+- [x] Configurable service types (billable/payable, multi-client, notes/mileage flags, calendar colors)
 - [ ] Client authorization hours ledger (authorized vs delivered)
 - [ ] Authorization and utilization reporting
 
@@ -208,10 +208,13 @@ When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the
 - UI when flagged on: Client Show **Compliance** tab (`ComplianceHistory` start/history); Settings > Company > Compliance forms (template metadata + read-only section/item list - no builder yet); deep-link queue at `/compliance/form_submissions`. Permissions catalog keys: `compliance_form_template`, `compliance_form_submission` (frontend `can` paths `compliance/form_templates`, `compliance/form_submissions`). Corrective actions may optionally link an `IncidentReport`.
 - Unfinished: first-party Settings section/item CRUD builder (preferred). SurveyJS Creator is commercial and schema-mismatched - only consider later if a licensed drag-drop editor is required.
 
+### Service Types
+- `ServiceType` is the operational kind of scheduled work on `shifts.service_type_id` (billable/payable, multi-client, notes/mileage flags, color). `Calendar::Event.category` stays the coarse event kind (e.g. system Shift). Assigned shift fill uses employee/client customization colors; open shifts keep error-red fill and use `service_type.color` on the left border (teal fallback). Settings > Calendar > Service Types. Overtime exemption field `category` matches `service_type.slug`. Seeded system types replace the old Shift Categories list; Day Program, Natural Support, and Training are non-system examples with open recurring sample events in `11_dev_shifts`.
+
 ### Payroll Settings
 - Period types: weekly, bi-weekly, semi-monthly, monthly. Weekly/bi-weekly use a start weekday; monthly uses a configurable start date (including last day of month). Semi-monthly is fixed: 1st-15th and 16th-last.
 - Payroll due date: user-configurable setting that defines when the approval window closes for each period; supports multiple rule types (e.g. days after period end, day of week after period end, day of month). See payroll workflow redesign plan.
-- Overtime: configurable weekly/daily thresholds; exemption rules by shift category, time range, duration.
+- Overtime: configurable weekly/daily thresholds; exemption rules by service type slug (criteria field still named `category`), time range, duration.
 - Pay rates: historical records with effective dates; hourly and salary; currency.
 
 ## Technical Decisions

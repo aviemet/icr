@@ -174,7 +174,9 @@ export function EventPopoverContent({ event, localizer, primaryResource = "emplo
 						className={ clsx(classes.eventColor) }
 						style={ {
 							backgroundColor: color,
-							...(isOpenShift ? { boxShadow: "inset 3px 0 0 var(--mantine-color-teal-6)" } : {}),
+							...(isOpenShift
+								? { boxShadow: `inset 3px 0 0 ${event.borderColor || "var(--mantine-color-teal-6)"}` }
+								: {}),
 						} }
 					/>
 					<Title order={ 4 }>

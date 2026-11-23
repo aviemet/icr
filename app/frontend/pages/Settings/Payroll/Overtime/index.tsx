@@ -11,7 +11,7 @@ import { Routes, withLayout } from "@/lib"
 
 export interface PayrollOvertimeSettingsProps {
 	settings: Schema.Setting
-	shift_types: Schema.Category[]
+	shift_types: Schema.ServiceType[]
 	overtime_exemptions: Schema.OvertimeExemption[]
 }
 

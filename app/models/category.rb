@@ -35,7 +35,6 @@ class Category < ApplicationRecord
 
   CATEGORIZABLE_TYPES = %w(
     Calendar::Event
-    Shift
     Contact::Address
     Contact::Email
     Contact::Phone

@@ -43,7 +43,9 @@ export type CategoryOption = {
 	label: string
 }
 
-export function categoryOptionsFromShiftTypes(shiftTypes: Schema.Category[]): CategoryOption[] {
+export function categoryOptionsFromShiftTypes(
+	shiftTypes: Array<Schema.Category | Schema.ServiceType>,
+): CategoryOption[] {
 	return shiftTypes.flatMap(shiftType => {
 		const value = shiftType.slug || shiftType.id
 		if(!value) return []

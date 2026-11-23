@@ -4,11 +4,11 @@ require "rails_helper"
 
 RSpec.describe Payroll::ShiftExceptions do
   let(:employee) { create(:employee) }
-  let(:category) { create(:category, slug: "shift") }
+  let(:service_type) { create(:service_type) }
 
   def build_shift(starts_at, ends_at, validate: true)
     event = create(:calendar_event, starts_at: starts_at, ends_at: ends_at)
-    shift = build(:shift, employee: employee, calendar_event: event, category: category)
+    shift = build(:shift, employee: employee, calendar_event: event, service_type: service_type)
     shift.save!(validate: validate)
     shift
   end

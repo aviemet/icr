@@ -201,19 +201,19 @@ RSpec.describe Payroll::EmployeePeriodHours do
     it "excludes active overtime exemption matches from OT through the engine" do
       pay_period = pay_period_for(Date.new(2024, 3, 15))
       employee = create(:employee)
-      category = Category.type("Shift").find_or_create_by!(name: "Sleep Shift") { |row| row.system = true }
+      service_type = create(:service_type, name: "Sleep Shift", slug: "sleep-shift")
       create(
         :overtime_exemption,
         name: "Sleep exempt",
         active: true,
-        criteria: [{ "category" => { "operator" => "equals", "value" => category.slug } }],
+        criteria: [{ "category" => { "operator" => "equals", "value" => service_type.slug } }],
       )
       interval = Payroll::WorkInterval.new(
         id: SecureRandom.uuid,
         employee_id: employee.id,
         starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0),
         ends_at: Time.zone.local(2024, 3, 15, 21, 0, 0),
-        category: category,
+        category: service_type,
       )
 
       result = described_class.call(pay_period, [employee.id], collector: stub_collector([interval]))
@@ -226,19 +226,19 @@ RSpec.describe Payroll::EmployeePeriodHours do
     it "ignores inactive overtime exemptions" do
       pay_period = pay_period_for(Date.new(2024, 3, 15))
       employee = create(:employee)
-      category = Category.type("Shift").find_or_create_by!(name: "Sleep Shift") { |row| row.system = true }
+      service_type = create(:service_type, name: "Sleep Shift", slug: "sleep-shift")
       create(
         :overtime_exemption,
         name: "Sleep inactive",
         active: false,
-        criteria: [{ "category" => { "operator" => "equals", "value" => category.slug } }],
+        criteria: [{ "category" => { "operator" => "equals", "value" => service_type.slug } }],
       )
       interval = Payroll::WorkInterval.new(
         id: SecureRandom.uuid,
         employee_id: employee.id,
         starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0),
         ends_at: Time.zone.local(2024, 3, 15, 19, 0, 0),
-        category: category,
+        category: service_type,
       )
 
       result = described_class.call(pay_period, [employee.id], collector: stub_collector([interval]))
@@ -419,12 +419,12 @@ RSpec.describe Payroll::EmployeePeriodHours do
         Setting.ihss_co_employer = true
         pay_period = pay_period_for(Date.new(2024, 3, 15))
         employee = create(:employee)
-        category = Category.type("Shift").find_or_create_by!(name: "Sleep Shift") { |row| row.system = true }
+        service_type = create(:service_type, name: "Sleep Shift", slug: "sleep-shift")
         create(
           :overtime_exemption,
           name: "Sleep with IHSS",
           active: true,
-          criteria: [{ "category" => { "operator" => "equals", "value" => category.slug } }],
+          criteria: [{ "category" => { "operator" => "equals", "value" => service_type.slug } }],
         )
         intervals = [
           Payroll::WorkInterval.new(
@@ -432,7 +432,7 @@ RSpec.describe Payroll::EmployeePeriodHours do
             employee_id: employee.id,
             starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0),
             ends_at: Time.zone.local(2024, 3, 15, 21, 0, 0),
-            category: category,
+            category: service_type,
             ihss: true,
           ),
         ]

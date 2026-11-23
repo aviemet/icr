@@ -5,7 +5,9 @@
 #  id          :uuid             not null, primary key
 #  all_day     :boolean          default(FALSE), not null
 #  ends_at     :datetime
+#  mileage     :decimal(8, 2)
 #  name        :string
+#  notes       :text
 #  starts_at   :datetime
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
@@ -120,7 +122,7 @@ class Calendar::Event < ApplicationRecord
     end
   end
 
-  scope :includes_associated, -> { includes([shift: [employee: [:person]]]) }
+  scope :includes_associated, -> { includes([shift: [:service_type, { employee: [:person] }]]) }
 
   scope :before, ->(time) { where(starts_at: ...time) }
   scope :after, ->(time) { where("ends_at > ?", time) }
@@ -167,7 +169,7 @@ class Calendar::Event < ApplicationRecord
           { person: [:employee, :client, :user] },
         ],
         shift: [
-          :category,
+          :service_type,
           {
             employee: [
               :person,

@@ -10,15 +10,6 @@ class Settings::CalendarsController < ApplicationController
     }
   end
 
-  # @route GET /settings/calendar/shift_types (settings_calendar_shift_types)
-  def shift_types
-    authorize Setting, :show?
-
-    render inertia: "Settings/Calendar/ShiftTypes", props: {
-      shift_types: -> { Category.type("Shift").render },
-    }
-  end
-
   # @route PATCH /settings/calendar (settings_calendar)
   # @route PUT /settings/calendar (settings_calendar)
   def update

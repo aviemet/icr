@@ -57,7 +57,7 @@ RSpec.describe Dev::SeedShifts do
         scheduled_hours = Shift.all.sum(&:duration_hours)
         expect(recorded_hours).to be_within(0.05).of(scheduled_hours)
 
-        expect(Shift.includes(:category).map { |shift| shift.category.name }).to all(eq("Regular"))
+        expect(Shift.includes(:service_type).map { |shift| shift.service_type.name }).to all(eq("Regular"))
         expect(employees.map(&:id)).to include(*Shift.distinct.pluck(:employee_id))
       end
 

@@ -75,6 +75,12 @@ en:
     ihss_updated: IHSS shift flag updated.
     ihss_shift_mode_required: Shift IHSS flags are only available when assignment mode is Assign by shift.
     category_updated: Shift type updated.
+    service_type_updated: Service type updated.
+  service_types:
+    errors:
+      system_protected: System service types cannot be deleted.
+      multi_client_not_allowed: This service type allows only one client.
+      notes_required: Notes are required for this service type.
   pay_periods:
     already_finalized: This pay period is already finalized.
     ihss_assignments_updated: IHSS period assignments saved.
