@@ -31,8 +31,8 @@
 #  fk_rails_...  (created_by_id => users.id)
 #
 class ReportDefinition < ApplicationRecord
-  MODES = %w[list aggregate].freeze
-  FORMATS = %w[xlsx csv].freeze
+  MODES = %w[list aggregate custom].freeze
+  FORMATS = %w[xlsx csv pdf].freeze
 
   resourcify
 
@@ -48,6 +48,7 @@ class ReportDefinition < ApplicationRecord
   validate :resource_and_columns_in_registry
 
   scope :system_reports, -> { where(system: true) }
+  scope :catalog, -> { where.not(mode: "custom") }
 
   def snapshot
     {
@@ -63,15 +64,25 @@ class ReportDefinition < ApplicationRecord
     }
   end
 
+  def custom?
+    mode == "custom"
+  end
+
   private
 
   def columns_present
+    return if custom?
     return if columns.is_a?(Array) && columns.any?
 
     errors.add(:columns, "must include at least one column")
   end
 
   def resource_and_columns_in_registry
+    if custom?
+      validate_custom_generator
+      return
+    end
+
     resource = Reports::Catalog.resource(resource_key)
     if resource.nil?
       errors.add(:resource_key, "is not a registered reportable resource")
@@ -82,5 +93,11 @@ class ReportDefinition < ApplicationRecord
     return if unknown.empty?
 
     errors.add(:columns, "contains unknown keys: #{unknown.join(', ')}")
+  end
+
+  def validate_custom_generator
+    return if Reports::Custom::Registry.registered?(resource_key)
+
+    errors.add(:resource_key, "is not a registered custom report generator")
   end
 end

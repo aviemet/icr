@@ -29,4 +29,21 @@ RSpec.describe Reports::Enqueue do
     expect(request.definition_snapshot["columns"]).to eq(definition.columns)
     expect(Reports::GenerateJob).to have_been_enqueued.with(request.id)
   end
+
+  it "runs generation inline when perform_now is true" do
+    ActiveJob::Base.queue_adapter = :test
+    client = create(:client)
+    custom_definition = create(:report_definition, :client_face_sheet)
+
+    request = described_class.call(
+      definition: custom_definition,
+      user: user,
+      params: { "client_id" => client.id },
+      perform_now: true,
+    )
+
+    expect(request.status).to eq("complete")
+    expect(request.file).to be_attached
+    expect(Reports::GenerateJob).not_to have_been_enqueued
+  end
 end

@@ -12,6 +12,7 @@ import type ClientHospitalVisitsPersisted from '../Client/HospitalVisits/Persist
 import type HouseholdsPersisted from '../Households/Persisted'
 import type IncidentReportsPersisted from '../IncidentReports/Persisted'
 import type ClientLifeDetailsPersisted from '../Client/LifeDetails/Persisted'
+import type ClientLinksPersisted from '../Client/Links/Persisted'
 import type PeopleShow from '../People/Show'
 import type PrescriptionsPersisted from '../Prescriptions/Persisted'
 import type ClientSupportContactsPersisted from '../Client/SupportContacts/Persisted'
@@ -55,6 +56,7 @@ declare global {
       ipp_starts_on?: Date
       last_name: string
       life_detail: ClientLifeDetailsPersisted
+      links: ClientLinksPersisted[]
       medi_cal_number?: string
       name: string
       number?: string

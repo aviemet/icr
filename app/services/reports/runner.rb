@@ -14,12 +14,11 @@ module Reports
 
     def call
       @report_request.mark_processing!
-      resource = Catalog.fetch!(@snapshot.fetch("resource_key"))
-      column_keys = Array(@snapshot.fetch("columns")).map(&:to_s)
-      filters = merged_filters
-      rows = build_rows(resource, column_keys, filters)
-      headers = resource.headers(column_keys)
-      payload = render_payload(headers, rows)
+      payload = if @snapshot.fetch("mode") == "custom"
+                  run_custom
+                else
+                  run_tabular
+                end
       attach_file(payload)
       @report_request.mark_complete!
       @report_request
@@ -34,6 +33,30 @@ module Reports
       defaults = (@snapshot["default_filters"] || {}).stringify_keys
       overrides = (@report_request.params || {}).stringify_keys
       defaults.merge(overrides)
+    end
+
+    def run_custom
+      generator = Custom::Registry.fetch!(@snapshot.fetch("resource_key"))
+      result = generator.call(
+        user: @user,
+        params: merged_filters,
+        snapshot: @snapshot,
+      )
+      {
+        content: result.fetch(:content),
+        content_type: result.fetch(:content_type),
+        filename: result[:filename],
+        extension: result[:extension],
+      }
+    end
+
+    def run_tabular
+      resource = Catalog.fetch!(@snapshot.fetch("resource_key"))
+      column_keys = Array(@snapshot.fetch("columns")).map(&:to_s)
+      filters = merged_filters
+      rows = build_rows(resource, column_keys, filters)
+      headers = resource.headers(column_keys)
+      render_payload(headers, rows)
     end
 
     def build_rows(resource, column_keys, filters)
@@ -62,17 +85,20 @@ module Reports
     end
 
     def attach_file(payload)
-      filename = [
-        @snapshot.fetch("slug"),
-        Time.current.strftime("%Y%m%d-%H%M%S"),
-        payload.fetch(:extension),
-      ].join(".")
-
+      filename = payload[:filename].presence || default_filename(payload)
       @report_request.file.attach(
         io: StringIO.new(payload.fetch(:content)),
         filename: filename,
         content_type: payload.fetch(:content_type),
       )
+    end
+
+    def default_filename(payload)
+      [
+        @snapshot.fetch("slug"),
+        Time.current.strftime("%Y%m%d-%H%M%S"),
+        payload.fetch(:extension),
+      ].join(".")
     end
   end
 end

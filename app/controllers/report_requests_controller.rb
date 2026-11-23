@@ -6,6 +6,7 @@ class ReportRequestsController < ApplicationController
   }
   expose :report_request
 
+  # @route GET /report_requests (report_requests)
   def index
     authorize ReportRequest
 
@@ -20,6 +21,7 @@ class ReportRequestsController < ApplicationController
     }
   end
 
+  # @route POST /report_requests (report_requests)
   def create
     definition = ReportDefinition.find(params.require(:report_definition_id))
     authorize ReportRequest.new
@@ -36,6 +38,7 @@ class ReportRequestsController < ApplicationController
     redirect_back_or_to report_definition_path(definition), inertia: { errors: e.record.errors }
   end
 
+  # @route GET /report_requests/:id/download (download_report_request)
   def download
     authorize report_request, :download?
 

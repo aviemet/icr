@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_22_211500) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_23_004719) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -210,6 +210,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_22_211500) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_client_life_details_on_client_id", unique: true
+  end
+
+  create_table "client_links", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "client_id", null: false
+    t.string "title", null: false
+    t.string "url", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_client_links_on_client_id"
   end
 
   create_table "client_support_contacts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1104,6 +1113,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_22_211500) do
   add_foreign_key "client_hospital_visits", "doctors"
   add_foreign_key "client_hospital_visits", "incident_reports"
   add_foreign_key "client_life_details", "clients"
+  add_foreign_key "client_links", "clients"
   add_foreign_key "client_support_contacts", "clients"
   add_foreign_key "client_support_contacts", "people"
   add_foreign_key "clients", "people"

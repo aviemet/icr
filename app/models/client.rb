@@ -104,6 +104,10 @@ class Client < ApplicationRecord
     class_name: "Client::Allergy",
     dependent: :destroy,
     inverse_of: :client
+  has_many :links,
+    class_name: "Client::Link",
+    dependent: :destroy,
+    inverse_of: :client
   has_many :diagnoses,
     class_name: "Client::Diagnosis",
     dependent: :destroy,
@@ -156,6 +160,7 @@ class Client < ApplicationRecord
       :attendants,
       support_contacts: { person: { contact: [:phones, :emails, :addresses] } },
       allergies: [],
+      links: [],
       diagnoses: :doctor,
       hospital_visits: [:doctor, :incident_report],
       enrollments: :vendor,

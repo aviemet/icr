@@ -87,6 +87,7 @@ function buildClient(overrides: Partial<Schema.ClientsShow> = {}): Schema.Client
 		incident_reports: [],
 		incident_reports_count: 0,
 		life_detail: null as unknown as Schema.ClientLifeDetailsPersisted,
+		links: [],
 		prescriptions: [],
 		support_contacts: [],
 		updated_at: new Date("2024-01-01"),

@@ -51,4 +51,23 @@ RSpec.describe Reports::Runner do
     expect(report_request.status).to eq("failed")
     expect(report_request.error_message).to include("Unknown reportable resource")
   end
+
+  it "runs a custom generator and attaches its content type" do
+    client = create(:client)
+    custom_definition = create(:report_definition, :client_face_sheet)
+    custom_request = create(
+      :report_request,
+      report_definition: custom_definition,
+      requested_by: user,
+      definition_snapshot: custom_definition.snapshot,
+      params: { "client_id" => client.id },
+    )
+
+    described_class.call(custom_request)
+
+    custom_request.reload
+    expect(custom_request.status).to eq("complete")
+    expect(custom_request.file).to be_attached
+    expect(custom_request.file.content_type).to eq("application/pdf")
+  end
 end

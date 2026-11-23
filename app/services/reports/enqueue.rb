@@ -2,14 +2,15 @@
 
 module Reports
   class Enqueue
-    def self.call(definition:, user:, params: {})
-      new(definition: definition, user: user, params: params).call
+    def self.call(definition:, user:, params: {}, perform_now: false)
+      new(definition: definition, user: user, params: params, perform_now: perform_now).call
     end
 
-    def initialize(definition:, user:, params: {})
+    def initialize(definition:, user:, params: {}, perform_now: false)
       @definition = definition
       @user = user
       @params = params.to_h.stringify_keys
+      @perform_now = perform_now
     end
 
     def call
@@ -20,7 +21,14 @@ module Reports
         definition_snapshot: @definition.snapshot,
         status: "pending",
       )
-      Reports::GenerateJob.perform_later(request.id)
+
+      if @perform_now
+        Reports::GenerateJob.perform_now(request.id)
+        request.reload
+      else
+        Reports::GenerateJob.perform_later(request.id)
+      end
+
       request
     end
   end

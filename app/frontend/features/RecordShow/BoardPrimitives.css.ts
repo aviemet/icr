@@ -145,7 +145,6 @@ export const actionGrid = css`
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: ${ vars.spacing.sm };
-	margin-top: auto;
 	padding-top: ${ vars.spacing.sm };
 
 	@media (min-width: ${ vars.breakpoints.xs }) {
@@ -178,8 +177,18 @@ export const actionTile = css`
 `
 
 export const actionTitle = css`
+	display: inline-flex;
+	align-items: center;
+	gap: ${ vars.spacing.xs };
 	font-size: ${ vars.fontSizes.sm };
 	font-weight: 600;
+`
+
+export const actionIcon = css`
+	display: inline-flex;
+	align-items: center;
+	flex-shrink: 0;
+	line-height: 1;
 `
 
 export const actionHint = css`

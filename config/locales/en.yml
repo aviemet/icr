@@ -86,3 +86,4 @@ en:
     adjustment_failed: Could not record adjustment.
   reports:
     not_ready: Report file is not ready
+    export_failed: Could not generate the report export

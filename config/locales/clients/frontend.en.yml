@@ -85,6 +85,20 @@ en:
           manager: Manager
           attendants: Attendants
           none: None assigned
+          face_sheet: Face Sheet
+          face_sheet_hint: Download PDF
+          schedule_hint: Open calendar
+          custom_links: Custom links
+          custom_links_empty: No custom links yet.
+          add_link: Add link
+          cancel_link: Cancel
+          modify_links: Modify
+          done_links: Done
+          edit_link: Edit
+          save_link: Save link
+          link_title: Title
+          link_url: URL
+
 
         profile:
           demographics: Demographics

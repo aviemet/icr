@@ -85,8 +85,12 @@ Rails.application.routes.draw do
   # RESOURCEFUL PATHS #
 
   resources :clients, param: :slug, concerns: :schedulable do
+    member do
+      get :face_sheet, to: "clients/face_sheets#show"
+    end
     resources :support_contacts, controller: "clients/support_contacts", only: [:create, :update, :destroy]
     resources :allergies, controller: "clients/allergies", only: [:create, :update, :destroy]
+    resources :links, controller: "clients/links", only: [:create, :update, :destroy]
     resources :diagnoses, controller: "clients/diagnoses", only: [:create, :update, :destroy]
     resources :prescriptions, controller: "clients/prescriptions", only: [:create, :update, :destroy]
     resources :hospital_visits, controller: "clients/hospital_visits", only: [:create, :update, :destroy]

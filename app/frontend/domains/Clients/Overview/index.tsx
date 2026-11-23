@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next"
 
 import { Avatar, Badge, Box, Group, Link, Text } from "@/components"
 import { DateTimeFormatter } from "@/components/Formatters"
-import { CalendarIcon, CoinsIcon, HomeIcon, UserGroupIcon, WarningTriangleIcon } from "@/components/Icons"
+import { CalendarIcon, CoinsIcon, DownloadIcon, HomeIcon, UserGroupIcon, WarningTriangleIcon } from "@/components/Icons"
 import { isPendingTermination } from "@/domains/Employees/PendingTermination/isPendingTermination"
 import {
 	BoardActionGrid,
@@ -13,6 +13,7 @@ import {
 } from "@/features"
 import { formatter, initials, Routes } from "@/lib"
 
+import { CustomLinks } from "./CustomLinks"
 import * as classes from "./Overview.css"
 
 function lastDayBadge(employee: { status?: string, inactive_at?: Date | string | null }) {
@@ -168,37 +169,20 @@ export function ClientOverview({
 					) }
 					<BoardActionGrid>
 						<BoardActionTile
-							href={ `${Routes.client(client.slug)}?tab=profile` }
-							title={ t("views.clients.show.tabs.profile") }
-							hint="View demographics"
-						/>
-						<BoardActionTile
-							href={ `${Routes.client(client.slug)}?tab=medical` }
-							title={ t("views.clients.show.tabs.medical") }
-							hint="Doctors, meds, and visits"
-						/>
-
-						<BoardActionTile
-							href={ `${Routes.client(client.slug)}?tab=documents` }
-							title={ t("views.clients.show.tabs.documents") }
-							hint="Files and images"
-						/>
-						<BoardActionTile
-							href={ `${Routes.client(client.slug)}?tab=incidents` }
-							title={ t("views.clients.show.tabs.incidents") }
-							hint="Incident log"
+							href={ Routes.faceSheetClient(client.slug) }
+							title={ t("views.clients.show.overview.face_sheet") }
+							hint={ t("views.clients.show.overview.face_sheet_hint") }
+							icon={ <DownloadIcon size={ 14 } /> }
+							external
 						/>
 						<BoardActionTile
 							href={ Routes.scheduleClient(client.slug) }
 							title={ t("views.clients.show.overview.schedule") }
-							hint="Open calendar"
-						/>
-						<BoardActionTile
-							href={ `${Routes.client(client.slug)}?tab=care` }
-							title={ t("views.clients.show.tabs.care") }
-							hint="Team and services"
+							hint={ t("views.clients.show.overview.schedule_hint") }
+							icon={ <CalendarIcon size={ 14 } /> }
 						/>
 					</BoardActionGrid>
+					<CustomLinks client={ client } />
 				</MetricTile>
 			</Box>
 		</Box>

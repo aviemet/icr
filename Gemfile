@@ -47,6 +47,8 @@ gem "active_storage_validations", "~> 2.0"
 gem "aasm", "~> 5.5"
 gem "active_reporter", "~> 1.0"
 gem "caxlsx", "~> 4.5"
+gem "prawn", "~> 2.5"
+gem "prawn-table", "~> 0.2"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data"

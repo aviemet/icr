@@ -1,5 +1,6 @@
 import { MantineProvider } from "@mantine/core"
-import { cleanup, render, screen } from "@testing-library/react"
+import { ModalsProvider } from "@mantine/modals"
+import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { ClientOverview } from "@/domains/Clients/Overview"
@@ -15,6 +16,15 @@ vi.mock("@inertiajs/react", () => ({
 	Link: ({ children, href, ...props }: { children?: React.ReactNode, href: string }) => (
 		<a href={ href } { ...props }>{ children }</a>
 	),
+	router: {
+		visit: vi.fn(),
+		delete: vi.fn(),
+	},
+}))
+
+vi.mock("@/lib/hooks", async (importOriginal) => ({
+	...await importOriginal<typeof import("@/lib/hooks")>(),
+	useRecordCanUpdate: () => true,
 }))
 
 function buildClient(overrides: Partial<Schema.ClientsShow> = {}): Schema.ClientsShow {
@@ -65,6 +75,7 @@ function buildClient(overrides: Partial<Schema.ClientsShow> = {}): Schema.Client
 		images: [],
 		incident_reports: [],
 		life_detail: {} as Schema.ClientLifeDetailsPersisted,
+		links: [],
 		prescriptions: [],
 		support_contacts: [],
 		updated_at: new Date("2024-01-01"),
@@ -90,7 +101,7 @@ describe("ClientOverview", () => {
 		})
 	})
 
-	it("renders metric tiles, care team, and action links", () => {
+	it("renders metric tiles, care team, and built-in quick links", () => {
 		render(
 			<MantineProvider theme={ theme }>
 				<ClientOverview client={ buildClient() } />
@@ -103,9 +114,45 @@ describe("ClientOverview", () => {
 		expect(screen.getByText("Aide One")).toBeInTheDocument()
 		expect(screen.getByText("views.clients.show.overview.household")).toBeInTheDocument()
 		expect(screen.getByText("Santos Home")).toBeInTheDocument()
-		expect(screen.getByText("views.clients.show.tabs.profile")).toBeInTheDocument()
+		expect(screen.getByText("views.clients.show.overview.face_sheet")).toBeInTheDocument()
 		expect(screen.getByText("views.clients.show.overview.schedule")).toBeInTheDocument()
+		expect(screen.queryByText("views.clients.show.tabs.profile")).not.toBeInTheDocument()
+		expect(screen.queryByText("views.clients.show.tabs.medical")).not.toBeInTheDocument()
+		expect(screen.getByText("views.clients.show.overview.custom_links")).toBeInTheDocument()
+		expect(screen.getByText("views.clients.show.overview.add_link")).toBeInTheDocument()
 	})
+
+	it("hides edit actions until modify mode is enabled", () => {
+		render(
+			<MantineProvider theme={ theme }>
+				<ModalsProvider>
+					<ClientOverview
+						client={ buildClient({
+							links: [
+								{
+									id: "link-1",
+									client_id: "client-1",
+									title: "Care Portal",
+									url: "https://example.com/care",
+									created_at: new Date("2024-01-01"),
+									updated_at: new Date("2024-01-01"),
+								},
+							],
+						}) }
+					/>
+				</ModalsProvider>
+			</MantineProvider>,
+		)
+
+		expect(screen.getByText("Care Portal")).toBeInTheDocument()
+		expect(screen.getByText("https://example.com/care")).toBeInTheDocument()
+		expect(screen.queryByText("views.clients.show.overview.edit_link")).not.toBeInTheDocument()
+
+		fireEvent.click(screen.getByRole("button", { name: "views.clients.show.overview.modify_links" }))
+		expect(screen.getByText("views.clients.show.overview.edit_link")).toBeInTheDocument()
+		expect(screen.getByRole("button", { name: "views.clients.show.overview.done_links" })).toBeInTheDocument()
+	})
+
 
 	it("hides household when the client has none", () => {
 		render(
@@ -173,5 +220,3 @@ describe("ClientOverview", () => {
 		expect(screen.queryByText("views.clients.show.overview.open_shifts")).not.toBeInTheDocument()
 	})
 })
-
-

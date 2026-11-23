@@ -67,7 +67,6 @@ declare global {
       person_id: string
       preferred_language?: string
       primary_manager: EmployeesPersisted
-      cover_letter?: ({ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date } | null)
       resume?: ({ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date } | null)
       slug: string
       status: "applicant" | "offered" | "employed" | "declined" | "terminated" | "withdrawn"

@@ -492,6 +492,10 @@
     "pundit": {
       "not_authorized": "You are not authorized to access this page."
     },
+    "reports": {
+      "export_failed": "Could not generate the report export",
+      "not_ready": "Report file is not ready"
+    },
     "requirements": {
       "gates": {
         "client_schedule_blocked": "%{employee} cannot be scheduled with %{client} until requirements are met: %{names}",
@@ -713,11 +717,19 @@
           },
           "overview": {
             "active_meds": "Active medications",
+            "add_link": "Add link",
             "allergies": "Active allergies",
             "attendants": "Attendants",
+            "cancel_link": "Cancel",
             "care_team": "Care Team",
             "client_number": "Client",
+            "custom_links": "Custom links",
+            "custom_links_empty": "No custom links yet.",
+            "done_links": "Done",
+            "edit_link": "Edit",
             "emergency_contacts": "Emergency contacts",
+            "face_sheet": "Face Sheet",
+            "face_sheet_hint": "Download PDF",
             "funding": "Funding and Plans",
             "health_alerts": "Health Alerts",
             "household": "Household",
@@ -725,12 +737,17 @@
             "ihss": "IHSS",
             "incidents": "Incidents",
             "ipp_review": "IPP Review",
+            "link_title": "Title",
+            "link_url": "URL",
             "manager": "Manager",
+            "modify_links": "Modify",
             "none": "None assigned",
             "open_shifts": "Open shifts to fill",
             "quick_links": "Quick Links",
             "regional_center": "Regional Center",
+            "save_link": "Save link",
             "schedule": "Schedule",
+            "schedule_hint": "Open calendar",
             "uci": "UCI"
           },
           "profile": {
@@ -969,6 +986,7 @@
           "edit": "Edit Employee",
           "hiring": {
             "add_offer": "Add Offer",
+            "cover_letter": "Cover Letter",
             "desired_compensation": "Desired Compensation",
             "desired_job_title": "Desired Job Title",
             "details": "Application",
@@ -1231,6 +1249,29 @@
           "view_clients": "Client review",
           "view_ihss": "IHSS assignments",
           "workflow_help": "Review and approve each employee timesheet, then close the period to lock it."
+        }
+      },
+      "reports": {
+        "definitions": {
+          "columns": "Columns",
+          "empty": "No reports available",
+          "filters": "Filters",
+          "format": "Format",
+          "queue": "Report queue",
+          "run": "Run report",
+          "title": "Reports"
+        },
+        "queue": {
+          "back_to_reports": "All reports",
+          "completed_at": "Completed",
+          "download": "Download",
+          "empty": "No report requests yet",
+          "name": "Report",
+          "requested_at": "Requested",
+          "requested_by": "Requested by",
+          "retention": "Completed reports are removed after 30 days",
+          "status": "Status",
+          "title": "Report Queue"
         }
       },
       "requirement_types": {

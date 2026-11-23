@@ -31,6 +31,7 @@ export {
 	MdAdd as NewIcon,
 	// MdOutlineDelete as TrashIcon,
 	MdOutlineContactMail as EmployeeIcon,
+	MdOutlineFileDownload as DownloadIcon,
 } from "react-icons/md"
 
 
