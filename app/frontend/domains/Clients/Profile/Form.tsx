@@ -4,6 +4,7 @@ import { Grid, Group } from "@/components"
 import { Form, Submit } from "@/components/Form"
 import { DateTimeFormatter } from "@/components/Formatters"
 import { DateInput, NumberInput, Textarea, TextInput } from "@/components/Inputs"
+import { ReferralFields } from "@/domains/Clients/ReferralFields"
 import {
 	DefinitionItem,
 	DefinitionList,
@@ -16,9 +17,13 @@ import { useRecordCanUpdate } from "@/lib/hooks"
 
 interface ClientProfileFormProps {
 	client: Schema.ClientsShow
+	regionalCenterOptions?: Schema.RegionalCentersOptions[]
 }
 
-export function ClientProfileForm({ client }: ClientProfileFormProps) {
+export function ClientProfileForm({
+	client,
+	regionalCenterOptions = [],
+}: ClientProfileFormProps) {
 	const { t } = useTranslation()
 	const canUpdate = useRecordCanUpdate()
 	const lifeDetail = client.life_detail
@@ -35,7 +40,8 @@ export function ClientProfileForm({ client }: ClientProfileFormProps) {
 							client: {
 								number: client.number ?? "",
 								uci_number: client.uci_number ?? "",
-								regional_center: client.regional_center ?? "",
+								regional_center_id: client.regional_center_id ?? "",
+								referred_by_other: client.referred_by_other ?? "",
 								medi_cal_number: client.medi_cal_number ?? "",
 								ipp_starts_on: client.ipp_starts_on ?? "",
 								ipp_ends_on: client.ipp_ends_on ?? "",
@@ -94,9 +100,7 @@ export function ClientProfileForm({ client }: ClientProfileFormProps) {
 									<Grid.Col span={ { xxs: 12, sm: 4 } }>
 										<TextInput name="client.uci_number" label="UCI Number" />
 									</Grid.Col>
-									<Grid.Col span={ { xxs: 12, sm: 4 } }>
-										<TextInput name="client.regional_center" label="Regional Center" />
-									</Grid.Col>
+									<ReferralFields regionalCenterOptions={ regionalCenterOptions } />
 									<Grid.Col span={ { xxs: 12, sm: 4 } }>
 										<TextInput name="client.medi_cal_number" label="Medi-Cal Number" />
 									</Grid.Col>
@@ -187,7 +191,7 @@ export function ClientProfileForm({ client }: ClientProfileFormProps) {
 						<FormBand title={ t("views.clients.show.profile.california") }>
 							<DefinitionList>
 								<DefinitionItem label="UCI Number" value={ client.uci_number || "-" } />
-								<DefinitionItem label="Regional Center" value={ client.regional_center || "-" } />
+								<DefinitionItem label="Referral" value={ client.referral_label || "-" } />
 								<DefinitionItem label="Medi-Cal Number" value={ client.medi_cal_number || "-" } />
 								<DefinitionItem
 									label="IPP Start"

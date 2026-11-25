@@ -26,6 +26,7 @@ function buildCompany(overrides: Partial<Schema.CompaniesShow> = {}): Schema.Com
 	return {
 		id: "company-1",
 		name: "ICR SLS",
+		regional_center_id: undefined,
 		contact: {
 			id: "contact-1",
 			addresses: [],

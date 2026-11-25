@@ -16,6 +16,7 @@ import type ClientLifeDetailsPersisted from '../Client/LifeDetails/Persisted'
 import type ClientLinksPersisted from '../Client/Links/Persisted'
 import type PeopleShow from '../People/Show'
 import type PrescriptionsPersisted from '../Prescriptions/Persisted'
+import type RegionalCentersOptions from '../RegionalCenters/Options'
 import type ClientSupportContactsPersisted from '../Client/SupportContacts/Persisted'
 
 declare global {
@@ -67,7 +68,10 @@ declare global {
       preferred_hospital?: string
       preferred_language?: string
       prescriptions: PrescriptionsPersisted[]
-      regional_center?: string
+      referral_label?: string
+      referred_by_other?: string
+      regional_center?: RegionalCentersOptions
+      regional_center_id?: string
       slug: string
       support_contacts: ClientSupportContactsPersisted[]
       uci_number?: string

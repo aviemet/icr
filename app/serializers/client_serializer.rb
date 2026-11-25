@@ -17,21 +17,24 @@
 #  number                :string
 #  preferred_hospital    :string
 #  preferred_language    :string
-#  regional_center       :string
+#  referred_by_other     :string
 #  slug                  :string           not null
 #  uci_number            :string
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  person_id             :uuid             not null
+#  regional_center_id    :uuid
 #
 # Indexes
 #
-#  index_clients_on_person_id  (person_id)
-#  index_clients_on_slug       (slug) UNIQUE
+#  index_clients_on_person_id           (person_id)
+#  index_clients_on_regional_center_id  (regional_center_id)
+#  index_clients_on_slug                (slug) UNIQUE
 #
 # Foreign Keys
 #
 #  fk_rails_...  (person_id => people.id)
+#  fk_rails_...  (regional_center_id => regional_centers.id)
 #
 class ClientSerializer < ApplicationSerializer
   include PersonFields
@@ -46,7 +49,8 @@ class ClientSerializer < ApplicationSerializer
     :inactive_at,
     :color,
     :uci_number,
-    :regional_center,
+    :regional_center_id,
+    :referred_by_other,
     :medi_cal_number,
     :ipp_starts_on,
     :ipp_ends_on,
@@ -60,4 +64,10 @@ class ClientSerializer < ApplicationSerializer
   )
 
   belongs_to :person, serializer: PersonSerializer
+  belongs_to :regional_center, serializer: RegionalCenters::OptionsSerializer, optional: true
+
+  type :string, optional: true
+  def referral_label
+    @object.referral_label
+  end
 end

@@ -49,7 +49,7 @@ export function ClientOverview({
 					icon={ <CoinsIcon size={ 16 } /> }
 				>
 					<MetricLine label={ t("views.clients.show.overview.uci") } value={ client.uci_number || "-" } />
-					<MetricLine label={ t("views.clients.show.overview.regional_center") } value={ client.regional_center || "-" } />
+					<MetricLine label={ t("views.clients.show.overview.regional_center") } value={ client.referral_label || "-" } />
 					<MetricLine
 						label={ t("views.clients.show.overview.ipp_review") }
 						value={ client.ipp_review_on

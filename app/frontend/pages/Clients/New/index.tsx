@@ -6,9 +6,10 @@ import { Routes } from "@/lib"
 
 interface NewClientProps {
 	client: Schema.ClientsFormData
+	regional_center_options?: Schema.RegionalCentersOptions[]
 }
 
-const NewClient = ({ client }: NewClientProps) => {
+const NewClient = ({ client, regional_center_options = [] }: NewClientProps) => {
 	const { t } = useTranslation()
 	const title = t("views.clients.new.title")
 
@@ -24,6 +25,7 @@ const NewClient = ({ client }: NewClientProps) => {
 			<ClientForm
 				to={ Routes.clients() }
 				client={ client }
+				regionalCenterOptions={ regional_center_options }
 			/>
 		</RecordFormPage>
 	)

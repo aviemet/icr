@@ -39,4 +39,9 @@ RSpec.describe Contactable do
   describe Person do
     it_behaves_like "a contactable entity"
   end
+
+  describe RegionalCenter do
+    it_behaves_like "a contactable entity"
+  end
 end
+

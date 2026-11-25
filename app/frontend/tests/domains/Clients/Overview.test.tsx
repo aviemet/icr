@@ -42,7 +42,9 @@ function buildClient(overrides: Partial<Schema.ClientsShow> = {}): Schema.Client
 		incident_reports_count: 0,
 		emergency_contacts_count: 1,
 		uci_number: "UCI-9",
-		regional_center: "North",
+		referral_label: "North",
+		regional_center_id: "rc-1",
+		referred_by_other: undefined,
 		ihss_authorized_hours: 40,
 		ihss_share_of_cost: 0,
 		current_manager: {

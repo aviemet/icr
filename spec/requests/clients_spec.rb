@@ -199,12 +199,13 @@ RSpec.describe "/clients" do
       end
 
       it "updates CA and IHSS profile fields" do
-        client = create(:client)
+        client = create(:client, regional_center: nil)
+        regional_center = RegionalCenter.find_by!(code: "rceb")
 
         patch client_url(client), params: {
           client: {
             uci_number: "1234567",
-            regional_center: "RCEB",
+            regional_center_id: regional_center.id,
             ihss_authorized_hours: 40.5,
             ihss_share_of_cost: 12.0,
             life_detail_attributes: {
@@ -216,10 +217,24 @@ RSpec.describe "/clients" do
         client.reload
 
         expect(client.uci_number).to eq("1234567")
-        expect(client.regional_center).to eq("RCEB")
+        expect(client.regional_center).to eq(regional_center)
         expect(client.ihss_authorized_hours).to eq(40.5)
         expect(client.life_detail.adls).to eq("Needs meal support")
         expect(client.life_detail.risk_flags).to eq("Elopement")
+      end
+
+      it "updates referred_by_other for privately funded clients" do
+        client = create(:client, regional_center: nil)
+
+        patch client_url(client), params: {
+          client: {
+            referred_by_other: "Privately funded",
+          },
+        }
+        client.reload
+
+        expect(client.referred_by_other).to eq("Privately funded")
+        expect(client.regional_center).to be_nil
       end
     end
 

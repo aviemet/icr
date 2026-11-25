@@ -17,21 +17,24 @@
 #  number                :string
 #  preferred_hospital    :string
 #  preferred_language    :string
-#  regional_center       :string
+#  referred_by_other     :string
 #  slug                  :string           not null
 #  uci_number            :string
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  person_id             :uuid             not null
+#  regional_center_id    :uuid
 #
 # Indexes
 #
-#  index_clients_on_person_id  (person_id)
-#  index_clients_on_slug       (slug) UNIQUE
+#  index_clients_on_person_id           (person_id)
+#  index_clients_on_regional_center_id  (regional_center_id)
+#  index_clients_on_slug                (slug) UNIQUE
 #
 # Foreign Keys
 #
 #  fk_rails_...  (person_id => people.id)
+#  fk_rails_...  (regional_center_id => regional_centers.id)
 #
 class Client < ApplicationRecord
   include Identificationable
@@ -55,6 +58,10 @@ class Client < ApplicationRecord
   friendly_id :slug_candidates
 
   resourcify
+
+  belongs_to :regional_center, optional: true
+
+  validate :referral_source_mutual_exclusion
 
   has_many :doctors_clients, dependent: :nullify
   has_many :doctors, through: :doctors_clients
@@ -150,6 +157,7 @@ class Client < ApplicationRecord
       :life_detail,
       :current_manager,
       :current_attendants,
+      :regional_center,
       person: { contact: { addresses: :category, emails: :category, phones: :category } },
     )
   }
@@ -186,7 +194,17 @@ class Client < ApplicationRecord
     active_at.present? && (inactive_at.nil? || inactive_at > Time.current)
   end
 
+  def referral_label
+    regional_center&.name.presence || referred_by_other.presence
+  end
+
   private
+
+  def referral_source_mutual_exclusion
+    return if regional_center_id.blank? || referred_by_other.blank?
+
+    errors.add(:base, "Choose a regional center or other referral, not both")
+  end
 
   def slug_candidates
     [

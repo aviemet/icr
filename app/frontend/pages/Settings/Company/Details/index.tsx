@@ -4,12 +4,19 @@ import { withLayout } from "@/lib"
 
 export interface CompanyDetailsProps {
 	company: Schema.CompaniesShow
+	regional_center_options?: Schema.RegionalCentersOptions[]
 }
 
-const CompanyDetails = ({ company }: CompanyDetailsProps) => {
+const CompanyDetails = ({
+	company,
+	regional_center_options = [],
+}: CompanyDetailsProps) => {
 	return (
 		<Box>
-			<CompanyForm company={ company } />
+			<CompanyForm
+				company={ company }
+				regionalCenterOptions={ regional_center_options }
+			/>
 		</Box>
 	)
 }

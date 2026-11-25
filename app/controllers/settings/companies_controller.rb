@@ -1,6 +1,7 @@
 class Settings::CompaniesController < ApplicationController
   strong_params :company, permit: [
     :name,
+    :regional_center_id,
     contact_attributes: [
       :id,
       addresses_attributes: [
@@ -18,6 +19,7 @@ class Settings::CompaniesController < ApplicationController
 
     render inertia: "Settings/Company/Details", props: {
       company: -> { company.render(:show) },
+      regional_center_options: -> { RegionalCenter.active.ordered.render(:options) },
     }
   end
 

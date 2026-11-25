@@ -27,9 +27,14 @@ export interface ShowClientProps {
 	can_view_open_shifts?: boolean
 	open_shifts_count?: number
 	trainingOptions?: Schema.EmployeeTrainingsOptions[]
+	regional_center_options?: Schema.RegionalCentersOptions[]
 }
 
-const ShowClient = ({ client, trainingOptions = [] }: ShowClientProps) => {
+const ShowClient = ({
+	client,
+	trainingOptions = [],
+	regional_center_options = [],
+}: ShowClientProps) => {
 	const { t } = useTranslation()
 	const { can } = usePermissions()
 	const { enabled } = useFeatures()
@@ -69,7 +74,11 @@ const ShowClient = ({ client, trainingOptions = [] }: ShowClientProps) => {
 			actions={ <ScheduleButton href={ Routes.scheduleClient(client.slug) } appearance="button" /> }
 			tabs={ [
 				{ id: "overview", label: t("views.clients.show.tabs.overview"), panel: <Overview client={ client } /> },
-				{ id: "profile", label: t("views.clients.show.tabs.profile"), panel: <Profile client={ client } /> },
+				{
+					id: "profile",
+					label: t("views.clients.show.tabs.profile"),
+					panel: <Profile client={ client } regional_center_options={ regional_center_options } />,
+				},
 				{ id: "contacts", label: t("views.clients.show.tabs.contacts"), panel: <Contacts client={ client } /> },
 				{
 					id: "medical",

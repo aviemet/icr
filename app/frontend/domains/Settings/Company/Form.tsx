@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 
 import { Form } from "@/components/Form"
-import { HiddenInput, TextInput } from "@/components/Inputs"
+import { HiddenInput, Select, TextInput } from "@/components/Inputs"
 import { SettingsPageHeader } from "@/domains/Settings/SettingsPageHeader"
 import { SettingsSaveButton } from "@/domains/Settings/SettingsSaveButton"
 import { FormBand, FormBandStack } from "@/features"
@@ -17,6 +17,7 @@ import {
 
 interface CompanyFormProps {
 	company: Schema.CompaniesShow
+	regionalCenterOptions?: Schema.RegionalCentersOptions[]
 }
 
 const emptyAddress = {
@@ -39,11 +40,18 @@ const emptyPhone = {
 	category_id: "",
 }
 
-export function CompanyForm({ company }: CompanyFormProps) {
+export function CompanyForm({
+	company,
+	regionalCenterOptions = [],
+}: CompanyFormProps) {
 	const { t } = useTranslation()
 	const contact = company.contact
 	const addresses = company.addresses?.length ? company.addresses : (contact?.addresses || [])
 	const phones = company.phones?.length ? company.phones : (contact?.phones || [])
+	const regionalCenterSelectOptions = regionalCenterOptions.map(center => ({
+		value: center.id,
+		label: center.name,
+	}))
 
 	return (
 		<Form
@@ -52,6 +60,7 @@ export function CompanyForm({ company }: CompanyFormProps) {
 			initialData={ {
 				company: {
 					name: company.name,
+					regional_center_id: company.regional_center_id ?? "",
 					contact_attributes: {
 						id: contact?.id,
 						addresses_attributes: addresses,
@@ -82,6 +91,13 @@ export function CompanyForm({ company }: CompanyFormProps) {
 						name="company.name"
 						label={ t("views.settings.company.name_label") }
 						required
+					/>
+					<Select
+						name="company.regional_center_id"
+						label={ t("views.settings.company.regional_center_label") }
+						options={ regionalCenterSelectOptions }
+						searchable
+						clearable
 					/>
 				</FormBand>
 

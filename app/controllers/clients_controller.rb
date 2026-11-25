@@ -13,7 +13,7 @@ class ClientsController < ApplicationController
 
   strong_params :client, permit: [
     :person_id, :active_at, :inactive_at, :number, :color,
-    :uci_number, :regional_center, :medi_cal_number,
+    :uci_number, :regional_center_id, :referred_by_other, :medi_cal_number,
     :ipp_starts_on, :ipp_ends_on, :ipp_review_on,
     :preferred_hospital, :preferred_language, :communication_notes,
     :ihss_authorized_hours, :ihss_share_of_cost, :ihss_notes,
@@ -71,6 +71,7 @@ class ClientsController < ApplicationController
         linked_ids = client_for_show.clients_trainings.map(&:training_id)
         Employee::Training.active.where.not(id: linked_ids).order(:name).render(:options)
       },
+      regional_center_options: -> { regional_center_options },
     }
   end
 
@@ -79,7 +80,8 @@ class ClientsController < ApplicationController
     authorize Client.new
 
     render inertia: "Clients/New", props: {
-      client: Client.new.render(:form_data)
+      client: Client.new.render(:form_data),
+      regional_center_options: -> { regional_center_options },
     }
   end
 
@@ -88,7 +90,8 @@ class ClientsController < ApplicationController
     authorize client
 
     render inertia: "Clients/Edit", props: {
-      client: client.render(:edit)
+      client: client.render(:edit),
+      regional_center_options: -> { regional_center_options },
     }
   end
 
@@ -147,5 +150,11 @@ class ClientsController < ApplicationController
 
     client.destroy!
     redirect_to clients_url, notice: t("templates.controllers.notices.destroyed", model: "Client")
+  end
+
+  private
+
+  def regional_center_options
+    RegionalCenter.active.ordered.render(:options)
   end
 end

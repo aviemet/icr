@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_23_170000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_24_040100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -244,7 +244,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_170000) do
     t.string "color"
     t.string "slug", null: false
     t.string "uci_number"
-    t.string "regional_center"
     t.string "medi_cal_number"
     t.date "ipp_starts_on"
     t.date "ipp_ends_on"
@@ -257,7 +256,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_170000) do
     t.text "ihss_notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "regional_center_id"
+    t.string "referred_by_other"
     t.index ["person_id"], name: "index_clients_on_person_id"
+    t.index ["regional_center_id"], name: "index_clients_on_regional_center_id"
     t.index ["slug"], name: "index_clients_on_slug", unique: true
   end
 
@@ -299,6 +301,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_170000) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "regional_center_id"
+    t.index ["regional_center_id"], name: "index_companies_on_regional_center_id"
   end
 
   create_table "compliance_corrective_actions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -970,6 +974,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_170000) do
     t.index ["medication_id"], name: "index_prescriptions_on_medication_id"
   end
 
+  create_table "regional_centers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "code", null: false
+    t.string "name", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["active"], name: "index_regional_centers_on_active"
+    t.index ["code"], name: "index_regional_centers_on_code", unique: true
+  end
+
   create_table "report_definitions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
@@ -1252,12 +1266,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_170000) do
   add_foreign_key "client_support_contacts", "clients"
   add_foreign_key "client_support_contacts", "people"
   add_foreign_key "clients", "people"
+  add_foreign_key "clients", "regional_centers"
   add_foreign_key "clients_attendants", "clients"
   add_foreign_key "clients_attendants", "employees", column: "attendant_id"
   add_foreign_key "clients_managers", "clients"
   add_foreign_key "clients_managers", "employees", column: "manager_id"
   add_foreign_key "clients_trainings", "clients"
   add_foreign_key "clients_trainings", "trainings"
+  add_foreign_key "companies", "regional_centers"
   add_foreign_key "compliance_corrective_actions", "compliance_form_submissions", column: "form_submission_id"
   add_foreign_key "compliance_corrective_actions", "incident_reports"
   add_foreign_key "compliance_form_answers", "compliance_form_items", column: "form_item_id"

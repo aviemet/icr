@@ -30,6 +30,7 @@ en:
         name_band_title: Company
         name_band_description: Legal or display name for the organization.
         name_label: Company Name
+        regional_center_label: Regional Center
         addresses_title: Addresses
         addresses_add: Add address
         addresses_empty: No addresses yet.

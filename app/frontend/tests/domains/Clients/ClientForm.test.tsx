@@ -63,4 +63,15 @@ describe("ClientForm", () => {
 		expect(screen.getByRole("textbox", { name: /Middle Name/ })).not.toBeRequired()
 		expect(screen.getByRole("textbox", { name: /Client #/ })).not.toBeRequired()
 	})
+
+	it("omits preferred hospital", () => {
+		render(
+			<MantineProvider theme={ theme }>
+				<ClientForm to="/clients" client={ buildClient() } />
+			</MantineProvider>,
+		)
+
+		expect(screen.queryByRole("textbox", { name: /Preferred Hospital/ })).toBeNull()
+		expect(screen.getByRole("textbox", { name: /Preferred Language/ })).toBeTruthy()
+	})
 })

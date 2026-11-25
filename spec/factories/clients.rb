@@ -17,29 +17,32 @@
 #  number                :string
 #  preferred_hospital    :string
 #  preferred_language    :string
-#  regional_center       :string
+#  referred_by_other     :string
 #  slug                  :string           not null
 #  uci_number            :string
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  person_id             :uuid             not null
+#  regional_center_id    :uuid
 #
 # Indexes
 #
-#  index_clients_on_person_id  (person_id)
-#  index_clients_on_slug       (slug) UNIQUE
+#  index_clients_on_person_id           (person_id)
+#  index_clients_on_regional_center_id  (regional_center_id)
+#  index_clients_on_slug                (slug) UNIQUE
 #
 # Foreign Keys
 #
 #  fk_rails_...  (person_id => people.id)
+#  fk_rails_...  (regional_center_id => regional_centers.id)
 #
 FactoryBot.define do
   factory :client do
     active_at { 2.years.ago }
     number { Faker::Alphanumeric.alpha(number: 8).upcase }
     uci_number { Faker::Number.number(digits: 7).to_s }
-    regional_center { "Regional Center of the East Bay" }
     preferred_language { "English" }
+    regional_center
 
     person
 

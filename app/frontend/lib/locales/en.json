@@ -764,7 +764,7 @@
             "none": "None assigned",
             "open_shifts": "Open shifts to fill",
             "quick_links": "Quick Links",
-            "regional_center": "Regional Center",
+            "regional_center": "Referral",
             "save_link": "Save link",
             "schedule": "Schedule",
             "schedule_hint": "Open calendar",
@@ -1468,6 +1468,7 @@
           "phones_add": "Add phone",
           "phones_empty": "No phone numbers yet.",
           "phones_title": "Phone numbers",
+          "regional_center_label": "Regional Center",
           "save": "Update company",
           "title": "Company Details"
         },

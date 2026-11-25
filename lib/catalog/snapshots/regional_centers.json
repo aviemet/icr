@@ -1,0 +1,275 @@
+[
+  {
+    "code": "acrc",
+    "name": "Alta California Regional Center",
+    "active": true,
+    "website": "https://www.altaregional.org",
+    "address": {
+      "address": "2241 Harvard Street, Suite 100",
+      "city": "Sacramento",
+      "region": "CA",
+      "postal": "95815",
+      "country": "US"
+    }
+  },
+  {
+    "code": "cvrc",
+    "name": "Central Valley Regional Center",
+    "active": true,
+    "website": "https://www.cvrc.org",
+    "address": {
+      "address": "4615 North Marty Avenue",
+      "city": "Fresno",
+      "region": "CA",
+      "postal": "93722",
+      "country": "US"
+    }
+  },
+  {
+    "code": "elarc",
+    "name": "Eastern Los Angeles Regional Center",
+    "active": true,
+    "website": "https://www.elarc.org",
+    "address": {
+      "address": "1000 South Fremont Avenue",
+      "city": "Alhambra",
+      "region": "CA",
+      "postal": "91802",
+      "country": "US"
+    }
+  },
+  {
+    "code": "fnrc",
+    "name": "Far Northern Regional Center",
+    "active": true,
+    "website": "https://www.farnorthernrc.org",
+    "address": {
+      "address": "1900 Churn Creek Road, Suite 114",
+      "city": "Redding",
+      "region": "CA",
+      "postal": "96002",
+      "country": "US"
+    }
+  },
+  {
+    "code": "fdlrc",
+    "name": "Frank D. Lanterman Regional Center",
+    "active": true,
+    "website": "https://www.lanterman.org",
+    "address": {
+      "address": "3303 Wilshire Boulevard, Suite 700",
+      "city": "Los Angeles",
+      "region": "CA",
+      "postal": "90010",
+      "country": "US"
+    }
+  },
+  {
+    "code": "ggrc",
+    "name": "Golden Gate Regional Center",
+    "active": true,
+    "website": "https://www.ggrc.org",
+    "address": {
+      "address": "1355 Market Street, Suite 200",
+      "city": "San Francisco",
+      "region": "CA",
+      "postal": "94103",
+      "country": "US"
+    }
+  },
+  {
+    "code": "hrc",
+    "name": "Harbor Regional Center",
+    "active": true,
+    "website": "https://www.harborrc.org",
+    "address": {
+      "address": "21231 Hawthorne Boulevard",
+      "city": "Torrance",
+      "region": "CA",
+      "postal": "90503",
+      "country": "US"
+    }
+  },
+  {
+    "code": "irc",
+    "name": "Inland Regional Center",
+    "active": true,
+    "website": "https://www.inlandrc.org",
+    "address": {
+      "address": "1365 South Waterman Avenue",
+      "city": "San Bernardino",
+      "region": "CA",
+      "postal": "92408",
+      "country": "US"
+    }
+  },
+  {
+    "code": "krc",
+    "name": "Kern Regional Center",
+    "active": true,
+    "website": "https://www.kernrc.org",
+    "address": {
+      "address": "3200 North Sillect Avenue",
+      "city": "Bakersfield",
+      "region": "CA",
+      "postal": "93308",
+      "country": "US"
+    }
+  },
+  {
+    "code": "nbrc",
+    "name": "North Bay Regional Center",
+    "active": true,
+    "website": "https://www.nbrc.net",
+    "address": {
+      "address": "2351 Mendocino Avenue",
+      "city": "Santa Rosa",
+      "region": "CA",
+      "postal": "95403",
+      "country": "US"
+    }
+  },
+  {
+    "code": "nlacrc",
+    "name": "North Los Angeles County Regional Center",
+    "active": true,
+    "website": "https://www.nlacrc.org",
+    "address": {
+      "address": "9200 Oakdale Avenue, Suite 100",
+      "city": "Chatsworth",
+      "region": "CA",
+      "postal": "91311",
+      "country": "US"
+    }
+  },
+  {
+    "code": "rcrc",
+    "name": "Redwood Coast Regional Center",
+    "active": true,
+    "website": "https://www.redwoodcoastrc.org",
+    "address": {
+      "address": "525 2nd Street, Suite 300",
+      "city": "Eureka",
+      "region": "CA",
+      "postal": "95501",
+      "country": "US"
+    }
+  },
+  {
+    "code": "rceb",
+    "name": "Regional Center of the East Bay",
+    "active": true,
+    "website": "https://www.rceb.org",
+    "address": {
+      "address": "500 Davis Street, Suite 100",
+      "city": "San Leandro",
+      "region": "CA",
+      "postal": "94577",
+      "country": "US"
+    }
+  },
+  {
+    "code": "rcoc",
+    "name": "Regional Center of Orange County",
+    "active": true,
+    "website": "https://www.rcocdd.com",
+    "address": {
+      "address": "1525 North Tustin Avenue",
+      "city": "Santa Ana",
+      "region": "CA",
+      "postal": "92705",
+      "country": "US"
+    }
+  },
+  {
+    "code": "sarc",
+    "name": "San Andreas Regional Center",
+    "active": true,
+    "website": "https://www.sanandreasregional.org",
+    "address": {
+      "address": "6203 San Ignacio Avenue, Suite 200",
+      "city": "San Jose",
+      "region": "CA",
+      "postal": "95119",
+      "country": "US"
+    }
+  },
+  {
+    "code": "sdrc",
+    "name": "San Diego Regional Center",
+    "active": true,
+    "website": "https://www.sdrc.org",
+    "address": {
+      "address": "4355 Ruffin Road, Suite 200",
+      "city": "San Diego",
+      "region": "CA",
+      "postal": "92123",
+      "country": "US"
+    }
+  },
+  {
+    "code": "sgprc",
+    "name": "San Gabriel/Pomona Regional Center",
+    "active": true,
+    "website": "https://www.sgprc.org",
+    "address": {
+      "address": "75 Rancho Camino Drive",
+      "city": "Pomona",
+      "region": "CA",
+      "postal": "91766",
+      "country": "US"
+    }
+  },
+  {
+    "code": "sclarc",
+    "name": "South Central Los Angeles Regional Center",
+    "active": true,
+    "website": "https://www.sclarc.org",
+    "address": {
+      "address": "2500 South Western Avenue",
+      "city": "Los Angeles",
+      "region": "CA",
+      "postal": "90018",
+      "country": "US"
+    }
+  },
+  {
+    "code": "tcrc",
+    "name": "Tri-Counties Regional Center",
+    "active": true,
+    "website": "https://www.tri-counties.org",
+    "address": {
+      "address": "520 East Montecito Street",
+      "city": "Santa Barbara",
+      "region": "CA",
+      "postal": "93103",
+      "country": "US"
+    }
+  },
+  {
+    "code": "vmrc",
+    "name": "Valley Mountain Regional Center",
+    "active": true,
+    "website": "https://www.vmrc.net",
+    "address": {
+      "address": "702 North Aurora Street",
+      "city": "Stockton",
+      "region": "CA",
+      "postal": "95202",
+      "country": "US"
+    }
+  },
+  {
+    "code": "wrc",
+    "name": "Westside Regional Center",
+    "active": true,
+    "website": "https://www.westsiderc.org",
+    "address": {
+      "address": "5901 Green Valley Circle, Suite 320",
+      "city": "Culver City",
+      "region": "CA",
+      "postal": "90230",
+      "country": "US"
+    }
+  }
+]

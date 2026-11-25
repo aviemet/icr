@@ -6,9 +6,10 @@ import { Routes } from "@/lib"
 
 interface EditClientProps {
 	client: Schema.ClientsEdit
+	regional_center_options?: Schema.RegionalCentersOptions[]
 }
 
-const EditClient = ({ client }: EditClientProps) => {
+const EditClient = ({ client, regional_center_options = [] }: EditClientProps) => {
 	const { t } = useTranslation()
 	const title = t("views.clients.edit.title", { name: client.name })
 
@@ -26,6 +27,7 @@ const EditClient = ({ client }: EditClientProps) => {
 				method="put"
 				to={ Routes.client(client.slug) }
 				client={ client }
+				regionalCenterOptions={ regional_center_options }
 			/>
 		</RecordFormPage>
 	)

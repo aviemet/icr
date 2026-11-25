@@ -2,6 +2,7 @@
 import type AddressesPersisted from '../Addresses/Persisted'
 import type ContactsPersisted from '../Contacts/Persisted'
 import type PhonesPersisted from '../Phones/Persisted'
+import type RegionalCentersOptions from '../RegionalCenters/Options'
 
 declare global {
   namespace Schema {
@@ -12,6 +13,8 @@ declare global {
       created_at: Date
       name: string
       phones: PhonesPersisted[]
+      regional_center?: RegionalCentersOptions
+      regional_center_id?: string
       updated_at: Date
     }
   }
