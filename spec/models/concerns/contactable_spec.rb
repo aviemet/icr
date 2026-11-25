@@ -44,4 +44,3 @@ RSpec.describe Contactable do
     it_behaves_like "a contactable entity"
   end
 end
-

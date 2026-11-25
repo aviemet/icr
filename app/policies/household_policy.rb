@@ -10,17 +10,17 @@ class HouseholdPolicy < ApplicationPolicy
         else
           attendant_ids = ClientsAttendant.current.where(attendant_id: employee.id).select(:client_id)
           managed_ids = ClientsManager.current.where(manager_id: employee.id).select(:client_id)
-          scope.joins(:households_clients)
+          scope.joins(:current_households_clients)
             .where(households_clients: { client_id: attendant_ids })
             .or(
-              scope.joins(:households_clients)
+              scope.joins(:current_households_clients)
                 .where(households_clients: { client_id: managed_ids }),
             )
             .distinct
         end
 
       when "Client"
-        scope.joins(:households_clients)
+        scope.joins(:current_households_clients)
           .where(households_clients: { client_id: user.person.client.id })
           .distinct
       else
@@ -68,7 +68,7 @@ class HouseholdPolicy < ApplicationPolicy
   def household_for_assigned_client?
     return false unless current_employee
 
-    client_ids = record.households_clients.select(:client_id)
+    client_ids = record.current_households_clients.select(:client_id)
     ClientsAttendant.current.exists?(attendant: current_employee, client_id: client_ids) ||
       ClientsManager.current.exists?(manager: current_employee, client_id: client_ids)
   end
@@ -76,6 +76,6 @@ class HouseholdPolicy < ApplicationPolicy
   def household_for_own_client?
     return false unless user.person&.client
 
-    record.households_clients.exists?(client_id: user.person.client.id)
+    record.current_households_clients.exists?(client_id: user.person.client.id)
   end
 end

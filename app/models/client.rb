@@ -67,8 +67,11 @@ class Client < ApplicationRecord
   has_many :doctors, through: :doctors_clients
   has_many :prescriptions, dependent: :destroy
 
-  has_one :households_client, dependent: :destroy
-  has_one :household, through: :households_client, dependent: :nullify
+  has_many :households_clients, dependent: :destroy, inverse_of: :client
+  has_one :current_households_client, -> {
+    merge(HouseholdsClient.current)
+  }, class_name: "HouseholdsClient", dependent: nil, inverse_of: :client
+  has_one :household, through: :current_households_client
 
   has_many :clients_managers,
     class_name: "ClientsManager",

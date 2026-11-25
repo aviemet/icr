@@ -2,11 +2,25 @@ class HouseholdsController < ApplicationController
   include Searchable
 
   expose :households, -> { policy_scope(search(Household.includes_associated)) }
-  expose :household, id: ->{ params[:slug] }, scope: ->{ policy_scope(Household.includes_associated) }, find_by: :slug
+  expose :household, id: -> { params[:slug] }, scope: -> { policy_scope(Household.includes_associated) }, find_by: :slug
 
-  sortable_fields %w(householdable_id householdable_type type number notes issued_at expires_at extra_fields)
+  sortable_fields %w(name)
 
-  strong_params :household, permit: [:householdable_id, :householdable_type, :type, :number, :notes, :issued_at, :expires_at, :extra_fields]
+  strong_params :household, permit: [
+    :name,
+    contact_attributes: [
+      :id,
+      addresses_attributes: [
+        :id, :name, :address, :address_2, :city, :region, :postal, :country, :notes, :category_id, :_destroy,
+      ],
+      phones_attributes: [
+        :id, :name, :number, :extension, :notes, :category_id, :_destroy,
+      ],
+      emails_attributes: [
+        :id, :name, :email, :notes, :category_id, :_destroy,
+      ],
+    ],
+  ]
 
   # @route GET /households (households)
   def index
@@ -26,8 +40,22 @@ class HouseholdsController < ApplicationController
   # @route GET /households/:slug (household)
   def show
     authorize household
+
+    household_for_show = Household.includes_show.find(household.id)
+
     render inertia: "Households/Show", props: {
-      household: -> { household.render(:show) }
+      household: -> { household_for_show.render(:show) },
+      can_update: -> { policy(household).update? },
+      available_clients: -> {
+        return [] unless policy(household).update?
+
+        Client
+          .joins(:person)
+          .includes(:person)
+          .where.not(id: HouseholdsClient.current.select(:client_id))
+          .order("people.last_name ASC", "people.first_name ASC")
+          .render(:options)
+      },
     }
   end
 
@@ -51,18 +79,16 @@ class HouseholdsController < ApplicationController
   def schedule
     authorize household
 
-    household_for_show = Household.includes(clients: [:person]).find(household.id)
+    household_for_show = Household.includes_show.find(household.id)
     range_start, range_end = DateRangeCalculator.new(params).call
-    masters = household.schedule_events_between(range_start, range_end)
 
     render inertia: "Households/Schedule", props: {
       household: -> { household_for_show.render(:show) },
       schedules: -> {
-        Calendar::RenderSchedule.call(
-          events: masters,
+        Households::RenderSchedule.call(
+          household: household,
           range_start: range_start,
           range_end: range_end,
-          view: :household,
         )
       },
     }
@@ -71,6 +97,7 @@ class HouseholdsController < ApplicationController
   # @route POST /households (households)
   def create
     authorize Household.new
+    household.assign_attributes(household_params)
     if household.save
       redirect_to household, notice: t("templates.controllers.notices.created", model: "Household")
     else
@@ -83,9 +110,10 @@ class HouseholdsController < ApplicationController
   def update
     authorize household
     if household.update(household_params)
-      redirect_to household, notice: t("templates.controllers.notices.updated", model: "Household")
+      redirect_to household_path(household, tab: params[:tab].presence || "profile"),
+        notice: t("templates.controllers.notices.updated", model: "Household")
     else
-      redirect_to edit_household_path, inertia: { errors: household.errors }
+      redirect_back_or_to edit_household_path(household), inertia: { errors: household.errors }
     end
   end
 

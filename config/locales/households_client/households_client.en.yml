@@ -1,0 +1,10 @@
+en:
+  activerecord:
+    errors:
+      models:
+        households_client:
+          attributes:
+            client_id:
+              already_member: Already belongs to a household
+            base:
+              overlapping_membership: Membership dates overlap another household membership for this client

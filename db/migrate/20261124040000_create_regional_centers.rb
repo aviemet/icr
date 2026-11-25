@@ -37,4 +37,3 @@ class CreateRegionalCenters < ActiveRecord::Migration[8.0]
     drop_table :regional_centers
   end
 end
-

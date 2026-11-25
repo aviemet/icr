@@ -30,6 +30,7 @@ job_title_defaults = [
     permissions: {
       "admin" => false,
       "client" => { "index" => true, "show" => true, "create" => false, "update" => false, "delete" => false },
+      "household" => { "index" => true, "show" => true, "create" => false, "update" => false, "delete" => false },
       "employee" => { "index" => true, "show" => true, "create" => false, "update" => false, "delete" => false },
       "doctor" => { "index" => true, "show" => true, "create" => false, "update" => false, "delete" => false },
       "vendor" => { "index" => true, "show" => true, "create" => false, "update" => false, "delete" => false },

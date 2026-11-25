@@ -29,6 +29,7 @@ class Employee::JobTitle::PermissionsCatalog
   RESOURCES = {
     "employee" => Employee,
     "client" => Client,
+    "household" => Household,
     "doctor" => Doctor,
     "vendor" => Vendor,
     "timesheet" => Timesheet,

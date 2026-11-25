@@ -36,4 +36,3 @@ RSpec.describe RegionalCenter do
     end
   end
 end
-

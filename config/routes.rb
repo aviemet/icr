@@ -139,7 +139,9 @@ Rails.application.routes.draw do
     resources :offers, controller: "employees/offers", only: [:create, :update, :destroy]
   end
 
-  resources :households, param: :slug, concerns: :schedulable
+  resources :households, param: :slug, concerns: :schedulable do
+    resources :memberships, controller: "households/memberships", only: [:create, :update]
+  end
 
   resources :shift_templates
 

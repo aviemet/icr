@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_24_040100) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_25_010728) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -756,11 +756,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_24_040100) do
   create_table "households_clients", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "household_id", null: false
     t.uuid "client_id", null: false
-    t.date "starts_at"
+    t.date "starts_at", null: false
     t.date "ends_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_households_clients_on_client_id"
+    t.index ["client_id"], name: "index_households_clients_one_open_per_client", unique: true, where: "(ends_at IS NULL)"
     t.index ["household_id"], name: "index_households_clients_on_household_id"
   end
 

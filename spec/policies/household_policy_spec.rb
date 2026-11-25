@@ -77,4 +77,43 @@ RSpec.describe HouseholdPolicy, type: :policy do
       expect(described_class.new(@admin_user, Household.new)).to authorize(:show)
     end
   end
+
+  permissions :create?, :update?, :destroy? do
+    it "allows admin" do
+      household = create(:household)
+      expect(described_class.new(@admin_user, household)).to authorize(:create)
+      expect(described_class.new(@admin_user, household)).to authorize(:update)
+      expect(described_class.new(@admin_user, household)).to authorize(:destroy)
+    end
+
+    it "allows job titles with household grants" do
+      @job_title.add_role(:create, Household)
+      @job_title.add_role(:update, Household)
+      @job_title.add_role(:destroy, Household)
+      household = create(:household)
+
+      policy = described_class.new(@employee_user_with_permission, household)
+      expect(policy).to authorize(:create)
+      expect(policy).to authorize(:update)
+      expect(policy).to authorize(:destroy)
+    end
+  end
+
+  describe ".scope with historical membership" do
+    it "excludes households for attendants of only former members" do
+      household = create(:household)
+      client = create(:client)
+      create(
+        :households_client,
+        household: household,
+        client: client,
+        starts_at: 30.days.ago.to_date,
+        ends_at: 1.day.ago.to_date,
+      )
+      create(:clients_attendant, client: client, attendant: @employee, starts_at: 1.day.ago)
+
+      scope = Pundit.policy_scope(@employee_user, Household)
+      expect(scope).not_to include(household)
+    end
+  end
 end

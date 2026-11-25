@@ -42,4 +42,3 @@ RSpec.describe "Settings::Companies", type: :request do
     end
   end
 end
-

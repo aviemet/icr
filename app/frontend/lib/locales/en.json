@@ -1153,8 +1153,69 @@
         }
       },
       "households": {
+        "edit": {
+          "description": "Update the household name.",
+          "title": "Edit Household"
+        },
+        "form": {
+          "create": "Create Household",
+          "household_details": "Household",
+          "household_details_description": "Display name for this home.",
+          "name": "Name",
+          "update": "Update Household"
+        },
+        "index": {
+          "new": "New Household",
+          "title": "Households"
+        },
+        "new": {
+          "description": "Name the household. Add address and members after create.",
+          "title": "New Household"
+        },
         "schedule": {
           "title": "%{name}'s Schedule"
+        },
+        "show": {
+          "clients": {
+            "add": "Add client",
+            "current": "Current members",
+            "done": "Done",
+            "edit": "Edit membership",
+            "empty_current": "No clients in this household yet.",
+            "empty_former": "No former members.",
+            "end": "End membership",
+            "ends_on": "Ends on",
+            "former": "Former members",
+            "manage": "Manage",
+            "save": "Save membership",
+            "schedule": "Schedule",
+            "starts": "Starts"
+          },
+          "contacts": {
+            "addresses": "Addresses",
+            "emails": "Emails",
+            "phones": "Phone Numbers",
+            "save": "Save Contact Details",
+            "title": "Household contact"
+          },
+          "overview": {
+            "address": "Home address",
+            "member_count": "Current members",
+            "members": "Members",
+            "no_address": "No address on file",
+            "schedule": "Schedule",
+            "schedule_hint": "View shifts for members during their membership dates."
+          },
+          "profile": {
+            "name": "Name"
+          },
+          "tabs": {
+            "clients": "Clients",
+            "contacts": "Contacts",
+            "overview": "Overview",
+            "profile": "Profile"
+          },
+          "title": "Household"
         }
       },
       "index_template": {

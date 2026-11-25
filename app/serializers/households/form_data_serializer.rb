@@ -1,3 +1,3 @@
 class Households::FormDataSerializer < HouseholdSerializer
-  attributes
+  has_one :contact, serializer: Contacts::PersistedSerializer
 end

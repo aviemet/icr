@@ -71,6 +71,6 @@ class Compliance::FormSubmissionPolicy < ApplicationPolicy
     return true if record.client_id.present? && client_ids.include?(record.client_id)
     return false if record.household_id.blank?
 
-    HouseholdsClient.exists?(household_id: record.household_id, client_id: client_ids)
+    HouseholdsClient.current.exists?(household_id: record.household_id, client_id: client_ids)
   end
 end

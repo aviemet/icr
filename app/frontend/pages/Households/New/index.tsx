@@ -1,27 +1,31 @@
-import { Title, Page, Section } from "@/components"
+import { useTranslation } from "react-i18next"
+
 import { HouseholdForm } from "@/domains/Households/Form"
+import { RecordFormPage } from "@/features"
 import { Routes } from "@/lib"
 
-interface INewHouseholdProps {
+interface NewHouseholdProps {
 	household: Schema.HouseholdsFormData
 }
 
-const NewHousehold = ({ ...data }: INewHouseholdProps) => {
-	const title = "New Household"
+const NewHousehold = ({ household }: NewHouseholdProps) => {
+	const { t } = useTranslation()
+	const title = t("views.households.new.title")
 
 	return (
-		<Page title={ title }>
-
-			<Section>
-				<Title>{ title }</Title>
-
-				<HouseholdForm
-					to={ Routes.households() }
-					{ ...data }
-				/>
-			</Section>
-
-		</Page>
+		<RecordFormPage
+			title={ title }
+			description={ t("views.households.new.description") }
+			breadcrumbs={ [
+				{ title: t("views.households.index.title"), href: Routes.households() },
+				{ title: "New" },
+			] }
+		>
+			<HouseholdForm
+				to={ Routes.households() }
+				household={ household }
+			/>
+		</RecordFormPage>
 	)
 }
 

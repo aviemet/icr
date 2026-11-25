@@ -67,7 +67,5 @@ class ClientSerializer < ApplicationSerializer
   belongs_to :regional_center, serializer: RegionalCenters::OptionsSerializer, optional: true
 
   type :string, optional: true
-  def referral_label
-    @object.referral_label
-  end
+  delegate :referral_label, to: :@object
 end

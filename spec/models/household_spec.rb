@@ -28,6 +28,27 @@ RSpec.describe Household do
   end
 
   describe "Associations" do
-    it{ is_expected.to have_many(:clients).through(:households_clients) }
+    it { is_expected.to have_many(:clients).through(:current_households_clients) }
+    it { is_expected.to have_many(:current_memberships) }
+    it { is_expected.to have_many(:past_memberships) }
+  end
+
+  describe "#clients" do
+    it "returns only current members" do
+      household = create(:household)
+      current_client = create(:client)
+      former_client = create(:client)
+      create(:households_client, household: household, client: current_client)
+      create(
+        :households_client,
+        household: household,
+        client: former_client,
+        starts_at: 30.days.ago.to_date,
+        ends_at: 1.day.ago.to_date,
+      )
+
+      expect(household.clients).to include(current_client)
+      expect(household.clients).not_to include(former_client)
+    end
   end
 end

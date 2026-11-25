@@ -1,70 +1,73 @@
-import { Box, Group, Link, Page, Section, Table, Text, Title } from "@/components"
-import { EditButton, ScheduleButton } from "@/components/Button"
+import { useTranslation } from "react-i18next"
+
+import { ScheduleButton, Text } from "@/components"
+import { RecordShowShell } from "@/features"
 import { Routes } from "@/lib"
 
-interface ShowHouseholdProps {
+import Clients from "./Clients"
+import Contacts from "./Contacts"
+import Overview from "./Overview"
+import Profile from "./Profile"
+
+export interface ShowHouseholdProps {
 	household: Schema.HouseholdsShow
+	can_update?: boolean
+	available_clients?: Schema.ClientsOptions[]
 }
 
-const ShowHousehold = ({ household }: ShowHouseholdProps) => {
-	const title = household.name || "Household"
+const ShowHousehold = ({
+	household,
+	available_clients = [],
+}: ShowHouseholdProps) => {
+	const { t } = useTranslation()
+	const title = household.name || t("views.households.show.title")
 
 	return (
-		<Page
+		<RecordShowShell
 			title={ title }
 			breadcrumbs={ [
-				{ title: "Households", href: Routes.households() },
+				{ title: t("views.households.index.title"), href: Routes.households() },
 				{ title, href: Routes.household(household.slug) },
 			] }
-		>
-			<Section fullHeight>
-				<Group justify="space-between" align="flex-start">
-					<Title>{ title }</Title>
-					<EditButton href={ Routes.editHousehold(household.slug) } label={ title } />
-				</Group>
-
-				<Box mt="md">
-					<Text fw={ 500 } mb="xs">
-						Clients in this household
-					</Text>
-
-					{ household.clients.length === 0
-						? (
-							<Text c="dimmed">
-								This household does not have any clients yet.
-							</Text>
-						)
-						: (
-							<Table>
-								<Table.Head>
-									<Table.Row>
-										<Table.Cell>Client</Table.Cell>
-										<Table.Cell className="actions">Actions</Table.Cell>
-									</Table.Row>
-								</Table.Head>
-								<Table.Body>
-									{ household.clients.map(client => (
-										<Table.Row key={ client.id }>
-
-											<Table.Cell>
-												<Link href={ Routes.client(client.slug) }>{ client.full_name }</Link>
-											</Table.Cell>
-
-											<Table.Cell>
-												<Group wrap="nowrap" gap="xs">
-													<ScheduleButton href={ Routes.scheduleClient(client.slug) } />
-												</Group>
-											</Table.Cell>
-
-										</Table.Row>
-									)) }
-								</Table.Body>
-							</Table>
-						) }
-				</Box>
-
-			</Section>
-		</Page>
+			meta={ (
+				<Text size="sm" c="dimmed" component="span">
+					{ household.current_memberships.length } { t("views.households.show.overview.members").toLowerCase() }
+				</Text>
+			) }
+			actions={ (
+				<ScheduleButton
+					href={ Routes.scheduleHousehold(household.slug) }
+					appearance="button"
+				/>
+			) }
+			tabs={ [
+				{
+					id: "overview",
+					label: t("views.households.show.tabs.overview"),
+					panel: <Overview household={ household } />,
+				},
+				{
+					id: "profile",
+					label: t("views.households.show.tabs.profile"),
+					panel: <Profile household={ household } />,
+				},
+				{
+					id: "contacts",
+					label: t("views.households.show.tabs.contacts"),
+					panel: <Contacts household={ household } />,
+				},
+				{
+					id: "clients",
+					label: t("views.households.show.tabs.clients"),
+					panel: (
+						<Clients
+							household={ household }
+							available_clients={ available_clients }
+						/>
+					),
+				},
+			] }
+		/>
 	)
 }
 

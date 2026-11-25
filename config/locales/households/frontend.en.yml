@@ -2,5 +2,57 @@
 en:
   views:
     households:
+      index:
+        title: Households
+        new: New Household
+      new:
+        title: New Household
+        description: Name the household. Add address and members after create.
+      edit:
+        title: Edit Household
+        description: Update the household name.
+      form:
+        name: Name
+        create: Create Household
+        update: Update Household
+        household_details: Household
+        household_details_description: Display name for this home.
+      show:
+        title: Household
+        tabs:
+          overview: Overview
+          profile: Profile
+          contacts: Contacts
+          clients: Clients
+        overview:
+          members: Members
+          member_count: Current members
+          address: Home address
+          schedule: Schedule
+          schedule_hint: View shifts for members during their membership dates.
+          no_address: No address on file
+        profile:
+          name: Name
+        contacts:
+          title: Household contact
+          phones: Phone Numbers
+          emails: Emails
+          addresses: Addresses
+          save: Save Contact Details
+        clients:
+          current: Current members
+          former: Former members
+          empty_current: No clients in this household yet.
+          empty_former: No former members.
+          add: Add client
+          manage: Manage
+          done: Done
+          edit: Edit membership
+          save: Save membership
+          end: End membership
+          ends_on: Ends on
+          starts: Starts
+          schedule: Schedule
+
       schedule:
         title: "%{name}'s Schedule"
