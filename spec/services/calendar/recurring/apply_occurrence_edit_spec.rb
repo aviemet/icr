@@ -17,7 +17,7 @@ RSpec.describe Calendar::Recurring::ApplyOccurrenceEdit do
       category_id: shift_category.id,
     )
     record.event_participants.build(participant_id: client.id, participant_type: "Client")
-    record.build_shift(employee_id: employee.id)
+    record.build_shift(employee_id: employee.id, mileage: 8.25)
     record.recurring_patterns.build(
       recurring_type: :weekly,
       offset: 1,
@@ -50,6 +50,7 @@ RSpec.describe Calendar::Recurring::ApplyOccurrenceEdit do
     continuation = Calendar::Event.where.not(id: event.id).order(:created_at).last
     expect(continuation.starts_at).to eq(Time.zone.parse("2026-11-23 11:00"))
     expect(continuation.recurring_patterns.sole.day_of_week).to eq(occurrence.wday)
+    expect(continuation.shift.mileage).to eq(8.25)
   end
 
   it "shifts the whole series when all is chosen with a date change" do

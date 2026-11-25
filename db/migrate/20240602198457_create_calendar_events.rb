@@ -5,6 +5,7 @@ class CreateCalendarEvents < ActiveRecord::Migration[8.0]
       t.datetime :starts_at
       t.datetime :ends_at
       t.boolean :all_day, null: false, default: false
+      t.text :notes
 
       # Reference to original event for repeating event exception
       t.belongs_to :parent, type: :uuid, null: true, foreign_key: { to_table: :calendar_events }

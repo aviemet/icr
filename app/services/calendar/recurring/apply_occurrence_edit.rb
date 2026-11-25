@@ -195,9 +195,15 @@ module Calendar
                           else
                             @event.shift&.service_type_id
                           end
+        mileage = if shift_attrs&.key?(:mileage)
+                    shift_attrs[:mileage]
+                  else
+                    @event.shift&.mileage
+                  end
         target.build_shift(
           employee_id: employee_id.presence,
           service_type_id: service_type_id.presence,
+          mileage: mileage,
         )
       end
 

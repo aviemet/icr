@@ -7,6 +7,7 @@ declare global {
       id?: string
       calendar_event_id: string
       employee_id?: string
+      mileage?: string | number
       service_type: ServiceType
       service_type_id: string
     }

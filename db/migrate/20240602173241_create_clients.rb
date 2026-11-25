@@ -10,7 +10,8 @@ class CreateClients < ActiveRecord::Migration[8.0]
       t.string :slug, null: false, index: { unique: true }
 
       t.string :uci_number
-      t.string :regional_center
+      t.belongs_to :regional_center, type: :uuid, null: true, foreign_key: true
+      t.string :referred_by_other
       t.string :medi_cal_number
       t.date :ipp_starts_on
       t.date :ipp_ends_on

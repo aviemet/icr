@@ -6,6 +6,8 @@ class CreateShifts < ActiveRecord::Migration[8.0]
       t.belongs_to :timesheet, null: true, foreign_key: true, type: :uuid
 
       t.date :facilitator_approved_at
+      t.boolean :ihss, null: false, default: false
+      t.decimal :mileage, precision: 8, scale: 2
 
       t.belongs_to :category, null: false, foreign_key: true, type: :uuid
 

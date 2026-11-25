@@ -91,6 +91,37 @@ RSpec.describe "Api::CalendarEvents", type: :request do
       expect(Shift.order(created_at: :desc).first.service_type_id).to eq(overnight.id)
     end
 
+    it "persists mileage on the nested shift" do
+      client = create(:client)
+      employee = create(:employee, :employed)
+      event_category = Category.type("Calendar::Event").find_or_create_by!(name: "Shift") { |category|
+        category.system = true
+      }
+      params = {
+        calendar_event: {
+          starts_at: 1.day.from_now,
+          ends_at: 1.day.from_now + 8.hours,
+          category_id: event_category.id,
+          shift_attributes: {
+            employee_id: employee.id,
+            mileage: 12.5,
+          },
+          event_participants_attributes: [
+            { participant_id: client.id, participant_type: "Client" },
+          ],
+        },
+      }
+
+      expect {
+        post api_calendar_events_url, params: params
+      }.to change(Shift, :count).by(1)
+
+      expect(response).to have_http_status(:created)
+      shift = Shift.order(created_at: :desc).first
+      expect(shift.mileage).to eq(12.5)
+      expect(response.parsed_body.dig("shift", "mileage")).to eq("12.5")
+    end
+
     it "rejects multi-client participants when the service type disallows them" do
       client_one = create(:client)
       client_two = create(:client)

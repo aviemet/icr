@@ -5,6 +5,7 @@
 #  id                      :uuid             not null, primary key
 #  facilitator_approved_at :date
 #  ihss                    :boolean          default(FALSE), not null
+#  mileage                 :decimal(8, 2)
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  calendar_event_id       :uuid             not null
@@ -36,6 +37,7 @@ class ShiftSerializer < ApplicationSerializer
     :employee_id,
     :calendar_event_id,
     :service_type_id,
+    :mileage,
   )
 
   belongs_to :service_type, serializer: ServiceTypeSerializer

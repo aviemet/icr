@@ -5,7 +5,6 @@
 #  id          :uuid             not null, primary key
 #  all_day     :boolean          default(FALSE), not null
 #  ends_at     :datetime
-#  mileage     :decimal(8, 2)
 #  name        :string
 #  notes       :text
 #  starts_at   :datetime
@@ -36,7 +35,6 @@ class Calendar::EventSerializer < ApplicationSerializer
     :ends_at,
     :all_day,
     :notes,
-    :mileage,
   )
 
   has_many :recurring_patterns, serializer: Calendar::RecurringPatternSerializer

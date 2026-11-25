@@ -15,7 +15,6 @@ declare global {
       event_participants: EventParticipant[]
       is_recurring: boolean
       master_id: string
-      mileage?: string | number
       name?: string
       notes?: string
       occurrence_starts_at: Date

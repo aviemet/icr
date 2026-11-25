@@ -53,6 +53,15 @@ function getShiftServiceTypeIdFromResources(resources: BaseCalendarEvent["resour
 	return typeof shift.service_type_id === "string" ? shift.service_type_id : ""
 }
 
+function getShiftMileageFromResources(resources: BaseCalendarEvent["resources"]): number | string | null {
+	if(typeof resources !== "object" || resources === null || !("shift" in resources)) return null
+	const shift = resources.shift
+	if(typeof shift !== "object" || shift === null || !("mileage" in shift)) return null
+	const mileage = shift.mileage
+	if(typeof mileage === "number" || typeof mileage === "string") return mileage
+	return null
+}
+
 function getRecurrenceResources(
 	resources: BaseCalendarEvent["resources"],
 ): ScheduleRecurrenceResources | undefined {
@@ -136,6 +145,7 @@ export function EventForm({
 		if(isEdit && existingEvent) {
 			const employeeId = getEmployeeIdFromResources(existingEvent.resources)
 			const serviceTypeId = getShiftServiceTypeIdFromResources(existingEvent.resources)
+			const mileage = getShiftMileageFromResources(existingEvent.resources)
 			return {
 				calendar_event: {
 					id: masterEventId,
@@ -145,10 +155,10 @@ export function EventForm({
 					starts_at: dayjs(existingEvent.start).toISOString(),
 					ends_at: dayjs(existingEvent.end).toISOString(),
 					notes: "",
-					mileage: null,
 					shift: {
 						employee_id: employeeId,
 						service_type_id: serviceTypeId || DEFAULT_SERVICE_TYPE_SLUG,
+						mileage,
 					},
 					event_participants: baseParticipants,
 				},
@@ -161,8 +171,7 @@ export function EventForm({
 				starts_at: dayjs(start).toISOString(),
 				ends_at: dayjs(start).add(8, "hours").toISOString(),
 				notes: "",
-				mileage: null,
-				shift: { employee_id: "", service_type_id: DEFAULT_SERVICE_TYPE_SLUG },
+				shift: { employee_id: "", service_type_id: DEFAULT_SERVICE_TYPE_SLUG, mileage: null },
 				event_participants: baseParticipants,
 			},
 		}
@@ -353,7 +362,7 @@ export function EventForm({
 								<Grid.Col>
 									<TextInput
 										label={ t("views.clients.schedule.event_form.mileage") }
-										name="calendar_event.mileage"
+										name="calendar_event.shift.mileage"
 									/>
 								</Grid.Col>
 							</>

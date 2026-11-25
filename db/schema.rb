@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_25_010728) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_23_164500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -108,12 +108,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_25_010728) do
     t.datetime "starts_at"
     t.datetime "ends_at"
     t.boolean "all_day", default: false, null: false
+    t.text "notes"
     t.uuid "parent_id"
     t.uuid "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "notes"
-    t.decimal "mileage", precision: 8, scale: 2
     t.index ["category_id"], name: "index_calendar_events_on_category_id"
     t.index ["parent_id"], name: "index_calendar_events_on_parent_id"
   end
@@ -244,6 +243,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_25_010728) do
     t.string "color"
     t.string "slug", null: false
     t.string "uci_number"
+    t.uuid "regional_center_id"
+    t.string "referred_by_other"
     t.string "medi_cal_number"
     t.date "ipp_starts_on"
     t.date "ipp_ends_on"
@@ -256,8 +257,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_25_010728) do
     t.text "ihss_notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "regional_center_id"
-    t.string "referred_by_other"
     t.index ["person_id"], name: "index_clients_on_person_id"
     t.index ["regional_center_id"], name: "index_clients_on_regional_center_id"
     t.index ["slug"], name: "index_clients_on_slug", unique: true
@@ -299,9 +298,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_25_010728) do
 
   create_table "companies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
+    t.uuid "regional_center_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "regional_center_id"
     t.index ["regional_center_id"], name: "index_companies_on_regional_center_id"
   end
 
@@ -1122,10 +1121,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_25_010728) do
     t.uuid "calendar_event_id", null: false
     t.uuid "timesheet_id"
     t.date "facilitator_approved_at"
+    t.boolean "ihss", default: false, null: false
+    t.decimal "mileage", precision: 8, scale: 2
     t.uuid "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "ihss", default: false, null: false
     t.uuid "service_type_id", null: false
     t.index ["calendar_event_id"], name: "index_shifts_on_calendar_event_id", unique: true
     t.index ["category_id"], name: "index_shifts_on_category_id"

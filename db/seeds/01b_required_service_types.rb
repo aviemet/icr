@@ -6,6 +6,7 @@ defaults = [
   { name: "Vacation", system: true, billable: false, payable: true, color: "#B45309" },
   { name: "Sick", system: true, billable: false, payable: true, color: "#BE123C" },
   { name: "Other", system: true, billable: true, payable: true, color: "#0369A1" },
+  { name: "Overnight", billable: true, payable: true, color: "#15803D" },
   { name: "Day Program", billable: true, payable: false, color: "#E8590C" },
   { name: "Natural Support", billable: false, payable: false, color: "#12B886" },
   { name: "Training", billable: false, payable: true, requires_notes: true, color: "#7950F2" },

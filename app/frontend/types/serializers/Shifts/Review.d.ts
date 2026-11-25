@@ -16,6 +16,7 @@ declare global {
       ihss: boolean
       is_recurring: boolean
       last_editor?: ({ id: string, name: string, initials: string, edited_at: string } | null)
+      mileage?: string | number
       occurrence_starts_at?: Date
       service_type: ServiceType
       service_type_id: string

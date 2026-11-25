@@ -30,7 +30,7 @@ type ScheduleResources = Record<string, object> & {
 	client?: Schema.ClientsPersisted
 	employee?: Schema.EmployeesPersisted
 	recurrence: ReturnType<typeof recurrenceResources>
-	shift?: { service_type_id: string }
+	shift?: { service_type_id: string, mileage?: string | number | null }
 }
 
 const OPEN_SHIFT_COLOR = vars.colors.red[6]
@@ -99,6 +99,7 @@ const Schedule = ({ household, schedules: initialSchedules }: ScheduleProps) => 
 				recurrence: recurrenceResources(event),
 				shift: {
 					service_type_id: event.shift?.service_type?.slug ?? event.shift?.service_type_id ?? "",
+					mileage: event.shift?.mileage ?? null,
 				},
 			}
 			if(client) resources.client = client

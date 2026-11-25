@@ -14,8 +14,7 @@ class Api::CalendarEventsController < Api::ApiController
     :category_id,
     :all_day,
     :notes,
-    :mileage,
-    shift_attributes: [:employee_id, :service_type_id],
+    shift_attributes: [:employee_id, :service_type_id, :mileage],
     event_participants_attributes: [:participant_id, :participant_type],
     recurring_patterns_attributes: [
       :recurring_type,
