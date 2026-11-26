@@ -31,6 +31,9 @@ vi.mock("@/lib/hooks", () => ({
 	usePermissions: () => ({
 		can: () => true,
 	}),
+	useFeatures: () => ({
+		enabled: () => true,
+	}),
 	useLocation: () => ({
 		paths: locationState.paths,
 	}),
@@ -102,6 +105,13 @@ describe("Sidebar active nav", () => {
 		renderSidebar(["households"])
 
 		expect(navRow("Households")).toHaveClass("active")
+		expect(navRow("Clients")).not.toHaveClass("active")
+	})
+
+	it("highlights Doctors as a top-level link on the doctors page", () => {
+		renderSidebar(["doctors"])
+
+		expect(navRow("Doctors")).toHaveClass("active")
 		expect(navRow("Clients")).not.toHaveClass("active")
 	})
 })

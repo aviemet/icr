@@ -30,7 +30,7 @@ class CreateRegionalCenters < ActiveRecord::Migration[8.0]
     regional_center = Class.new(ActiveRecord::Base) {
       self.table_name = "regional_centers"
     }
-    regional_center.insert_all(rows)
+    regional_center.insert_all(rows) # rubocop:disable Rails/SkipsModelValidations
   end
 
   def down

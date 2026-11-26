@@ -11,6 +11,12 @@ Rails.application.routes.draw do
     match "/:status", to: "errors#show", as: :error, via: :all
   end
 
+  match "/404", to: "errors#show", defaults: { status: 404 }, via: :all
+  match "/500", to: "errors#show", defaults: { status: 500 }, via: :all
+  match "/422", to: "errors#show", defaults: { status: 422 }, via: :all
+  match "/403", to: "errors#show", defaults: { status: 403 }, via: :all
+  match "/503", to: "errors#show", defaults: { status: 503 }, via: :all
+
   # CONCERNS #
 
   concern :schedulable do
@@ -102,6 +108,7 @@ Rails.application.routes.draw do
     resources :doctors, controller: "clients/doctors", only: [:create, :destroy]
     resources :documents, controller: "clients/documents", only: [:create, :destroy]
     resources :images, controller: "clients/images", only: [:create, :destroy]
+    resource :portrait, controller: "clients/portraits", only: [:create, :destroy]
     resources :trainings, controller: "clients/trainings", only: [:create, :update, :destroy]
     resources :compliance_form_submissions, controller: "clients/compliance_form_submissions", only: [:create]
     resource :life_detail, controller: "clients/life_details", only: [:update]
@@ -146,6 +153,17 @@ Rails.application.routes.draw do
   resources :shift_templates
 
   resources :caseloads, only: [:index, :create, :update]
+
+  resources :time_off_requests, only: [:index, :create] do
+    member do
+      post :approve
+      post :deny
+      post :cancel
+    end
+    collection do
+      post :manager_leave
+    end
+  end
 
   scope path: "payroll" do
     get "/", to: "pay_periods#index", as: :payroll_periods

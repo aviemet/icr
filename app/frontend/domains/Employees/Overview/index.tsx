@@ -142,7 +142,7 @@ export function EmployeeOverview({
 							title={ t("views.employees.show.tabs.requirements") }
 							hint="Fulfillment status"
 						/>
-						{ employee.current_pay_period_id && (
+						{ employee.status === "employed" && employee.current_pay_period_id && (
 							<BoardActionTile
 								href={ Routes.periodEmployeeReview(employee.current_pay_period_id, employee.id) }
 								title={ t("views.employees.show.overview.payroll_review") }
@@ -156,11 +156,13 @@ export function EmployeeOverview({
 								hint="Employment transitions"
 							/>
 						) }
-						<BoardActionTile
-							href={ Routes.scheduleEmployee(employee.slug) }
-							title="Schedule"
-							hint="Open calendar"
-						/>
+						{ employee.status !== "applicant" && employee.status !== "offered" && (
+							<BoardActionTile
+								href={ Routes.scheduleEmployee(employee.slug) }
+								title="Schedule"
+								hint="Open calendar"
+							/>
+						) }
 
 					</BoardActionGrid>
 				</MetricTile>

@@ -45,7 +45,6 @@ RSpec.describe ClientsTraining do
   end
 
   describe "Associations" do
-    it { is_expected.to belong_to(:client) }
     it { is_expected.to belong_to(:training).class_name("Employee::Training") }
   end
 end

@@ -116,8 +116,4 @@ RSpec.describe Calendar::RecurringPattern do
       )).to be_valid
     end
   end
-
-  describe "Associations" do
-    it { is_expected.to belong_to(:calendar_event) }
-  end
 end

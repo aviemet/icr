@@ -26,7 +26,6 @@ require "rails_helper"
 RSpec.describe Employee::Credential do
   subject(:credential) { build(:employee_credential) }
 
-  it { is_expected.to belong_to(:employee) }
   it { is_expected.to validate_presence_of(:name) }
   it { is_expected.to validate_presence_of(:credential_type) }
 

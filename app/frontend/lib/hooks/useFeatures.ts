@@ -6,6 +6,7 @@ export type FeatureKey = keyof SharedInertiaFeatures
 
 type SharedInertiaFeatures = {
 	compliance_forms: boolean
+	vendors: boolean
 }
 
 export function useFeatures() {

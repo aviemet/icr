@@ -7,6 +7,7 @@ import {
 	Button,
 	Group,
 	Link,
+	Presence,
 	Section,
 	Table,
 	Text,
@@ -117,7 +118,7 @@ export function IhssAssignmentBoard({
 														<Text size="sm">{ row.client_name }</Text>
 													</Table.Cell>
 													<Table.Cell>
-														<Text size="sm">{ row.authorized_hours ?? "-" }</Text>
+														<Text size="sm"><Presence>{ row.authorized_hours }</Presence></Text>
 													</Table.Cell>
 													<Table.Cell>
 														{ finalized

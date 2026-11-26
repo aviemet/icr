@@ -1,6 +1,6 @@
 import { TextInput } from "@mantine/core"
 
-import { Group, Link, type TableColumn } from "@/components"
+import { Group, Link, Presence, type TableColumn } from "@/components"
 import { EditButton, ScheduleButton } from "@/components/Button"
 import { DateTimeFormatter } from "@/components/Formatters"
 import { Routes } from "@/lib"
@@ -113,7 +113,7 @@ export function useClientTableColumns({
 					),
 				}
 				: {}),
-			render: (client) => client.uci_number || "-",
+			render: (client) => <Presence>{ client.uci_number }</Presence>,
 		},
 		{
 			accessor: "active_at",

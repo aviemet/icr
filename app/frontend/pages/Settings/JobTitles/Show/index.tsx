@@ -17,6 +17,7 @@ const actionLabels: Record<keyof Permissions, string> = {
 	update: "Edit",
 	delete: "Delete",
 	complete: "Complete",
+	approve: "Approve",
 }
 
 const permissionActions: Array<keyof Permissions> = [
@@ -26,6 +27,7 @@ const permissionActions: Array<keyof Permissions> = [
 	"update",
 	"delete",
 	"complete",
+	"approve",
 ]
 
 function grantedActions(resourcePermissions: Permissions) {

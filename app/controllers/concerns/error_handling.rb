@@ -48,8 +48,8 @@ module ErrorHandling
       error_details = if Rails.env.development?
                         {
                           message: exception.message,
-                          backtrace: exception.backtrace&.first(5),
-                          class: exception.class.name
+                          backtrace: Array(exception.backtrace),
+                          class: exception.class.name,
                         }
                       end
 

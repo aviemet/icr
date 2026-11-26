@@ -18,7 +18,8 @@ export function CaseloadMetrics({
 	unassignedCount,
 }: CaseloadMetricsProps) {
 	const { t } = useTranslation()
-	const unassignedTone = unassignedCount > 0 ? "alert" : "default"
+	const hasUnassigned = unassignedCount > 0
+	const unassignedTone = hasUnassigned ? "alert" : "default"
 
 	return (
 		<Box className={ classes.tileRow }>
@@ -39,11 +40,11 @@ export function CaseloadMetrics({
 			<MetricTile
 				title={ t("views.caseloads.metrics.unassigned") }
 				tone={ unassignedTone }
-				icon={ <WarningTriangleIcon size={ 16 } /> }
+				icon={ hasUnassigned ? <WarningTriangleIcon size={ 16 } /> : <ClientIcon size={ 16 } /> }
 			>
 				<MetricLine
 					label={ t("views.caseloads.metrics.unassigned") }
-					value={ <CountChip value={ unassignedCount } alert={ unassignedCount > 0 } /> }
+					value={ <CountChip value={ unassignedCount } alert={ hasUnassigned } /> }
 				/>
 			</MetricTile>
 		</Box>

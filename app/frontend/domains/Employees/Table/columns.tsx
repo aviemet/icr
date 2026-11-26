@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 
-import { Group, Link, type TableColumn } from "@/components"
+import { Group, Link, Presence, type TableColumn } from "@/components"
 import { EditButton, ScheduleButton } from "@/components/Button"
 import { DateTimeFormatter } from "@/components/Formatters"
 import {
@@ -137,7 +137,7 @@ export function useEmployeeTableColumns({
 					),
 				}
 				: {}),
-			render: (employee) => employee.number ?? "",
+			render: (employee) => <Presence>{ employee.number }</Presence>,
 		},
 		{
 			accessor: "actions",

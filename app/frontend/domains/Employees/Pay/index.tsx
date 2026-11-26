@@ -12,7 +12,7 @@ import {
 	RecordRow,
 } from "@/features"
 import { Routes } from "@/lib"
-import { useRecordCanUpdate } from "@/lib/hooks"
+import { usePermissions, useRecordCanUpdate } from "@/lib/hooks"
 
 interface EmployeePayProps {
 	employee: Schema.EmployeesShow
@@ -25,7 +25,12 @@ const PERIOD_OPTIONS = [
 
 export function EmployeePay({ employee }: EmployeePayProps) {
 	const { t } = useTranslation()
+	const { can } = usePermissions()
 	const canUpdate = useRecordCanUpdate()
+	const canManageTimeOff = can("time_off/requests", "index") ||
+		can("time_off/requests", "show") ||
+		can("time_off/requests", "create") ||
+		can("time_off/requests", "approve")
 	const rates = [...employee.pay_rates].sort((left, right) => {
 		const leftTime = left.starts_at ? new Date(left.starts_at).getTime() : 0
 		const rightTime = right.starts_at ? new Date(right.starts_at).getTime() : 0
@@ -38,6 +43,14 @@ export function EmployeePay({ employee }: EmployeePayProps) {
 				<MetricTile title={ t("views.employees.show.pay.payroll") }>
 					<Link href={ Routes.periodEmployeeReview(employee.current_pay_period_id, employee.id) }>
 						{ t("views.employees.show.pay.view_period_review") }
+					</Link>
+				</MetricTile>
+			) }
+
+			{ canManageTimeOff && (
+				<MetricTile title={ t("views.employees.show.pay.time_off") }>
+					<Link href={ Routes.timeOffRequests() }>
+						{ t("views.employees.show.pay.manage_time_off") }
 					</Link>
 				</MetricTile>
 			) }

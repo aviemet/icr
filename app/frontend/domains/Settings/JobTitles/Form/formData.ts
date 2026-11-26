@@ -5,6 +5,7 @@ export type Permissions = {
 	update?: boolean
 	delete?: boolean
 	complete?: boolean
+	approve?: boolean
 }
 
 export type JobTitleFormData = {
@@ -21,6 +22,7 @@ export type JobTitleFormData = {
 		incident_report: Permissions
 		employee_training: Permissions
 		requirement: Permissions
+		time_off_request: Permissions
 	}
 }
 
@@ -35,6 +37,11 @@ const emptyResourcePermissions: Permissions = {
 const emptyTrainingPermissions: Permissions = {
 	...emptyResourcePermissions,
 	complete: false,
+}
+
+const emptyTimeOffPermissions: Permissions = {
+	...emptyResourcePermissions,
+	approve: false,
 }
 
 export const emptyPermissions: {
@@ -52,6 +59,7 @@ export const emptyPermissions: {
 		incident_report: { ...emptyResourcePermissions },
 		employee_training: { ...emptyTrainingPermissions },
 		requirement: { ...emptyResourcePermissions },
+		time_off_request: { ...emptyTimeOffPermissions },
 	},
 }
 
@@ -75,6 +83,7 @@ export const permissionColumns: (keyof Permissions)[] = [
 	"update",
 	"delete",
 	"complete",
+	"approve",
 ]
 
 type TableRow = {
@@ -133,5 +142,10 @@ export const tableRows: TableRow[] = [
 		model: "requirement",
 		label: "Requirements",
 		permissions: ["index", "show", "create", "update", "delete"],
+	},
+	{
+		model: "time_off_request",
+		label: "Time Off",
+		permissions: ["index", "show", "create", "update", "delete", "approve"],
 	},
 ]

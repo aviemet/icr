@@ -5,6 +5,8 @@ RSpec.describe "Searchable", type: :request do
   describe "search functionality" do
     login_user(:admin)
 
+    before { Flipper.enable(:vendors) }
+
     it "performs basic search" do
       category = create(:category, :vendor)
       create(:vendor, name: "Acme Supplies", category: category)

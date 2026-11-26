@@ -30,7 +30,7 @@ RSpec.describe Payroll::IhssHourClassifier do
         ends_at: Time.zone.local(2024, 3, 12, 17, 0, 0),
         ihss: false,
       )
-      pay_period = create(:pay_period, starts_at: Date.new(2024, 3, 11), ends_at: Date.new(2024, 3, 17))
+      pay_period = instance_double(PayPeriod, id: SecureRandom.uuid)
 
       result = described_class.call(
         pay_period: pay_period,

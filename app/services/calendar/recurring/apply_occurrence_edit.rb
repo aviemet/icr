@@ -32,7 +32,12 @@ module Calendar
         form_starts_at = parse_time(@attrs[:starts_at]) || @event.starts_at
         form_ends_at = parse_time(@attrs[:ends_at]) || @event.ends_at
         duration = form_ends_at - form_starts_at
+        previous_starts_at = @event.starts_at
         series_starts_at, series_ends_at = series_times_for_all(form_starts_at, duration)
+        shift = master_shift
+        approval_snapshot = SyncOccurrenceApprovals.snapshot(shift)
+        override_snapshot = SyncOccurrenceOverrides.snapshot(shift)
+        delta = series_starts_at - previous_starts_at
 
         update_attrs = @attrs.except(:edit_scope, :occurrence_starts_at, :recurring_patterns_attributes)
         update_attrs[:starts_at] = series_starts_at
@@ -41,6 +46,22 @@ module Calendar
         ActiveRecord::Base.transaction do
           @event.update!(update_attrs)
           replace_patterns!(@attrs[:recurring_patterns_attributes]) if pattern_attrs_provided?
+        end
+
+        SyncOccurrenceApprovals.restore_remapped(
+          shift,
+          snapshot: approval_snapshot,
+          delta: delta,
+        )
+        SyncOccurrenceOverrides.restore_remapped(
+          shift,
+          snapshot: override_snapshot,
+          delta: delta,
+        )
+        if pattern_attrs_provided?
+          reloaded = @event.reload
+          SyncOccurrenceApprovals.purge_unexpanded(shift, event: reloaded)
+          SyncOccurrenceOverrides.purge_unexpanded(shift, event: reloaded)
         end
       end
 
@@ -73,6 +94,8 @@ module Calendar
           @event.event_exceptions.create!(
             cancelled: @occurrence_starts_at,
           )
+          SyncOccurrenceApprovals.delete_slot(master_shift, @occurrence_starts_at)
+          SyncOccurrenceOverrides.delete_slot(master_shift, @occurrence_starts_at)
 
           build_detached_event(form_starts_at, form_ends_at).save!
         end
@@ -264,6 +287,10 @@ module Calendar
         return value if value.acts_like?(:time)
 
         Time.zone.parse(value.to_s)
+      end
+
+      def master_shift
+        Shift.find_by(calendar_event_id: @event.id)
       end
     end
   end

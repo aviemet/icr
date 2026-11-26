@@ -40,9 +40,4 @@ RSpec.describe Employee::EmployeesJobTitle do
       end
     end
   end
-
-  describe "Associations" do
-    it{ is_expected.to belong_to(:employee) }
-    it{ is_expected.to belong_to(:job_title) }
-  end
 end

@@ -1,20 +1,20 @@
 require "rails_helper"
 
 RSpec.describe UserPolicy, type: :policy do
-  before do
-    @admin_user = create(:user).tap { |u| u.add_role(:admin) }
-    @employee = create(:employee, :employed)
-    @employee_user = create(:user, person: create(:person, employee: @employee))
-    @client = create(:client)
-    @client_user = create(:user, person: create(:person, client: @client))
-    @job_title = create(:job_title)
-    @employee_with_permission = create(:employee, :employed)
-    @employee_with_permission.assign_job_title(@job_title)
-    @employee_with_permission.reload
-    @employee_user_with_permission = create(:user, person: create(:person, employee: @employee_with_permission))
-  end
-
   describe ".scope" do
+    before do
+      @admin_user = create(:user).tap { |user| user.add_role(:admin) }
+      @employee = create(:employee, :employed)
+      @employee_user = create(:user, person: create(:person, employee: @employee))
+      @client = create(:client)
+      @client_user = create(:user, person: create(:person, client: @client))
+      @job_title = create(:job_title)
+      @employee_with_permission = create(:employee, :employed)
+      @employee_with_permission.assign_job_title(@job_title)
+      @employee_with_permission.reload
+      @employee_user_with_permission = create(:user, person: create(:person, employee: @employee_with_permission))
+    end
+
     it "returns all users for admin" do
       @users = create_list(:user, 3)
       scope = Pundit.policy_scope(@admin_user, User)
@@ -58,23 +58,25 @@ RSpec.describe UserPolicy, type: :policy do
 
   permissions :index? do
     it "allows admin" do
-      expect(described_class.new(@admin_user, User.new)).to authorize(:index)
+      expect(described_class.new(stub_admin_user, User.new)).to authorize(:index)
     end
   end
 
   permissions :show? do
     it "allows admin" do
-      expect(described_class.new(@admin_user, User.new)).to authorize(:show)
+      expect(described_class.new(stub_admin_user, User.new)).to authorize(:show)
     end
 
     it "allows a user to view their own settings" do
-      expect(described_class.new(@employee_user, @employee_user)).to authorize(:show)
+      user = instance_double(User, id: 1, has_role?: false, person: nil)
+      expect(described_class.new(user, user)).to authorize(:show)
     end
   end
 
   permissions :update? do
     it "allows a user to update their own record" do
-      expect(described_class.new(@employee_user, @employee_user)).to authorize(:update)
+      user = instance_double(User, id: 1, has_role?: false, person: nil)
+      expect(described_class.new(user, user)).to authorize(:update)
     end
   end
 end

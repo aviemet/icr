@@ -12,7 +12,7 @@ const EditVendor = ({ vendor }: EditVendorProps) => {
 	return (
 		<Page title={ title } breadcrumbs={ [
 			{ title: "Vendors", href: Routes.vendors() },
-			{ title: title, href: Routes.vendor(vendor.id) },
+			{ title: title, href: Routes.vendor(vendor.slug) },
 			{ title },
 		] }>
 			<Section>
@@ -20,7 +20,7 @@ const EditVendor = ({ vendor }: EditVendorProps) => {
 
 				<VendorForm
 					method="put"
-					to={ Routes.vendor(vendor.id) }
+					to={ Routes.vendor(vendor.slug) }
 					vendor={ vendor }
 				/>
 			</Section>

@@ -32,7 +32,8 @@ RSpec.describe "Api::Spotlights", type: :request do
       expect(types_and_slugs).not_to include(["client", other_client.slug])
     end
 
-    it "returns trainings, doctors, households and vendors for a matching query" do
+    it "returns trainings, doctors, households and vendors for a matching query when vendors are enabled" do
+      Flipper.enable(:vendors)
       training = create(:training, name: "Spotlight Safety Training")
       doctor_person = create(:person, first_name: "Spotlight", last_name: "Doctor")
       household = create(:household, name: "Spotlight Household")
@@ -56,6 +57,17 @@ RSpec.describe "Api::Spotlights", type: :request do
       expect(doctor_slugs).to include(Doctor.last.slug)
       expect(household_slugs).to include(household.slug)
       expect(vendor_slugs).to include(vendor.slug)
+    end
+
+    it "omits vendors from search results when the vendors feature is disabled" do
+      Flipper.disable(:vendors)
+      create(:vendor, name: "Spotlight Vendor")
+
+      get api_spotlights_url, params: { q: "Spotlight" }
+      expect(response).to be_successful
+
+      vendor_slugs = response.parsed_body.select { |item| item["type"] == "vendor" }.pluck("slug")
+      expect(vendor_slugs).to be_empty
     end
   end
 end

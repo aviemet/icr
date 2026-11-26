@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import { NewIcon } from "@/components/Icons"
 import { DoctorTable } from "@/domains/Doctors/Table"
 import { IndexPageTemplate } from "@/features"
@@ -9,14 +11,17 @@ interface DoctorIndexProps {
 }
 
 const DoctorsIndex = ({ doctors, pagination }: DoctorIndexProps) => {
+	const { t } = useTranslation()
+
 	return (
 		<IndexPageTemplate
-			title="Doctors"
+			title={ t("views.doctors.index.title") }
 			model="doctors"
 			pagination={ pagination }
 			deleteRoute={ Routes.doctors() }
+			dense
 			actions={ [
-				{ label: "New Doctor", href: Routes.newDoctor(), icon: <NewIcon /> },
+				{ label: t("views.doctors.index.new"), href: Routes.newDoctor(), icon: <NewIcon /> },
 			] }
 		>
 			<DoctorTable records={ doctors } model="doctors" />

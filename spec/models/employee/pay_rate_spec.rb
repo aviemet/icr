@@ -44,10 +44,6 @@ RSpec.describe Employee::PayRate do
     end
   end
 
-  describe "Associations" do
-    it{ is_expected.to belong_to(:employee) }
-  end
-
   describe "Scopes" do
     describe "active" do
       it "only returns active pay rates" do

@@ -175,5 +175,45 @@ RSpec.describe Payroll::PeriodSummary do
         )
       end
     end
+
+    it "counts facilitator-pending occurrences for recurring masters that expand into the period" do
+      travel_to Time.zone.local(2024, 3, 20, 12, 0, 0) do
+        Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:weekly]
+        Setting.payroll_period_day = "monday"
+
+        pay_period = create(
+          :pay_period,
+          starts_at: Date.new(2024, 3, 11).beginning_of_day,
+          ends_at: Date.new(2024, 3, 17).end_of_day,
+          finalized_at: nil,
+          approved_at: nil,
+        )
+        employee = create(:employee)
+        create(:timesheet, pay_period: pay_period, employee: employee, approved_at: nil)
+
+        master_starts = Time.zone.local(2024, 2, 12, 9, 0, 0)
+        shift = create(
+          :shift,
+          employee: employee,
+          facilitator_approved_at: nil,
+          calendar_event: create(
+            :calendar_event,
+            starts_at: master_starts,
+            ends_at: master_starts + 8.hours,
+          ),
+        )
+        create(
+          :calendar_recurring_pattern,
+          calendar_event: shift.calendar_event,
+          recurring_type: :weekly,
+          day_of_week: 1,
+          end_date: nil,
+        )
+
+        counts = described_class.new(pay_period, employee_ids: [employee.id]).show_counts
+
+        expect(counts[:facilitator_pending_shift_count]).to be > 0
+      end
+    end
   end
 end

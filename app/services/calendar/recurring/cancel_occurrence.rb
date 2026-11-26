@@ -16,7 +16,15 @@ module Calendar
         time = @occurrence_starts_at
         time = Time.zone.parse(time.to_s) unless time.acts_like?(:time)
 
-        @event.event_exceptions.create!(cancelled: time)
+        ActiveRecord::Base.transaction do
+          @event.event_exceptions.create!(cancelled: time)
+          SyncOccurrenceApprovals.delete_slot(master_shift, time)
+          SyncOccurrenceOverrides.delete_slot(master_shift, time)
+        end
+      end
+
+      def master_shift
+        Shift.find_by(calendar_event_id: @event.id)
       end
     end
   end

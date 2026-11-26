@@ -1,14 +1,16 @@
 import { router } from "@inertiajs/react"
 import { ActionIcon } from "@mantine/core"
+import axios from "axios"
 import dayjs from "dayjs"
 import { useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { Badge, Button, Group, Table, Text, Tooltip } from "@/components"
 import { Form } from "@/components/Form"
-import { CalendarIcon, TrashIcon } from "@/components/Icons"
+import { CalendarIcon, CheckIcon, TrashIcon } from "@/components/Icons"
 import { ServiceTypesDropdown } from "@/components/Inputs/Dropdowns"
 import { LastEditorAvatar } from "@/domains/TimeSheets/LastEditorAvatar"
+import { type IhssToggleDelta } from "@/domains/TimeSheets/ihssToggle"
 import { formatter, Routes } from "@/lib"
 import { parseTimeString } from "@/lib/dates"
 import { useUpdateCalendarEvent } from "@/queries/calendarEvents/mutations"
@@ -37,11 +39,14 @@ interface ReviewRowProps {
 	onDelete: () => void
 	deleting: boolean
 	employeeSlug: string
+	payPeriodId: string
+	clientId?: string
 	reloadHref: string
 	showClientColumn: boolean
 	canFacilitatorApprove: boolean
 	canEditIhss: boolean
 	canEditShiftType: boolean
+	onIhssToggle?: (delta: IhssToggleDelta) => void
 }
 
 export function ReviewRow({
@@ -52,11 +57,14 @@ export function ReviewRow({
 	onDelete,
 	deleting,
 	employeeSlug,
+	payPeriodId,
+	clientId,
 	reloadHref,
 	showClientColumn,
 	canFacilitatorApprove,
 	canEditIhss,
 	canEditShiftType,
+	onIhssToggle,
 }: ReviewRowProps) {
 	const { t } = useTranslation()
 
@@ -64,6 +72,7 @@ export function ReviewRow({
 	const endDate = useMemo(() => new Date(String(shift.ends_at)), [shift.ends_at])
 	const [startTime, setStartTime] = useState(() => dayjs(String(shift.starts_at)).format("HH:mm"))
 	const [endTime, setEndTime] = useState(() => dayjs(String(shift.ends_at)).format("HH:mm"))
+	const [ihssSaving, setIhssSaving] = useState(false)
 
 	const displayStart = mergedDateTime(startDate, startTime) ?? startDate
 	const displayEnd = mergedDateTime(endDate, endTime) ?? endDate
@@ -182,7 +191,13 @@ export function ReviewRow({
 							comboboxProps={ { withinPortal: true } }
 							onChange={ (nextValue) => {
 								if(!nextValue || nextValue === (shift.service_type_id ?? shift.service_type?.id)) return
-								router.patch(Routes.serviceTypeShift(shift.shift_id), { service_type_id: nextValue })
+								router.patch(Routes.serviceTypeShift(shift.shift_id), {
+									service_type_id: nextValue,
+									pay_period_id: payPeriodId,
+									occurrence_starts_at: shift.occurrence_starts_at
+										? new Date(String(shift.occurrence_starts_at)).toISOString()
+										: new Date(String(shift.starts_at)).toISOString(),
+								})
 							} }
 						/>
 					)
@@ -194,11 +209,9 @@ export function ReviewRow({
 			</Table.Cell>
 			{ canEditIhss && (
 				<Table.Cell>
-					<Badge variant="light" color={ shift.ihss ? "teal" : "gray" } size="sm">
-						{ shift.ihss
-							? t("views.timesheets.employee_review.ihss")
-							: t("views.timesheets.index.no_value") }
-					</Badge>
+					{ shift.ihss
+						? <CheckIcon color="green" aria-label={ t("views.timesheets.employee_review.ihss") } />
+						: null }
 				</Table.Cell>
 			) }
 			<Table.Cell>
@@ -226,7 +239,27 @@ export function ReviewRow({
 						<Button
 							size="xs"
 							variant={ shift.ihss ? "default" : "light" }
-							onClick={ () => router.patch(Routes.ihssShift(shift.shift_id), { ihss: !shift.ihss }) }
+							loading={ ihssSaving }
+							disabled={ ihssSaving }
+							onClick={ async () => {
+								setIhssSaving(true)
+								try {
+									const response = await axios.patch<IhssToggleDelta>(
+										Routes.ihssShift(shift.shift_id),
+										{
+											ihss: !shift.ihss,
+											pay_period_id: payPeriodId,
+											client_id: clientId,
+											occurrence_starts_at: shift.occurrence_starts_at
+												? new Date(String(shift.occurrence_starts_at)).toISOString()
+												: new Date(String(shift.starts_at)).toISOString(),
+										},
+									)
+									onIhssToggle?.(response.data)
+								} finally {
+									setIhssSaving(false)
+								}
+							} }
 						>
 							{ shift.ihss
 								? t("views.timesheets.employee_review.clear_ihss")
@@ -239,7 +272,12 @@ export function ReviewRow({
 								<Button
 									size="xs"
 									variant="default"
-									onClick={ () => router.post(Routes.unapproveShift(shift.shift_id)) }
+									onClick={ () => router.post(Routes.unapproveShift(shift.shift_id), {
+										pay_period_id: payPeriodId,
+										occurrence_starts_at: shift.occurrence_starts_at
+											? new Date(String(shift.occurrence_starts_at)).toISOString()
+											: new Date(String(shift.starts_at)).toISOString(),
+									}) }
 								>
 									{ t("views.pay_periods.client_show.unapprove") }
 								</Button>
@@ -248,7 +286,12 @@ export function ReviewRow({
 								<Button
 									size="xs"
 									variant="filled"
-									onClick={ () => router.post(Routes.approveShift(shift.shift_id)) }
+									onClick={ () => router.post(Routes.approveShift(shift.shift_id), {
+										pay_period_id: payPeriodId,
+										occurrence_starts_at: shift.occurrence_starts_at
+											? new Date(String(shift.occurrence_starts_at)).toISOString()
+											: new Date(String(shift.starts_at)).toISOString(),
+									}) }
 								>
 									{ t("views.pay_periods.client_show.approve") }
 								</Button>

@@ -113,9 +113,24 @@ const Schedule = ({ household, schedules: initialSchedules }: ScheduleProps) => 
 				start: ensureDate(event.starts_at),
 				end: ensureDate(event.ends_at),
 				allDay: event.all_day,
-				color: isOpenShift ? OPEN_SHIFT_COLOR : employee?.color,
+				color: isOpenShift
+					? (
+						event.shift?.service_type
+						&& event.shift.service_type.slug !== "regular"
+						&& event.shift.service_type.color
+							? event.shift.service_type.color
+							: OPEN_SHIFT_COLOR
+					)
+					: employee?.color,
 				open: isOpenShift,
-				borderColor: isOpenShift ? event.shift?.service_type?.color : undefined,
+				borderColor: isOpenShift
+					&& (
+						!event.shift?.service_type
+						|| event.shift.service_type.slug === "regular"
+						|| !event.shift.service_type.color
+					)
+					? event.shift?.service_type?.color
+					: undefined,
 				indicatorColor: client?.color,
 				indicatorLabel,
 				resources,

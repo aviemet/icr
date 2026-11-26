@@ -1,4 +1,4 @@
-import { Table, Link, type TableColumn } from "@/components"
+import { Table, Link, Presence, type TableColumn } from "@/components"
 import { EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
@@ -13,13 +13,17 @@ export function VendorTable({ records, model }: VendorTableProps) {
 			accessor: "name",
 			title: "Name",
 			sortable: true,
-			render: (vendor) => <Link href={ Routes.vendor(vendor.id) }>{ vendor.name }</Link>,
+			render: (vendor) => <Link href={ Routes.vendor(vendor.slug) }>{ vendor.name }</Link>,
 		},
 		{
 			accessor: "notes",
 			title: "Notes",
 			sortable: true,
-			render: (vendor) => <Link href={ Routes.vendor(vendor.id) }>{ vendor.notes }</Link>,
+			render: (vendor) => (
+				<Link href={ Routes.vendor(vendor.slug) }>
+					<Presence>{ vendor.notes }</Presence>
+				</Link>
+			),
 		},
 		{
 			accessor: "actions",
@@ -27,7 +31,7 @@ export function VendorTable({ records, model }: VendorTableProps) {
 			titleClassName: "actionsCell",
 			cellsClassName: "actionsCell",
 			sortable: false,
-			render: (vendor) => <EditButton href={ Routes.editVendor(vendor.id) } />,
+			render: (vendor) => <EditButton href={ Routes.editVendor(vendor.slug) } />,
 		},
 	]
 

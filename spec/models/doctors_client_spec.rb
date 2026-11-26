@@ -35,9 +35,4 @@ RSpec.describe DoctorsClient do
     end
 
   end
-
-  describe "Associations" do
-    it{ is_expected.to belong_to(:doctor) }
-    it{ is_expected.to belong_to(:client) }
-  end
 end

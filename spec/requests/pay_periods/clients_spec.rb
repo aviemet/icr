@@ -146,6 +146,23 @@ RSpec.describe "pay period clients views", type: :request do
       expect(inertia.props[:shift_ot_hours]).to be_a(Hash)
     end
 
+    it "skips sync_shifts! on Inertia partial reloads used by Mark IHSS" do
+      client = create(:client)
+      employee = create(:employee, :employed)
+      pay_period, _shift = create_period_with_client_shift(client: client, employee: employee)
+
+      expect_any_instance_of(PayPeriod).not_to receive(:sync_shifts!)
+
+      get client_period_path(pay_period, client.id),
+        headers: {
+          "X-Inertia" => "true",
+          "X-Inertia-Partial-Data" => "shifts,shift_ot_hours,ihss_hours_used",
+          "X-Inertia-Partial-Component" => "PayPeriods/Client",
+        }
+
+      expect(response).to have_http_status(:success)
+    end
+
     it "expands recurring masters into in-period occurrence rows" do
       Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
       client = create(:client)
@@ -191,7 +208,10 @@ RSpec.describe "pay period clients views", type: :request do
       client = create(:client)
       employee = create(:employee, :employed)
       pay_period, shift = create_period_with_client_shift(client: client, employee: employee)
-      shift.update!(facilitator_approved_at: Date.new(2024, 3, 20))
+      ShiftOccurrenceApproval.approve!(
+        shift: shift,
+        occurrence_starts_at: shift.calendar_event.starts_at,
+      )
 
       get period_path(pay_period)
 

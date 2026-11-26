@@ -2,7 +2,7 @@ import { router } from "@inertiajs/react"
 import { useModals } from "@mantine/modals"
 import { useTranslation } from "react-i18next"
 
-import { Avatar, Badge, Button, Group, Link, Stack, Table, type TableColumn, Text } from "@/components"
+import { Avatar, Badge, Button, Group, Link, Presence, Stack, Table, type TableColumn, Text } from "@/components"
 import { finalApproveWithWarning } from "@/domains/PayPeriods/finalApproveWithWarning"
 import { payrollApprovalStatus } from "@/domains/PayPeriods/payrollFilters"
 import { formatter, Routes } from "@/lib"
@@ -12,6 +12,9 @@ interface EmployeeHoursMap {
 	ot_hours?: number
 	ihss_hours?: number
 	company_hours?: number
+	pto_hours?: number
+	sick_hours?: number
+	holiday_hours?: number
 }
 
 interface EmployeeExceptionsMap {
@@ -51,13 +54,15 @@ export function EmployeesTable({
 }: EmployeesTableProps) {
 	const { t } = useTranslation()
 	const modals = useModals()
-	const noValue = t("views.timesheets.index.no_value")
+	const formatHours = (hours: number | undefined) => (
+		<Presence>
+			{ typeof hours === "number" ? formatter.number.decimal(hours, 2) : null }
+		</Presence>
+	)
 
-	const formatHours = (hours: number | undefined) =>
-		typeof hours === "number" ? formatter.number.decimal(hours, 2) : noValue
-
-	const formatExceptionCount = (count: number | undefined) =>
-		typeof count === "number" && count > 0 ? String(count) : noValue
+	const formatExceptionCount = (count: number | undefined) => (
+		<Presence>{ typeof count === "number" && count > 0 ? count : null }</Presence>
+	)
 
 	const columns: TableColumn<Schema.EmployeesPersisted>[] = [
 		{
@@ -105,10 +110,22 @@ export function EmployeesTable({
 			render: (employee) => formatHours(employee_hours[employee.id]?.company_hours),
 		},
 		{
-			accessor: "pto_sick",
-			title: t("views.timesheets.index.employees.pto_sick"),
+			accessor: "pto_hours",
+			title: t("views.timesheets.index.employees.pto_hours"),
 			sortable: false,
-			render: () => noValue,
+			render: (employee) => formatHours(employee_hours[employee.id]?.pto_hours),
+		},
+		{
+			accessor: "sick_hours",
+			title: t("views.timesheets.index.employees.sick_hours"),
+			sortable: false,
+			render: (employee) => formatHours(employee_hours[employee.id]?.sick_hours),
+		},
+		{
+			accessor: "holiday_hours",
+			title: t("views.timesheets.index.employees.holiday_hours"),
+			sortable: false,
+			render: (employee) => formatHours(employee_hours[employee.id]?.holiday_hours),
 		},
 		{
 			accessor: "exceptions",
@@ -123,7 +140,7 @@ export function EmployeesTable({
 			render: (employee) => {
 				const total = facilitatorShiftCountByEmployee[employee.id] ?? 0
 				const reviewed = facilitatorReviewedShiftCountByEmployee[employee.id] ?? 0
-				if(total === 0) return noValue
+				if(total === 0) return <Presence>{ null }</Presence>
 
 				return (
 					<Text size="sm">
@@ -185,10 +202,10 @@ export function EmployeesTable({
 											{ shifts.map(shift => (
 												<Text key={ shift.id } size="sm" c="dimmed">
 													{ t("views.pay_periods.show.unreviewed_shift_line", {
-														client: shift.client_names.join(", ") || noValue,
+														client: shift.client_names.join(", ") || "-",
 														when: shift.starts_at
 															? formatter.datetime.dateShort(shift.starts_at)
-															: noValue,
+															: "-",
 													}) }
 												</Text>
 											)) }

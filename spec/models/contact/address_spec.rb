@@ -27,7 +27,6 @@
 #  fk_rails_...  (contact_id => contacts.id)
 #
 require "rails_helper"
-require "models/shared/contact_method"
 
 RSpec.describe Contact::Address do
   describe "Validations" do
@@ -40,9 +39,5 @@ RSpec.describe Contact::Address do
         expect(build(:address, attr => nil)).not_to be_valid
       end
     end
-  end
-
-  describe "Associations" do
-    it_behaves_like "contact_method"
   end
 end

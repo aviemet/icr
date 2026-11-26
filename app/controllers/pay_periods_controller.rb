@@ -108,22 +108,7 @@ class PayPeriodsController < ApplicationController
   # @route GET /payroll/periods/:id/clients/:client_id (client_period)
   def client
     authorize pay_period, :show?
-    pay_period.sync_shifts! unless pay_period.finalized?
-
-    scoped_clients = Payroll::ClientScopeForUser.call(user: current_user, period: pay_period)
-    client_record = scoped_clients.find(params.expect(:client_id))
-    shifts_list = Payroll::ClientPeriodQueue.shifts_for_client(period: pay_period, client_id: client_record.id)
-    last_editors = Payroll::ShiftLastEditors.call(shifts_list)
-    shifts_list.each do |shift|
-      shift.instance_variable_set(:@_last_editor, last_editors[shift.calendar_event_id.to_s])
-    end
-    shift_exception_reasons = Payroll::ShiftExceptions.call(shifts_list)[:reasons_by_shift_id]
-    employee_ids = shifts_list.map(&:employee_id).compact.uniq
-    employees_list = Employee.where(id: employee_ids).includes(:person).to_a
-    hours_by_employee = Payroll::EmployeePeriodHours.call(pay_period, employee_ids)
-    shift_ot_hours = hours_by_employee.each_with_object({}) do |(_employee_id, hours_data), hash|
-      hash.merge!(hours_data[:shift_ot_hours] || {})
-    end
+    pay_period.sync_shifts! unless pay_period.finalized? || inertia_partial_data_request?
 
     render inertia: "PayPeriods/Client", props: {
       pay_period: -> { pay_period.render },
@@ -131,23 +116,18 @@ class PayPeriodsController < ApplicationController
       finalized: -> { pay_period.finalized? },
       can_facilitator_approve: -> { !pay_period.finalized? && facilitator_approve_access? },
       can_view_employees: -> { employee_combined_access? },
-      period_client: -> { client_record.render(:persisted) },
-      period_employees: -> {
-        employees_list
-          .map { |employee|
-            {
-              id: employee.id.to_s,
-              name: employee.full_name.presence || employee.name || "-",
-              slug: employee.slug,
-            }
-          }
-          .sort_by { |row| row[:name].to_s.downcase }
+      period_client: -> { client_review_client.render(:persisted) },
+      period_employees: -> { client_review_employees_payload },
+      shifts: -> { client_review_shifts.map { |row| row.render(:review) } },
+      shift_exception_reasons: -> {
+        Payroll::ShiftExceptions.call(client_review_shifts)[:reasons_by_shift_id]
       },
-      shifts: -> { shifts_list.map { |row| row.render(:review) } },
-      shift_exception_reasons: -> { shift_exception_reasons },
-      shift_ot_hours: -> { shift_ot_hours.transform_keys(&:to_s) },
+      shift_ot_hours: -> { client_review_shift_ot_hours },
       ihss_hours_used: -> {
-        Payroll::ClientPeriodIhssHours.call(pay_period: pay_period, client_ids: [client_record.id])[client_record.id.to_s] || 0.0
+        Payroll::ClientPeriodIhssHours.call(
+          pay_period: pay_period,
+          client_ids: [client_review_client.id],
+        )[client_review_client.id.to_s] || 0.0
       },
       ihss_assignment_mode: -> { Setting.ihss_assignment_mode },
       can_edit_ihss: -> { !pay_period.finalized? && employee_combined_access? },
@@ -263,6 +243,45 @@ class PayPeriodsController < ApplicationController
   end
 
   private
+
+  def client_review_client
+    @client_review_client ||= Payroll::ClientScopeForUser
+      .call(user: current_user, period: pay_period)
+      .find(params.expect(:client_id))
+  end
+
+  def client_review_shifts
+    @client_review_shifts ||= begin
+      shifts_list = Payroll::ClientPeriodQueue.shifts_for_client(
+        period: pay_period,
+        client_id: client_review_client.id,
+      )
+      last_editors = Payroll::ShiftLastEditors.call(shifts_list)
+      shifts_list.each do |shift|
+        shift.instance_variable_set(:@_last_editor, last_editors[shift.calendar_event_id.to_s])
+      end
+      shifts_list
+    end
+  end
+
+  def client_review_employees_payload
+    employee_ids = client_review_shifts.map(&:employee_id).compact.uniq
+    Employee.where(id: employee_ids).includes(:person).map { |employee|
+      {
+        id: employee.id.to_s,
+        name: employee.full_name.presence || employee.name || "-",
+        slug: employee.slug,
+      }
+    }.sort_by { |row| row[:name].to_s.downcase }
+  end
+
+  def client_review_shift_ot_hours
+    employee_ids = client_review_shifts.map(&:employee_id).compact.uniq
+    hours_by_employee = Payroll::EmployeePeriodHours.call(pay_period, employee_ids)
+    hours_by_employee.each_with_object({}) do |(_employee_id, hours_data), hash|
+      hash.merge!(hours_data[:shift_ot_hours] || {})
+    end.transform_keys(&:to_s)
+  end
 
   def period_employee_ids(period)
     PayPeriod.shifts_overlapping_period(period).assigned.distinct.pluck(:employee_id)

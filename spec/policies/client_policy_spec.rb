@@ -1,21 +1,33 @@
 require "rails_helper"
 
 RSpec.describe ClientPolicy, type: :policy do
-  before do
-    @admin_user = create(:user).tap { |u| u.add_role(:admin) }
-    @employee = create(:employee, :employed)
-    @employee_user = create(:user, person: create(:person, employee: @employee))
-    @client = create(:client)
-    @client_user = create(:user, person: create(:person, client: @client))
-    @job_title = create(:job_title)
-    @employee_with_permission = create(:employee, :employed)
-    @employee_with_permission.assign_job_title(@job_title)
-    @employee_with_permission.reload
-    @employee_user_with_permission = create(:user, person: create(:person, employee: @employee_with_permission))
-    @clients = create_list(:client, 3)
+  def employee_user_with_client_relationship(attendant: false, manager: false)
+    attendants = double(current: double(exists?: attendant))
+    managers = double(current: double(exists?: manager))
+    employee = instance_double(
+      Employee,
+      clients_attendants: attendants,
+      clients_managers: managers,
+      job_title: stub_job_title,
+    )
+    stub_employee_user(employee: employee)
   end
 
   describe ".scope" do
+    before do
+      @admin_user = create(:user).tap { |user| user.add_role(:admin) }
+      @employee = create(:employee, :employed)
+      @employee_user = create(:user, person: create(:person, employee: @employee))
+      @client = create(:client)
+      @client_user = create(:user, person: create(:person, client: @client))
+      @job_title = create(:job_title)
+      @employee_with_permission = create(:employee, :employed)
+      @employee_with_permission.assign_job_title(@job_title)
+      @employee_with_permission.reload
+      @employee_user_with_permission = create(:user, person: create(:person, employee: @employee_with_permission))
+      @clients = create_list(:client, 3)
+    end
+
     it "returns all clients for admin" do
       scope = Pundit.policy_scope(@admin_user, Client)
       expect(scope.count).to be >= 4
@@ -59,189 +71,177 @@ RSpec.describe ClientPolicy, type: :policy do
 
   permissions :index? do
     it "allows admin" do
-      expect(described_class.new(@admin_user, Client.new)).to authorize(:index)
+      expect(described_class.new(stub_admin_user, Client.new)).to authorize(:index)
     end
 
     it "allows employee with index permission" do
-      @job_title.add_role(:index, Client)
-      @employee_with_permission.reload
-
-      expect(described_class.new(@employee_user_with_permission, Client.new)).to authorize(:index)
+      user = stub_employee_user(job_title_roles: [[:index, Client]])
+      expect(described_class.new(user, Client.new)).to authorize(:index)
     end
 
     it "allows employee with current attendant relationship" do
-      client = create(:client)
-      create(:clients_attendant, client: client, attendant: @employee, starts_at: 1.day.ago)
-
-      expect(described_class.new(@employee_user, Client.new)).to authorize(:index)
+      user = employee_user_with_client_relationship(attendant: true)
+      expect(described_class.new(user, Client.new)).to authorize(:index)
     end
 
     it "denies employee without permission or attendant relationship" do
-      expect(described_class.new(@employee_user, Client.new)).not_to authorize(:index)
+      user = employee_user_with_client_relationship
+      expect(described_class.new(user, Client.new)).not_to authorize(:index)
     end
 
     it "allows client users" do
-      expect(described_class.new(@client_user, Client.new)).to authorize(:index)
+      expect(described_class.new(stub_client_user, Client.new)).to authorize(:index)
     end
   end
 
   permissions :show? do
     it "allows admin" do
-      expect(described_class.new(@admin_user, @client)).to authorize(:show)
+      expect(described_class.new(stub_admin_user, instance_double(Client))).to authorize(:show)
     end
 
     it "allows employee with show permission" do
-      @job_title.add_role(:show, Client)
-      @employee_with_permission.reload
-
-      expect(described_class.new(@employee_user_with_permission, @client)).to authorize(:show)
+      user = stub_employee_user(job_title_roles: [[:show, Client]])
+      expect(described_class.new(user, instance_double(Client))).to authorize(:show)
     end
 
     it "allows employee who is current attendant" do
-      create(:clients_attendant, client: @client, attendant: @employee, starts_at: 1.day.ago)
-
-      expect(described_class.new(@employee_user, @client)).to authorize(:show)
+      client = build_stubbed(:client)
+      current_attendants = double(exists?: true)
+      allow(client).to receive(:clients_attendants).and_return(double(current: current_attendants))
+      expect(described_class.new(stub_employee_user, client)).to authorize(:show)
     end
 
     it "denies employee without permission or attendant relationship" do
-      other_client = @clients.first
-      expect(described_class.new(@employee_user, other_client)).not_to authorize(:show)
+      client = build_stubbed(:client)
+      current_relations = double(exists?: false)
+      allow(client).to receive(:clients_attendants).and_return(double(current: current_relations))
+      allow(client).to receive(:clients_managers).and_return(double(current: current_relations))
+      expect(described_class.new(stub_employee_user, client)).not_to authorize(:show)
     end
 
     it "allows client users for own client" do
-      expect(described_class.new(@client_user, @client)).to authorize(:show)
+      client = instance_double(Client, id: 1)
+      expect(described_class.new(stub_client_user(client: client), client)).to authorize(:show)
     end
 
     it "denies client users for other client" do
-      other_client = @clients.first
-
-      expect(described_class.new(@client_user, other_client)).not_to authorize(:show)
+      user = stub_client_user(client: instance_double(Client, id: 1))
+      expect(described_class.new(user, instance_double(Client, id: 2))).not_to authorize(:show)
     end
   end
 
   permissions :schedule? do
     it "allows admin" do
-      expect(described_class.new(@admin_user, @client)).to authorize(:schedule)
+      expect(described_class.new(stub_admin_user, instance_double(Client))).to authorize(:schedule)
     end
 
     it "allows employee with show permission" do
-      @job_title.add_role(:show, Client)
-      @employee_with_permission.reload
-
-      expect(described_class.new(@employee_user_with_permission, @client)).to authorize(:schedule)
+      user = stub_employee_user(job_title_roles: [[:show, Client]])
+      expect(described_class.new(user, instance_double(Client))).to authorize(:schedule)
     end
 
     it "allows employee who is current attendant" do
-      create(:clients_attendant, client: @client, attendant: @employee, starts_at: 1.day.ago)
-
-      expect(described_class.new(@employee_user, @client)).to authorize(:schedule)
+      client = build_stubbed(:client)
+      allow(client).to receive(:clients_attendants).and_return(double(current: double(exists?: true)))
+      expect(described_class.new(stub_employee_user, client)).to authorize(:schedule)
     end
 
     it "allows client users for own client" do
-      expect(described_class.new(@client_user, @client)).to authorize(:schedule)
+      client = instance_double(Client, id: 1)
+      expect(described_class.new(stub_client_user(client: client), client)).to authorize(:schedule)
     end
   end
 
   permissions :new? do
     it "allows admin" do
-      expect(described_class.new(@admin_user, Client.new)).to authorize(:new)
+      expect(described_class.new(stub_admin_user, Client.new)).to authorize(:new)
     end
 
     it "allows employee with create permission" do
-      @job_title.add_role(:create, Client)
-      @employee_with_permission.reload
-
-      expect(described_class.new(@employee_user_with_permission, Client.new)).to authorize(:new)
+      user = stub_employee_user(job_title_roles: [[:create, Client]])
+      expect(described_class.new(user, Client.new)).to authorize(:new)
     end
 
     it "denies employee without create permission" do
-      expect(described_class.new(@employee_user, Client.new)).not_to authorize(:new)
+      expect(described_class.new(stub_employee_user, Client.new)).not_to authorize(:new)
     end
 
     it "denies client" do
-      expect(described_class.new(@client_user, Client.new)).not_to authorize(:new)
+      expect(described_class.new(stub_client_user, Client.new)).not_to authorize(:new)
     end
   end
 
   permissions :create? do
     it "allows admin" do
-      expect(described_class.new(@admin_user, Client.new)).to authorize(:create)
+      expect(described_class.new(stub_admin_user, Client.new)).to authorize(:create)
     end
 
     it "allows employee with create permission" do
-      @job_title.add_role(:create, Client)
-      @employee_with_permission.reload
-
-      expect(described_class.new(@employee_user_with_permission, Client.new)).to authorize(:create)
+      user = stub_employee_user(job_title_roles: [[:create, Client]])
+      expect(described_class.new(user, Client.new)).to authorize(:create)
     end
   end
 
   permissions :edit? do
     it "allows admin" do
-      expect(described_class.new(@admin_user, @client)).to authorize(:edit)
+      expect(described_class.new(stub_admin_user, instance_double(Client))).to authorize(:edit)
     end
 
     it "allows employee with update permission" do
-      @job_title.add_role(:update, Client)
-      @employee_with_permission.reload
-
-      expect(described_class.new(@employee_user_with_permission, @client)).to authorize(:edit)
+      user = stub_employee_user(job_title_roles: [[:update, Client]])
+      expect(described_class.new(user, instance_double(Client))).to authorize(:edit)
     end
 
     it "allows employee who currently manages the client" do
-      create(:clients_manager, client: @client, manager: @employee, starts_at: 1.day.ago)
-
-      expect(described_class.new(@employee_user, @client)).to authorize(:edit)
+      client = build_stubbed(:client)
+      allow(client).to receive(:clients_managers).and_return(double(current: double(exists?: true)))
+      expect(described_class.new(stub_employee_user, client)).to authorize(:edit)
     end
 
     it "denies employee who is only a current attendant" do
-      create(:clients_attendant, client: @client, attendant: @employee, starts_at: 1.day.ago)
-
-      expect(described_class.new(@employee_user, @client)).not_to authorize(:edit)
+      client = build_stubbed(:client)
+      allow(client).to receive(:clients_managers).and_return(double(current: double(exists?: false)))
+      expect(described_class.new(stub_employee_user, client)).not_to authorize(:edit)
     end
 
     it "allows client users for own client" do
-      expect(described_class.new(@client_user, @client)).to authorize(:edit)
+      client = instance_double(Client, id: 1)
+      expect(described_class.new(stub_client_user(client: client), client)).to authorize(:edit)
     end
 
     it "denies client users for other client" do
-      other_client = @clients.first
-
-      expect(described_class.new(@client_user, other_client)).not_to authorize(:edit)
+      user = stub_client_user(client: instance_double(Client, id: 1))
+      expect(described_class.new(user, instance_double(Client, id: 2))).not_to authorize(:edit)
     end
   end
 
   permissions :update? do
     it "allows admin" do
-      expect(described_class.new(@admin_user, @client)).to authorize(:update)
+      expect(described_class.new(stub_admin_user, instance_double(Client))).to authorize(:update)
     end
 
     it "allows employee with update permission" do
-      @job_title.add_role(:update, Client)
-      @employee_with_permission.reload
-
-      expect(described_class.new(@employee_user_with_permission, @client)).to authorize(:update)
+      user = stub_employee_user(job_title_roles: [[:update, Client]])
+      expect(described_class.new(user, instance_double(Client))).to authorize(:update)
     end
   end
 
   permissions :destroy? do
     it "allows admin" do
-      expect(described_class.new(@admin_user, @client)).to authorize(:destroy)
+      expect(described_class.new(stub_admin_user, instance_double(Client))).to authorize(:destroy)
     end
 
     it "allows employee with destroy permission" do
-      @job_title.add_role(:destroy, Client)
-      @employee_with_permission.reload
-
-      expect(described_class.new(@employee_user_with_permission, @client)).to authorize(:destroy)
+      user = stub_employee_user(job_title_roles: [[:destroy, Client]])
+      expect(described_class.new(user, instance_double(Client))).to authorize(:destroy)
     end
 
     it "denies employee without destroy permission" do
-      expect(described_class.new(@employee_user, @client)).not_to authorize(:destroy)
+      expect(described_class.new(stub_employee_user, instance_double(Client))).not_to authorize(:destroy)
     end
 
     it "denies client" do
-      expect(described_class.new(@client_user, @client)).not_to authorize(:destroy)
+      expect(described_class.new(stub_client_user, instance_double(Client))).not_to authorize(:destroy)
     end
   end
 end

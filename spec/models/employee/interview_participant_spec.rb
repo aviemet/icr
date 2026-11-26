@@ -30,6 +30,5 @@ RSpec.describe Employee::InterviewParticipant do
 
   describe "Associations" do
     it { is_expected.to belong_to(:interview).class_name("Employee::Interview") }
-    it { is_expected.to belong_to(:person) }
   end
 end

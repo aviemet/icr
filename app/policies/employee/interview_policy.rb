@@ -1,20 +1,40 @@
 class Employee::InterviewPolicy < ApplicationPolicy
   class Scope < ApplicationPolicy::Scope
     def resolve
-      return scope.all if user.has_role?(:admin)
+      return scope.all if admin?
+      return scope.all if job_title_allows?(:show, Employee) || job_title_allows?(:index, Employee)
 
-      case user.person&.agency_role
-      when "Employee"
-        if user.person.employee&.job_title&.has_role?(:index, Employee::Interview)
-          scope.all
-        else
-          scope.none
-        end
-      when "Client"
-        scope.none
-      else
-        scope.none
-      end
+      scope.none
     end
+  end
+
+  def index?
+    return true if admin?
+
+    job_title_allows?(:index, Employee) || job_title_allows?(:show, Employee)
+  end
+
+  def show?
+    return true if admin?
+
+    job_title_allows?(:show, Employee)
+  end
+
+  def create?
+    return true if admin?
+
+    job_title_allows?(:update, Employee) || job_title_allows?(:create, Employee)
+  end
+
+  def update?
+    return true if admin?
+
+    job_title_allows?(:update, Employee)
+  end
+
+  def destroy?
+    return true if admin?
+
+    job_title_allows?(:update, Employee) || job_title_allows?(:destroy, Employee)
   end
 end

@@ -19,17 +19,17 @@ en:
         title: Clients Overview
         view_all: View All Clients
       command_center: "%{company} Command Center"
-      schedule:
-        add: Add Event
-        empty: No upcoming events in your view.
+      my_schedule:
+        empty: No upcoming shifts on your schedule.
+        title: My Schedule
+        untitled: Shift
+        view: View my schedule
+      staffing:
+        empty: No open shifts to fill.
         open_shift: Open shift
         open_shifts: Open shifts to fill
-        shift_for: Shift - %{name}
-        title: Today's Schedule
-        untitled_shift: Shift
-        upcoming: Upcoming Appointments
-        view: View Schedule
-
+        title: Staffing
+        view_caseloads: View caseloads
       team:
         add_new: Add New Employee
         hiring_pipeline: In hiring pipeline
@@ -37,9 +37,11 @@ en:
         title: Team Overview
         view_all: View All Employees
       time:
+        my_hours_week: Your hours this week
         pending_timesheets: Timesheets pending approval
         title: Time Tracking
         total_hours: "%{hours} Hours"
         total_hours_week: Total hours tracked this week
         view: View Timesheets
+        view_profile: My profile
       welcome: Welcome back, %{name}

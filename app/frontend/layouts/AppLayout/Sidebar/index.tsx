@@ -1,4 +1,5 @@
 import clsx from "clsx"
+import { useTranslation } from "react-i18next"
 
 import {
 	Group,
@@ -8,10 +9,10 @@ import {
 	Text,
 	Divider,
 } from "@/components"
-import { ClientIcon, ClockIcon, ColumnsIcon, DashboardIcon, EmployeeIcon, HelpingIcon, PeopleIcon, SettingsIcon } from "@/components/Icons"
+import { CalendarIcon, ClientIcon, ClockIcon, ColumnsIcon, DashboardIcon, DoctorIcon, EmployeeIcon, HelpingIcon, PeopleIcon, SettingsIcon } from "@/components/Icons"
 import { IconProvider } from "@/layouts/Providers/IconProvider"
 import { matchesAtPosition, Routes } from "@/lib"
-import { useLocation, usePageProps, usePermissions } from "@/lib/hooks"
+import { useFeatures, useLocation, usePageProps, usePermissions } from "@/lib/hooks"
 import { useStore } from "@/lib/store"
 
 import { ToggleSidebarButton } from "../ToggleSidebarButton"
@@ -20,8 +21,10 @@ import * as classes from "../AppLayout.css"
 import { UserMenu } from "./UserMenu"
 
 export function Sidebar() {
+	const { t } = useTranslation()
 	const { auth: { user } } = usePageProps()
 	const { can } = usePermissions()
+	const { enabled } = useFeatures()
 	const { sidebarOpen, siteTitle } = useStore()
 	const { paths } = useLocation()
 
@@ -87,13 +90,6 @@ export function Sidebar() {
 										active={ matchesAtPosition(paths, [0, "households"]) }
 									/>
 								) }
-								{ can("doctors", "index") && (
-									<MenuLink
-										label="Doctors"
-										href={ Routes.doctors() }
-										active={ matchesAtPosition(paths, [0, "doctors"]) }
-									/>
-								) }
 							</MenuLink>
 						) }
 						{ can("employees", "index") && (
@@ -138,6 +134,14 @@ export function Sidebar() {
 								active={ matchesAtPosition(paths, [0, "payroll"]) }
 							/>
 						) }
+						{ (can("time_off/requests", "create") || can("time_off/requests", "index") || can("time_off/requests", "show")) && (
+							<MenuLink
+								label={ t("views.time_off.index.title") }
+								href={ Routes.timeOffRequests() }
+								leftSection={ <CalendarIcon /> }
+								active={ matchesAtPosition(paths, [0, "time_off_requests"]) }
+							/>
+						) }
 						{ can("report_definitions", "index") && (
 							<MenuLink
 								label="Reports"
@@ -151,19 +155,27 @@ export function Sidebar() {
 							>
 								{ can("report_requests", "index") && (
 									<MenuLink
-										label="Queue"
+										label="Report queue"
 										href={ Routes.reportRequests() }
 										active={ matchesAtPosition(paths, [0, "report_requests"]) }
 									/>
 								) }
 							</MenuLink>
 						) }
-						{ can("vendors", "index") && (
+						{ enabled("vendors") && can("vendors", "index") && (
 							<MenuLink
 								label="Vendors"
 								href={ Routes.vendors() }
 								leftSection={ <HelpingIcon /> }
 								active={ matchesAtPosition(paths, [0, "vendors"]) }
+							/>
+						) }
+						{ can("doctors", "index") && (
+							<MenuLink
+								label="Doctors"
+								href={ Routes.doctors() }
+								leftSection={ <DoctorIcon /> }
+								active={ matchesAtPosition(paths, [0, "doctors"]) }
 							/>
 						) }
 					</ul>

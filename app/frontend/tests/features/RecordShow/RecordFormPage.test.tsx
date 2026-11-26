@@ -2,7 +2,6 @@ import { MantineProvider } from "@mantine/core"
 import { cleanup, render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
-import { pageChrome } from "@/components/PageChrome"
 import { FormBand, RecordFormPage } from "@/features/RecordShow"
 import { theme } from "@/lib/theme"
 
@@ -36,7 +35,7 @@ describe("RecordFormPage", () => {
 		})
 	})
 
-	it("renders a panel header and panel form bands", () => {
+	it("renders the page identity and form content", () => {
 		render(
 			<MantineProvider theme={ theme } defaultColorScheme="dark">
 				<RecordFormPage
@@ -50,15 +49,9 @@ describe("RecordFormPage", () => {
 			</MantineProvider>,
 		)
 
-		expect(screen.getByText("New Client")).toBeInTheDocument()
+		expect(screen.getByRole("heading", { name: "New Client" })).toBeInTheDocument()
 		expect(screen.getByText("Add demographics, funding, and communication preferences.")).toBeInTheDocument()
 		expect(screen.getByText("Demographics")).toBeInTheDocument()
 		expect(screen.getByText("Form body")).toBeInTheDocument()
-
-		const header = screen.getByText("New Client").closest("header")
-		expect(header?.className).toContain(pageChrome.panelSurface)
-
-		const band = screen.getByText("Demographics").closest("section")
-		expect(band?.className).toContain(pageChrome.panelSurface)
 	})
 })

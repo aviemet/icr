@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import { NewIcon } from "@/components/Icons"
 import { VendorTable } from "@/domains/Vendors/Table"
 import { IndexPageTemplate } from "@/features"
@@ -9,14 +11,17 @@ interface VendorIndexProps {
 }
 
 const VendorsIndex = ({ vendors, pagination }: VendorIndexProps) => {
+	const { t } = useTranslation()
+
 	return (
 		<IndexPageTemplate
-			title="Vendors"
+			title={ t("views.vendors.index.title") }
 			model="vendors"
 			pagination={ pagination }
 			deleteRoute={ Routes.vendors() }
+			dense
 			actions={ [
-				{ label: "New Vendor", href: Routes.newVendor(), icon: <NewIcon /> },
+				{ label: t("views.vendors.index.new"), href: Routes.newVendor(), icon: <NewIcon /> },
 			] }
 		>
 			<VendorTable records={ vendors } model="vendors" />

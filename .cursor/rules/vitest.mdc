@@ -1,0 +1,32 @@
+---
+description: Vitest and RTL assertion standards for frontend tests
+globs: "app/frontend/tests/**/*.{ts,tsx}"
+alwaysApply: false
+---
+# Vitest / RTL
+
+Tests live under `app/frontend/tests` mirroring `app/frontend`. Use Vitest + Testing Library. Playwright e2e stays under `app/frontend/tests/e2e` and talks to a real server.
+
+## What to assert
+
+Assert behavior that can break: roles, actions, hrefs that are contracts, callback/wiring payloads, one representative datum, and branches.
+
+```tsx
+expect(screen.getByRole("link", { name: /4 Active clients/i }))
+  .toHaveAttribute("href", "/clients")
+expect(screen.getByText("Lawrence Schultz")).toBeInTheDocument()
+```
+
+Prefer smoke checks for presentational chrome: children render, interactive region exists, accent CSS variable when that variable is the public contract (`tone="alert"`).
+
+## Avoid
+
+- Listing every `views.*` i18n key or chrome copy as text (`getByText("views.dashboard.clients.title")`)
+- Pinning CSS-module / Linaria `className` strings unless the class is a behavioral API (e.g. calendar layout math, sidebar active state)
+- Snapshot tests of large UI boards
+- Asserting that prop strings passed into a header equal those same strings on screen
+
+## Form and provider setup
+
+- Forms: `remember={false}`; for form-context tests use Form from `use-inertia-form`, wrap with `MantineProvider`, stub `matchMedia` in `beforeEach`, wrap `Grid.Col` in `Grid`.
+- Translated assertion stability (backend messages in shared flows): use a stable locale; frontend tests that mock `t` as identity should still assert roles/actions over key laundry lists.

@@ -69,6 +69,10 @@ export function PermissionsSection() {
 								<Table.HeadCell>
 									<ColumnToggle permission="complete" label="Complete" />
 								</Table.HeadCell>
+
+								<Table.HeadCell>
+									<ColumnToggle permission="approve" label="Approve" />
+								</Table.HeadCell>
 							</Table.Row>
 						</Table.Head>
 

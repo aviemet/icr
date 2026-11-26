@@ -32,6 +32,24 @@ RSpec.describe Reports::Custom::ClientFaceSheet do
     expect(result[:filename]).to include("client-face-sheet")
   end
 
+  it "builds a PDF with an embedded portrait" do
+    client.portrait.attach(
+      io: Rails.root.join("spec/fixtures/files/sample.png").open,
+      filename: "portrait.png",
+      content_type: "image/png",
+    )
+
+    result = described_class.call(
+      user: user,
+      params: { "client_id" => client.id },
+      snapshot: snapshot,
+    )
+
+    expect(result[:content_type]).to eq("application/pdf")
+    expect(result[:content]).to start_with("%PDF")
+    expect(result[:content].bytesize).to be > 500
+  end
+
   it "rejects an unauthorized client id" do
     other_user = create(:user).tap(&:confirm)
 

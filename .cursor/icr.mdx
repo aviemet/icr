@@ -1,339 +1,76 @@
 # ICR Project Documentation
 
-## Project Overview
-This is a single-instance Rails application designed to run for a single company. There is no multi-tenancy support, and company details are managed through a singleton settings model.
+## Model organization
 
-### Model Organization
-- Employee-related models live under the `Employee::` namespace and use explicit `class_name` in associations (required for the namespace to resolve). Serializers mirror the same namespace.
-- Client care-domain models live under the `Client::` namespace (`SupportContact`, `Allergy`, `Diagnosis`, `LifeDetail`, `Enrollment`) with `self.table_name` and explicit `class_name` on `Client` associations. Decent Exposure in nested `Clients::*` controllers must pass `model: Client::...` or it resolves the un-namespaced constant.
+- Employee models live under `Employee::` with explicit `class_name` on associations; serializers mirror the namespace. Nested Decent Exposure controllers need `model: Employee::...`.
+- Client care-domain models live under `Client::` (`SupportContact`, `Allergy`, `Diagnosis`, `LifeDetail`, `Enrollment`) with `self.table_name` and explicit `class_name` on `Client` associations. Nested `Clients::*` Decent Exposure needs `model: Client::...` or it resolves the un-namespaced constant.
 
-## Project Milestones
+## Milestones
 
-When working on payroll or timesheet workflow features (Phase 6, Phase 7, or the payroll index/workflow), use the plan at [.cursor/plans/payroll_workflow_redesign_31672fdc.plan.md](.cursor/plans/payroll_workflow_redesign_31672fdc.plan.md) and document progress in this file (e.g. under Feature Documentation or by updating the Phase 6/7 checklist items below). The redesign plan's hard approval-window close is superseded: Approve stays available until finalize; due date is urgency only.
+- [x] Phase 1: Auth and authorization (open: passkeys, global session invalidation, session logs)
+- [ ] Phase 2: Document management (secure storage, categories/types, versioning, access controls, record association)
+- [x] Phase 3: Employee management (open: assign-to-client workflow, backup attendants)
+- [x] Phase 4: Client management (open: natural support people; MAR / controlled-substance logs)
+- [x] Phase 5: Calendar and scheduling (open: schedule directors, facilitator, attendants, natural support, backups)
+- [x] Phase 6: Timesheet management (open: automated timesheet generation rules beyond schedule/manual)
+- [x] Phase 7: IHSS hours (open: automated assignment rules)
+- [x] Phase 8: Customization (accent color, dyslexia font)
+- [x] Phase 9: Service types (open: client authorization hours ledger; auth/utilization reporting)
+- [ ] Phase 10: Care planning (EAP, health passport/ADL, ISP, service planning, appointments worksheet, FIR/SIR depth)
+- [ ] Phase 11: MAR (admin logs, missed-med tracking, notifications, reports)
+- [x] Phase 12: Forms/notes/reports engine (open: daily service notes; compliance builder UI; due/overdue queue as product surface; enable `compliance_forms` by default when ready; more stock reports; B-lite builder UI)
+- [x] Phase 13: HR extras (open: benefits enrollment; expenses/mileage prefs; timesheet attestation; messaging; LMS lessons)
+- [ ] Phase 14: Clock and EVV (back burner: clock-in/out on `Calendar::Event`/`Shift`; geofence; aggregator queues; dashboards)
 
-### Phase 1: Core Authentication and Authorization
-- [x] User authentication system
-  - [ ] Passkeys
-  - [ ] Global session invalidation
-  - [ ] Session logs with IPs and timestamps
-- [x] Role-based authorization using Pundit and Rolify
-  - [x] Define core roles (admin, manager, facilitator, employee)
-  - [x] Job title permission matrix (Rolify resource roles)
-  - [x] Implement authorization policies
-  - [x] UI visibility controls based on user permissions
-- [ ] Basic user profile management
-  - [x] User settings page
+## Stabilizing decisions
 
-### Phase 2: Document Management System
-- [ ] Set up secure file storage system
-- [ ] Document upload and management
-  - [ ] Define document categories and types
-  - [ ] Version control for documents
-  - [ ] Document access controls
-- [ ] Document association with records (users, clients, etc.)
+- Audit: paper_trail `versions` is the single audit store. Keep behavior gates on the model (`finalized_at`, `approved_at`, plus `created_at`/`updated_at`). Actor and audit-only actions live only on versions (`whodunnit`, custom `event`) - do not add `*_by` or audit-only `*_at` columns.
+- Concern config used in instance methods (e.g. sortable fields) must use `class_attribute`. Module-level ivars set in `included` are class ivars and are invisible in instance methods.
+- Singleton settings share one update endpoint across Inertia pages; use `redirect_back_or_to settings_path` so success and validation errors return to the originating page.
+- Frontend: named exports only except Inertia page modules (those MUST default-export). Optional named `Page` (e.g. `export const Page = withLayout(Inner, "layout")`) for the resolver.
 
-### Phase 3: Employee Management
-- [x] Employee onboarding workflow
-  - [x] Personal information management
-  - [x] Required documentation tracking
-  - [x] Employment status tracking
-- [x] Employee profile management
-  - [x] Qualification tracking
-  - [x] Document storage for IDs and certifications
-  - [x] Medical information storage (clearances: TB, physical, other)
-- [x] Requirements System
-  - [x] User-defined requirements for employees
-  - [x] Requirements can be scoped to job titles, clients, or company-wide
-  - [x] Trainings and credential types can satisfy requirements
-  - [x] Employment and client-schedule enforcement gates
-  - [x] Track requirement fulfillment status per employee
-- [ ] Workflow for assigning an Employee to a client
-- [ ] Mark employees as backup options for a client
-- [x] Allow the use of requirements and/or trainings to gate allowing employee to be scheduled with client
+## Domain lore
 
-### Phase 4: Client Management
-- [x] Client onboarding workflow
-  - [x] Personal and medical information
-  - [x] Care requirements documentation
-  - [x] Emergency contact management
-- [x] Client profile management
-  - [x] Service history tracking
-  - [x] Document management for client-specific files
-- [ ] Natural support people for a client (non-employee family/friends; unpaid presence that counts as the client not being alone)
-- [ ] MAR / controlled-substance logs (Future Feature)
+### Permissions and caseloads
 
-### Phase 5: Calendar and Scheduling
-- [x] Core calendar functionality
-  - [x] Multiple view strategies (day, week, month)
-  - [x] Proper handling of overlapping events
-- [x] Event management
-  - [x] Recurring event support (master + pattern expand-on-read; this-occurrence vs series edit)
-  - [x] Schedule conflict detection
-  - [x] Schedule assignment for employees and clients
-- [ ] Schedule any person associated with the client: directors, that client's facilitator, approved attendants, natural support, and backup employees
-- [x] Calendar access controls based on roles
-
-### Phase 6: Timesheet Management
-- [ ] Timesheet generation system
-  - [x] Automatic generation based on schedules
-  - [x] Manual entry support
-- [x] Timesheet review workflow
-  - [x] Facilitator review and approval process
-  - [x] Manager final approval
-- [x] Pay period management
-  - [x] Configure pay period settings
-  - [x] Automated reminders for approvals
-  - [x] Deadline tracking
-- [x] Overtime and overtime exception customization and options
-
-### Phase 7: IHSS Hours Management
-- [x] IHSS hours tracking system
-  - [x] Manual hour assignment (by shift or by period, per Settings)
-  - [ ] Automated assignment rules
-- [x] Hours calculation engine
-  - [x] Standard hours tracking
-  - [x] IHSS hours tracking
-  - [x] Overtime calculation for both types (co-employer setting)
-- [x] Co-employment settings and rules
-
-### Phase 8: Customization
-- [x] Color choice for site accent color
-  - [x] Dyslexia font option
-
-### Phase 9: Service Types and Authorizations
-- [x] Configurable service types (billable/payable, multi-client, notes/mileage flags, calendar colors)
-- [ ] Client authorization hours ledger (authorized vs delivered)
-- [ ] Authorization and utilization reporting
-
-### Phase 10: Care Planning and Client Clinical Depth
-- [ ] Emergency Assistance Plan (EAP) structured fields and printable face/EAP sheets
-- [ ] Health passport / ADL and matching tags (expand beyond free-text `Client::LifeDetail`)
-- [ ] ISP / person-centered plans (templates, objectives, quarterly review cadence)
-- [ ] Service planning: Client Connect logs, QA, assessments, client training guides
-- [ ] Appointments worksheet (staff + clinician sections; link to doctors and incidents)
-- [ ] Deepen incident reporting: FIR (incl. med-error) and SIR (RC-style categories, witnesses, treatment, finalize) on top of existing `IncidentReport`
-
-### Phase 11: Medication Administration (MAR)
-- [ ] Administration logs, missed-med tracking, notifications (expands Phase 4 MAR item)
-- [ ] Med administration and notification reports
-
-### Phase 12: Forms, Notes, and Reports Engine
-- [ ] Daily service notes (same Compliance:: form engine; separate template; ship after hazard assessment)
-- [x] Compliance form engine (FormTemplate / Section / Item / Submission / Answer / CorrectiveAction; household-or-client subject; paper_trail)
-- [x] Hazard Assessment and Correction Record (seeded home-safety checklist; submission capture; Client Show Compliance tab when flagged on)
-- [ ] Compliance form builder UI (Settings CRUD for sections/items; system templates stay seed-owned; SurveyJS Creator is a later licensed option, not the default path)
-- [ ] Compliance due/overdue work queue as a product surface (route exists under `/compliance/form_submissions`; flag-gated; not main-nav)
-- [ ] Enable `compliance_forms` Flipper flag by default once builder + Client-tab UX are ready
-- [x] Definition-driven report engine (ReportDefinition + ReportRequest queue, registry whitelist, list runner, caxlsx/CSV, 30-day purge)
-- [x] Stock report: Employee Requirement Expiration (employee_credential resource)
-- [ ] Additional stock reports (contacts, timesheets, IHSS/OT/auth utilization, payroll processing variants)
-- [ ] ADP-style and condensed payroll processing report variants as needed
-- [ ] B-lite builder UI (definitions already support it; no UI yet)
-
-### Phase 13: HR Extras and Workplace Comms
-- [ ] Employee benefits enrollment records
-- [ ] Expenses / mileage / holiday and sick-time preferences
-- [ ] Employee timesheet attestation and sign-off
-- [ ] Internal messaging, announcements, time-off requests
-- [ ] LMS-style training lessons/quizzes (beyond catalog + completion dates)
-
-### Phase 14: Clock and EVV (back burner)
-- [ ] Clock-in/out foundation attached to existing `Calendar::Event` / `Shift` identity
-- [ ] Geofence / location and revision-reason settings (GPS and device sensor integrations)
-- [ ] Aggregator credentials, service-code mapping, unverified/pending/history queues
-- [ ] Daily clock and EVV dashboards
-
-## Conventions
-### Architecture
-- Single-tenant application
-- Company settings use singleton pattern
-- Front end is Typescript using Yarn, Vite, Inertia.js and React (do *not* use npm or pnpm, this project uses yarn)
-- Backend is Ruby on Rails using Inertia
-- Audit: paper_trail `versions` is the single audit store. Keep domain state columns that gate behavior on the model (`finalized_at`, `approved_at`, plus standard `created_at`/`updated_at`). Actor and audit-only actions (e.g. payroll export) live only on versions (`whodunnit`, custom `event`) - do not add `*_by` or audit-only `*_at` columns.
-
-### Controller Concerns
-- Config used in instance methods (e.g. sortable fields) must use `class_attribute` so each including class gets its own config. Module-level instance variables set in `included` are class ivars and are not visible in instance methods.
-
-### Settings Controllers
-- Singleton settings share one update endpoint across multiple Inertia pages. Use `redirect_back_or_to settings_path` so both success and validation errors return to the originating page without losing Inertia error handling.
-
-### Development Guidelines
-- No multi-tenancy support
-- Changes must be atomic and focused
-- Frontend: no default exports; use named exports only (except for the app/frontend/pages directory, those all MUST be default exports). React components use function declarations: `export function ComponentName({ ...props }: Props) { ... }`. Barrel files re-export with `export { X } from "./Y"`. Inertia page modules may export a named `Page` (e.g. `export const Page = withLayout(Inner, "layout")`) for the resolver.
-- When checking HTTP response status, use exact status equality (e.g. 201), not range checks.
-- TypeScript: strict types, prefer existing types and generics over inline types. Do not use type assertions (as, as unknown as). Do not add explicit return type annotations when TypeScript can infer them; only annotate when intent is genuinely ambiguous. Fix type errors by correcting the types (e.g. union types, generics), not by casting.
-- Nested ternaries are disallowed; use `if`/`else` or early returns.
-- ASCII punctuation only in all generated or edited text (code, UI copy, docs, commits, locales). Use `'` not curly apostrophes/quotes; use `-` not en-dash (`–`) or em-dash (`—`); use `...` not ellipsis (`…`). Empty/missing display values use `-`, not `—`.
-
-## Feature Documentation
-*Document completed features and their core functionality here*
-
-### Dashboard
-- Root Inertia page loads `dashboard` props from `Dashboard::StatsSerializer.render(Dashboard::Stats#payload)` so the payload matches `Schema.DashboardStats` from TypesFromSerializers. When `user` is nil, `Dashboard::Stats` uses `Client.none`, `Employee.none`, `Calendar::Event.none`, and `Timesheet.none` instead of calling Pundit, so counts and lists collapse to empty without a separate blank payload path. Nested rows are `Struct` instances; use `Payload#to_h` for plain hashes. `Dashboard::StatsSerializer` and its nested serializers subclass `BaseSerializer` (not `ApplicationSerializer`) so the root DTO is not forced through `identifier`/ActiveRecord-oriented hooks. Counts and lists use `Pundit.policy_scope` for `Client`, `Employee`, `Calendar::Event`, and `Timesheet` so the numbers match what that user could list in those areas. Week hours sum shift lengths (calendar event duration) for scoped employees in the current calendar week. Pending timesheets are unapproved rows for the current pay period when that `PayPeriod` row already exists (GET does not create periods). Recent activity is derived from the newest clients and employees in scope, not from the activity table.
-
-### Client Show
-- Client show is URL-tabbed (Overview, Profile, Contacts, Medical, Care and Services, Trainings, Documents, Incidents). Schedule stays a member route. Nested writes live under `/clients/:client_slug/...` and authorize through `ClientPolicy#update?` (show for read). Overview counts and sibling collections come from one `Client.includes_show` load via `Clients::ShowSerializer` so allergy/prescription/support-contact/enrollment/attendant/training/doctor/hospital-visit ids stay lockstep. Tabs that declare `sections` on `RecordShowShell` add a `RecordShowSubNav` row under the primary tabs, keyed by `?section=` (primary tab changes clear `section`). Medical uses Overview (preferred hospital, linked doctors, allergies, diagnoses), Medications (prescriptions / dosage), and Hospital Visits (`Client::HospitalVisit`); nested prescription and hospital-visit redirects pass the matching section. CA-aware profile fields and IHSS profile fields live on `clients`; day programs are `Client::Enrollment` rows linked to `Vendor`. Support contacts use Personable (name and Contactable phones/emails/addresses live on Person). Document/image UI uses ActiveStorage `HasDocuments`/`HasImages` list/upload/purge (Phase 2 versioning still open). Client Trainings tab lists `ClientsTraining` join rows (optional link from catalog `Employee::Training`, with `required` for working with that client). Client-schedule requirements gate pairing via `ClientsAttendant` and calendar shifts that include that client.
-
-### Doctors
-- Doctors are Personable records with specialty, NPI, practice name, and notes. Show is URL-tabbed (Overview, Clients, Prescriptions, Diagnoses, Hospital Visits) from one `Doctor.includes_show` load. Client linking and prescription/diagnosis/hospital-visit attribution use `DoctorsDropdown` via `GET /api/options/doctors`. Incident reports may reference a doctor; hospital visits may reference an incident. MAR administration logs remain deferred.
-
-### Employee Show
-
-- Employee show is URL-tabbed (Overview, Profile, Contacts, Credentials, Assignments, Trainings, Requirements, Pay, Documents). Schedule and Status stay member routes. Nested writes live under `/employees/:employee_slug/...` and authorize through `EmployeePolicy#update?` (show for read). Overview counts and sibling collections come from one `Employee.includes_show` load via `Employees::ShowSerializer`. Status transitions use AASM events via `PUT .../status` with `employee[event]` (including `begin_employment` for applicant to employed). HR nested models under `Employee::` (`SupportContact`, `Credential`, `Clearance`) need Decent Exposure `model: Employee::...`. Credentials tab covers identifications, credentials, and clearances. Pay tab holds pay-rate history and deep-links to payroll employee review when a current `PayPeriod` row already exists (GET does not create periods). Trainings catalog lives at `/employees/trainings` and is gated by `Employee::Training` job-title grants (`employee_training` in the permissions matrix); assigning/editing dates on an employee uses employee update, while setting `completed_at` requires the `complete` grant on `Employee::Training` (seeded for Facilitator; Director via grant-all). Requirement fulfillment is computed live by `Requirement::FulfillmentForEmployee` from the same show load and passed as `requirement_fulfillments` (Overview unmet count + Requirements tab).
-
-### Requirements
-- Admin CRUD lives under Settings > Company > Requirements (`/settings/requirements`, types at `/settings/requirement_types`). A requirement belongs to a `Requirement::Type`, optional polymorphic scope (`Employee::JobTitle`, `Client`, or company-wide when blank), an `enforcement` (`advisory`, `employment`, `client_schedule`), and `Requirement::Item` rows that are either an `Employee::Training` fulfillable or a `credential_type` matching `Employee::Credential` (XOR). Satisfaction is AND across items: training items need `EmployeesTraining.completed_at`; credential items need a non-expired credential of that type. `Requirement::FulfillmentForEmployee` evaluates applicable requirements live (no persisted fulfillment rows). `Requirement::EmploymentGate` blocks `begin_employment` / `accept_offer` (and `Offers::Accept` hires). `Requirement::ClientScheduleGate` blocks `Calendar::Event` saves that pair a shift employee with a client participant, and `ClientsAttendant` create/client changes. Permissions catalog key is `requirement` (`Requirement::Requirement`); type CRUD reuses those grants via `Requirement::TypePolicy`. Dev seeds include Attendant DL employment, first-client protocol training (`client_schedule`), and advisory First Aid.
-
-### Permission System
-- Single stack: Devise auth, Rolify roles, Pundit policies. Job Titles are the admin-facing permission surface (Settings > Job Titles matrix).
-- Resource x action grants live as Rolify roles on `Employee::JobTitle` (e.g. `job_title.has_role?(:index, Client)`). User-level `:admin` bypasses all checks.
-- Relationship limits stay in Pundit scopes/policies: attendants via `ClientsAttendant`, managers via `ClientsManager` / `Employee::EmployeesManager`, self via own employee/timesheet/shift.
-- Shared Inertia `permissions` hash is built from Pundit policy methods and cached per user; job title role changes invalidate those cache keys.
-- Job-title "Grant all listed actions" checkbox expands to every catalogued resource action; it is not the same as user `:admin`.
+- Job-title "Grant all listed actions" expands to every catalogued resource action; it is not user `:admin`.
 - Catalog resources used as Rolify targets need `resourcify` on the model (e.g. `ClientsManager`); without it, `SyncPermissions` fails with "Resource type Doesn't exist".
-- Title-scoped gates: add the action to `PermissionsCatalog` (CRUD or `EXTRA_ACTIONS`), grant it in `db/seeds/02_required_permissions.rb`, and check via `standard_auth` / `job_title_allows?`. Do not hardcode job title names in policies.
+- Title-scoped gates: add the action to `PermissionsCatalog`, grant it in `db/seeds/02_required_permissions.rb`, and check via `standard_auth` / `job_title_allows?`. Do not hardcode job title names in policies.
+- Facilitator roster: join `Employee.actively_employed` through `Employee#active_employees_job_title` (uses `1.second.from_now`). Do not use `Employee::JobTitle#active_employees` for same-day assignments - that association compares `starts_at` to `Date.current` (midnight) and drops rows that started later the same day.
 
-### Caseloads
-- Org-wide facilitator caseloads are `ClientsManager` rows (`manager` = facilitator employee). `/caseloads` is gated on `permissions.clients_managers` (`ClientsManagerPolicy`). Nested employee/client manager tabs stay the per-record editors.
-- Facilitator roster query: join `Employee.actively_employed` through `Employee#active_employees_job_title` (uses `1.second.from_now`). Do not use `Employee::JobTitle#active_employees` for same-day assignments - that association compares `starts_at` to `Date.current` (midnight) and drops rows that started later the same day.
+### Calendar
 
-### Reports
-- Definition-driven engine: stock reports are `ReportDefinition` rows (seeded, `system: true`) that pick column/filter keys from a code whitelist in `Reports::Catalog` / `Reports::Resources::*`. Runs create `ReportRequest` with a frozen `definition_snapshot`, enqueue `Reports::GenerateJob`, and attach XLS/CSV via ActiveStorage. Completed requests older than 30 days are purged by `Reports::PurgeExpiredJob`. List mode uses AR + registry extractors; aggregate mode is reserved for active_reporter mappings. B-lite (staff column picker) should only add UI that writes non-system `ReportDefinition` rows through the same registry validation - do not add one-off `send_data` exporters for new stock reports. Permissions keys: `report_definition`, `report_request`. UI: `/reports` (definitions) and `/report_requests` (queue).
+- Recurring events expand-on-read on the models (`Calendar::Event#occurrences_in` / `.schedule_occurrences_in`, engine `Calendar::Recurring::ExpandOccurrences`). The calendar frontend maps serialized occurrence rows; it does not expand recurrence in JS.
+- Recurring edit scopes: `edit_scope` all|future|one. All shifts the master by `(form_starts_at - occurrence_starts_at)`; future truncates and continues; just-this detaches.
+- Gotcha: popover closes on click-outside. Date/time pickers inside the popover must not use a portal.
+- Client schedule: mutations must invalidate the React Query schedule query or the UI shows stale/duplicate events.
+- Participantable `calendar_events` is has_many through `event_participants`; use a distinct scope so the API returns each event once.
+- Gotcha: a Calendar::Event relation that joins and also includes employee job_title can raise Postgres "column reference starts_at is ambiguous". Filter via a subquery of ids, then apply includes on the outer relation (no joins on the outer query).
 
-### Compliance forms
-- Namespace `Compliance::`: `FormTemplate` / `FormSection` / `FormItem` define checklists; `FormSubmission` / `FormAnswer` / `CorrectiveAction` capture completions. Prefer `household` as subject (fallback `client`). Template `form_version` is the checklist revision column - do not name it `version` (PaperTrail owns that association name).
-- First seeded template: Hazard Assessment and Correction Record (`Compliance::HazardAssessmentSeed`, slug `hazard-assessment-correction-record`), quarterly cadence. `Compliance::EnsureDueSubmissions` opens the next draft from last submitted/closed + cadence interval; incomplete drafts use `incomplete` scope (draft only), while the queue uses `open_statuses` (draft + submitted).
-- Feature flag: Flipper key `compliance_forms` (default off). Controllers use `require_feature :compliance_forms`. Inertia shares `features.compliance_forms`; frontend `useFeatures()`. Toggle at `/admin/flipper` (admin role). No Sidebar or Spotlight entry.
-- UI when flagged on: Client Show **Compliance** tab (`ComplianceHistory` start/history); Settings > Company > Compliance forms (template metadata + read-only section/item list - no builder yet); deep-link queue at `/compliance/form_submissions`. Permissions catalog keys: `compliance_form_template`, `compliance_form_submission` (frontend `can` paths `compliance/form_templates`, `compliance/form_submissions`). Corrective actions may optionally link an `IncidentReport`.
-- Unfinished: first-party Settings section/item CRUD builder (preferred). SurveyJS Creator is commercial and schema-mismatched - only consider later if a licensed drag-drop editor is required.
+### Payroll and timesheets
 
-### Service Types
-- `ServiceType` is the operational kind of scheduled work on `shifts.service_type_id` (billable/payable, multi-client, notes/mileage flags, color). `Calendar::Event.category` stays the coarse event kind (e.g. system Shift). Assigned shift fill uses employee/client customization colors; open shifts keep error-red fill and use `service_type.color` on the left border (teal fallback). Settings > Calendar > Service Types. Overtime exemption field `category` matches `service_type.slug`. Seeded system types replace the old Shift Categories list; Day Program, Natural Support, and Training are non-system examples with open recurring sample events in `11_dev_shifts`.
+- Approve / Unapprove / bulk approve stay available until the period is finalized (`can_approve = !finalized?`). Payroll due date and `approval_window_open` are urgency signals only; they must never hard-block approval.
+- Two view families per period: clients-first (`/payroll/periods/:id/clients`) for facilitator caseload review; employee-combined (`/payroll/periods/:id` plus employee review) for Director final approve, finalize, and export. Facilitators without Timesheet `index` are redirected from the employee-combined period show to the clients board.
+- Facilitator review, shift-mode IHSS, and service type are per occurrence (`shift_occurrence_approvals` / `shift_occurrence_overrides` keyed by `shift_id` + `occurrence_starts_at`), kept in sync by `Calendar::Recurring` mutation services (just-this = cancel exception + detach; edit-all remaps after commit so event time-change invalidate does not wipe the remap). Director final approval is timesheet-level (`timesheets.approved_at`). Finalize and export never wait on facilitator stamps.
+- `PayPeriod.for_period_dates` reuses a period that starts on the same calendar day (snaps end; timezone-safe), or creates one and shrinks any predecessor that overlapped; shrinking reattaches out-of-range shifts via `PayPeriod.attach_shift!`. GET does not create periods.
+- Recurring payroll surface: `PayPeriod#shift_occurrences` (via `Shift#occurrences_in`) for hours, review tables, and counts. Occurrence row `id` matches hours OT keys; mutations use `shift_id` (the real Shift UUID).
+- IHSS classification runs first via `Payroll::IhssHourClassifier`. When `Setting.ihss_co_employer` is false, only company hours feed OT math; when true, all hours feed OT. Hours calculator reads intervals via a collector interface (default: scheduled shifts) so clock-in/out can swap later without changing OT math or UI contracts.
+- Attaching a shift or changing event times/participants clears timesheet `approved_at` and occurrence approval rows for that shift.
+- Semi-monthly with "last day of month": first period 1st-14th, second 15th-last day. Monthly with last day: last day of prior month through second-to-last day of current month.
+- OT exemption criteria field is still named `category` and matches `service_type.slug`.
 
-### Payroll Settings
-- Period types: weekly, bi-weekly, semi-monthly, monthly. Weekly/bi-weekly use a start weekday; monthly uses a configurable start date (including last day of month). Semi-monthly is fixed: 1st-15th and 16th-last.
-- Payroll due date: user-configurable setting that defines when the approval window closes for each period; supports multiple rule types (e.g. days after period end, day of week after period end, day of month). See payroll workflow redesign plan.
-- Overtime: configurable weekly/daily thresholds; exemption rules by service type slug (criteria field still named `category`), time range, duration.
-- Pay rates: historical records with effective dates; hourly and salary; currency.
+### Compliance, time off, dashboard
 
-## Technical Decisions
-### Authentication & Authorization
-- Devise, Pundit, Rolify. Job title Rolify roles drive resource/action grants; Pundit encodes relationship-scoped access. No separate Permission::Group system.
+- Compliance template revision column is `form_version` - do not name it `version` (PaperTrail owns that association). Flipper key `compliance_forms` defaults off; no Sidebar or Spotlight entry. Incomplete drafts use `incomplete` scope (draft only); the queue uses `open_statuses` (draft + submitted).
+- Time off: accrual and balances stay with Paychex; this app does not earn or enforce banks.
+- Dashboard: when `user` is nil, `Dashboard::Stats` uses `Client.none` / `Employee.none` / `Calendar::Event.none` / `Timesheet.none` instead of Pundit. Nested rows are Structs; use `Payload#to_h` for plain hashes. `Dashboard::StatsSerializer` subclasses `BaseSerializer` (not `ApplicationSerializer`).
 
-### Document Management
-- Active Storage; versioning for important documents; Pundit for access.
+## Frontend and test footguns
 
-### Calendar System
-- Multiple view strategies; timezones must be handled correctly; recurring events follow RFC 5545 (iCalendar).
-- Recurring events: one master `Calendar::Event` plus `Calendar::RecurringPattern` definition rows (daily/weekly/monthly/yearly, interval, ends never/on date/after N). Expand-on-read surface is on the models: `Calendar::Event#occurrences_in` / `.schedule_occurrences_in` (engine: `Calendar::Recurring::ExpandOccurrences`), and for payroll `Shift#occurrences_in(pay_period)` / `PayPeriod#shift_occurrences` (wraps as `Payroll::ShiftOccurrence`). Schedule APIs load masters via `for_schedule_range`, then `Calendar::RenderSchedule` serializes `schedule_occurrences_in` rows over the wire (`master_id`, `occurrence_starts_at`, `is_recurring`, display `starts_at`/`ends_at`). The calendar frontend maps those rows; it does not expand recurrence in JS. Create and edit share one EventForm with Repeat fields (hydrated from series patterns on edit). On save of a recurring edit, choose all / this-and-future / just-this (`edit_scope` all|future|one). All shifts the master by `(form_starts_at - occurrence_starts_at)` so date moves apply to the whole series; future truncates and continues; just-this detaches. All/future can replace pattern rows.
-- One display-setting drives both month and time-grid views (month strategies vs overlap for day/week), so per-strategy behavior can be added without changing the public API.
-- Gotcha: The popover closes on click-outside. Date/time pickers or other inputs inside the popover must not use a portal, or the popover will close when the user selects a value.
-- Client schedule: Events come from React Query; mutations must invalidate the schedule query so the calendar refetches. If invalidation is skipped, the UI can show stale or duplicate events.
-- Client schedule uniqueness: Participantable's calendar_events is has_many through event_participants; the join can return the same event multiple times. The association uses a distinct scope so the API returns each event once.
-- Gotcha: If a Calendar::Event relation uses joins and also includes employee job_title (via Employee's active job title scope), Postgres can raise "column reference starts_at is ambiguous". Avoid by filtering events via a subquery of ids, then applying includes on the outer relation (no joins on the outer query).
-
-### Timesheet System
-- Payroll is a time-approval and period-integrity workflow (approve timesheets, finalize/lock the period). A vendor-neutral hours export is available after finalize. EVV is deferred; keep shift and calendar_event identity intact as the future attachment point.
-- Two view families per period: **clients-first** (`/payroll/periods/:id/clients` and client drill-down) for facilitator caseload review and Director oversight; **employee-combined** (`/payroll/periods/:id` plus employee review) for Director final approve, finalize, and export. Facilitators without Timesheet `index` are redirected from the employee-combined period show to the clients board.
-- Facilitator review is shift-level (`shifts.facilitator_approved_at`), authorized when every Client on the event is on the facilitator's active `ClientsManager` caseload. Director final approval is timesheet-level (`timesheets.approved_at`). Directors may final-approve with unreviewed shifts; the UI warns with the gap list. Finalize and export never wait on facilitator stamps.
-- Payroll IA: `/payroll` is an attention home (counts + CTA into the current period); employee review is the timecard drill-down for the combined sheet.
-- Employee payroll review: per-employee view for a pay period; authorization follows timesheet show; Director final approve uses `final_approve?` (Timesheet `index`).
-- PayPeriod: one per (starts_at, ends_at); no overlapping periods; derived from settings. Use PayPeriod.for_period_dates(start_date, end_date) to resolve a period: it reuses a period that starts on the same calendar day (snapping end to the canonical range; timezone-safe), or creates one and shrinks any predecessor that overlapped into that range. Shrinking reattaches out-of-range shifts via PayPeriod.attach_shift!.
-- Timesheet: pre-submittal; tracks Director approval; belongs to PayPeriod and Employee; has many Shifts.
-- Shift create: PayPeriod.attach_shift! finds or creates the pay period that contains the shift date and attaches a timesheet. Pay periods appear because shifts are scheduled into them.
-- PayPeriod create/sync: sync_shifts! finds shifts via `Calendar::Event.for_schedule_range` (so recurring masters that expand into the period count). Non-recurring overlapping shifts are attached to this period's timesheets; recurring masters keep their original timesheet, and the period still gets an employee timesheet row so they appear in payroll.
-- Payroll index hours: Payroll::EmployeePeriodHours computes per-employee regular_hours, ot_hours, ihss_hours, and company_hours for a pay period. Uses Setting overtime_weekly_hours and overtime_daily_hours; splits work intervals by day (including overnight); applies active OvertimeExemption rules to exclude exempt intervals from OT; weekly OT and daily OT are summed. IHSS classification runs first via Payroll::IhssHourClassifier (shift flag or period assignments). When Setting.ihss_co_employer is false, only company hours feed OT math; when true, all hours feed OT. The calculator reads intervals via a collector interface (default: scheduled shifts), so payroll can later swap in a clock-in/out collector without changing overtime math or UI contracts.
-- Recurring shifts in payroll: use `PayPeriod#shift_occurrences` (via `Shift#occurrences_in`) for hours, review tables, and counts so every consumer shares one model surface. Occurrence row `id` matches hours OT keys; mutations use `shift_id` (the real Shift UUID). It does not require the master `timesheet_id` to point at the current period.
-- IHSS settings (Settings > Payroll > IHSS): `ihss_co_employer` and `ihss_assignment_mode` (`shift` | `period`). Shift mode toggles `shifts.ihss` in payroll review. Period mode stores `Payroll::IhssPeriodAssignment` rows (pay period + employee + client + hours) and consumes those hours chronologically against matching client shifts. Client payroll boards show IHSS hours used in the period next to `clients.ihss_authorized_hours`.
-- Payroll approval UI: Director Approve / Unapprove / bulk approve stay available until the period is finalized (`can_approve = !finalized?` for index holders). The payroll due date and `approval_window_open` are deadline / urgency signals only; they must never hard-block approval. Hard-close language in the older payroll redesign plan is superseded by this rule.
-- Approval reminder emails: `Payroll::SendApprovalReminders` (daily GoodJob cron) emails admins and Timesheet approvers for closed, unfinalized periods with pending Director approvals. Facilitators (update without index) get a count of pending caseload shifts. Org-wide enable/disable lives under Settings > Notifications (`Setting.notifications_payroll_approval_reminders`).
-- Manual shift entry on employee payroll review creates a `Calendar::Event` + nested `Shift` via `POST /api/calendar_events` (same path as schedule); `PayPeriod.attach_shift!` wires the timesheet. Create into a finalized period is rejected. Attaching a shift or changing event times/participants clears timesheet `approved_at` and shift `facilitator_approved_at`. Review rows show `last_editor` from the latest paper_trail time update on the calendar event (initials avatar + tooltip).
-
-### Frontend Components
-#### UI Framework
-- Mantine v8+; use current API from docs.
-- Gotcha: Mantine date/time inputs expect strings; shared inputs accept Date or string and normalize to ISO string before passing in.
-
-#### Spotlight (command palette)
-- Single instance in the shared Providers tree; actions are permission-gated and mirror sidebar navigation.
-
-#### Icons
-- Single export from components/Icons; icons renamed for semantic use. IconProvider sets default size and class.
-
-#### Component Organization
-- Frontend: components, features, layouts, lib, pages, queries, types under app/frontend.
-- One exported React component per file. Shared presentational widgets belong in `features/` or `components/`; domains compose them. Copy-pasting the same helper into multiple domain boards is forbidden tech debt (see `.cursor/rules/no-ui-duplication.mdc`).
-- React 19: ref is passed as a normal prop; components that need ref support accept ref in their props interface (ref?: React.Ref&lt;HTMLElement&gt;) and pass it to the underlying DOM or child. forwardRef is not used.
-
-#### Links and navigation
-- Use the Link component with `as="button"` and `buttonProps` for button-styled navigation (not `Button component={Link}`); Link with as="button" renders an anchor styled as a button and uses Inertia routing.
-- Use the Routes object from @/lib for all hrefs; do not build URLs manually (e.g. use Routes.payrollEmployeeReview(employeeId), not `/payroll/employees/${id}`).
-
-#### Formatters
-- All formatting lives in formatters.ts; do not define formatters inline. Add new ones there and use via formatter / formatter.datetime / formatter.number from @/lib.
-
-
-#### UI & Styling
-- Mantine; Linaria with .css.ts; clsx for class composition; theme supports dark/light.
-- clsx conditionals use the object map (`{ [classes.foo]: condition }`). Do not toggle classes with `condition && classes.foo` or ternaries inside `clsx(...)`.
-- Page chrome contract: `theme.other.page.maxWidth` is the shared content width. Default panel fill is `light-dark(white, dark[6])` via `pageChrome.panelFill` / `pageChrome.panelSurface` (`Section variant="panel"`, show chrome, status desk, dense index shells). Outer shells that nest other panels use `wrapper` (`Section wrapper` / `pageChrome.panelWrapperSurface`: `gray[0]` / `dark[7]`). Mantine `Paper` and `Card` theme styles use the default fill. Do not invent per-page panel backgrounds; override only for a documented niche surface. `panelSurface` also sets `--icr-field-bg` / `--icr-field-border` so inputs read as inset wells. Left accent stripes are status opt-in only. Do not add page background gradients or primary-tinted panel fills.
-- Board metric/action UI lives in `features/RecordShow/Board` (`MetricLine`, `CountChip`, `MetricValue`, `BoardActionTile`, `BoardActionGrid`) with styles in `BoardPrimitives.css.ts`. Dashboard and Client/Employee Overview boards must use these shared components; do not redefine them locally.
-- Gotcha: Linaria-generated class order can make overrides between multiple classes on the same element unreliable. When a view-specific class must override a base class (e.g. base `event` plus TimeGrid `timeGridEvent`), prefer a combined selector like `&.${event} { ... }` in the overriding class so it wins regardless of CSS emission order.
-
-#### Form Implementation
-- use-inertia-form v4.6.0; Form wraps Inertia + Mantine; nested data, Rails-style attributes; custom inputs via the form hook; strict typing.
-- Gotcha: To submit via a custom path (e.g. React Query), use the optional submit-with callback; when set, default submit is skipped and the normal destination is optional.
-
-#### State Management
-- Server state: Inertia.js
-- Client-only state: zustand
-- Form state: use-inertia-form
-
-#### Type System
-- Strict TypeScript; prefer existing types and generics.
-- **NEVER use type assertions (typecasting).** No `as`, no `as unknown as`, no `as any`. If something does not type-check, fix the types (e.g. add a union type, widen a generic, export a type the API accepts). Casting is a project rule violation.
-- **NEVER add explicit return types** on functions when the return type can be inferred. Let TypeScript infer. Only add a return type when it is required for a public API or when inference is genuinely wrong/ambiguous.
-- Do not use `any` or `unknown` as escape hatches; do not add unnecessary type annotations on variables when the literal or expression already satisfies the expected type.
-- These TypeScript rules are non-negotiable. When in doubt, try without the cast or annotation first; the code often already type-checks.
-- Ruby constants can be exported to TS via rails types:generate; add a subtask in types.rake so it stays in sync.
-- moduleResolution "bundler" is required for subpath exports (e.g. tiptap menus).
-
-#### Internationalization (i18n)
-- react-i18next; locales from Rails (i18n-js). Model-specific frontend strings in config/locales/[model]/frontend.en.yml; rest in frontend.en.yml. Keys: views.[feature].[page].[key]. Controller notices use shared templates under templates.controllers.notices with %{model}; CRUD notices (created/updated/destroyed/status_updated) use these.
-- RSpec (`spec/i18n_spec.rb`) asserts there are no missing keys reported by i18n-tasks for references under `app/` (including TSX). Other i18n-tasks reports (unused, normalize, interpolation) are optional; run `bundle exec i18n-tasks` when needed.
-- Devise Inertia pages use `config/locales/devise/frontend.en.yml` under `views.devise` (shared copy such as `views.devise.shared.email`, per-flow keys such as `views.devise.confirmations.new.title`).
-
-#### Testing
-- Unit: Vitest + RTL; E2E: Playwright (no mocks). Tests mirror app/frontend under app/frontend/tests.
-- Gotcha: For assertions on translated strings, run validation and assertions inside I18n.with_locale(:en) so the expected message is stable.
-- Gotcha: Forms must use remember={ false } or the form library can persist state across unmount/remount and tests see stale values.
-- Gotcha: For form-context tests, use Form from use-inertia-form (not the app Form wrapper). For Mantine, wrap with MantineProvider, stub matchMedia in beforeEach, and wrap Grid.Col in Grid.
-- Do not test literal constants from the source; test behavior, branches, and contracts.
-- Prefer smoke-level checks for presentational layout (e.g. main content renders, interactive regions exist) over asserting element order, separators, or exact hrefs unless that order is a behavioral contract.
-
-#### Serializers
-- Smoke spec discovers serializers, infers model from name, renders each. Slug-identified models need persisted records so the smoke spec creates them. Gotcha: Identification uses the id_type column; serializers must use :id_type, not :type.
-
-#### Lib coverage
-- spec/lib covers lib code; generator specs live under spec/lib/generators. Gotcha: In specs that register at-exit blocks with doubles, stub the class's at_exit so real at-exit is not registered.
-
-#### Performance
-- Code splitting, lazy loading, memoization, minimal global state.
-
-#### TipTap Integration
-- TipTap v3.14.0; Mantine integration via @mantine/tiptap. Gotcha: Menu components (BubbleMenu, FloatingMenu) must be imported from the /menus subpath, not the main package.
-
-## Payroll Periods
-
-### Semi-Monthly
-- With "last day of month" setting: first period 1st-14th, second 15th-last day. Otherwise two configurable dates; each period ends the day before the next starts.
-
-### Bi-Weekly
-- Fixed reference date for boundaries; 14-day periods; configurable start day of week.
-
-### Weekly
-- Configurable start day of week; 7-day periods.
-
-### Monthly
-- Configurable start date or "last day of month." When last day: period is last day of prior month through second-to-last day of current month. Otherwise ends day before next period's start.
+- Mantine date/time inputs expect strings; shared inputs accept Date or string and normalize to ISO string before passing in.
+- Linaria class order: when a view-specific class must override a base class, use a combined selector like `&.${event} { ... }` so it wins regardless of CSS emission order.
+- Page chrome: `theme.other.page.maxWidth` is the shared content width. Default panel fill is `pageChrome.panelFill` / `panelSurface`; outer shells that nest panels use `wrapper` / `panelWrapperSurface`. `panelSurface` sets `--icr-field-bg` / `--icr-field-border`. Do not invent per-page panel backgrounds.
+- Form submit-with callback: when set, default submit is skipped and the normal destination is optional.
+- Serializer smoke: Identification uses the `id_type` column; serializers must use `:id_type`, not `:type`.
+- TipTap Menu components (BubbleMenu, FloatingMenu) must be imported from the `/menus` subpath, not the main package.
+- Lib specs that register at-exit blocks with doubles: stub the class's `at_exit` so real at-exit is not registered.

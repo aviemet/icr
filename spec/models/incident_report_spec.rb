@@ -48,9 +48,6 @@ RSpec.describe IncidentReport do
   end
 
   describe "Associations" do
-    it{ is_expected.to belong_to(:reported_by) }
-    it{ is_expected.to belong_to(:client) }
-    it{ is_expected.to belong_to(:reported_to) }
     it{ is_expected.to belong_to(:doctor).optional }
     it{ is_expected.to have_many(:hospital_visits).class_name("Client::HospitalVisit") }
   end

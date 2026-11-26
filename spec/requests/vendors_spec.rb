@@ -4,6 +4,8 @@ require_relative "../support/devise"
 RSpec.describe "/vendors" do
   login_user(:admin)
 
+  before { Flipper.enable(:vendors) }
+
   def valid_attributes
     category = create(:category, :vendor)
     {
@@ -22,6 +24,15 @@ RSpec.describe "/vendors" do
 
   def new_attributes
     attributes_for(:vendor).slice(:name, :notes)
+  end
+
+  describe "when the feature flag is disabled" do
+    before { Flipper.disable(:vendors) }
+
+    it "returns not found" do
+      get vendors_url
+      expect(response).to have_http_status(:not_found)
+    end
   end
 
   describe "GET /index" do

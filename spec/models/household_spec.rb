@@ -29,8 +29,6 @@ RSpec.describe Household do
 
   describe "Associations" do
     it { is_expected.to have_many(:clients).through(:current_households_clients) }
-    it { is_expected.to have_many(:current_memberships) }
-    it { is_expected.to have_many(:past_memberships) }
   end
 
   describe "#clients" do

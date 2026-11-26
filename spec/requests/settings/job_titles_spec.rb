@@ -161,6 +161,37 @@ RSpec.describe "Settings::JobTitles", type: :request do
       expect(job_title.has_role?(:complete, Employee::Training)).to be true
       expect(job_title.has_role?(:index, Employee::Training)).to be true
     end
+
+    it "persists time off approve without clearing create" do
+      job_title = create(:job_title, name: "Facilitator")
+      job_title.add_role(:create, TimeOff::Request)
+      job_title.add_role(:show, TimeOff::Request)
+
+      patch settings_job_title_url(job_title.slug), params: {
+        job_title: {
+          name: "Facilitator",
+          description: job_title.description,
+          department_id: job_title.department_id,
+        },
+        permissions: {
+          admin: false,
+          time_off_request: {
+            index: true,
+            show: true,
+            create: true,
+            update: false,
+            delete: false,
+            approve: true,
+          },
+        },
+      }
+
+      expect(response).to redirect_to(settings_job_titles_path)
+      job_title.reload
+      expect(job_title.has_role?(:approve, TimeOff::Request)).to be true
+      expect(job_title.has_role?(:create, TimeOff::Request)).to be true
+      expect(job_title.has_role?(:index, TimeOff::Request)).to be true
+    end
   end
 
   describe "DELETE /settings/job_titles/:slug" do

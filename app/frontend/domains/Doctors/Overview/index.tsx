@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 
-import { Box, Text } from "@/components"
+import { Box, Presence, Text } from "@/components"
 import { PhoneFormatter } from "@/components/Formatters"
 import {
 	BoardActionGrid,
@@ -27,15 +27,15 @@ export function DoctorOverview({ doctor }: DoctorOverviewProps) {
 				<MetricTile title={ t("views.doctors.show.overview.specialty") }>
 					<MetricLine
 						label={ t("views.doctors.show.overview.specialty") }
-						value={ doctor.specialty || "-" }
+						value={ <Presence>{ doctor.specialty }</Presence> }
 					/>
 					<MetricLine
 						label={ t("views.doctors.show.overview.npi") }
-						value={ doctor.npi || "-" }
+						value={ <Presence>{ doctor.npi }</Presence> }
 					/>
 					<MetricLine
 						label={ t("views.doctors.show.overview.practice") }
-						value={ doctor.practice_name || "-" }
+						value={ <Presence>{ doctor.practice_name }</Presence> }
 					/>
 				</MetricTile>
 
@@ -52,7 +52,7 @@ export function DoctorOverview({ doctor }: DoctorOverviewProps) {
 				</MetricTile>
 
 				<MetricTile title={ t("views.doctors.show.overview.notes") }>
-					<Text size="sm">{ doctor.notes || "-" }</Text>
+					<Text size="sm"><Presence>{ doctor.notes }</Presence></Text>
 				</MetricTile>
 			</Box>
 

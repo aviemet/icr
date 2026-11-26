@@ -13,53 +13,36 @@ class TimesheetsController < ApplicationController
   # @route GET /payroll/periods/:period_id/employees/:employee_id (period_employee_review)
   def employee_review
     authorize_pay_period!
-    pay_period.sync_shifts! unless pay_period.finalized?
-    timesheet = Timesheet.find_by(employee_id: employee.id, pay_period_id: pay_period.id)
-    record_to_authorize = timesheet || Timesheet.new(employee_id: employee.id)
+    pay_period.sync_shifts! unless pay_period.finalized? || inertia_partial_data_request?
+    @review_timesheet = Timesheet.find_by(employee_id: employee.id, pay_period_id: pay_period.id)
+    record_to_authorize = @review_timesheet || Timesheet.new(employee_id: employee.id)
     authorize record_to_authorize, :show?
-
-    base_shifts = PayPeriod.shifts_overlapping_period(pay_period)
-      .assigned
-      .where(employee_id: employee.id)
-      .includes(
-        :category,
-        calendar_event: [
-          :recurring_patterns,
-          :event_exceptions,
-          { clients: :person },
-        ],
-      )
-      .to_a
-    shifts_list = pay_period.shift_occurrences(base_shifts)
-    last_editors = Payroll::ShiftLastEditors.call(base_shifts)
-    shifts_list.each do |shift|
-      shift.instance_variable_set(:@_last_editor, last_editors[shift.calendar_event_id.to_s])
-    end
-
-    employee_hours = Payroll::EmployeePeriodHours.call(pay_period, [employee.id])
-    period_end = pay_period.ends_at.to_date
-    approval_window_open = !pay_period.finalized? && Payroll::Period.approval_window_open?(period_end)
-    shift_exception_reasons = Payroll::ShiftExceptions.call(shifts_list)[:reasons_by_shift_id]
-    hours_data = employee_hours[employee.id.to_s] || {}
-    shift_ot_hours = hours_data[:shift_ot_hours] || {}
-    can_final_approve = timesheet.present? && !pay_period.finalized? && policy(timesheet).final_approve?
-    unreviewed_shifts = timesheet.present? ? Payroll::UnreviewedShifts.call(timesheet) : []
 
     render inertia: "Timesheets/EmployeeReview", props: {
       employee: -> { employee.render(:index) },
       pay_period_id: -> { pay_period.id.to_s },
       period_dates: -> { [pay_period.starts_at, pay_period.ends_at].map { |date| date.strftime("%FT%T%:z") } },
-      approval_window_open: -> { approval_window_open },
+      approval_window_open: -> {
+        !pay_period.finalized? && Payroll::Period.approval_window_open?(pay_period.ends_at.to_date)
+      },
       finalized: -> { pay_period.finalized? },
-      can_approve: -> { can_final_approve },
-      timesheet: -> { timesheet&.render(:show) },
-      shifts: -> { shifts_list.map { |shift| shift.render(:review) } },
-      shift_exception_reasons: -> { shift_exception_reasons },
-      shift_ot_hours: -> { shift_ot_hours },
-      employee_hours: -> { hours_data.except(:shift_ot_hours) },
-      unreviewed_shifts: -> { unreviewed_shifts },
+      can_approve: -> {
+        @review_timesheet.present? && !pay_period.finalized? && policy(@review_timesheet).final_approve?
+      },
+      timesheet: -> { @review_timesheet&.render(:show) },
+      shifts: -> { employee_review_shifts.map { |shift| shift.render(:review) } },
+      shift_exception_reasons: -> {
+        Payroll::ShiftExceptions.call(employee_review_shifts)[:reasons_by_shift_id]
+      },
+      shift_ot_hours: -> { employee_review_hours_data[:shift_ot_hours] || {} },
+      employee_hours: -> { employee_review_hours_data.except(:shift_ot_hours) },
+      unreviewed_shifts: -> {
+        @review_timesheet.present? ? Payroll::UnreviewedShifts.call(@review_timesheet) : []
+      },
       ihss_assignment_mode: -> { Setting.ihss_assignment_mode },
-      can_edit_ihss: -> { !pay_period.finalized? && timesheet.present? && policy(timesheet).update? },
+      can_edit_ihss: -> {
+        !pay_period.finalized? && @review_timesheet.present? && policy(@review_timesheet).update?
+      },
     }
   end
 
@@ -185,5 +168,33 @@ class TimesheetsController < ApplicationController
 
   def authorize_pay_period!
     authorize pay_period, :show?
+  end
+
+  def employee_review_shifts
+    @employee_review_shifts ||= begin
+      base_shifts = PayPeriod.shifts_overlapping_period(pay_period)
+        .assigned
+        .where(employee_id: employee.id)
+        .includes(
+          :category,
+          calendar_event: [
+            :recurring_patterns,
+            :event_exceptions,
+            { clients: :person },
+          ],
+        )
+        .to_a
+      shifts_list = pay_period.shift_occurrences(base_shifts)
+      last_editors = Payroll::ShiftLastEditors.call(base_shifts)
+      shifts_list.each do |shift|
+        shift.instance_variable_set(:@_last_editor, last_editors[shift.calendar_event_id.to_s])
+      end
+      shifts_list
+    end
+  end
+
+  def employee_review_hours_data
+    @employee_review_hours_data ||=
+      Payroll::EmployeePeriodHours.call(pay_period, [employee.id])[employee.id.to_s] || {}
   end
 end

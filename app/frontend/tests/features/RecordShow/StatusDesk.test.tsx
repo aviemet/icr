@@ -2,7 +2,6 @@ import { MantineProvider } from "@mantine/core"
 import { cleanup, render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
-import { pageChrome } from "@/components/PageChrome"
 import { StatusDesk } from "@/features/RecordShow/StatusDesk"
 import { theme } from "@/lib/theme"
 
@@ -63,8 +62,6 @@ describe("StatusDesk", () => {
 
 		expect(screen.queryByText("Position change form")).not.toBeInTheDocument()
 		expect(screen.getByPlaceholderText("Select an action")).toBeInTheDocument()
-		expect(document.querySelector(`.${pageChrome.panelSurface}`)).toBeTruthy()
-		expect(document.querySelector(`.${pageChrome.pageShell}`)).toBeTruthy()
 
 		rerender(
 			<MantineProvider theme={ theme }>

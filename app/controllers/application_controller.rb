@@ -20,4 +20,10 @@ class ApplicationController < ActionController::Base
 
   include FeatureFlagged
   include ErrorHandling
+
+  private
+
+  def inertia_partial_data_request?
+    request.headers["X-Inertia-Partial-Data"].present?
+  end
 end

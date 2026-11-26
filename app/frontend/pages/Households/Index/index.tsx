@@ -19,6 +19,7 @@ const HouseholdsIndex = ({ households, pagination }: HouseholdIndexProps) => {
 			model="households"
 			pagination={ pagination }
 			deleteRoute={ Routes.households() }
+			dense
 			actions={ [
 				{
 					label: t("views.households.index.new"),

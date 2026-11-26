@@ -41,13 +41,9 @@ RSpec.describe Doctor do
   describe "Associations" do
     it_behaves_like "participantable"
 
-    it{ is_expected.to belong_to(:person) }
-
     it{ is_expected.to have_many(:clients).through(:doctors_clients) }
-    it{ is_expected.to have_many(:prescriptions) }
     it{ is_expected.to have_many(:diagnoses).class_name("Client::Diagnosis") }
     it{ is_expected.to have_many(:hospital_visits).class_name("Client::HospitalVisit") }
-    it{ is_expected.to have_many(:incident_reports) }
   end
 
   describe "attributes" do

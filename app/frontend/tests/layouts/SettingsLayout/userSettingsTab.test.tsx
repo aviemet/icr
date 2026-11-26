@@ -40,7 +40,7 @@ describe("SettingsLayout user settings tab", () => {
 		})
 	})
 
-	it("right-aligns the User Settings tab", async () => {
+	it("marks the User Settings link active", async () => {
 		const { SettingsLayout } = await import("@/layouts/SettingsLayout")
 
 		render(
@@ -52,10 +52,8 @@ describe("SettingsLayout user settings tab", () => {
 		)
 
 		const userSettingsLink = screen.getByRole("link", { name: "User Settings" })
-		expect(userSettingsLink.className).toContain("userSettingsLink")
 		expect(userSettingsLink).toHaveAttribute("href", "/settings/user")
 		expect(userSettingsLink).toHaveAttribute("data-active", "true")
-		expect(userSettingsLink.querySelector(".controlIcon")).toBeTruthy()
-		expect(screen.getByRole("link", { name: "General" }).querySelector(".controlIcon")).toBeTruthy()
+		expect(screen.getByRole("link", { name: "General" })).not.toHaveAttribute("data-active", "true")
 	})
 })

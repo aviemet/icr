@@ -39,8 +39,6 @@ RSpec.describe Timesheet do
   end
 
   describe "Associations" do
-    it { is_expected.to belong_to(:employee) }
-    it { is_expected.to belong_to(:pay_period) }
     it { is_expected.to have_many(:shifts).dependent(:nullify) }
   end
 

@@ -87,9 +87,12 @@ module Payroll
     end
 
     def facilitator_pending_shift_count
-      PayPeriod.shifts_overlapping_period(@pay_period)
-        .where(employee_id: @employee_ids, facilitator_approved_at: nil)
-        .count
+      shifts = PayPeriod.shifts_overlapping_period(@pay_period)
+        .where(employee_id: @employee_ids)
+        .includes(calendar_event: [:recurring_patterns, :event_exceptions])
+        .to_a
+
+      @pay_period.shift_occurrences(shifts).count { |occurrence| occurrence.facilitator_approved_at.blank? }
     end
 
     def exception_counts

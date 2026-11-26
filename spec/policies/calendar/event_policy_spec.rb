@@ -1,16 +1,16 @@
 require "rails_helper"
 
 RSpec.describe Calendar::EventPolicy, type: :policy do
-  before do
-    @admin_user = create(:user).tap { |u| u.add_role(:admin) }
-    @employee = create(:employee, :employed)
-    @employee_user = create(:user, person: create(:person, employee: @employee))
-    @client = create(:client)
-    @client_user = create(:user, person: create(:person, client: @client))
-    @events = create_list(:calendar_event, 3)
-  end
-
   describe ".scope" do
+    before do
+      @admin_user = create(:user).tap { |user| user.add_role(:admin) }
+      @employee = create(:employee, :employed)
+      @employee_user = create(:user, person: create(:person, employee: @employee))
+      @client = create(:client)
+      @client_user = create(:user, person: create(:person, client: @client))
+      @events = create_list(:calendar_event, 3)
+    end
+
     it "returns all events for admin" do
       scope = Pundit.policy_scope(@admin_user, Calendar::Event)
       expect(scope.count).to eq(3)
@@ -55,13 +55,13 @@ RSpec.describe Calendar::EventPolicy, type: :policy do
 
   permissions :index? do
     it "allows admin" do
-      expect(described_class.new(@admin_user, Calendar::Event.new)).to authorize(:index)
+      expect(described_class.new(stub_admin_user, Calendar::Event.new)).to authorize(:index)
     end
   end
 
   permissions :show? do
     it "allows admin" do
-      expect(described_class.new(@admin_user, Calendar::Event.new)).to authorize(:show)
+      expect(described_class.new(stub_admin_user, Calendar::Event.new)).to authorize(:show)
     end
   end
 end

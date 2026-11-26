@@ -104,25 +104,24 @@ describe("ClientOverview", () => {
 		})
 	})
 
-	it("renders metric tiles, care team, and built-in quick links", () => {
+	it("renders care data and built-in action links", () => {
 		render(
 			<MantineProvider theme={ theme }>
 				<ClientOverview client={ buildClient() } />
 			</MantineProvider>,
 		)
 
-		expect(screen.getByText("views.clients.show.overview.funding")).toBeInTheDocument()
 		expect(screen.getByText("UCI-9")).toBeInTheDocument()
 		expect(screen.getByText("Lead Manager")).toBeInTheDocument()
-		expect(screen.getByText("Aide One")).toBeInTheDocument()
-		expect(screen.getByText("views.clients.show.overview.household")).toBeInTheDocument()
-		expect(screen.getByText("Santos Home")).toBeInTheDocument()
-		expect(screen.getByText("views.clients.show.overview.face_sheet")).toBeInTheDocument()
-		expect(screen.getByText("views.clients.show.overview.schedule")).toBeInTheDocument()
-		expect(screen.queryByText("views.clients.show.tabs.profile")).not.toBeInTheDocument()
-		expect(screen.queryByText("views.clients.show.tabs.medical")).not.toBeInTheDocument()
-		expect(screen.getByText("views.clients.show.overview.custom_links")).toBeInTheDocument()
-		expect(screen.getByText("views.clients.show.overview.add_link")).toBeInTheDocument()
+		expect(screen.getByRole("link", { name: "Santos Home" })).toHaveAttribute("href", "/households/santos-home")
+		expect(screen.getByRole("link", { name: /views.clients.show.overview.face_sheet/ })).toHaveAttribute(
+			"href",
+			"/clients/maria-santos/face_sheet",
+		)
+		expect(screen.getByRole("link", { name: /views.clients.show.overview.schedule/ })).toHaveAttribute(
+			"href",
+			"/clients/maria-santos/schedule",
+		)
 	})
 
 	it("hides edit actions until modify mode is enabled", () => {

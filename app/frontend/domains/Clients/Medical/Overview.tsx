@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 
-import { Link, Stack, Text } from "@/components"
+import { Link, Presence, Stack, Text } from "@/components"
 import { DeleteButton } from "@/components/Button"
 import { Form, Submit } from "@/components/Form"
 import {
@@ -45,7 +45,7 @@ export function MedicalOverview({ client }: MedicalOverviewProps) {
 	return (
 		<Stack gap="lg">
 			<MetricTile title={ t("views.clients.show.medical.preferred_hospital") }>
-				<Text size="sm">{ client.preferred_hospital || "-" }</Text>
+				<Text size="sm"><Presence>{ client.preferred_hospital }</Presence></Text>
 			</MetricTile>
 
 			<CollectionPanel

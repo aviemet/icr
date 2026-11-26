@@ -9,6 +9,7 @@ declare global {
       created_at: Date
       name: string
       notes?: string
+      slug: string
       updated_at: Date
     }
   }

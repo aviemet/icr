@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe HouseholdPolicy, type: :policy do
-  before do
+  def setup_scope_users
     @admin_user = create(:user).tap { |u| u.add_role(:admin) }
     @employee = create(:employee, :employed)
     @employee_user = create(:user, person: create(:person, employee: @employee))
@@ -15,6 +15,8 @@ RSpec.describe HouseholdPolicy, type: :policy do
   end
 
   describe ".scope" do
+    before { setup_scope_users }
+
     it "returns all households for admin" do
       households = create_list(:household, 3)
       scope = Pundit.policy_scope(@admin_user, Household)
@@ -60,39 +62,42 @@ RSpec.describe HouseholdPolicy, type: :policy do
 
   permissions :index? do
     it "allows admin" do
-      expect(described_class.new(@admin_user, Household.new)).to authorize(:index)
+      expect(described_class.new(stub_admin_user, Household.new)).to authorize(:index)
     end
 
     it "allows employees even with no household assignments" do
-      expect(described_class.new(@employee_user, Household.new)).to authorize(:index)
+      expect(described_class.new(stub_employee_user, Household.new)).to authorize(:index)
     end
 
     it "allows client users" do
-      expect(described_class.new(@client_user, Household.new)).to authorize(:index)
+      expect(described_class.new(stub_client_user, Household.new)).to authorize(:index)
     end
   end
 
   permissions :show? do
     it "allows admin" do
-      expect(described_class.new(@admin_user, Household.new)).to authorize(:show)
+      expect(described_class.new(stub_admin_user, Household.new)).to authorize(:show)
     end
   end
 
   permissions :create?, :update?, :destroy? do
     it "allows admin" do
-      household = create(:household)
-      expect(described_class.new(@admin_user, household)).to authorize(:create)
-      expect(described_class.new(@admin_user, household)).to authorize(:update)
-      expect(described_class.new(@admin_user, household)).to authorize(:destroy)
+      household = build_stubbed(:household)
+      policy = described_class.new(stub_admin_user, household)
+      expect(policy).to authorize(:create)
+      expect(policy).to authorize(:update)
+      expect(policy).to authorize(:destroy)
     end
 
     it "allows job titles with household grants" do
-      @job_title.add_role(:create, Household)
-      @job_title.add_role(:update, Household)
-      @job_title.add_role(:destroy, Household)
-      household = create(:household)
-
-      policy = described_class.new(@employee_user_with_permission, household)
+      user = stub_employee_user(
+        job_title_roles: [
+          [:create, Household],
+          [:update, Household],
+          [:destroy, Household],
+        ],
+      )
+      policy = described_class.new(user, build_stubbed(:household))
       expect(policy).to authorize(:create)
       expect(policy).to authorize(:update)
       expect(policy).to authorize(:destroy)
@@ -100,6 +105,8 @@ RSpec.describe HouseholdPolicy, type: :policy do
   end
 
   describe ".scope with historical membership" do
+    before { setup_scope_users }
+
     it "excludes households for attendants of only former members" do
       household = create(:household)
       client = create(:client)

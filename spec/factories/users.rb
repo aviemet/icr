@@ -58,5 +58,17 @@ FactoryBot.define do
     active { true }
 
     person
+
+    trait :admin do
+      after(:create) { |user| user.add_role(:admin) }
+    end
+
+    trait :with_role do
+      transient do
+        role { :employee }
+      end
+
+      after(:create) { |user, evaluator| user.add_role(evaluator.role) }
+    end
   end
 end

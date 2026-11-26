@@ -18,12 +18,13 @@ module Payroll
 
       base_shifts = PayPeriod.shifts_overlapping_period(period)
         .assigned
-        .facilitator_pending
         .where(employee_id: @timesheet.employee_id)
         .includes(calendar_event: [:recurring_patterns, :event_exceptions, { clients: :person }])
         .to_a
 
-      period.shift_occurrences(base_shifts).map { |shift| serialize(shift) }
+      period.shift_occurrences(base_shifts)
+        .reject(&:facilitator_approved?)
+        .map { |shift| serialize(shift) }
     end
 
     private

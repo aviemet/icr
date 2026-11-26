@@ -1,0 +1,34 @@
+---
+en:
+  views:
+    time_off:
+      index:
+        title: Time Off
+        description: Request leave and review pending requests. Accrual stays with payroll.
+        spotlight_description: Request and approve leave
+        my_requests_title: My requests
+        pending_queue_title: Direct reports pending
+        org_pending_title: All pending
+        request_title: Request time off
+        manager_leave_title: Record leave for a report
+        kind: Kind
+        kind_pto: PTO
+        kind_sick: Sick
+        starts_at: Starts
+        ends_at: Ends
+        hours: Hours
+        status: Status
+        employee: Employee
+        actions: Actions
+        submit: Submit request
+        record_leave: Record leave
+        approve: Approve
+        deny: Deny
+        cancel: Cancel
+        review_note: Note
+        empty_requests: No requests yet.
+        empty_pending: No pending requests.
+        status_pending: Pending
+        status_approved: Approved
+        status_denied: Denied
+        status_canceled: Canceled

@@ -62,8 +62,7 @@ class Settings::PayrollsController < ApplicationController
 
       redirect_to redirect_path, success: t("settings.notices.updated")
     rescue StandardError
-      flash[:error] = t("settings.errors.update_failed")
-      redirect_to redirect_path, inertia: { errors: ["There were errors"] }
+      redirect_to redirect_path, alert: t("settings.errors.update_failed"), inertia: { errors: ["There were errors"] }
     end
   end
 end

@@ -108,7 +108,7 @@ describe("HouseholdClients", () => {
 		})
 	})
 
-	it("renders current and former member sections", () => {
+	it("links current and former members", () => {
 		render(
 			<MantineProvider theme={ theme }>
 				<ModalsProvider>
@@ -117,10 +117,8 @@ describe("HouseholdClients", () => {
 			</MantineProvider>,
 		)
 
-		expect(screen.getByText("views.households.show.clients.current")).toBeTruthy()
-		expect(screen.getByText("views.households.show.clients.former")).toBeTruthy()
-		expect(screen.getByText("Maria Santos")).toBeTruthy()
-		expect(screen.getByText("Former Member")).toBeTruthy()
+		expect(screen.getByRole("link", { name: "Maria Santos" })).toHaveAttribute("href", "/clients/maria-santos")
+		expect(screen.getByRole("link", { name: "Former Member" })).toHaveAttribute("href", "/clients/former-member")
 	})
 
 	it("swaps schedule for edit and delete when Manage is clicked", () => {
@@ -132,15 +130,18 @@ describe("HouseholdClients", () => {
 			</MantineProvider>,
 		)
 
-		expect(screen.getByLabelText("Schedule")).toBeTruthy()
-		expect(screen.queryByLabelText("Edit Maria Santos")).toBeNull()
-		expect(screen.queryByLabelText("Delete Maria Santos")).toBeNull()
+		expect(screen.getByRole("link", { name: "Schedule" })).toHaveAttribute(
+			"href",
+			"/clients/maria-santos/schedule",
+		)
+		expect(screen.queryByRole("button", { name: "Edit Maria Santos" })).not.toBeInTheDocument()
+		expect(screen.queryByRole("button", { name: "Delete Maria Santos" })).not.toBeInTheDocument()
 
-		fireEvent.click(screen.getByText("views.households.show.clients.manage"))
+		fireEvent.click(screen.getByRole("button", { name: "views.households.show.clients.manage" }))
 
-		expect(screen.queryByLabelText("Schedule")).toBeNull()
-		expect(screen.getByLabelText("Edit Maria Santos")).toBeTruthy()
-		expect(screen.getByLabelText("Delete Maria Santos")).toBeTruthy()
-		expect(screen.getByText("views.households.show.clients.done")).toBeTruthy()
+		expect(screen.queryByRole("link", { name: "Schedule" })).not.toBeInTheDocument()
+		expect(screen.getByRole("button", { name: "Edit Maria Santos" })).toBeInTheDocument()
+		expect(screen.getByRole("button", { name: "Delete Maria Santos" })).toBeInTheDocument()
+		expect(screen.getByRole("button", { name: "views.households.show.clients.done" })).toBeInTheDocument()
 	})
 })

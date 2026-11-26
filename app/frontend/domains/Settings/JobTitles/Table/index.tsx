@@ -1,4 +1,4 @@
-import { Group, Link, Paper, Table, Text, type TableColumn } from "@/components"
+import { Group, Link, Paper, Presence, Table, Text, type TableColumn } from "@/components"
 import { DeleteButton, EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
@@ -26,26 +26,20 @@ export function JobTitleTable({ records }: JobTitleTableProps) {
 		{
 			accessor: "department.name",
 			title: "Department",
-			render: (jobTitle) => {
-				const departmentName = String(jobTitle.department?.name ?? "")
-				return (
-					<Text size="sm" c={ departmentName ? undefined : "dimmed" }>
-						{ departmentName || "—" }
-					</Text>
-				)
-			},
+			render: (jobTitle) => (
+				<Presence>{ jobTitle.department?.name }</Presence>
+			),
 		},
 		{
 			accessor: "description",
 			title: "Description",
-			render: (jobTitle) => {
-				const description = String(jobTitle.description ?? "")
-				return (
-					<Text size="sm" c={ description ? undefined : "dimmed" } lineClamp={ 2 }>
-						{ description || "—" }
-					</Text>
-				)
-			},
+			render: (jobTitle) => (
+				<Presence>
+					{ jobTitle.description
+						? <Text size="sm" lineClamp={ 2 }>{ String(jobTitle.description) }</Text>
+						: null }
+				</Presence>
+			),
 		},
 		{
 			accessor: "actions",

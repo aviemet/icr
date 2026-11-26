@@ -24,6 +24,7 @@ module Payroll
       end
 
       def work_interval_for(row)
+        slug = row.service_type&.slug
         WorkInterval.new(
           id: row.id,
           employee_id: row.employee_id,
@@ -32,6 +33,7 @@ module Payroll
           category: row.service_type,
           ihss: row.ihss,
           client_ids: row.calendar_event.clients.map(&:id),
+          leave_kind: TimeOff::LeaveKind.from_slug(slug),
         )
       end
     end

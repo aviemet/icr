@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next"
 
 import { Badge, Button, Group, Stack, Text } from "@/components"
 import { ReviewTable } from "@/domains/TimeSheets/ReviewTable"
+import { type IhssToggleDelta } from "@/domains/TimeSheets/ihssToggle"
 import { Routes } from "@/lib"
 
 import {
@@ -23,6 +24,7 @@ interface ClientShiftsTableProps {
 	canFacilitatorApprove: boolean
 	canEditTimes: boolean
 	canEditIhss?: boolean
+	onIhssToggle?: (delta: IhssToggleDelta) => void
 }
 
 export function ClientShiftsTable({
@@ -36,6 +38,7 @@ export function ClientShiftsTable({
 	canFacilitatorApprove,
 	canEditTimes,
 	canEditIhss = false,
+	onIhssToggle,
 }: ClientShiftsTableProps) {
 	const { t } = useTranslation()
 	const selectedEmployee = employees.find(employee => employee.id === selectedEmployeeId) ?? null
@@ -43,12 +46,15 @@ export function ClientShiftsTable({
 		() => shiftsForEmployee(shifts, selectedEmployeeId),
 		[shifts, selectedEmployeeId],
 	)
-	const pendingIds = [...new Set(
-		selectedShifts
-			.filter(shift => !shift.facilitator_approved_at)
-			.map(shift => shift.shift_id),
-	)]
-	const pendingCount = selectedShifts.filter(shift => !shift.facilitator_approved_at).length
+	const pendingApprovals = selectedShifts
+		.filter(shift => !shift.facilitator_approved_at)
+		.map(shift => ({
+			shift_id: shift.shift_id,
+			occurrence_starts_at: shift.occurrence_starts_at
+				? new Date(String(shift.occurrence_starts_at)).toISOString()
+				: new Date(String(shift.starts_at)).toISOString(),
+		}))
+	const pendingCount = pendingApprovals.length
 	const { regularHours, otHours } = useMemo(
 		() => hoursForShifts(selectedShifts, shiftOtHours),
 		[selectedShifts, shiftOtHours],
@@ -89,7 +95,7 @@ export function ClientShiftsTable({
 						variant="filled"
 						size="sm"
 						onClick={ () => router.post(Routes.bulkApproveShifts(), {
-							shift_ids: pendingIds,
+							approvals: pendingApprovals,
 							pay_period_id: payPeriodId,
 							client_id: clientId,
 						}) }
@@ -110,10 +116,12 @@ export function ClientShiftsTable({
 				employeeId={ selectedEmployee.id }
 				employeeSlug={ selectedEmployee.slug }
 				payPeriodId={ payPeriodId }
+				clientId={ clientId }
 				reloadHref={ reloadHref }
 				showClientColumn={ false }
 				canFacilitatorApprove={ canFacilitatorApprove }
 				canEditIhss={ canEditIhss }
+				onIhssToggle={ onIhssToggle }
 			/>
 		</Stack>
 	)

@@ -23,8 +23,4 @@ RSpec.describe Medication do
       end
     end
   end
-
-  describe "Associations" do
-    it{ is_expected.to have_many(:prescriptions) }
-  end
 end

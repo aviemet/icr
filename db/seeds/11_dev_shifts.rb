@@ -257,4 +257,31 @@ if Rails.env.development?
 
     Rails.logger.info "[seeds] special service type events: day program, natural support, training"
   end
+
+  admin_user = User.find_by(email: "aviemet@gmail.com") || User.with_role(:admin).first
+  if admin_user.present?
+    stamped_at = Time.current
+    recurring_shift_ids = Shift.joins(calendar_event: :recurring_patterns).select(:id)
+    closed_periods = PayPeriod.where(ends_at: ...stamped_at).where(finalized_at: nil)
+    closed_periods.find_each do |period|
+      Shift.where(timesheet_id: period.timesheet_ids)
+        .assigned
+        .where.not(id: recurring_shift_ids)
+        .includes(:calendar_event, :occurrence_approvals)
+        .find_each do |shift|
+          next if shift.calendar_event&.starts_at.blank?
+          next if shift.occurrence_approvals.exists?
+
+          ShiftOccurrenceApproval.create!(
+            shift: shift,
+            occurrence_starts_at: shift.calendar_event.starts_at,
+            facilitator_approved_at: stamped_at,
+          )
+        end
+      period.timesheets.where(approved_at: nil).update_all(approved_at: stamped_at) # rubocop:disable Rails/SkipsModelValidations
+      period.finalize!(admin_user)
+    end
+
+    Rails.logger.info "[seeds] finalized #{closed_periods.count} past pay periods (current period left open)"
+  end
 end

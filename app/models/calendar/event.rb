@@ -199,26 +199,47 @@ class Calendar::Event < ApplicationRecord
   end
 
   def pay_period_allows_mutation
-    if shift&.timesheet&.pay_period&.finalized?
-      errors.add(:base, I18n.t("pay_periods.finalized_locked"))
-      return
-    end
-
     return if starts_at.blank?
     return if shift.blank?
-
-    period_start_date, = Payroll::Period.period_dates(starts_at.to_date)
-    period = PayPeriod.where(starts_at: period_start_date.to_time.beginning_of_day.all_day).first
-    return unless period&.finalized?
+    return unless mutation_locked?(starts_at)
 
     errors.add(:base, I18n.t("pay_periods.finalized_locked"))
   end
 
   def prevent_destroy_when_pay_period_finalized
-    return unless shift&.timesheet&.pay_period&.finalized?
+    return if shift.blank?
+
+    lock_at = starts_at.presence || shift.timesheet&.pay_period&.starts_at
+    return if lock_at.blank?
+    return unless mutation_locked?(lock_at)
 
     errors.add(:base, I18n.t("pay_periods.finalized_locked"))
     throw :abort
+  end
+
+  def mutation_locked?(at)
+    return false if recurring_patterns.any? && series_reaches_open_period?
+
+    mutation_period_finalized?(at)
+  end
+
+  def mutation_period_finalized?(at)
+    period_start_date, = Payroll::Period.period_dates(at.to_date)
+    period = PayPeriod.where(starts_at: period_start_date.to_time.beginning_of_day.all_day).first
+    period&.finalized? || false
+  end
+
+  def series_reaches_open_period?
+    open_periods = PayPeriod.where(finalized_at: nil)
+    return false if open_periods.none?
+
+    pattern_end = recurring_patterns.filter_map(&:end_date).max
+    open_periods.any? do |period|
+      next false if period.ends_at < starts_at
+      next true if pattern_end.nil?
+
+      pattern_end >= period.starts_at.to_date
+    end
   end
 
   def set_shift_category_when_shift_present
@@ -240,7 +261,7 @@ class Calendar::Event < ApplicationRecord
   end
 
   def invalidate_shift_approvals_on_time_change
-    return unless previous_changes.key?("starts_at") || previous_changes.key?("ends_at")
+    return unless saved_change_to_starts_at? || saved_change_to_ends_at?
 
     Shift.find_by(calendar_event_id: id)&.invalidate_approvals!
   end

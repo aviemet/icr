@@ -48,6 +48,13 @@ describe("exclude", () => {
 	it("omits a nested path", () => {
 		const obj = { user: { name: "Ada", role: "admin" } }
 		expect(exclude(obj, "user.name")).toEqual({ user: { role: "admin" } })
+		expect(obj).toEqual({ user: { name: "Ada", role: "admin" } })
+	})
+
+	it("keeps retained values by reference", () => {
+		const element = { type: "svg", props: { size: 16 } }
+		const result = exclude({ leftSection: element, style: {} }, "style")
+		expect(result?.leftSection).toBe(element)
 	})
 })
 

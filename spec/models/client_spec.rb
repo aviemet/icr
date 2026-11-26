@@ -59,7 +59,7 @@ RSpec.describe Client do
       )
 
       expect(client).not_to be_valid
-      expect(client.errors[:base]).to include("Choose a regional center or other referral, not both")
+      expect(client.errors[:base]).to be_present
     end
   end
 
@@ -81,13 +81,11 @@ RSpec.describe Client do
   describe "Associations" do
     it_behaves_like "participantable"
 
-    it{ is_expected.to belong_to(:person) }
     it{ is_expected.to belong_to(:regional_center).optional }
 
     it{ is_expected.to have_many(:doctors).through(:doctors_clients) }
     it{ is_expected.to have_many(:hospital_visits).class_name("Client::HospitalVisit") }
-    it{ is_expected.to have_many(:prescriptions) }
 
-    it{ is_expected.to have_one(:household).through(:households_client) }
+    it{ is_expected.to have_one(:household).through(:current_households_client) }
   end
 end

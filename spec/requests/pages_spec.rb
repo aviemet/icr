@@ -17,7 +17,9 @@ RSpec.describe "Pages" do
           inactive_client_count: kind_of(Integer),
           active_team_count: kind_of(Integer),
           hiring_pipeline_count: kind_of(Integer),
-          upcoming_events: kind_of(Array),
+          my_upcoming_shifts: kind_of(Array),
+          open_shifts: kind_of(Array),
+          staffing_visible: be_in([true, false]),
           activity_items: kind_of(Array),
           week_tracked_hours: kind_of(Numeric),
           pending_timesheet_count: kind_of(Integer),
@@ -28,8 +30,6 @@ RSpec.describe "Pages" do
 
   describe "GET /home" do
     it "renders a successful response" do
-      create(:client)
-
       get home_url
 
       expect(response).to be_successful

@@ -22,8 +22,7 @@ class Settings::NotificationsController < ApplicationController
 
       redirect_back_or_to settings_notifications_path, success: t("settings.notices.updated")
     rescue StandardError
-      flash[:error] = t("settings.errors.update_failed")
-      redirect_back_or_to settings_notifications_path, inertia: { errors: ["There were errors"] }
+      redirect_back_or_to settings_notifications_path, alert: t("settings.errors.update_failed"), inertia: { errors: ["There were errors"] }
     end
   end
 end

@@ -1,8 +1,58 @@
 ---
-description: 
-globs: *_spec.rb
+description: RSpec suite speed, stubs vs DB, and what to assert
+globs: "*_spec.rb,spec/**/*.rb"
 alwaysApply: false
 ---
-Avoid using `let` when setting up tests. Prefer setting up state and context in each test rather than introducing indirection by using `let`.
+# RSpec
 
-In request specs, when testing inertia related responses and props, use the inertia rspec helpers.
+## Setup style
+
+- Prefer setting up state in each example over `let`, unless the subject is shared across files or `let` is clearly simpler.
+- In request specs, use the Inertia RSpec helpers for component and props assertions.
+- Login helpers: `login_user(:role)` / `login_admin` via `RequestMacros` and user factory traits (`:admin`, `:with_role`). Prefer those traits over manual `confirm` + `add_role`.
+
+## Suite infrastructure
+
+- Suite seeds only `db/seeds/*required*.rb` once in `before(:suite)`, then uses transactional fixtures.
+- Request specs use rack-test in-process and share transactional rollback.
+- Keep that strategy. Browser-driven feature/system specs are the case that needs a non-transaction DatabaseCleaner strategy and a separate DB connection.
+- Do not combine per-example DatabaseCleaner `:transaction` with `use_transactional_fixtures` (nested transactions wipe or pollute suite seeds).
+
+## When to use the DB
+
+Keep real persistence for:
+
+- Uniqueness / DB constraints, association callbacks, AR scopes and SQL
+- Policy `Scope` filtering
+- Request/integration flows and Inertia prop lockstep (holistic integrity)
+- Services whose behavior is load-then-aggregate (payroll hours, dashboards, reminders)
+
+## When to stub
+
+Prefer `instance_double`, `build`, `build_stubbed`, and `allow(Collaborator).to receive(:call)` for:
+
+- Policy `permissions` / predicate examples — use `spec/support/policy_stub_users.rb` (`stub_admin_user`, `stub_employee_user`, `stub_client_user`, `stub_job_title`)
+- Serializers that map attributes already on the object
+- Pure model predicates and formatters
+- PORO/calculator services (stub `Setting` accessors; use value objects the API already accepts)
+- Thin jobs that only dispatch to a service
+
+House patterns: `spec/serializers/application_serializer_spec.rb`, overtime exemption matches doubles, `spec/jobs/payroll/send_approval_reminders_job_spec.rb`.
+
+## What to assert
+
+Assert behavior that can break: branches, contracts, side effects, lockstep id-keyed populations.
+
+```ruby
+# Good: validation / branch
+expect { Setting.payroll_period_type = "invalid_type" }
+  .to raise_error(ActiveRecord::RecordInvalid)
+
+# Good: error identity via i18n
+expect(record.errors[:base]).to include(I18n.t("pay_periods.finalized_locked"))
+
+# Good: lockstep props
+expect(props[:allergies].pluck(:id)).to eq([allergy.id])
+```
+
+Skip constant-inventory specs, bare Shoulda `belong_to` / `have_many` with no custom options, English string literals that mirror source copy, and serializer key laundry lists when a service spec already covers computed values. Keep Shoulda matchers that encode app choices (`class_name`, `dependent`, `through`, scopes).

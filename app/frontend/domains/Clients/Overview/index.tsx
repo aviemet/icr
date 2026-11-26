@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 
-import { Avatar, Badge, Box, Group, Link, Text } from "@/components"
+import { Avatar, Badge, Box, Group, Link, Presence, Text } from "@/components"
 import { DateTimeFormatter } from "@/components/Formatters"
 import { CalendarIcon, CoinsIcon, DownloadIcon, HomeIcon, UserGroupIcon, WarningTriangleIcon } from "@/components/Icons"
 import { isPendingTermination } from "@/domains/Employees/PendingTermination/isPendingTermination"
@@ -48,13 +48,23 @@ export function ClientOverview({
 					title={ t("views.clients.show.overview.funding") }
 					icon={ <CoinsIcon size={ 16 } /> }
 				>
-					<MetricLine label={ t("views.clients.show.overview.uci") } value={ client.uci_number || "-" } />
-					<MetricLine label={ t("views.clients.show.overview.regional_center") } value={ client.referral_label || "-" } />
+					<MetricLine
+						label={ t("views.clients.show.overview.uci") }
+						value={ <Presence>{ client.uci_number }</Presence> }
+					/>
+					<MetricLine
+						label={ t("views.clients.show.overview.regional_center") }
+						value={ <Presence>{ client.referral_label }</Presence> }
+					/>
 					<MetricLine
 						label={ t("views.clients.show.overview.ipp_review") }
-						value={ client.ipp_review_on
-							? <DateTimeFormatter>{ client.ipp_review_on }</DateTimeFormatter>
-							: "-" }
+						value={ (
+							<Presence>
+								{ client.ipp_review_on
+									? <DateTimeFormatter>{ client.ipp_review_on }</DateTimeFormatter>
+									: null }
+							</Presence>
+						) }
 					/>
 				</MetricTile>
 
@@ -62,8 +72,14 @@ export function ClientOverview({
 					title={ t("views.clients.show.overview.ihss") }
 					icon={ <HomeIcon size={ 16 } /> }
 				>
-					<MetricLine label="Authorized hours" value={ client.ihss_authorized_hours ?? "-" } />
-					<MetricLine label="Share of cost" value={ client.ihss_share_of_cost ?? "-" } />
+					<MetricLine
+						label="Authorized hours"
+						value={ <Presence>{ client.ihss_authorized_hours }</Presence> }
+					/>
+					<MetricLine
+						label="Share of cost"
+						value={ <Presence>{ client.ihss_share_of_cost }</Presence> }
+					/>
 				</MetricTile>
 
 				<MetricTile
@@ -82,10 +98,6 @@ export function ClientOverview({
 					<MetricLine
 						label={ t("views.clients.show.overview.incidents") }
 						value={ <CountChip value={ client.incident_reports_count } alert={ client.incident_reports_count > 0 } /> }
-					/>
-					<MetricLine
-						label={ t("views.clients.show.overview.emergency_contacts") }
-						value={ <CountChip value={ client.emergency_contacts_count } /> }
 					/>
 				</MetricTile>
 			</Box>

@@ -16,8 +16,11 @@ vi.mock("react-i18next", () => ({
 			if(key === "views.dashboard.team.hiring_pipeline") return "In hiring pipeline"
 			if(key === "views.dashboard.time.total_hours") return `${options?.hours ?? 0} Hours`
 			if(key === "views.dashboard.time.total_hours_week") return "Total hours tracked this week"
+			if(key === "views.dashboard.time.my_hours_week") return "Your hours this week"
 			if(key === "views.dashboard.time.pending_timesheets") return "Timesheets pending approval"
-			if(key === "views.dashboard.schedule.open_shifts") return "Open shifts to fill"
+			if(key === "views.dashboard.staffing.open_shifts") return "Open shifts to fill"
+			if(key === "views.dashboard.staffing.title") return "Staffing"
+			if(key === "views.dashboard.my_schedule.title") return "My Schedule"
 			if(key === "views.dashboard.activity.item_employee") return `New employee: ${options?.name ?? ""}`
 			return key
 		},
@@ -31,18 +34,22 @@ vi.mock("@inertiajs/react", () => ({
 	usePage: () => ({
 		props: {
 			settings: { company_name: "ICR SLS" },
-			auth: { user: { person: { name: "Ada Lovelace" } } },
+			auth: { user: { person: { name: "Ada Lovelace" } }, own_employee_slug: "ada-lovelace" },
 		},
 	}),
 }))
 
+const permissionsState = {
+	can: (_resource?: string, _action?: string) => true,
+}
+
 vi.mock("@/lib/hooks", () => ({
 	usePageProps: () => ({
 		settings: { company_name: "ICR SLS" },
-		auth: { user: { person: { name: "Ada Lovelace" } } },
+		auth: { user: { person: { name: "Ada Lovelace" } }, own_employee_slug: "ada-lovelace" },
 	}),
 	usePermissions: () => ({
-		can: () => true,
+		can: (resource: string, action: string) => permissionsState.can(resource, action),
 	}),
 }))
 
@@ -54,11 +61,10 @@ function buildDashboard(overrides: Partial<Schema.DashboardStats> = {}): Schema.
 		hiring_pipeline_count: 3,
 		pending_timesheet_count: 1,
 		open_shift_count: 0,
+		staffing_visible: true,
 		week_tracked_hours: 40.5,
 		pending_terminations: [],
-		upcoming_events: [
-			{ id: "event-1", name: "Morning shift", starts_at: "2026-11-19T09:00:00Z" } as Schema.DashboardStatsUpcomingEvent,
-		],
+		my_upcoming_shifts: [],
 		open_shifts: [],
 		activity_items: [
 			{ id: "emp-1", kind: "employee", name: "Lawrence Schultz" } as Schema.DashboardStatsActivityItem,
@@ -70,6 +76,7 @@ function buildDashboard(overrides: Partial<Schema.DashboardStats> = {}): Schema.
 describe("DashboardBoard", () => {
 	beforeEach(() => {
 		cleanup()
+		permissionsState.can = () => true
 		Object.defineProperty(window, "matchMedia", {
 			writable: true,
 			value: () => ({
@@ -85,7 +92,7 @@ describe("DashboardBoard", () => {
 		})
 	})
 
-	it("renders welcome chrome, metric tiles, and action links", () => {
+	it("links dashboard metrics to their destinations", () => {
 		render(
 			<MantineProvider theme={ theme }>
 				<ModalsProvider>
@@ -94,22 +101,12 @@ describe("DashboardBoard", () => {
 			</MantineProvider>,
 		)
 
-		expect(screen.getByText("Ada Lovelace")).toBeInTheDocument()
-		expect(screen.getByText("ICR SLS Command Center")).toBeInTheDocument()
-		expect(screen.getByText("views.dashboard.clients.title")).toBeInTheDocument()
-		expect(screen.getByText("views.dashboard.team.title")).toBeInTheDocument()
-		expect(screen.getByText("views.dashboard.time.title")).toBeInTheDocument()
 		expect(screen.getByRole("link", { name: /4 Active clients/i })).toHaveAttribute("href", "/clients")
-		expect(screen.queryByText("4 Active Clients")).not.toBeInTheDocument()
 		expect(screen.getByRole("link", { name: /2 Team members/i })).toHaveAttribute("href", "/employees")
-		expect(screen.getByRole("link", { name: /Inactive/i })).toHaveAttribute("href", "/clients")
 		expect(screen.getByRole("link", { name: /In hiring pipeline/i })).toHaveAttribute("href", "/employees/applicants")
 		expect(screen.getByRole("link", { name: /Timesheets pending approval/i })).toHaveAttribute("href", "/payroll")
 		expect(screen.getByRole("link", { name: /40\.5 Total hours tracked this week/i })).toHaveAttribute("href", "/payroll")
-		expect(screen.getByText("Morning shift")).toBeInTheDocument()
 		expect(screen.getByText("New employee: Lawrence Schultz")).toBeInTheDocument()
-		expect(screen.getByText("views.dashboard.clients.view_all")).toBeInTheDocument()
-		expect(screen.getByText("views.dashboard.time.view")).toBeInTheDocument()
 	})
 
 	it("renders open shifts with alert count and schedule links", () => {
@@ -134,11 +131,43 @@ describe("DashboardBoard", () => {
 			</MantineProvider>,
 		)
 
-		expect(screen.getByRole("link", { name: /Open shifts to fill/i })).toHaveAttribute(
-			"href",
-			"/clients/maria-santos/schedule",
-		)
+		const openShiftLinks = screen.getAllByRole("link", { name: /Open shifts to fill/i })
+		expect(openShiftLinks[0]).toHaveAttribute("href", "/clients/maria-santos/schedule")
 		expect(screen.getByText("Maria Santos")).toBeInTheDocument()
+	})
+
+	it("renders my schedule for attendants without staffing visibility", () => {
+		permissionsState.can = () => false
+
+		render(
+			<MantineProvider theme={ theme }>
+				<ModalsProvider>
+					<DashboardBoard
+						dashboard={ buildDashboard({
+							staffing_visible: false,
+							open_shift_count: 0,
+							open_shifts: [],
+							activity_items: [],
+							my_upcoming_shifts: [
+								{
+									id: "mine-1",
+									client_name: "Arthur Considine",
+									client_slug: "arthur-considine",
+									starts_at: "2026-11-21T09:00:00Z",
+									ends_at: "2026-11-21T17:00:00Z",
+								},
+							],
+						}) }
+					/>
+				</ModalsProvider>
+			</MantineProvider>,
+		)
+
+		expect(screen.getByRole("link", { name: "Arthur Considine" })).toHaveAttribute(
+			"href",
+			"/clients/arthur-considine/schedule",
+		)
+		expect(screen.queryByText("Staffing")).not.toBeInTheDocument()
 	})
 
 	it("renders pending terminations with cancel", () => {

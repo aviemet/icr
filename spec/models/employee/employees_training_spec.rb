@@ -69,9 +69,4 @@ RSpec.describe Employee::EmployeesTraining do
       expect(build(:employees_training, started_at: nil, completed_at: nil).status).to eq(:not_started)
     end
   end
-
-  describe "Associations" do
-    it { is_expected.to belong_to(:employee) }
-    it { is_expected.to belong_to(:training) }
-  end
 end

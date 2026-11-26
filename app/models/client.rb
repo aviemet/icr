@@ -44,6 +44,17 @@ class Client < ApplicationRecord
   include Attachment::HasImages
   include Attachment::HasDocuments
 
+  has_one_attached :portrait do |attachable|
+    Attachment::Config.image_sizes.each do |name, dimensions|
+      attachable.variant name, resize_to_fill: dimensions
+    end
+  end
+
+  validates :portrait,
+    content_type: { in: Attachment::Config.valid_image_types, spoofing_protection: true },
+    size: { less_than: Attachment::Config.max_image_size },
+    if: -> { portrait.attached? }
+
   include PgSearchable
 
   pg_search_config(
@@ -166,7 +177,7 @@ class Client < ApplicationRecord
   }
 
   scope :includes_show, -> {
-    includes_associated.includes(
+    with_attached_portrait.includes_associated.includes(
       :doctors,
       :doctors_clients,
       :clients_managers,

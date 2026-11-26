@@ -11,7 +11,10 @@ en:
       roster:
         title: Facilitators
         empty: No facilitators found
-        caseload_size: "%{count} clients"
+        caseload_size:
+          one: "%{count} client"
+          other: "%{count} clients"
+
         select_hint: Select a facilitator to review their caseload
       clients:
         title: Caseload

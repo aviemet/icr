@@ -84,8 +84,8 @@ module Payroll
       managed_client_ids = employee.managed_clients.pluck(:id)
       return 0 if managed_client_ids.empty?
 
-      PayPeriod.shifts_overlapping_period(pay_period)
-        .where(employee_id: director_pending_ids, facilitator_approved_at: nil)
+      shifts = PayPeriod.shifts_overlapping_period(pay_period)
+        .where(employee_id: director_pending_ids)
         .joins(calendar_event: :event_participants)
         .where(
           event_participants: {
@@ -93,8 +93,11 @@ module Payroll
             participant_id: managed_client_ids,
           },
         )
+        .includes(calendar_event: [:recurring_patterns, :event_exceptions])
         .distinct
-        .count
+        .to_a
+
+      pay_period.shift_occurrences(shifts).count { |occurrence| !occurrence.facilitator_approved? }
     end
 
     def admin_users

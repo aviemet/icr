@@ -6,6 +6,7 @@ import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { Box, Group, Table, type TableProps, Text } from "@/components"
+import { type IhssToggleDelta } from "@/domains/TimeSheets/ihssToggle"
 import { confirmBusyAction } from "@/features"
 import { formatter, Routes, assertStatus, HTTP_STATUS } from "@/lib"
 
@@ -17,14 +18,19 @@ interface ReviewTableProps extends TableProps {
 	shiftOtHours?: Record<string, number>
 	regularHours: number
 	otHours: number
+	ptoHours?: number
+	sickHours?: number
+	holidayHours?: number
 	canEditTimes: boolean
 	employeeId: string
 	employeeSlug: string
 	payPeriodId: string
+	clientId?: string
 	reloadHref?: string
 	showClientColumn?: boolean
 	canFacilitatorApprove?: boolean
 	canEditIhss?: boolean
+	onIhssToggle?: (delta: IhssToggleDelta) => void
 }
 
 export function ReviewTable({
@@ -33,14 +39,19 @@ export function ReviewTable({
 	shiftOtHours = {},
 	regularHours,
 	otHours,
+	ptoHours = 0,
+	sickHours = 0,
+	holidayHours = 0,
 	canEditTimes,
 	employeeId,
 	employeeSlug,
 	payPeriodId,
+	clientId,
 	reloadHref,
 	showClientColumn = true,
 	canFacilitatorApprove = false,
 	canEditIhss = false,
+	onIhssToggle,
 	...props
 }: ReviewTableProps) {
 	const { t } = useTranslation()
@@ -147,11 +158,14 @@ export function ReviewTable({
 										onDelete={ () => handleDeleteShift(shift) }
 										deleting={ busy }
 										employeeSlug={ employeeSlug }
+										payPeriodId={ payPeriodId }
+										clientId={ clientId }
 										reloadHref={ resolvedReloadHref }
 										showClientColumn={ showClientColumn }
 										canFacilitatorApprove={ canFacilitatorApprove }
 										canEditIhss={ canEditIhss }
 										canEditShiftType={ canEditTimes }
+										onIhssToggle={ onIhssToggle }
 									/>
 								))
 							) }
@@ -170,6 +184,15 @@ export function ReviewTable({
 										</Text>
 										<Text size="sm" fw={ 500 }>
 											{ t("views.timesheets.employee_review.footer_overtime") }: { formatter.number.decimal(otHours, 2) } hrs
+										</Text>
+										<Text size="sm" fw={ 500 }>
+											{ t("views.timesheets.employee_review.pto_hours") }: { formatter.number.decimal(ptoHours, 2) } hrs
+										</Text>
+										<Text size="sm" fw={ 500 }>
+											{ t("views.timesheets.employee_review.sick_hours") }: { formatter.number.decimal(sickHours, 2) } hrs
+										</Text>
+										<Text size="sm" fw={ 500 }>
+											{ t("views.timesheets.employee_review.holiday_hours") }: { formatter.number.decimal(holidayHours, 2) } hrs
 										</Text>
 									</Group>
 								</Table.Cell>

@@ -572,6 +572,13 @@
       },
       "pm": "PM"
     },
+    "time_off_requests": {
+      "approved": "Time off request approved.",
+      "canceled": "Time off request canceled.",
+      "created": "Time off request submitted.",
+      "denied": "Time off request denied.",
+      "manager_leave_created": "Leave recorded for employee."
+    },
     "timesheets": {
       "approval_window_closed": "Approval is only allowed after the period has closed and before the payroll due date.",
       "approved": "Timesheet approved.",
@@ -582,6 +589,7 @@
     "views": {
       "applicants": {
         "index": {
+          "new": "New Applicant",
           "title": "Applicants"
         }
       },
@@ -604,7 +612,10 @@
           "unassigned": "Unassigned"
         },
         "roster": {
-          "caseload_size": "%{count} clients",
+          "caseload_size": {
+            "one": "%{count} client",
+            "other": "%{count} clients"
+          },
           "empty": "No facilitators found",
           "select_hint": "Select a facilitator to review their caseload",
           "title": "Facilitators"
@@ -739,7 +750,7 @@
             "active_meds": "Active medications",
             "add_link": "Add link",
             "allergies": "Active allergies",
-            "attendants": "Attendants",
+            "attendants": "Attendant",
             "cancel_link": "Cancel",
             "care_team": "Care Team",
             "client_number": "Client",
@@ -776,6 +787,11 @@
             "demographics": "Demographics",
             "ihss": "IHSS Profile",
             "life_details": "Life Details",
+            "portrait": "Portrait",
+            "portrait_current": "Current portrait",
+            "portrait_empty": "No portrait uploaded yet",
+            "portrait_remove": "Remove portrait",
+            "portrait_upload": "Upload portrait",
             "save": "Save Profile"
           },
           "tabs": {
@@ -833,16 +849,18 @@
           "view_all": "View All Clients"
         },
         "command_center": "%{company} Command Center",
-        "schedule": {
-          "add": "Add Event",
-          "empty": "No upcoming events in your view.",
+        "my_schedule": {
+          "empty": "No upcoming shifts on your schedule.",
+          "title": "My Schedule",
+          "untitled": "Shift",
+          "view": "View my schedule"
+        },
+        "staffing": {
+          "empty": "No open shifts to fill.",
           "open_shift": "Open shift",
           "open_shifts": "Open shifts to fill",
-          "shift_for": "Shift - %{name}",
-          "title": "Today's Schedule",
-          "untitled_shift": "Shift",
-          "upcoming": "Upcoming Appointments",
-          "view": "View Schedule"
+          "title": "Staffing",
+          "view_caseloads": "View caseloads"
         },
         "team": {
           "add_new": "Add New Employee",
@@ -852,11 +870,13 @@
           "view_all": "View All Employees"
         },
         "time": {
+          "my_hours_week": "Your hours this week",
           "pending_timesheets": "Timesheets pending approval",
           "title": "Time Tracking",
           "total_hours": "%{hours} Hours",
           "total_hours_week": "Total hours tracked this week",
-          "view": "View Timesheets"
+          "view": "View Timesheets",
+          "view_profile": "My profile"
         },
         "welcome": "Welcome back, %{name}"
       },
@@ -1050,8 +1070,10 @@
           },
           "pay": {
             "add_rate": "Add Pay Rate",
+            "manage_time_off": "Manage time off",
             "payroll": "Payroll",
             "rates": "Pay Rates",
+            "time_off": "Time Off",
             "view_period_review": "View Current Period Review"
           },
           "profile": {
@@ -1692,6 +1714,39 @@
           "wednesday": "Wednesday"
         }
       },
+      "time_off": {
+        "index": {
+          "actions": "Actions",
+          "approve": "Approve",
+          "cancel": "Cancel",
+          "deny": "Deny",
+          "description": "Request leave and review pending requests. Accrual stays with payroll.",
+          "employee": "Employee",
+          "empty_pending": "No pending requests.",
+          "empty_requests": "No requests yet.",
+          "ends_at": "Ends",
+          "hours": "Hours",
+          "kind": "Kind",
+          "kind_pto": "PTO",
+          "kind_sick": "Sick",
+          "manager_leave_title": "Record leave for a report",
+          "my_requests_title": "My requests",
+          "org_pending_title": "All pending",
+          "pending_queue_title": "Direct reports pending",
+          "record_leave": "Record leave",
+          "request_title": "Request time off",
+          "review_note": "Note",
+          "spotlight_description": "Request and approve leave",
+          "starts_at": "Starts",
+          "status": "Status",
+          "status_approved": "Approved",
+          "status_canceled": "Canceled",
+          "status_denied": "Denied",
+          "status_pending": "Pending",
+          "submit": "Submit request",
+          "title": "Time Off"
+        }
+      },
       "timesheets": {
         "employee_review": {
           "actions": "Actions",
@@ -1723,6 +1778,7 @@
           "exception": "Exception",
           "footer_overtime": "Overtime",
           "footer_regular": "Regular",
+          "holiday_hours": "Holiday",
           "hours": "Hours",
           "ihss": "IHSS",
           "ihss_hours": "IHSS Hours",
@@ -1768,11 +1824,13 @@
             "employee": "Employee",
             "exceptions": "Exceptions",
             "facilitator_progress": "Facilitator review",
+            "holiday_hours": "Holiday",
             "ihss_hours": "IHSS Hours",
             "ot_hours": "OT Hours",
-            "pto_sick": "PTO / Sick",
+            "pto_hours": "PTO",
             "regular_hours": "Regular Hours",
             "review": "Review",
+            "sick_hours": "Sick",
             "status": "Status",
             "unapprove": "Unapprove"
           },
@@ -1878,6 +1936,21 @@
           "completed": "Completed",
           "in_progress": "In progress",
           "not_started": "Not started"
+        }
+      },
+      "vendors": {
+        "edit": {
+          "title": "Edit Vendor"
+        },
+        "index": {
+          "new": "New Vendor",
+          "title": "Vendors"
+        },
+        "new": {
+          "title": "New Vendor"
+        },
+        "show": {
+          "title": "Vendor"
         }
       }
     }

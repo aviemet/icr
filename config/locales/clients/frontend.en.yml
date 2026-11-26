@@ -85,9 +85,10 @@ en:
           open_shifts: Open shifts to fill
           household: Household
           manager: Manager
-          attendants: Attendants
+          attendants: Attendant
           none: None assigned
           face_sheet: Face Sheet
+
           face_sheet_hint: Download PDF
           schedule_hint: Open calendar
           custom_links: Custom links
@@ -109,6 +110,11 @@ en:
           life_details: Life Details
           communication: Communication
           save: Save Profile
+          portrait: Portrait
+          portrait_upload: Upload portrait
+          portrait_remove: Remove portrait
+          portrait_current: Current portrait
+          portrait_empty: No portrait uploaded yet
         medical:
           sections:
             overview: Overview

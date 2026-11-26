@@ -8,7 +8,7 @@ module InertiaShare::Flash
 
     inertia_share flash: -> { {
       success: flash[:success], # green
-      alert: flash[:alert], # red
+      alert: flash[:alert].presence || flash[:error], # red
       info: flash[:notice], # blue
       warning: flash[:warning] # yellow
     } }

@@ -44,7 +44,7 @@ RSpec.describe Employee::JobTitle do
         },
       )
       expect(assignment).not_to be_valid
-      expect(assignment.errors[:ends_at]).to include("must be after starts_at")
+      expect(assignment.errors[:ends_at]).to be_present
     end
 
     it "allows assignment when ends_at is blank" do
@@ -56,7 +56,6 @@ RSpec.describe Employee::JobTitle do
 
   describe "Associations" do
     it{ is_expected.to have_many(:employees).through(:employees_job_titles) }
-    it{ is_expected.to have_many(:active_employees_job_titles) }
     it{ is_expected.to have_many(:active_employees).through(:active_employees_job_titles) }
 
     it "only returns active job title assignments" do

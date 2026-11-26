@@ -27,7 +27,7 @@ const ApplicantsIndex = ({ employees, can_updates, pagination, job_title_options
 			dense
 			actions={ canCreate
 				? [
-					{ label: t("views.employees.index.new"), href: Routes.newEmployee(), icon: <NewIcon /> },
+					{ label: t("views.applicants.index.new"), href: Routes.newEmployee(), icon: <NewIcon /> },
 				]
 				: [] }
 		>

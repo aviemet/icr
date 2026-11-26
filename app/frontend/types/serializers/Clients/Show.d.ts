@@ -65,6 +65,8 @@ declare global {
       number?: string
       person: PeopleShow
       person_id: string
+      portrait_medium_url?: string
+      portrait_url?: string
       preferred_hospital?: string
       preferred_language?: string
       prescriptions: PrescriptionsPersisted[]

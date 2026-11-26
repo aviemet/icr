@@ -136,7 +136,7 @@ const Status = ({ employee }: StatusProps) => {
 							{ t("views.employees.show.overview.job_title") }: { String(employee.job_title.name) }
 						</Text>
 					) }
-					{ employee.active_at && (
+					{ employee.active_at && employee.status !== "applicant" && employee.status !== "offered" && (
 						<Text size="sm" c="dimmed" component="span">
 							{ t("views.employees.show.overview.hire_date") }:{ " " }
 							<DateTimeFormatter>{ employee.active_at }</DateTimeFormatter>

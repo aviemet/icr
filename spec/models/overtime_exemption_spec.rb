@@ -19,7 +19,7 @@ RSpec.describe OvertimeExemption, type: :model do
 
   describe "#matches?" do
     let(:overnight_exemption) do
-      described_class.create!(
+      described_class.new(
         name: "Overnight Sleep Shift",
         criteria: [{
           "category" => { "operator" => "equals", "value" => "sleep_shift" },
@@ -30,7 +30,7 @@ RSpec.describe OvertimeExemption, type: :model do
     end
 
     let(:daytime_exemption) do
-      described_class.create!(
+      described_class.new(
         name: "Day Shift",
         criteria: [{
           "category" => { "operator" => "equals", "value" => "regular" },
@@ -105,7 +105,7 @@ RSpec.describe OvertimeExemption, type: :model do
 
     context "with multiple criteria groups" do
       let(:complex_exemption) do
-        described_class.create!(
+        described_class.new(
           name: "Complex Rules",
           criteria: [
             {

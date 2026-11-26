@@ -18,6 +18,7 @@ export {
 	TbMoonStars as MoonIcon,
 	TbEye as ViewIcon,
 	TbAlertTriangle as WarningTriangleIcon,
+	TbStethoscope as DoctorIcon,
 } from "react-icons/tb"
 
 export {

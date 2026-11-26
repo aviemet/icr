@@ -37,6 +37,44 @@ RSpec.describe Payroll::EmployeePeriodHours do
       expect(result[employee.id.to_s][:regular_hours]).to eq(8.0)
       expect(result[employee.id.to_s][:ot_hours]).to eq(0.0)
       expect(result[employee.id.to_s][:shift_ot_hours]).to eq(shift.id.to_s => 0.0)
+      expect(result[employee.id.to_s][:pto_hours]).to eq(0.0)
+      expect(result[employee.id.to_s][:sick_hours]).to eq(0.0)
+    end
+
+    it "classifies vacation and sick leave separately and excludes them from OT pools" do
+      pay_period = pay_period_for(Date.new(2024, 3, 15))
+      employee = create(:employee)
+      timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
+      vacation = ServiceType.find_or_create_by!(slug: "vacation") do |service_type|
+        service_type.name = "Vacation"
+        service_type.system = true
+        service_type.billable = false
+        service_type.payable = true
+        service_type.color = "#B45309"
+        service_type.position = 0
+      end
+      sick = ServiceType.find_or_create_by!(slug: "sick") do |service_type|
+        service_type.name = "Sick"
+        service_type.system = true
+        service_type.billable = false
+        service_type.payable = true
+        service_type.color = "#BE123C"
+        service_type.position = 1
+      end
+      work_event = create(:calendar_event, starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0), ends_at: Time.zone.local(2024, 3, 15, 17, 0, 0))
+      create(:shift, employee: employee, timesheet: timesheet, calendar_event: work_event)
+      pto_event = create(:calendar_event, starts_at: Time.zone.local(2024, 3, 14, 9, 0, 0), ends_at: Time.zone.local(2024, 3, 14, 17, 0, 0))
+      create(:shift, employee: employee, timesheet: timesheet, calendar_event: pto_event, service_type: vacation)
+      sick_event = create(:calendar_event, starts_at: Time.zone.local(2024, 3, 13, 9, 0, 0), ends_at: Time.zone.local(2024, 3, 13, 13, 0, 0))
+      create(:shift, employee: employee, timesheet: timesheet, calendar_event: sick_event, service_type: sick)
+
+      result = described_class.call(pay_period, [employee.id])[employee.id.to_s]
+
+      expect(result[:regular_hours]).to eq(8.0)
+      expect(result[:ot_hours]).to eq(0.0)
+      expect(result[:pto_hours]).to eq(8.0)
+      expect(result[:sick_hours]).to eq(4.0)
+      expect(result[:company_hours]).to eq(8.0)
     end
 
     it "splits overnight shift across two days and applies threshold OT only after daily totals exceed 8" do

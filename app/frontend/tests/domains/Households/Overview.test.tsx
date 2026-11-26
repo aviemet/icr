@@ -62,7 +62,7 @@ describe("HouseholdOverview", () => {
 		})
 	})
 
-	it("renders member count and schedule action", () => {
+	it("links members and the schedule action", () => {
 		render(
 			<MantineProvider theme={ theme }>
 				<HouseholdOverview
@@ -95,8 +95,10 @@ describe("HouseholdOverview", () => {
 			</MantineProvider>,
 		)
 
-		expect(screen.getByText("views.households.show.overview.members")).toBeTruthy()
-		expect(screen.getByText("Maria Santos")).toBeTruthy()
-		expect(screen.getByText("views.households.show.overview.schedule")).toBeTruthy()
+		expect(screen.getByRole("link", { name: "Maria Santos" })).toHaveAttribute("href", "/clients/maria-santos")
+		expect(screen.getByRole("link", { name: /views.households.show.overview.schedule/ })).toHaveAttribute(
+			"href",
+			"/households/santos-home/schedule",
+		)
 	})
 })

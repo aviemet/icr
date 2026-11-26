@@ -32,9 +32,4 @@ RSpec.describe EventParticipant do
       end
     end
   end
-
-  describe "Associations" do
-    it{ is_expected.to belong_to(:calendar_event) }
-    it{ is_expected.to belong_to(:participant) }
-  end
 end

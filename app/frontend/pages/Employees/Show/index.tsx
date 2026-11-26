@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 
-import { Avatar, Badge, Link, ScheduleButton, Text } from "@/components"
+import { Avatar, Badge, Link, Presence, ScheduleButton, Text } from "@/components"
 import { DateTimeFormatter } from "@/components/Formatters"
 import { employeeStatusBadgeColor } from "@/domains/Employees/employeeStatusBadgeColor"
 import { type RequirementFulfillmentsPayload } from "@/domains/Employees/Requirements/types"
@@ -66,14 +66,14 @@ const ShowEmployee = ({
 			meta={ (
 				<>
 					<Text size="sm" c="dimmed" component="span">
-						{ t("views.employees.show.overview.employee_number") }: { employee.number || "-" }
+						{ t("views.employees.show.overview.employee_number") }: <Presence>{ employee.number }</Presence>
 					</Text>
 					{ employee.job_title && (
 						<Text size="sm" c="dimmed" component="span">
 							{ t("views.employees.show.overview.job_title") }: { String(employee.job_title.name) }
 						</Text>
 					) }
-					{ employee.active_at && (
+					{ employee.active_at && employeeStatus !== "applicant" && employeeStatus !== "offered" && (
 						<Text size="sm" c="dimmed" component="span">
 							{ t("views.employees.show.overview.hire_date") }:{ " " }
 							<DateTimeFormatter>{ employee.active_at }</DateTimeFormatter>
@@ -83,7 +83,9 @@ const ShowEmployee = ({
 			) }
 			actions={ (
 				<>
-					<ScheduleButton href={ Routes.scheduleEmployee(employee.slug) } appearance="button" />
+					{ employeeStatus !== "applicant" && employeeStatus !== "offered" && (
+						<ScheduleButton href={ Routes.scheduleEmployee(employee.slug) } appearance="button" />
+					) }
 					{ can_update && (
 						<Link href={ Routes.statusEmployee(employee.slug) } as="button" buttonProps={ { variant: "light", size: "sm" } }>
 							{ t("views.employees.show.change_status") }

@@ -16,18 +16,33 @@ module Calendar
       def call
         last_day = @occurrence_starts_at.in_time_zone.to_date - 1.day
 
-        @event.recurring_patterns.each do |pattern|
-          next_end = if pattern.end_date.present?
-                       [pattern.end_date, last_day].min
-                     else
-                       last_day
-                     end
+        ActiveRecord::Base.transaction do
+          @event.recurring_patterns.each do |pattern|
+            next_end = if pattern.end_date.present?
+                         [pattern.end_date, last_day].min
+                       else
+                         last_day
+                       end
 
-          pattern.update!(
-            end_date: next_end,
-            max_occurrences: nil,
+            pattern.update!(
+              end_date: next_end,
+              max_occurrences: nil,
+            )
+          end
+
+          SyncOccurrenceApprovals.delete_from(
+            master_shift,
+            occurrence_starts_at: @occurrence_starts_at,
+          )
+          SyncOccurrenceOverrides.delete_from(
+            master_shift,
+            occurrence_starts_at: @occurrence_starts_at,
           )
         end
+      end
+
+      def master_shift
+        Shift.find_by(calendar_event_id: @event.id)
       end
     end
   end

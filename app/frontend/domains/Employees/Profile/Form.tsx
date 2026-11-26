@@ -64,16 +64,16 @@ export function EmployeeProfileForm({ employee }: EmployeeProfileFormProps) {
 						<FormBand title={ t("views.employees.show.profile.demographics") } actions={ controls }>
 							<DefinitionList>
 								<DefinitionItem label="First Name" value={ employee.person.first_name } />
-								<DefinitionItem label="Middle Name" value={ employee.person.middle_name || "-" } />
+								<DefinitionItem label="Middle Name" value={ employee.person.middle_name } />
 								<DefinitionItem label="Last Name" value={ employee.person.last_name } />
-								<DefinitionItem label="Nickname" value={ employee.person.nick_name || "-" } />
+								<DefinitionItem label="Nickname" value={ employee.person.nick_name } />
 								<DefinitionItem
 									label="Date of Birth"
 									value={ employee.person.dob
 										? <DateTimeFormatter>{ employee.person.dob }</DateTimeFormatter>
-										: "-" }
+										: null }
 								/>
-								<DefinitionItem label="Employee #" value={ employee.number || "-" } />
+								<DefinitionItem label="Employee #" value={ employee.number } />
 							</DefinitionList>
 						</FormBand>
 
@@ -81,7 +81,7 @@ export function EmployeeProfileForm({ employee }: EmployeeProfileFormProps) {
 							<DefinitionList>
 								<DefinitionItem
 									label="Job Title"
-									value={ employee.job_title ? String(employee.job_title.name) : "-" }
+									value={ employee.job_title ? String(employee.job_title.name) : null }
 								/>
 								<DefinitionItem
 									label="Default Calendar Color"
@@ -99,27 +99,27 @@ export function EmployeeProfileForm({ employee }: EmployeeProfileFormProps) {
 												<span>{ employee.color }</span>
 											</Group>
 										)
-										: "-" }
+										: null }
 								/>
 								<DefinitionItem
 									label="Hire Date"
 									value={ employee.active_at
 										? <DateTimeFormatter>{ employee.active_at }</DateTimeFormatter>
-										: "-" }
+										: null }
 								/>
 								<DefinitionItem
 									label="End Date"
 									value={ employee.inactive_at
 										? <DateTimeFormatter>{ employee.inactive_at }</DateTimeFormatter>
-										: "-" }
+										: null }
 								/>
 							</DefinitionList>
 						</FormBand>
 
 						<FormBand title={ t("views.employees.show.profile.communication") }>
 							<DefinitionList>
-								<DefinitionItem label="Preferred Language" value={ employee.preferred_language || "-" } />
-								<DefinitionItem label="Communication Notes" value={ employee.communication_notes || "-" } fullWidth />
+								<DefinitionItem label="Preferred Language" value={ employee.preferred_language } />
+								<DefinitionItem label="Communication Notes" value={ employee.communication_notes } fullWidth />
 							</DefinitionList>
 						</FormBand>
 					</FormBandStack>

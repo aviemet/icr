@@ -34,8 +34,4 @@ RSpec.describe Contact::Website do
       end
     end
   end
-
-  describe "Associations" do
-    it_behaves_like "contact_method"
-  end
 end

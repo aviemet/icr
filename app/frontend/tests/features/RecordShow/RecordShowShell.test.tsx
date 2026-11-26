@@ -2,7 +2,6 @@ import { MantineProvider, Tabs as MantineTabs } from "@mantine/core"
 import { cleanup, render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
-import { pageChrome } from "@/components/PageChrome"
 import { RecordShowShell } from "@/features/RecordShow"
 import { theme } from "@/lib/theme"
 
@@ -86,7 +85,6 @@ describe("RecordShowShell", () => {
 		expect(screen.getByRole("tab", { name: "Overview" })).toBeInTheDocument()
 		expect(screen.getByRole("tab", { name: "Profile" })).toBeInTheDocument()
 		expect(screen.getByText("Overview board")).toBeInTheDocument()
-		expect(screen.getByText("Overview board").closest(`.${pageChrome.panelWrapperSurface}`)).toBeTruthy()
 	})
 
 	it("renders section subnav and default section panel for sectioned tabs", () => {

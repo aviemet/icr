@@ -138,9 +138,4 @@ RSpec.describe HouseholdsClient do
       expect(membership.covers?(Date.new(2026, 1, 21))).to be(false)
     end
   end
-
-  describe "Associations" do
-    it { is_expected.to belong_to(:client) }
-    it { is_expected.to belong_to(:household) }
-  end
 end

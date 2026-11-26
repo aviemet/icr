@@ -57,6 +57,7 @@ en:
         save_times: Save times
         shift: Shift
         sick_hours: Sick
+        holiday_hours: Holiday
         status_approved: Approved
         status_pending: Pending
         status_submitted: Submitted
@@ -80,7 +81,9 @@ en:
           ot_hours: OT Hours
           ihss_hours: IHSS Hours
           company_hours: Company Hours
-          pto_sick: PTO / Sick
+          pto_hours: PTO
+          sick_hours: Sick
+          holiday_hours: Holiday
           regular_hours: Regular Hours
           review: Review
           status: Status

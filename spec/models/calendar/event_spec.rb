@@ -48,10 +48,7 @@ RSpec.describe Calendar::Event do
   describe "Associations" do
     it { is_expected.to belong_to(:parent).optional }
 
-    it { is_expected.to have_one(:shift) }
-
     it { is_expected.to have_many(:children).dependent(:destroy) }
-    it { is_expected.to have_many(:recurring_patterns) }
     it { is_expected.to have_many(:event_exceptions).dependent(:destroy) }
     it { is_expected.to have_many(:clients).through(:event_participants) }
     it { is_expected.to have_many(:households).through(:event_participants) }
@@ -135,6 +132,42 @@ RSpec.describe Calendar::Event do
 
       expect(event.update(starts_at: event.starts_at + 1.hour)).to be(false)
       expect(event.errors[:base]).to include(I18n.t("pay_periods.finalized_locked"))
+    end
+
+    it "allows updating a recurring master whose timesheet period is finalized when the series reaches an open period" do
+      travel_to Time.zone.local(2024, 3, 20, 12, 0, 0) do
+        employee = create(:employee)
+        past_start = Date.new(2024, 2, 16)
+        past_end = Date.new(2024, 2, 29)
+        past_period = PayPeriod.for_period_dates(past_start, past_end)
+        past_period.update!(finalized_at: Time.current)
+
+        open_start = Date.new(2024, 3, 16)
+        open_end = Date.new(2024, 3, 31)
+        PayPeriod.for_period_dates(open_start, open_end)
+
+        master_starts = Time.zone.local(2024, 2, 19, 9, 0, 0)
+        shift = create(
+          :shift,
+          employee: employee,
+          calendar_event: create(
+            :calendar_event,
+            starts_at: master_starts,
+            ends_at: master_starts + 8.hours,
+          ),
+        )
+        event = described_class.find(shift.calendar_event_id)
+        create(
+          :calendar_recurring_pattern,
+          calendar_event: event,
+          recurring_type: :weekly,
+          day_of_week: 1,
+          end_date: nil,
+        )
+        shift.update_column(:timesheet_id, past_period.timesheets.find_or_create_by!(employee_id: employee.id).id) # rubocop:disable Rails/SkipsModelValidations
+
+        expect(event.update(notes: "series still open")).to be(true)
+      end
     end
   end
 

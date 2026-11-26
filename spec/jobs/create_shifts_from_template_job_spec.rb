@@ -3,10 +3,10 @@ require "rails_helper"
 RSpec.describe CreateShiftsFromTemplateJob, type: :job do
   describe "#perform" do
     it "creates shifts for active template" do
-      template = create(:shift_template, :recurring)
-      create(:shift_template_entry, shift_template: template)
+      template = build_stubbed(:shift_template, :recurring)
       start_date = Date.current
 
+      allow(ShiftTemplate).to receive(:find_by).with(id: template.id).and_return(template)
       allow(ShiftTemplateApplicator).to receive(:apply)
         .with(template, start_date)
         .and_return(true)
@@ -18,9 +18,10 @@ RSpec.describe CreateShiftsFromTemplateJob, type: :job do
     end
 
     it "does not create shifts for inactive template" do
-      template = create(:shift_template, :inactive)
+      template = build_stubbed(:shift_template, :inactive)
       start_date = Date.current
 
+      allow(ShiftTemplate).to receive(:find_by).with(id: template.id).and_return(template)
       allow(ShiftTemplateApplicator).to receive(:apply)
 
       described_class.new.perform(template.id, start_date)
@@ -29,9 +30,11 @@ RSpec.describe CreateShiftsFromTemplateJob, type: :job do
     end
 
     it "handles missing template gracefully" do
+      template_id = SecureRandom.uuid
+      allow(ShiftTemplate).to receive(:find_by).with(id: template_id).and_return(nil)
       allow(ShiftTemplateApplicator).to receive(:apply)
 
-      described_class.new.perform(-1, Date.current)
+      described_class.new.perform(template_id, Date.current)
 
       expect(ShiftTemplateApplicator).not_to have_received(:apply)
     end

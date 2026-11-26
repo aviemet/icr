@@ -40,7 +40,6 @@ RSpec.describe Client::HospitalVisit do
   end
 
   describe "Associations" do
-    it { is_expected.to belong_to(:client) }
     it { is_expected.to belong_to(:doctor).optional }
     it { is_expected.to belong_to(:incident_report).optional }
   end

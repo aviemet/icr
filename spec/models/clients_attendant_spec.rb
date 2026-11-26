@@ -27,7 +27,6 @@ RSpec.describe ClientsAttendant, type: :model do
 
   describe "associations" do
     it { is_expected.to belong_to(:attendant).class_name("Employee") }
-    it { is_expected.to belong_to(:client) }
   end
 
   describe "validations" do
@@ -46,7 +45,9 @@ RSpec.describe ClientsAttendant, type: :model do
 
       it "validates uniqueness of attendant_id scoped to client_id" do
         expect(clients_attendant).not_to be_valid
-        expect(clients_attendant.errors[:attendant_id]).to include("Already attends this client")
+        expect(clients_attendant.errors[:attendant_id]).to include(
+          I18n.t("activerecord.errors.models.clients_attendant.attributes.attendant_id.already_attends"),
+        )
       end
     end
   end

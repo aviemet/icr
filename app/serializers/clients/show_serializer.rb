@@ -30,6 +30,26 @@ class Clients::ShowSerializer < Clients::PersistedSerializer
     Attachments::FileSerializer.many(@object.images)
   end
 
+  type :string, optional: true
+  def portrait_url
+    return unless @object.portrait.attached?
+
+    Rails.application.routes.url_helpers.rails_blob_path(
+      @object.portrait.variant(:thumb),
+      only_path: true,
+    )
+  end
+
+  type :string, optional: true
+  def portrait_medium_url
+    return unless @object.portrait.attached?
+
+    Rails.application.routes.url_helpers.rails_blob_path(
+      @object.portrait.variant(:medium),
+      only_path: true,
+    )
+  end
+
   type :number, optional: false
   def active_allergies_count
     @object.allergies.count(&:active?)

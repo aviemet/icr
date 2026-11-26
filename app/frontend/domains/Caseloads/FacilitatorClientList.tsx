@@ -67,7 +67,6 @@ export function FacilitatorClientList({
 										<Button
 											size="compact-xs"
 											variant="light"
-											color="orange"
 											onClick={ () => handleReassign(client) }
 										>
 											{ t("views.caseloads.clients.reassign") }

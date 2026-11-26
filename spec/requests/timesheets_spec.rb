@@ -41,6 +41,23 @@ RSpec.describe "/timesheets", type: :request do
       expect(inertia.props[:unreviewed_shifts]).to eq([])
     end
 
+    it "skips sync_shifts! on Inertia partial reloads used by Mark IHSS" do
+      pay_period = create(:pay_period, finalized_at: nil, approved_at: nil)
+      employee = create(:employee)
+      create(:timesheet, pay_period: pay_period, employee: employee, approved_at: nil)
+
+      expect_any_instance_of(PayPeriod).not_to receive(:sync_shifts!)
+
+      get period_employee_review_path(period_id: pay_period.id, employee_id: employee.id),
+        headers: {
+          "X-Inertia" => "true",
+          "X-Inertia-Partial-Data" => "shifts,employee_hours,shift_ot_hours",
+          "X-Inertia-Partial-Component" => "Timesheets/EmployeeReview",
+        }
+
+      expect(response).to have_http_status(:success)
+    end
+
     it "includes unreviewed shifts for the approve warning payload" do
       Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
       employee = create(:employee, :employed)

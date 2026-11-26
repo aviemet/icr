@@ -6,8 +6,6 @@ RSpec.describe "Settings::Companies", type: :request do
 
   describe "GET /show" do
     it "renders a successful response" do
-      create(:regional_center) unless RegionalCenter.exists?
-
       get settings_company_url
 
       expect(response).to be_successful

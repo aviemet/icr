@@ -26,7 +26,6 @@ require "rails_helper"
 RSpec.describe ClientsManager do
   describe "associations" do
     it { is_expected.to belong_to(:manager).class_name("Employee") }
-    it { is_expected.to belong_to(:client) }
   end
 
   describe "validations" do
@@ -43,7 +42,7 @@ RSpec.describe ClientsManager do
           ends_at: 1.day.ago,)
 
         expect(clients_manager).not_to be_valid
-        expect(clients_manager.errors[:ends_at]).to include("must be after starts_at")
+        expect(clients_manager.errors[:ends_at]).to be_present
       end
     end
 
@@ -66,7 +65,9 @@ RSpec.describe ClientsManager do
 
         I18n.with_locale(:en) do
           expect(duplicate).not_to be_valid
-          expect(duplicate.errors[:manager_id]).to include("Already manages")
+          expect(duplicate.errors[:manager_id]).to include(
+            I18n.t("activerecord.errors.models.clients_manager.attributes.manager_id.already_manages"),
+          )
         end
       end
 

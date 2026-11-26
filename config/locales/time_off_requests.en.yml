@@ -1,0 +1,8 @@
+---
+en:
+  time_off_requests:
+    created: Time off request submitted.
+    approved: Time off request approved.
+    denied: Time off request denied.
+    canceled: Time off request canceled.
+    manager_leave_created: Leave recorded for employee.

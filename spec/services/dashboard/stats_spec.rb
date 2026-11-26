@@ -19,8 +19,9 @@ RSpec.describe Dashboard::Stats do
       payload = described_class.new(nil).payload
 
       expect(payload.active_client_count).to eq(0)
-      expect(payload.upcoming_events).to eq([])
+      expect(payload.my_upcoming_shifts).to eq([])
       expect(payload.activity_items).to eq([])
+      expect(payload.staffing_visible).to be(false)
     end
 
     it "returns policy-scoped counts and payloads for an admin" do
@@ -29,11 +30,6 @@ RSpec.describe Dashboard::Stats do
 
       create(:employee)
       employed = create(:employee, :employed)
-
-      create(:calendar_event,
-        name: "Visible event",
-        starts_at: 2.hours.from_now,
-        ends_at: 3.hours.from_now,)
 
       period_start, period_end = Payroll::Period.period_dates
       period_starts_at = period_start.to_time.beginning_of_day
@@ -52,11 +48,30 @@ RSpec.describe Dashboard::Stats do
       expect(payload.inactive_client_count).to eq(1)
       expect(payload.active_team_count).to eq(1)
       expect(payload.hiring_pipeline_count).to eq(1)
-      expect(payload.upcoming_events.map(&:name)).to include("Visible event")
+      expect(payload.staffing_visible).to be(true)
       expect(payload.week_tracked_hours).to be_within(0.01).of(8.0)
       expect(payload.pending_timesheet_count).to eq(1)
       expect(payload.activity_items.map(&:kind)).to include("client", "employee")
       expect(payload.pending_terminations).to eq([])
+    end
+
+    it "counts recurring assigned shift occurrences that fall in the current week" do
+      employed = create(:employee, :employed)
+      master = create(:calendar_event,
+        starts_at: Time.zone.local(2026, 3, 16, 9, 0, 0),
+        ends_at: Time.zone.local(2026, 3, 16, 17, 0, 0),)
+      create(
+        :calendar_recurring_pattern,
+        calendar_event: master,
+        offset: 1,
+        day_of_week: 1,
+        end_date: Date.new(2026, 5, 1),
+      )
+      create(:shift, employee: employed, calendar_event: master)
+
+      payload = described_class.new(admin).payload
+
+      expect(payload.week_tracked_hours).to be_within(0.01).of(8.0)
     end
 
     it "includes pending terminations for an admin" do
@@ -86,19 +101,25 @@ RSpec.describe Dashboard::Stats do
       expect(payload.open_shifts.first.client_slug).to eq(client.slug)
     end
 
-    it "returns empty open shifts for attendants" do
+    it "returns empty open shifts and staffing_visible false for attendants" do
       client = create(:client)
       attendant_user = create(:user)
-      attendant = create(:employee, person: attendant_user.person)
+      attendant = create(:employee, :employed, person: attendant_user.person)
       create(:clients_attendant, client: client, attendant: attendant)
       event = create(:calendar_event, starts_at: 1.day.from_now, ends_at: 1.day.from_now + 2.hours)
       create(:event_participant, calendar_event: event, participant: client)
       create(:shift, :open, calendar_event: event)
+      assigned = create(:calendar_event, starts_at: 2.days.from_now, ends_at: 2.days.from_now + 2.hours)
+      create(:event_participant, calendar_event: assigned, participant: client)
+      create(:shift, employee: attendant, calendar_event: assigned)
 
       payload = described_class.new(attendant_user).payload
 
+      expect(payload.staffing_visible).to be(false)
       expect(payload.open_shift_count).to eq(0)
       expect(payload.open_shifts).to eq([])
+      expect(payload.my_upcoming_shifts.length).to eq(1)
+      expect(payload.my_upcoming_shifts.first.client_slug).to eq(client.slug)
     end
   end
 end

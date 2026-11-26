@@ -101,7 +101,7 @@ RSpec.describe Category do
 
   describe "#to_s" do
     it "returns formatted string with type and name" do
-      category = create(:category, categorizable_type: "Calendar::Event", name: "Meeting")
+      category = build(:category, categorizable_type: "Calendar::Event", name: "Meeting")
       expect(category.to_s).to eq("Calendar Event - Meeting")
     end
   end

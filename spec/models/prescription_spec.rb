@@ -41,13 +41,6 @@ RSpec.describe Prescription do
     end
   end
 
-  describe "Associations" do
-    it{ is_expected.to belong_to(:medication) }
-    it{ is_expected.to belong_to(:client) }
-    it{ is_expected.to belong_to(:doctor) }
-    it{ is_expected.to belong_to(:dosage) }
-  end
-
   describe "Scopes" do
     describe "active" do
       it "only returns active prescriptions" do

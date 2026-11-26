@@ -1,4 +1,4 @@
-import { Table, Link, type TableColumn } from "@/components"
+import { Table, Link, Presence, type TableColumn } from "@/components"
 import { EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
@@ -19,13 +19,13 @@ export function DoctorTable({ records, model }: DoctorTableProps) {
 			accessor: "specialty",
 			title: "Specialty",
 			sortable: true,
-			render: (doctor) => doctor.specialty || "-",
+			render: (doctor) => <Presence>{ doctor.specialty }</Presence>,
 		},
 		{
 			accessor: "practice_name",
 			title: "Practice",
 			sortable: true,
-			render: (doctor) => doctor.practice_name || "-",
+			render: (doctor) => <Presence>{ doctor.practice_name }</Presence>,
 		},
 		{
 			accessor: "actions",

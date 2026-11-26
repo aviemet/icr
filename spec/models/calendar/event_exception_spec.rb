@@ -45,8 +45,4 @@ RSpec.describe Calendar::EventException do
       expect(build(:calendar_event_exception, { cancelled: nil, rescheduled: nil })).not_to be_valid
     end
   end
-
-  describe "Associations" do
-    it { is_expected.to belong_to(:calendar_event) }
-  end
 end

@@ -81,5 +81,26 @@ RSpec.describe Employee::JobTitle::SyncPermissions do
 
       expect(Rails.cache.read(cache_key)).to be_nil
     end
+
+    it "preserves roles for catalog resources absent from the payload" do
+      job_title.add_role(:index, ReportDefinition)
+      job_title.add_role(:show, ReportDefinition)
+      job_title.add_role(:index, Client)
+
+      described_class.call(job_title, {
+        "client" => {
+          "index" => false,
+          "show" => true,
+          "create" => false,
+          "update" => false,
+          "delete" => false,
+        },
+      })
+
+      expect(job_title.has_role?(:index, Client)).to be false
+      expect(job_title.has_role?(:show, Client)).to be true
+      expect(job_title.has_role?(:index, ReportDefinition)).to be true
+      expect(job_title.has_role?(:show, ReportDefinition)).to be true
+    end
   end
 end

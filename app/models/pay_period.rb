@@ -141,8 +141,10 @@ class PayPeriod < ApplicationRecord
   end
 
   def shift_occurrences(shifts)
-    Array(shifts).flat_map { |shift| shift.occurrences_in(self) }
+    rows = Array(shifts).flat_map { |shift| shift.occurrences_in(self) }
       .sort_by { |row| [row.starts_at, row.id.to_s] }
+    Payroll::ShiftOccurrence.preload_approvals!(rows)
+    Payroll::ShiftOccurrence.preload_overrides!(rows)
   end
 
   def self.attach_shift!(shift)

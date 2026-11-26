@@ -1,6 +1,6 @@
 import clsx from "clsx"
 
-import { Box } from "@/components"
+import { Box, Presence } from "@/components"
 
 import * as classes from "./DefinitionList.css"
 
@@ -16,7 +16,7 @@ export function DefinitionItem({ label, value, fullWidth = false }: DefinitionIt
 			[classes.fullWidth]: fullWidth,
 		}) }>
 			<Box className={ classes.label }>{ label }</Box>
-			<Box className={ classes.value }>{ value ?? "-" }</Box>
+			<Box className={ classes.value }><Presence>{ value }</Presence></Box>
 		</Box>
 	)
 }

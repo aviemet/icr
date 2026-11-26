@@ -6,6 +6,10 @@ RSpec.describe DateRangeCalculator do
     Time.use_zone("UTC") { example.run }
   end
 
+  before do
+    allow(Setting).to receive(:first_day_of_week).and_return(0)
+  end
+
   def first_day_symbol(day_number)
     [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday][day_number]
   end
@@ -47,9 +51,8 @@ RSpec.describe DateRangeCalculator do
       end
 
       it "adjusts ranges when first day of the week is changed" do
-        original_first_day = Setting.first_day_of_week || 0
-        new_first_day = (original_first_day + 1) % 7
-        Setting.first_day_of_week = new_first_day
+        new_first_day = 1
+        allow(Setting).to receive(:first_day_of_week).and_return(new_first_day)
 
         start_date, end_date = described_class.new({
           view: "month",
@@ -64,8 +67,6 @@ RSpec.describe DateRangeCalculator do
 
         expect(start_date).to eq(expected_start)
         expect(end_date).to eq(expected_end)
-      ensure
-        Setting.first_day_of_week = original_first_day
       end
     end
 
@@ -91,9 +92,8 @@ RSpec.describe DateRangeCalculator do
       end
 
       it "adjusts week range when first day of week setting changes" do
-        original_first_day = Setting.first_day_of_week || 0
-        new_first_day = (original_first_day + 1) % 7
-        Setting.first_day_of_week = new_first_day
+        new_first_day = 1
+        allow(Setting).to receive(:first_day_of_week).and_return(new_first_day)
 
         reference = Time.zone.parse("2024-02-15")
         start_date, end_date = described_class.new({
@@ -107,14 +107,11 @@ RSpec.describe DateRangeCalculator do
 
         expect(start_date).to eq(expected_start)
         expect(end_date).to eq(expected_end)
-      ensure
-        Setting.first_day_of_week = original_first_day
       end
 
       it "adjusts week range for different first day values" do
-        original_first_day = Setting.first_day_of_week || 0
-        new_first_day = (original_first_day + 2) % 7
-        Setting.first_day_of_week = new_first_day
+        new_first_day = 2
+        allow(Setting).to receive(:first_day_of_week).and_return(new_first_day)
 
         reference = Time.zone.parse("2024-02-15")
         start_date, end_date = described_class.new({
@@ -128,8 +125,6 @@ RSpec.describe DateRangeCalculator do
 
         expect(start_date).to eq(expected_start)
         expect(end_date).to eq(expected_end)
-      ensure
-        Setting.first_day_of_week = original_first_day
       end
     end
 

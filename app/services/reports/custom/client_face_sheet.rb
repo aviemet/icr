@@ -28,6 +28,7 @@ module Reports
       def authorize!
         client_id = params.fetch("client_id")
         @client = Pundit.policy_scope!(user, Client)
+          .with_attached_portrait
           .includes(
             :identifications,
             :allergies,
@@ -53,30 +54,46 @@ module Reports
         address = contact&.primary_address
         phone = contact&.primary_phone
 
-        pdf.fields(
-          [
-            ["Name", person&.name],
-            ["Birth Date", format_date(person&.dob)],
-            ["Sex", blank],
-            ["Height", blank],
-            ["Weight", blank],
-            ["Hair Color", blank],
-            ["Eye Color", blank],
-            ["Identifying Characteristics", blank],
-            ["SSN", blank],
-            ["State Id #", state_id_number],
-            ["Medi-Cal/Medicaid #", client.medi_cal_number],
-            ["Medi-Care #", blank],
-            ["UCI #", client.uci_number],
-            ["Client #", client.number],
-            ["Address", format_address(address)],
-            ["Phone", phone&.number],
-            ["Conserved", blank],
-            ["Start Date", format_date(client.active_at)],
-            ["Preferred Hospital", client.preferred_hospital],
-            ["Comments", client.communication_notes],
-          ],
-        )
+        pairs = [
+          ["Name", person&.name],
+          ["Birth Date", format_date(person&.dob)],
+          ["Sex", blank],
+          ["Height", blank],
+          ["Weight", blank],
+          ["Hair Color", blank],
+          ["Eye Color", blank],
+          ["Identifying Characteristics", blank],
+          ["SSN", blank],
+          ["State Id #", state_id_number],
+          ["Medi-Cal/Medicaid #", client.medi_cal_number],
+          ["Medi-Care #", blank],
+          ["UCI #", client.uci_number],
+          ["Client #", client.number],
+          ["Address", format_address(address)],
+          ["Phone", phone&.number],
+          ["Conserved", blank],
+          ["Start Date", format_date(client.active_at)],
+          ["Preferred Hospital", client.preferred_hospital],
+          ["Comments", client.communication_notes],
+        ]
+
+        portrait_path = portrait_tempfile_path
+        begin
+          pdf.identity_block(pairs, portrait_path: portrait_path)
+        ensure
+          File.delete(portrait_path) if portrait_path.present? && File.exist?(portrait_path)
+        end
+      end
+
+      def portrait_tempfile_path
+        return unless client.portrait.attached?
+
+        extension = File.extname(client.portrait.filename.to_s).presence || ".jpg"
+        tempfile = Tempfile.new(["client-portrait", extension])
+        tempfile.binmode
+        tempfile.write(client.portrait.download)
+        tempfile.close
+        tempfile.path
       end
 
       def render_allergies(pdf)

@@ -3,10 +3,11 @@ export {}
 
 declare global {
   namespace Schema {
-    interface DashboardStatsUpcomingEvent {
+    interface DashboardStatsMyUpcomingShift {
       id: string
+      client_name: string
+      client_slug: string
       ends_at: string
-      name: string
       starts_at: string
     }
   }

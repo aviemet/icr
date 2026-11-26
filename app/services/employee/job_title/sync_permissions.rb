@@ -27,10 +27,14 @@ class Employee::JobTitle::SyncPermissions
     raw.to_h.deep_stringify_keys
   end
 
+  def admin_payload?
+    ActiveModel::Type::Boolean.new.cast(permissions["admin"])
+  end
+
   def desired_roles
     roles = Set.new
 
-    if ActiveModel::Type::Boolean.new.cast(permissions["admin"])
+    if admin_payload?
       Employee::JobTitle::PermissionsCatalog::RESOURCES.each do |key, resource_class|
         Employee::JobTitle::PermissionsCatalog.actions_for(key).each do |action|
           roles << [action.to_sym, resource_class]
@@ -39,7 +43,10 @@ class Employee::JobTitle::SyncPermissions
       return roles
     end
 
-    Employee::JobTitle::PermissionsCatalog::RESOURCES.each do |key, resource_class|
+    touched_resource_keys.each do |key|
+      resource_class = Employee::JobTitle::PermissionsCatalog.resource_class(key)
+      next if resource_class.nil?
+
       resource_permissions = permissions[key]
       next unless resource_permissions.is_a?(Hash)
 
@@ -59,10 +66,27 @@ class Employee::JobTitle::SyncPermissions
     roles
   end
 
+  def touched_resource_keys
+    return Employee::JobTitle::PermissionsCatalog.resource_keys if admin_payload?
+
+    permissions.keys.reject { |key| key == "admin" }
+  end
+
+  def touched_resource_classes
+    return Employee::JobTitle::PermissionsCatalog::RESOURCES.values.to_set if admin_payload?
+
+    touched_resource_keys.filter_map { |key|
+      Employee::JobTitle::PermissionsCatalog.resource_class(key)
+    }.to_set
+  end
+
   def sync_roles(desired)
     current = current_managed_roles
+    removable = touched_resource_classes
 
     (current - desired).each do |role_name, resource_class|
+      next unless removable.include?(resource_class)
+
       job_title.remove_role(role_name, resource_class)
     end
 

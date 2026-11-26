@@ -7,6 +7,7 @@ module Payroll
     :category,
     :ihss,
     :client_ids,
+    :leave_kind,
     keyword_init: true,
   ) do
     def start_time
@@ -25,6 +26,10 @@ module Payroll
 
     def ihss?
       ihss == true
+    end
+
+    def leave?
+      leave_kind.present?
     end
 
     def client_ids

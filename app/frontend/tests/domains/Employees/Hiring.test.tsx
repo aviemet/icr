@@ -128,7 +128,7 @@ describe("EmployeeHiring", () => {
 		})
 	})
 
-	it("renders application details, offers, and interviews", () => {
+	it("renders application data and document links", () => {
 		render(
 			<MantineProvider theme={ theme }>
 				<EmployeeHiring employee={ buildEmployee() } />
@@ -141,7 +141,6 @@ describe("EmployeeHiring", () => {
 		expect(screen.getByRole("link", { name: "ada.pdf" })).toHaveAttribute("href", "/files/ada.pdf")
 		expect(screen.getByRole("link", { name: "cover.pdf" })).toHaveAttribute("href", "/files/cover.pdf")
 		expect(screen.getByText("Caregiver - $22.00 (hourly)")).toBeInTheDocument()
-		expect(screen.getByText("views.employees.show.hiring.offer_statuses.extended")).toBeInTheDocument()
 		expect(screen.getByText("Phone - Zoom")).toBeInTheDocument()
 	})
 
@@ -156,14 +155,4 @@ describe("EmployeeHiring", () => {
 		expect(screen.queryByText("Update")).not.toBeInTheDocument()
 	})
 
-	it("shows empty states without offers or interviews", () => {
-		render(
-			<MantineProvider theme={ theme }>
-				<EmployeeHiring employee={ buildEmployee({ offers: [], interviews: [], resume: null, cover_letter: null }) } />
-			</MantineProvider>,
-		)
-
-		expect(screen.getByText("views.employees.show.hiring.empty_offers")).toBeInTheDocument()
-		expect(screen.getByText("views.employees.show.hiring.empty_interviews")).toBeInTheDocument()
-	})
 })

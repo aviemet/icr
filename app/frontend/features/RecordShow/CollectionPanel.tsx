@@ -1,7 +1,7 @@
 import clsx from "clsx"
 import React from "react"
 
-import { Box, Section, Title } from "@/components"
+import { Box, Presence, Section, Title } from "@/components"
 
 import * as classes from "./CollectionPanel.css"
 
@@ -43,7 +43,7 @@ export function CollectionPanel({
 			</Box>
 			{ hasItems
 				? <Box className={ classes.list }>{ children }</Box>
-				: <Box className={ classes.empty }>{ emptyLabel ?? "-" }</Box> }
+				: <Box className={ classes.empty }><Presence>{ emptyLabel }</Presence></Box> }
 		</Section>
 	)
 }

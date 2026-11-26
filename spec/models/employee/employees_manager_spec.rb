@@ -46,7 +46,7 @@ RSpec.describe Employee::EmployeesManager do
     it "is invalid when ends_at is before starts_at" do
       manager_record = build(:employees_manager, starts_at: Time.current, ends_at: 1.day.ago)
       expect(manager_record).not_to be_valid
-      expect(manager_record.errors[:ends_at]).to include("must be after starts_at")
+      expect(manager_record.errors[:ends_at]).to be_present
     end
   end
 

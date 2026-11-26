@@ -85,6 +85,7 @@ module Payroll
         category: interval.category,
         ihss: ihss,
         client_ids: interval.client_ids,
+        leave_kind: interval.leave_kind,
       )
     end
 
@@ -97,6 +98,7 @@ module Payroll
         category: interval.category,
         ihss: ihss,
         client_ids: interval.client_ids,
+        leave_kind: interval.leave_kind,
       )
     end
 

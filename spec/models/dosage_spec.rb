@@ -27,10 +27,6 @@ RSpec.describe Dosage do
     end
   end
 
-  describe "Associations" do
-    it{ is_expected.to have_one(:prescription) }
-  end
-
   describe "administration_method" do
     it "accepts enum values" do
       dosage = create(:dosage, administration_method: :oral)

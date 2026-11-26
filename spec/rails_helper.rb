@@ -79,36 +79,14 @@ RSpec.configure do |config|
     c.app_host = "https://localhost:3000"
   end
 
-  # Database Cleaner
   config.before :suite do
-    DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
-    Rails.application.load_seed
-  end
-
-  # Request specs cannot use a transaction because Capybara runs in a
-  # separate thread with a different database connection.
-  # Prefer deletion over truncation: TRUNCATE takes AccessExclusiveLock and
-  # deadlocks against concurrent writers (seeds, paper_trail, GoodJob).
-  config.before type: :request do
-    DatabaseCleaner.strategy = :deletion
-  end
-
-  # Reset so other non-request specs don't have to deal with slow deletion.
-  # Deletion wipes seeded system rows; restore required seed data afterward.
-  config.after type: :request  do
-    DatabaseCleaner.strategy = :transaction
-    Rails.root.glob("db/seeds/*required*.rb").each { |seed| load seed }
+    Rails.root.glob("db/seeds/*required*.rb").sort.each { |seed| load seed }
   end
 
   config.before do
-    DatabaseCleaner.start
     # WebMock.disable_net_connect!(allow_localhost: true)
     ActionMailer::Base.deliveries.clear
-  end
-
-  config.after do
-    DatabaseCleaner.clean
   end
 
   # Shoulda

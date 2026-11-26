@@ -23,7 +23,7 @@ import { recurrenceResources } from "@/features/CalendarSchedule"
 import { ensureViewName, Routes, vars } from "@/lib"
 import { ensureDate } from "@/lib/dates"
 import { datetime } from "@/lib/formatters"
-import { useCalendarScheduleQueryInitialData, useLocation } from "@/lib/hooks"
+import { useCalendarScheduleQueryInitialData, useLocation, usePermissions } from "@/lib/hooks"
 import { useEventTitleFormatter } from "@/lib/hooks/useEventTitleFormatter"
 import { useGetClientSchedules } from "@/queries/clients"
 
@@ -62,6 +62,8 @@ function NewEventModalContent({ client }: { client: Schema.ClientsShow }) {
 
 const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 	const { t } = useTranslation()
+	const { can } = usePermissions()
+	const canCreateShift = can("calendar/events", "create")
 
 	const formatEventTitle = useEventTitleFormatter()
 	const location = useLocation()
@@ -112,15 +114,22 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 		return data.map((event) => {
 			const employee = event.shift?.employee
 			const isOpenShift = !hasAssignedEmployee(employee)
+			const serviceType = event.shift?.service_type
+			const typedOpenColor = isOpenShift
+				&& serviceType
+				&& serviceType.slug !== "regular"
+				&& serviceType.color
+				? serviceType.color
+				: undefined
 			return {
 				id: event.id,
 				title: isOpenShift ? (event.name || "Open shift") : (event.name ?? ""),
 				start: ensureDate(event.starts_at),
 				end: ensureDate(event.ends_at),
 				allDay: event.all_day,
-				color: isOpenShift ? OPEN_SHIFT_COLOR : employee?.color,
+				color: isOpenShift ? (typedOpenColor || OPEN_SHIFT_COLOR) : employee?.color,
 				open: isOpenShift,
-				borderColor: isOpenShift ? event.shift?.service_type?.color : undefined,
+				borderColor: isOpenShift && !typedOpenColor ? serviceType?.color : undefined,
 				resources: {
 					employee: hasAssignedEmployee(employee) ? employee : {},
 					client,
@@ -144,18 +153,20 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 		<Page title={ `${client.full_name} Schedule` } breadcrumbs={ breadcrumbs }>
 			<Group justify="space-between">
 				<Title>{ t("views.clients.schedule.title", { name: client?.person?.name }) }</Title>
-				<Box>
-					<Modal
-						trigger={
-							<Button leftSection={ <PlusIcon /> }>
-								New Event
-							</Button>
-						}
-						title="New Event"
-					>
-						<NewEventModalContent client={ client } />
-					</Modal>
-				</Box>
+				{ canCreateShift && (
+					<Box>
+						<Modal
+							trigger={
+								<Button leftSection={ <PlusIcon /> }>
+									{ t("views.clients.schedule.new_shift") }
+								</Button>
+							}
+							title={ t("views.clients.schedule.new_shift") }
+						>
+							<NewEventModalContent client={ client } />
+						</Modal>
+					</Box>
+				) }
 			</Group>
 
 			<Calendar
@@ -177,7 +188,13 @@ const Schedule = ({ client, schedules: initialSchedules }: ScheduleProps) => {
 				} }
 				popoverContent={ {
 					event: (event: BaseCalendarEvent, localizer: CalendarLocalizer) => <EventPopoverContent event={ event } localizer={ localizer } />,
-					background: (context) => <EventCalendarPopover client={ client } selectedDate={ context.time ?? context.date } />,
+					...(canCreateShift
+						? {
+							background: (context: { date: Date, time?: Date }) => (
+								<EventCalendarPopover client={ client } selectedDate={ context.time ?? context.date } />
+							),
+						}
+						: {}),
 				} satisfies Partial<PopoverContentMap> }
 			/>
 		</Page>

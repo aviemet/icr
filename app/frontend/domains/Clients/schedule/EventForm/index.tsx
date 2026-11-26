@@ -53,13 +53,13 @@ function getShiftServiceTypeIdFromResources(resources: BaseCalendarEvent["resour
 	return typeof shift.service_type_id === "string" ? shift.service_type_id : ""
 }
 
-function getShiftMileageFromResources(resources: BaseCalendarEvent["resources"]): number | string | null {
-	if(typeof resources !== "object" || resources === null || !("shift" in resources)) return null
+function getShiftMileageFromResources(resources: BaseCalendarEvent["resources"]): number | string | undefined {
+	if(typeof resources !== "object" || resources === null || !("shift" in resources)) return undefined
 	const shift = resources.shift
-	if(typeof shift !== "object" || shift === null || !("mileage" in shift)) return null
+	if(typeof shift !== "object" || shift === null || !("mileage" in shift)) return undefined
 	const mileage = shift.mileage
 	if(typeof mileage === "number" || typeof mileage === "string") return mileage
-	return null
+	return undefined
 }
 
 function getRecurrenceResources(
@@ -171,7 +171,7 @@ export function EventForm({
 				starts_at: dayjs(start).toISOString(),
 				ends_at: dayjs(start).add(8, "hours").toISOString(),
 				notes: "",
-				shift: { employee_id: "", service_type_id: DEFAULT_SERVICE_TYPE_SLUG, mileage: null },
+				shift: { employee_id: "", service_type_id: DEFAULT_SERVICE_TYPE_SLUG, mileage: undefined },
 				event_participants: baseParticipants,
 			},
 		}

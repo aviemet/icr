@@ -65,9 +65,6 @@ describe("CompanyForm", () => {
 			</MantineProvider>,
 		)
 
-		expect(screen.getByText("No addresses yet.")).toBeInTheDocument()
-		expect(screen.getByText("No phone numbers yet.")).toBeInTheDocument()
-
 		await user.click(screen.getByRole("button", { name: "Add address" }))
 		const dialog = await screen.findByRole("dialog")
 		expect(dialog).toBeInTheDocument()

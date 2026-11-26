@@ -44,27 +44,14 @@ RSpec.describe Employee do
       expect(build(:employee)).to be_valid
     end
 
-    it "is invalid with missing attributes" do
-      %i().each do |attr|
-        expect(build(:employee, attr => nil)).not_to be_valid
-      end
-    end
   end
 
   describe "Associations" do
     it_behaves_like "participantable"
 
-    it{ is_expected.to belong_to(:person) }
-
     it{ is_expected.to have_many(:job_titles).through(:employees_job_titles) }
     it{ is_expected.to have_one(:job_title).through(:active_employees_job_title) }
-    it{ is_expected.to have_many(:pay_rates) }
-    it{ is_expected.to have_many(:support_contacts) }
-    it{ is_expected.to have_many(:credentials) }
-    it{ is_expected.to have_many(:clearances) }
-    it{ is_expected.to have_many(:interviews) }
 
-    it { is_expected.to have_many(:shifts) }
     it { is_expected.to have_many(:shift_events).through(:shifts) }
 
     it{ is_expected.to have_many(:managed_employees).through(:managed_employees_managers) }

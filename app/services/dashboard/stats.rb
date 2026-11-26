@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
 class Dashboard::Stats
-  UpcomingEvent = Struct.new(:id, :name, :starts_at, :ends_at, keyword_init: true) do
-    def to_h
-      { id: id, name: name, starts_at: starts_at, ends_at: ends_at }
-    end
-  end
-
   ActivityItem = Struct.new(:kind, :id, :name, :created_at, keyword_init: true) do
     def to_h
       { kind: kind, id: id, name: name, created_at: created_at }
@@ -31,6 +25,18 @@ class Dashboard::Stats
     end
   end
 
+  MyUpcomingShift = Struct.new(:id, :client_name, :client_slug, :starts_at, :ends_at, keyword_init: true) do
+    def to_h
+      {
+        id: id,
+        client_name: client_name,
+        client_slug: client_slug,
+        starts_at: starts_at,
+        ends_at: ends_at,
+      }
+    end
+  end
+
   Payload = Struct.new(
     :active_client_count,
     :inactive_client_count,
@@ -39,8 +45,9 @@ class Dashboard::Stats
     :week_tracked_hours,
     :pending_timesheet_count,
     :open_shift_count,
-    :upcoming_events,
+    :staffing_visible,
     :open_shifts,
+    :my_upcoming_shifts,
     :activity_items,
     :pending_terminations,
     keyword_init: true,
@@ -54,8 +61,9 @@ class Dashboard::Stats
         week_tracked_hours: week_tracked_hours,
         pending_timesheet_count: pending_timesheet_count,
         open_shift_count: open_shift_count,
-        upcoming_events: upcoming_events.map(&:to_h),
+        staffing_visible: staffing_visible,
         open_shifts: open_shifts.map(&:to_h),
+        my_upcoming_shifts: my_upcoming_shifts.map(&:to_h),
         activity_items: activity_items.map(&:to_h),
         pending_terminations: pending_terminations.map(&:to_h),
       }
@@ -75,8 +83,9 @@ class Dashboard::Stats
       week_tracked_hours: week_tracked_hours_total,
       pending_timesheet_count: pending_timesheet_count,
       open_shift_count: open_shift_count,
-      upcoming_events: upcoming_events_payload,
+      staffing_visible: staffing_visible?,
       open_shifts: open_shifts_payload,
+      my_upcoming_shifts: my_upcoming_shifts_payload,
       activity_items: activity_items_payload,
       pending_terminations: pending_terminations_payload,
     )
@@ -92,10 +101,6 @@ class Dashboard::Stats
 
   def employees_scope
     user ? Pundit.policy_scope(user, Employee) : Employee.none
-  end
-
-  def events_scope
-    user ? Pundit.policy_scope(user, Calendar::Event) : Calendar::Event.none
   end
 
   def timesheets_scope
@@ -131,32 +136,8 @@ class Dashboard::Stats
     employees_scope.where(status: [:applicant, :offered]).count
   end
 
-  def upcoming_events_payload
-    events_scope
-      .includes_associated
-      .after(Time.zone.now)
-      .order(:starts_at)
-      .limit(5)
-      .map { |event| serialize_event(event) }
-  end
-
-  def serialize_event(event)
-    UpcomingEvent.new(
-      id: event.id,
-      name: event_label(event),
-      starts_at: event.starts_at.iso8601,
-      ends_at: event.ends_at.iso8601,
-    )
-  end
-
-  def event_label(event)
-    name = event.name.presence
-    return name if name
-
-    person = event.shift&.employee&.person
-    return I18n.t("views.dashboard.schedule.untitled_shift") if person.blank?
-
-    I18n.t("views.dashboard.schedule.shift_for", name: person.name)
+  def staffing_visible?
+    Shifts::OpenVisibility.can_view?(user)
   end
 
   def open_shift_count
@@ -173,10 +154,45 @@ class Dashboard::Stats
     client = shift.calendar_event&.clients&.first
     OpenShiftItem.new(
       id: shift.id,
-      client_name: client&.person&.name.to_s.presence || I18n.t("views.dashboard.schedule.open_shift"),
+      client_name: client&.person&.name.to_s.presence || I18n.t("views.dashboard.staffing.open_shift"),
       client_slug: client&.slug.to_s,
       starts_at: shift.starts_at.iso8601,
       ends_at: shift.ends_at.iso8601,
+    )
+  end
+
+  def my_upcoming_shifts_payload
+    employee = user&.person&.employee
+    return [] if employee.blank?
+
+    range_start = Time.zone.now
+    range_end = 14.days.from_now
+    shifts = Shift.assigned
+      .where(employee_id: employee.id)
+      .joins(:calendar_event)
+      .merge(Calendar::Event.for_schedule_range(range_start, range_end))
+      .includes(calendar_event: [:recurring_patterns, :event_exceptions, { clients: :person }])
+
+    rows = shifts.flat_map do |shift|
+      shift.calendar_event.occurrences_in(range_start, range_end).map do |occurrence|
+        [shift, occurrence]
+      end
+    end
+
+    rows
+      .sort_by { |_shift, occurrence| occurrence.starts_at }
+      .first(5)
+      .map { |shift, occurrence| serialize_my_upcoming_shift(shift, occurrence) }
+  end
+
+  def serialize_my_upcoming_shift(shift, occurrence)
+    client = shift.calendar_event&.clients&.first
+    MyUpcomingShift.new(
+      id: Payroll::ShiftOccurrence.interval_id(shift.id, occurrence),
+      client_name: client&.person&.name.to_s.presence || I18n.t("views.dashboard.my_schedule.untitled"),
+      client_slug: client&.slug.to_s,
+      starts_at: occurrence.starts_at.iso8601,
+      ends_at: occurrence.ends_at.iso8601,
     )
   end
 
@@ -209,11 +225,14 @@ class Dashboard::Stats
     employee_ids = employees_scope.pluck(:id)
     return 0.0 if employee_ids.empty?
 
-    total = Shift.where(employee_id: employee_ids)
-      .joins(:calendar_event)
-      .merge(Calendar::Event.between(range_start, range_end))
-      .sum(Arel.sql("(EXTRACT(EPOCH FROM (calendar_events.ends_at - calendar_events.starts_at)) / 3600.0)"))
-    total.to_f
+    events = Calendar::Event.for_schedule_range(range_start, range_end)
+      .joins(:shift)
+      .merge(Shift.assigned.where(employee_id: employee_ids))
+      .includes(:recurring_patterns, :event_exceptions)
+
+    Calendar::Event.occurrences_in(events, range_start: range_start, range_end: range_end).sum do |occurrence|
+      (occurrence.ends_at - occurrence.starts_at) / 1.hour
+    end.to_f
   end
 
   def pending_timesheet_count

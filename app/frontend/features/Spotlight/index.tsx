@@ -2,14 +2,17 @@ import { router } from "@inertiajs/react"
 import { Loader } from "@mantine/core"
 import { Spotlight, type SpotlightActionData } from "@mantine/spotlight"
 import React, { useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 
-import { SearchIcon, DashboardIcon, ClientIcon, EmployeeIcon, SettingsIcon, ClockIcon, HelpingIcon, PeopleIcon, ColumnsIcon } from "@/components/Icons"
+import { SearchIcon, DashboardIcon, ClientIcon, DoctorIcon, EmployeeIcon, SettingsIcon, ClockIcon, HelpingIcon, PeopleIcon, ColumnsIcon, CalendarIcon } from "@/components/Icons"
 import { Routes } from "@/lib"
-import { useDebouncedValue, usePermissions } from "@/lib/hooks"
+import { useDebouncedValue, useFeatures, usePermissions } from "@/lib/hooks"
 import { useGetSpotlights } from "@/queries"
 
 export function SpotlightComponent() {
+	const { t } = useTranslation()
 	const { can } = usePermissions()
+	const { enabled } = useFeatures()
 
 	const [query, setQuery] = useState("")
 	const [debouncedQuery] = useDebouncedValue(query, 400)
@@ -92,6 +95,16 @@ export function SpotlightComponent() {
 			})
 		}
 
+		if(can("time_off/requests", "create") || can("time_off/requests", "index") || can("time_off/requests", "show")) {
+			spotlightStaticActions.push({
+				id: "time-off",
+				label: t("views.time_off.index.title"),
+				description: t("views.time_off.index.spotlight_description"),
+				onClick: () => router.visit(Routes.timeOffRequests()),
+				leftSection: <CalendarIcon />,
+			})
+		}
+
 		if(can("report_definitions", "index")) {
 			spotlightStaticActions.push({
 				id: "reports",
@@ -112,13 +125,23 @@ export function SpotlightComponent() {
 			})
 		}
 
-		if(can("vendors", "index")) {
+		if(enabled("vendors") && can("vendors", "index")) {
 			spotlightStaticActions.push({
 				id: "vendors",
 				label: "Vendors",
 				description: "View vendors",
 				onClick: () => router.visit(Routes.vendors()),
 				leftSection: <HelpingIcon />,
+			})
+		}
+
+		if(can("doctors", "index")) {
+			spotlightStaticActions.push({
+				id: "doctors",
+				label: "Doctors",
+				description: "View doctors",
+				onClick: () => router.visit(Routes.doctors()),
+				leftSection: <DoctorIcon />,
 			})
 		}
 
@@ -133,7 +156,7 @@ export function SpotlightComponent() {
 		}
 
 		return spotlightStaticActions
-	}, [can])
+	}, [can, enabled, t])
 
 	const handleQueryChange = (value: string) => {
 		setQuery(value)

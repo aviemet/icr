@@ -61,6 +61,17 @@ if Rails.env.development?
     Rails.logger.info "[seeds] clients (4) + household + client user"
   end
 
+  demo_client = Client.first
+  if demo_client.present? && !demo_client.portrait.attached?
+    portrait_path = Rails.root.join("db/seeds/files/demo_client_portrait.png")
+    demo_client.portrait.attach(
+      io: File.open(portrait_path),
+      filename: "demo-portrait.png",
+      content_type: "image/png",
+    )
+    Rails.logger.info "[seeds] attached demo portrait to #{demo_client.slug}"
+  end
+
   if Employee.none?
     ActiveRecord::Base.transaction do
       facilitator_job = Employee::JobTitle.find_by(slug: "facilitator")
@@ -124,6 +135,14 @@ if Rails.env.development?
       attendant.assign_job_title(Employee::JobTitle.find_by(slug: "attendant"))
 
       FactoryBot.create(:employees_manager, employee: attendant, manager: facilitator, primary: true)
+      facilitators.each do |managed_facilitator|
+        FactoryBot.create(
+          :employees_manager,
+          employee: managed_facilitator,
+          manager: director,
+          primary: true,
+        )
+      end
       FactoryBot.create(:pay_rate, :active, employee: attendant)
       FactoryBot.create(:employee_credential, employee: attendant, expires_on: 20.days.from_now)
       FactoryBot.create(:employee_clearance, employee: attendant)
@@ -192,6 +211,35 @@ if Rails.env.development?
         notes: "Extended after strong interview. Includes weekend differential discussion.",
       })
       offered_applicant.make_offer! if offered_applicant.may_make_offer?
+
+      FactoryBot.create(
+        :time_off_request,
+        employee: attendant,
+        kind: :pto,
+        starts_at: 2.weeks.from_now.change(hour: 9),
+        ends_at: 2.weeks.from_now.change(hour: 17),
+        hours: 8.0,
+        status: :pending,
+      )
+
+      sick_starts = 1.week.ago.change(hour: 9)
+      TimeOff::RecordManagerLeave.call(
+        employee: attendant,
+        kind: :sick,
+        starts_at: sick_starts,
+        ends_at: sick_starts + 8.hours,
+        hours: 8.0,
+        user: facilitator.person.user,
+      )
+
+      holiday_starts = 3.days.ago.change(hour: 9)
+      TimeOff::CreateLeaveShift.call(
+        employee: attendant,
+        service_type_slug: "holiday",
+        starts_at: holiday_starts,
+        ends_at: holiday_starts + 8.hours,
+        name: "Holiday leave",
+      )
     end
 
     Rails.logger.info "[seeds] employees + 3 facilitators/director/attendant users + HR sample data"
@@ -383,7 +431,9 @@ if Rails.env.development?
       if attendant
         Employee::EmployeesTraining.find_or_create_by!(employee: attendant, training: protocol_training) do |row|
           row.started_at = Time.current
-          row.completed_at = nil
+          row.completed_at = Time.current
+        end.tap do |row|
+          row.update!(completed_at: Time.current) if row.completed_at.blank?
         end
       end
 

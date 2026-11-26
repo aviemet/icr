@@ -1,6 +1,8 @@
 class VendorsController < ApplicationController
   include Searchable
 
+  require_feature :vendors
+
   expose :vendors, -> { search(Vendor.includes_associated) }
   expose :vendor, id: ->{ params[:slug] }, scope: ->{ Vendor.includes_associated }, find_by: :slug
 

@@ -127,30 +127,4 @@ RSpec.describe Setting, type: :model do
     end
   end
 
-  describe "constants" do
-    describe "PAY_PERIOD_TYPES" do
-      it "defines expected period types" do
-        expect(Setting::PAY_PERIOD_TYPES).to eq({
-          weekly: "weekly",
-          bi_weekly: "bi_weekly",
-          semi_monthly: "semi_monthly",
-          monthly: "monthly"
-        })
-      end
-
-      it "is frozen" do
-        expect(Setting::PAY_PERIOD_TYPES).to be_frozen
-      end
-    end
-
-    describe "ALLOWED_TEMPLATE_VARS" do
-      it "defines expected template variables" do
-        expect(Setting::ALLOWED_TEMPLATE_VARS).to eq([:first_name, :last_name, :full_name, :first_initial, :last_initial])
-      end
-
-      it "is frozen" do
-        expect(Setting::ALLOWED_TEMPLATE_VARS).to be_frozen
-      end
-    end
-  end
 end

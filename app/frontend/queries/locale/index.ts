@@ -38,7 +38,7 @@ export const useGetPayPeriodTypes: ReactQueryFunction<any[]> = options => {
 	})
 }
 
-export const useGetLanguages: ReactQueryFunction<any[]> = options => {
+export const useGetLanguages: ReactQueryFunction<{ value: string, label: string }[]> = options => {
 	return useQuery({
 		queryKey: ["languages"],
 		queryFn: async () => {

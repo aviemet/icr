@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 
-import { Badge, Group, Link, Table, type TableColumn, Text } from "@/components"
+import { Badge, Group, Link, Presence, Table, type TableColumn, Text } from "@/components"
 import { Routes } from "@/lib"
 
 interface ClientsTableProps {
@@ -29,7 +29,7 @@ export function ClientsTable({
 			sortable: false,
 			render: (client) => (
 				<Link href={ Routes.clientPeriod(payPeriodId, client.id) }>
-					{ client.full_name ?? client.name ?? "-" }
+					<Presence>{ client.full_name ?? client.name }</Presence>
 				</Link>
 			),
 		},
@@ -67,7 +67,7 @@ export function ClientsTable({
 			title: t("views.pay_periods.clients.columns.authorized"),
 			sortable: false,
 			render: (client) => (
-				<Text size="sm">{ client.ihss_authorized_hours ?? "-" }</Text>
+				<Text size="sm"><Presence>{ client.ihss_authorized_hours }</Presence></Text>
 			),
 		},
 		{

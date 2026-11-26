@@ -37,7 +37,6 @@ require "rails_helper"
 RSpec.describe Shift, type: :model do
   describe "associations" do
     it { is_expected.to belong_to(:employee).optional }
-    it { is_expected.to belong_to(:calendar_event) }
     it { is_expected.to belong_to(:timesheet).optional }
   end
 

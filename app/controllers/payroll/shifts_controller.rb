@@ -7,13 +7,19 @@ class Payroll::ShiftsController < ApplicationController
   def approve
     authorize shift, :facilitator_approve?
 
-    period = shift.timesheet&.pay_period
+    period = action_period
     if period&.finalized?
       redirect_back_or_to(fallback_period_path(period), alert: t("pay_periods.finalized_locked"))
       return
     end
 
-    shift.update!(facilitator_approved_at: Time.current)
+    occurrence_starts_at = occurrence_starts_at_param
+    if occurrence_starts_at.blank?
+      redirect_back_or_to(fallback_period_path(period), alert: t("shifts.occurrence_required"))
+      return
+    end
+
+    ShiftOccurrenceApproval.approve!(shift: shift, occurrence_starts_at: occurrence_starts_at)
     redirect_back_or_to(fallback_period_path(period), notice: t("shifts.facilitator_approved"))
   end
 
@@ -21,13 +27,19 @@ class Payroll::ShiftsController < ApplicationController
   def unapprove
     authorize shift, :facilitator_unapprove?
 
-    period = shift.timesheet&.pay_period
+    period = action_period
     if period&.finalized?
       redirect_back_or_to(fallback_period_path(period), alert: t("pay_periods.finalized_locked"))
       return
     end
 
-    shift.update!(facilitator_approved_at: nil)
+    occurrence_starts_at = occurrence_starts_at_param
+    if occurrence_starts_at.blank?
+      redirect_back_or_to(fallback_period_path(period), alert: t("shifts.occurrence_required"))
+      return
+    end
+
+    ShiftOccurrenceApproval.unapprove!(shift: shift, occurrence_starts_at: occurrence_starts_at)
     redirect_back_or_to(fallback_period_path(period), notice: t("shifts.facilitator_unapproved"))
   end
 
@@ -35,20 +47,34 @@ class Payroll::ShiftsController < ApplicationController
   def update_ihss
     authorize shift, :update_ihss?
 
-    period = shift.timesheet&.pay_period
-    period = period&.reload if period.present?
+    period = action_period
     if period.blank? || period.finalized?
-      redirect_back_or_to(fallback_period_path(period), alert: t("pay_periods.finalized_locked"))
-      return
+      return render_ihss_failure(t("pay_periods.finalized_locked"), period)
     end
 
     if Setting.ihss_assignment_mode != Setting::IHSS_ASSIGNMENT_MODES[:shift]
-      redirect_back_or_to(fallback_period_path(period), alert: t("shifts.ihss_shift_mode_required"))
-      return
+      return render_ihss_failure(t("shifts.ihss_shift_mode_required"), period)
     end
 
-    shift.update!(ihss: ActiveModel::Type::Boolean.new.cast(params.require(:ihss)))
-    redirect_back_or_to(fallback_period_path(period), notice: t("shifts.ihss_updated"))
+    occurrence_starts_at = occurrence_starts_at_param
+    if occurrence_starts_at.blank?
+      return render_ihss_failure(t("shifts.occurrence_required"), period)
+    end
+
+    override = ShiftOccurrenceOverride.set_ihss!(
+      shift: shift,
+      occurrence_starts_at: occurrence_starts_at,
+      ihss: params.require(:ihss),
+    )
+
+    delta = Payroll::IhssToggleRefresh.call(
+      pay_period: period,
+      shift: shift,
+      occurrence_starts_at: occurrence_starts_at,
+      ihss: override.ihss == true,
+      client_id: params[:client_id],
+    )
+    render json: delta
   end
 
   # @route PATCH /payroll/shifts/:id/service_type (service_type_shift)
@@ -56,17 +82,26 @@ class Payroll::ShiftsController < ApplicationController
   def update_service_type
     authorize shift, :update_service_type?
 
-    period = shift.timesheet&.pay_period
-    period = period&.reload if period.present?
+    period = action_period
     if period.blank? || period.finalized?
       redirect_back_or_to(fallback_period_path(period), alert: t("pay_periods.finalized_locked"))
+      return
+    end
+
+    occurrence_starts_at = occurrence_starts_at_param
+    if occurrence_starts_at.blank?
+      redirect_back_or_to(fallback_period_path(period), alert: t("shifts.occurrence_required"))
       return
     end
 
     id_or_slug = params[:service_type_id].presence || params[:category_id].presence
     service_type = ServiceType.active.find_by(id: id_or_slug) ||
       ServiceType.active.find_by!(slug: id_or_slug)
-    shift.update!(service_type: service_type)
+    ShiftOccurrenceOverride.set_service_type!(
+      shift: shift,
+      occurrence_starts_at: occurrence_starts_at,
+      service_type: service_type,
+    )
     redirect_back_or_to(fallback_period_path(period), notice: t("shifts.service_type_updated"))
   end
 
@@ -81,25 +116,18 @@ class Payroll::ShiftsController < ApplicationController
     end
 
     client_id = params[:client_id].presence
-    scope = PayPeriod.shifts_overlapping_period(period).assigned.facilitator_pending
-    if client_id.present?
-      scope = scope
-        .joins(calendar_event: :event_participants)
-        .where(
-          event_participants: {
-            participant_type: "Client",
-            participant_id: client_id,
-          },
-        )
-    end
-
-    ids = params[:shift_ids].presence || (params[:approve_all] ? scope.distinct.pluck("shifts.id") : [])
+    targets = bulk_approval_targets(period, client_id)
     approved = 0
-    Shift.where(id: ids).includes(calendar_event: :clients, timesheet: :pay_period).find_each do |row|
-      authorize row, :facilitator_approve?
-      next if row.facilitator_approved?
 
-      row.update!(facilitator_approved_at: Time.current)
+    targets.each do |target|
+      row = Shift.includes(calendar_event: :clients, timesheet: :pay_period).find_by(id: target[:shift_id])
+      next if row.blank?
+
+      authorize row, :facilitator_approve?
+      ShiftOccurrenceApproval.approve!(
+        shift: row,
+        occurrence_starts_at: target[:occurrence_starts_at],
+      )
       approved += 1
     rescue Pundit::NotAuthorizedError
       next
@@ -113,9 +141,82 @@ class Payroll::ShiftsController < ApplicationController
 
   private
 
+  def action_period
+    requested_id = params[:pay_period_id].presence
+    if requested_id.present?
+      period = PayPeriod.find_by(id: requested_id)
+      return period if period.present?
+    end
+
+    shift.timesheet&.pay_period
+  end
+
   def fallback_period_path(period)
     return payroll_periods_path if period.blank?
 
     period_path(period)
+  end
+
+  def occurrence_starts_at_param
+    raw = params[:occurrence_starts_at].presence
+    return ShiftOccurrenceApproval.normalize_occurrence_starts_at(raw) if raw.present?
+    return if shift.calendar_event&.recurring_patterns&.any?
+
+    shift.calendar_event&.starts_at
+  end
+
+  def render_ihss_failure(message, period)
+    respond_to do |format|
+      format.json { render json: { error: message }, status: :unprocessable_content }
+      format.any { redirect_back_or_to(fallback_period_path(period), alert: message) }
+    end
+  end
+
+  def bulk_approval_targets(period, client_id)
+    explicit = Array(params[:approvals]).filter_map do |raw|
+      attrs = raw.respond_to?(:permit) ? raw.permit(:shift_id, :occurrence_starts_at) : raw
+      shift_id = attrs[:shift_id].presence || attrs["shift_id"].presence
+      occurrence_starts_at = attrs[:occurrence_starts_at].presence || attrs["occurrence_starts_at"].presence
+      next if shift_id.blank? || occurrence_starts_at.blank?
+
+      {
+        shift_id: shift_id,
+        occurrence_starts_at: ShiftOccurrenceApproval.normalize_occurrence_starts_at(occurrence_starts_at),
+      }
+    end
+    return explicit if explicit.any?
+
+    if ActiveModel::Type::Boolean.new.cast(params[:approve_all])
+      scope = PayPeriod.shifts_overlapping_period(period).assigned
+      if client_id.present?
+        scope = scope
+          .joins(calendar_event: :event_participants)
+          .where(
+            event_participants: {
+              participant_type: "Client",
+              participant_id: client_id,
+            },
+          )
+      end
+      occurrences = period.shift_occurrences(scope.includes(calendar_event: [:recurring_patterns, :event_exceptions]).distinct.to_a)
+      return occurrences.reject(&:facilitator_approved?).map { |occurrence|
+        {
+          shift_id: occurrence.shift_id,
+          occurrence_starts_at: occurrence.occurrence_starts_at,
+        }
+      }
+    end
+
+    shift_ids = Array(params[:shift_ids])
+    occurrence_starts_ats = Array(params[:occurrence_starts_ats])
+    shift_ids.each_with_index.filter_map do |shift_id, index|
+      occurrence_starts_at = occurrence_starts_ats[index]
+      next if shift_id.blank? || occurrence_starts_at.blank?
+
+      {
+        shift_id: shift_id,
+        occurrence_starts_at: ShiftOccurrenceApproval.normalize_occurrence_starts_at(occurrence_starts_at),
+      }
+    end
   end
 end

@@ -5,6 +5,7 @@ class Employee::JobTitle::PermissionsCatalog
 
   EXTRA_ACTIONS = {
     "employee_training" => %w[complete],
+    "time_off_request" => %w[approve],
   }.freeze
 
   FORM_ACTION_TO_ROLE = {
@@ -15,6 +16,7 @@ class Employee::JobTitle::PermissionsCatalog
     "delete" => :destroy,
     "destroy" => :destroy,
     "complete" => :complete,
+    "approve" => :approve,
   }.freeze
 
   ROLE_TO_FORM_ACTION = {
@@ -24,6 +26,7 @@ class Employee::JobTitle::PermissionsCatalog
     update: "update",
     destroy: "delete",
     complete: "complete",
+    approve: "approve",
   }.freeze
 
   RESOURCES = {
@@ -46,6 +49,7 @@ class Employee::JobTitle::PermissionsCatalog
     "compliance_form_template" => Compliance::FormTemplate,
     "compliance_form_submission" => Compliance::FormSubmission,
     "service_type" => ServiceType,
+    "time_off_request" => TimeOff::Request,
   }.freeze
 
   def self.resource_keys

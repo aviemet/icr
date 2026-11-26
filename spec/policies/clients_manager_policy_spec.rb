@@ -1,27 +1,16 @@
 require "rails_helper"
 
 RSpec.describe ClientsManagerPolicy, type: :policy do
-  let(:admin_user) { create(:user).tap { |user| user.add_role(:admin) } }
-  let(:job_title) { create(:job_title) }
-  let(:facilitator) { create(:employee, :employed) }
-  let(:facilitator_user) do
-    create(:user, person: facilitator.person).tap do
-      facilitator.assign_job_title(job_title)
-      facilitator.reload
-    end
-  end
-  let(:director_title) { create(:job_title, name: "Director Ops") }
-  let(:director) { create(:employee, :employed) }
+  let(:admin_user) { stub_admin_user }
+  let(:facilitator_user) { stub_employee_user }
   let(:director_user) do
-    create(:user, person: director.person).tap do
-      director.assign_job_title(director_title)
-      director.reload
-    end
-  end
-
-  before do
-    Employee::JobTitle::SyncPermissions.call(director_title, { "admin" => true })
-    director.reload
+    stub_employee_user(
+      job_title_roles: [
+        [:index, ClientsManager],
+        [:create, ClientsManager],
+        [:update, ClientsManager],
+      ],
+    )
   end
 
   permissions :index?, :create?, :update? do

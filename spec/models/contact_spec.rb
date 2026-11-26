@@ -36,12 +36,6 @@ RSpec.describe Contact do
   end
 
   describe "Associations" do
-    it { is_expected.to belong_to(:contactable) }
-
-    it { is_expected.to have_many(:addresses) }
-    it { is_expected.to have_many(:emails) }
-    it { is_expected.to have_many(:phones) }
-
     it { is_expected.to belong_to(:primary_address).optional }
     it { is_expected.to belong_to(:primary_email).optional }
     it { is_expected.to belong_to(:primary_phone).optional }

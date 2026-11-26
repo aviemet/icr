@@ -187,8 +187,8 @@ class Dev::SeedShifts
         timesheet.update!(
           total_regular_hours: hours[:regular_hours] || 0,
           total_ot_hours: hours[:ot_hours] || 0,
-          total_sick_hours: 0,
-          total_pto_hours: 0,
+          total_sick_hours: hours[:sick_hours] || 0,
+          total_pto_hours: hours[:pto_hours] || 0,
         )
       end
     end

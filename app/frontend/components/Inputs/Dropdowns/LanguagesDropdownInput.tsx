@@ -1,4 +1,3 @@
-import { isEmpty } from "es-toolkit/compat"
 import React from "react"
 
 import { Select as InputSelect } from "@/components/Inputs"
@@ -6,7 +5,12 @@ import { useGetLanguages } from "@/queries/locale"
 
 import { type AsyncDropdown } from "."
 
-export interface LanguagesDropdownProps extends AsyncDropdown<Schema.LanguageOption> {
+type LanguageOption = {
+	value: string
+	label: string
+}
+
+export interface LanguagesDropdownProps extends AsyncDropdown<LanguageOption> {
 	ref?: React.Ref<HTMLInputElement>
 }
 
@@ -16,23 +20,20 @@ export function LanguagesDropdown({
 	ref,
 	...props
 }: LanguagesDropdownProps) {
-	const { data, refetch } = useGetLanguages({
+	const { data } = useGetLanguages({
 		staleTime: Infinity,
 	})
+
+	const options = (data ?? []).map(language => ({
+		label: language.label,
+		value: String(language.value),
+	}))
 
 	return <InputSelect
 		ref={ ref }
 		label={ label }
 		name={ name }
-		options={ !data
-			? []
-			: data.map(language => ({
-				label: `${language.code} (${language.symbol})`,
-				value: String(language.code),
-			})) }
-		onDropdownOpen={ () => {
-			if(isEmpty(data)) refetch()
-		} }
+		options={ options }
 		searchable
 		clearable
 		{ ...props }

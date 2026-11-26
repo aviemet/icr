@@ -1,4 +1,4 @@
-import { Group, Link, Paper, Table, Text, type TableColumn } from "@/components"
+import { Group, Link, Paper, Presence, Table, Text, type TableColumn } from "@/components"
 import { DeleteButton, EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
@@ -26,14 +26,13 @@ export function DepartmentTable({ records }: DepartmentTableProps) {
 		{
 			accessor: "description",
 			title: "Description",
-			render: (department) => {
-				const description = String(department.description ?? "")
-				return (
-					<Text size="sm" c={ description ? undefined : "dimmed" } lineClamp={ 2 }>
-						{ description || "—" }
-					</Text>
-				)
-			},
+			render: (department) => (
+				<Presence>
+					{ department.description
+						? <Text size="sm" lineClamp={ 2 }>{ String(department.description) }</Text>
+						: null }
+				</Presence>
+			),
 		},
 		{
 			accessor: "actions",

@@ -1,21 +1,14 @@
 require "rails_helper"
 
 RSpec.describe ApplicationPolicy do
-  let(:user) { create(:user) }
-  let(:employee) { create(:employee, :employed, person: user.person) }
-  let(:job_title) { create(:job_title) }
-  let(:record) { create(:client, person: create(:person)) }
+  let(:record) { Client }
+  let(:user) { stub_employee_user(job_title_roles: roles) }
+  let(:roles) { [] }
   let(:policy) { described_class.new(user, record) }
-
-  before do
-    employee.assign_job_title(job_title)
-    employee.reload
-    user.reload
-  end
 
   describe "standard authorization" do
     context "when user is an admin" do
-      before { user.add_role(:admin) }
+      let(:user) { stub_admin_user }
 
       it "allows all actions" do
         expect(policy.index?).to be true
@@ -27,10 +20,7 @@ RSpec.describe ApplicationPolicy do
     end
 
     context "when job title has resource roles" do
-      before do
-        job_title.add_role(:show, Client)
-        job_title.add_role(:index, Client)
-      end
+      let(:roles) { [[:show, Client], [:index, Client]] }
 
       it "allows permitted actions" do
         expect(policy.show?).to be true

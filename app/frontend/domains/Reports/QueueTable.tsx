@@ -1,4 +1,4 @@
-import { Anchor, Stack, Table, Text, type TableColumn } from "@/components"
+import { Anchor, Presence, Stack, Table, Text, type TableColumn } from "@/components"
 import { DateTimeFormatter } from "@/components/Formatters"
 
 export interface ReportRequestListItem {
@@ -41,7 +41,7 @@ export function QueueTable({ reportRequests }: QueueTableProps) {
 		{
 			accessor: "requested_by_name",
 			title: "Requested by",
-			render: (request) => request.requested_by_name ?? "-",
+			render: (request) => <Presence>{ request.requested_by_name }</Presence>,
 		},
 		{
 			accessor: "created_at",
@@ -52,18 +52,22 @@ export function QueueTable({ reportRequests }: QueueTableProps) {
 			accessor: "completed_at",
 			title: "Completed",
 			render: (request) => (
-				request.completed_at
-					? <DateTimeFormatter>{ request.completed_at }</DateTimeFormatter>
-					: "-"
+				<Presence>
+					{ request.completed_at
+						? <DateTimeFormatter>{ request.completed_at }</DateTimeFormatter>
+						: null }
+				</Presence>
 			),
 		},
 		{
 			accessor: "download_path",
 			title: "Download",
 			render: (request) => (
-				request.download_path
-					? <Anchor href={ request.download_path }>{ "Download" }</Anchor>
-					: "-"
+				<Presence>
+					{ request.download_path
+						? <Anchor href={ request.download_path }>{ "Download" }</Anchor>
+						: null }
+				</Presence>
 			),
 		},
 	]

@@ -1,8 +1,9 @@
-import { Code, Section, Text, Title } from "@/components"
+import { Code, Group, Link, Paper, Section, Stack, Text, Title } from "@/components"
+import { Routes } from "@/lib"
 
 interface ShowErrorProps {
 	status: string | number
-	url: string
+	url?: string
 	server_error?: {
 		message: string
 		backtrace: string[]
@@ -16,43 +17,73 @@ type ErrorPageMessage = {
 }
 
 const errorMessages: Record<string, ErrorPageMessage> = {
-	403:{
+	403: {
 		title: "Forbidden",
-		description: "Sorry, you don't have permission to access this page.",
+		description: "You do not have permission to access this page.",
 	},
-	404:{
+	404: {
 		title: "Page Not Found",
-		description: "Sorry, the page you are looking for could not be found.",
+		description: "The page you are looking for could not be found.",
 	},
-	500:{
-		title: "Server Error",
-		description: "Whoops, something went wrong on our servers.",
+	500: {
+		title: "Something Went Wrong",
+		description: "An unexpected error occurred. Please try again in a moment.",
 	},
 	503: {
 		title: "Service Unavailable",
-		description: "Sorry, we are doing some maintenance. Please check back soon.",
+		description: "The application is temporarily unavailable. Please check back soon.",
 	},
 }
 
 const ShowError = ({ status, url, server_error }: ShowErrorProps) => {
 	const isDevelopmentEnvironment = import.meta.env.MODE === "development"
-
-	const errorMessage = errorMessages[status] || {
-		title: "Unexpected error",
-		description: "",
+	const statusKey = String(status)
+	const errorMessage = errorMessages[statusKey] || {
+		title: "Unexpected Error",
+		description: "Something went wrong while loading this page.",
 	}
 
 	return (
-		<Section>
-			<Title>{ errorMessage.title }</Title>
-			<Text>{ errorMessage.description }</Text>
-			{ server_error && isDevelopmentEnvironment && (
-				<>
-					<Code my="xs">{ url }</Code>
-					<Code my="xs">{ server_error.message }</Code>
-					<Code my="xs" block>{ server_error.backtrace.join("\n") }</Code>
-				</>
-			) }
+		<Section variant="panel">
+			<Stack gap="lg" maw={ 640 } mx="auto" py="xl">
+				<Stack gap="xs">
+					<Text size="sm" c="dimmed" tt="uppercase" fw={ 600 }>
+						Error { statusKey }
+					</Text>
+					<Title order={ 1 }>{ errorMessage.title }</Title>
+					<Text c="dimmed">{ errorMessage.description }</Text>
+				</Stack>
+
+				<Group>
+					<Link href={ Routes.root() } as="button" buttonProps={ { variant: "filled" } }>
+						Back to dashboard
+					</Link>
+				</Group>
+
+				{ server_error && isDevelopmentEnvironment && (
+					<Paper withBorder p="md" radius="md">
+						<Stack gap="sm">
+							<Text size="sm" fw={ 700 }>Development details</Text>
+							{ url && (
+								<div>
+									<Text size="sm" fw={ 600 }>Request</Text>
+									<Code block>{ url }</Code>
+								</div>
+							) }
+							<div>
+								<Text size="sm" fw={ 600 }>{ server_error.class }</Text>
+								<Code block>{ server_error.message }</Code>
+							</div>
+							{ server_error.backtrace.length > 0 && (
+								<div>
+									<Text size="sm" fw={ 600 }>Backtrace</Text>
+									<Code block>{ server_error.backtrace.join("\n") }</Code>
+								</div>
+							) }
+						</Stack>
+					</Paper>
+				) }
+			</Stack>
 		</Section>
 	)
 }

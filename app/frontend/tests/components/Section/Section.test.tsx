@@ -2,9 +2,7 @@ import { MantineProvider } from "@mantine/core"
 import { cleanup, render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it } from "vitest"
 
-import { pageChrome } from "@/components/PageChrome"
 import { Section } from "@/components/Section"
-import * as sectionClasses from "@/components/Section/Section.css"
 import { theme } from "@/lib/theme"
 
 describe("Section", () => {
@@ -25,64 +23,28 @@ describe("Section", () => {
 		})
 	})
 
-	it("renders panel variant without accent by default", () => {
+	it("renders its children", () => {
 		render(
 			<MantineProvider theme={ theme }>
-				<Section variant="panel" data-testid="panel">
+				<Section variant="panel">
 					Panel body
 				</Section>
 			</MantineProvider>,
 		)
 
-		const panel = screen.getByTestId("panel")
-		expect(panel.className).toContain(pageChrome.panelSurface)
-		expect(panel.className).toContain(sectionClasses.panel)
-		expect(panel.className).not.toContain(sectionClasses.accent)
-		expect(panel.className).not.toContain(sectionClasses.root)
+		expect(screen.getByText("Panel body")).toBeInTheDocument()
 	})
 
-	it("applies accent stripe when accent is set", () => {
+	it("sets the accent color variable", () => {
 		render(
 			<MantineProvider theme={ theme }>
-				<Section variant="panel" accent data-testid="panel">
+				<Section variant="panel" accent="yellow" data-testid="panel">
 					Panel body
 				</Section>
 			</MantineProvider>,
 		)
 
 		const panel = screen.getByTestId("panel")
-		expect(panel.className).toContain(sectionClasses.panel)
-		expect(panel.className).toContain(sectionClasses.accent)
 		expect(panel.style.getPropertyValue("--section-accent")).toBeTruthy()
-	})
-
-	it("uses wrapper surface when wrapper is set", () => {
-		render(
-			<MantineProvider theme={ theme }>
-				<Section variant="panel" wrapper data-testid="panel">
-					Wrapper body
-				</Section>
-			</MantineProvider>,
-		)
-
-		const panel = screen.getByTestId("panel")
-		expect(panel.className).toContain(pageChrome.panelWrapperSurface)
-		expect(panel.className).not.toContain(pageChrome.panelSurface)
-	})
-
-	it("keeps plain variant without panel chrome", () => {
-		render(
-			<MantineProvider theme={ theme }>
-				<Section data-testid="plain">
-					Plain body
-				</Section>
-			</MantineProvider>,
-		)
-
-		const plain = screen.getByTestId("plain")
-		expect(plain.className).toContain(sectionClasses.root)
-		expect(plain.className).not.toContain(pageChrome.panelSurface)
-		expect(plain.className).not.toContain(sectionClasses.panel)
-		expect(plain.className).not.toContain(sectionClasses.accent)
 	})
 })

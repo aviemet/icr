@@ -2,7 +2,6 @@ import { MantineProvider } from "@mantine/core"
 import { cleanup, render, screen, waitFor } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
-import { pageChrome } from "@/components/PageChrome"
 import { TrainingForm } from "@/domains/Trainings/Form"
 import { theme } from "@/lib/theme"
 
@@ -34,7 +33,7 @@ describe("TrainingForm", () => {
 		})
 	})
 
-	it("renders catalog fields", () => {
+	it("renders the catalog form controls", () => {
 		render(
 			<MantineProvider theme={ theme }>
 				<TrainingForm
@@ -50,17 +49,9 @@ describe("TrainingForm", () => {
 			</MantineProvider>,
 		)
 
-		expect(screen.getByText("views.trainings.form.name")).toBeTruthy()
-		expect(screen.getByText("views.trainings.form.description")).toBeTruthy()
-		expect(screen.getByText("views.trainings.form.estimated_minutes")).toBeTruthy()
-		expect(screen.getByText("views.trainings.form.client_ids")).toBeTruthy()
-		expect(screen.getByText("views.trainings.form.create")).toBeTruthy()
-
-		const detailsBand = screen.getByText("Details").closest("section")
-		expect(detailsBand?.className).toContain(pageChrome.panelSurface)
-
-		const clientsBand = screen.getByText("Clients").closest("section")
-		expect(clientsBand?.className).toContain(pageChrome.panelSurface)
+		expect(screen.getByRole("textbox", { name: "views.trainings.form.name" })).toBeRequired()
+		expect(screen.getByRole("textbox", { name: "views.trainings.form.estimated_minutes" })).toBeInTheDocument()
+		expect(screen.getByRole("button", { name: "views.trainings.form.create" })).toBeInTheDocument()
 	})
 
 	it("loads selected clients into the clients multiselect", async () => {

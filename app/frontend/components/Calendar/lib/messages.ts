@@ -34,7 +34,7 @@ export const defaultMessages: CalendarMessages = {
 	},
 	formats: {
 		monthTitle: "MMMM YYYY",
-		weekTitle: "Week of MMM D, YYYY",
+		weekTitle: "[Week of] MMM D, YYYY",
 		dayTitle: "dddd, MMMM D, YYYY",
 		agendaTitle: "MMM D, YYYY",
 	},

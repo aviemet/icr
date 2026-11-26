@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_23_164500) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_26_090000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -1092,6 +1092,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_164500) do
     t.index ["var"], name: "index_settings_on_var", unique: true
   end
 
+  create_table "shift_occurrence_approvals", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "shift_id", null: false
+    t.datetime "occurrence_starts_at", null: false
+    t.datetime "facilitator_approved_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shift_id", "occurrence_starts_at"], name: "index_shift_occurrence_approvals_uniqueness", unique: true
+    t.index ["shift_id"], name: "index_shift_occurrence_approvals_on_shift_id"
+  end
+
+  create_table "shift_occurrence_overrides", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "shift_id", null: false
+    t.datetime "occurrence_starts_at", null: false
+    t.boolean "ihss"
+    t.uuid "service_type_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["service_type_id"], name: "index_shift_occurrence_overrides_on_service_type_id"
+    t.index ["shift_id", "occurrence_starts_at"], name: "index_shift_occurrence_overrides_uniqueness", unique: true
+    t.index ["shift_id"], name: "index_shift_occurrence_overrides_on_shift_id"
+  end
+
   create_table "shift_template_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "shift_template_id", null: false
     t.uuid "employee_id", null: false
@@ -1132,6 +1154,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_164500) do
     t.index ["employee_id"], name: "index_shifts_on_employee_id"
     t.index ["service_type_id"], name: "index_shifts_on_service_type_id"
     t.index ["timesheet_id"], name: "index_shifts_on_timesheet_id"
+  end
+
+  create_table "time_off_requests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "employee_id", null: false
+    t.integer "kind", null: false
+    t.datetime "starts_at", null: false
+    t.datetime "ends_at", null: false
+    t.decimal "hours", precision: 8, scale: 2, null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "reviewed_at"
+    t.text "review_note"
+    t.uuid "shift_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_id", "status"], name: "index_time_off_requests_on_employee_id_and_status"
+    t.index ["employee_id"], name: "index_time_off_requests_on_employee_id"
+    t.index ["shift_id"], name: "index_time_off_requests_on_shift_id"
+    t.index ["status"], name: "index_time_off_requests_on_status"
   end
 
   create_table "timesheets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1346,6 +1386,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_164500) do
   add_foreign_key "report_requests", "users", column: "requested_by_id"
   add_foreign_key "requirement_items", "requirements"
   add_foreign_key "requirements", "requirement_types"
+  add_foreign_key "shift_occurrence_approvals", "shifts"
+  add_foreign_key "shift_occurrence_overrides", "service_types"
+  add_foreign_key "shift_occurrence_overrides", "shifts"
   add_foreign_key "shift_template_entries", "employees"
   add_foreign_key "shift_template_entries", "shift_templates"
   add_foreign_key "shift_templates", "clients"
@@ -1354,6 +1397,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_164500) do
   add_foreign_key "shifts", "employees"
   add_foreign_key "shifts", "service_types"
   add_foreign_key "shifts", "timesheets"
+  add_foreign_key "time_off_requests", "employees"
+  add_foreign_key "time_off_requests", "shifts"
   add_foreign_key "timesheets", "employees"
   add_foreign_key "timesheets", "pay_periods"
   add_foreign_key "vendors", "categories"

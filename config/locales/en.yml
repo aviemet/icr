@@ -72,6 +72,7 @@ en:
     facilitator_approved: Shift reviewed.
     facilitator_unapproved: Shift review removed.
     bulk_facilitator_approved: "%{count} shift(s) reviewed."
+    occurrence_required: Choose a specific shift occurrence.
     ihss_updated: IHSS shift flag updated.
     ihss_shift_mode_required: Shift IHSS flags are only available when assignment mode is Assign by shift.
     category_updated: Shift type updated.

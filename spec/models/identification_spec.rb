@@ -41,10 +41,6 @@ RSpec.describe Identification do
     end
   end
 
-  describe "Associations" do
-    it { is_expected.to belong_to(:identificationable) }
-  end
-
   describe "Enums" do
     subject(:identification) { described_class.new }
 

@@ -15,12 +15,12 @@ RSpec.describe EmployeePolicy, type: :policy do
   let(:managed_employee) { create(:employee, :employed) }
   let(:other_employee) { create(:employee, :employed) }
 
-  before do
-    job_title.add_role(:index, Employee)
-    job_title.add_role(:show, Employee)
-  end
-
   describe ".scope" do
+    before do
+      job_title.add_role(:index, Employee)
+      job_title.add_role(:show, Employee)
+    end
+
     it "returns all employees for facilitator with index" do
       scope = Pundit.policy_scope(facilitator_user, Employee)
       expect(scope).to include(managed_employee, other_employee, facilitator)
@@ -37,40 +37,50 @@ RSpec.describe EmployeePolicy, type: :policy do
 
   permissions :update? do
     it "allows facilitator with update role for any employee" do
-      job_title.add_role(:update, Employee)
-
-      expect(described_class.new(facilitator_user, other_employee)).to authorize(:update)
+      user = stub_employee_user(job_title_roles: [[:update, Employee]])
+      expect(described_class.new(user, instance_double(Employee))).to authorize(:update)
     end
 
     it "allows manager without update role for managed employee only" do
-      create(:employees_manager, manager: hourly, employee: managed_employee, starts_at: 1.day.ago)
+      managed_record = build_stubbed(:employee)
+      other_record = build_stubbed(:employee)
+      current_managers = double
+      allow(current_managers).to receive(:exists?).with(employee: managed_record).and_return(true)
+      allow(current_managers).to receive(:exists?).with(employee: other_record).and_return(false)
+      manager_records = double(current: current_managers)
+      manager = instance_double(Employee, job_title: stub_job_title, managed_employees_managers: manager_records)
+      user = stub_employee_user(employee: manager)
 
-      expect(described_class.new(hourly_user, managed_employee)).to authorize(:update)
-      expect(described_class.new(hourly_user, other_employee)).not_to authorize(:update)
+      expect(described_class.new(user, managed_record)).to authorize(:update)
+      expect(described_class.new(user, other_record)).not_to authorize(:update)
     end
 
     it "allows admin" do
-      expect(described_class.new(admin_user, other_employee)).to authorize(:update)
+      expect(described_class.new(stub_admin_user, instance_double(Employee))).to authorize(:update)
     end
   end
 
   permissions :show? do
     it "allows hourly to view self" do
-      expect(described_class.new(hourly_user, hourly)).to authorize(:show)
+      employee = instance_double(Employee, id: 1, job_title: stub_job_title)
+      user = stub_employee_user(employee: employee)
+      expect(described_class.new(user, employee)).to authorize(:show)
     end
 
     it "allows facilitator with show role to view any employee" do
-      expect(described_class.new(facilitator_user, other_employee)).to authorize(:show)
+      user = stub_employee_user(job_title_roles: [[:show, Employee]])
+      expect(described_class.new(user, instance_double(Employee))).to authorize(:show)
     end
   end
 
   permissions :index? do
     it "allows facilitator with index role for a relation record" do
-      expect(described_class.new(facilitator_user, Employee.all)).to authorize(:index)
+      user = stub_employee_user(job_title_roles: [[:index, Employee]])
+      expect(described_class.new(user, Employee.all)).to authorize(:index)
     end
 
     it "denies hourly without index role" do
-      expect(described_class.new(hourly_user, Employee.all)).not_to authorize(:index)
+      expect(described_class.new(stub_employee_user, Employee.all)).not_to authorize(:index)
     end
   end
 end

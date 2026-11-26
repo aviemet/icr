@@ -1,0 +1,13 @@
+---
+en:
+  views:
+    vendors:
+      index:
+        title: Vendors
+        new: New Vendor
+      new:
+        title: New Vendor
+      edit:
+        title: Edit Vendor
+      show:
+        title: Vendor

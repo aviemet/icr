@@ -43,6 +43,16 @@ class Shift < ApplicationRecord
   belongs_to :service_type
   belongs_to :category, optional: true
 
+  has_many :occurrence_approvals,
+    class_name: "ShiftOccurrenceApproval",
+    dependent: :delete_all,
+    inverse_of: :shift
+
+  has_many :occurrence_overrides,
+    class_name: "ShiftOccurrenceOverride",
+    dependent: :delete_all,
+    inverse_of: :shift
+
   validates :calendar_event_id, uniqueness: true
   validate :no_overlapping_shifts_for_employee
 
@@ -79,11 +89,15 @@ class Shift < ApplicationRecord
     joins(:calendar_event).where(calendar_events: { starts_at: Time.current.. })
   }
   scope :includes_associated, -> { includes(:calendar_event, :timesheet, :service_type) }
-  scope :facilitator_approved, -> { where.not(facilitator_approved_at: nil) }
-  scope :facilitator_pending, -> { where(facilitator_approved_at: nil) }
+  scope :with_occurrence_approval, -> {
+    where(id: ShiftOccurrenceApproval.select(:shift_id))
+  }
+  scope :without_occurrence_approval, -> {
+    where.not(id: ShiftOccurrenceApproval.select(:shift_id))
+  }
 
   def facilitator_approved?
-    facilitator_approved_at.present?
+    occurrence_approvals.exists?
   end
 
   def occurrences_in(pay_period)
@@ -95,13 +109,16 @@ class Shift < ApplicationRecord
   end
 
   def clear_facilitator_approval!
-    return if facilitator_approved_at.blank?
+    Calendar::Recurring::SyncOccurrenceApprovals.clear_all(self)
+  end
 
-    update!(facilitator_approved_at: nil)
+  def clear_occurrence_overrides!
+    Calendar::Recurring::SyncOccurrenceOverrides.clear_all(self)
   end
 
   def invalidate_approvals!
     clear_facilitator_approval!
+    clear_occurrence_overrides!
     return if timesheet.blank?
     return if timesheet.approved_at.blank?
 

@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 
-import { Avatar, Badge, ScheduleButton, Text } from "@/components"
+import { Avatar, Badge, Presence, ScheduleButton, Text } from "@/components"
 import { DateTimeFormatter } from "@/components/Formatters"
 import {
 	MedicalHospitalVisits,
@@ -52,7 +52,12 @@ const ShowClient = ({
 				{ title, href: Routes.client(client.slug) },
 			] }
 			avatar={ (
-				<Avatar radius="xl" size={ 44 } color="brand">
+				<Avatar
+					src={ client.portrait_url || undefined }
+					radius="xl"
+					size={ 44 }
+					color="brand"
+				>
 					{ initials(title) ?? "?" }
 				</Avatar>
 			) }
@@ -62,7 +67,7 @@ const ShowClient = ({
 			meta={ (
 				<>
 					<Text size="sm" c="dimmed" component="span">
-						{ t("views.clients.show.overview.client_number") }: { client.number || "-" }
+						{ t("views.clients.show.overview.client_number") }: <Presence>{ client.number }</Presence>
 					</Text>
 					{ client.active_at && (
 						<Text size="sm" c="dimmed" component="span">

@@ -10,7 +10,6 @@ class Api::SpotlightsController < Api::ApiController
     trainings = policy_scope(Employee::Training.includes_associated).search(query).limit(10)
     doctors = policy_scope(Doctor.includes_associated).search(query).limit(10)
     households = Household.search(query).limit(10)
-    vendors = policy_scope(Vendor.includes_associated).search(query).limit(10)
 
     results = []
     results.concat(employees.render(:spotlight))
@@ -18,7 +17,11 @@ class Api::SpotlightsController < Api::ApiController
     results.concat(trainings.render(:spotlight))
     results.concat(doctors.render(:spotlight))
     results.concat(households.render(:spotlight))
-    results.concat(vendors.render(:spotlight))
+
+    if Flipper.enabled?(:vendors, current_user)
+      vendors = policy_scope(Vendor.includes_associated).search(query).limit(10)
+      results.concat(vendors.render(:spotlight))
+    end
 
     render json: results
   end

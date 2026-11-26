@@ -35,9 +35,15 @@ module Payroll
     private
 
     def hours_for_intervals(intervals)
-      ihss_hours = intervals.select(&:ihss?).sum(&:duration_hours).round(2)
-      company_hours = intervals.reject(&:ihss?).sum(&:duration_hours).round(2)
-      ot_eligible = ot_eligible_intervals(intervals)
+      leave_intervals, work_intervals = intervals.partition(&:leave?)
+
+      pto_hours = leave_intervals.select { |interval| interval.leave_kind == :pto }.sum(&:duration_hours).round(2)
+      sick_hours = leave_intervals.select { |interval| interval.leave_kind == :sick }.sum(&:duration_hours).round(2)
+      holiday_hours = leave_intervals.select { |interval| interval.leave_kind == :holiday }.sum(&:duration_hours).round(2)
+
+      ihss_hours = work_intervals.select(&:ihss?).sum(&:duration_hours).round(2)
+      company_hours = work_intervals.reject(&:ihss?).sum(&:duration_hours).round(2)
+      ot_eligible = ot_eligible_intervals(work_intervals)
 
       total_hours = 0.0
       daily_hours = Hash.new(0.0)
@@ -74,6 +80,9 @@ module Payroll
         shift_ot_hours: shift_ot_hours,
         ihss_hours: ihss_hours,
         company_hours: company_hours,
+        pto_hours: pto_hours,
+        sick_hours: sick_hours,
+        holiday_hours: holiday_hours,
       }
     end
 

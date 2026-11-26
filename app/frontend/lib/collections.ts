@@ -1,5 +1,4 @@
-import { cloneDeep, isPlainObject } from "es-toolkit"
-import { unset } from "es-toolkit/compat"
+import { isPlainObject } from "es-toolkit"
 
 export { NestedObject } from "./Collections/NestedObject"
 export { NestedURLSearchParams } from "./Collections/NestedURLSearchParams"
@@ -12,14 +11,28 @@ export const coerceArray = <T extends unknown>(arg: T | T[] | null | undefined) 
 	return [arg]
 }
 
-export const exclude = <T extends any, K extends string>(obj: T, keys: K | K[]): Omit<T, K> | undefined => {
-	const clone = cloneDeep(obj)
-	if(clone) {
-		coerceArray(keys).forEach(key => {
-			unset(clone, key)
-		})
+const omitPath = (source: Record<string, unknown>, path: string[]): Record<string, unknown> => {
+	const [head, ...rest] = path
+	if(head === undefined || !Object.hasOwn(source, head)) return source
+
+	const copy = { ...source }
+	if(rest.length === 0) {
+		delete copy[head]
+		return copy
 	}
-	return clone
+
+	const child = copy[head]
+	if(isRecord(child)) copy[head] = omitPath(child, rest)
+	return copy
+}
+
+export const exclude = <T extends any, K extends string>(obj: T, keys: K | K[]): Omit<T, K> | undefined => {
+	if(!isRecord(obj)) return obj ?? undefined
+
+	return coerceArray(keys).reduce<Record<string, unknown>>(
+		(result, key) => omitPath(result, key.split(".")),
+		obj,
+	) as Omit<T, K>
 }
 
 export const withDefaults = (obj: Record<string, any>, defaults: Record<string, any>) => {

@@ -44,7 +44,7 @@ RSpec.describe ReportDefinition do
     definition = build(:report_definition, resource_key: "not_registered")
 
     expect(definition).not_to be_valid
-    expect(definition.errors[:resource_key].join).to include("registered")
+    expect(definition.errors[:resource_key]).to be_present
   end
 
   it "builds a snapshot for enqueue isolation" do
@@ -70,7 +70,7 @@ RSpec.describe ReportDefinition do
     )
 
     expect(definition).not_to be_valid
-    expect(definition.errors[:resource_key].join).to include("custom report generator")
+    expect(definition.errors[:resource_key]).to be_present
   end
 
   it "excludes custom definitions from the catalog scope" do

@@ -90,7 +90,7 @@ describe("EmployeeOverview", () => {
 		})
 	})
 
-	it("renders assignment, alert tiles, and quick action links", () => {
+	it("renders assignment data and quick action links", () => {
 		render(
 			<MantineProvider theme={ theme }>
 				<ModalsProvider>
@@ -99,12 +99,37 @@ describe("EmployeeOverview", () => {
 			</MantineProvider>,
 		)
 
-		expect(screen.getByText("views.employees.show.overview.assignments")).toBeInTheDocument()
 		expect(screen.getByText("Lead Manager")).toBeInTheDocument()
-		expect(screen.getByText("views.employees.show.overview.alerts")).toBeInTheDocument()
-		expect(screen.getByText("views.employees.show.tabs.profile")).toBeInTheDocument()
-		expect(screen.getByText("views.employees.show.overview.payroll_review")).toBeInTheDocument()
-		expect(screen.getByText("Schedule")).toBeInTheDocument()
+		expect(screen.getByRole("link", { name: /views.employees.show.tabs.profile/ })).toHaveAttribute(
+			"href",
+			"/employees/ada-lovelace?tab=profile",
+		)
+		expect(screen.getByRole("link", { name: /views.employees.show.overview.payroll_review/ })).toHaveAttribute(
+			"href",
+			"/payroll/periods/period-1/employees/employee-1",
+		)
+		expect(screen.getByRole("link", { name: /Schedule/ })).toHaveAttribute(
+			"href",
+			"/employees/ada-lovelace/schedule",
+		)
+	})
+
+	it("hides payroll review and schedule for non-employed statuses", () => {
+		render(
+			<MantineProvider theme={ theme }>
+				<ModalsProvider>
+					<EmployeeOverview
+						employee={ buildEmployee({
+							status: "applicant",
+							current_pay_period_id: "period-1",
+						}) }
+					/>
+				</ModalsProvider>
+			</MantineProvider>,
+		)
+
+		expect(screen.queryByText("views.employees.show.overview.payroll_review")).not.toBeInTheDocument()
+		expect(screen.queryByRole("link", { name: /Schedule/ })).not.toBeInTheDocument()
 	})
 
 	it("shows a pending termination banner", () => {

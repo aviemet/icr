@@ -16,7 +16,10 @@ vi.mock("react-i18next", () => ({
 			if(key === "views.caseloads.metrics.on_caseload") return "On caseload"
 			if(key === "views.caseloads.metrics.unassigned") return "Unassigned"
 			if(key === "views.caseloads.roster.title") return "Facilitators"
-			if(key === "views.caseloads.roster.caseload_size") return `${options?.count ?? 0} clients`
+			if(key === "views.caseloads.roster.caseload_size") {
+				const count = Number(options?.count ?? 0)
+				return count === 1 ? `${count} client` : `${count} clients`
+			}
 			if(key === "views.caseloads.clients.title") return "Caseload"
 			if(key === "views.caseloads.clients.reassign") return "Reassign"
 			if(key === "views.caseloads.clients.reassign_title") return "Reassign client"
@@ -138,7 +141,7 @@ describe("CaseloadsBoard", () => {
 		})
 	})
 
-	it("renders metrics, roster, caseload clients, and unassigned assign actions", () => {
+	it("renders facilitator data and client actions", () => {
 		render(
 			<MantineProvider theme={ theme }>
 				<ModalsProvider>
@@ -147,12 +150,11 @@ describe("CaseloadsBoard", () => {
 			</MantineProvider>,
 		)
 
-		expect(screen.getByText("Caseloads")).toBeTruthy()
-		expect(screen.getByText("Ada Facilitator")).toBeTruthy()
-		expect(screen.getByText("Casey Client")).toBeTruthy()
-		expect(screen.getByText("Una Client")).toBeTruthy()
-		expect(screen.getByText("Reassign")).toBeTruthy()
-		expect(screen.getByText("Assign")).toBeTruthy()
+		expect(screen.getByText("Ada Facilitator")).toBeInTheDocument()
+		expect(screen.getByRole("link", { name: "Casey Client" })).toHaveAttribute("href", "/clients/casey-client")
+		expect(screen.getByRole("link", { name: "Una Client" })).toHaveAttribute("href", "/clients/una-client")
+		expect(screen.getByRole("button", { name: "Reassign" })).toBeInTheDocument()
+		expect(screen.getByRole("button", { name: "Assign" })).toBeInTheDocument()
 	})
 
 	it("opens the assign confirm modal from an unassigned client action", async () => {

@@ -35,6 +35,7 @@ export interface SharedInertiaProps extends PageProps {
 	permissions: Record<string, Record<string, boolean>>
 	features: {
 		compliance_forms: boolean
+		vendors: boolean
 	}
 	can_update?: boolean
 	can_updates?: Record<string, boolean>

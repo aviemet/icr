@@ -40,10 +40,6 @@ RSpec.describe Person do
 
   describe "Associations" do
     it{ is_expected.to belong_to(:user).optional }
-
-    it{ is_expected.to have_one(:client) }
-    it{ is_expected.to have_one(:employee) }
-    it{ is_expected.to have_one(:doctor) }
   end
 
   describe "Attributes" do

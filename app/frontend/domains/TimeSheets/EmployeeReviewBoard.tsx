@@ -1,5 +1,6 @@
 import { router } from "@inertiajs/react"
 import { useModals } from "@mantine/modals"
+import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import {
@@ -22,6 +23,11 @@ import { formatter, Routes } from "@/lib"
 
 import { AddShiftForm } from "./AddShiftForm"
 import * as classes from "./Board.css"
+import {
+	applyIhssToggleToShifts,
+	type IhssToggleDelta,
+	mergeShiftOtHours,
+} from "./ihssToggle"
 import { ReviewTable } from "./ReviewTable"
 
 interface EmployeeHoursMap {
@@ -29,6 +35,9 @@ interface EmployeeHoursMap {
 	ot_hours?: number
 	ihss_hours?: number
 	company_hours?: number
+	pto_hours?: number
+	sick_hours?: number
+	holiday_hours?: number
 }
 
 interface UnreviewedShiftRow {
@@ -73,15 +82,36 @@ export function EmployeeReviewBoard({
 	const [periodStart, periodEnd] = periodDates
 	const periodRange =
 		periodStart && periodEnd ? formatter.datetime.range(periodStart, periodEnd) : ""
-	const regularHours = employeeHours.regular_hours ?? 0
-	const otHours = employeeHours.ot_hours ?? 0
-	const ihssHours = employeeHours.ihss_hours ?? 0
-	const companyHours = employeeHours.company_hours ?? 0
-	const totalHours = ihssHours + companyHours
+	const [reviewShifts, setReviewShifts] = useState(shifts)
+	const [reviewShiftOtHours, setReviewShiftOtHours] = useState(shiftOtHours)
+	const [reviewEmployeeHours, setReviewEmployeeHours] = useState(employeeHours)
+
+	useEffect(() => {
+		setReviewShifts(shifts)
+		setReviewShiftOtHours(shiftOtHours)
+		setReviewEmployeeHours(employeeHours)
+	}, [shifts, shiftOtHours, employeeHours])
+
+	const regularHours = reviewEmployeeHours.regular_hours ?? 0
+	const otHours = reviewEmployeeHours.ot_hours ?? 0
+	const ihssHours = reviewEmployeeHours.ihss_hours ?? 0
+	const companyHours = reviewEmployeeHours.company_hours ?? 0
+	const ptoHours = reviewEmployeeHours.pto_hours ?? 0
+	const sickHours = reviewEmployeeHours.sick_hours ?? 0
+	const holidayHours = reviewEmployeeHours.holiday_hours ?? 0
+	const totalHours = ihssHours + companyHours + ptoHours + sickHours + holidayHours
 	const showIhssToggle = canEditIhss && ihssAssignmentMode === "shift"
 	const isApproved = Boolean(timesheet?.approved_at)
 	const noValue = t("views.timesheets.index.no_value")
 	const employeeName = employee.full_name ?? employee.name ?? "-"
+
+	const handleIhssToggle = (delta: IhssToggleDelta) => {
+		setReviewShifts(current => applyIhssToggleToShifts(current, delta))
+		setReviewShiftOtHours(current => mergeShiftOtHours(current, delta.shift_ot_hours))
+		if(delta.employee_hours) {
+			setReviewEmployeeHours(current => ({ ...current, ...delta.employee_hours }))
+		}
+	}
 
 	return (
 		<Box className={ classes.viewport }>
@@ -207,6 +237,30 @@ export function EmployeeReviewBoard({
 						</MetricValue>
 					</MetricTile>
 					<MetricTile
+						title={ t("views.timesheets.employee_review.pto_hours") }
+						icon={ <ClockIcon size={ 16 } /> }
+					>
+						<MetricValue>
+							{ formatter.number.decimal(ptoHours, 2) } hrs
+						</MetricValue>
+					</MetricTile>
+					<MetricTile
+						title={ t("views.timesheets.employee_review.sick_hours") }
+						icon={ <ClockIcon size={ 16 } /> }
+					>
+						<MetricValue>
+							{ formatter.number.decimal(sickHours, 2) } hrs
+						</MetricValue>
+					</MetricTile>
+					<MetricTile
+						title={ t("views.timesheets.employee_review.holiday_hours") }
+						icon={ <ClockIcon size={ 16 } /> }
+					>
+						<MetricValue>
+							{ formatter.number.decimal(holidayHours, 2) } hrs
+						</MetricValue>
+					</MetricTile>
+					<MetricTile
 						title={ t("views.timesheets.employee_review.total") }
 						icon={ <ClockIcon size={ 16 } /> }
 					>
@@ -218,16 +272,20 @@ export function EmployeeReviewBoard({
 
 				<Section variant="panel" className={ classes.panel }>
 					<ReviewTable
-						shifts={ shifts }
+						shifts={ reviewShifts }
 						shiftExceptionReasons={ shiftExceptionReasons }
-						shiftOtHours={ shiftOtHours }
+						shiftOtHours={ reviewShiftOtHours }
 						regularHours={ regularHours }
 						otHours={ otHours }
+						ptoHours={ ptoHours }
+						sickHours={ sickHours }
+						holidayHours={ holidayHours }
 						canEditTimes={ !finalized }
 						employeeId={ employee.id }
 						employeeSlug={ employee.slug }
 						payPeriodId={ payPeriodId }
 						canEditIhss={ showIhssToggle }
+						onIhssToggle={ handleIhssToggle }
 					/>
 				</Section>
 
