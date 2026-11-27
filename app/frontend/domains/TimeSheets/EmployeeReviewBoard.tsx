@@ -289,12 +289,6 @@ export function EmployeeReviewBoard({
 						shifts={ reviewShifts }
 						shiftExceptionReasons={ shiftExceptionReasons }
 						shiftOtHours={ reviewShiftOtHours }
-						regularHours={ regularHours }
-						otHours={ otHours }
-						ihssHours={ ihssHours }
-						ptoHours={ ptoHours }
-						sickHours={ sickHours }
-						holidayHours={ holidayHours }
 						canEditTimes={ !finalized }
 						employeeId={ employee.id }
 						employeeSlug={ employee.slug }

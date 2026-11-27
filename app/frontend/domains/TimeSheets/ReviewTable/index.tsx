@@ -5,10 +5,10 @@ import axios from "axios"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { Box, Group, Table, type TableProps, Text } from "@/components"
+import { Box, Table, type TableProps, Text } from "@/components"
 import { type IhssToggleDelta } from "@/domains/TimeSheets/ihssToggle"
 import { confirmBusyAction } from "@/features"
-import { formatter, Routes, assertStatus, HTTP_STATUS } from "@/lib"
+import { Routes, assertStatus, HTTP_STATUS } from "@/lib"
 
 import { ReviewRow } from "./ReviewRow"
 
@@ -16,12 +16,6 @@ interface ReviewTableProps extends TableProps {
 	shifts: Schema.ShiftsReview[]
 	shiftExceptionReasons?: Record<string, string[]>
 	shiftOtHours?: Record<string, number>
-	regularHours: number
-	otHours: number
-	ihssHours?: number
-	ptoHours?: number
-	sickHours?: number
-	holidayHours?: number
 	canEditTimes: boolean
 	employeeId: string
 	employeeSlug: string
@@ -40,12 +34,6 @@ export function ReviewTable({
 	shifts,
 	shiftExceptionReasons = {},
 	shiftOtHours = {},
-	regularHours,
-	otHours,
-	ihssHours = 0,
-	ptoHours = 0,
-	sickHours = 0,
-	holidayHours = 0,
 	canEditTimes,
 	employeeId,
 	employeeSlug,
@@ -64,20 +52,6 @@ export function ReviewTable({
 	const modals = useModals()
 	const [busy, setBusy] = useState(false)
 	const resolvedReloadHref = reloadHref ?? Routes.periodEmployeeReview(payPeriodSlug, employeeSlug)
-
-	const leadingColumnCount =
-		1 +
-		(showClientColumn ? 1 : 0) +
-		1 +
-		1 +
-		1 +
-		(showIhss ? 1 : 0)
-	const trailingColumnCount =
-		1 +
-		1 +
-		(canFacilitatorApprove ? 1 : 0) +
-		1
-	const columnCount = leadingColumnCount + trailingColumnCount
 
 	const reloadReview = () => {
 		router.get(resolvedReloadHref)
@@ -121,40 +95,36 @@ export function ReviewTable({
 		<Box style={ { position: "relative" } }>
 			<LoadingOverlay visible={ busy } overlayProps={ { blur: 1 } } />
 
-			<Table.Provider>
-				<Table { ...props }>
-					<Table.Head>
-						<Table.Row>
-							<Table.HeadCell>{ t("views.timesheets.employee_review.date") }</Table.HeadCell>
-							{ showClientColumn && (
-								<Table.HeadCell>{ t("views.timesheets.employee_review.client") }</Table.HeadCell>
-							) }
-							<Table.HeadCell>{ t("views.timesheets.employee_review.in_out_times") }</Table.HeadCell>
-							<Table.HeadCell>{ t("views.timesheets.employee_review.hours") }</Table.HeadCell>
-							<Table.HeadCell>{ t("views.timesheets.employee_review.shift_type") }</Table.HeadCell>
-							{ showIhss && (
-								<Table.HeadCell>{ t("views.timesheets.employee_review.ihss") }</Table.HeadCell>
-							) }
-							<Table.HeadCell>{ t("views.timesheets.employee_review.ot") }</Table.HeadCell>
-							<Table.HeadCell>{ t("views.timesheets.employee_review.exception") }</Table.HeadCell>
-							{ canFacilitatorApprove && (
-								<Table.HeadCell>{ t("views.pay_periods.client_show.columns.status") }</Table.HeadCell>
-							) }
-							<Table.HeadCell className="actionsCell">{ t("views.timesheets.employee_review.actions") }</Table.HeadCell>
-						</Table.Row>
-					</Table.Head>
-
-					<Table.Body>
-						{ shifts.length === 0
-							? (
+			{ shifts.length === 0
+				? (
+					<Text size="sm" c="dimmed">{ t("views.timesheets.employee_review.no_shifts") }</Text>
+				)
+				: (
+					<Table.Provider>
+						<Table { ...props }>
+							<Table.Head>
 								<Table.Row>
-									<Table.Cell colSpan={ columnCount }>
-										<Text size="sm" c="dimmed">{ t("views.timesheets.employee_review.no_shifts") }</Text>
-									</Table.Cell>
+									<Table.HeadCell>{ t("views.timesheets.employee_review.date") }</Table.HeadCell>
+									{ showClientColumn && (
+										<Table.HeadCell>{ t("views.timesheets.employee_review.client") }</Table.HeadCell>
+									) }
+									<Table.HeadCell>{ t("views.timesheets.employee_review.in_out_times") }</Table.HeadCell>
+									<Table.HeadCell>{ t("views.timesheets.employee_review.hours") }</Table.HeadCell>
+									<Table.HeadCell>{ t("views.timesheets.employee_review.shift_type") }</Table.HeadCell>
+									{ showIhss && (
+										<Table.HeadCell>{ t("views.timesheets.employee_review.ihss") }</Table.HeadCell>
+									) }
+									<Table.HeadCell>{ t("views.timesheets.employee_review.ot") }</Table.HeadCell>
+									<Table.HeadCell>{ t("views.timesheets.employee_review.exception") }</Table.HeadCell>
+									{ canFacilitatorApprove && (
+										<Table.HeadCell>{ t("views.pay_periods.client_show.columns.status") }</Table.HeadCell>
+									) }
+									<Table.HeadCell className="actionsCell">{ t("views.timesheets.employee_review.actions") }</Table.HeadCell>
 								</Table.Row>
-							)
-							: (
-								shifts.map(shift => (
+							</Table.Head>
+
+							<Table.Body>
+								{ shifts.map(shift => (
 									<ReviewRow
 										key={ shift.id }
 										shift={ shift }
@@ -174,45 +144,11 @@ export function ReviewTable({
 										canEditShiftType={ canEditTimes }
 										onIhssToggle={ onIhssToggle }
 									/>
-								))
-							) }
-					</Table.Body>
-
-					{ shifts.length > 0 && (
-						<Table.Footer>
-							<Table.Row>
-								<Table.Cell colSpan={ leadingColumnCount }>
-									<Text fw={ 500 }>{ t("views.timesheets.employee_review.total") }</Text>
-								</Table.Cell>
-								<Table.Cell colSpan={ trailingColumnCount }>
-									<Group gap="md">
-										<Text size="sm" fw={ 500 }>
-											{ t("views.timesheets.employee_review.footer_regular") }: { formatter.number.decimal(regularHours, 2) } hrs
-										</Text>
-										<Text size="sm" fw={ 500 }>
-											{ t("views.timesheets.employee_review.footer_overtime") }: { formatter.number.decimal(otHours, 2) } hrs
-										</Text>
-										{ showIhss && (
-											<Text size="sm" fw={ 500 }>
-												{ t("views.timesheets.employee_review.ihss_hours") }: { formatter.number.decimal(ihssHours, 2) } hrs
-											</Text>
-										) }
-										<Text size="sm" fw={ 500 }>
-											{ t("views.timesheets.employee_review.pto_hours") }: { formatter.number.decimal(ptoHours, 2) } hrs
-										</Text>
-										<Text size="sm" fw={ 500 }>
-											{ t("views.timesheets.employee_review.sick_hours") }: { formatter.number.decimal(sickHours, 2) } hrs
-										</Text>
-										<Text size="sm" fw={ 500 }>
-											{ t("views.timesheets.employee_review.holiday_hours") }: { formatter.number.decimal(holidayHours, 2) } hrs
-										</Text>
-									</Group>
-								</Table.Cell>
-							</Table.Row>
-						</Table.Footer>
-					) }
-				</Table>
-			</Table.Provider>
+								)) }
+							</Table.Body>
+						</Table>
+					</Table.Provider>
+				) }
 		</Box>
 	)
 }

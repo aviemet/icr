@@ -2,8 +2,9 @@ import { router } from "@inertiajs/react"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
-import { Badge, Button, Group, Stack, Text } from "@/components"
+import { Badge, Button, Group, Section, Stack, Text } from "@/components"
 import { type IhssToggleDelta } from "@/domains/TimeSheets/ihssToggle"
+import { ReviewHoursTotals } from "@/domains/TimeSheets/ReviewHoursTotals"
 import { ReviewTable } from "@/domains/TimeSheets/ReviewTable"
 import { Routes } from "@/lib"
 
@@ -28,6 +29,7 @@ interface ClientShiftsTableProps {
 	showIhss?: boolean
 	canEditIhss?: boolean
 	onIhssToggle?: (delta: IhssToggleDelta) => void
+	panelClassName?: string
 }
 
 export function ClientShiftsTable({
@@ -45,6 +47,7 @@ export function ClientShiftsTable({
 	showIhss = false,
 	canEditIhss = false,
 	onIhssToggle,
+	panelClassName,
 }: ClientShiftsTableProps) {
 	const { t } = useTranslation()
 	const selectedEmployee = employees.find(employee => employee.id === selectedEmployeeId) ?? null
@@ -66,75 +69,101 @@ export function ClientShiftsTable({
 		[selectedShifts, shiftOtHours],
 	)
 	const reloadHref = Routes.clientPeriod(payPeriodSlug, clientSlug)
+	const totalRows = [
+		{
+			key: "regular",
+			label: t("views.timesheets.employee_review.footer_regular"),
+			hours: regularHours,
+		},
+		{
+			key: "ot",
+			label: t("views.timesheets.employee_review.footer_overtime"),
+			hours: otHours,
+		},
+		...(showIhss
+			? [{
+				key: "ihss",
+				label: t("views.timesheets.employee_review.ihss_hours"),
+				hours: ihssHours,
+			}]
+			: []),
+	]
 
 	if(employees.length === 0) {
 		return (
-			<Text size="sm" c="dimmed">
-				{ t("views.pay_periods.client_show.no_employees") }
-			</Text>
+			<Section variant="panel" className={ panelClassName }>
+				<Text size="sm" c="dimmed">
+					{ t("views.pay_periods.client_show.no_employees") }
+				</Text>
+			</Section>
 		)
 	}
 
 	if(!selectedEmployee) {
 		return (
-			<Text size="sm" c="dimmed">
-				{ t("views.pay_periods.client_show.employee_placeholder") }
-			</Text>
+			<Section variant="panel" className={ panelClassName }>
+				<Text size="sm" c="dimmed">
+					{ t("views.pay_periods.client_show.employee_placeholder") }
+				</Text>
+			</Section>
 		)
 	}
 
 	return (
-		<Stack gap="md">
-			<Group justify="space-between" gap="sm" wrap="wrap" align="center">
-				<Group gap="sm" wrap="wrap" align="center">
-					<Badge variant="light" color={ pendingCount === 0 ? "green" : "yellow" }>
-						{ pendingCount === 0
-							? t("views.pay_periods.clients.status_reviewed")
-							: t("views.pay_periods.clients.status_pending") }
-					</Badge>
-					<Text size="sm" c="dimmed">
-						{ t("views.pay_periods.client_show.pending_count", { count: pendingCount }) }
-					</Text>
-				</Group>
-				{ canFacilitatorApprove && pendingCount > 0 && (
-					<Button
-						variant="filled"
-						size="sm"
-						onClick={ () => router.post(Routes.bulkApproveShifts(), {
-							approvals: pendingApprovals,
-							pay_period_id: payPeriodId,
-							client_id: clientId,
-						}, {
-							preserveState: true,
-							preserveScroll: true,
-						}) }
-					>
-						{ t("views.pay_periods.client_show.approve_all_pending") }
-					</Button>
-				) }
-			</Group>
+		<>
+			<Section variant="panel" className={ panelClassName }>
+				<Stack gap="md">
+					<Group justify="space-between" gap="sm" wrap="wrap" align="center">
+						<Group gap="sm" wrap="wrap" align="center">
+							<Badge variant="light" color={ pendingCount === 0 ? "green" : "yellow" }>
+								{ pendingCount === 0
+									? t("views.pay_periods.clients.status_reviewed")
+									: t("views.pay_periods.clients.status_pending") }
+							</Badge>
+							<Text size="sm" c="dimmed">
+								{ t("views.pay_periods.client_show.pending_count", { count: pendingCount }) }
+							</Text>
+						</Group>
+						{ canFacilitatorApprove && pendingCount > 0 && (
+							<Button
+								variant="filled"
+								size="sm"
+								onClick={ () => router.post(Routes.bulkApproveShifts(), {
+									approvals: pendingApprovals,
+									pay_period_id: payPeriodId,
+									client_id: clientId,
+								}, {
+									preserveState: true,
+									preserveScroll: true,
+								}) }
+							>
+								{ t("views.pay_periods.client_show.approve_all_pending") }
+							</Button>
+						) }
+					</Group>
 
-			<ReviewTable
-				key={ selectedEmployee.id }
-				shifts={ selectedShifts }
-				shiftExceptionReasons={ shiftExceptionReasons }
-				shiftOtHours={ shiftOtHours }
-				regularHours={ regularHours }
-				otHours={ otHours }
-				ihssHours={ ihssHours }
-				canEditTimes={ canEditTimes }
-				employeeId={ selectedEmployee.id }
-				employeeSlug={ selectedEmployee.slug }
-				payPeriodId={ payPeriodId }
-				payPeriodSlug={ payPeriodSlug }
-				clientId={ clientId }
-				reloadHref={ reloadHref }
-				showClientColumn={ false }
-				canFacilitatorApprove={ canFacilitatorApprove }
-				showIhss={ showIhss }
-				canEditIhss={ canEditIhss }
-				onIhssToggle={ onIhssToggle }
-			/>
-		</Stack>
+					<ReviewTable
+						key={ selectedEmployee.id }
+						shifts={ selectedShifts }
+						shiftExceptionReasons={ shiftExceptionReasons }
+						shiftOtHours={ shiftOtHours }
+						canEditTimes={ canEditTimes }
+						employeeId={ selectedEmployee.id }
+						employeeSlug={ selectedEmployee.slug }
+						payPeriodId={ payPeriodId }
+						payPeriodSlug={ payPeriodSlug }
+						clientId={ clientId }
+						reloadHref={ reloadHref }
+						showClientColumn={ false }
+						canFacilitatorApprove={ canFacilitatorApprove }
+						showIhss={ showIhss }
+						canEditIhss={ canEditIhss }
+						onIhssToggle={ onIhssToggle }
+					/>
+				</Stack>
+			</Section>
+
+			<ReviewHoursTotals rows={ totalRows } className={ panelClassName } />
+		</>
 	)
 }

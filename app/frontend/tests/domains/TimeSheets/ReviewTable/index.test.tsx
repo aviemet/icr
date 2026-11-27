@@ -18,13 +18,6 @@ vi.mock("react-i18next", () => ({
 				"views.timesheets.employee_review.ot": "OT",
 				"views.timesheets.employee_review.exception": "Exception",
 				"views.timesheets.employee_review.actions": "Actions",
-				"views.timesheets.employee_review.total": "Total",
-				"views.timesheets.employee_review.footer_regular": "Regular",
-				"views.timesheets.employee_review.footer_overtime": "Overtime",
-				"views.timesheets.employee_review.ihss_hours": "IHSS Hours",
-				"views.timesheets.employee_review.pto_hours": "PTO Hours",
-				"views.timesheets.employee_review.sick_hours": "Sick",
-				"views.timesheets.employee_review.holiday_hours": "Holiday",
 				"views.timesheets.employee_review.client_calendar": "Client calendar",
 				"views.timesheets.employee_review.employee_calendar": "Employee calendar",
 				"views.pay_periods.client_show.columns.status": "Status",
@@ -33,6 +26,7 @@ vi.mock("react-i18next", () => ({
 				"views.pay_periods.client_show.approve": "Approve",
 				"views.pay_periods.client_show.unapprove": "Unapprove",
 				"views.timesheets.index.no_value": "--",
+				"views.timesheets.employee_review.no_shifts": "No shifts in this period",
 			}
 			return labels[key] ?? key
 		},
@@ -103,9 +97,6 @@ function renderTable(overrides: {
 		<MantineProvider theme={ theme }>
 			<ReviewTable
 				shifts={ [reviewShift()] }
-				regularHours={ 24 }
-				otHours={ 0 }
-				ihssHours={ 6 }
 				canEditTimes={ false }
 				employeeId="employee-1"
 				employeeSlug="carlton-ortiz"
@@ -139,17 +130,15 @@ describe("ReviewTable", () => {
 		cleanup()
 	})
 
-	it("includes IHSS hours in the totals row when IHSS is shown", () => {
+	it("shows the IHSS column when IHSS is enabled", () => {
 		renderTable({ showIhss: true })
 
-		expect(screen.getByText(/IHSS Hours: 6\.00 hrs/)).toBeInTheDocument()
 		expect(screen.getByRole("columnheader", { name: "IHSS" })).toBeInTheDocument()
 	})
 
-	it("hides the IHSS column and footer total when IHSS is not shown", () => {
+	it("hides the IHSS column when IHSS is not shown", () => {
 		renderTable({ showIhss: false })
 
-		expect(screen.queryByText(/IHSS Hours:/)).not.toBeInTheDocument()
 		expect(screen.queryByRole("columnheader", { name: "IHSS" })).not.toBeInTheDocument()
 	})
 

@@ -161,24 +161,23 @@ export function ClientReviewBoard({
 					</Box>
 				</Section>
 
-				<Section variant="panel" className={ classes.panel }>
-					<ClientShiftsTable
-						payPeriodId={ payPeriodId }
-						payPeriodSlug={ payPeriodSlug }
-						clientId={ periodClient.id }
-						clientSlug={ periodClient.slug }
-						employees={ periodEmployees }
-						selectedEmployeeId={ selectedEmployeeId }
-						shifts={ reviewShifts }
-						shiftExceptionReasons={ shiftExceptionReasons }
-						shiftOtHours={ reviewShiftOtHours }
-						canFacilitatorApprove={ canFacilitatorApprove }
-						canEditTimes={ !finalized }
-						showIhss={ showIhss }
-						canEditIhss={ showIhss && canEditIhss && ihssAssignmentMode === "shift" }
-						onIhssToggle={ handleIhssToggle }
-					/>
-				</Section>
+				<ClientShiftsTable
+					payPeriodId={ payPeriodId }
+					payPeriodSlug={ payPeriodSlug }
+					clientId={ periodClient.id }
+					clientSlug={ periodClient.slug }
+					employees={ periodEmployees }
+					selectedEmployeeId={ selectedEmployeeId }
+					shifts={ reviewShifts }
+					shiftExceptionReasons={ shiftExceptionReasons }
+					shiftOtHours={ reviewShiftOtHours }
+					canFacilitatorApprove={ canFacilitatorApprove }
+					canEditTimes={ !finalized }
+					showIhss={ showIhss }
+					canEditIhss={ showIhss && canEditIhss && ihssAssignmentMode === "shift" }
+					onIhssToggle={ handleIhssToggle }
+					panelClassName={ classes.panel }
+				/>
 
 				<Group>
 					<Link

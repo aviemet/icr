@@ -139,7 +139,7 @@ RSpec.describe Payroll::EmployeePeriodHours do
       expect(result[employee.id.to_s][:shift_ot_hours][shift.id.to_s]).to eq(2.0)
     end
 
-    it "splits shift_ot_hours proportionally when multiple shifts exceed daily threshold the same day" do
+    it "attributes daily shift OT chronologically after the daily threshold" do
       pay_period = pay_period_for(Date.new(2024, 3, 15))
       employee = create(:employee)
       timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
@@ -150,8 +150,8 @@ RSpec.describe Payroll::EmployeePeriodHours do
 
       result = described_class.call(pay_period, [employee.id])
 
-      expect(result[employee.id.to_s][:shift_ot_hours][shift1.id.to_s]).to eq(1.0)
-      expect(result[employee.id.to_s][:shift_ot_hours][shift2.id.to_s]).to eq(1.0)
+      expect(result[employee.id.to_s][:shift_ot_hours][shift1.id.to_s]).to eq(0.0)
+      expect(result[employee.id.to_s][:shift_ot_hours][shift2.id.to_s]).to eq(2.0)
     end
 
     it "does not infinite loop when processing shifts" do
@@ -208,11 +208,98 @@ RSpec.describe Payroll::EmployeePeriodHours do
       expect(result[employee.id.to_s][:ot_hours]).to eq(8.0)
     end
 
-    it "sums daily and weekly OT in the same period" do
+    it "attributes weekly shift OT chronologically after the weekly threshold" do
+      pay_period = pay_period_for(Date.new(2024, 3, 11))
+      employee = create(:employee)
+      intervals = (0..6).map do |day_offset|
+        date = Date.new(2024, 3, 11) + day_offset
+        Payroll::WorkInterval.new(
+          id: "day-#{day_offset}",
+          employee_id: employee.id,
+          starts_at: Time.zone.local(date.year, date.month, date.day, 9, 0, 0),
+          ends_at: Time.zone.local(date.year, date.month, date.day, 17, 0, 0),
+          category: nil,
+        )
+      end
+
+      result = described_class.call(pay_period, [employee.id], collector: stub_collector(intervals))
+      shift_ot = result[employee.id.to_s][:shift_ot_hours]
+
+      expect(result[employee.id.to_s][:ot_hours]).to eq(16.0)
+      expect(shift_ot["day-0"]).to eq(0.0)
+      expect(shift_ot["day-1"]).to eq(0.0)
+      expect(shift_ot["day-2"]).to eq(0.0)
+      expect(shift_ot["day-3"]).to eq(0.0)
+      expect(shift_ot["day-4"]).to eq(0.0)
+      expect(shift_ot["day-5"]).to eq(8.0)
+      expect(shift_ot["day-6"]).to eq(8.0)
+    end
+
+    it "attributes partial weekly OT on the shift that crosses the weekly threshold" do
+      pay_period = pay_period_for(Date.new(2024, 3, 11))
+      employee = create(:employee)
+      intervals = [
+        Payroll::WorkInterval.new(
+          id: "mon",
+          employee_id: employee.id,
+          starts_at: Time.zone.local(2024, 3, 11, 9, 0, 0),
+          ends_at: Time.zone.local(2024, 3, 11, 17, 0, 0),
+          category: nil,
+        ),
+        Payroll::WorkInterval.new(
+          id: "tue",
+          employee_id: employee.id,
+          starts_at: Time.zone.local(2024, 3, 12, 9, 0, 0),
+          ends_at: Time.zone.local(2024, 3, 12, 17, 0, 0),
+          category: nil,
+        ),
+        Payroll::WorkInterval.new(
+          id: "wed",
+          employee_id: employee.id,
+          starts_at: Time.zone.local(2024, 3, 13, 9, 0, 0),
+          ends_at: Time.zone.local(2024, 3, 13, 17, 0, 0),
+          category: nil,
+        ),
+        Payroll::WorkInterval.new(
+          id: "thu",
+          employee_id: employee.id,
+          starts_at: Time.zone.local(2024, 3, 14, 9, 0, 0),
+          ends_at: Time.zone.local(2024, 3, 14, 17, 0, 0),
+          category: nil,
+        ),
+        Payroll::WorkInterval.new(
+          id: "fri",
+          employee_id: employee.id,
+          starts_at: Time.zone.local(2024, 3, 15, 9, 0, 0),
+          ends_at: Time.zone.local(2024, 3, 15, 17, 0, 0),
+          category: nil,
+        ),
+        Payroll::WorkInterval.new(
+          id: "sat",
+          employee_id: employee.id,
+          starts_at: Time.zone.local(2024, 3, 16, 9, 0, 0),
+          ends_at: Time.zone.local(2024, 3, 16, 13, 0, 0),
+          category: nil,
+        ),
+      ]
+
+      result = described_class.call(pay_period, [employee.id], collector: stub_collector(intervals))
+      shift_ot = result[employee.id.to_s][:shift_ot_hours]
+
+      expect(result[employee.id.to_s][:ot_hours]).to eq(4.0)
+      expect(shift_ot["mon"]).to eq(0.0)
+      expect(shift_ot["tue"]).to eq(0.0)
+      expect(shift_ot["wed"]).to eq(0.0)
+      expect(shift_ot["thu"]).to eq(0.0)
+      expect(shift_ot["fri"]).to eq(0.0)
+      expect(shift_ot["sat"]).to eq(4.0)
+    end
+
+    it "counts daily OT once and does not also count those hours as weekly OT" do
       pay_period = pay_period_for(Date.new(2024, 3, 11))
       employee = create(:employee)
       monday = Payroll::WorkInterval.new(
-        id: SecureRandom.uuid,
+        id: "mon",
         employee_id: employee.id,
         starts_at: Time.zone.local(2024, 3, 11, 9, 0, 0),
         ends_at: Time.zone.local(2024, 3, 11, 20, 0, 0),
@@ -221,7 +308,7 @@ RSpec.describe Payroll::EmployeePeriodHours do
       rest = (1..4).map do |day_offset|
         date = Date.new(2024, 3, 11) + day_offset
         Payroll::WorkInterval.new(
-          id: SecureRandom.uuid,
+          id: "day-#{day_offset}",
           employee_id: employee.id,
           starts_at: Time.zone.local(date.year, date.month, date.day, 9, 0, 0),
           ends_at: Time.zone.local(date.year, date.month, date.day, 17, 0, 0),
@@ -231,9 +318,45 @@ RSpec.describe Payroll::EmployeePeriodHours do
 
       result = described_class.call(pay_period, [employee.id], collector: stub_collector([monday, *rest]))
       hours = result[employee.id.to_s]
+      shift_ot = hours[:shift_ot_hours]
 
-      expect(hours[:ot_hours]).to eq(6.0)
-      expect(hours[:regular_hours]).to eq(37.0)
+      expect(hours[:ot_hours]).to eq(3.0)
+      expect(hours[:regular_hours]).to eq(40.0)
+      expect(shift_ot["mon"]).to eq(3.0)
+      expect(shift_ot["day-1"]).to eq(0.0)
+      expect(shift_ot["day-2"]).to eq(0.0)
+      expect(shift_ot["day-3"]).to eq(0.0)
+      expect(shift_ot["day-4"]).to eq(0.0)
+    end
+
+    it "attributes daily and weekly OT on the same long day without double-counting hours" do
+      pay_period = pay_period_for(Date.new(2024, 3, 11))
+      employee = create(:employee)
+      intervals = (0..4).map do |day_offset|
+        date = Date.new(2024, 3, 11) + day_offset
+        Payroll::WorkInterval.new(
+          id: "day-#{day_offset}",
+          employee_id: employee.id,
+          starts_at: Time.zone.local(date.year, date.month, date.day, 9, 0, 0),
+          ends_at: Time.zone.local(date.year, date.month, date.day, 17, 0, 0),
+          category: nil,
+        )
+      end
+      saturday = Payroll::WorkInterval.new(
+        id: "sat",
+        employee_id: employee.id,
+        starts_at: Time.zone.local(2024, 3, 16, 9, 0, 0),
+        ends_at: Time.zone.local(2024, 3, 16, 19, 0, 0),
+        category: nil,
+      )
+
+      result = described_class.call(pay_period, [employee.id], collector: stub_collector([*intervals, saturday]))
+      hours = result[employee.id.to_s]
+
+      expect(hours[:ot_hours]).to eq(10.0)
+      expect(hours[:regular_hours]).to eq(40.0)
+      expect(hours[:shift_ot_hours]["sat"]).to eq(10.0)
+      expect(hours[:shift_ot_hours].values.sum).to eq(10.0)
     end
 
     it "excludes active overtime exemption matches from OT through the engine" do

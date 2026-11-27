@@ -44,40 +44,12 @@ module Payroll
       ihss_hours = work_intervals.select(&:ihss?).sum(&:duration_hours).round(2)
       company_hours = work_intervals.reject(&:ihss?).sum(&:duration_hours).round(2)
       ot_eligible = ot_eligible_intervals(work_intervals)
-
-      total_hours = 0.0
-      daily_hours = Hash.new(0.0)
-      weekly_hours = Hash.new(0.0)
-
-      ot_eligible.each do |interval|
-        next if exempt?(interval)
-
-        hours_by_date(interval).each do |date, hours|
-          total_hours += hours
-          daily_hours[date] += hours
-          week_start = date.beginning_of_week(@week_start_day)
-          weekly_hours[week_start] += hours
-        end
-      end
-
-      daily_ot_by_date = daily_hours.transform_values { |hours| [hours - @daily_threshold, 0].max }
-      weekly_ot_by_week = weekly_hours.transform_values { |hours| [hours - @weekly_threshold, 0].max }
-      ot_hours = (daily_ot_by_date.values.sum + weekly_ot_by_week.values.sum).round(2)
-      regular_hours = (total_hours - ot_hours).round(2)
-      regular_hours = 0.0 if regular_hours.negative?
-
-      shift_ot_hours = shift_ot_hours_for_intervals(
-        ot_eligible,
-        daily_hours: daily_hours,
-        weekly_hours: weekly_hours,
-        daily_ot_by_date: daily_ot_by_date,
-        weekly_ot_by_week: weekly_ot_by_week,
-      )
+      classified = classify_ot(ot_eligible)
 
       {
-        regular_hours: regular_hours,
-        ot_hours: ot_hours,
-        shift_ot_hours: shift_ot_hours,
+        regular_hours: classified[:regular_hours],
+        ot_hours: classified[:ot_hours],
+        shift_ot_hours: classified[:shift_ot_hours],
         ihss_hours: ihss_hours,
         company_hours: company_hours,
         pto_hours: pto_hours,
@@ -92,37 +64,97 @@ module Payroll
       intervals.reject(&:ihss?)
     end
 
-    def shift_ot_hours_for_intervals(intervals, daily_hours:, weekly_hours:, daily_ot_by_date:, weekly_ot_by_week:)
-      intervals.each_with_object(Hash.new(0.0)) do |interval, hash|
+    def classify_ot(intervals)
+      shift_ot_hours = Hash.new(0.0)
+      total_hours = 0.0
+
+      intervals.each do |interval|
         next if interval.id.blank?
 
-        if exempt?(interval)
-          hash[interval.id.to_s] += 0.0
-          next
-        end
-
-        interval_ot = 0.0
-        hours_by_date(interval).each do |date, hours|
-          total = daily_hours[date]
-          next if total.zero?
-
-          interval_ot += (hours / total) * daily_ot_by_date[date]
-        end
-
-        interval_weekly_hours = Hash.new(0.0)
-        hours_by_date(interval).each do |date, hours|
-          week_start = date.beginning_of_week(@week_start_day)
-          interval_weekly_hours[week_start] += hours
-        end
-        interval_weekly_hours.each do |week_start, interval_w|
-          total = weekly_hours[week_start]
-          next if total.zero?
-
-          interval_ot += (interval_w / total) * weekly_ot_by_week[week_start]
-        end
-
-        hash[interval.id.to_s] += interval_ot.round(2)
+        shift_ot_hours[interval.id.to_s] = 0.0
       end
+
+      segments_by_day = Hash.new { |days, date| days[date] = [] }
+
+      intervals.each do |interval|
+        next if exempt?(interval)
+
+        hours_by_date(interval).each do |date, hours|
+          total_hours += hours
+          segments_by_day[date] << {
+            interval_id: interval.id.presence&.to_s,
+            date: date,
+            hours: hours,
+            start_time: interval.start_time,
+          }
+        end
+      end
+
+      straight_by_week = Hash.new { |weeks, week_start| weeks[week_start] = [] }
+      ot_hours = 0.0
+
+      segments_by_day.keys.sort.each do |date|
+        day_total = 0.0
+        ordered = segments_by_day[date].sort_by { |segment| segment[:start_time].to_i }
+        week_start = date.beginning_of_week(@week_start_day)
+
+        ordered.each do |segment|
+          hours = segment[:hours]
+          if day_total >= @daily_threshold
+            ot_hours += hours
+            shift_ot_hours[segment[:interval_id]] += hours if segment[:interval_id]
+          elsif day_total + hours > @daily_threshold
+            daily_ot = day_total + hours - @daily_threshold
+            straight = hours - daily_ot
+            ot_hours += daily_ot
+            shift_ot_hours[segment[:interval_id]] += daily_ot if segment[:interval_id]
+            if straight.positive?
+              straight_by_week[week_start] << {
+                interval_id: segment[:interval_id],
+                date: date,
+                hours: straight,
+                start_time: segment[:start_time],
+              }
+            end
+          else
+            straight_by_week[week_start] << {
+              interval_id: segment[:interval_id],
+              date: date,
+              hours: hours,
+              start_time: segment[:start_time],
+            }
+          end
+          day_total += hours
+        end
+      end
+
+      straight_by_week.each_value do |segments|
+        ordered = segments.sort_by { |segment| [segment[:date], segment[:start_time].to_i] }
+        week_total = 0.0
+
+        ordered.each do |segment|
+          hours = segment[:hours]
+          if week_total >= @weekly_threshold
+            ot_hours += hours
+            shift_ot_hours[segment[:interval_id]] += hours if segment[:interval_id]
+          elsif week_total + hours > @weekly_threshold
+            weekly_ot = week_total + hours - @weekly_threshold
+            ot_hours += weekly_ot
+            shift_ot_hours[segment[:interval_id]] += weekly_ot if segment[:interval_id]
+          end
+          week_total += hours
+        end
+      end
+
+      ot_hours = ot_hours.round(2)
+      regular_hours = (total_hours - ot_hours).round(2)
+      regular_hours = 0.0 if regular_hours.negative?
+
+      {
+        regular_hours: regular_hours,
+        ot_hours: ot_hours,
+        shift_ot_hours: shift_ot_hours.transform_values { |hours| hours.round(2) },
+      }
     end
 
     def exempt?(interval)
