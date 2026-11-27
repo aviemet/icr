@@ -2,7 +2,7 @@ import { MantineProvider } from "@mantine/core"
 import { cleanup, render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
-import { Table, type TableColumn } from "@/components"
+import { Table, DataTable, type TableColumn } from "@/components"
 import { theme } from "@/lib/theme"
 
 vi.mock("@inertiajs/react", () => ({
@@ -40,7 +40,7 @@ const records: Row[] = [
 	{ id: "2", name: "Grace" },
 ]
 
-describe("Table.DataTable pagination ownership", () => {
+describe("DataTable pagination ownership", () => {
 	beforeEach(() => {
 		cleanup()
 		Object.defineProperty(window, "matchMedia", {
@@ -62,7 +62,7 @@ describe("Table.DataTable pagination ownership", () => {
 		render(
 			<MantineProvider theme={ theme } defaultColorScheme="dark">
 				<Table.Provider model="employees">
-					<Table.DataTable
+					<DataTable
 						columns={ columns }
 						records={ records }
 						model="employees"

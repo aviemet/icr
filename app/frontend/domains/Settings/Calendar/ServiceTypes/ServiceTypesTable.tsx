@@ -8,7 +8,7 @@ import {
 	Modal,
 	Text,
 	type TableColumn,
-	Table,
+	Table, DataTable,
 } from "@/components"
 import { DeleteButton, EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
@@ -99,7 +99,7 @@ export function ServiceTypesTable({ serviceTypes }: ServiceTypesTableProps) {
 
 	return (
 		<Table.Provider>
-			<Table.DataTable
+			<DataTable
 				classNames={ { table: classes.table } }
 				columns={ columns }
 				records={ serviceTypes }

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { Group, Table, Link, type TableColumn } from "@/components"
+import { Group, DataTable, Link, type TableColumn } from "@/components"
 import { EditButton } from "@/components/Button"
 import { useServerTableFilters } from "@/components/Table/useServerTableFilters"
 import { Routes } from "@/lib"
@@ -126,7 +126,7 @@ export function TrainingTable({
 	]
 
 	return (
-		<Table.DataTable
+		<DataTable
 			columns={ columns }
 			records={ records }
 			model={ model }

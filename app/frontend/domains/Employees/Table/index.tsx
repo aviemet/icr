@@ -1,4 +1,4 @@
-import { Table } from "@/components"
+import { DataTable } from "@/components"
 import { useServerTableFilters } from "@/components/Table/useServerTableFilters"
 
 import { useEmployeeTableColumns } from "./columns"
@@ -41,7 +41,7 @@ export function EmployeeTable({
 
 
 	return (
-		<Table.DataTable
+		<DataTable
 			columns={ columns }
 			records={ records }
 			model={ model }

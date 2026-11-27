@@ -1,4 +1,4 @@
-import { Group, Link, Paper, Presence, Table, Text, type TableColumn } from "@/components"
+import { Group, Link, Paper, Presence, Table, DataTable, Text, type TableColumn } from "@/components"
 import { DeleteButton, EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
@@ -66,7 +66,7 @@ export function DepartmentTable({ records }: DepartmentTableProps) {
 			style={ { overflow: "hidden" } }
 		>
 			<Table.Provider>
-				<Table.DataTable
+				<DataTable
 					classNames={ { table: classes.table } }
 					columns={ columns }
 					records={ records }

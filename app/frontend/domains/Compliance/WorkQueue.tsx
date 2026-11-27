@@ -1,6 +1,6 @@
 import { router } from "@inertiajs/react"
 
-import { Button, Group, Link, Stack, Table, Text, type TableColumn } from "@/components"
+import { Button, Group, Link, Stack, Table, DataTable, Text, type TableColumn } from "@/components"
 import { DateTimeFormatter } from "@/components/Formatters"
 import { Routes } from "@/lib"
 
@@ -102,7 +102,7 @@ export function WorkQueue({ formSubmissions, tab, counts }: WorkQueueProps) {
 				? <Text>{ "No inspections in this queue." }</Text>
 				: (
 					<Table>
-						<Table.DataTable
+						<DataTable
 							records={ formSubmissions }
 							columns={ columns }
 						/>

@@ -1,4 +1,4 @@
-import { Table, Link, type TableColumn } from "@/components"
+import {DataTable, Link, type TableColumn} from "@/components"
 import { EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
@@ -26,7 +26,7 @@ export function ShiftTemplateTable({ records, model }: ShiftTemplateTableProps) 
 	]
 
 	return (
-		<Table.DataTable
+		<DataTable
 			columns={ columns }
 			records={ records }
 			model={ model }

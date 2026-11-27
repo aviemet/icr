@@ -512,6 +512,7 @@
     "service_types": {
       "errors": {
         "multi_client_not_allowed": "This service type allows only one client.",
+        "not_assignable": "That service type cannot be assigned to a shift.",
         "notes_required": "Notes are required for this service type.",
         "system_protected": "System service types cannot be deleted."
       }
@@ -1729,6 +1730,9 @@
           "wednesday": "Wednesday"
         }
       },
+      "table": {
+        "empty": "Nothing to display"
+      },
       "time_off": {
         "index": {
           "actions": "Actions",
@@ -1772,6 +1776,7 @@
           "back_to_payroll": "Back to Payroll",
           "break": "Break",
           "bulk_actions": "Actions",
+          "cancel_edit_times": "Cancel",
           "clear_ihss": "Clear IHSS",
           "clear_selection": "Clear selection",
           "client": "Client",
@@ -1810,8 +1815,6 @@
           "regular_hours": "Regular Hours",
           "request_changes": "Request Changes",
           "save_times": "Save times",
-          "times": "times",
-          "cancel_edit_times": "Cancel",
           "select_all": "Select all shifts",
           "select_shift": "Select shift",
           "selected_count": "%{count} selected",
@@ -1825,6 +1828,7 @@
           "status_submitted": "Submitted",
           "tab_date": "Date",
           "tab_day": "Day",
+          "times": "times",
           "title": "Timesheet Review",
           "total": "Total",
           "unapprove": "Remove approval"

@@ -153,6 +153,7 @@ export default [
 			"@stylistic/no-multiple-empty-lines": ["error", {
 				max: 2,
 				maxBOF: 0,
+				maxEOF: 0,
 			}],
 			"@stylistic/space-infix-ops": "error",
 			"@stylistic/space-unary-ops": ["error", {

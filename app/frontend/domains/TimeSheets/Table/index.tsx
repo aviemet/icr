@@ -1,4 +1,4 @@
-import { Table, type TableColumn } from "@/components"
+import {DataTable, type TableColumn} from "@/components"
 import { EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
@@ -20,7 +20,7 @@ export function TimesheetTable({ records, model }: TimesheetTableProps) {
 	]
 
 	return (
-		<Table.DataTable
+		<DataTable
 			columns={ columns }
 			records={ records }
 			model={ model }

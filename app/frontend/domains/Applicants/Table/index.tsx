@@ -1,4 +1,4 @@
-import { Table } from "@/components"
+import { DataTable } from "@/components"
 import { useServerTableFilters } from "@/components/Table/useServerTableFilters"
 
 import {
@@ -35,7 +35,7 @@ export function ApplicantTable({
 	})
 
 	return (
-		<Table.DataTable
+		<DataTable
 			columns={ columns }
 			records={ records }
 			model={ model }

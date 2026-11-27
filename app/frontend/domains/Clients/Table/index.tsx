@@ -1,4 +1,4 @@
-import { Table } from "@/components"
+import { DataTable } from "@/components"
 import { type ServerTableFilterField } from "@/components/Table/serverTableFilters"
 import { useServerTableFilters } from "@/components/Table/useServerTableFilters"
 
@@ -39,7 +39,7 @@ export function ClientTable({ records, canUpdates = {}, model, serverFiltered = 
 	})
 
 	return (
-		<Table.DataTable
+		<DataTable
 			columns={ columns }
 			records={ records }
 			model={ model }

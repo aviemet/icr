@@ -1,4 +1,4 @@
-import { Table, Link, Presence, type TableColumn } from "@/components"
+import {DataTable, Link, Presence, type TableColumn} from "@/components"
 import { EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
@@ -36,7 +36,7 @@ export function VendorTable({ records, model }: VendorTableProps) {
 	]
 
 	return (
-		<Table.DataTable
+		<DataTable
 			columns={ columns }
 			records={ records }
 			model={ model }

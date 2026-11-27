@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 
-import { Badge, Group, Link, Presence, Table, type TableColumn, Text } from "@/components"
+import {Badge, Group, Link, Presence, DataTable, type TableColumn, Text} from "@/components"
 import { Routes } from "@/lib"
 
 interface ClientsTableProps {
@@ -108,7 +108,7 @@ export function ClientsTable({
 	]
 
 	return (
-		<Table.DataTable
+		<DataTable
 			columns={ columns }
 			records={ clients }
 			model="clients"

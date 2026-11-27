@@ -1,4 +1,4 @@
-import { Group, Link, Paper, Table, Text, type TableColumn } from "@/components"
+import { Group, Link, Paper, Table, DataTable, Text, type TableColumn } from "@/components"
 import { EditButton } from "@/components/Button"
 import { CheckIcon } from "@/components/Icons"
 import { Routes } from "@/lib"
@@ -93,7 +93,7 @@ export function PersonTable({ records, model, pagination }: PersonTableProps) {
 				model={ model }
 				pagination={ pagination }
 			>
-				<Table.DataTable
+				<DataTable
 					classNames={ { table: classes.table } }
 					columns={ columns }
 					records={ records }

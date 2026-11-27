@@ -1,7 +1,7 @@
 import { router } from "@inertiajs/react"
 import { useTranslation } from "react-i18next"
 
-import { Button, Group, Presence, Table, type TableColumn, Text } from "@/components"
+import { Button, DataTable, Group, Presence, type TableColumn, Text } from "@/components"
 import { formatter, Routes } from "@/lib"
 
 type TimeOffRequestRow = Schema.TimeOffRequestsIndex
@@ -24,6 +24,10 @@ export function RequestsTable({
 	currentEmployeeId,
 }: RequestsTableProps) {
 	const { t } = useTranslation()
+
+	if(requests.length === 0) {
+		return <Text c="dimmed" size="sm">{ emptyLabel }</Text>
+	}
 
 	const statusLabel = (status: string) => {
 		switch(status) {
@@ -132,12 +136,8 @@ export function RequestsTable({
 		},
 	]
 
-	if(requests.length === 0) {
-		return <Text c="dimmed" size="sm">{ emptyLabel }</Text>
-	}
-
 	return (
-		<Table.DataTable
+		<DataTable
 			columns={ columns }
 			records={ requests }
 			model="time_off_requests"

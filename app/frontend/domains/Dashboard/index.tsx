@@ -1,214 +1,29 @@
-import { useTranslation } from "react-i18next"
-
-import { Box, Link, Section, Text, Title } from "@/components"
-import { CalendarIcon, ClockIcon, HomeIcon, PeopleIcon } from "@/components/Icons"
+import { Box } from "@/components"
 import { PendingTerminationsList } from "@/domains/Employees/PendingTermination"
-import {
-	BoardActionGrid,
-	BoardActionTile,
-	CountChip,
-	MetricLine,
-	MetricTile,
-	MetricValue,
-} from "@/features"
-import { formatter, Routes } from "@/lib"
-import { usePageProps, usePermissions } from "@/lib/hooks"
 
+import { ActivityPanel } from "./ActivityPanel"
 import * as classes from "./Board.css"
+import { Chrome } from "./Chrome"
+import { ClientsPanel } from "./ClientsPanel"
+import { MySchedulePanel } from "./MySchedulePanel"
+import { StaffingPanel } from "./StaffingPanel"
+import { TeamPanel } from "./TeamPanel"
+import { TimePanel } from "./TimePanel"
 
 interface DashboardBoardProps {
 	dashboard: Schema.DashboardStats
 }
 
 export function DashboardBoard({ dashboard }: DashboardBoardProps) {
-	const { t } = useTranslation()
-	const { settings, auth } = usePageProps()
-	const { can } = usePermissions()
-	const user = auth.user
-	const hoursLabel = formatter.number.decimal(dashboard.week_tracked_hours, 1)
-	const timeTone = dashboard.pending_timesheet_count > 0 ? "alert" : "default"
-	const staffingTone = dashboard.open_shift_count > 0 ? "alert" : "default"
-	const canViewClients = can("clients", "index")
-	const canCreateClients = can("clients", "create")
-	const canViewEmployees = can("employees", "index")
-	const canCreateEmployees = can("employees", "create")
-	const canViewPayrollIndex = can("timesheets", "index")
-	const canViewCaseloads = can("clients_managers", "index")
-	const showStaffing = dashboard.staffing_visible
-	const showOrgClients = canViewClients || canCreateClients
-	const showOrgTeam = canViewEmployees || canCreateEmployees
-	const showActivity = canViewClients || canViewEmployees
-	const showMySchedule = !showStaffing && Boolean(auth.own_employee_slug)
-	const clientsHref = canViewClients ? Routes.clients() : undefined
-	const employeesHref = canViewEmployees ? Routes.employees() : undefined
-	const applicantsHref = canViewEmployees ? Routes.applicants() : undefined
-	const payrollHref = canViewPayrollIndex ? Routes.payrollPeriods() : undefined
-	const firstOpenShiftClientSlug = dashboard.open_shifts.find((shift) => shift.client_slug)?.client_slug
-	const openShiftHref = firstOpenShiftClientSlug
-		? Routes.scheduleClient(firstOpenShiftClientSlug)
-		: undefined
-	const ownEmployeeHref = auth.own_employee_slug
-		? Routes.employee(auth.own_employee_slug)
-		: null
-	const ownScheduleHref = auth.own_employee_slug
-		? Routes.scheduleEmployee(auth.own_employee_slug)
-		: null
-	const ownClientHref = auth.own_client_slug
-		? Routes.client(auth.own_client_slug)
-		: null
-	const hoursHref = canViewPayrollIndex
-		? payrollHref
-		: ownScheduleHref ?? ownEmployeeHref ?? undefined
-	const hoursLabelKey = canViewPayrollIndex
-		? "views.dashboard.time.total_hours_week"
-		: "views.dashboard.time.my_hours_week"
-
 	return (
 		<Box className={ classes.viewport }>
 			<Box className={ classes.board }>
-				<Section variant="panel" className={ classes.chrome }>
-					<Box className={ classes.identity }>
-						<Title order={ 2 }>
-							{ user?.person?.name || settings.company_name }
-						</Title>
-						<span className={ classes.subtitle }>
-							{ t("views.dashboard.command_center", { company: settings.company_name }) }
-						</span>
-					</Box>
-				</Section>
+				<Chrome />
 
 				<Box className={ classes.tileRow }>
-					{ showOrgClients && (
-						<MetricTile
-							title={ t("views.dashboard.clients.title") }
-							icon={ <HomeIcon size={ 16 } /> }
-						>
-							<MetricValue
-								label={ t("views.dashboard.clients.active_count") }
-								href={ clientsHref }
-							>
-								{ dashboard.active_client_count }
-							</MetricValue>
-							<MetricLine
-								label={ t("views.dashboard.clients.inactive_count") }
-								value={ <CountChip value={ dashboard.inactive_client_count } /> }
-								href={ clientsHref }
-							/>
-							<BoardActionGrid>
-								{ canViewClients && (
-									<BoardActionTile
-										href={ Routes.clients() }
-										title={ t("views.dashboard.clients.view_all") }
-										hint="Open client list"
-									/>
-								) }
-								{ canCreateClients && (
-									<BoardActionTile
-										href={ Routes.newClient() }
-										title={ t("views.dashboard.clients.add_new") }
-										hint="Create a client"
-									/>
-								) }
-								{ ownClientHref && (
-									<BoardActionTile
-										href={ ownClientHref }
-										title="My profile"
-										hint="Open your client record"
-									/>
-								) }
-							</BoardActionGrid>
-						</MetricTile>
-					) }
-
-					{ showOrgTeam && (
-						<MetricTile
-							title={ t("views.dashboard.team.title") }
-							icon={ <PeopleIcon size={ 16 } /> }
-						>
-							<MetricValue
-								label={ t("views.dashboard.team.member_count") }
-								href={ employeesHref }
-							>
-								{ dashboard.active_team_count }
-							</MetricValue>
-							{ canViewEmployees && (
-								<MetricLine
-									label={ t("views.dashboard.team.hiring_pipeline") }
-									value={ (
-										<CountChip
-											value={ dashboard.hiring_pipeline_count }
-											alert={ dashboard.hiring_pipeline_count > 0 }
-										/>
-									) }
-									href={ applicantsHref }
-								/>
-							) }
-							<BoardActionGrid>
-								{ canViewEmployees && (
-									<BoardActionTile
-										href={ Routes.employees() }
-										title={ t("views.dashboard.team.view_all") }
-										hint="Open employee list"
-									/>
-								) }
-								{ canCreateEmployees && (
-									<BoardActionTile
-										href={ Routes.newEmployee() }
-										title={ t("views.dashboard.team.add_new") }
-										hint="Start onboarding"
-									/>
-								) }
-								{ ownEmployeeHref && (
-									<BoardActionTile
-										href={ ownEmployeeHref }
-										title="My profile"
-										hint="Open your employee record"
-									/>
-								) }
-							</BoardActionGrid>
-						</MetricTile>
-					) }
-
-					<MetricTile
-						title={ t("views.dashboard.time.title") }
-						tone={ timeTone }
-						icon={ <ClockIcon size={ 16 } /> }
-					>
-						<MetricValue
-							label={ t(hoursLabelKey) }
-							href={ hoursHref ?? undefined }
-						>
-							{ hoursLabel }
-						</MetricValue>
-						{ canViewPayrollIndex && (
-							<MetricLine
-								label={ t("views.dashboard.time.pending_timesheets") }
-								value={ (
-									<CountChip
-										value={ dashboard.pending_timesheet_count }
-										alert={ dashboard.pending_timesheet_count > 0 }
-									/>
-								) }
-								href={ payrollHref }
-							/>
-						) }
-						<BoardActionGrid>
-							{ canViewPayrollIndex && (
-								<BoardActionTile
-									href={ Routes.payrollPeriods() }
-									title={ t("views.dashboard.time.view") }
-									hint="Payroll periods"
-								/>
-							) }
-							{ !canViewPayrollIndex && ownEmployeeHref && (
-								<BoardActionTile
-									href={ ownEmployeeHref }
-									title={ t("views.dashboard.time.view_profile") }
-									hint="Open your employee record"
-								/>
-							) }
-						</BoardActionGrid>
-					</MetricTile>
+					<ClientsPanel dashboard={ dashboard } />
+					<TeamPanel dashboard={ dashboard } />
+					<TimePanel dashboard={ dashboard } />
 				</Box>
 
 				{ dashboard.pending_terminations.length > 0 && (
@@ -216,128 +31,9 @@ export function DashboardBoard({ dashboard }: DashboardBoardProps) {
 				) }
 
 				<Box className={ classes.secondaryRow }>
-					{ showStaffing && (
-						<MetricTile
-							title={ t("views.dashboard.staffing.title") }
-							tone={ staffingTone }
-							icon={ <CalendarIcon size={ 16 } /> }
-						>
-							<MetricLine
-								label={ t("views.dashboard.staffing.open_shifts") }
-								value={ (
-									<CountChip
-										value={ dashboard.open_shift_count }
-										alert={ dashboard.open_shift_count > 0 }
-									/>
-								) }
-								href={ openShiftHref }
-							/>
-							<Box className={ classes.list }>
-								{ dashboard.open_shifts.length > 0
-									? (
-										dashboard.open_shifts.map((shift) => (
-											<Box key={ shift.id } className={ classes.listItem }>
-												{ shift.client_slug
-													? (
-														<Link href={ Routes.scheduleClient(shift.client_slug) }>
-															{ shift.client_name }
-														</Link>
-													)
-													: <span>{ shift.client_name }</span> }
-												<span className={ classes.listMeta }>
-													{ formatter.datetime.timeShort(shift.starts_at) }
-												</span>
-											</Box>
-										))
-									)
-									: (
-										<Text size="sm" c="dimmed">{ t("views.dashboard.staffing.empty") }</Text>
-									) }
-							</Box>
-							<BoardActionGrid>
-								{ canViewCaseloads && (
-									<BoardActionTile
-										href={ Routes.caseloads() }
-										title={ t("views.dashboard.staffing.view_caseloads") }
-										hint="Open caseloads"
-									/>
-								) }
-								{ openShiftHref && (
-									<BoardActionTile
-										href={ openShiftHref }
-										title={ t("views.dashboard.staffing.open_shifts") }
-										hint="Open schedule"
-									/>
-								) }
-							</BoardActionGrid>
-						</MetricTile>
-					) }
-
-					{ showMySchedule && (
-						<MetricTile
-							title={ t("views.dashboard.my_schedule.title") }
-							icon={ <CalendarIcon size={ 16 } /> }
-						>
-							<Box className={ classes.list }>
-								{ dashboard.my_upcoming_shifts.length > 0
-									? (
-										dashboard.my_upcoming_shifts.map((shift) => (
-											<Box key={ shift.id } className={ classes.listItem }>
-												{ shift.client_slug
-													? (
-														<Link href={ Routes.scheduleClient(shift.client_slug) }>
-															{ shift.client_name }
-														</Link>
-													)
-													: <span>{ shift.client_name }</span> }
-												<span className={ classes.listMeta }>
-													{ formatter.datetime.timeShort(shift.starts_at) }
-												</span>
-											</Box>
-										))
-									)
-									: (
-										<Text size="sm" c="dimmed">{ t("views.dashboard.my_schedule.empty") }</Text>
-									) }
-							</Box>
-							{ ownScheduleHref && (
-								<BoardActionGrid>
-									<BoardActionTile
-										href={ ownScheduleHref }
-										title={ t("views.dashboard.my_schedule.view") }
-										hint="Open your schedule"
-									/>
-								</BoardActionGrid>
-							) }
-						</MetricTile>
-					) }
-
-					{ showActivity && (
-						<MetricTile
-							title={ t("views.dashboard.activity.title") }
-							icon={ <PeopleIcon size={ 16 } /> }
-						>
-							<Box className={ classes.list }>
-								{ dashboard.activity_items.length === 0
-									? (
-										<Text size="sm" c="dimmed">{ t("views.dashboard.activity.empty") }</Text>
-									)
-									: (
-										dashboard.activity_items.map((item) => {
-											const label = item.name || t("views.dashboard.activity.unnamed")
-											const text = item.kind === "client"
-												? t("views.dashboard.activity.item_client", { name: label })
-												: t("views.dashboard.activity.item_employee", { name: label })
-											return (
-												<Box key={ `${item.kind}-${item.id}` } className={ classes.listItem }>
-													<span>{ text }</span>
-												</Box>
-											)
-										})
-									) }
-							</Box>
-						</MetricTile>
-					) }
+					<StaffingPanel dashboard={ dashboard } />
+					<MySchedulePanel dashboard={ dashboard } />
+					<ActivityPanel dashboard={ dashboard } />
 				</Box>
 			</Box>
 		</Box>

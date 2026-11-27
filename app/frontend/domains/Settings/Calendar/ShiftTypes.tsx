@@ -8,7 +8,7 @@ import {
 	Group,
 	Text,
 	type TableColumn,
-	Table,
+	Table, DataTable,
 } from "@/components"
 import { DeleteButton } from "@/components/Button"
 import { PlusIcon } from "@/components/Icons"
@@ -102,7 +102,7 @@ export function ShiftTypes({ shift_types }: ShiftTypesProps) {
 				description={ t("views.settings.calendar.shift_types_existing_description") }
 			>
 				<Table.Provider>
-					<Table.DataTable
+					<DataTable
 						classNames={ { table: classes.table } }
 						columns={ columns }
 						records={ shift_types }

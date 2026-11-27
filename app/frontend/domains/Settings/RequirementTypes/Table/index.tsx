@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 
-import { Group, Link, Table, type TableColumn } from "@/components"
+import {Group, Link, DataTable, type TableColumn} from "@/components"
 import { EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
@@ -44,7 +44,7 @@ export function RequirementTypeTable({ records, model }: RequirementTypeTablePro
 	]
 
 	return (
-		<Table.DataTable
+		<DataTable
 			columns={ columns }
 			records={ records }
 			model={ model }

@@ -2,7 +2,7 @@ import { MantineProvider } from "@mantine/core"
 import { cleanup, render } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
-import { Table, type TableColumn } from "@/components"
+import { Table, DataTable, type TableColumn } from "@/components"
 import { theme } from "@/lib/theme"
 
 vi.mock("@inertiajs/react", () => ({
@@ -43,7 +43,7 @@ function UnstableColumnsTable() {
 
 	return (
 		<Table.Provider model="clients">
-			<Table.DataTable
+			<DataTable
 				columns={ columns }
 				records={ records }
 				model="clients"
@@ -53,7 +53,7 @@ function UnstableColumnsTable() {
 	)
 }
 
-describe("Table.DataTable column sync", () => {
+describe("DataTable column sync", () => {
 	beforeEach(() => {
 		cleanup()
 		Object.defineProperty(window, "matchMedia", {
@@ -87,7 +87,7 @@ describe("Table.DataTable column sync", () => {
 		const { container } = render(
 			<MantineProvider theme={ theme } defaultColorScheme="dark">
 				<Table.Provider model="clients">
-					<Table.DataTable
+					<DataTable
 						columns={ [
 							{
 								accessor: "name",

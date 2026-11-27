@@ -10,10 +10,10 @@ import {
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react"
 
 import { CheckIcon } from "@/components/Icons"
+import { useTableContext, type TableContextColumn } from "@/components/Table/Provider"
 import { useLocation } from "@/lib/hooks/useLocation"
 
 import * as classes from "./DataTable.css"
-import { useTableContext, type TableContextColumn } from "../Provider"
 
 const isValidDirection = (value: string | undefined): value is "asc" | "desc" => {
 	return value === "asc" || value === "desc"

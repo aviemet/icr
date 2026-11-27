@@ -1,4 +1,3 @@
-import { DataTable, type TableDataTableProps } from "./DataTable"
 import {
 	DateRangeFilterInput,
 	emptyDateRangeFilterValue,
@@ -15,11 +14,10 @@ import {
 	type ServerTableFilterField,
 	type ServerTableFilterValues,
 } from "./serverTableFilters"
-import { Table as TableBase, Head, Body, Footer, Row, Cell, HeadCell, type TableProps } from "./Table"
+import { Table as TableBase, Head, Body, Footer, Row, Cell, HeadCell, RowIterator, type TableProps } from "./Table"
 import { useServerTableFilters } from "./useServerTableFilters"
 
 export {
-	DataTable, type TableDataTableProps,
 	Section,
 	SearchInput,
 	useTableSectionContext,
@@ -38,7 +36,6 @@ export {
 }
 
 export const Table = Object.assign(TableBase, {
-	DataTable,
 	Section,
 	SearchInput,
 	Pagination,
@@ -48,8 +45,8 @@ export const Table = Object.assign(TableBase, {
 	Row,
 	Cell,
 	HeadCell,
+	RowIterator,
 	Provider: TableProvider,
 })
 
-export { type DataTableColumn as TableColumn } from "mantine-datatable"
 export { type TableProps }

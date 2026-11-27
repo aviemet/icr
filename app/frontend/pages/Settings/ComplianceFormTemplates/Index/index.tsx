@@ -1,4 +1,4 @@
-import { Box, Link, Stack, Table, Text, type TableColumn } from "@/components"
+import { Box, Link, Stack, Table, DataTable, Text, type TableColumn } from "@/components"
 import { SettingsPageHeader } from "@/domains/Settings/SettingsPageHeader"
 import { Routes, withLayout } from "@/lib"
 
@@ -37,7 +37,7 @@ const ComplianceFormTemplatesIndex = ({ form_templates }: ComplianceFormTemplate
 				: (
 					<Stack gap="md">
 						<Table>
-							<Table.DataTable records={ form_templates } columns={ columns } />
+							<DataTable records={ form_templates } columns={ columns } />
 						</Table>
 					</Stack>
 				) }

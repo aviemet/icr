@@ -1,4 +1,4 @@
-import { Link, Table, type TableColumn } from "@/components"
+import {Link, DataTable, type TableColumn} from "@/components"
 import { EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
@@ -30,7 +30,7 @@ export function ScheduleTable({ records, model }: ScheduleTableProps) {
 	]
 
 	return (
-		<Table.DataTable
+		<DataTable
 			columns={ columns }
 			records={ records }
 			model={ model }

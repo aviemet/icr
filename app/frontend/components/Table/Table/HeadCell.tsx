@@ -1,5 +1,7 @@
 import { Table, type TableThProps } from "@mantine/core"
-import { type Ref } from "react"
+import { type Ref, useLayoutEffect } from "react"
+
+import { useTableDataContext } from "./TableDataContext"
 
 export interface HeadCellProps extends TableThProps {
 	children?: React.ReactNode
@@ -7,6 +9,15 @@ export interface HeadCellProps extends TableThProps {
 }
 
 export function HeadCell({ children, ref, ...props }: HeadCellProps) {
+	const tableData = useTableDataContext(false)
+	const registerHeadCell = tableData?.registerHeadCell
+
+	useLayoutEffect(() => {
+		if(!registerHeadCell) return
+
+		return registerHeadCell()
+	}, [registerHeadCell])
+
 	return (
 		<Table.Th { ...props } ref={ ref }>
 			{ children }

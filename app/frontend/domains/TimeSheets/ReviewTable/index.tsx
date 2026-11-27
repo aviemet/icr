@@ -95,60 +95,60 @@ export function ReviewTable({
 		<Box style={ { position: "relative" } }>
 			<LoadingOverlay visible={ busy } overlayProps={ { blur: 1 } } />
 
-			{ shifts.length === 0
-				? (
+			<Table
+				{ ...props }
+				data={ shifts }
+				emptyMessage={ (
 					<Text size="sm" c="dimmed">{ t("views.timesheets.employee_review.no_shifts") }</Text>
-				)
-				: (
-					<Table.Provider>
-						<Table { ...props }>
-							<Table.Head>
-								<Table.Row>
-									<Table.HeadCell>{ t("views.timesheets.employee_review.date") }</Table.HeadCell>
-									{ showClientColumn && (
-										<Table.HeadCell>{ t("views.timesheets.employee_review.client") }</Table.HeadCell>
-									) }
-									<Table.HeadCell>{ t("views.timesheets.employee_review.in_out_times") }</Table.HeadCell>
-									<Table.HeadCell>{ t("views.timesheets.employee_review.hours") }</Table.HeadCell>
-									<Table.HeadCell>{ t("views.timesheets.employee_review.shift_type") }</Table.HeadCell>
-									{ showIhss && (
-										<Table.HeadCell>{ t("views.timesheets.employee_review.ihss") }</Table.HeadCell>
-									) }
-									<Table.HeadCell>{ t("views.timesheets.employee_review.ot") }</Table.HeadCell>
-									<Table.HeadCell>{ t("views.timesheets.employee_review.exception") }</Table.HeadCell>
-									{ canFacilitatorApprove && (
-										<Table.HeadCell>{ t("views.pay_periods.client_show.columns.status") }</Table.HeadCell>
-									) }
-									<Table.HeadCell className="actionsCell">{ t("views.timesheets.employee_review.actions") }</Table.HeadCell>
-								</Table.Row>
-							</Table.Head>
-
-							<Table.Body>
-								{ shifts.map(shift => (
-									<ReviewRow
-										key={ shift.id }
-										shift={ shift }
-										shiftExceptionReasons={ shiftExceptionReasons }
-										shiftOtHours={ shiftOtHours }
-										canEditTimes={ canEditTimes }
-										onDelete={ () => handleDeleteShift(shift) }
-										deleting={ busy }
-										employeeSlug={ employeeSlug }
-										payPeriodId={ payPeriodId }
-										clientId={ clientId }
-										reloadHref={ resolvedReloadHref }
-										showClientColumn={ showClientColumn }
-										canFacilitatorApprove={ canFacilitatorApprove }
-										showIhss={ showIhss }
-										canEditIhss={ canEditIhss }
-										canEditShiftType={ canEditTimes }
-										onIhssToggle={ onIhssToggle }
-									/>
-								)) }
-							</Table.Body>
-						</Table>
-					</Table.Provider>
 				) }
+			>
+				<Table.Head>
+					<Table.Row>
+						<Table.HeadCell>{ t("views.timesheets.employee_review.date") }</Table.HeadCell>
+						{ showClientColumn && (
+							<Table.HeadCell>{ t("views.timesheets.employee_review.client") }</Table.HeadCell>
+						) }
+						<Table.HeadCell>{ t("views.timesheets.employee_review.in_out_times") }</Table.HeadCell>
+						<Table.HeadCell>{ t("views.timesheets.employee_review.hours") }</Table.HeadCell>
+						<Table.HeadCell>{ t("views.timesheets.employee_review.shift_type") }</Table.HeadCell>
+						{ showIhss && (
+							<Table.HeadCell>{ t("views.timesheets.employee_review.ihss") }</Table.HeadCell>
+						) }
+						<Table.HeadCell>{ t("views.timesheets.employee_review.ot") }</Table.HeadCell>
+						<Table.HeadCell>{ t("views.timesheets.employee_review.exception") }</Table.HeadCell>
+						{ canFacilitatorApprove && (
+							<Table.HeadCell>{ t("views.pay_periods.client_show.columns.status") }</Table.HeadCell>
+						) }
+						<Table.HeadCell className="actionsCell">{ t("views.timesheets.employee_review.actions") }</Table.HeadCell>
+					</Table.Row>
+				</Table.Head>
+
+				<Table.Body>
+					<Table.RowIterator>
+						{ (shift: Schema.ShiftsReview) => (
+							<ReviewRow
+								key={ shift.id }
+								shift={ shift }
+								shiftExceptionReasons={ shiftExceptionReasons }
+								shiftOtHours={ shiftOtHours }
+								canEditTimes={ canEditTimes }
+								onDelete={ () => handleDeleteShift(shift) }
+								deleting={ busy }
+								employeeSlug={ employeeSlug }
+								payPeriodId={ payPeriodId }
+								clientId={ clientId }
+								reloadHref={ resolvedReloadHref }
+								showClientColumn={ showClientColumn }
+								canFacilitatorApprove={ canFacilitatorApprove }
+								showIhss={ showIhss }
+								canEditIhss={ canEditIhss }
+								canEditShiftType={ canEditTimes }
+								onIhssToggle={ onIhssToggle }
+							/>
+						) }
+					</Table.RowIterator>
+				</Table.Body>
+			</Table>
 		</Box>
 	)
 }

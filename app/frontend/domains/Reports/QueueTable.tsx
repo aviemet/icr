@@ -1,4 +1,4 @@
-import { Anchor, Presence, Stack, Table, Text, type TableColumn } from "@/components"
+import { Anchor, Presence, Stack, Table, DataTable, Text, type TableColumn } from "@/components"
 import { DateTimeFormatter } from "@/components/Formatters"
 
 export interface ReportRequestListItem {
@@ -74,7 +74,7 @@ export function QueueTable({ reportRequests }: QueueTableProps) {
 
 	return (
 		<Table>
-			<Table.DataTable
+			<DataTable
 				records={ reportRequests }
 				columns={ columns }
 			/>

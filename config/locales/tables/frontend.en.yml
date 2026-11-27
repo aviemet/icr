@@ -1,6 +1,8 @@
 ---
 en:
   views:
+    table:
+      empty: Nothing to display
     index_template:
       clear_selection: Clear
       delete_selected: Delete

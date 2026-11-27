@@ -75,21 +75,21 @@ export function ClientTrainings({ client, trainingOptions }: ClientTrainingsProp
 			) }
 		>
 			{ rows.length > 0 && (
-				<Table.Provider>
-					<Table>
-						<Table.Head>
-							<Table.Row>
-								<Table.HeadCell>{ t("views.clients.show.trainings.columns.name") }</Table.HeadCell>
-								<Table.HeadCell>{ t("views.clients.show.trainings.columns.duration") }</Table.HeadCell>
-								<Table.HeadCell>{ t("views.clients.show.trainings.columns.required") }</Table.HeadCell>
-								<Table.HeadCell>{ t("views.clients.show.trainings.columns.description") }</Table.HeadCell>
-								{ canUpdate && (
-									<Table.HeadCell className="actionsCell">{ t("views.clients.show.trainings.columns.actions") }</Table.HeadCell>
-								) }
-							</Table.Row>
-						</Table.Head>
-						<Table.Body>
-							{ rows.map((row) => (
+				<Table data={ rows }>
+					<Table.Head>
+						<Table.Row>
+							<Table.HeadCell>{ t("views.clients.show.trainings.columns.name") }</Table.HeadCell>
+							<Table.HeadCell>{ t("views.clients.show.trainings.columns.duration") }</Table.HeadCell>
+							<Table.HeadCell>{ t("views.clients.show.trainings.columns.required") }</Table.HeadCell>
+							<Table.HeadCell>{ t("views.clients.show.trainings.columns.description") }</Table.HeadCell>
+							{ canUpdate && (
+								<Table.HeadCell className="actionsCell">{ t("views.clients.show.trainings.columns.actions") }</Table.HeadCell>
+							) }
+						</Table.Row>
+					</Table.Head>
+					<Table.Body>
+						<Table.RowIterator>
+							{ (row: NonNullable<Schema.ClientsShow["clients_trainings"]>[number]) => (
 								<Table.Row key={ row.id }>
 									<Table.Cell>
 										<Link href={ Routes.training(row.training.id) }>
@@ -144,10 +144,10 @@ export function ClientTrainings({ client, trainingOptions }: ClientTrainingsProp
 										</Table.Cell>
 									) }
 								</Table.Row>
-							)) }
-						</Table.Body>
-					</Table>
-				</Table.Provider>
+							) }
+						</Table.RowIterator>
+					</Table.Body>
+				</Table>
 			) }
 		</CollectionPanel>
 	)

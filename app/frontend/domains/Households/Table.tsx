@@ -1,4 +1,4 @@
-import { Table, Link, Box, Group, type TableColumn } from "@/components"
+import {DataTable, Link, Box, Group, type TableColumn} from "@/components"
 import { EditButton, ScheduleButton } from "@/components/Button"
 import { Routes } from "@/lib"
 
@@ -45,7 +45,7 @@ export function HouseholdTable({ records, model }: HouseholdTableProps) {
 	]
 
 	return (
-		<Table.DataTable
+		<DataTable
 			columns={ columns }
 			records={ records }
 			model={ model }

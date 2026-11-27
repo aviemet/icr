@@ -30,6 +30,7 @@ export function PermissionsSection() {
 					className={ pageChrome.panelFill }
 				>
 					<Table
+						data={ tableRows }
 						wrapper={ false }
 						className={ classes.table }
 						horizontalSpacing="md"
@@ -76,9 +77,13 @@ export function PermissionsSection() {
 							</Table.Row>
 						</Table.Head>
 
-						<Table.Body>{ tableRows.map(row => (
-							<SwitchRow key={ row.model } { ...row } />
-						)) }</Table.Body>
+						<Table.Body>
+							<Table.RowIterator>
+								{ (row: (typeof tableRows)[number]) => (
+									<SwitchRow key={ row.model } { ...row } />
+								) }
+							</Table.RowIterator>
+						</Table.Body>
 					</Table>
 
 					<Box className={ classes.adminOption }>

@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 
-import { Badge, Group, Link, Table, type TableColumn } from "@/components"
+import { Badge, Group, Link, Table, DataTable, type TableColumn } from "@/components"
 import { formatter, Routes } from "@/lib"
 
 import { periodWorkflowLabel } from "./workflow"
@@ -90,7 +90,7 @@ export function PayPeriodsTable({ periods, currentPeriodId }: PayPeriodsTablePro
 
 	return (
 		<Table.Provider>
-			<Table.DataTable
+			<DataTable
 				columns={ columns }
 				records={ periods }
 				selectable={ false }

@@ -5,7 +5,7 @@ import {
 	Button,
 	Modal,
 	Text,
-	Table,
+	Table, DataTable,
 	type TableColumn,
 } from "@/components"
 
@@ -84,7 +84,7 @@ export function ExemptionsTable({ exemptions, categoryOptions }: ExemptionsTable
 
 	return (
 		<Table.Provider>
-			<Table.DataTable
+			<DataTable
 				columns={ columns }
 				records={ exemptions }
 				selectable={ false }

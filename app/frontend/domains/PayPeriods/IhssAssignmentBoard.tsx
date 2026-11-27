@@ -92,64 +92,61 @@ export function IhssAssignmentBoard({
 				</Section>
 
 				<Section variant="panel" className={ classes.panel }>
-					{ rows.length === 0
-						? (
+					<Table
+						data={ rows }
+						emptyMessage={ (
 							<Text size="sm" c="dimmed">{ t("views.pay_periods.ihss.empty") }</Text>
-						)
-						: (
-							<>
-								<Table.Provider>
-									<Table>
-										<Table.Head>
-											<Table.Row>
-												<Table.HeadCell>{ t("views.pay_periods.ihss.employee") }</Table.HeadCell>
-												<Table.HeadCell>{ t("views.pay_periods.ihss.client") }</Table.HeadCell>
-												<Table.HeadCell>{ t("views.pay_periods.ihss.authorized") }</Table.HeadCell>
-												<Table.HeadCell>{ t("views.pay_periods.ihss.hours") }</Table.HeadCell>
-											</Table.Row>
-										</Table.Head>
-										<Table.Body>
-											{ rows.map((row, index) => (
-												<Table.Row key={ `${row.employee_id}:${row.client_id}` }>
-													<Table.Cell>
-														<Text size="sm">{ row.employee_name }</Text>
-													</Table.Cell>
-													<Table.Cell>
-														<Text size="sm">{ row.client_name }</Text>
-													</Table.Cell>
-													<Table.Cell>
-														<Text size="sm"><Presence>{ row.authorized_hours }</Presence></Text>
-													</Table.Cell>
-													<Table.Cell>
-														{ finalized
-															? (
-																<Text size="sm">{ formatter.number.decimal(row.hours, 2) }</Text>
-															)
-															: (
-																<NumberInput
-																	name={ `ihss_hours_${row.employee_id}_${row.client_id}` }
-																	label=""
-																	value={ row.hours }
-																	onChange={ (value) => updateHours(index, value ?? 0) }
-																	decimalScale={ 2 }
-																	min={ 0 }
-																/>
-															) }
-													</Table.Cell>
-												</Table.Row>
-											)) }
-										</Table.Body>
-									</Table>
-								</Table.Provider>
-								{ !finalized && (
-									<Group mt="md">
-										<Button onClick={ handleSave } loading={ processing }>
-											{ t("views.pay_periods.ihss.save") }
-										</Button>
-									</Group>
-								) }
-							</>
 						) }
+					>
+						<Table.Head>
+							<Table.Row>
+								<Table.HeadCell>{ t("views.pay_periods.ihss.employee") }</Table.HeadCell>
+								<Table.HeadCell>{ t("views.pay_periods.ihss.client") }</Table.HeadCell>
+								<Table.HeadCell>{ t("views.pay_periods.ihss.authorized") }</Table.HeadCell>
+								<Table.HeadCell>{ t("views.pay_periods.ihss.hours") }</Table.HeadCell>
+							</Table.Row>
+						</Table.Head>
+						<Table.Body>
+							<Table.RowIterator>
+								{ (row: IhssAssignmentRow, index) => (
+									<Table.Row key={ `${row.employee_id}:${row.client_id}` }>
+										<Table.Cell>
+											<Text size="sm">{ row.employee_name }</Text>
+										</Table.Cell>
+										<Table.Cell>
+											<Text size="sm">{ row.client_name }</Text>
+										</Table.Cell>
+										<Table.Cell>
+											<Text size="sm"><Presence>{ row.authorized_hours }</Presence></Text>
+										</Table.Cell>
+										<Table.Cell>
+											{ finalized
+												? (
+													<Text size="sm">{ formatter.number.decimal(row.hours, 2) }</Text>
+												)
+												: (
+													<NumberInput
+														name={ `ihss_hours_${row.employee_id}_${row.client_id}` }
+														label=""
+														value={ row.hours }
+														onChange={ (value) => updateHours(index, value ?? 0) }
+														decimalScale={ 2 }
+														min={ 0 }
+													/>
+												) }
+										</Table.Cell>
+									</Table.Row>
+								) }
+							</Table.RowIterator>
+						</Table.Body>
+					</Table>
+					{ !finalized && rows.length > 0 && (
+						<Group mt="md">
+							<Button onClick={ handleSave } loading={ processing }>
+								{ t("views.pay_periods.ihss.save") }
+							</Button>
+						</Group>
+					) }
 				</Section>
 
 				<Group>

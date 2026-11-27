@@ -2,7 +2,7 @@ import { router } from "@inertiajs/react"
 import { useModals } from "@mantine/modals"
 import { useTranslation } from "react-i18next"
 
-import { Avatar, Badge, Button, Group, Link, Presence, Stack, Table, type TableColumn, Text } from "@/components"
+import {Avatar, Badge, Button, Group, Link, Presence, Stack, DataTable, type TableColumn, Text} from "@/components"
 import { finalApproveWithWarning } from "@/domains/PayPeriods/finalApproveWithWarning"
 import { payrollApprovalStatus } from "@/domains/PayPeriods/payrollFilters"
 import { formatter, Routes } from "@/lib"
@@ -232,7 +232,7 @@ export function EmployeesTable({
 	]
 
 	return (
-		<Table.DataTable
+		<DataTable
 			columns={ columns }
 			records={ employees }
 			model="employees"
