@@ -1,10 +1,18 @@
 import { MantineProvider } from "@mantine/core"
-import { cleanup, render, screen } from "@testing-library/react"
+import { cleanup, render, screen, waitFor } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
+import axios from "axios"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { Table } from "@/components"
 import { ReviewRow } from "@/domains/TimeSheets/ReviewTable/ReviewRow"
 import { theme } from "@/lib/theme"
+
+vi.mock("axios", () => ({
+	default: {
+		patch: vi.fn(),
+	},
+}))
 
 vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
@@ -53,6 +61,7 @@ function reviewShift(overrides: Partial<Schema.ShiftsReview> = {}): Schema.Shift
 			id: "st-1",
 			active: true,
 			allows_multi_client: false,
+			assignable: true,
 			billable: true,
 			color: "#15803D",
 			name: "Regular",
@@ -71,7 +80,10 @@ function reviewShift(overrides: Partial<Schema.ShiftsReview> = {}): Schema.Shift
 	}
 }
 
-function renderRow(shift: Schema.ShiftsReview) {
+function renderRow(
+	shift: Schema.ShiftsReview,
+	onIhssToggle: (delta: { ihss: boolean }) => void = () => {},
+) {
 	return render(
 		<MantineProvider theme={ theme }>
 			<Table>
@@ -89,8 +101,10 @@ function renderRow(shift: Schema.ShiftsReview) {
 						reloadHref="/reload"
 						showClientColumn={ false }
 						canFacilitatorApprove={ false }
+						showIhss
 						canEditIhss
 						canEditShiftType={ false }
+						onIhssToggle={ onIhssToggle }
 					/>
 				</Table.Body>
 			</Table>
@@ -113,21 +127,48 @@ describe("ReviewRow IHSS column", () => {
 				dispatchEvent: () => false,
 			}),
 		})
+		vi.mocked(axios.patch).mockReset()
 	})
 
 	afterEach(() => {
 		cleanup()
 	})
 
-	it("shows a checkmark when the shift is IHSS", () => {
+	it("renders a checked checkbox for IHSS shifts", () => {
 		renderRow(reviewShift({ ihss: true }))
 
-		expect(screen.getByLabelText("IHSS")).toBeInTheDocument()
+		expect(screen.getByRole("checkbox", { name: "IHSS" })).toBeChecked()
+		expect(screen.queryByRole("button", { name: "Clear IHSS" })).not.toBeInTheDocument()
 	})
 
-	it("leaves the IHSS cell empty when the shift is not IHSS", () => {
+	it("renders an unchecked checkbox for non-IHSS shifts", () => {
 		renderRow(reviewShift({ ihss: false }))
 
-		expect(screen.queryByLabelText("IHSS")).not.toBeInTheDocument()
+		expect(screen.getByRole("checkbox", { name: "IHSS" })).not.toBeChecked()
+		expect(screen.queryByRole("button", { name: "Mark IHSS" })).not.toBeInTheDocument()
+	})
+
+	it("toggles IHSS from the column checkbox", async () => {
+		const user = userEvent.setup()
+		const onIhssToggle = vi.fn()
+		vi.mocked(axios.patch).mockResolvedValue({
+			data: { ihss: true, shift_id: "shift-1" },
+		})
+
+		renderRow(reviewShift({ ihss: false }), onIhssToggle)
+
+		await user.click(screen.getByRole("checkbox", { name: "IHSS" }))
+
+		await waitFor(() => {
+			expect(axios.patch).toHaveBeenCalledWith(
+				expect.stringContaining("/payroll/shifts/shift-1/ihss"),
+				expect.objectContaining({
+					ihss: true,
+					pay_period_id: "period-1",
+					client_id: "client-1",
+				}),
+			)
+		})
+		expect(onIhssToggle).toHaveBeenCalledWith({ ihss: true, shift_id: "shift-1" })
 	})
 })

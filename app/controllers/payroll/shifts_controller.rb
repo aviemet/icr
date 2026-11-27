@@ -95,8 +95,13 @@ class Payroll::ShiftsController < ApplicationController
     end
 
     id_or_slug = params[:service_type_id].presence || params[:category_id].presence
-    service_type = ServiceType.active.find_by(id: id_or_slug) ||
-      ServiceType.active.find_by!(slug: id_or_slug)
+    service_type = ServiceType.active.assignable.find_by(id: id_or_slug) ||
+      ServiceType.active.assignable.find_by(slug: id_or_slug)
+    if service_type.blank?
+      redirect_back_or_to(fallback_period_path(period), alert: t("service_types.errors.not_assignable"))
+      return
+    end
+
     ShiftOccurrenceOverride.set_service_type!(
       shift: shift,
       occurrence_starts_at: occurrence_starts_at,
@@ -133,8 +138,9 @@ class Payroll::ShiftsController < ApplicationController
       next
     end
 
+    client = Client.find_by(id: client_id) if client_id.present?
     redirect_back_or_to(
-      client_id.present? ? client_period_path(period, client_id) : clients_period_path(period),
+      client.present? ? client_period_path(period, client) : clients_period_path(period),
       notice: t("shifts.bulk_facilitator_approved", count: approved),
     )
   end

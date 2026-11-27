@@ -58,6 +58,7 @@ export function ServiceTypesTable({ serviceTypes }: ServiceTypesTableProps) {
 			title: t("views.settings.calendar.service_types_column_flags"),
 			render: (serviceType) => (
 				<Box className={ classes.flagList }>
+					{ serviceType.assignable && <Badge size="xs" variant="light">{ t("views.settings.calendar.service_types_flag_assignable") }</Badge> }
 					{ serviceType.billable && <Badge size="xs" variant="light">{ t("views.settings.calendar.service_types_flag_billable") }</Badge> }
 					{ serviceType.payable && <Badge size="xs" variant="light">{ t("views.settings.calendar.service_types_flag_payable") }</Badge> }
 					{ serviceType.allows_multi_client && <Badge size="xs" variant="light">{ t("views.settings.calendar.service_types_flag_multi_client") }</Badge> }
@@ -75,7 +76,7 @@ export function ServiceTypesTable({ serviceTypes }: ServiceTypesTableProps) {
 				const slug = serviceType.slug
 
 				return (
-					<Group gap="xs" justify="flex-end" wrap="nowrap">
+					<Group gap="xs" justify="center" wrap="nowrap">
 						{ slug && (
 							<Modal
 								title={ t("views.settings.calendar.service_types_form_title_edit") }

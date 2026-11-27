@@ -54,8 +54,8 @@ class ShiftOccurrenceApproval < ApplicationRecord
   end
 
   def self.map_for_shift_ids(shift_ids)
-    where(shift_id: shift_ids).each_with_object({}) do |row, hash|
-      hash[lookup_key(row.shift_id, row.occurrence_starts_at)] = row
+    where(shift_id: shift_ids).index_by do |row|
+      lookup_key(row.shift_id, row.occurrence_starts_at)
     end
   end
 end

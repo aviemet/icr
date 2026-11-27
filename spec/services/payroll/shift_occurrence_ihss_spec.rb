@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Per-occurrence IHSS and service type" do
+RSpec.describe ShiftOccurrenceOverride do
   around do |example|
     Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:weekly]
     Setting.payroll_period_day = "monday"

@@ -8,6 +8,7 @@
 #  ends_at         :datetime
 #  finalized_at    :datetime
 #  period_type     :integer
+#  slug            :string           not null
 #  starts_at       :datetime
 #  status          :integer
 #  created_at      :datetime         not null
@@ -15,6 +16,7 @@
 #
 # Indexes
 #
+#  index_pay_periods_on_slug                   (slug) UNIQUE
 #  index_pay_periods_on_starts_at_and_ends_at  (starts_at,ends_at) UNIQUE
 #
 require "rails_helper"
@@ -140,7 +142,7 @@ RSpec.describe PayPeriod, type: :model do
       expect(described_class.count).to eq(1)
     end
 
-    it "snaps an existing same-start period to the requested end date" do
+    it "returns existing same-start period dates unchanged when the requested end differs" do
       period_start_date = Date.new(2024, 11, 1)
       existing = create(
         :pay_period,
@@ -152,28 +154,21 @@ RSpec.describe PayPeriod, type: :model do
 
       expect(result.id).to eq(existing.id)
       expect(result.starts_at.to_date).to eq(Date.new(2024, 11, 1))
-      expect(result.ends_at.to_date).to eq(Date.new(2024, 11, 15))
+      expect(result.ends_at.to_date).to eq(Date.new(2024, 11, 30))
     end
 
-    it "merges same-start periods and reassigns timesheets to the requested range" do
+    it "does not create a second period when called again for the same start day" do
       period_start_date = Date.new(2024, 3, 1)
-      period_end_date = Date.new(2024, 3, 31)
-      first = create(:pay_period, starts_at: period_start_date.to_time.beginning_of_day, ends_at: Date.new(2024, 3, 14).to_time.end_of_day)
-      second = create(:pay_period, starts_at: period_start_date.to_time.beginning_of_day, ends_at: Date.new(2024, 3, 20).to_time.end_of_day)
-      employee = create(:employee)
-      timesheet_first = create(:timesheet, employee: employee, pay_period: first)
-      timesheet_second = create(:timesheet, employee: employee, pay_period: second)
+      first = described_class.for_period_dates(period_start_date, Date.new(2024, 3, 14))
 
-      result = described_class.for_period_dates(period_start_date, period_end_date)
+      result = described_class.for_period_dates(period_start_date, Date.new(2024, 3, 31))
 
       expect(described_class.count).to eq(1)
       expect(result.id).to eq(first.id)
-      expect(result.starts_at.to_date).to eq(period_start_date)
-      expect(result.ends_at.to_date).to eq(period_end_date)
-      expect(Timesheet.where(pay_period_id: result.id).pluck(:id)).to contain_exactly(timesheet_first.id, timesheet_second.id)
+      expect(result.ends_at.to_date).to eq(Date.new(2024, 3, 14))
     end
 
-    it "creates a new period for a different start day and shrinks an overlapping predecessor" do
+    it "creates a new period for a different start day without changing overlapping neighbors" do
       oversized = create(
         :pay_period,
         starts_at: Date.new(2024, 11, 1).to_time.beginning_of_day,
@@ -184,11 +179,13 @@ RSpec.describe PayPeriod, type: :model do
 
       expect(result.starts_at.to_date).to eq(Date.new(2024, 11, 16))
       expect(result.ends_at.to_date).to eq(Date.new(2024, 11, 30))
-      expect(oversized.reload.ends_at.to_date).to eq(Date.new(2024, 11, 15))
+      expect(oversized.reload.starts_at.to_date).to eq(Date.new(2024, 11, 1))
+      expect(oversized.ends_at.to_date).to eq(Date.new(2024, 11, 30))
     end
 
-    it "creates a new period when none shares the start day and keeps neighbors contiguous" do
+    it "creates a new period when none shares the start day and leaves neighbors unchanged" do
       previous = create(:pay_period, starts_at: Date.new(2024, 2, 1).to_time.beginning_of_day, ends_at: Date.new(2024, 2, 10).to_time.end_of_day)
+      previous_ends_at = previous.ends_at
       period_start_date = Date.new(2024, 2, 15)
       period_end_date = Date.new(2024, 2, 20)
 
@@ -197,7 +194,7 @@ RSpec.describe PayPeriod, type: :model do
       expect(result).to be_persisted
       expect(result.starts_at.to_date).to eq(period_start_date)
       expect(result.ends_at.to_date).to eq(period_end_date)
-      expect(previous.reload.ends_at.to_i).to eq(result.starts_at.to_i - 1)
+      expect(previous.reload.ends_at).to eq(previous_ends_at)
     end
   end
 
@@ -425,28 +422,6 @@ RSpec.describe PayPeriod, type: :model do
       end
     end
 
-    it "is invoked when for_period_dates shrinks a same-start period" do
-      travel_to Time.zone.local(2024, 3, 10, 12, 0, 0) do
-        oversized = described_class.for_period_dates(Date.new(2024, 3, 1), Date.new(2024, 3, 31))
-        employee = create(:employee)
-        wrong_timesheet = oversized.timesheets.create!(employee: employee)
-        future_shift = create(
-          :shift,
-          employee: employee,
-          calendar_event: create(
-            :calendar_event,
-            starts_at: Time.zone.local(2024, 3, 20, 9, 0, 0),
-            ends_at: Time.zone.local(2024, 3, 20, 17, 0, 0),
-          ),
-        )
-        future_shift.update_column(:timesheet_id, wrong_timesheet.id) # rubocop:disable Rails/SkipsModelValidations
-
-        described_class.for_period_dates(Date.new(2024, 3, 1), Date.new(2024, 3, 15))
-
-        expect(oversized.reload.ends_at.to_date).to eq(Date.new(2024, 3, 15))
-        expect(future_shift.reload.timesheet.pay_period.starts_at.to_date).to eq(Date.new(2024, 3, 16))
-      end
-    end
   end
 
   describe "destroying with associated timesheets" do

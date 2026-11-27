@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_26_090000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_26_185000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -888,8 +888,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_26_090000) do
     t.integer "period_type"
     t.jsonb "config_snapshot"
     t.datetime "finalized_at"
+    t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_pay_periods_on_slug", unique: true
     t.index ["starts_at", "ends_at"], name: "index_pay_periods_on_starts_at_and_ends_at", unique: true
   end
 
@@ -1078,6 +1080,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_26_090000) do
     t.string "color", default: "#2F6FED", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "assignable", default: true, null: false
     t.index ["active"], name: "index_service_types_on_active"
     t.index ["name"], name: "index_service_types_on_name", unique: true
     t.index ["position"], name: "index_service_types_on_position"

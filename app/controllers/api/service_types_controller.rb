@@ -1,5 +1,5 @@
 class Api::ServiceTypesController < Api::ApiController
-  expose :service_types, -> { policy_scope(ServiceType).active.ordered }
+  expose :service_types, -> { policy_scope(ServiceType).active.assignable.ordered }
 
   # @route GET /api/service_types (api_service_types)
   def index

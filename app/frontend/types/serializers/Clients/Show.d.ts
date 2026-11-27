@@ -8,6 +8,7 @@ import type EmployeesPersisted from '../Employees/Persisted'
 import type ClientDiagnosesPersisted from '../Client/Diagnoses/Persisted'
 import type DoctorsPersisted from '../Doctors/Persisted'
 import type DoctorsClientsPersisted from '../DoctorsClients/Persisted'
+import type AttachmentsFile from '../Attachments/File'
 import type ClientEnrollmentsPersisted from '../Client/Enrollments/Persisted'
 import type ClientHospitalVisitsPersisted from '../Client/HospitalVisits/Persisted'
 import type HouseholdsPersisted from '../Households/Persisted'
@@ -40,7 +41,7 @@ declare global {
       diagnoses: ClientDiagnosesPersisted[]
       doctors: DoctorsPersisted[]
       doctors_clients: DoctorsClientsPersisted[]
-      documents: Array<{ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date }>
+      documents: AttachmentsFile[]
       emergency_contacts_count: number
       enrollments: ClientEnrollmentsPersisted[]
       first_name: string
@@ -50,7 +51,7 @@ declare global {
       ihss_authorized_hours?: string | number
       ihss_notes?: string
       ihss_share_of_cost?: string | number
-      images: Array<{ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date }>
+      images: AttachmentsFile[]
       inactive_at?: Date
       incident_reports: IncidentReportsPersisted[]
       incident_reports_count: number

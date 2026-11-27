@@ -21,6 +21,10 @@ export const table = css`
 		white-space: nowrap;
 		text-align: center;
 
+		.mantine-datatable-header-cell-sortable-text {
+			text-align: center;
+		}
+
 		& > * {
 			width: fit-content;
 			max-width: 100%;

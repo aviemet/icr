@@ -531,6 +531,7 @@
       "facilitator_unapproved": "Shift review removed.",
       "ihss_shift_mode_required": "Shift IHSS flags are only available when assignment mode is Assign by shift.",
       "ihss_updated": "IHSS shift flag updated.",
+      "occurrence_required": "Choose a specific shift occurrence.",
       "service_type_updated": "Service type updated."
     },
     "starts_at": "Starts At",
@@ -1254,8 +1255,8 @@
       },
       "pay_periods": {
         "client_show": {
-          "approve": "Mark reviewed",
-          "approve_all_pending": "Mark all pending reviewed",
+          "approve": "Approve",
+          "approve_all_pending": "Approve All",
           "back_to_clients": "Back to clients",
           "columns": {
             "status": "Status"
@@ -1266,7 +1267,7 @@
           "help": "Choose an employee to review their shifts for this client.",
           "no_employees": "No employees worked for this client in this period.",
           "pending_count": "%{count} shifts need review",
-          "unapprove": "Clear review"
+          "unapprove": "Unapprove"
         },
         "clients": {
           "columns": {
@@ -1284,6 +1285,19 @@
           "reviewed_of_total": "%{reviewed} / %{total}",
           "status_pending": "Needs review",
           "status_reviewed": "Reviewed",
+          "tiles": {
+            "clients": "Clients",
+            "clients_needing_review": "Clients needing review",
+            "fully_reviewed": "Fully reviewed",
+            "ihss_remaining": "Remaining",
+            "in_caseload": "In caseload",
+            "needs_review": "Needs review",
+            "pending_shifts": "Pending shifts",
+            "reviewed_shifts": "Reviewed shifts",
+            "still_pending": "Still pending",
+            "total_shifts": "Total shifts",
+            "totals": "Totals"
+          },
           "title": "Client review",
           "view_employees": "Employee payroll"
         },
@@ -1478,6 +1492,7 @@
           "service_types_existing_description": "System types ship with the app and cannot be deleted. Custom types can be removed.",
           "service_types_existing_title": "Existing types",
           "service_types_flag_active": "Active",
+          "service_types_flag_assignable": "Assignable to shifts",
           "service_types_flag_billable": "Billable",
           "service_types_flag_mileage": "Tracks mileage",
           "service_types_flag_multi_client": "Multi-client",
@@ -1795,6 +1810,8 @@
           "regular_hours": "Regular Hours",
           "request_changes": "Request Changes",
           "save_times": "Save times",
+          "times": "times",
+          "cancel_edit_times": "Cancel",
           "select_all": "Select all shifts",
           "select_shift": "Select shift",
           "selected_count": "%{count} selected",

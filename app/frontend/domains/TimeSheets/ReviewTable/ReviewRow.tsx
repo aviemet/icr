@@ -5,17 +5,19 @@ import dayjs from "dayjs"
 import { useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { Badge, Button, Group, Table, Text, Tooltip } from "@/components"
-import { Form } from "@/components/Form"
-import { CalendarIcon, CheckIcon, TrashIcon } from "@/components/Icons"
+import { Group, Table, Text, Tooltip } from "@/components"
+import { CalendarIcon, TrashIcon } from "@/components/Icons"
+import { Checkbox } from "@/components/Inputs"
 import { ServiceTypesDropdown } from "@/components/Inputs/Dropdowns"
-import { LastEditorAvatar } from "@/domains/TimeSheets/LastEditorAvatar"
 import { type IhssToggleDelta } from "@/domains/TimeSheets/ihssToggle"
+import { LastEditorAvatar } from "@/domains/TimeSheets/LastEditorAvatar"
 import { formatter, Routes } from "@/lib"
 import { parseTimeString } from "@/lib/dates"
 import { useUpdateCalendarEvent } from "@/queries/calendarEvents/mutations"
 
-import { ReviewRowFormFields, type ReviewRowFormData } from "./ReviewRowFormFields"
+import { type ReviewRowFormData } from "./ReviewRowFormFields"
+import { ReviewRowTimes } from "./ReviewRowTimes"
+import { ReviewStatusCell } from "./ReviewStatusCell"
 
 function shiftRowHours(startDate: Date, endDate: Date): number {
 	return (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60)
@@ -44,6 +46,7 @@ interface ReviewRowProps {
 	reloadHref: string
 	showClientColumn: boolean
 	canFacilitatorApprove: boolean
+	showIhss: boolean
 	canEditIhss: boolean
 	canEditShiftType: boolean
 	onIhssToggle?: (delta: IhssToggleDelta) => void
@@ -62,6 +65,7 @@ export function ReviewRow({
 	reloadHref,
 	showClientColumn,
 	canFacilitatorApprove,
+	showIhss,
 	canEditIhss,
 	canEditShiftType,
 	onIhssToggle,
@@ -79,7 +83,6 @@ export function ReviewRow({
 	const hours = shiftRowHours(displayStart, displayEnd)
 	const shiftDateParam = formatter.datetime.dateUrl(String(shift.starts_at))
 	const weekdayLabel = dayjs(String(shift.starts_at)).format("ddd")
-	const reviewed = Boolean(shift.facilitator_approved_at)
 
 	const reloadReview = useCallback(() => {
 		router.get(reloadHref)
@@ -124,6 +127,42 @@ export function ReviewRow({
 		setEndTime(end)
 	}, [])
 
+	const onCancelEditTimes = useCallback(() => {
+		setStartTime(dayjs(String(shift.starts_at)).format("HH:mm"))
+		setEndTime(dayjs(String(shift.ends_at)).format("HH:mm"))
+	}, [shift.ends_at, shift.starts_at])
+
+	const toggleIhss = useCallback(async (nextIhss: boolean) => {
+		if(nextIhss === shift.ihss || ihssSaving) return
+
+		setIhssSaving(true)
+		try {
+			const response = await axios.patch<IhssToggleDelta>(
+				Routes.ihssShift(shift.shift_id),
+				{
+					ihss: nextIhss,
+					pay_period_id: payPeriodId,
+					client_id: clientId,
+					occurrence_starts_at: shift.occurrence_starts_at
+						? new Date(String(shift.occurrence_starts_at)).toISOString()
+						: new Date(String(shift.starts_at)).toISOString(),
+				},
+			)
+			onIhssToggle?.(response.data)
+		} finally {
+			setIhssSaving(false)
+		}
+	}, [
+		clientId,
+		ihssSaving,
+		onIhssToggle,
+		payPeriodId,
+		shift.ihss,
+		shift.occurrence_starts_at,
+		shift.shift_id,
+		shift.starts_at,
+	])
+
 	const clientScheduleHref = shift.client_slug
 		? Routes.scheduleClient(shift.client_slug, { date: shiftDateParam, view: "month" })
 		: null
@@ -134,6 +173,7 @@ export function ReviewRow({
 	const clientCalendarLabel = t("views.timesheets.employee_review.client_calendar")
 	const employeeCalendarLabel = t("views.timesheets.employee_review.employee_calendar")
 	const deleteShiftLabel = t("views.timesheets.employee_review.delete_shift")
+	const ihssLabel = t("views.timesheets.employee_review.ihss")
 
 	return (
 		<Table.Row key={ shift.id }>
@@ -150,26 +190,16 @@ export function ReviewRow({
 			) }
 			<Table.Cell>
 				<Group gap={ 8 } wrap="nowrap" align="center">
-					{ canEditTimes
-						? (
-							<Form
-								method="post"
-								action={ reloadHref }
-								initialData={ initialData }
-								submitWith={ submitWith }
-								onBefore={ () => true }
-								railsAttributes={ false }
-							>
-								<ReviewRowFormFields initialData={ initialData } onTimesChange={ onTimesChange } />
-							</Form>
-						)
-						: (
-							<Text size="sm">
-								{ dayjs(String(shift.starts_at)).format("HH:mm") }
-								{ " - " }
-								{ dayjs(String(shift.ends_at)).format("HH:mm") }
-							</Text>
-						) }
+					<ReviewRowTimes
+						canEdit={ canEditTimes }
+						startsAt={ displayStart }
+						endsAt={ displayEnd }
+						initialData={ initialData }
+						reloadHref={ reloadHref }
+						submitWith={ submitWith }
+						onTimesChange={ onTimesChange }
+						onCancelEdit={ onCancelEditTimes }
+					/>
 					{ shift.last_editor && (
 						<LastEditorAvatar editor={ shift.last_editor } />
 					) }
@@ -207,11 +237,16 @@ export function ReviewRow({
 						</Text>
 					) }
 			</Table.Cell>
-			{ canEditIhss && (
+			{ showIhss && (
 				<Table.Cell>
-					{ shift.ihss
-						? <CheckIcon color="green" aria-label={ t("views.timesheets.employee_review.ihss") } />
-						: null }
+					<Checkbox
+						aria-label={ ihssLabel }
+						checked={ shift.ihss }
+						disabled={ !canEditIhss || ihssSaving }
+						onChange={ event => {
+							void toggleIhss(event.currentTarget.checked)
+						} }
+					/>
 				</Table.Cell>
 			) }
 			<Table.Cell>
@@ -226,77 +261,11 @@ export function ReviewRow({
 			</Table.Cell>
 			{ canFacilitatorApprove && (
 				<Table.Cell>
-					<Badge variant="light" color={ reviewed ? "green" : "yellow" } size="sm">
-						{ reviewed
-							? t("views.pay_periods.clients.status_reviewed")
-							: t("views.pay_periods.clients.status_pending") }
-					</Badge>
+					<ReviewStatusCell shift={ shift } payPeriodId={ payPeriodId } />
 				</Table.Cell>
 			) }
-			<Table.Cell>
+			<Table.Cell className="actionsCell">
 				<Group gap={ 4 } wrap="nowrap">
-					{ canEditIhss && (
-						<Button
-							size="xs"
-							variant={ shift.ihss ? "default" : "light" }
-							loading={ ihssSaving }
-							disabled={ ihssSaving }
-							onClick={ async () => {
-								setIhssSaving(true)
-								try {
-									const response = await axios.patch<IhssToggleDelta>(
-										Routes.ihssShift(shift.shift_id),
-										{
-											ihss: !shift.ihss,
-											pay_period_id: payPeriodId,
-											client_id: clientId,
-											occurrence_starts_at: shift.occurrence_starts_at
-												? new Date(String(shift.occurrence_starts_at)).toISOString()
-												: new Date(String(shift.starts_at)).toISOString(),
-										},
-									)
-									onIhssToggle?.(response.data)
-								} finally {
-									setIhssSaving(false)
-								}
-							} }
-						>
-							{ shift.ihss
-								? t("views.timesheets.employee_review.clear_ihss")
-								: t("views.timesheets.employee_review.mark_ihss") }
-						</Button>
-					) }
-					{ canFacilitatorApprove && (
-						reviewed
-							? (
-								<Button
-									size="xs"
-									variant="default"
-									onClick={ () => router.post(Routes.unapproveShift(shift.shift_id), {
-										pay_period_id: payPeriodId,
-										occurrence_starts_at: shift.occurrence_starts_at
-											? new Date(String(shift.occurrence_starts_at)).toISOString()
-											: new Date(String(shift.starts_at)).toISOString(),
-									}) }
-								>
-									{ t("views.pay_periods.client_show.unapprove") }
-								</Button>
-							)
-							: (
-								<Button
-									size="xs"
-									variant="filled"
-									onClick={ () => router.post(Routes.approveShift(shift.shift_id), {
-										pay_period_id: payPeriodId,
-										occurrence_starts_at: shift.occurrence_starts_at
-											? new Date(String(shift.occurrence_starts_at)).toISOString()
-											: new Date(String(shift.starts_at)).toISOString(),
-									}) }
-								>
-									{ t("views.pay_periods.client_show.approve") }
-								</Button>
-							)
-					) }
 					{ clientScheduleHref && (
 						<Tooltip label={ clientCalendarLabel } withArrow>
 							<ActionIcon

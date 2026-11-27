@@ -25,7 +25,9 @@ const modalPickerPopoverProps = { withinPortal: true, zIndex: 400 }
 
 export interface AddShiftFormProps {
 	employeeId: string
+	employeeSlug: string
 	payPeriodId: string
+	payPeriodSlug: string
 	periodDates: [Date, Date]
 }
 
@@ -49,7 +51,9 @@ function defaultShiftTimes(periodStart: Date, periodEnd: Date) {
 
 export function AddShiftForm({
 	employeeId,
+	employeeSlug,
 	payPeriodId,
+	payPeriodSlug,
 	periodDates,
 }: AddShiftFormProps) {
 	const { t } = useTranslation()
@@ -88,15 +92,15 @@ export function AddShiftForm({
 				},
 			}).then(() => {
 				close()
-				router.get(Routes.periodEmployeeReview(payPeriodId, employeeId))
+				router.get(Routes.periodEmployeeReview(payPeriodSlug, employeeSlug))
 			})
 		},
-		[close, createEvent, employeeId, payPeriodId],
+		[close, createEvent, employeeId, employeeSlug, payPeriodSlug],
 	)
 
 	return (
 		<Form<AddShiftFormData>
-			action={ Routes.periodEmployeeReview(payPeriodId, employeeId) }
+			action={ Routes.periodEmployeeReview(payPeriodSlug, employeeSlug) }
 			method="post"
 			initialData={ initialData }
 			submitWith={ submitWith }

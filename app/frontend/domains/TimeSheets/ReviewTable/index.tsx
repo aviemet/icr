@@ -18,6 +18,7 @@ interface ReviewTableProps extends TableProps {
 	shiftOtHours?: Record<string, number>
 	regularHours: number
 	otHours: number
+	ihssHours?: number
 	ptoHours?: number
 	sickHours?: number
 	holidayHours?: number
@@ -25,10 +26,12 @@ interface ReviewTableProps extends TableProps {
 	employeeId: string
 	employeeSlug: string
 	payPeriodId: string
+	payPeriodSlug: string
 	clientId?: string
 	reloadHref?: string
 	showClientColumn?: boolean
 	canFacilitatorApprove?: boolean
+	showIhss?: boolean
 	canEditIhss?: boolean
 	onIhssToggle?: (delta: IhssToggleDelta) => void
 }
@@ -39,6 +42,7 @@ export function ReviewTable({
 	shiftOtHours = {},
 	regularHours,
 	otHours,
+	ihssHours = 0,
 	ptoHours = 0,
 	sickHours = 0,
 	holidayHours = 0,
@@ -46,10 +50,12 @@ export function ReviewTable({
 	employeeId,
 	employeeSlug,
 	payPeriodId,
+	payPeriodSlug,
 	clientId,
 	reloadHref,
 	showClientColumn = true,
 	canFacilitatorApprove = false,
+	showIhss = false,
 	canEditIhss = false,
 	onIhssToggle,
 	...props
@@ -57,7 +63,7 @@ export function ReviewTable({
 	const { t } = useTranslation()
 	const modals = useModals()
 	const [busy, setBusy] = useState(false)
-	const resolvedReloadHref = reloadHref ?? Routes.periodEmployeeReview(payPeriodId, employeeId)
+	const resolvedReloadHref = reloadHref ?? Routes.periodEmployeeReview(payPeriodSlug, employeeSlug)
 
 	const leadingColumnCount =
 		1 +
@@ -65,7 +71,7 @@ export function ReviewTable({
 		1 +
 		1 +
 		1 +
-		(canEditIhss ? 1 : 0)
+		(showIhss ? 1 : 0)
 	const trailingColumnCount =
 		1 +
 		1 +
@@ -126,7 +132,7 @@ export function ReviewTable({
 							<Table.HeadCell>{ t("views.timesheets.employee_review.in_out_times") }</Table.HeadCell>
 							<Table.HeadCell>{ t("views.timesheets.employee_review.hours") }</Table.HeadCell>
 							<Table.HeadCell>{ t("views.timesheets.employee_review.shift_type") }</Table.HeadCell>
-							{ canEditIhss && (
+							{ showIhss && (
 								<Table.HeadCell>{ t("views.timesheets.employee_review.ihss") }</Table.HeadCell>
 							) }
 							<Table.HeadCell>{ t("views.timesheets.employee_review.ot") }</Table.HeadCell>
@@ -134,7 +140,7 @@ export function ReviewTable({
 							{ canFacilitatorApprove && (
 								<Table.HeadCell>{ t("views.pay_periods.client_show.columns.status") }</Table.HeadCell>
 							) }
-							<Table.HeadCell>{ t("views.timesheets.employee_review.actions") }</Table.HeadCell>
+							<Table.HeadCell className="actionsCell">{ t("views.timesheets.employee_review.actions") }</Table.HeadCell>
 						</Table.Row>
 					</Table.Head>
 
@@ -163,6 +169,7 @@ export function ReviewTable({
 										reloadHref={ resolvedReloadHref }
 										showClientColumn={ showClientColumn }
 										canFacilitatorApprove={ canFacilitatorApprove }
+										showIhss={ showIhss }
 										canEditIhss={ canEditIhss }
 										canEditShiftType={ canEditTimes }
 										onIhssToggle={ onIhssToggle }
@@ -185,6 +192,11 @@ export function ReviewTable({
 										<Text size="sm" fw={ 500 }>
 											{ t("views.timesheets.employee_review.footer_overtime") }: { formatter.number.decimal(otHours, 2) } hrs
 										</Text>
+										{ showIhss && (
+											<Text size="sm" fw={ 500 }>
+												{ t("views.timesheets.employee_review.ihss_hours") }: { formatter.number.decimal(ihssHours, 2) } hrs
+											</Text>
+										) }
 										<Text size="sm" fw={ 500 }>
 											{ t("views.timesheets.employee_review.pto_hours") }: { formatter.number.decimal(ptoHours, 2) } hrs
 										</Text>

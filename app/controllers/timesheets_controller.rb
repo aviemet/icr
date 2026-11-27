@@ -3,14 +3,14 @@ class TimesheetsController < ApplicationController
 
   expose :timesheets, -> { search(Timesheet.includes_associated) }
   expose :timesheet, scope: -> { Timesheet.includes_associated }
-  expose :employee, id: -> { params[:employee_id] }, scope: -> { Employee.includes_associated }
-  expose :pay_period, id: -> { params[:period_id] || params[:pay_period_id] }, model: PayPeriod
+  expose :employee, id: -> { params[:employee_slug] }, find_by: :slug, scope: -> { Employee.includes_associated }
+  expose :pay_period, id: -> { params[:period_slug] }, find_by: :slug, model: PayPeriod
 
   sortable_fields %w(employee.name approved_at)
 
   strong_params :timesheet, permit: [:pay_period_id, :employee_id, :approved_at]
 
-  # @route GET /payroll/periods/:period_id/employees/:employee_id (period_employee_review)
+  # @route GET /payroll/periods/:period_slug/employees/:employee_slug (period_employee_review)
   def employee_review
     authorize_pay_period!
     pay_period.sync_shifts! unless pay_period.finalized? || inertia_partial_data_request?
@@ -21,6 +21,7 @@ class TimesheetsController < ApplicationController
     render inertia: "Timesheets/EmployeeReview", props: {
       employee: -> { employee.render(:index) },
       pay_period_id: -> { pay_period.id.to_s },
+      pay_period_slug: -> { pay_period.slug },
       period_dates: -> { [pay_period.starts_at, pay_period.ends_at].map { |date| date.strftime("%FT%T%:z") } },
       approval_window_open: -> {
         !pay_period.finalized? && Payroll::Period.approval_window_open?(pay_period.ends_at.to_date)

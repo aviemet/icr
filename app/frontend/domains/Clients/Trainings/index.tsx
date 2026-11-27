@@ -84,7 +84,7 @@ export function ClientTrainings({ client, trainingOptions }: ClientTrainingsProp
 								<Table.HeadCell>{ t("views.clients.show.trainings.columns.required") }</Table.HeadCell>
 								<Table.HeadCell>{ t("views.clients.show.trainings.columns.description") }</Table.HeadCell>
 								{ canUpdate && (
-									<Table.HeadCell>{ t("views.clients.show.trainings.columns.actions") }</Table.HeadCell>
+									<Table.HeadCell className="actionsCell">{ t("views.clients.show.trainings.columns.actions") }</Table.HeadCell>
 								) }
 							</Table.Row>
 						</Table.Head>
@@ -136,7 +136,7 @@ export function ClientTrainings({ client, trainingOptions }: ClientTrainingsProp
 										<Text size="sm" lineClamp={ 2 }>{ row.training.description || "-" }</Text>
 									</Table.Cell>
 									{ canUpdate && (
-										<Table.Cell>
+										<Table.Cell className="actionsCell">
 											<DeleteButton
 												href={ Routes.clientTraining(client.slug, row.id) }
 												label={ row.training.name }

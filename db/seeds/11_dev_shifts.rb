@@ -210,12 +210,11 @@ if Rails.env.development?
     Rails.logger.info "[seeds] recurring weekday shifts: client 4 + one-off overlap"
   end
 
-  day_program = ServiceType.find_by(name: "Day Program")
-  natural_support = ServiceType.find_by(name: "Natural Support")
   training = ServiceType.find_by(name: "Training")
+  regular = ServiceType.find_by(name: "Regular")
   special_event_names = ["Day Program", "Natural Support", "Training"]
 
-  if Client.first.present? && day_program.present? && natural_support.present? && training.present? && !Calendar::Event.exists?(name: special_event_names)
+  if Client.first.present? && training.present? && regular.present? && !Calendar::Event.exists?(name: special_event_names)
     ActiveRecord::Base.transaction do
       client = Client.first
       special_anchor = seed_anchor_date
@@ -227,7 +226,7 @@ if Rails.env.development?
         employee: nil,
         starts_at: day_program_start,
         duration: 6.hours,
-        service_type: day_program,
+        service_type: regular,
         name: "Day Program",
         patterns: [{ recurring_type: :weekly, offset: 1, day_of_week: 2 }],
       )
@@ -238,7 +237,7 @@ if Rails.env.development?
         employee: nil,
         starts_at: natural_start,
         duration: 3.hours,
-        service_type: natural_support,
+        service_type: regular,
         name: "Natural Support",
         patterns: [{ recurring_type: :weekly, offset: 1, day_of_week: 4 }],
       )
@@ -255,7 +254,7 @@ if Rails.env.development?
       )
     end
 
-    Rails.logger.info "[seeds] special service type events: day program, natural support, training"
+    Rails.logger.info "[seeds] special events: day program, natural support, training"
   end
 
   admin_user = User.find_by(email: "aviemet@gmail.com") || User.with_role(:admin).first

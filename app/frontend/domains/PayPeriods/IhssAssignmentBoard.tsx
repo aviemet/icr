@@ -29,14 +29,14 @@ export interface IhssAssignmentRow {
 }
 
 export interface IhssAssignmentBoardProps {
-	payPeriodId: string
+	payPeriodSlug: string
 	periodDates: [string, string]
 	finalized: boolean
 	assignmentRows: IhssAssignmentRow[]
 }
 
 export function IhssAssignmentBoard({
-	payPeriodId,
+	payPeriodSlug,
 	periodDates,
 	finalized,
 	assignmentRows,
@@ -62,7 +62,7 @@ export function IhssAssignmentBoard({
 	const handleSave = () => {
 		setProcessing(true)
 		router.patch(
-			Routes.ihssPeriod(payPeriodId),
+			Routes.ihssPeriod(payPeriodSlug),
 			{
 				assignments: rows.map(row => ({
 					employee_id: row.employee_id,
@@ -155,7 +155,7 @@ export function IhssAssignmentBoard({
 				<Group>
 					<Link
 						as="button"
-						href={ Routes.period(payPeriodId) }
+						href={ Routes.period(payPeriodSlug) }
 						variant="default"
 						leftSection={ <PreviousIcon size={ 16 } /> }
 					>

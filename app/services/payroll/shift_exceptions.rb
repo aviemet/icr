@@ -38,6 +38,9 @@ module Payroll
     end
 
     def overlap?(shift_a, shift_b)
+      return false if shift_a.employee_id.blank? || shift_b.employee_id.blank?
+      return false if shift_a.employee_id != shift_b.employee_id
+
       start_a = shift_a.start_time
       end_a = shift_a.end_time
       start_b = shift_b.start_time

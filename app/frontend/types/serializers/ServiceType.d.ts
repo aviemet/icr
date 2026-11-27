@@ -7,6 +7,7 @@ declare global {
       id?: string
       active: boolean
       allows_multi_client: boolean
+      assignable: boolean
       billable: boolean
       color: string
       name: string

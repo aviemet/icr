@@ -4,7 +4,7 @@ import { Badge, Group, Link, Presence, Table, type TableColumn, Text } from "@/c
 import { Routes } from "@/lib"
 
 interface ClientsTableProps {
-	payPeriodId: string
+	payPeriodSlug: string
 	clients: Schema.ClientsPersisted[]
 	pendingShiftCountByClient: Record<string, number>
 	reviewedShiftCountByClient: Record<string, number>
@@ -13,7 +13,7 @@ interface ClientsTableProps {
 }
 
 export function ClientsTable({
-	payPeriodId,
+	payPeriodSlug,
 	clients,
 	pendingShiftCountByClient,
 	reviewedShiftCountByClient,
@@ -28,7 +28,7 @@ export function ClientsTable({
 			title: t("views.pay_periods.clients.columns.client"),
 			sortable: false,
 			render: (client) => (
-				<Link href={ Routes.clientPeriod(payPeriodId, client.id) }>
+				<Link href={ Routes.clientPeriod(payPeriodSlug, client.slug) }>
 					<Presence>{ client.full_name ?? client.name }</Presence>
 				</Link>
 			),
@@ -97,7 +97,7 @@ export function ClientsTable({
 				<Group gap="xs" wrap="nowrap">
 					<Link
 						as="button"
-						href={ Routes.clientPeriod(payPeriodId, client.id) }
+						href={ Routes.clientPeriod(payPeriodSlug, client.slug) }
 						buttonProps={ { variant: "light", size: "xs" } }
 					>
 						{ t("views.pay_periods.clients.review") }

@@ -1,7 +1,7 @@
 class PayPeriodsController < ApplicationController
   include Searchable
 
-  expose :pay_period
+  expose :pay_period, id: -> { params[:slug] }, find_by: :slug
   expose :employees, -> {
     search(
       Employee.includes_associated
@@ -35,7 +35,7 @@ class PayPeriodsController < ApplicationController
     }
   end
 
-  # @route GET /payroll/periods/:id (period)
+  # @route GET /payroll/periods/:slug (period)
   def show
     authorize pay_period
     unless employee_combined_access?
@@ -76,7 +76,7 @@ class PayPeriodsController < ApplicationController
     }
   end
 
-  # @route GET /payroll/periods/:id/clients (clients_period)
+  # @route GET /payroll/periods/:slug/clients (clients_period)
   def clients
     authorize pay_period, :show?
     pay_period.sync_shifts! unless pay_period.finalized?
@@ -105,7 +105,7 @@ class PayPeriodsController < ApplicationController
     }
   end
 
-  # @route GET /payroll/periods/:id/clients/:client_id (client_period)
+  # @route GET /payroll/periods/:slug/clients/:client_slug (client_period)
   def client
     authorize pay_period, :show?
     pay_period.sync_shifts! unless pay_period.finalized? || inertia_partial_data_request?
@@ -134,7 +134,7 @@ class PayPeriodsController < ApplicationController
     }
   end
 
-  # @route GET /payroll/periods/:id/ihss (ihss_period)
+  # @route GET /payroll/periods/:slug/ihss (ihss_period)
   def ihss
     authorize pay_period, :update?
 
@@ -153,8 +153,8 @@ class PayPeriodsController < ApplicationController
     }
   end
 
-  # @route PUT /payroll/periods/:id/ihss (ihss_period)
-  # @route PATCH /payroll/periods/:id/ihss (ihss_period)
+  # @route PUT /payroll/periods/:slug/ihss (ihss_period)
+  # @route PATCH /payroll/periods/:slug/ihss (ihss_period)
   def update_ihss
     authorize pay_period, :update?
 
@@ -173,7 +173,7 @@ class PayPeriodsController < ApplicationController
     redirect_to ihss_period_path(pay_period), notice: t("pay_periods.ihss_assignments_updated")
   end
 
-  # @route POST /payroll/periods/:id/finalize (finalize_period)
+  # @route POST /payroll/periods/:slug/finalize (finalize_period)
   def finalize
     authorize pay_period, :finalize?
     period_end = pay_period.ends_at.to_date
@@ -192,7 +192,7 @@ class PayPeriodsController < ApplicationController
     redirect_to period_path(pay_period), notice: t("pay_periods.finalized")
   end
 
-  # @route GET /payroll/periods/:id/export (export_period)
+  # @route GET /payroll/periods/:slug/export (export_period)
   def export
     authorize pay_period, :export?
 
@@ -208,7 +208,7 @@ class PayPeriodsController < ApplicationController
     send_data csv, filename: filename, type: "text/csv; charset=utf-8", disposition: "attachment"
   end
 
-  # @route POST /payroll/periods/:id/adjustments (adjustments_period)
+  # @route POST /payroll/periods/:slug/adjustments (adjustments_period)
   def create_adjustment
     authorize pay_period, :create_adjustment?
 
@@ -247,7 +247,7 @@ class PayPeriodsController < ApplicationController
   def client_review_client
     @client_review_client ||= Payroll::ClientScopeForUser
       .call(user: current_user, period: pay_period)
-      .find(params.expect(:client_id))
+      .find_by!(slug: params.expect(:client_slug))
   end
 
   def client_review_shifts

@@ -142,9 +142,9 @@ export function EmployeeOverview({
 							title={ t("views.employees.show.tabs.requirements") }
 							hint="Fulfillment status"
 						/>
-						{ employee.status === "employed" && employee.current_pay_period_id && (
+						{ employee.status === "employed" && employee.current_pay_period_slug && (
 							<BoardActionTile
-								href={ Routes.periodEmployeeReview(employee.current_pay_period_id, employee.id) }
+								href={ Routes.periodEmployeeReview(employee.current_pay_period_slug, employee.slug) }
 								title={ t("views.employees.show.overview.payroll_review") }
 								hint="Current period"
 							/>

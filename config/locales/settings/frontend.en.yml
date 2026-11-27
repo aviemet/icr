@@ -103,6 +103,7 @@ en:
         service_types_name_placeholder: e.g. Community Outing
         service_types_color_label: Color
         service_types_flag_active: Active
+        service_types_flag_assignable: Assignable to shifts
         service_types_flag_billable: Billable
         service_types_flag_payable: Payable
         service_types_flag_multi_client: Multi-client

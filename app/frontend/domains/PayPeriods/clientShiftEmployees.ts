@@ -35,6 +35,18 @@ export function defaultEmployeeId(
 	return pendingOption?.value ?? options[0].value
 }
 
+export function resolveSelectedEmployeeId(
+	current: string | null,
+	shifts: Schema.ShiftsReview[],
+	options: ClientShiftEmployeeOption[],
+): string | null {
+	if(current && options.some(option => option.value === current)) {
+		return current
+	}
+
+	return defaultEmployeeId(shifts, options)
+}
+
 export function shiftsForEmployee(
 	shifts: Schema.ShiftsReview[],
 	employeeId: string | null,
@@ -47,9 +59,10 @@ export function shiftsForEmployee(
 export function hoursForShifts(
 	shifts: Schema.ShiftsReview[],
 	shiftOtHours: Record<string, number>,
-): { regularHours: number, otHours: number } {
+): { regularHours: number, otHours: number, ihssHours: number } {
 	let totalHours = 0
 	let otHours = 0
+	let ihssHours = 0
 
 	for(const shift of shifts) {
 		const startsAt = new Date(String(shift.starts_at)).getTime()
@@ -59,9 +72,12 @@ export function hoursForShifts(
 
 		totalHours += shiftHours
 		otHours += shiftOt
+		if(shift.ihss) {
+			ihssHours += shiftHours
+		}
 	}
 
 	const regularHours = Math.max(totalHours - otHours, 0)
 
-	return { regularHours, otHours }
+	return { regularHours, otHours, ihssHours }
 }

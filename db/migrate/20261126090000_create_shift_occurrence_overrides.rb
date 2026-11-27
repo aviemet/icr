@@ -5,7 +5,7 @@ class CreateShiftOccurrenceOverrides < ActiveRecord::Migration[8.0]
     create_table :shift_occurrence_overrides, id: :uuid do |t|
       t.references :shift, null: false, foreign_key: true, type: :uuid
       t.datetime :occurrence_starts_at, null: false
-      t.boolean :ihss, null: true
+      t.boolean :ihss, null: true # rubocop:disable Rails/ThreeStateBooleanColumn
       t.references :service_type, null: true, foreign_key: true, type: :uuid
       t.timestamps
     end

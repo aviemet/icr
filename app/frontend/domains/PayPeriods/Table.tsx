@@ -7,6 +7,7 @@ import { periodWorkflowLabel } from "./workflow"
 
 export interface PayPeriodRow {
 	id: string
+	slug: string
 	starts_at: string
 	ends_at: string
 	finalized_at?: string
@@ -33,7 +34,7 @@ export function PayPeriodsTable({ periods, currentPeriodId }: PayPeriodsTablePro
 			sortable: false,
 			render: (period) => (
 				<Group gap="sm" wrap="nowrap">
-					<Link href={ Routes.period(period.id) }>
+					<Link href={ Routes.period(period.slug) }>
 						{ formatter.datetime.range(period.starts_at, period.ends_at) }
 					</Link>
 					{ period.id === currentPeriodId && (

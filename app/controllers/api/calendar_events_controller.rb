@@ -133,7 +133,14 @@ class Api::CalendarEventsController < Api::ApiController
       shift_params[:category_slug].presence
     return if id_or_slug.blank?
 
-    service_type = ServiceType.find_by(id: id_or_slug) || ServiceType.find_by!(slug: id_or_slug)
+    service_type = ServiceType.active.assignable.find_by(id: id_or_slug) ||
+      ServiceType.active.assignable.find_by(slug: id_or_slug)
+    if service_type.blank?
+      render json: { errors: { service_type_id: I18n.t("service_types.errors.not_assignable") } },
+        status: :unprocessable_content
+      return
+    end
+
     shift_params[:service_type_id] = service_type.id
     shift_params.delete(:service_type_slug)
     shift_params.delete(:category_id)
@@ -148,8 +155,12 @@ class Api::CalendarEventsController < Api::ApiController
     service_type_id = shift_params[:service_type_id]
     return if service_type_id.blank?
 
-    service_type = ServiceType.find_by(id: service_type_id)
-    return if service_type.blank?
+    service_type = ServiceType.active.assignable.find_by(id: service_type_id)
+    if service_type.blank?
+      render json: { errors: { service_type_id: I18n.t("service_types.errors.not_assignable") } },
+        status: :unprocessable_content
+      return
+    end
 
     participants = Array(params.dig(:calendar_event, :event_participants_attributes))
     client_count = participants.count { |row| row[:participant_type].to_s == "Client" && row[:participant_id].present? }

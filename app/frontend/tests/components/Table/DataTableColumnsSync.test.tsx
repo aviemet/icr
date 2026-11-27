@@ -58,9 +58,9 @@ describe("Table.DataTable column sync", () => {
 		cleanup()
 		Object.defineProperty(window, "matchMedia", {
 			writable: true,
-			value: () => ({
-				matches: false,
-				media: "",
+			value: (query: string) => ({
+				matches: true,
+				media: query,
 				onchange: null,
 				addListener: () => {},
 				removeListener: () => {},
@@ -81,5 +81,43 @@ describe("Table.DataTable column sync", () => {
 		}).not.toThrow()
 
 		expect(document.querySelectorAll(".mantine-datatable-row")).toHaveLength(1)
+	})
+
+	it("center-aligns Actions column headers", () => {
+		const { container } = render(
+			<MantineProvider theme={ theme } defaultColorScheme="dark">
+				<Table.Provider model="clients">
+					<Table.DataTable
+						columns={ [
+							{
+								accessor: "name",
+								title: "Name",
+								render: (row) => row.name,
+							},
+							{
+								accessor: "actions",
+								title: "Actions",
+								titleClassName: "actionsCell",
+								cellsClassName: "actionsCell",
+								render: () => null,
+							},
+						] }
+						records={ records }
+						model="clients"
+						height="auto"
+					/>
+				</Table.Provider>
+			</MantineProvider>,
+		)
+
+		const actionsHeader = Array.from(container.querySelectorAll("th")).find(
+			(header) => header.textContent?.includes("Actions"),
+		)
+		expect(actionsHeader).toBeDefined()
+		expect(actionsHeader).toHaveClass("actionsCell")
+
+		const actionsTitle = actionsHeader?.querySelector(".mantine-datatable-header-cell-sortable-text")
+		expect(actionsTitle).not.toBeNull()
+		expect(actionsTitle).toHaveClass("mantine-datatable-text-align-center")
 	})
 })

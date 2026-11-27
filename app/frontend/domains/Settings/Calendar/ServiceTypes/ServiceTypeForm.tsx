@@ -9,6 +9,7 @@ export type ServiceTypeFormValues = {
 	name: string
 	color: string
 	active: boolean
+	assignable: boolean
 	billable: boolean
 	payable: boolean
 	allows_multi_client: boolean
@@ -30,6 +31,7 @@ function emptyServiceType(): ServiceTypeFormValues {
 		name: "",
 		color: "#2F6FED",
 		active: true,
+		assignable: true,
 		billable: true,
 		payable: true,
 		allows_multi_client: false,
@@ -43,6 +45,7 @@ export function toFormValues(serviceType: Schema.ServiceType): ServiceTypeFormVa
 		name: serviceType.name,
 		color: serviceType.color,
 		active: serviceType.active,
+		assignable: serviceType.assignable,
 		billable: serviceType.billable,
 		payable: serviceType.payable,
 		allows_multi_client: serviceType.allows_multi_client,
@@ -96,6 +99,11 @@ export function ServiceTypeForm({ serviceType, onCancel }: ServiceTypeFormProps)
 						name="service_type.active"
 						label={ t("views.settings.calendar.service_types_flag_active") }
 						defaultChecked={ values.active }
+					/>
+					<Switch
+						name="service_type.assignable"
+						label={ t("views.settings.calendar.service_types_flag_assignable") }
+						defaultChecked={ values.assignable }
 					/>
 					<Switch
 						name="service_type.billable"

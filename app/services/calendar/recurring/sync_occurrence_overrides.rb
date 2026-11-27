@@ -66,9 +66,9 @@ module Calendar
           range_start: range_start,
           range_end: range_end,
         )
-        keep = expanded.map { |occurrence|
+        keep = expanded.to_set { |occurrence|
           ShiftOccurrenceOverride.normalize_occurrence_starts_at(occurrence.original_starts_at)
-        }.to_set
+        }
 
         ShiftOccurrenceOverride.where(shift_id: shift.id).find_each do |row|
           next if keep.include?(ShiftOccurrenceOverride.normalize_occurrence_starts_at(row.occurrence_starts_at))

@@ -143,6 +143,7 @@ RSpec.describe Payroll::PeriodSummary do
         row = described_class.archive_row(pay_period, employee_ids: [employee.id])
 
         expect(row[:id]).to eq(pay_period.id.to_s)
+        expect(row[:slug]).to eq(pay_period.slug)
         expect(row[:workflow_status]).to eq("pending")
         expect(row[:pending_count]).to eq(1)
         expect(row).to include(:payroll_due_date, :overtime_hours, :flagged_count)

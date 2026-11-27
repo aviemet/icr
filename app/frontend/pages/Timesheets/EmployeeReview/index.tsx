@@ -20,6 +20,7 @@ interface UnreviewedShiftRow {
 interface TimesheetsEmployeeReviewProps {
 	employee: Schema.EmployeesIndex
 	pay_period_id: string
+	pay_period_slug: string
 	period_dates: [Date, Date]
 	approval_window_open: boolean
 	finalized: boolean
@@ -37,6 +38,7 @@ interface TimesheetsEmployeeReviewProps {
 export default function TimesheetsEmployeeReview({
 	employee,
 	pay_period_id,
+	pay_period_slug,
 	period_dates,
 	finalized,
 	can_approve,
@@ -56,13 +58,14 @@ export default function TimesheetsEmployeeReview({
 			title={ t("views.timesheets.employee_review.title") }
 			breadcrumbs={ [
 				{ title: t("views.pay_periods.index.title"), href: Routes.payrollPeriods() },
-				{ title: t("views.pay_periods.show.title"), href: Routes.period(pay_period_id) },
+				{ title: t("views.pay_periods.show.title"), href: Routes.period(pay_period_slug) },
 				{ title: t("views.timesheets.employee_review.title") },
 			] }
 		>
 			<EmployeeReviewBoard
 				employee={ employee }
 				payPeriodId={ pay_period_id }
+				payPeriodSlug={ pay_period_slug }
 				periodDates={ period_dates }
 				finalized={ finalized }
 				canApprove={ can_approve }

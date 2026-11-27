@@ -37,6 +37,18 @@ en:
         status_pending: Needs review
         review: Review
         view_employees: Employee payroll
+        tiles:
+          needs_review: Needs review
+          clients: Clients
+          totals: Totals
+          pending_shifts: Pending shifts
+          clients_needing_review: Clients needing review
+          reviewed_shifts: Reviewed shifts
+          total_shifts: Total shifts
+          in_caseload: In caseload
+          fully_reviewed: Fully reviewed
+          still_pending: Still pending
+          ihss_remaining: Remaining
         columns:
           client: Client
           pending: Pending
@@ -62,9 +74,9 @@ en:
         no_employees: No employees worked for this client in this period.
         pending_count: "%{count} shifts need review"
         finalized_locked: This period is closed. Shift review is locked.
-        approve: Mark reviewed
-        unapprove: Clear review
-        approve_all_pending: Mark all pending reviewed
+        approve: Approve
+        unapprove: Unapprove
+        approve_all_pending: Approve All
         back_to_clients: Back to clients
         columns:
           status: Status

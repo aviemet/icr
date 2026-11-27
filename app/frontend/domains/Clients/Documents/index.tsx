@@ -9,15 +9,6 @@ import { useRecordCanUpdate } from "@/lib/hooks"
 
 import * as classes from "./Documents.css"
 
-type ClientAttachment = {
-	id: string
-	filename: string
-	content_type: string
-	byte_size: number
-	url: string
-	created_at: Date
-}
-
 interface ClientDocumentsProps {
 	client: Schema.ClientsShow
 }
@@ -25,8 +16,8 @@ interface ClientDocumentsProps {
 export function ClientDocuments({ client }: ClientDocumentsProps) {
 	const { t } = useTranslation()
 	const canUpdate = useRecordCanUpdate()
-	const documents: ClientAttachment[] = client.documents
-	const images: ClientAttachment[] = client.images
+	const documents = client.documents
+	const images = client.images
 
 	const uploadDocument = (fileList: FileList | null) => {
 		const file = fileList?.[0]

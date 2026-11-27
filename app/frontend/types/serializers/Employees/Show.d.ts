@@ -3,6 +3,7 @@ import type ClientsPersisted from '../Clients/Persisted'
 import type EmployeeClearancesPersisted from '../Employee/Clearances/Persisted'
 import type ClientsAttendantsPersisted from '../ClientsAttendants/Persisted'
 import type ClientsManagersPersisted from '../ClientsManagers/Persisted'
+import type AttachmentsFile from '../Attachments/File'
 import type EmployeeCredentialsPersisted from '../Employee/Credentials/Persisted'
 import type EmployeeJobTitle from '../Employee/JobTitle'
 import type EmployeeEmployeesTrainingsPersisted from '../Employee/EmployeesTrainings/Persisted'
@@ -29,17 +30,18 @@ declare global {
       color?: string
       color_mappings: Record<string, Record<string, string>>
       communication_notes?: string
-      cover_letter?: ({ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date } | null)
+      cover_letter?: AttachmentsFile
       created_at: Date
       credentials: EmployeeCredentialsPersisted[]
       current_pay_period_id?: string
+      current_pay_period_slug?: string
       desired_compensation?: string
       desired_compensation_cents?: number
       desired_compensation_currency: string
       desired_compensation_period: "hourly" | "salary"
       desired_job_title?: EmployeeJobTitle
       desired_job_title_id?: string
-      documents: Array<{ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date }>
+      documents: AttachmentsFile[]
       eligible_for_hire: boolean
       emergency_contacts_count: number
       employees_trainings: EmployeeEmployeesTrainingsPersisted[]
@@ -49,7 +51,7 @@ declare global {
       full_name: string
       hiring_notes?: string
       identifications: IdentificationsShow[]
-      images: Array<{ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date }>
+      images: AttachmentsFile[]
       inactive_at?: Date
       incomplete_trainings_count: number
       ineligibility_reason?: string
@@ -67,7 +69,7 @@ declare global {
       person_id: string
       preferred_language?: string
       primary_manager: EmployeesPersisted
-      resume?: ({ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date } | null)
+      resume?: AttachmentsFile
       slug: string
       status: "applicant" | "offered" | "employed" | "declined" | "terminated" | "withdrawn"
       support_contacts: EmployeeSupportContactsPersisted[]

@@ -8,6 +8,7 @@
 #  ends_at         :datetime
 #  finalized_at    :datetime
 #  period_type     :integer
+#  slug            :string           not null
 #  starts_at       :datetime
 #  status          :integer
 #  created_at      :datetime         not null
@@ -15,6 +16,7 @@
 #
 # Indexes
 #
+#  index_pay_periods_on_slug                   (slug) UNIQUE
 #  index_pay_periods_on_starts_at_and_ends_at  (starts_at,ends_at) UNIQUE
 #
 class PayPeriod < ApplicationRecord
@@ -27,12 +29,17 @@ class PayPeriod < ApplicationRecord
   has_many :timesheets, dependent: :destroy
   has_many :adjustments, class_name: "Payroll::Adjustment", dependent: :destroy, inverse_of: :pay_period
 
+  before_validation :assign_slug_from_starts_at, on: :create
   after_create :sync_shifts!
 
   before_destroy :prevent_destroy_when_locked, prepend: true
 
   scope :includes_associated, -> { includes(:timesheets) }
   scope :recent_first, -> { order(ends_at: :desc) }
+
+  def to_param
+    slug
+  end
 
   def finalized?
     finalized_at.present?
@@ -91,45 +98,10 @@ class PayPeriod < ApplicationRecord
     start_t = period_start_date.to_time.beginning_of_day
     end_t = period_end_date.to_time.end_of_day
 
-    same_start = where(starts_at: start_t.all_day).order(:starts_at)
-    if same_start.exists?
-      base = same_start.first
-      transaction do
-        base.update!(starts_at: start_t, ends_at: end_t)
+    existing = where(starts_at: start_t.all_day).order(:created_at, :starts_at).first
+    return existing if existing
 
-        ids_to_merge = same_start.where.not(id: base.id).pluck(:id)
-        if ids_to_merge.any?
-          # We are only reassigning the pay_period_id foreign key for timesheets being merged into the base period.
-          # No per-record validations or callbacks are needed here, and running them would make this merge significantly slower.
-          Timesheet.where(pay_period_id: ids_to_merge).update_all(pay_period_id: base.id) # rubocop:disable Rails/SkipsModelValidations
-          where(id: ids_to_merge).delete_all
-        end
-
-        base.reattach_out_of_range_shifts!
-      end
-      return base
-    end
-
-    transaction do
-      created = create!(starts_at: start_t, ends_at: end_t)
-
-      where.not(id: created.id).where("starts_at < ? AND ends_at >= ?", start_t, start_t).find_each do |other|
-        other.update!(ends_at: start_t - 1.second)
-        other.reattach_out_of_range_shifts!
-      end
-
-      previous = where.not(id: created.id).where(ends_at: ...created.starts_at).order(ends_at: :desc).first
-      if previous && previous.ends_at < created.starts_at - 1.second
-        previous.update!(ends_at: created.starts_at - 1.second)
-      end
-
-      following = where.not(id: created.id).where("starts_at > ?", created.ends_at).order(:starts_at).first
-      if following && following.starts_at > created.ends_at + 1.second
-        following.update!(starts_at: created.ends_at + 1.second)
-      end
-
-      created
-    end
+    create!(starts_at: start_t, ends_at: end_t)
   end
 
   def self.shifts_overlapping_period(pay_period)
@@ -199,6 +171,12 @@ class PayPeriod < ApplicationRecord
   end
 
   private
+
+  def assign_slug_from_starts_at
+    return if starts_at.blank?
+
+    self.slug = starts_at.to_date.iso8601
+  end
 
   def prevent_destroy_when_locked
     if finalized?

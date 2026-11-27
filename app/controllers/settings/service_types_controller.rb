@@ -63,6 +63,7 @@ class Settings::ServiceTypesController < ApplicationController
     params.expect(
       service_type: [:name,
                      :active,
+                     :assignable,
                      :position,
                      :billable,
                      :payable,

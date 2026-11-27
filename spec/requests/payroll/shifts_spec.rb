@@ -300,6 +300,44 @@ RSpec.describe "/payroll/shifts", type: :request do
   describe "PATCH /payroll/shifts/:id/service_type" do
     login_user(:admin)
 
+    it "rejects a non-assignable service type" do
+      employee = create(:employee, :employed)
+      pay_period = create(:pay_period, finalized_at: nil)
+      timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
+      leave_type = create(
+        :service_type,
+        name: "Sick Leave #{SecureRandom.hex(4)}",
+        assignable: false,
+        billable: false,
+        payable: true,
+      )
+      event = create(
+        :calendar_event,
+        starts_at: pay_period.starts_at + 1.day,
+        ends_at: pay_period.starts_at + 1.day + 8.hours,
+      )
+      shift = create(
+        :shift,
+        employee: employee,
+        timesheet: timesheet,
+        calendar_event: event,
+      )
+      original_service_type_id = shift.service_type_id
+
+      patch service_type_shift_url(shift), params: {
+        service_type_id: leave_type.id,
+        occurrence_starts_at: event.starts_at.iso8601,
+        pay_period_id: pay_period.id,
+      }
+
+      expect(response).to have_http_status(:redirect)
+      alert = flash[:alert]
+      alert_message = alert.is_a?(Hash) ? alert[:message] || alert["message"] : alert
+      expect(alert_message).to eq(I18n.t("service_types.errors.not_assignable"))
+      expect(shift.reload.service_type_id).to eq(original_service_type_id)
+      expect(ShiftOccurrenceOverride.where(shift_id: shift.id)).to be_empty
+    end
+
     it "updates one occurrence service type" do
       employee = create(:employee, :employed)
       pay_period = create(:pay_period, finalized_at: nil)

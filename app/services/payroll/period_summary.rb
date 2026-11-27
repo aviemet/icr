@@ -40,6 +40,7 @@ module Payroll
     def archive_row
       summary.slice(*ARCHIVE_KEYS).merge(
         id: @pay_period.id.to_s,
+        slug: @pay_period.slug,
         starts_at: @pay_period.starts_at.iso8601,
         ends_at: @pay_period.ends_at.iso8601,
         finalized_at: @pay_period.finalized_at&.iso8601,
@@ -70,6 +71,7 @@ module Payroll
 
       {
         pay_period_id: @pay_period.id.to_s,
+        pay_period_slug: @pay_period.slug,
         starts_at: @pay_period.starts_at.iso8601,
         ends_at: @pay_period.ends_at.iso8601,
         payroll_due_date: due_date.strftime("%FT%T%:z"),

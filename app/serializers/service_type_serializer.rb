@@ -5,6 +5,7 @@
 #  id                  :uuid             not null, primary key
 #  active              :boolean          default(TRUE), not null
 #  allows_multi_client :boolean          default(FALSE), not null
+#  assignable          :boolean          default(TRUE), not null
 #  billable            :boolean          default(TRUE), not null
 #  color               :string           default("#2F6FED"), not null
 #  name                :string           not null
@@ -33,6 +34,7 @@ class ServiceTypeSerializer < ApplicationSerializer
     :active,
     :system,
     :position,
+    :assignable,
     :billable,
     :payable,
     :allows_multi_client,

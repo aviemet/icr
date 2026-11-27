@@ -128,6 +128,7 @@ export function PeriodShowBoard({
 }: PeriodShowBoardProps) {
 	const { t } = useTranslation()
 	const payPeriodId = pay_period.id
+	const payPeriodSlug = pay_period.slug
 	const [periodStart, periodEnd] = period_dates
 	const periodRange = periodStart && periodEnd ? formatter.datetime.range(periodStart, periodEnd) : ""
 	const approvedCount = summary?.approved_count ?? 0
@@ -191,7 +192,7 @@ export function PeriodShowBoard({
 							<Button
 								variant="filled"
 								disabled={ !can_finalize }
-								onClick={ () => router.post(Routes.finalizePeriod(payPeriodId)) }
+								onClick={ () => router.post(Routes.finalizePeriod(payPeriodSlug)) }
 							>
 								{ t("views.pay_periods.show.finalize") }
 							</Button>
@@ -199,7 +200,7 @@ export function PeriodShowBoard({
 						{ can_export && (
 							<Button
 								component="a"
-								href={ Routes.exportPeriod(payPeriodId) }
+								href={ Routes.exportPeriod(payPeriodSlug) }
 								variant="default"
 							>
 								{ t("views.pay_periods.show.export") }
@@ -208,7 +209,7 @@ export function PeriodShowBoard({
 						{ can_view_clients && (
 							<Link
 								as="button"
-								href={ Routes.clientsPeriod(payPeriodId) }
+								href={ Routes.clientsPeriod(payPeriodSlug) }
 								buttonProps={ { variant: "light" } }
 							>
 								{ t("views.pay_periods.show.view_clients") }
@@ -217,7 +218,7 @@ export function PeriodShowBoard({
 						{ ihss_assignment_mode === "period" && (
 							<Link
 								as="button"
-								href={ Routes.ihssPeriod(payPeriodId) }
+								href={ Routes.ihssPeriod(payPeriodSlug) }
 								buttonProps={ { variant: "light" } }
 							>
 								{ t("views.pay_periods.show.view_ihss") }
@@ -266,6 +267,7 @@ export function PeriodShowBoard({
 					<Table.Provider selectable model="employees">
 						<WorkQueue
 							payPeriodId={ payPeriodId }
+							payPeriodSlug={ payPeriodSlug }
 							employees={ employees }
 							employeeHours={ employee_hours }
 							canApprove={ can_approve }
@@ -286,7 +288,7 @@ export function PeriodShowBoard({
 				{ finalized && (
 					<Section variant="panel" className={ classes.panel }>
 						<Title order={ 4 }>{ t("views.pay_periods.show.adjustments_title") }</Title>
-						<AdjustmentForm payPeriodId={ payPeriodId } />
+						<AdjustmentForm payPeriodSlug={ payPeriodSlug } />
 						{ adjustments.length === 0
 							? (
 								<Text size="sm" c="dimmed">{ t("views.pay_periods.show.no_adjustments") }</Text>

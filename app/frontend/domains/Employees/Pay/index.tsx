@@ -39,9 +39,9 @@ export function EmployeePay({ employee }: EmployeePayProps) {
 
 	return (
 		<Stack gap="lg">
-			{ employee.current_pay_period_id && (
+			{ employee.current_pay_period_slug && (
 				<MetricTile title={ t("views.employees.show.pay.payroll") }>
-					<Link href={ Routes.periodEmployeeReview(employee.current_pay_period_id, employee.id) }>
+					<Link href={ Routes.periodEmployeeReview(employee.current_pay_period_slug, employee.slug) }>
 						{ t("views.employees.show.pay.view_period_review") }
 					</Link>
 				</MetricTile>

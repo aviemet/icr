@@ -6,7 +6,7 @@ RSpec.describe Payroll::ShiftExceptions do
   let(:employee) { create(:employee) }
   let(:service_type) { create(:service_type) }
 
-  def build_shift(starts_at, ends_at, validate: true)
+  def build_shift(starts_at, ends_at, employee: self.employee, validate: true)
     event = create(:calendar_event, starts_at: starts_at, ends_at: ends_at)
     shift = build(:shift, employee: employee, calendar_event: event, service_type: service_type)
     shift.save!(validate: validate)
@@ -25,7 +25,7 @@ RSpec.describe Payroll::ShiftExceptions do
       expect(result[:reasons_by_shift_id]).to eq({})
     end
 
-    it "returns count and reasons when two shifts overlap" do
+    it "returns count and reasons when two shifts for the same employee overlap" do
       base = 1.day.ago.at_noon
       shift1 = build_shift(base, base + 8.hours)
       shift2 = build_shift(base + 4.hours, base + 12.hours, validate: false)
@@ -36,6 +36,18 @@ RSpec.describe Payroll::ShiftExceptions do
       expect(result[:exception_count]).to eq(2)
       expect(result[:reasons_by_shift_id].keys).to contain_exactly(shift1.id.to_s, shift2.id.to_s)
       expect(result[:reasons_by_shift_id].values.flatten).to all(include("Overlaps with shift"))
+    end
+
+    it "ignores overlapping shifts for different employees" do
+      other_employee = create(:employee)
+      base = 1.day.ago.at_noon
+      shift1 = build_shift(base, base + 8.hours, employee: employee)
+      shift2 = build_shift(base + 4.hours, base + 12.hours, employee: other_employee)
+
+      result = described_class.call([shift1, shift2])
+
+      expect(result[:exception_count]).to eq(0)
+      expect(result[:reasons_by_shift_id]).to eq({})
     end
   end
 end

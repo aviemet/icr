@@ -9,6 +9,8 @@ class CreatePayPeriods < ActiveRecord::Migration[8.1]
       t.jsonb :config_snapshot
       t.datetime :finalized_at
 
+      t.string :slug, null: false, index: { unique: true }
+
       t.timestamps
     end
 

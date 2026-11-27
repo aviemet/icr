@@ -5,7 +5,6 @@ import { vars } from "@/lib/theme"
 export const table = css`
 	.actionsCell {
 		width: 10rem;
-		text-align: right;
 	}
 `
 

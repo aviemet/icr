@@ -46,13 +46,14 @@ export default function PayPeriodsClient({
 			title={ clientName }
 			breadcrumbs={ [
 				{ title: t("views.pay_periods.index.title"), href: Routes.payrollPeriods() },
-				{ title: periodRange || t("views.pay_periods.show.title"), href: can_view_employees ? Routes.period(pay_period.id) : undefined },
-				{ title: t("views.pay_periods.clients.title"), href: Routes.clientsPeriod(pay_period.id) },
+				{ title: periodRange || t("views.pay_periods.show.title"), href: can_view_employees ? Routes.period(pay_period.slug) : undefined },
+				{ title: t("views.pay_periods.clients.title"), href: Routes.clientsPeriod(pay_period.slug) },
 				{ title: clientName },
 			] }
 		>
 			<ClientReviewBoard
 				payPeriodId={ pay_period.id }
+				payPeriodSlug={ pay_period.slug }
 				periodDates={ period_dates }
 				finalized={ finalized }
 				canFacilitatorApprove={ can_facilitator_approve }

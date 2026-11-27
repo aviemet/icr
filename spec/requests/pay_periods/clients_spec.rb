@@ -119,7 +119,7 @@ RSpec.describe "pay period clients views", type: :request do
     end
   end
 
-  describe "GET /payroll/periods/:id/clients/:client_id" do
+  describe "GET /payroll/periods/:id/clients/:client_slug" do
     login_user(:admin)
 
     it "renders the client drill-down with employee-selectable shifts for that client" do
@@ -127,7 +127,7 @@ RSpec.describe "pay period clients views", type: :request do
       employee = create(:employee, :employed)
       pay_period, shift = create_period_with_client_shift(client: client, employee: employee)
 
-      get client_period_path(pay_period, client.id)
+      get client_period_path(pay_period, client)
 
       expect(response).to have_http_status(:success)
       expect_inertia.to render_component "PayPeriods/Client"
@@ -146,14 +146,39 @@ RSpec.describe "pay period clients views", type: :request do
       expect(inertia.props[:shift_ot_hours]).to be_a(Hash)
     end
 
+    it "does not flag concurrent coverage by different employees as exceptions" do
+      client = create(:client)
+      employee = create(:employee, :employed)
+      other_employee = create(:employee, :employed)
+      pay_period, first_shift = create_period_with_client_shift(client: client, employee: employee)
+
+      travel_to Time.zone.local(2024, 3, 20, 12, 0, 0) do
+        timesheet = create(:timesheet, pay_period: pay_period, employee: other_employee, approved_at: nil)
+        event = create(
+          :calendar_event,
+          starts_at: first_shift.calendar_event.starts_at,
+          ends_at: first_shift.calendar_event.ends_at,
+        )
+        event.event_participants.create!(participant: client)
+        create(:shift, employee: other_employee, timesheet: timesheet, calendar_event: event)
+      end
+
+      get client_period_path(pay_period, client)
+
+      expect(response).to have_http_status(:success)
+      shift_ids = inertia.props[:shifts].map { |row| row[:id].to_s }
+      expect(shift_ids.size).to eq(2)
+      expect(inertia.props[:shift_exception_reasons].keys & shift_ids).to eq([])
+    end
+
     it "skips sync_shifts! on Inertia partial reloads used by Mark IHSS" do
       client = create(:client)
       employee = create(:employee, :employed)
       pay_period, _shift = create_period_with_client_shift(client: client, employee: employee)
 
-      expect_any_instance_of(PayPeriod).not_to receive(:sync_shifts!)
+      expect_any_instance_of(PayPeriod).not_to receive(:sync_shifts!) # rubocop:disable RSpec/AnyInstance
 
-      get client_period_path(pay_period, client.id),
+      get client_period_path(pay_period, client),
         headers: {
           "X-Inertia" => "true",
           "X-Inertia-Partial-Data" => "shifts,shift_ot_hours,ihss_hours_used",
@@ -185,7 +210,7 @@ RSpec.describe "pay period clients views", type: :request do
         event.event_participants.create!(participant: client)
         shift = create(:shift, employee: employee, timesheet: timesheet, calendar_event: event)
 
-        get client_period_path(pay_period, client.id)
+        get client_period_path(pay_period, client)
 
         expect(response).to have_http_status(:success)
         starts = inertia.props[:shifts].map { |row| Time.zone.parse(row[:starts_at].to_s).to_date }

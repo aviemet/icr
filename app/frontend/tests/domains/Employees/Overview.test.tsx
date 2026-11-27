@@ -40,6 +40,7 @@ function buildEmployee(overrides: Partial<Schema.EmployeesShow> = {}): Schema.Em
 		expiring_clearances_count: 1,
 		emergency_contacts_count: 1,
 		current_pay_period_id: "period-1",
+		current_pay_period_slug: "2024-03-16",
 		primary_manager: {
 			id: "mgr-1",
 			slug: "lead-mgr",
@@ -106,7 +107,7 @@ describe("EmployeeOverview", () => {
 		)
 		expect(screen.getByRole("link", { name: /views.employees.show.overview.payroll_review/ })).toHaveAttribute(
 			"href",
-			"/payroll/periods/period-1/employees/employee-1",
+			"/payroll/periods/2024-03-16/employees/ada-lovelace",
 		)
 		expect(screen.getByRole("link", { name: /Schedule/ })).toHaveAttribute(
 			"href",
@@ -122,6 +123,7 @@ describe("EmployeeOverview", () => {
 						employee={ buildEmployee({
 							status: "applicant",
 							current_pay_period_id: "period-1",
+							current_pay_period_slug: "2024-03-16",
 						}) }
 					/>
 				</ModalsProvider>

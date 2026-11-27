@@ -21,6 +21,7 @@ import { periodWorkflowLabel } from "./workflow"
 
 interface PeriodSummary {
 	pay_period_id: string
+	pay_period_slug: string
 	starts_at: string
 	ends_at: string
 	payroll_due_date: string
@@ -53,10 +54,11 @@ export function PayrollHomeBoard({
 		? dayjs(current_summary.payroll_due_date).startOf("day").diff(dayjs().startOf("day"), "day")
 		: 0
 	const payPeriodId = current_summary.pay_period_id
-	const reviewHref = Routes.period(payPeriodId)
-	const pendingHref = Routes.period(payPeriodId, { tab: "needs_approval" })
-	const flaggedHref = Routes.period(payPeriodId, { tab: "flagged" })
-	const approvedHref = Routes.period(payPeriodId, { tab: "approved" })
+	const payPeriodSlug = current_summary.pay_period_slug
+	const reviewHref = Routes.period(payPeriodSlug)
+	const pendingHref = Routes.period(payPeriodSlug, { tab: "needs_approval" })
+	const flaggedHref = Routes.period(payPeriodSlug, { tab: "flagged" })
+	const approvedHref = Routes.period(payPeriodSlug, { tab: "approved" })
 	const pendingTone = current_summary.pending_count > 0 ? "alert" : "default"
 	const flaggedTone = current_summary.flagged_count > 0 ? "alert" : "default"
 
@@ -96,7 +98,7 @@ export function PayrollHomeBoard({
 							{ can_finalize && (
 								<Button
 									variant="filled"
-									onClick={ () => router.post(Routes.finalizePeriod(payPeriodId)) }
+									onClick={ () => router.post(Routes.finalizePeriod(payPeriodSlug)) }
 								>
 									{ t("views.pay_periods.show.finalize") }
 								</Button>
@@ -104,7 +106,7 @@ export function PayrollHomeBoard({
 							{ can_export && (
 								<Button
 									component="a"
-									href={ Routes.exportPeriod(payPeriodId) }
+									href={ Routes.exportPeriod(payPeriodSlug) }
 									variant="default"
 								>
 									{ t("views.pay_periods.show.export") }

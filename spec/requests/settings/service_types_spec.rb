@@ -43,7 +43,7 @@ RSpec.describe "Settings::ServiceTypes", type: :request do
 
   describe "PATCH /settings/calendar/service_types/:slug" do
     it "updates a service type" do
-      service_type = create(:service_type, name: "Editable #{SecureRandom.hex(4)}", color: "#2F6FED")
+      service_type = create(:service_type, name: "Editable #{SecureRandom.hex(4)}", color: "#2F6FED", assignable: true)
 
       patch settings_service_type_path(service_type), params: {
         service_type: {
@@ -55,6 +55,7 @@ RSpec.describe "Settings::ServiceTypes", type: :request do
           requires_notes: true,
           tracks_mileage: false,
           active: true,
+          assignable: false,
         },
       }
 
@@ -64,6 +65,7 @@ RSpec.describe "Settings::ServiceTypes", type: :request do
       expect(service_type.billable).to be(false)
       expect(service_type.allows_multi_client).to be(true)
       expect(service_type.requires_notes).to be(true)
+      expect(service_type.assignable).to be(false)
     end
   end
 

@@ -93,11 +93,27 @@ export function DataTable<T extends object = Record<string, unknown>>({
 
 	const visibleColumns = useMemo(() => {
 		const columnHide = context?.columnHide ?? {}
-		return columns.filter(column => {
-			const accessor = column.accessor
-			if(accessor === undefined || accessor === null) return true
-			return !columnHide[String(accessor)]
-		})
+		return columns
+			.filter(column => {
+				const accessor = column.accessor
+				if(accessor === undefined || accessor === null) return true
+				return !columnHide[String(accessor)]
+			})
+			.map(column => {
+				const isActionsColumn =
+					column.accessor === "actions" ||
+					column.titleClassName === "actionsCell" ||
+					column.cellsClassName === "actionsCell"
+
+				if(!isActionsColumn) return column
+
+				return {
+					...column,
+					textAlign: column.textAlign ?? "center",
+					titleClassName: column.titleClassName ?? "actionsCell",
+					cellsClassName: column.cellsClassName ?? "actionsCell",
+				}
+			})
 	}, [columns, context?.columnHide])
 
 	const sortStatus = useMemo<DataTableSortStatus<T>>(() => {

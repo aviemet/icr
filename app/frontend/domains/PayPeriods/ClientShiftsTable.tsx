@@ -3,8 +3,8 @@ import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
 import { Badge, Button, Group, Stack, Text } from "@/components"
-import { ReviewTable } from "@/domains/TimeSheets/ReviewTable"
 import { type IhssToggleDelta } from "@/domains/TimeSheets/ihssToggle"
+import { ReviewTable } from "@/domains/TimeSheets/ReviewTable"
 import { Routes } from "@/lib"
 
 import {
@@ -15,7 +15,9 @@ import {
 
 interface ClientShiftsTableProps {
 	payPeriodId: string
+	payPeriodSlug: string
 	clientId: string
+	clientSlug: string
 	employees: ClientPeriodEmployee[]
 	selectedEmployeeId: string | null
 	shifts: Schema.ShiftsReview[]
@@ -23,13 +25,16 @@ interface ClientShiftsTableProps {
 	shiftOtHours: Record<string, number>
 	canFacilitatorApprove: boolean
 	canEditTimes: boolean
+	showIhss?: boolean
 	canEditIhss?: boolean
 	onIhssToggle?: (delta: IhssToggleDelta) => void
 }
 
 export function ClientShiftsTable({
 	payPeriodId,
+	payPeriodSlug,
 	clientId,
+	clientSlug,
 	employees,
 	selectedEmployeeId,
 	shifts,
@@ -37,6 +42,7 @@ export function ClientShiftsTable({
 	shiftOtHours,
 	canFacilitatorApprove,
 	canEditTimes,
+	showIhss = false,
 	canEditIhss = false,
 	onIhssToggle,
 }: ClientShiftsTableProps) {
@@ -55,11 +61,11 @@ export function ClientShiftsTable({
 				: new Date(String(shift.starts_at)).toISOString(),
 		}))
 	const pendingCount = pendingApprovals.length
-	const { regularHours, otHours } = useMemo(
+	const { regularHours, otHours, ihssHours } = useMemo(
 		() => hoursForShifts(selectedShifts, shiftOtHours),
 		[selectedShifts, shiftOtHours],
 	)
-	const reloadHref = Routes.clientPeriod(payPeriodId, clientId)
+	const reloadHref = Routes.clientPeriod(payPeriodSlug, clientSlug)
 
 	if(employees.length === 0) {
 		return (
@@ -98,6 +104,9 @@ export function ClientShiftsTable({
 							approvals: pendingApprovals,
 							pay_period_id: payPeriodId,
 							client_id: clientId,
+						}, {
+							preserveState: true,
+							preserveScroll: true,
 						}) }
 					>
 						{ t("views.pay_periods.client_show.approve_all_pending") }
@@ -112,14 +121,17 @@ export function ClientShiftsTable({
 				shiftOtHours={ shiftOtHours }
 				regularHours={ regularHours }
 				otHours={ otHours }
+				ihssHours={ ihssHours }
 				canEditTimes={ canEditTimes }
 				employeeId={ selectedEmployee.id }
 				employeeSlug={ selectedEmployee.slug }
 				payPeriodId={ payPeriodId }
+				payPeriodSlug={ payPeriodSlug }
 				clientId={ clientId }
 				reloadHref={ reloadHref }
 				showClientColumn={ false }
 				canFacilitatorApprove={ canFacilitatorApprove }
+				showIhss={ showIhss }
 				canEditIhss={ canEditIhss }
 				onIhssToggle={ onIhssToggle }
 			/>

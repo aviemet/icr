@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import {
@@ -19,15 +19,18 @@ import {
 import { formatter, Routes } from "@/lib"
 
 import * as classes from "./Board.css"
+import { clientHasIhss } from "./clientHasIhss"
 import {
 	type ClientPeriodEmployee,
 	defaultEmployeeId,
 	employeeOptionsFromEmployees,
+	resolveSelectedEmployeeId,
 } from "./clientShiftEmployees"
 import { ClientShiftsTable } from "./ClientShiftsTable"
 
 export interface ClientReviewBoardProps {
 	payPeriodId: string
+	payPeriodSlug: string
 	periodDates: [string, string]
 	finalized: boolean
 	canFacilitatorApprove: boolean
@@ -44,6 +47,7 @@ export interface ClientReviewBoardProps {
 
 export function ClientReviewBoard({
 	payPeriodId,
+	payPeriodSlug,
 	periodDates,
 	finalized,
 	canFacilitatorApprove,
@@ -61,6 +65,7 @@ export function ClientReviewBoard({
 	const [periodStart, periodEnd] = periodDates
 	const periodRange = periodStart && periodEnd ? formatter.datetime.range(periodStart, periodEnd) : ""
 	const clientName = periodClient.full_name ?? periodClient.name
+	const showIhss = clientHasIhss(periodClient)
 	const employeeOptions = useMemo(
 		() => employeeOptionsFromEmployees(periodEmployees),
 		[periodEmployees],
@@ -68,24 +73,41 @@ export function ClientReviewBoard({
 	const [reviewShifts, setReviewShifts] = useState(shifts)
 	const [reviewShiftOtHours, setReviewShiftOtHours] = useState(shiftOtHours)
 	const [reviewIhssHoursUsed, setReviewIhssHoursUsed] = useState(ihssHoursUsed)
-	const [userSelectedEmployeeId, setUserSelectedEmployeeId] = useState<string | null>(null)
+	const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(
+		() => defaultEmployeeId(shifts, employeeOptionsFromEmployees(periodEmployees)),
+	)
+	const [prevShifts, setPrevShifts] = useState(shifts)
+	const [prevShiftOtHours, setPrevShiftOtHours] = useState(shiftOtHours)
+	const [prevIhssHoursUsed, setPrevIhssHoursUsed] = useState(ihssHoursUsed)
+	const [prevEmployeeOptions, setPrevEmployeeOptions] = useState(employeeOptions)
 
-	useEffect(() => {
+	if(
+		shifts !== prevShifts ||
+		shiftOtHours !== prevShiftOtHours ||
+		ihssHoursUsed !== prevIhssHoursUsed
+	) {
+		setPrevShifts(shifts)
+		setPrevShiftOtHours(shiftOtHours)
+		setPrevIhssHoursUsed(ihssHoursUsed)
 		setReviewShifts(shifts)
 		setReviewShiftOtHours(shiftOtHours)
 		setReviewIhssHoursUsed(ihssHoursUsed)
-	}, [shifts, shiftOtHours, ihssHoursUsed])
+	}
 
-	const selectedEmployeeId = useMemo(() => {
-		if(
-			userSelectedEmployeeId !== null
-			&& employeeOptions.some(option => option.value === userSelectedEmployeeId)
-		) {
-			return userSelectedEmployeeId
+	const nextSelectedEmployeeId = resolveSelectedEmployeeId(
+		selectedEmployeeId,
+		reviewShifts,
+		employeeOptions,
+	)
+	if(
+		employeeOptions !== prevEmployeeOptions ||
+		nextSelectedEmployeeId !== selectedEmployeeId
+	) {
+		setPrevEmployeeOptions(employeeOptions)
+		if(nextSelectedEmployeeId !== selectedEmployeeId) {
+			setSelectedEmployeeId(nextSelectedEmployeeId)
 		}
-
-		return defaultEmployeeId(reviewShifts, employeeOptions)
-	}, [userSelectedEmployeeId, employeeOptions, reviewShifts])
+	}
 
 	const handleIhssToggle = (delta: IhssToggleDelta) => {
 		setReviewShifts(current => applyIhssToggleToShifts(current, delta))
@@ -100,7 +122,9 @@ export function ClientReviewBoard({
 			<Box className={ classes.board }>
 				<Section variant="panel" className={ classes.chrome }>
 					<Box className={ classes.identity }>
-						<Title order={ 2 }><Presence>{ clientName }</Presence></Title>
+						<Title order={ 2 }>
+							<Presence>{ `${t("views.clients.show.title")}: ${clientName}` }</Presence>
+						</Title>
 						{ periodRange && (
 							<span className={ classes.subtitle }>{ periodRange }</span>
 						) }
@@ -109,11 +133,13 @@ export function ClientReviewBoard({
 								{ t("views.pay_periods.client_show.finalized_locked") }
 							</span>
 						) }
-						<span className={ classes.subtitle }>
-							{ t("views.pay_periods.clients.columns.ihss_used") }: { reviewIhssHoursUsed }
-							{ " / " }
-							<Presence>{ periodClient.ihss_authorized_hours }</Presence>
-						</span>
+						{ showIhss && (
+							<span className={ classes.subtitle }>
+								{ t("views.pay_periods.clients.columns.ihss_used") }: { reviewIhssHoursUsed }
+								{ " / " }
+								<Presence>{ periodClient.ihss_authorized_hours }</Presence>
+							</span>
+						) }
 						{ employeeOptions.length > 0
 							? (
 								<Select
@@ -122,7 +148,7 @@ export function ClientReviewBoard({
 									placeholder={ t("views.pay_periods.client_show.employee_placeholder") }
 									options={ employeeOptions }
 									value={ selectedEmployeeId }
-									onChange={ setUserSelectedEmployeeId }
+									onChange={ setSelectedEmployeeId }
 									searchable
 									clearable={ false }
 								/>
@@ -138,7 +164,9 @@ export function ClientReviewBoard({
 				<Section variant="panel" className={ classes.panel }>
 					<ClientShiftsTable
 						payPeriodId={ payPeriodId }
+						payPeriodSlug={ payPeriodSlug }
 						clientId={ periodClient.id }
+						clientSlug={ periodClient.slug }
 						employees={ periodEmployees }
 						selectedEmployeeId={ selectedEmployeeId }
 						shifts={ reviewShifts }
@@ -146,7 +174,8 @@ export function ClientReviewBoard({
 						shiftOtHours={ reviewShiftOtHours }
 						canFacilitatorApprove={ canFacilitatorApprove }
 						canEditTimes={ !finalized }
-						canEditIhss={ canEditIhss && ihssAssignmentMode === "shift" }
+						showIhss={ showIhss }
+						canEditIhss={ showIhss && canEditIhss && ihssAssignmentMode === "shift" }
 						onIhssToggle={ handleIhssToggle }
 					/>
 				</Section>
@@ -154,7 +183,7 @@ export function ClientReviewBoard({
 				<Group>
 					<Link
 						as="button"
-						href={ Routes.clientsPeriod(payPeriodId) }
+						href={ Routes.clientsPeriod(payPeriodSlug) }
 						variant="default"
 						leftSection={ <PreviousIcon size={ 16 } /> }
 					>
@@ -163,7 +192,7 @@ export function ClientReviewBoard({
 					{ canViewEmployees && (
 						<Link
 							as="button"
-							href={ Routes.period(payPeriodId) }
+							href={ Routes.period(payPeriodSlug) }
 							variant="default"
 						>
 							{ t("views.pay_periods.clients.view_employees") }

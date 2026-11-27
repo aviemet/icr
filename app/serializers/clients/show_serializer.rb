@@ -19,16 +19,8 @@ class Clients::ShowSerializer < Clients::PersistedSerializer
   has_many :incident_reports, serializer: IncidentReports::PersistedSerializer
   has_many :clients_trainings, serializer: ClientsTrainings::ShowRowSerializer
   has_many :compliance_form_submissions, serializer: Compliance::FormSubmissions::PersistedSerializer
-
-  type "Array<{ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date }>"
-  def documents
-    Attachments::FileSerializer.many(@object.documents)
-  end
-
-  type "Array<{ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date }>"
-  def images
-    Attachments::FileSerializer.many(@object.images)
-  end
+  has_many :documents, serializer: Attachments::FileSerializer
+  has_many :images, serializer: Attachments::FileSerializer
 
   type :string, optional: true
   def portrait_url

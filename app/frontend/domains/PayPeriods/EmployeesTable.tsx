@@ -28,7 +28,7 @@ interface UnreviewedShiftRow {
 }
 
 interface EmployeesTableProps {
-	payPeriodId: string
+	payPeriodSlug: string
 	employees: Schema.EmployeesPersisted[]
 	employee_hours: Record<string, EmployeeHoursMap>
 	canApprove: boolean
@@ -41,7 +41,7 @@ interface EmployeesTableProps {
 }
 
 export function EmployeesTable({
-	payPeriodId,
+	payPeriodSlug,
 	employees,
 	employee_hours,
 	canApprove,
@@ -70,7 +70,7 @@ export function EmployeesTable({
 			title: t("views.timesheets.index.employees.employee"),
 			sortable: false,
 			render: (employee) => (
-				<Link href={ Routes.periodEmployeeReview(payPeriodId, employee.id) }>
+				<Link href={ Routes.periodEmployeeReview(payPeriodSlug, employee.slug) }>
 					<Group gap="sm" wrap="nowrap" style={ { display: "inline-flex" } }>
 						<Avatar
 							src={ undefined }
@@ -180,7 +180,7 @@ export function EmployeesTable({
 					<Group gap="xs" wrap="nowrap">
 						<Link
 							as="button"
-							href={ Routes.periodEmployeeReview(payPeriodId, employee.id) }
+							href={ Routes.periodEmployeeReview(payPeriodSlug, employee.slug) }
 							buttonProps={ { variant: "light", size: "xs" } }
 						>
 							{ t("views.timesheets.index.employees.review") }

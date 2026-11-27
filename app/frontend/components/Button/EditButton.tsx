@@ -1,3 +1,5 @@
+import { type TooltipProps } from "@mantine/core"
+
 import { ActionIcon, Link, Tooltip } from "@/components"
 import { EditIcon } from "@/components/Icons"
 
@@ -7,16 +9,17 @@ interface EditButtonProps {
 	href?: string
 	label?: string
 	onClick?: () => void
+	tooltipPosition?: TooltipProps["position"]
 }
 
-export function EditButton({ href, label, onClick }: EditButtonProps) {
+export function EditButton({ href, label, onClick, tooltipPosition = "left" }: EditButtonProps) {
 	const usedLabel = `Edit${label ? ` ${label}` : ""}`
 
 	return (
 		<Tooltip
 			withArrow
 			label={ usedLabel }
-			position="left"
+			position={ tooltipPosition }
 			transitionProps={ { transition: "fade" } }
 		>
 			{ href

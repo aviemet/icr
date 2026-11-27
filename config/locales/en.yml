@@ -82,6 +82,7 @@ en:
       system_protected: System service types cannot be deleted.
       multi_client_not_allowed: This service type allows only one client.
       notes_required: Notes are required for this service type.
+      not_assignable: That service type cannot be assigned to a shift.
   pay_periods:
     already_finalized: This pay period is already finalized.
     ihss_assignments_updated: IHSS period assignments saved.

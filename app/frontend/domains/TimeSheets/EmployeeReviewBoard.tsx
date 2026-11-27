@@ -1,6 +1,6 @@
 import { router } from "@inertiajs/react"
 import { useModals } from "@mantine/modals"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import {
@@ -49,6 +49,7 @@ interface UnreviewedShiftRow {
 export interface EmployeeReviewBoardProps {
 	employee: Schema.EmployeesIndex
 	payPeriodId: string
+	payPeriodSlug: string
 	periodDates: [Date, Date]
 	finalized: boolean
 	canApprove: boolean
@@ -65,6 +66,7 @@ export interface EmployeeReviewBoardProps {
 export function EmployeeReviewBoard({
 	employee,
 	payPeriodId,
+	payPeriodSlug,
 	periodDates,
 	finalized,
 	canApprove,
@@ -85,12 +87,22 @@ export function EmployeeReviewBoard({
 	const [reviewShifts, setReviewShifts] = useState(shifts)
 	const [reviewShiftOtHours, setReviewShiftOtHours] = useState(shiftOtHours)
 	const [reviewEmployeeHours, setReviewEmployeeHours] = useState(employeeHours)
+	const [prevShifts, setPrevShifts] = useState(shifts)
+	const [prevShiftOtHours, setPrevShiftOtHours] = useState(shiftOtHours)
+	const [prevEmployeeHours, setPrevEmployeeHours] = useState(employeeHours)
 
-	useEffect(() => {
+	if(
+		shifts !== prevShifts ||
+		shiftOtHours !== prevShiftOtHours ||
+		employeeHours !== prevEmployeeHours
+	) {
+		setPrevShifts(shifts)
+		setPrevShiftOtHours(shiftOtHours)
+		setPrevEmployeeHours(employeeHours)
 		setReviewShifts(shifts)
 		setReviewShiftOtHours(shiftOtHours)
 		setReviewEmployeeHours(employeeHours)
-	}, [shifts, shiftOtHours, employeeHours])
+	}
 
 	const regularHours = reviewEmployeeHours.regular_hours ?? 0
 	const otHours = reviewEmployeeHours.ot_hours ?? 0
@@ -194,7 +206,9 @@ export function EmployeeReviewBoard({
 							>
 								<AddShiftForm
 									employeeId={ employee.id }
+									employeeSlug={ employee.slug }
 									payPeriodId={ payPeriodId }
+									payPeriodSlug={ payPeriodSlug }
 									periodDates={ periodDates }
 								/>
 							</Modal>
@@ -277,6 +291,7 @@ export function EmployeeReviewBoard({
 						shiftOtHours={ reviewShiftOtHours }
 						regularHours={ regularHours }
 						otHours={ otHours }
+						ihssHours={ ihssHours }
 						ptoHours={ ptoHours }
 						sickHours={ sickHours }
 						holidayHours={ holidayHours }
@@ -284,6 +299,8 @@ export function EmployeeReviewBoard({
 						employeeId={ employee.id }
 						employeeSlug={ employee.slug }
 						payPeriodId={ payPeriodId }
+						payPeriodSlug={ payPeriodSlug }
+						showIhss={ showIhssToggle }
 						canEditIhss={ showIhssToggle }
 						onIhssToggle={ handleIhssToggle }
 					/>
@@ -292,7 +309,7 @@ export function EmployeeReviewBoard({
 				<Group>
 					<Link
 						as="button"
-						href={ Routes.period(payPeriodId) }
+						href={ Routes.period(payPeriodSlug) }
 						variant="default"
 						leftSection={ <PreviousIcon size={ 16 } /> }
 					>

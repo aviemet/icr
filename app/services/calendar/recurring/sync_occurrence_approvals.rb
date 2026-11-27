@@ -64,9 +64,9 @@ module Calendar
           range_start: range_start,
           range_end: range_end,
         )
-        keep = expanded.map { |occurrence|
+        keep = expanded.to_set { |occurrence|
           ShiftOccurrenceApproval.normalize_occurrence_starts_at(occurrence.original_starts_at)
-        }.to_set
+        }
 
         ShiftOccurrenceApproval.where(shift_id: shift.id).find_each do |row|
           next if keep.include?(ShiftOccurrenceApproval.normalize_occurrence_starts_at(row.occurrence_starts_at))

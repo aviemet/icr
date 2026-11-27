@@ -5,6 +5,7 @@
 #  id                  :uuid             not null, primary key
 #  active              :boolean          default(TRUE), not null
 #  allows_multi_client :boolean          default(FALSE), not null
+#  assignable          :boolean          default(TRUE), not null
 #  billable            :boolean          default(TRUE), not null
 #  color               :string           default("#2F6FED"), not null
 #  name                :string           not null
@@ -28,6 +29,7 @@ FactoryBot.define do
   factory :service_type do
     sequence(:name) { |index| "Service Type #{index}" }
     active { true }
+    assignable { true }
     system { false }
     position { 0 }
     billable { true }
@@ -43,6 +45,7 @@ FactoryBot.define do
         ServiceType.find_or_create_by!(name: "Regular") do |row|
           row.system = true
           row.active = true
+          row.assignable = true
           row.billable = true
           row.payable = true
           row.color = "#2F6FED"

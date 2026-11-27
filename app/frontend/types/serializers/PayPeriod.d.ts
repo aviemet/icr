@@ -11,6 +11,7 @@ declare global {
       ends_at?: Date
       finalized_at?: Date
       period_type?: number
+      slug: string
       starts_at?: Date
       status?: number
       updated_at: Date

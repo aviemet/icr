@@ -168,17 +168,17 @@ Rails.application.routes.draw do
   scope path: "payroll" do
     get "/", to: "pay_periods#index", as: :payroll_periods
 
-    resources :periods, controller: "pay_periods", only: [:show] do
+    resources :periods, controller: "pay_periods", only: [:show], param: :slug do
       member do
         post :finalize
         get :export
         get :clients
-        get "clients/:client_id", action: :client, as: :client
+        get "clients/:client_slug", action: :client, as: :client
         get :ihss, action: :ihss
         match :ihss, action: :update_ihss, via: [:patch, :put]
       end
       post :adjustments, on: :member, action: :create_adjustment, as: :adjustments
-      get "employees/:employee_id", to: "timesheets#employee_review", as: :employee_review
+      get "employees/:employee_slug", to: "timesheets#employee_review", as: :employee_review
     end
 
     resources :timesheets, only: [:show, :new, :edit, :create, :update, :destroy] do

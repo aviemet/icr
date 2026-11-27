@@ -5,6 +5,7 @@
 #  id                  :uuid             not null, primary key
 #  active              :boolean          default(TRUE), not null
 #  allows_multi_client :boolean          default(FALSE), not null
+#  assignable          :boolean          default(TRUE), not null
 #  billable            :boolean          default(TRUE), not null
 #  color               :string           default("#2F6FED"), not null
 #  name                :string           not null
@@ -27,6 +28,16 @@
 require "rails_helper"
 
 RSpec.describe ServiceType, type: :model do
+  describe ".assignable" do
+    it "includes only assignable service types" do
+      assignable = create(:service_type, name: "Assignable #{SecureRandom.hex(4)}", assignable: true)
+      excluded = create(:service_type, name: "Leave #{SecureRandom.hex(4)}", assignable: false)
+
+      expect(described_class.assignable).to include(assignable)
+      expect(described_class.assignable).not_to include(excluded)
+    end
+  end
+
   describe "validations" do
     it "requires a unique name and slug" do
       create(:service_type, name: "Personal Care")

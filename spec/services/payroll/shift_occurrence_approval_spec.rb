@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Per-occurrence facilitator approval" do
+RSpec.describe ShiftOccurrenceApproval do
   around do |example|
     Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:weekly]
     Setting.payroll_period_day = "monday"

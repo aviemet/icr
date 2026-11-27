@@ -9,15 +9,6 @@ import { useRecordCanUpdate } from "@/lib/hooks"
 
 import * as classes from "./Documents.css"
 
-type EmployeeAttachment = {
-	id: string
-	filename: string
-	content_type: string
-	byte_size: number
-	url: string
-	created_at: Date
-}
-
 interface EmployeeDocumentsProps {
 	employee: Schema.EmployeesShow
 }
@@ -25,8 +16,8 @@ interface EmployeeDocumentsProps {
 export function EmployeeDocuments({ employee }: EmployeeDocumentsProps) {
 	const { t } = useTranslation()
 	const canUpdate = useRecordCanUpdate()
-	const documents: EmployeeAttachment[] = employee.documents
-	const images: EmployeeAttachment[] = employee.images
+	const documents = employee.documents
+	const images = employee.images
 
 	const uploadDocument = (fileList: FileList | null) => {
 		const file = fileList?.[0]

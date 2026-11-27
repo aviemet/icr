@@ -29,12 +29,12 @@ export default function PayPeriodsIhss({
 			title={ t("views.pay_periods.ihss.title") }
 			breadcrumbs={ [
 				{ title: t("views.pay_periods.index.title"), href: Routes.payrollPeriods() },
-				{ title: periodRange || t("views.pay_periods.show.title"), href: Routes.period(pay_period.id) },
+				{ title: periodRange || t("views.pay_periods.show.title"), href: Routes.period(pay_period.slug) },
 				{ title: t("views.pay_periods.ihss.title") },
 			] }
 		>
 			<IhssAssignmentBoard
-				payPeriodId={ pay_period.id }
+				payPeriodSlug={ pay_period.slug }
 				periodDates={ period_dates }
 				finalized={ finalized }
 				assignmentRows={ assignment_rows }

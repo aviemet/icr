@@ -73,8 +73,8 @@ vi.mock("@/lib", async () => {
 		categorySlug: () => "calendar-event-shift",
 		Routes: {
 			...actual.Routes,
-			periodEmployeeReview: (payPeriodId: string, employeeId: string) => (
-				`/payroll/periods/${payPeriodId}/employees/${employeeId}`
+			periodEmployeeReview: (payPeriodId: string, employeeSlug: string) => (
+				`/payroll/periods/${payPeriodId}/employees/${employeeSlug}`
 			),
 			apiCalendarEvents: () => "/api/calendar_events",
 		},
@@ -117,7 +117,9 @@ describe("AddShiftForm", () => {
 				<MantineProvider theme={ theme }>
 					<AddShiftForm
 						employeeId="employee-1"
+						employeeSlug="ava-example"
 						payPeriodId="period-1"
+						payPeriodSlug="2024-03-16"
 						periodDates={ [
 							new Date("2024-03-16T00:00:00"),
 							new Date("2024-03-31T23:59:59"),
@@ -145,6 +147,6 @@ describe("AddShiftForm", () => {
 		])
 		expect(payload.calendar_event.category_slug).toBe("calendar-event-shift")
 		expect(closeModal).toHaveBeenCalled()
-		expect(routerGet).toHaveBeenCalledWith("/payroll/periods/period-1/employees/employee-1")
+		expect(routerGet).toHaveBeenCalledWith("/payroll/periods/2024-03-16/employees/ava-example")
 	})
 })

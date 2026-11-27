@@ -25,13 +25,13 @@ RSpec.describe "/timesheets", type: :request do
     { pay_period_id: create(:pay_period, finalized_at: nil, approved_at: nil).id, employee_id: create(:employee).id }
   end
 
-  describe "GET /payroll/periods/:period_id/employees/:employee_id (employee_review)" do
+  describe "GET /payroll/periods/:period_id/employees/:employee_slug (employee_review)" do
     it "renders a successful response with approve controls enabled" do
       pay_period = create(:pay_period, finalized_at: nil, approved_at: nil)
       employee = create(:employee)
       timesheet = create(:timesheet, pay_period: pay_period, employee: employee, approved_at: nil)
 
-      get period_employee_review_path(period_id: pay_period.id, employee_id: employee.id)
+      get period_employee_review_path(period_slug: pay_period.slug, employee_slug: employee.slug)
 
       expect(response).to have_http_status(:success)
       expect_inertia.to render_component "Timesheets/EmployeeReview"
@@ -46,9 +46,9 @@ RSpec.describe "/timesheets", type: :request do
       employee = create(:employee)
       create(:timesheet, pay_period: pay_period, employee: employee, approved_at: nil)
 
-      expect_any_instance_of(PayPeriod).not_to receive(:sync_shifts!)
+      expect_any_instance_of(PayPeriod).not_to receive(:sync_shifts!) # rubocop:disable RSpec/AnyInstance
 
-      get period_employee_review_path(period_id: pay_period.id, employee_id: employee.id),
+      get period_employee_review_path(period_slug: pay_period.slug, employee_slug: employee.slug),
         headers: {
           "X-Inertia" => "true",
           "X-Inertia-Partial-Data" => "shifts,employee_hours,shift_ot_hours",
@@ -83,7 +83,7 @@ RSpec.describe "/timesheets", type: :request do
         )
       end
 
-      get period_employee_review_path(period_id: pay_period.id, employee_id: employee.id)
+      get period_employee_review_path(period_slug: pay_period.slug, employee_slug: employee.slug)
 
       expect(response).to have_http_status(:success)
       expect(inertia.props[:unreviewed_shifts].pluck(:id)).to eq([shift.id.to_s])
@@ -104,7 +104,7 @@ RSpec.describe "/timesheets", type: :request do
       timesheet = create(:timesheet, pay_period: pay_period, employee: employee, approved_at: nil)
 
       travel_to Time.zone.local(2024, 3, 25, 12, 0, 0) do
-        get period_employee_review_path(period_id: pay_period.id, employee_id: employee.id)
+        get period_employee_review_path(period_slug: pay_period.slug, employee_slug: employee.slug)
 
         expect(response).to have_http_status(:success)
         expect(inertia.props[:approval_window_open]).to be(false)
@@ -143,7 +143,7 @@ RSpec.describe "/timesheets", type: :request do
         end
       end
 
-      get period_employee_review_path(period_id: pay_period.id, employee_id: employee.id)
+      get period_employee_review_path(period_slug: pay_period.slug, employee_slug: employee.slug)
 
       expect(response).to have_http_status(:success)
       review_shifts = inertia.props[:shifts]

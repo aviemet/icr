@@ -7,10 +7,10 @@ import { TextInput } from "@/components/Inputs"
 import { Routes } from "@/lib"
 
 interface AdjustmentFormProps {
-	payPeriodId: string
+	payPeriodSlug: string
 }
 
-export function AdjustmentForm({ payPeriodId }: AdjustmentFormProps) {
+export function AdjustmentForm({ payPeriodSlug }: AdjustmentFormProps) {
 	const { t } = useTranslation()
 	const [reason, setReason] = useState("")
 	const [timesheetId, setTimesheetId] = useState("")
@@ -22,7 +22,7 @@ export function AdjustmentForm({ payPeriodId }: AdjustmentFormProps) {
 
 		setProcessing(true)
 		router.post(
-			Routes.adjustmentsPeriod(payPeriodId),
+			Routes.adjustmentsPeriod(payPeriodSlug),
 			{
 				reason,
 				timesheet_id: timesheetId || undefined,

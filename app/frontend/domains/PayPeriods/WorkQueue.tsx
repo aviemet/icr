@@ -29,6 +29,7 @@ interface UnreviewedShiftRow {
 
 interface WorkQueueProps {
 	payPeriodId: string
+	payPeriodSlug: string
 	employees: Schema.EmployeesPersisted[]
 	employeeHours: Record<string, EmployeeHoursMap>
 	canApprove: boolean
@@ -46,6 +47,7 @@ interface WorkQueueProps {
 
 export function WorkQueue({
 	payPeriodId,
+	payPeriodSlug,
 	employees,
 	employeeHours,
 	canApprove,
@@ -126,7 +128,7 @@ export function WorkQueue({
 			</Group>
 
 			<EmployeesTable
-				payPeriodId={ payPeriodId }
+				payPeriodSlug={ payPeriodSlug }
 				employees={ filteredEmployees }
 				employee_hours={ employeeHours }
 				canApprove={ canApprove }

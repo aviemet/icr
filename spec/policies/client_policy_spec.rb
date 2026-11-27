@@ -114,8 +114,7 @@ RSpec.describe ClientPolicy, type: :policy do
     it "denies employee without permission or attendant relationship" do
       client = build_stubbed(:client)
       current_relations = double(exists?: false)
-      allow(client).to receive(:clients_attendants).and_return(double(current: current_relations))
-      allow(client).to receive(:clients_managers).and_return(double(current: current_relations))
+      allow(client).to receive_messages(clients_attendants: double(current: current_relations), clients_managers: double(current: current_relations))
       expect(described_class.new(stub_employee_user, client)).not_to authorize(:show)
     end
 

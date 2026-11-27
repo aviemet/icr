@@ -50,9 +50,9 @@
 ### Payroll and timesheets
 
 - Approve / Unapprove / bulk approve stay available until the period is finalized (`can_approve = !finalized?`). Payroll due date and `approval_window_open` are urgency signals only; they must never hard-block approval.
-- Two view families per period: clients-first (`/payroll/periods/:id/clients`) for facilitator caseload review; employee-combined (`/payroll/periods/:id` plus employee review) for Director final approve, finalize, and export. Facilitators without Timesheet `index` are redirected from the employee-combined period show to the clients board.
+- Two view families per period: clients-first (`/payroll/periods/:slug/clients`) for facilitator caseload review; employee-combined (`/payroll/periods/:slug` plus employee review) for Director final approve, finalize, and export. Public period param is start-date `slug` (`YYYY-MM-DD`). Facilitators without Timesheet `index` are redirected from the employee-combined period show to the clients board.
 - Facilitator review, shift-mode IHSS, and service type are per occurrence (`shift_occurrence_approvals` / `shift_occurrence_overrides` keyed by `shift_id` + `occurrence_starts_at`), kept in sync by `Calendar::Recurring` mutation services (just-this = cancel exception + detach; edit-all remaps after commit so event time-change invalidate does not wipe the remap). Director final approval is timesheet-level (`timesheets.approved_at`). Finalize and export never wait on facilitator stamps.
-- `PayPeriod.for_period_dates` reuses a period that starts on the same calendar day (snaps end; timezone-safe), or creates one and shrinks any predecessor that overlapped; shrinking reattaches out-of-range shifts via `PayPeriod.attach_shift!`. GET does not create periods.
+- `PayPeriod.for_period_dates` finds by start calendar day and returns that row unchanged, or creates with the requested start/end and start-date `slug`. Settings decide dates only at create; existing `starts_at`/`ends_at`/`slug` never rewrite, and neighbors are never reshaped. GET show does not create periods; index may create the current window.
 - Recurring payroll surface: `PayPeriod#shift_occurrences` (via `Shift#occurrences_in`) for hours, review tables, and counts. Occurrence row `id` matches hours OT keys; mutations use `shift_id` (the real Shift UUID).
 - IHSS classification runs first via `Payroll::IhssHourClassifier`. When `Setting.ihss_co_employer` is false, only company hours feed OT math; when true, all hours feed OT. Hours calculator reads intervals via a collector interface (default: scheduled shifts) so clock-in/out can swap later without changing OT math or UI contracts.
 - Attaching a shift or changing event times/participants clears timesheet `approved_at` and occurrence approval rows for that shift.
@@ -67,6 +67,7 @@
 
 ## Frontend and test footguns
 
+- Button labels use Title Case (capitalize every word), e.g. Approve All.
 - Mantine date/time inputs expect strings; shared inputs accept Date or string and normalize to ISO string before passing in.
 - Linaria class order: when a view-specific class must override a base class, use a combined selector like `&.${event} { ... }` so it wins regardless of CSS emission order.
 - Page chrome: `theme.other.page.maxWidth` is the shared content width. Default panel fill is `pageChrome.panelFill` / `panelSurface`; outer shells that nest panels use `wrapper` / `panelWrapperSurface`. `panelSurface` sets `--icr-field-bg` / `--icr-field-border`. Do not invent per-page panel backgrounds.

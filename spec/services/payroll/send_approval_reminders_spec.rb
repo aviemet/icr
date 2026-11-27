@@ -99,7 +99,7 @@ RSpec.describe Payroll::SendApprovalReminders do
 
       expect(delivered_to).to eq([admin.email])
       expect(ActionMailer::Base.deliveries.last.subject).to include("2 timesheets")
-      expect(ActionMailer::Base.deliveries.last.body.encoded).to include("/payroll/periods/#{pay_period.id}")
+      expect(ActionMailer::Base.deliveries.last.body.encoded).to include("/payroll/periods/#{pay_period.slug}")
     end
 
     it "emails org-wide approvers with the full pending count" do

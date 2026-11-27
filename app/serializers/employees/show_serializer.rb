@@ -15,16 +15,8 @@ class Employees::ShowSerializer < Employees::PersistedSerializer
   has_many :offers, serializer: Employee::Offers::PersistedSerializer
   has_many :attended_clients, serializer: Clients::PersistedSerializer
   has_many :managed_clients, serializer: Clients::PersistedSerializer
-
-  type "Array<{ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date }>"
-  def documents
-    Attachments::FileSerializer.many(@object.documents)
-  end
-
-  type "Array<{ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date }>"
-  def images
-    Attachments::FileSerializer.many(@object.images)
-  end
+  has_many :documents, serializer: Attachments::FileSerializer
+  has_many :images, serializer: Attachments::FileSerializer
 
   type :number, optional: false
   def assigned_clients_count
@@ -53,14 +45,25 @@ class Employees::ShowSerializer < Employees::PersistedSerializer
 
   type :string, optional: true
   def current_pay_period_id
-    period_start_date, period_end_date = Payroll::Period.period_dates
-    period = PayPeriod.find_by(
-      starts_at: period_start_date.to_time.beginning_of_day,
-      ends_at: period_end_date.to_time.end_of_day,
-    )
-    period&.id
+    current_pay_period&.id
+  end
+
+  type :string, optional: true
+  def current_pay_period_slug
+    current_pay_period&.slug
   end
 
   type :Date, optional: true
   delegate :pending_termination_at, to: :@object
+
+  private
+
+  def current_pay_period
+    memo.fetch(:current_pay_period) do
+      period_start_date, = Payroll::Period.period_dates
+      PayPeriod.where(starts_at: period_start_date.to_time.beginning_of_day.all_day)
+        .order(:created_at, :starts_at)
+        .first
+    end
+  end
 end

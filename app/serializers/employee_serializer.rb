@@ -68,18 +68,12 @@ class EmployeeSerializer < ApplicationSerializer
     @object.desired_compensation&.to_s
   end
 
-  type "({ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date } | null)", optional: true
-  def resume
-    return nil unless @object.resume.attached?
-
-    Attachments::FileSerializer.one(@object.resume)
+  has_one :resume, serializer: Attachments::FileSerializer, optional: true do
+    @object.resume if @object.resume.attached?
   end
 
-  type "({ id: string, filename: string, content_type: string, byte_size: number, url: string, created_at: Date } | null)", optional: true
-  def cover_letter
-    return nil unless @object.cover_letter.attached?
-
-    Attachments::FileSerializer.one(@object.cover_letter)
+  has_one :cover_letter, serializer: Attachments::FileSerializer, optional: true do
+    @object.cover_letter if @object.cover_letter.attached?
   end
 
   belongs_to :person, serializer: PersonSerializer

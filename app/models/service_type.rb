@@ -5,6 +5,7 @@
 #  id                  :uuid             not null, primary key
 #  active              :boolean          default(TRUE), not null
 #  allows_multi_client :boolean          default(FALSE), not null
+#  assignable          :boolean          default(TRUE), not null
 #  billable            :boolean          default(TRUE), not null
 #  color               :string           default("#2F6FED"), not null
 #  name                :string           not null
@@ -45,13 +46,14 @@ class ServiceType < ApplicationRecord
   before_destroy :abort_system_destroy
 
   scope :active, -> { where(active: true) }
+  scope :assignable, -> { where(assignable: true) }
   scope :ordered, -> { order(:position, :name) }
   scope :includes_associated, -> { all }
 
   def self.default
-    active.ordered.find_by(slug: "regular") ||
-      active.ordered.find_by(slug: "standard") ||
-      active.ordered.first ||
+    active.assignable.ordered.find_by(slug: "regular") ||
+      active.assignable.ordered.find_by(slug: "standard") ||
+      active.assignable.ordered.first ||
       ordered.first
   end
 
