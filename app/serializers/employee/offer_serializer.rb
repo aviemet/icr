@@ -41,10 +41,7 @@ class Employee::OfferSerializer < ApplicationSerializer
     :notes,
   )
 
-  type :string, optional: false
-  def rate
-    @object.rate.to_s
-  end
+  currency_for :rate
 
   belongs_to :job_title, serializer: Employee::JobTitleSerializer
 end

@@ -27,6 +27,7 @@ import { WorkQueue } from "./WorkQueue"
 interface EmployeeHoursMap {
 	regular_hours?: number
 	ot_hours?: number
+	double_time_hours?: number
 	ihss_hours?: number
 	company_hours?: number
 }
@@ -135,7 +136,10 @@ export function PeriodShowBoard({
 	const totalCount = summary?.total_count ?? employees.length
 	const pendingCount = summary?.pending_count ?? 0
 	const flaggedCount = summary?.flagged_count ?? 0
-	const overtimeHours = Object.values(employee_hours).reduce((sum, hours) => sum + (hours.ot_hours ?? 0), 0)
+	const overtimeHours = Object.values(employee_hours).reduce(
+		(sum, hours) => sum + (hours.ot_hours ?? 0) + (hours.double_time_hours ?? 0),
+		0,
+	)
 	const dueInDays = payroll_due_date
 		? dayjs(payroll_due_date).startOf("day").diff(dayjs().startOf("day"), "day")
 		: 0
@@ -146,6 +150,7 @@ export function PeriodShowBoard({
 	return (
 		<Box className={ classes.viewport }>
 			<Box className={ classes.board }>
+
 				<Section variant="panel" className={ classes.chrome }>
 					<Box className={ classes.identity }>
 						<Group gap="sm" wrap="wrap" align="center">
@@ -154,12 +159,15 @@ export function PeriodShowBoard({
 								{ periodWorkflowLabel(workflow_status, t) }
 							</Badge>
 						</Group>
+
 						{ periodRange && (
 							<span className={ classes.subtitle }>{ periodRange }</span>
 						) }
+
 						<span className={ classes.subtitle }>
 							{ t("views.pay_periods.show.workflow_help") }
 						</span>
+
 						<Group gap="md" wrap="wrap">
 							<span className={ classes.subtitle }>
 								{ t("views.timesheets.index.approved_count", {
@@ -167,6 +175,7 @@ export function PeriodShowBoard({
 									total: totalCount,
 								}) }
 							</span>
+
 							{ !finalized && (
 								<span className={ classes.subtitle }>
 									{ payrollDueDateLabel(dueInDays, t, {
@@ -175,6 +184,7 @@ export function PeriodShowBoard({
 									}) }
 								</span>
 							) }
+
 							{ finalized && pay_period.finalized_at && (
 								<span className={ classes.subtitle }>
 									{ t("views.pay_periods.show.finalized_stamp", {
@@ -183,10 +193,13 @@ export function PeriodShowBoard({
 								</span>
 							) }
 						</Group>
+
 						{ !finalized && blockedMessage && (
 							<span className={ classes.subtitle }>{ blockedMessage }</span>
 						) }
+
 					</Box>
+
 					<Group gap="sm" wrap="wrap">
 						{ !finalized && (
 							<Button
@@ -197,6 +210,7 @@ export function PeriodShowBoard({
 								{ t("views.pay_periods.show.finalize") }
 							</Button>
 						) }
+
 						{ can_export && (
 							<Button
 								component="a"
@@ -206,6 +220,7 @@ export function PeriodShowBoard({
 								{ t("views.pay_periods.show.export") }
 							</Button>
 						) }
+
 						{ can_view_clients && (
 							<Link
 								as="button"
@@ -215,6 +230,7 @@ export function PeriodShowBoard({
 								{ t("views.pay_periods.show.view_clients") }
 							</Link>
 						) }
+
 						{ ihss_assignment_mode === "period" && (
 							<Link
 								as="button"
@@ -225,9 +241,11 @@ export function PeriodShowBoard({
 							</Link>
 						) }
 					</Group>
+
 				</Section>
 
 				<Box className={ classes.metricStrip }>
+
 					<MetricTile
 						title={ t("views.timesheets.index.summary_pending") }
 						tone={ pendingTone }
@@ -235,6 +253,7 @@ export function PeriodShowBoard({
 					>
 						<MetricValue>{ pendingCount }</MetricValue>
 					</MetricTile>
+
 					<MetricTile
 						title={ t("views.timesheets.index.summary_flagged") }
 						tone={ flaggedTone }
@@ -242,6 +261,7 @@ export function PeriodShowBoard({
 					>
 						<MetricValue>{ flaggedCount }</MetricValue>
 					</MetricTile>
+
 					<MetricTile
 						title={ t("views.timesheets.index.summary_overtime") }
 						icon={ <ClockIcon size={ 16 } /> }
@@ -250,6 +270,7 @@ export function PeriodShowBoard({
 							{ t("views.timesheets.index.summary_hours", { count: overtimeHours }) }
 						</MetricValue>
 					</MetricTile>
+
 					<MetricTile
 						title={ t("views.pay_periods.index.summary.approved_label") }
 						icon={ <CheckIcon size={ 16 } /> }
@@ -261,6 +282,7 @@ export function PeriodShowBoard({
 							}) }
 						</MetricValue>
 					</MetricTile>
+
 				</Box>
 
 				<Section variant="panel" className={ classes.panel }>

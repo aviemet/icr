@@ -154,6 +154,16 @@ describe("flattenToPaths", () => {
 			["phones.1.number", "555-0199"],
 		])
 	})
+
+	it("keeps Money values as a single field value", () => {
+		expect(flattenToPaths({
+			offer: {
+				rate: { amount: 22.5, cents: 2250, currency_iso: "USD" },
+			},
+		})).toEqual([
+			["offer.rate", { amount: 22.5, cents: 2250, currency_iso: "USD" }],
+		])
+	})
 })
 
 describe("renameObjectWithAttributes", () => {

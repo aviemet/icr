@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next"
 
 import { useFormField, useFormFieldError } from "@/components/Form"
 import { currencyInputFormat } from "@/lib/formatters"
+import { isMoney } from "@/types"
 
 import { InputWrapper } from "./InputWrapper"
 import { Label } from "./Label"
@@ -23,9 +24,14 @@ export interface CurrencyInputProps extends NumberInputProps, BaseInputProps {
 function toFloat(value: unknown): number | undefined {
 	if(value === null || value === undefined || value === "") return undefined
 	if(typeof value === "number") return Number.isFinite(value) ? value : undefined
+	if(isMoney(value)) return Number.isFinite(value.amount) ? value.amount : undefined
 
 	const parsed = Number(value)
 	return Number.isFinite(parsed) ? parsed : undefined
+}
+
+function moneyCurrency(value: unknown): string | undefined {
+	return isMoney(value) ? value.currency_iso : undefined
 }
 
 function commitFloat(value: number, decimalScale: number) {
@@ -35,7 +41,7 @@ function commitFloat(value: number, decimalScale: number) {
 
 export function CurrencyInput({
 	symbol,
-	currency = "USD",
+	currency,
 	locale,
 	label,
 	name,
@@ -58,8 +64,14 @@ export function CurrencyInput({
 	...props
 }: CurrencyInputProps) {
 	const { i18n } = useTranslation()
+	const fieldError = useFormFieldError(name)
+	const [fieldValue, setFieldValue] = useFormField(name)
+	const resolvedCurrency = currency
+		?? moneyCurrency(value)
+		?? moneyCurrency(fieldValue)
+		?? "USD"
 	const resolvedLocale = locale ?? i18n.resolvedLanguage ?? i18n.language ?? "en-US"
-	const format = currencyInputFormat(resolvedLocale, currency)
+	const format = currencyInputFormat(resolvedLocale, resolvedCurrency)
 	const resolvedDecimalScale = decimalScale ?? format.decimalScale
 	const resolvedThousandSeparator = thousandSeparator ?? format.thousandSeparator
 	const resolvedDecimalSeparator = decimalSeparator ?? format.decimalSeparator
@@ -69,8 +81,6 @@ export function CurrencyInput({
 			: [resolvedDecimalSeparator, "."]
 	)
 
-	const fieldError = useFormFieldError(name)
-	const [fieldValue, setFieldValue] = useFormField(name)
 	const inputId = id || name
 	const numericValue = value !== undefined ? toFloat(value) : toFloat(fieldValue)
 

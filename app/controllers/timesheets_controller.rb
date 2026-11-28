@@ -36,7 +36,10 @@ class TimesheetsController < ApplicationController
         Payroll::ShiftExceptions.call(employee_review_shifts)[:reasons_by_shift_id]
       },
       shift_ot_hours: -> { employee_review_hours_data[:shift_ot_hours] || {} },
-      employee_hours: -> { employee_review_hours_data.except(:shift_ot_hours) },
+      shift_double_time_hours: -> { employee_review_hours_data[:shift_double_time_hours] || {} },
+      employee_hours: -> {
+        employee_review_hours_data.except(:shift_ot_hours, :shift_double_time_hours, :client_ihss_hours)
+      },
       unreviewed_shifts: -> {
         @review_timesheet.present? ? Payroll::UnreviewedShifts.call(@review_timesheet) : []
       },

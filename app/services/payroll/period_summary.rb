@@ -65,7 +65,9 @@ module Payroll
         .count
       total_count = @employee_ids.size
       hours = EmployeePeriodHours.call(@pay_period, @employee_ids)
-      overtime_hours = hours.values.sum { |row| row[:ot_hours].to_f }
+      overtime_hours = hours.values.sum { |row|
+        row[:ot_hours].to_f + row[:double_time_hours].to_f
+      }
       period_end = @pay_period.ends_at.to_date
       due_date = Period.payroll_due_date(period_end)
 

@@ -92,4 +92,3 @@ describe("CalendarEvent indicator", () => {
 		expect(screen.getByText("Shift")).toBeInTheDocument()
 	})
 })
-

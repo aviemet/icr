@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 
-import {Group, Link, DataTable, type TableColumn} from "@/components"
+import { Group, Link, DataTable, type TableColumn } from "@/components"
 import { EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 

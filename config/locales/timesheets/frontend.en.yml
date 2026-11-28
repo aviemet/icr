@@ -37,6 +37,7 @@ en:
         employee_label: Employee
         exception: Exception
         footer_overtime: Overtime
+        footer_double_time: Double Time
         footer_regular: Regular
         hours: Hours
         in_out_times: In / Out Times

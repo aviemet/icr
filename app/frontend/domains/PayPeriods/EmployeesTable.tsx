@@ -2,7 +2,7 @@ import { router } from "@inertiajs/react"
 import { useModals } from "@mantine/modals"
 import { useTranslation } from "react-i18next"
 
-import {Avatar, Badge, Button, Group, Link, Presence, Stack, DataTable, type TableColumn, Text} from "@/components"
+import { Avatar, Badge, Button, Group, Link, Presence, Stack, DataTable, type TableColumn, Text } from "@/components"
 import { finalApproveWithWarning } from "@/domains/PayPeriods/finalApproveWithWarning"
 import { payrollApprovalStatus } from "@/domains/PayPeriods/payrollFilters"
 import { formatter, Routes } from "@/lib"
@@ -10,6 +10,7 @@ import { formatter, Routes } from "@/lib"
 interface EmployeeHoursMap {
 	regular_hours?: number
 	ot_hours?: number
+	double_time_hours?: number
 	ihss_hours?: number
 	company_hours?: number
 	pto_hours?: number
@@ -96,6 +97,12 @@ export function EmployeesTable({
 			title: t("views.timesheets.index.employees.ot_hours"),
 			sortable: false,
 			render: (employee) => formatHours(employee_hours[employee.id]?.ot_hours),
+		},
+		{
+			accessor: "double_time_hours",
+			title: t("views.timesheets.employee_review.footer_double_time"),
+			sortable: false,
+			render: (employee) => formatHours(employee_hours[employee.id]?.double_time_hours),
 		},
 		{
 			accessor: "ihss_hours",

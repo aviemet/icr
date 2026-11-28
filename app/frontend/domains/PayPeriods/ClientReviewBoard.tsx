@@ -40,6 +40,7 @@ export interface ClientReviewBoardProps {
 	shifts: Schema.ShiftsReview[]
 	shiftExceptionReasons: Record<string, string[]>
 	shiftOtHours: Record<string, number>
+	shiftDoubleTimeHours?: Record<string, number>
 	ihssHoursUsed?: number
 	ihssAssignmentMode?: string
 	canEditIhss?: boolean
@@ -57,6 +58,7 @@ export function ClientReviewBoard({
 	shifts,
 	shiftExceptionReasons,
 	shiftOtHours,
+	shiftDoubleTimeHours = {},
 	ihssHoursUsed = 0,
 	ihssAssignmentMode = "shift",
 	canEditIhss = false,
@@ -171,6 +173,7 @@ export function ClientReviewBoard({
 					shifts={ reviewShifts }
 					shiftExceptionReasons={ shiftExceptionReasons }
 					shiftOtHours={ reviewShiftOtHours }
+					shiftDoubleTimeHours={ shiftDoubleTimeHours }
 					canFacilitatorApprove={ canFacilitatorApprove }
 					canEditTimes={ !finalized }
 					showIhss={ showIhss }

@@ -15,6 +15,7 @@
 #  inactive_at                   :datetime
 #  ineligibility_reason          :text
 #  number                        :string
+#  overtime_policy               :string           default("standard"), not null
 #  preferred_language            :string
 #  slug                          :string           not null
 #  status                        :integer
@@ -61,12 +62,10 @@ class EmployeeSerializer < ApplicationSerializer
     :desired_compensation_period,
     :desired_job_title_id,
     :hiring_notes,
+    :overtime_policy,
   )
 
-  type :string, optional: true
-  def desired_compensation
-    @object.desired_compensation&.to_s
-  end
+  currency_for :desired_compensation, optional: true
 
   has_one :resume, serializer: Attachments::FileSerializer, optional: true do
     @object.resume if @object.resume.attached?

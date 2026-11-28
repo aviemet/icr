@@ -59,7 +59,26 @@ export function IhssAssignmentBoard({
 		setRows(next)
 	}
 
+	const overAuthorizedClients = (() => {
+		const assignedByClient = new Map<string, { name: string, authorized: number | null | undefined, hours: number }>()
+		for(const row of rows) {
+			const current = assignedByClient.get(row.client_id) ?? {
+				name: row.client_name,
+				authorized: row.authorized_hours,
+				hours: 0,
+			}
+			current.hours += row.hours
+			assignedByClient.set(row.client_id, current)
+		}
+
+		return [...assignedByClient.values()].filter(entry =>
+			typeof entry.authorized === "number" && entry.hours > entry.authorized,
+		)
+	})()
+
 	const handleSave = () => {
+		if(overAuthorizedClients.length > 0) return
+
 		setProcessing(true)
 		router.patch(
 			Routes.ihssPeriod(payPeriodSlug),
@@ -81,13 +100,22 @@ export function IhssAssignmentBoard({
 			<Box className={ classes.board }>
 				<Section variant="panel" className={ classes.chrome }>
 					<Box className={ classes.identity }>
+
 						<Title order={ 2 }>{ t("views.pay_periods.ihss.title") }</Title>
 						{ periodRange && (
 							<span className={ classes.subtitle }>{ periodRange }</span>
 						) }
+
 						<span className={ classes.subtitle }>
 							{ t("views.pay_periods.ihss.help") }
 						</span>
+
+						{ overAuthorizedClients.length > 0 && (
+							<Text size="sm" c="red" mt="xs">
+								{ t("views.pay_periods.ihss.over_authorized") }
+							</Text>
+						) }
+
 					</Box>
 				</Section>
 
@@ -110,15 +138,19 @@ export function IhssAssignmentBoard({
 							<Table.RowIterator>
 								{ (row: IhssAssignmentRow, index) => (
 									<Table.Row key={ `${row.employee_id}:${row.client_id}` }>
+
 										<Table.Cell>
 											<Text size="sm">{ row.employee_name }</Text>
 										</Table.Cell>
+
 										<Table.Cell>
 											<Text size="sm">{ row.client_name }</Text>
 										</Table.Cell>
+
 										<Table.Cell>
 											<Text size="sm"><Presence>{ row.authorized_hours }</Presence></Text>
 										</Table.Cell>
+
 										<Table.Cell>
 											{ finalized
 												? (
@@ -135,18 +167,25 @@ export function IhssAssignmentBoard({
 													/>
 												) }
 										</Table.Cell>
+
 									</Table.Row>
 								) }
 							</Table.RowIterator>
 						</Table.Body>
 					</Table>
+
 					{ !finalized && rows.length > 0 && (
 						<Group mt="md">
-							<Button onClick={ handleSave } loading={ processing }>
+							<Button
+								onClick={ handleSave }
+								loading={ processing }
+								disabled={ overAuthorizedClients.length > 0 }
+							>
 								{ t("views.pay_periods.ihss.save") }
 							</Button>
 						</Group>
 					) }
+
 				</Section>
 
 				<Group>
@@ -159,6 +198,7 @@ export function IhssAssignmentBoard({
 						{ t("views.pay_periods.ihss.back") }
 					</Link>
 				</Group>
+
 			</Box>
 		</Box>
 	)

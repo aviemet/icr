@@ -22,4 +22,3 @@ export const useGetHouseholdSchedules: ReactQueryFunction<Schema.CalendarEventsH
 		...options,
 	})
 }
-

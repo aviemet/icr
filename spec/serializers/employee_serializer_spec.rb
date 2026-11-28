@@ -17,6 +17,7 @@ require "rails_helper"
 #  inactive_at                   :datetime
 #  ineligibility_reason          :text
 #  number                        :string
+#  overtime_policy               :string           default("standard"), not null
 #  preferred_language            :string
 #  slug                          :string           not null
 #  status                        :integer
@@ -65,5 +66,17 @@ RSpec.describe EmployeeSerializer do
 
     expect(payload[:resume]).to be_nil
     expect(payload[:cover_letter]).to be_nil
+  end
+
+  it "serializes desired_compensation as Money" do
+    employee = create(:employee, desired_compensation: Money.new(2200, "USD"))
+
+    payload = described_class.render(employee)
+
+    expect(payload[:desired_compensation]).to eq(
+      amount: 22.0,
+      cents: 2200,
+      currency_iso: "USD",
+    )
   end
 end

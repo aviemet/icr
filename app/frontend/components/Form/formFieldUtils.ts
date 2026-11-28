@@ -1,6 +1,8 @@
 import { toPath } from "es-toolkit/compat"
 import { useCallback, useEffect, useState } from "react"
 
+import { isMoney } from "@/types"
+
 import { useFormFieldContext } from "./FormFieldContext"
 
 export function nameToPath(name: string) {
@@ -135,8 +137,10 @@ function setInputElementValue(field: HTMLInputElement, value: unknown) {
 		field.checked = Boolean(value)
 	} else if(field.type === "radio") {
 		field.checked = field.value === String(value)
+	} else if(isMoney(value)) {
+		field.value = String(value.amount)
 	} else {
-		field.value = value === null ? "" : String(value)
+		field.value = value === null || value === undefined ? "" : String(value)
 	}
 	dispatchInputAndChange(field)
 }
@@ -156,4 +160,3 @@ function setTextAreaElementValue(field: HTMLTextAreaElement, value: unknown) {
 	field.value = value === null ? "" : String(value)
 	dispatchInputAndChange(field)
 }
-

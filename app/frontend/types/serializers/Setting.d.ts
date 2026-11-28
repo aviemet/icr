@@ -14,8 +14,12 @@ declare global {
       ihss_assignment_mode: string
       ihss_co_employer: boolean
       notifications_payroll_approval_reminders: boolean
+      overtime_daily_double_time_hours: integer
       overtime_daily_hours: integer
+      overtime_personal_attendant_daily_hours: integer
+      overtime_personal_attendant_weekly_hours: integer
       overtime_weekly_hours: integer
+      overtime_workweek_start: string
       payroll_due_date_day_of_month: string
       payroll_due_date_day_of_week: string
       payroll_due_date_days: integer

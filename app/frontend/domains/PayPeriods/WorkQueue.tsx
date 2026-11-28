@@ -15,6 +15,7 @@ import { PayrollTableFooter } from "./PayrollTableFooter"
 interface EmployeeHoursMap {
 	regular_hours?: number
 	ot_hours?: number
+	double_time_hours?: number
 }
 
 interface EmployeeExceptionsMap {
@@ -87,7 +88,7 @@ export function WorkQueue({
 				const hours = employeeHours[employee.id]
 				return {
 					regular: totals.regular + (hours?.regular_hours ?? 0),
-					ot: totals.ot + (hours?.ot_hours ?? 0),
+					ot: totals.ot + (hours?.ot_hours ?? 0) + (hours?.double_time_hours ?? 0),
 				}
 			},
 			{ regular: 0, ot: 0 },
@@ -104,6 +105,7 @@ export function WorkQueue({
 				>
 					{ t("views.timesheets.index.tabs.all") }
 				</Button>
+
 				<Button
 					variant={ activeTab === "needs_approval" ? "light" : "subtle" }
 					size="xs"
@@ -111,6 +113,7 @@ export function WorkQueue({
 				>
 					{ t("views.timesheets.index.tabs.needs_approval") } ({ pendingCount })
 				</Button>
+
 				<Button
 					variant={ activeTab === "flagged" ? "light" : "subtle" }
 					size="xs"
@@ -118,6 +121,7 @@ export function WorkQueue({
 				>
 					{ t("views.timesheets.index.tabs.flagged") } ({ flaggedCount })
 				</Button>
+
 				<Button
 					variant={ activeTab === "approved" ? "light" : "subtle" }
 					size="xs"

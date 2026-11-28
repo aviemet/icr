@@ -34,8 +34,5 @@ class Employee::PayRateSerializer < ApplicationSerializer
     :notes,
   )
 
-  type :string, optional: false
-  def rate
-    @object.rate.to_s
-  end
+  currency_for :rate
 end

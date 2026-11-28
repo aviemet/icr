@@ -15,6 +15,7 @@
 #  inactive_at                   :datetime
 #  ineligibility_reason          :text
 #  number                        :string
+#  overtime_policy               :string           default("standard"), not null
 #  preferred_language            :string
 #  slug                          :string           not null
 #  status                        :integer
@@ -78,6 +79,13 @@ class Employee < ApplicationRecord
     terminated: 4,
     withdrawn: 5
   }
+
+  OVERTIME_POLICIES = {
+    standard: "standard",
+    personal_attendant: "personal_attendant",
+  }.freeze
+
+  enum :overtime_policy, OVERTIME_POLICIES, default: :standard, validate: true
 
   WORKFORCE_STATUSES = %w[employed terminated].freeze
   PIPELINE_STATUSES = %w[applicant offered declined withdrawn].freeze

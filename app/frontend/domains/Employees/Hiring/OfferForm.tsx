@@ -19,7 +19,7 @@ export function OfferForm({ employee }: OfferFormProps) {
 				offer: {
 					job_title_id: employee.desired_job_title_id ?? "",
 					rate: "",
-					period: employee.desired_compensation_period || "hourly",
+					period: employee.desired_compensation_period ?? "hourly",
 					proposed_start_on: "",
 					employee_number: "",
 					status: "draft",

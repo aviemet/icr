@@ -20,6 +20,7 @@ class CreateEmployees < ActiveRecord::Migration[8.0]
       t.references :desired_job_title, type: :uuid, foreign_key: { to_table: :job_titles }
 
       t.string :slug, null: false, index: { unique: true }
+      t.string :overtime_policy, null: false, default: "standard"
 
       t.timestamps
     end

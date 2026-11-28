@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next"
 
 import { DangerousHtml, Link } from "@/components"
+import { CurrencyFormatter } from "@/components/Formatters"
 import { DefinitionItem, DefinitionList, FormBand } from "@/features"
 
 export interface HiringDetailsProps {
@@ -10,7 +11,12 @@ export interface HiringDetailsProps {
 export function HiringDetails({ employee }: HiringDetailsProps) {
 	const { t } = useTranslation()
 	const compensation = employee.desired_compensation
-		? `${employee.desired_compensation} (${employee.desired_compensation_period})`
+		? (
+			<>
+				<CurrencyFormatter>{ employee.desired_compensation }</CurrencyFormatter>
+				{ ` (${employee.desired_compensation_period})` }
+			</>
+		)
 		: null
 	const notes = employee.hiring_notes
 		? <DangerousHtml>{ employee.hiring_notes }</DangerousHtml>

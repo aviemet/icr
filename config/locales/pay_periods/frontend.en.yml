@@ -63,6 +63,7 @@ en:
         save: Save IHSS assignments
         hours: IHSS hours
         authorized: Authorized
+        over_authorized: Assigned IHSS hours exceed authorized hours for one or more clients.
         employee: Employee
         client: Client
         empty: No employee and client pairs with shifts in this period.

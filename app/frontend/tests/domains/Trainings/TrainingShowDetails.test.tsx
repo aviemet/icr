@@ -60,4 +60,3 @@ describe("TrainingShowDetails", () => {
 		expect(screen.getByText("Welcome")).toBeInTheDocument()
 	})
 })
-

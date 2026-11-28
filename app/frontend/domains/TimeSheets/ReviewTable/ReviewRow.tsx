@@ -5,7 +5,7 @@ import dayjs from "dayjs"
 import { useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { Group, Table, Text, Tooltip } from "@/components"
+import { Group, Presence, Table, Text, Tooltip } from "@/components"
 import { CalendarIcon, TrashIcon } from "@/components/Icons"
 import { Checkbox } from "@/components/Inputs"
 import { ServiceTypesDropdown } from "@/components/Inputs/Dropdowns"
@@ -177,17 +177,22 @@ export function ReviewRow({
 
 	return (
 		<Table.Row key={ shift.id }>
+
 			<Table.Cell>
 				<Group gap={ 6 } wrap="nowrap">
 					<Text size="sm">{ dayjs(String(shift.starts_at)).format("MMM D") }</Text>
 					<Text size="xs" c="dimmed">{ weekdayLabel }</Text>
 				</Group>
 			</Table.Cell>
+
 			{ showClientColumn && (
 				<Table.Cell>
-					<Text size="sm">{ shift.client_name ?? t("views.timesheets.index.no_value") }</Text>
+					<Text size="sm">
+						<Presence>{ shift.client_name }</Presence>
+					</Text>
 				</Table.Cell>
 			) }
+
 			<Table.Cell>
 				<Group gap={ 8 } wrap="nowrap" align="center">
 					<ReviewRowTimes
@@ -205,9 +210,11 @@ export function ReviewRow({
 					) }
 				</Group>
 			</Table.Cell>
+
 			<Table.Cell>
 				<Text size="sm">{ formatter.number.decimal(hours, 2) }</Text>
 			</Table.Cell>
+
 			<Table.Cell>
 				{ canEditShiftType
 					? (
@@ -233,10 +240,11 @@ export function ReviewRow({
 					)
 					: (
 						<Text size="sm">
-							{ shift.service_type?.name ?? t("views.timesheets.index.no_value") }
+							<Presence>{ shift.service_type?.name }</Presence>
 						</Text>
 					) }
 			</Table.Cell>
+
 			{ showIhss && (
 				<Table.Cell>
 					<Checkbox
@@ -249,9 +257,11 @@ export function ReviewRow({
 					/>
 				</Table.Cell>
 			) }
+
 			<Table.Cell>
 				<Text size="sm">{ formatter.number.decimal(shiftOtHours[shift.id] ?? 0, 2) }</Text>
 			</Table.Cell>
+
 			<Table.Cell>
 				<Text size="sm" c="dimmed">
 					{ (shiftExceptionReasons[shift.id]?.length ?? 0) > 0
@@ -259,11 +269,13 @@ export function ReviewRow({
 						: t("views.timesheets.index.no_value") }
 				</Text>
 			</Table.Cell>
+
 			{ canFacilitatorApprove && (
 				<Table.Cell>
 					<ReviewStatusCell shift={ shift } payPeriodId={ payPeriodId } />
 				</Table.Cell>
 			) }
+
 			<Table.Cell className="actionsCell">
 				<Group gap={ 4 } wrap="nowrap">
 					{ clientScheduleHref && (
@@ -317,6 +329,7 @@ export function ReviewRow({
 					) }
 				</Group>
 			</Table.Cell>
+
 		</Table.Row>
 	)
 }

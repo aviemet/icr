@@ -8,28 +8,32 @@ module Payroll
 
     def initialize(pay_period:, client_ids:)
       @pay_period = pay_period
-      @client_ids = Array(client_ids)
+      @client_ids = Array(client_ids).map(&:to_s)
     end
 
     def call
-      return {} if @client_ids.empty?
+      empty = @client_ids.index_with { 0.0 }
+      return empty if @client_ids.empty?
 
       shifts = shifts_for_clients
-      return @client_ids.index_with { 0.0 }.transform_keys(&:to_s) if shifts.empty?
+      return empty if shifts.empty?
 
-      collected = @pay_period.shift_occurrences(shifts).filter_map { |row| interval_for(row) }
-      intervals = IhssHourClassifier.call(pay_period: @pay_period, intervals: collected)
+      employee_ids = shifts.map(&:employee_id).compact.uniq
+      collected = WorkIntervalCollectors::ScheduledShifts.new.intervals_for(
+        pay_period: @pay_period,
+        employee_ids: employee_ids,
+      )
+      relevant = collected.select { |interval| interval.client_ids.intersect?(@client_ids) }
+      ledger = IhssHourClassifier.call_with_ledger(pay_period: @pay_period, intervals: relevant)
 
-      totals = @client_ids.index_with { 0.0 }
-      intervals.select(&:ihss?).each do |interval|
-        matching = interval.client_ids & @client_ids
-        next if matching.empty?
+      totals = empty.dup
+      ledger.client_hours.each do |client_id, hours|
+        next unless totals.key?(client_id)
 
-        share = interval.duration_hours / matching.size
-        matching.each { |client_id| totals[client_id] += share }
+        totals[client_id] += hours
       end
 
-      totals.transform_keys(&:to_s).transform_values { |hours| hours.round(2) }
+      totals.transform_values { |hours| hours.round(2) }
     end
 
     private
@@ -50,21 +54,6 @@ module Payroll
       Shift.where(id: shift_ids).includes(
         :service_type,
         calendar_event: [:clients, :recurring_patterns, :event_exceptions],
-      )
-    end
-
-    def interval_for(row)
-      client_ids = row.calendar_event.clients.map(&:id)
-      return unless client_ids.intersect?(@client_ids)
-
-      WorkInterval.new(
-        id: row.id,
-        employee_id: row.employee_id,
-        starts_at: row.starts_at,
-        ends_at: row.ends_at,
-        category: row.service_type,
-        ihss: row.ihss,
-        client_ids: client_ids,
       )
     end
   end

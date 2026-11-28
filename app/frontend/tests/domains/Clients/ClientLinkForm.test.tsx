@@ -96,4 +96,3 @@ describe("ClientLinkForm", () => {
 		expect(closeModal).toHaveBeenCalledTimes(1)
 	})
 })
-

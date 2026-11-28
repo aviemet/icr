@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_26_185000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_26_090000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -546,6 +546,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_26_185000) do
     t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "overtime_policy", default: "standard", null: false
     t.index ["desired_job_title_id"], name: "index_employees_on_desired_job_title_id"
     t.index ["person_id"], name: "index_employees_on_person_id"
     t.index ["slug"], name: "index_employees_on_slug", unique: true

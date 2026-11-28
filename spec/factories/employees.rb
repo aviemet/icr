@@ -15,6 +15,7 @@
 #  inactive_at                   :datetime
 #  ineligibility_reason          :text
 #  number                        :string
+#  overtime_policy               :string           default("standard"), not null
 #  preferred_language            :string
 #  slug                          :string           not null
 #  status                        :integer

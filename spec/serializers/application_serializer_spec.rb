@@ -17,22 +17,26 @@ end
 
 RSpec.describe ApplicationSerializer do
   describe ".currency_for" do
-    it "generates a serializer that runs without error for an object with a money field" do
+    it "serializes a money field as amount, cents, and currency_iso" do
       object = instance_double(
         ApplicationSerializerSpec::PriceHolder,
         price: Money.new(1000, "USD"),
         new_record?: true,
       )
-      expect { ApplicationSerializerSpec::CurrencyForSerializer.render(object) }.not_to raise_error
+
+      expect(ApplicationSerializerSpec::CurrencyForSerializer.render(object)).to eq(
+        price: { amount: 10.0, cents: 1000, currency_iso: "USD" },
+      )
     end
 
-    it "generates a serializer that runs without error when the money field is nil" do
+    it "serializes a nil money field as nil" do
       object = instance_double(
         ApplicationSerializerSpec::PriceHolder,
         price: nil,
         new_record?: true,
       )
-      expect { ApplicationSerializerSpec::CurrencyForSerializer.render(object) }.not_to raise_error
+
+      expect(ApplicationSerializerSpec::CurrencyForSerializer.render(object)).to eq(price: nil)
     end
   end
 

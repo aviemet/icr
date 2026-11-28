@@ -33,6 +33,7 @@ import { ReviewTable } from "./ReviewTable"
 interface EmployeeHoursMap {
 	regular_hours?: number
 	ot_hours?: number
+	double_time_hours?: number
 	ihss_hours?: number
 	company_hours?: number
 	pto_hours?: number
@@ -82,8 +83,7 @@ export function EmployeeReviewBoard({
 	const { t } = useTranslation()
 	const modals = useModals()
 	const [periodStart, periodEnd] = periodDates
-	const periodRange =
-		periodStart && periodEnd ? formatter.datetime.range(periodStart, periodEnd) : ""
+	const periodRange = periodStart && periodEnd ? formatter.datetime.range(periodStart, periodEnd) : ""
 	const [reviewShifts, setReviewShifts] = useState(shifts)
 	const [reviewShiftOtHours, setReviewShiftOtHours] = useState(shiftOtHours)
 	const [reviewEmployeeHours, setReviewEmployeeHours] = useState(employeeHours)
@@ -106,6 +106,7 @@ export function EmployeeReviewBoard({
 
 	const regularHours = reviewEmployeeHours.regular_hours ?? 0
 	const otHours = reviewEmployeeHours.ot_hours ?? 0
+	const doubleTimeHours = reviewEmployeeHours.double_time_hours ?? 0
 	const ihssHours = reviewEmployeeHours.ihss_hours ?? 0
 	const companyHours = reviewEmployeeHours.company_hours ?? 0
 	const ptoHours = reviewEmployeeHours.pto_hours ?? 0
@@ -225,6 +226,7 @@ export function EmployeeReviewBoard({
 							{ formatter.number.decimal(regularHours, 2) } hrs
 						</MetricValue>
 					</MetricTile>
+
 					<MetricTile
 						title={ t("views.timesheets.employee_review.ot_hours") }
 						tone={ otHours > 0 ? "alert" : "default" }
@@ -234,6 +236,17 @@ export function EmployeeReviewBoard({
 							{ formatter.number.decimal(otHours, 2) } hrs
 						</MetricValue>
 					</MetricTile>
+
+					<MetricTile
+						title={ t("views.timesheets.employee_review.footer_double_time") }
+						tone={ doubleTimeHours > 0 ? "alert" : "default" }
+						icon={ <ClockIcon size={ 16 } /> }
+					>
+						<MetricValue>
+							{ formatter.number.decimal(doubleTimeHours, 2) } hrs
+						</MetricValue>
+					</MetricTile>
+
 					<MetricTile
 						title={ t("views.timesheets.employee_review.ihss_hours") }
 						icon={ <ClockIcon size={ 16 } /> }
@@ -242,6 +255,7 @@ export function EmployeeReviewBoard({
 							{ formatter.number.decimal(ihssHours, 2) } hrs
 						</MetricValue>
 					</MetricTile>
+
 					<MetricTile
 						title={ t("views.timesheets.employee_review.company_hours") }
 						icon={ <ClockIcon size={ 16 } /> }
@@ -250,6 +264,7 @@ export function EmployeeReviewBoard({
 							{ formatter.number.decimal(companyHours, 2) } hrs
 						</MetricValue>
 					</MetricTile>
+
 					<MetricTile
 						title={ t("views.timesheets.employee_review.pto_hours") }
 						icon={ <ClockIcon size={ 16 } /> }
@@ -258,6 +273,7 @@ export function EmployeeReviewBoard({
 							{ formatter.number.decimal(ptoHours, 2) } hrs
 						</MetricValue>
 					</MetricTile>
+
 					<MetricTile
 						title={ t("views.timesheets.employee_review.sick_hours") }
 						icon={ <ClockIcon size={ 16 } /> }
@@ -266,6 +282,7 @@ export function EmployeeReviewBoard({
 							{ formatter.number.decimal(sickHours, 2) } hrs
 						</MetricValue>
 					</MetricTile>
+
 					<MetricTile
 						title={ t("views.timesheets.employee_review.holiday_hours") }
 						icon={ <ClockIcon size={ 16 } /> }
@@ -274,6 +291,7 @@ export function EmployeeReviewBoard({
 							{ formatter.number.decimal(holidayHours, 2) } hrs
 						</MetricValue>
 					</MetricTile>
+
 					<MetricTile
 						title={ t("views.timesheets.employee_review.total") }
 						icon={ <ClockIcon size={ 16 } /> }

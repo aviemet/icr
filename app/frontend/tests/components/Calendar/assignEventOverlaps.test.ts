@@ -122,4 +122,3 @@ describe("assignEventOverlaps", () => {
 			.toEqual(new Set([0, 1, 2]))
 	})
 })
-

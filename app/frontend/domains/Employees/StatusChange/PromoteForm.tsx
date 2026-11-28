@@ -38,7 +38,7 @@ export function PromoteForm({ employee }: PromoteFormProps) {
 	const activePayRate = currentPayRate(employee.pay_rates)
 	const currentRateLabel = activePayRate
 		? t("views.employees.status.promotion.current_rate", {
-			rate: formatter.currency(Number(activePayRate.rate)),
+			rate: formatter.currency(activePayRate.rate),
 			period: activePayRate.period,
 		})
 		: undefined

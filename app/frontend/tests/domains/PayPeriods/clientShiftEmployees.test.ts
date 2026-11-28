@@ -132,6 +132,7 @@ describe("hoursForShifts", () => {
 		expect(hoursForShifts(shifts, { "1": 2 })).toEqual({
 			regularHours: 6,
 			otHours: 2,
+			doubleTimeHours: 0,
 			ihssHours: 0,
 		})
 	})
@@ -159,6 +160,7 @@ describe("hoursForShifts", () => {
 		expect(hoursForShifts(shifts, {})).toEqual({
 			regularHours: 14,
 			otHours: 0,
+			doubleTimeHours: 0,
 			ihssHours: 6,
 		})
 	})

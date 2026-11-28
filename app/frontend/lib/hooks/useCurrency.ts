@@ -1,4 +1,4 @@
-import { type Money } from "@/types"
+import { isMoney, type Money } from "@/types"
 
 export type UseCurrencyOptions = Omit<Intl.NumberFormatOptions, "style" | "currency">
 
@@ -17,17 +17,10 @@ export function useCurrency({
 	locale = "en-US",
 	options = {},
 }: UseCurrencyProps): [amount: number, formatter: Intl.NumberFormat] {
-	let currencyIso = currency
-	if(typeof amount !== "number" && amount?.hasOwnProperty("currency_iso")) {
-		currencyIso = amount.currency_iso
-	}
-
-	let value = 0
-	if(typeof amount === "number") {
-		value = amount
-	} else if(amount?.hasOwnProperty("amount")) {
-		value = amount.amount
-	}
+	const currencyIso = isMoney(amount) ? amount.currency_iso : currency
+	const value = typeof amount === "number"
+		? amount
+		: (isMoney(amount) ? amount.amount : 0)
 
 	const baseOptions: OmittedOptions = {
 		style: "currency",

@@ -1,0 +1,135 @@
+# Project Goals
+
+Phased product backlog for ICR. Checkboxes are the source of truth for what is done vs open.
+
+### Phase 1: Core Authentication and Authorization
+- [x] User authentication system
+  - [ ] Passkeys
+  - [ ] Global session invalidation
+  - [ ] Session logs with IPs and timestamps
+- [x] Role-based authorization using Pundit and Rolify
+  - [x] Define core roles (admin, manager, facilitator, employee)
+  - [x] Job title permission matrix (Rolify resource roles)
+  - [x] Implement authorization policies
+  - [x] UI visibility controls based on user permissions
+- [ ] Basic user profile management
+  - [x] User settings page
+
+### Phase 2: Document Management System
+- [ ] Set up secure file storage system
+- [ ] Document upload and management
+  - [ ] Define document categories and types
+  - [ ] Version control for documents
+  - [ ] Document access controls
+- [ ] Document association with records (users, clients, etc.)
+
+### Phase 3: Employee Management
+- [x] Employee onboarding workflow
+  - [x] Personal information management
+  - [x] Required documentation tracking
+  - [x] Employment status tracking
+- [x] Employee profile management
+  - [x] Qualification tracking
+  - [x] Document storage for IDs and certifications
+  - [x] Medical information storage (clearances: TB, physical, other)
+- [x] Requirements System
+  - [x] User-defined requirements for employees
+  - [x] Requirements can be scoped to job titles, clients, or company-wide
+  - [x] Trainings and credential types can satisfy requirements
+  - [x] Employment and client-schedule enforcement gates
+  - [x] Track requirement fulfillment status per employee
+- [ ] Workflow for assigning an Employee to a client
+- [ ] Mark employees as backup options for a client
+- [x] Allow the use of requirements and/or trainings to gate allowing employee to be scheduled with client
+
+### Phase 4: Client Management
+- [x] Client onboarding workflow
+  - [x] Personal and medical information
+  - [x] Care requirements documentation
+  - [x] Emergency contact management
+- [x] Client profile management
+  - [x] Service history tracking
+  - [x] Document management for client-specific files
+- [ ] Natural support people for a client (non-employee family/friends; unpaid presence that counts as the client not being alone)
+- [ ] MAR / controlled-substance logs (Future Feature)
+
+### Phase 5: Calendar and Scheduling
+- [x] Core calendar functionality
+  - [x] Multiple view strategies (day, week, month)
+  - [x] Proper handling of overlapping events
+- [x] Event management
+  - [x] Recurring event support (master + pattern expand-on-read; this-occurrence vs series edit)
+  - [x] Schedule conflict detection
+  - [x] Schedule assignment for employees and clients
+- [ ] Schedule any person associated with the client: directors, that client's facilitator, approved attendants, natural support, and backup employees
+- [x] Calendar access controls based on roles
+
+### Phase 6: Timesheet Management
+- [ ] Timesheet generation system
+  - [x] Automatic generation based on schedules
+  - [x] Manual entry support
+- [x] Timesheet review workflow
+  - [x] Facilitator review and approval process
+  - [x] Manager final approval
+- [x] Pay period management
+  - [x] Configure pay period settings
+  - [x] Automated reminders for approvals
+  - [x] Deadline tracking
+- [x] Overtime and overtime exception customization and options
+
+### Phase 7: IHSS Hours Management
+- [x] IHSS hours tracking system
+  - [x] Manual hour assignment (by shift or by period, per Settings)
+  - [ ] Automated assignment rules
+- [x] Hours calculation engine
+  - [x] Standard hours tracking
+  - [x] IHSS hours tracking
+  - [x] Overtime calculation for both types (co-employer setting)
+- [x] Co-employment settings and rules
+
+### Phase 8: Customization
+- [x] Color choice for site accent color
+  - [x] Dyslexia font option
+
+### Phase 9: Service Types and Authorizations
+- [x] Configurable service types (billable/payable, multi-client, notes/mileage flags, calendar colors)
+- [ ] Client authorization hours ledger (authorized vs delivered)
+- [ ] Authorization and utilization reporting
+
+### Phase 10: Care Planning and Client Clinical Depth
+- [ ] Emergency Assistance Plan (EAP) structured fields and printable face/EAP sheets
+- [ ] Health passport / ADL and matching tags (expand beyond free-text `Client::LifeDetail`)
+- [ ] ISP / person-centered plans (templates, objectives, quarterly review cadence)
+- [ ] Service planning: Client Connect logs, QA, assessments, client training guides
+- [ ] Appointments worksheet (staff + clinician sections; link to doctors and incidents)
+- [ ] Deepen incident reporting: FIR (incl. med-error) and SIR (RC-style categories, witnesses, treatment, finalize) on top of existing `IncidentReport`
+
+### Phase 11: Medication Administration (MAR)
+- [ ] Administration logs, missed-med tracking, notifications (expands Phase 4 MAR item)
+- [ ] Med administration and notification reports
+
+### Phase 12: Forms, Notes, and Reports Engine
+- [ ] Daily service notes (same Compliance::Form engine; separate template; ship after hazard assessment)
+- [x] Compliance form engine (FormTemplate / Section / Item / Submission / Answer / CorrectiveAction; household-or-client subject; paper_trail)
+- [x] Hazard Assessment and Correction Record (seeded home-safety checklist; submission capture; Client Show Compliance tab when flagged on)
+- [ ] Compliance form builder UI (Settings CRUD for sections/items; system templates stay seed-owned; SurveyJS Creator is a later licensed option, not the default path)
+- [ ] Compliance due/overdue work queue as a product surface (route exists under `/compliance/form_submissions`; flag-gated; not main-nav)
+- [ ] Enable `compliance_forms` Flipper flag by default once builder + Client-tab UX are ready
+- [x] Definition-driven report engine (ReportDefinition + ReportRequest queue, registry whitelist, list runner, caxlsx/CSV, 30-day purge)
+- [x] Stock report: Employee Requirement Expiration (employee_credential resource)
+- [ ] Additional stock reports (contacts, timesheets, IHSS/OT/auth utilization, payroll processing variants)
+- [ ] ADP-style and condensed payroll processing report variants as needed
+- [ ] B-lite builder UI (definitions already support it; no UI yet)
+
+### Phase 13: HR Extras and Workplace Comms
+- [ ] Employee benefits enrollment records
+- [ ] Expenses / mileage / holiday and sick-time preferences
+- [ ] Employee timesheet attestation and sign-off
+- [ ] Internal messaging, announcements, time-off requests
+- [ ] LMS-style training lessons/quizzes (beyond catalog + completion dates)
+
+### Phase 14: Clock and EVV (back burner)
+- [ ] Clock-in/out foundation attached to existing `Calendar::Event` / `Shift` identity
+- [ ] Geofence / location and revision-reason settings (GPS and device sensor integrations)
+- [ ] Aggregator credentials, service-code mapping, unverified/pending/history queues
+- [ ] Daily clock and EVV dashboards

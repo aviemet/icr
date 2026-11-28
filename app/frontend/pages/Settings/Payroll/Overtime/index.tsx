@@ -1,12 +1,12 @@
 import { useTranslation } from "react-i18next"
 
-import { Box, Grid } from "@/components"
+import { Box } from "@/components"
 import { Form } from "@/components/Form"
 import { Overtime } from "@/domains/Settings/Payroll/Form/Overtime"
 import { OvertimeExemptions } from "@/domains/Settings/Payroll/Form/OvertimeExemptions"
 import { SettingsPageHeader } from "@/domains/Settings/SettingsPageHeader"
 import { SettingsSaveButton } from "@/domains/Settings/SettingsSaveButton"
-import { FormBand, FormBandStack } from "@/features"
+import { FormBandStack } from "@/features"
 import { Routes, withLayout } from "@/lib"
 
 export interface PayrollOvertimeSettingsProps {
@@ -36,14 +36,7 @@ const PayrollOvertimeSettings = ({
 						actions={ <SettingsSaveButton /> }
 					/>
 
-					<FormBand
-						title={ t("views.settings.payroll.overtime.thresholds_band_title") }
-						description={ t("views.settings.payroll.overtime.thresholds_band_description") }
-					>
-						<Grid>
-							<Overtime />
-						</Grid>
-					</FormBand>
+					<Overtime />
 				</Form>
 
 				<OvertimeExemptions

@@ -70,6 +70,7 @@ function buildEmployee(overrides: Partial<Schema.EmployeesShow> = {}): Schema.Em
 		support_contacts: [],
 		updated_at: new Date("2024-01-01"),
 		...overrides,
+		overtime_policy: overrides.overtime_policy ?? "standard",
 	}
 }
 

@@ -40,6 +40,7 @@ function buildEmployee(overrides: Partial<Schema.EmployeesFormData> = {}): Schem
 		job_title: {} as Schema.EmployeeJobTitle,
 		color_mappings: {},
 		...overrides,
+		overtime_policy: overrides.overtime_policy ?? "standard",
 	}
 }
 

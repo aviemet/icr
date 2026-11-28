@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Payroll
   WorkInterval = Struct.new(
     :id,
@@ -8,6 +10,7 @@ module Payroll
     :ihss,
     :client_ids,
     :leave_kind,
+    :consuming_client_id,
     keyword_init: true,
   ) do
     def start_time
@@ -33,7 +36,7 @@ module Payroll
     end
 
     def client_ids
-      Array(self[:client_ids])
+      Array(self[:client_ids]).map(&:to_s).uniq.sort
     end
   end
 end

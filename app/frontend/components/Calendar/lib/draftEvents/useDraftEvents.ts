@@ -64,4 +64,3 @@ export function useDraftEvents<TDraft extends Identifiable>(): DraftEventsApi<TD
 		clearDraftEvents,
 	}), [draftEvents, upsertDraftEvent, patchDraftEvent, removeDraftEvent, clearDraftEvents])
 }
-

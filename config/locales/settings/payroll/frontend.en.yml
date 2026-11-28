@@ -42,12 +42,22 @@ en:
         overtime:
           title: Overtime
           description: Set overtime thresholds and rules for shifts that should be excluded.
-          thresholds_band_title: Thresholds
-          thresholds_band_description: Hours above these counts in a week or day are paid as overtime.
+          standard_band_title: Standard (Wage Order 15)
+          standard_band_description: Daily, weekly, double-time, and seventh-day thresholds for employees on the standard overtime policy under California Wage Order 15.
+          personal_attendant_band_title: Personal attendant (Wage Order 15 / LAB 1454)
+          personal_attendant_band_description: Daily and weekly thresholds for employees on the personal attendant overtime policy under California Wage Order 15 and LAB 1454. Double-time and seventh-day premiums do not apply.
           weekly_label: Weekly threshold (hours)
-          weekly_description: Hours over this in a week are overtime
+          weekly_description: Hours over this in a week are overtime under the standard Wage Order 15 policy
           daily_label: Daily threshold (hours)
-          daily_description: Hours over this in a day are overtime
+          daily_description: Hours over this in a day are overtime under the standard Wage Order 15 policy
+          double_time_label: Daily double-time threshold (hours)
+          double_time_description: Hours over this in a day are double-time under the standard Wage Order 15 policy
+          workweek_start_label: Overtime workweek starts on
+          workweek_start_description: Weekly overtime and seventh-day premiums use this workweek, independent of pay period start
+          personal_attendant_daily_label: Daily threshold (hours)
+          personal_attendant_daily_description: Hours over this in a day are overtime under the personal attendant Wage Order 15 / LAB 1454 policy
+          personal_attendant_weekly_label: Weekly threshold (hours)
+          personal_attendant_weekly_description: Hours over this in a week are overtime under the personal attendant Wage Order 15 / LAB 1454 policy
         ihss:
           title: IHSS
           description: Co-employment and how IHSS hours are assigned for overtime and tracking.

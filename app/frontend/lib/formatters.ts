@@ -1,13 +1,21 @@
 import dayjs from "dayjs"
 
+import { isMoney, type Money } from "@/types"
+
 import { ensureDate } from "./dates"
 
-export const currency = (amount: number, currency = "USD", locale = "en-US") => {
+export const currency = (
+	amount: number | Money | null | undefined,
+	currencyCode = "USD",
+	locale = "en-US",
+) => {
+	const value = isMoney(amount) ? amount.amount : (amount ?? 0)
+	const resolvedCurrency = isMoney(amount) ? amount.currency_iso : currencyCode
 	const formatter = new Intl.NumberFormat(locale, {
 		style: "currency",
-		currency,
+		currency: resolvedCurrency,
 	})
-	return formatter.format(amount)
+	return formatter.format(value)
 }
 
 export type CurrencyInputFormat = {

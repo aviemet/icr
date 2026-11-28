@@ -57,4 +57,3 @@ export function Event<TEventResources extends EventResources>({
 		</CalendarEvent>
 	)
 }
-

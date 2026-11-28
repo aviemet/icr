@@ -24,6 +24,7 @@ interface ClientShiftsTableProps {
 	shifts: Schema.ShiftsReview[]
 	shiftExceptionReasons: Record<string, string[]>
 	shiftOtHours: Record<string, number>
+	shiftDoubleTimeHours?: Record<string, number>
 	canFacilitatorApprove: boolean
 	canEditTimes: boolean
 	showIhss?: boolean
@@ -42,6 +43,7 @@ export function ClientShiftsTable({
 	shifts,
 	shiftExceptionReasons,
 	shiftOtHours,
+	shiftDoubleTimeHours = {},
 	canFacilitatorApprove,
 	canEditTimes,
 	showIhss = false,
@@ -64,9 +66,9 @@ export function ClientShiftsTable({
 				: new Date(String(shift.starts_at)).toISOString(),
 		}))
 	const pendingCount = pendingApprovals.length
-	const { regularHours, otHours, ihssHours } = useMemo(
-		() => hoursForShifts(selectedShifts, shiftOtHours),
-		[selectedShifts, shiftOtHours],
+	const { regularHours, otHours, doubleTimeHours, ihssHours } = useMemo(
+		() => hoursForShifts(selectedShifts, shiftOtHours, shiftDoubleTimeHours),
+		[selectedShifts, shiftOtHours, shiftDoubleTimeHours],
 	)
 	const reloadHref = Routes.clientPeriod(payPeriodSlug, clientSlug)
 	const totalRows = [
@@ -79,6 +81,11 @@ export function ClientShiftsTable({
 			key: "ot",
 			label: t("views.timesheets.employee_review.footer_overtime"),
 			hours: otHours,
+		},
+		{
+			key: "double_time",
+			label: t("views.timesheets.employee_review.footer_double_time"),
+			hours: doubleTimeHours,
 		},
 		...(showIhss
 			? [{

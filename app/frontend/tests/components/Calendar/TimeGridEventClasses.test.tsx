@@ -77,4 +77,3 @@ describe("TimeGrid event classes", () => {
 		expect(eventElement).toHaveClass(timeGridEventClasses.timeGridEvent)
 	})
 })
-

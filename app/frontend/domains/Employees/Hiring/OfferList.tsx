@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 
 import { Badge } from "@/components"
-import { DateTimeFormatter } from "@/components/Formatters"
+import { CurrencyFormatter, DateTimeFormatter } from "@/components/Formatters"
 import { CollectionAddModal, CollectionPanel, RecordRow } from "@/features"
 import { useRecordCanUpdate } from "@/lib/hooks"
 
@@ -36,7 +36,13 @@ export function OfferList({ employee }: OfferListProps) {
 			{ offers.map(offer => (
 				<RecordRow
 					key={ offer.id }
-					title={ `${String(offer.job_title.name)} - ${offer.rate} (${offer.period})` }
+					title={ (
+						<>
+							{ `${String(offer.job_title.name)} - ` }
+							<CurrencyFormatter>{ offer.rate }</CurrencyFormatter>
+							{ ` (${offer.period})` }
+						</>
+					) }
 					meta={ (
 						<span>
 							<Badge variant="light" size="sm">

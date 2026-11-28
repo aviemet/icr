@@ -40,7 +40,7 @@ RSpec.describe ShiftOccurrenceApproval do
 
         first = occurrences.first
         second = occurrences.second
-        ShiftOccurrenceApproval.approve!(
+        described_class.approve!(
           shift: shift,
           occurrence_starts_at: first.occurrence_starts_at,
         )
@@ -64,9 +64,9 @@ RSpec.describe ShiftOccurrenceApproval do
         occurrences = pay_period.shift_occurrences([shift.reload])
         first = occurrences.first
         second = occurrences.second
-        ShiftOccurrenceApproval.approve!(shift: shift, occurrence_starts_at: first.occurrence_starts_at)
-        ShiftOccurrenceApproval.approve!(shift: shift, occurrence_starts_at: second.occurrence_starts_at)
-        ShiftOccurrenceApproval.unapprove!(shift: shift, occurrence_starts_at: first.occurrence_starts_at)
+        described_class.approve!(shift: shift, occurrence_starts_at: first.occurrence_starts_at)
+        described_class.approve!(shift: shift, occurrence_starts_at: second.occurrence_starts_at)
+        described_class.unapprove!(shift: shift, occurrence_starts_at: first.occurrence_starts_at)
 
         refreshed = pay_period.shift_occurrences([shift.reload])
         expect(refreshed.find { |row| row.occurrence_starts_at.to_i == first.occurrence_starts_at.to_i })
@@ -85,11 +85,11 @@ RSpec.describe ShiftOccurrenceApproval do
         event, shift = create_daily_series(employee: employee, master_starts: master_starts)
         pay_period = PayPeriod.for_period_dates(Date.new(2024, 3, 11), Date.new(2024, 3, 17))
         slot = pay_period.shift_occurrences([shift.reload]).first.occurrence_starts_at
-        ShiftOccurrenceApproval.approve!(shift: shift, occurrence_starts_at: slot)
+        described_class.approve!(shift: shift, occurrence_starts_at: slot)
 
         Calendar::Recurring::CancelOccurrence.call(event, occurrence_starts_at: slot)
 
-        expect(ShiftOccurrenceApproval.where(shift_id: shift.id)).to be_empty
+        expect(described_class.where(shift_id: shift.id)).to be_empty
       end
     end
 
@@ -100,7 +100,7 @@ RSpec.describe ShiftOccurrenceApproval do
         event, shift = create_daily_series(employee: employee, master_starts: master_starts)
         pay_period = PayPeriod.for_period_dates(Date.new(2024, 3, 11), Date.new(2024, 3, 17))
         slot = pay_period.shift_occurrences([shift.reload]).first.occurrence_starts_at
-        ShiftOccurrenceApproval.approve!(shift: shift, occurrence_starts_at: slot)
+        described_class.approve!(shift: shift, occurrence_starts_at: slot)
 
         expect {
           Calendar::Recurring::ApplyOccurrenceEdit.call(
@@ -115,9 +115,9 @@ RSpec.describe ShiftOccurrenceApproval do
         }.to change(Calendar::Event, :count).by(1)
 
         expect(
-          ShiftOccurrenceApproval.where(
+          described_class.where(
             shift_id: shift.id,
-            occurrence_starts_at: ShiftOccurrenceApproval.normalize_occurrence_starts_at(slot),
+            occurrence_starts_at: described_class.normalize_occurrence_starts_at(slot),
           ),
         ).to be_empty
         detached = Calendar::Event.order(:created_at).last
@@ -132,8 +132,8 @@ RSpec.describe ShiftOccurrenceApproval do
         event, shift = create_daily_series(employee: employee, master_starts: master_starts)
         pay_period = PayPeriod.for_period_dates(Date.new(2024, 3, 11), Date.new(2024, 3, 17))
         slot = pay_period.shift_occurrences([shift.reload]).first.occurrence_starts_at
-        ShiftOccurrenceApproval.approve!(shift: shift, occurrence_starts_at: slot)
-        expect(ShiftOccurrenceApproval.where(shift_id: shift.id).count).to eq(1)
+        described_class.approve!(shift: shift, occurrence_starts_at: slot)
+        expect(described_class.where(shift_id: shift.id).count).to eq(1)
 
         Calendar::Recurring::ApplyOccurrenceEdit.call(
           event,
@@ -145,8 +145,8 @@ RSpec.describe ShiftOccurrenceApproval do
           occurrence_starts_at: slot,
         )
 
-        expect(ShiftOccurrenceApproval.where(shift_id: shift.id).count).to eq(1)
-        remapped = ShiftOccurrenceApproval.find_by!(shift_id: shift.id)
+        expect(described_class.where(shift_id: shift.id).count).to eq(1)
+        remapped = described_class.find_by!(shift_id: shift.id)
         expect(remapped.occurrence_starts_at.to_i).to eq((slot + 1.hour).to_i)
       end
     end
@@ -162,7 +162,7 @@ RSpec.describe ShiftOccurrenceApproval do
         create(:timesheet, pay_period: pay_period, employee: employee)
 
         occurrences = pay_period.shift_occurrences([shift.reload])
-        ShiftOccurrenceApproval.approve!(
+        described_class.approve!(
           shift: shift,
           occurrence_starts_at: occurrences.first.occurrence_starts_at,
         )
@@ -183,10 +183,10 @@ RSpec.describe ShiftOccurrenceApproval do
       )
       shift = create(:shift, employee: employee, calendar_event: event)
 
-      ShiftOccurrenceApproval.approve!(shift: shift, occurrence_starts_at: event.starts_at)
+      described_class.approve!(shift: shift, occurrence_starts_at: event.starts_at)
       expect(shift.occurrence_approvals.count).to eq(1)
 
-      ShiftOccurrenceApproval.unapprove!(shift: shift, occurrence_starts_at: event.starts_at)
+      described_class.unapprove!(shift: shift, occurrence_starts_at: event.starts_at)
       expect(shift.occurrence_approvals).to be_empty
     end
   end

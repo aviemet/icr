@@ -16,6 +16,7 @@ interface PayPeriodsClientProps {
 	shifts: Schema.ShiftsReview[]
 	shift_exception_reasons: Record<string, string[]>
 	shift_ot_hours: Record<string, number>
+	shift_double_time_hours?: Record<string, number>
 	ihss_hours_used?: number
 	ihss_assignment_mode?: string
 	can_edit_ihss?: boolean
@@ -32,6 +33,7 @@ export default function PayPeriodsClient({
 	shifts,
 	shift_exception_reasons = {},
 	shift_ot_hours = {},
+	shift_double_time_hours = {},
 	ihss_hours_used = 0,
 	ihss_assignment_mode = "shift",
 	can_edit_ihss = false,
@@ -63,6 +65,7 @@ export default function PayPeriodsClient({
 				shifts={ shifts }
 				shiftExceptionReasons={ shift_exception_reasons }
 				shiftOtHours={ shift_ot_hours }
+				shiftDoubleTimeHours={ shift_double_time_hours }
 				ihssHoursUsed={ ihss_hours_used }
 				ihssAssignmentMode={ ihss_assignment_mode }
 				canEditIhss={ can_edit_ihss }

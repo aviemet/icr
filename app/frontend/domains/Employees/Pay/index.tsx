@@ -3,15 +3,15 @@ import { useTranslation } from "react-i18next"
 import { Link, Stack } from "@/components"
 import { DeleteButton } from "@/components/Button"
 import { Form, Submit } from "@/components/Form"
-import { DateTimeFormatter } from "@/components/Formatters"
-import { DateInput, NumberInput, Select, Textarea } from "@/components/Inputs"
+import { CurrencyFormatter, DateTimeFormatter } from "@/components/Formatters"
+import { CurrencyInput, DateInput, Select, Textarea } from "@/components/Inputs"
 import {
 	CollectionAddModal,
 	CollectionPanel,
 	MetricTile,
 	RecordRow,
 } from "@/features"
-import { Routes } from "@/lib"
+import { formatter, Routes } from "@/lib"
 import { usePermissions, useRecordCanUpdate } from "@/lib/hooks"
 
 interface EmployeePayProps {
@@ -37,6 +37,17 @@ export function EmployeePay({ employee }: EmployeePayProps) {
 		return rightTime - leftTime
 	})
 
+	const overtimePolicyOptions = [
+		{
+			value: "standard",
+			label: t("views.employees.show.pay.overtime_policy_standard"),
+		},
+		{
+			value: "personal_attendant",
+			label: t("views.employees.show.pay.overtime_policy_personal_attendant"),
+		},
+	]
+
 	return (
 		<Stack gap="lg">
 			{ employee.current_pay_period_slug && (
@@ -44,6 +55,30 @@ export function EmployeePay({ employee }: EmployeePayProps) {
 					<Link href={ Routes.periodEmployeeReview(employee.current_pay_period_slug, employee.slug) }>
 						{ t("views.employees.show.pay.view_period_review") }
 					</Link>
+				</MetricTile>
+			) }
+
+			{ canUpdate && (
+				<MetricTile title={ t("views.employees.show.pay.overtime_policy") }>
+					<Form
+						action={ Routes.employee(employee.slug) }
+						method="put"
+						initialData={ {
+							employee: {
+								overtime_policy: employee.overtime_policy ?? "standard",
+							},
+						} }
+					>
+						<Stack gap="sm">
+							<Select
+								name="employee.overtime_policy"
+								label={ t("views.employees.show.pay.overtime_policy") }
+								description={ t("views.employees.show.pay.overtime_policy_help") }
+								options={ overtimePolicyOptions }
+							/>
+							<Submit>{ t("views.employees.show.pay.save_overtime_policy") }</Submit>
+						</Stack>
+					</Form>
 				</MetricTile>
 			) }
 
@@ -78,7 +113,7 @@ export function EmployeePay({ employee }: EmployeePayProps) {
 							} }
 						>
 							<Stack gap="sm">
-								<NumberInput name="pay_rate.rate" label="Rate" decimalScale={ 2 } required />
+								<CurrencyInput name="pay_rate.rate" label="Rate" decimalScale={ 2 } required />
 								<Select name="pay_rate.period" label="Period" options={ PERIOD_OPTIONS } />
 								<DateInput name="pay_rate.starts_at" label="Starts" />
 								<DateInput name="pay_rate.ends_at" label="Ends" />
@@ -92,7 +127,12 @@ export function EmployeePay({ employee }: EmployeePayProps) {
 				{ rates.map(payRate => (
 					<RecordRow
 						key={ payRate.id }
-						title={ `${payRate.rate} (${payRate.period})` }
+						title={ (
+							<>
+								<CurrencyFormatter>{ payRate.rate }</CurrencyFormatter>
+								{ ` (${payRate.period})` }
+							</>
+						) }
 						meta={ (
 							<span>
 								{ payRate.starts_at
@@ -108,7 +148,7 @@ export function EmployeePay({ employee }: EmployeePayProps) {
 							? (
 								<DeleteButton
 									href={ Routes.employeePayRate(employee.slug, payRate.id) }
-									label={ payRate.rate }
+									label={ formatter.currency(payRate.rate) }
 								/>
 							)
 							: undefined }

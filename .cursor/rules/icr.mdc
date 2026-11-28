@@ -6,19 +6,20 @@ alwaysApply: true
 # REQUIRED FOR EVERY INTERACTION
 
 1. Read .cursor/icr.mdx at the start of each interaction
-2. **Testing:** When you add or change behavior (new code, bug fixes, refactors), you MUST:
+2. **Project goals:** Product roadmap / phase checklists live in `.cursor/project-goals.mdx`. Read that file when planning or scoping phase work, picking backlog items, or answering "what's done / what's open". Update its checkboxes when shipping listed goals. Follow `.cursor/rules/project-goals.mdc`.
+3. **Testing:** When you add or change behavior (new code, bug fixes, refactors), you MUST:
    - Add or update specs that cover the behavior (or the fix). Do not leave new/changed code untested.
    - Run the relevant specs (and any obviously related specs) before finishing. Fix any failures.
    - Prefer adding a focused spec file for new services/features; run the full spec suite for the touched area.
-3. **Holistic integrity:** Follow `.cursor/rules/holistic-integrity.mdc`. A local unit that passes while the page that consumes it ships mismatched props, queries, or counts is unfinished. Trace one record across load → props → UI keys; keep one loaded set for one screen; lockstep sibling id-keyed maps in specs; keep shared domain numbers consistent across index and show.
-4. When working on payroll or timesheet workflow features (e.g. payroll index, pay periods, timesheet approval), read the Payroll and timesheets lore in .cursor/icr.mdx (Approve-until-finalize and related IA rules).
-5. **`.cursor/icr.mdx` updates (high bar, opt-in):** Add to this file **only** when you learned something **specific to this application or this repo's conventions** that a competent reader would **not** reasonably infer from reading the relevant code paths in a few minutes. When in doubt, **do not** add a note. Silence is correct for most tasks.
-6. **Never** put the following in `.cursor/icr.mdx` (these are obvious, universal, or belong in normal code/commits, not project lore):
+4. **Holistic integrity:** Follow `.cursor/rules/holistic-integrity.mdc`. A local unit that passes while the page that consumes it ships mismatched props, queries, or counts is unfinished. Trace one record across load → props → UI keys; keep one loaded set for one screen; lockstep sibling id-keyed maps in specs; keep shared domain numbers consistent across index and show.
+5. When working on payroll or timesheet workflow features (e.g. payroll index, pay periods, timesheet approval), read the Payroll and timesheets lore in .cursor/icr.mdx (Approve-until-finalize and related IA rules).
+6. **`.cursor/icr.mdx` updates (high bar, opt-in):** Add to this file **only** when you learned something **specific to this application or this repo's conventions** that a competent reader would **not** reasonably infer from reading the relevant code paths in a few minutes. When in doubt, **do not** add a note. Silence is correct for most tasks. Product goals belong in `.cursor/project-goals.mdx`, not here.
+7. **Never** put the following in `.cursor/icr.mdx` (these are obvious, universal, or belong in normal code/commits, not project lore):
    - Language, framework, or package-manager defaults and hygiene (e.g. direct imports need declared dependencies, how Yarn/npm works, generic Vitest/Vite behavior)
    - Anything that restates what the code or `package.json` already says plainly
    - Bug fix or incident play-by-play ("we forgot X, then added Y") unless it encodes a **lasting** domain or integration rule for this repo
    - Variable names, field names, one-off flows, or details that will churn with the next refactor
-7. When you **do** update `.cursor/icr.mdx` (per item 5):
+8. When you **do** update `.cursor/icr.mdx` (per item 6):
    - Document only (a) non-obvious quirks or gotchas tied to **this** codebase, or (b) overarching design/architectural decisions that stabilize how the app is built or operated
    - Only add information not already documented
    - Place information in the appropriate section; if no appropriate section exists, create one

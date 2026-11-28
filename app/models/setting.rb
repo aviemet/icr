@@ -63,6 +63,10 @@ class Setting < RailsSettings::Base
     shift_title_format: "{start:h:mma} - {end:h:mma}: {full_name}",
     overtime_weekly_hours: 40,
     overtime_daily_hours: 8,
+    overtime_daily_double_time_hours: 12,
+    overtime_workweek_start: "monday",
+    overtime_personal_attendant_daily_hours: 9,
+    overtime_personal_attendant_weekly_hours: 45,
     payroll_period_type: PAY_PERIOD_TYPES[:semi_monthly],
     payroll_period_day: "monday",
     payroll_period_date: "1",
@@ -115,6 +119,13 @@ class Setting < RailsSettings::Base
 
   field :overtime_weekly_hours, type: :integer, default: 40, validates: { presence: true }
   field :overtime_daily_hours, type: :integer, default: 8, validates: { presence: true }
+  field :overtime_daily_double_time_hours, type: :integer, default: 12, validates: { presence: true }
+  field :overtime_workweek_start, type: :string, default: DEFAULT_SETTINGS[:overtime_workweek_start], validates: {
+    presence: true,
+    inclusion: { in: WEEKDAYS },
+  }
+  field :overtime_personal_attendant_daily_hours, type: :integer, default: 9, validates: { presence: true }
+  field :overtime_personal_attendant_weekly_hours, type: :integer, default: 45, validates: { presence: true }
 
   field :payroll_period_type, type: :string, default: DEFAULT_SETTINGS[:payroll_period_type], validates: {
     presence: true,

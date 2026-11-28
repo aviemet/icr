@@ -34,7 +34,7 @@ function buildEmployee(overrides: Partial<Schema.EmployeesShow> = {}): Schema.Em
 		person: { id: "person-1", name: "Ada Lovelace" } as Schema.PeopleShow,
 		status: "applicant",
 		application_source: "Referral",
-		desired_compensation: "$22.00",
+		desired_compensation: { amount: 22, cents: 2200, currency_iso: "USD" },
 		desired_compensation_currency: "USD",
 		desired_compensation_period: "hourly",
 		desired_job_title: { id: "jt-1", name: "Caregiver" } as Schema.EmployeeJobTitle,
@@ -80,7 +80,7 @@ function buildEmployee(overrides: Partial<Schema.EmployeesShow> = {}): Schema.Em
 				job_title: { id: "jt-1", name: "Caregiver" } as Schema.EmployeeJobTitle,
 				job_title_id: "jt-1",
 				period: "hourly",
-				rate: "$22.00",
+				rate: { amount: 22, cents: 2200, currency_iso: "USD" },
 				rate_cents: 2200,
 				rate_currency: "USD",
 				status: "extended",
@@ -107,6 +107,7 @@ function buildEmployee(overrides: Partial<Schema.EmployeesShow> = {}): Schema.Em
 		support_contacts: [],
 		updated_at: new Date("2024-01-01"),
 		...overrides,
+		overtime_policy: overrides.overtime_policy ?? "standard",
 	}
 }
 

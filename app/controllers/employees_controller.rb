@@ -39,6 +39,7 @@ class EmployeesController < ApplicationController
     :application_source, :desired_compensation, :desired_compensation_cents,
     :desired_compensation_currency, :desired_compensation_period,
     :desired_job_title_id, :hiring_notes, :resume, :cover_letter,
+    :overtime_policy,
     person_attributes: [
       :id, :first_name, :middle_name, :last_name, :nick_name, :dob,
       contact_attributes: [

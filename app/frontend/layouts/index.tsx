@@ -70,4 +70,3 @@ export function PublicLayout({ children }: LayoutProps) {
 		</LayoutWrapper>
 	)
 }
-

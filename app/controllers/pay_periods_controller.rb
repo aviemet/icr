@@ -122,7 +122,8 @@ class PayPeriodsController < ApplicationController
       shift_exception_reasons: -> {
         Payroll::ShiftExceptions.call(client_review_shifts)[:reasons_by_shift_id]
       },
-      shift_ot_hours: -> { client_review_shift_ot_hours },
+      shift_ot_hours: -> { client_review_shift_maps[:ot] },
+      shift_double_time_hours: -> { client_review_shift_maps[:double_time] },
       ihss_hours_used: -> {
         Payroll::ClientPeriodIhssHours.call(
           pay_period: pay_period,
@@ -171,6 +172,12 @@ class PayPeriodsController < ApplicationController
     rows = params.permit(assignments: [:employee_id, :client_id, :hours]).fetch(:assignments, [])
     Payroll::ReplaceIhssPeriodAssignments.call(period: pay_period, rows: rows)
     redirect_to ihss_period_path(pay_period), notice: t("pay_periods.ihss_assignments_updated")
+  rescue Payroll::ReplaceIhssPeriodAssignments::AuthorizationExceeded => e
+    redirect_to ihss_period_path(pay_period), alert: t(
+      "pay_periods.ihss_authorization_exceeded",
+      authorized: e.authorized_hours,
+      assigned: e.assigned_hours,
+    )
   end
 
   # @route POST /payroll/periods/:slug/finalize (finalize_period)
@@ -275,12 +282,21 @@ class PayPeriodsController < ApplicationController
     }.sort_by { |row| row[:name].to_s.downcase }
   end
 
-  def client_review_shift_ot_hours
-    employee_ids = client_review_shifts.map(&:employee_id).compact.uniq
-    hours_by_employee = Payroll::EmployeePeriodHours.call(pay_period, employee_ids)
-    hours_by_employee.each_with_object({}) do |(_employee_id, hours_data), hash|
-      hash.merge!(hours_data[:shift_ot_hours] || {})
-    end.transform_keys(&:to_s)
+  def client_review_shift_maps
+    @client_review_shift_maps ||= begin
+      employee_ids = client_review_shifts.map(&:employee_id).compact.uniq
+      hours_by_employee = Payroll::EmployeePeriodHours.call(pay_period, employee_ids)
+      ot = {}
+      double_time = {}
+      hours_by_employee.each_value do |hours_data|
+        ot.merge!(hours_data[:shift_ot_hours] || {})
+        double_time.merge!(hours_data[:shift_double_time_hours] || {})
+      end
+      {
+        ot: ot.transform_keys(&:to_s),
+        double_time: double_time.transform_keys(&:to_s),
+      }
+    end
   end
 
   def period_employee_ids(period)

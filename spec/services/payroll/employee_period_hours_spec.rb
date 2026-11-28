@@ -380,7 +380,7 @@ RSpec.describe Payroll::EmployeePeriodHours do
       result = described_class.call(pay_period, [employee.id], collector: stub_collector([interval]))
 
       expect(result[employee.id.to_s][:ot_hours]).to eq(0.0)
-      expect(result[employee.id.to_s][:regular_hours]).to eq(0.0)
+      expect(result[employee.id.to_s][:regular_hours]).to eq(12.0)
       expect(result[employee.id.to_s][:company_hours]).to eq(12.0)
     end
 
@@ -641,7 +641,7 @@ RSpec.describe Payroll::EmployeePeriodHours do
         @intervals = rows
       end
 
-      def intervals_for(pay_period:, employee_ids:) # rubocop:disable Lint/UnusedMethodArgument
+      def intervals_for(pay_period:, employee_ids:, range_start: nil, range_end: nil) # rubocop:disable Lint/UnusedMethodArgument
         @intervals.select { |work_interval| employee_ids.include?(work_interval.employee_id) }
       end
     end.new(intervals)

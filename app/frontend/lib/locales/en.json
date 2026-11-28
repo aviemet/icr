@@ -473,6 +473,7 @@
       "finalized": "Pay period closed.",
       "finalized_locked": "This pay period is finalized. Record an adjustment to change values.",
       "ihss_assignments_updated": "IHSS period assignments saved.",
+      "ihss_authorization_exceeded": "IHSS assignments (%{assigned}h) exceed authorized hours (%{authorized}h) for a client.",
       "ihss_period_mode_required": "Period IHSS assignment is only available when assignment mode is Assign by period."
     },
     "payroll": {
@@ -1073,8 +1074,13 @@
           "pay": {
             "add_rate": "Add Pay Rate",
             "manage_time_off": "Manage time off",
+            "overtime_policy": "Overtime policy",
+            "overtime_policy_help": "Standard uses Wage Order 15 daily, weekly, double-time, and seventh-day rules. Personal attendant uses Wage Order 15 / LAB 1454 daily and weekly thresholds from settings.",
+            "overtime_policy_personal_attendant": "Personal attendant (Wage Order 15 / LAB 1454)",
+            "overtime_policy_standard": "Standard (Wage Order 15)",
             "payroll": "Payroll",
             "rates": "Pay Rates",
+            "save_overtime_policy": "Save Overtime Policy",
             "time_off": "Time Off",
             "view_period_review": "View Current Period Review"
           },
@@ -1310,6 +1316,7 @@
           "empty": "No employee and client pairs with shifts in this period.",
           "help": "Enter IHSS hours for each employee and client for this pay period.",
           "hours": "IHSS hours",
+          "over_authorized": "Assigned IHSS hours exceed authorized hours for one or more clients.",
           "save": "Save IHSS assignments",
           "title": "IHSS assignments"
         },
@@ -1608,14 +1615,24 @@
             "title": "IHSS"
           },
           "overtime": {
-            "daily_description": "Hours over this in a day are overtime",
+            "daily_description": "Hours over this in a day are overtime under the standard Wage Order 15 policy",
             "daily_label": "Daily threshold (hours)",
             "description": "Set overtime thresholds and rules for shifts that should be excluded.",
-            "thresholds_band_description": "Hours above these counts in a week or day are paid as overtime.",
-            "thresholds_band_title": "Thresholds",
+            "double_time_description": "Hours over this in a day are double-time under the standard Wage Order 15 policy",
+            "double_time_label": "Daily double-time threshold (hours)",
+            "personal_attendant_band_description": "Daily and weekly thresholds for employees on the personal attendant overtime policy under California Wage Order 15 and LAB 1454. Double-time and seventh-day premiums do not apply.",
+            "personal_attendant_band_title": "Personal attendant (Wage Order 15 / LAB 1454)",
+            "personal_attendant_daily_description": "Hours over this in a day are overtime under the personal attendant Wage Order 15 / LAB 1454 policy",
+            "personal_attendant_daily_label": "Daily threshold (hours)",
+            "personal_attendant_weekly_description": "Hours over this in a week are overtime under the personal attendant Wage Order 15 / LAB 1454 policy",
+            "personal_attendant_weekly_label": "Weekly threshold (hours)",
+            "standard_band_description": "Daily, weekly, double-time, and seventh-day thresholds for employees on the standard overtime policy under California Wage Order 15.",
+            "standard_band_title": "Standard (Wage Order 15)",
             "title": "Overtime",
-            "weekly_description": "Hours over this in a week are overtime",
-            "weekly_label": "Weekly threshold (hours)"
+            "weekly_description": "Hours over this in a week are overtime under the standard Wage Order 15 policy",
+            "weekly_label": "Weekly threshold (hours)",
+            "workweek_start_description": "Weekly overtime and seventh-day premiums use this workweek, independent of pay period start",
+            "workweek_start_label": "Overtime workweek starts on"
           },
           "overtime_exemptions": {
             "active": "Active",
@@ -1796,6 +1813,7 @@
           "end_date": "End date",
           "end_time": "End time",
           "exception": "Exception",
+          "footer_double_time": "Double Time",
           "footer_overtime": "Overtime",
           "footer_regular": "Regular",
           "holiday_hours": "Holiday",

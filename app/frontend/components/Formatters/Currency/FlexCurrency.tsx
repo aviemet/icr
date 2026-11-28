@@ -1,5 +1,5 @@
 import { Box, Group } from "@/components"
-import { type Money } from "@/types"
+import { isMoney, type Money } from "@/types"
 
 interface FlexCurrencyFormatterProps {
 	children: number | Money | null
@@ -11,7 +11,7 @@ const getParts = (formatter: Intl.NumberFormat, value: number | Money | null) =>
 	let numberValue = 0
 	if(typeof value === "number") {
 		numberValue = value
-	} else if(value?.hasOwnProperty("amount")) {
+	} else if(isMoney(value)) {
 		numberValue = value.amount
 	}
 

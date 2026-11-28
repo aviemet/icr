@@ -86,6 +86,7 @@ en:
   pay_periods:
     already_finalized: This pay period is already finalized.
     ihss_assignments_updated: IHSS period assignments saved.
+    ihss_authorization_exceeded: "IHSS assignments (%{assigned}h) exceed authorized hours (%{authorized}h) for a client."
     ihss_period_mode_required: Period IHSS assignment is only available when assignment mode is Assign by period.
     finalize_before_period_end: Close is available after the pay period ends.
     finalized: Pay period closed.

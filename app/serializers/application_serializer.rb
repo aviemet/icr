@@ -3,8 +3,8 @@ class ApplicationSerializer < Oj::Serializer
 
   identifier
 
-  def self.currency_for(field)
-    type "Money"
+  def self.currency_for(field, optional: false)
+    type "Money", optional: optional
     define_method(field) do
       money = @object.send(field)
 

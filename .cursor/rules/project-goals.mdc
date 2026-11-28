@@ -1,0 +1,12 @@
+---
+description: Project roadmap and phase checklists. Use when planning features, picking backlog work, scoping a phase, checking whether a capability is done/open, or updating goal checkboxes after shipping.
+alwaysApply: false
+---
+
+# Project goals
+
+1. Read `.cursor/project-goals.mdx` before planning or scoping product work tied to a phase, roadmap item, gap, or "what's left" question.
+2. Treat that file as the backlog source of truth. Prefer open checklist items when choosing next work in a domain.
+3. After shipping work that completes (or partially completes) a listed goal, update the matching checkbox(es) in `.cursor/project-goals.mdx` in the same change.
+4. Add new phase items only when the user asks for a lasting product goal. Do not dump bug fixes, refactors, or one-off tasks into this file.
+5. Domain how-it-works lore stays in `.cursor/icr.mdx`. Goals stay here.

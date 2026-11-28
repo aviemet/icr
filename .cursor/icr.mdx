@@ -5,23 +5,6 @@
 - Employee models live under `Employee::` with explicit `class_name` on associations; serializers mirror the namespace. Nested Decent Exposure controllers need `model: Employee::...`.
 - Client care-domain models live under `Client::` (`SupportContact`, `Allergy`, `Diagnosis`, `LifeDetail`, `Enrollment`) with `self.table_name` and explicit `class_name` on `Client` associations. Nested `Clients::*` Decent Exposure needs `model: Client::...` or it resolves the un-namespaced constant.
 
-## Milestones
-
-- [x] Phase 1: Auth and authorization (open: passkeys, global session invalidation, session logs)
-- [ ] Phase 2: Document management (secure storage, categories/types, versioning, access controls, record association)
-- [x] Phase 3: Employee management (open: assign-to-client workflow, backup attendants)
-- [x] Phase 4: Client management (open: natural support people; MAR / controlled-substance logs)
-- [x] Phase 5: Calendar and scheduling (open: schedule directors, facilitator, attendants, natural support, backups)
-- [x] Phase 6: Timesheet management (open: automated timesheet generation rules beyond schedule/manual)
-- [x] Phase 7: IHSS hours (open: automated assignment rules)
-- [x] Phase 8: Customization (accent color, dyslexia font)
-- [x] Phase 9: Service types (open: client authorization hours ledger; auth/utilization reporting)
-- [ ] Phase 10: Care planning (EAP, health passport/ADL, ISP, service planning, appointments worksheet, FIR/SIR depth)
-- [ ] Phase 11: MAR (admin logs, missed-med tracking, notifications, reports)
-- [x] Phase 12: Forms/notes/reports engine (open: daily service notes; compliance builder UI; due/overdue queue as product surface; enable `compliance_forms` by default when ready; more stock reports; B-lite builder UI)
-- [x] Phase 13: HR extras (open: benefits enrollment; expenses/mileage prefs; timesheet attestation; messaging; LMS lessons)
-- [ ] Phase 14: Clock and EVV (back burner: clock-in/out on `Calendar::Event`/`Shift`; geofence; aggregator queues; dashboards)
-
 ## Stabilizing decisions
 
 - Audit: paper_trail `versions` is the single audit store. Keep behavior gates on the model (`finalized_at`, `approved_at`, plus `created_at`/`updated_at`). Actor and audit-only actions live only on versions (`whodunnit`, custom `event`) - do not add `*_by` or audit-only `*_at` columns.
@@ -54,7 +37,9 @@
 - Facilitator review, shift-mode IHSS, and service type are per occurrence (`shift_occurrence_approvals` / `shift_occurrence_overrides` keyed by `shift_id` + `occurrence_starts_at`), kept in sync by `Calendar::Recurring` mutation services (just-this = cancel exception + detach; edit-all remaps after commit so event time-change invalidate does not wipe the remap). Director final approval is timesheet-level (`timesheets.approved_at`). Finalize and export never wait on facilitator stamps.
 - `PayPeriod.for_period_dates` finds by start calendar day and returns that row unchanged, or creates with the requested start/end and start-date `slug`. Settings decide dates only at create; existing `starts_at`/`ends_at`/`slug` never rewrite, and neighbors are never reshaped. GET show does not create periods; index may create the current window.
 - Recurring payroll surface: `PayPeriod#shift_occurrences` (via `Shift#occurrences_in`) for hours, review tables, and counts. Occurrence row `id` matches hours OT keys; mutations use `shift_id` (the real Shift UUID).
-- IHSS classification runs first via `Payroll::IhssHourClassifier`. When `Setting.ihss_co_employer` is false, only company hours feed OT math; when true, all hours feed OT. Hours calculator reads intervals via a collector interface (default: scheduled shifts) so clock-in/out can swap later without changing OT math or UI contracts.
+- Hours truth lives in `Payroll::Hours::Engine` (collect with workweek lookback -> IHSS consumption ledger -> policy classifier -> in-period report). `EmployeePeriodHours` delegates to it. OT workweek is `Setting.overtime_workweek_start`, not `payroll_period_day`.
+- Employee `overtime_policy`: `standard` (Wage Order 15 daily/weekly/DT/7th-day via settings) or `personal_attendant` (Wage Order 15 / LAB 1454 daily/weekly via settings, no DT/7th-day). Criteria overtime exemptions are straight-time regular, not unpaid.
+- IHSS classification runs first via `Payroll::IhssHourClassifier` with stable client-id order and per-client consumption tags. When `Setting.ihss_co_employer` is false, only company hours feed OT math; when true, all hours feed OT. `ClientPeriodIhssHours` reads the same consumption ledger.
 - Attaching a shift or changing event times/participants clears timesheet `approved_at` and occurrence approval rows for that shift.
 - Semi-monthly with "last day of month": first period 1st-14th, second 15th-last day. Monthly with last day: last day of prior month through second-to-last day of current month.
 - OT exemption criteria field is still named `category` and matches `service_type.slug`.
@@ -67,6 +52,7 @@
 
 ## Frontend and test footguns
 
+- Monetized fields serialize via `ApplicationSerializer.currency_for` as `Money` (`amount` / `cents` / `currency_iso`). Do not string-format Money in serializers. `flattenToPaths` keeps Money as a leaf so CurrencyInput can read it from form initial data.
 - Button labels use Title Case (capitalize every word), e.g. Approve All.
 - Mantine date/time inputs expect strings; shared inputs accept Date or string and normalize to ISO string before passing in.
 - Linaria class order: when a view-specific class must override a base class, use a combined selector like `&.${event} { ... }` so it wins regardless of CSS emission order.

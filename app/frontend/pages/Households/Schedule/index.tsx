@@ -172,4 +172,3 @@ const Schedule = ({ household, schedules: initialSchedules }: ScheduleProps) => 
 }
 
 export default Schedule
-

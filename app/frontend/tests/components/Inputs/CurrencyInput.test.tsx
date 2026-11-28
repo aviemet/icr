@@ -1,5 +1,5 @@
 import { MantineProvider } from "@mantine/core"
-import { cleanup, render, screen } from "@testing-library/react"
+import { cleanup, render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { beforeEach, describe, expect, it } from "vitest"
 
@@ -67,5 +67,27 @@ describe("CurrencyInput", () => {
 
 		expect(input).toHaveValue("1.234.567,89")
 		expect(document.querySelector('input[type="hidden"][name="rate"]')).toHaveValue("1234567.89")
+	})
+
+	it("reads amount and currency from a Money form value", async () => {
+		render(
+			<MantineProvider theme={ theme }>
+				<Form
+					action="/test"
+					method="post"
+					initialData={ {
+						rate: { amount: 22.5, cents: 2250, currency_iso: "USD" },
+					} }
+				>
+					<CurrencyInput name="rate" label="Rate" />
+				</Form>
+			</MantineProvider>,
+		)
+
+		await waitFor(() => {
+			expect(screen.getByLabelText("Rate")).toHaveValue("22.5")
+		})
+		expect(document.querySelector('input[type="hidden"][name="rate"]')).toHaveValue("22.5")
+		expect(screen.getByText("$")).toBeInTheDocument()
 	})
 })

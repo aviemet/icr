@@ -158,4 +158,3 @@ describe("EventPopoverContent", () => {
 		expect(screen.queryByText("views.clients.schedule.event_form.edit_recurring_body")).not.toBeInTheDocument()
 	})
 })
-

@@ -105,6 +105,11 @@ en:
           view_period_review: View Current Period Review
           time_off: Time Off
           manage_time_off: Manage time off
+          overtime_policy: Overtime policy
+          overtime_policy_help: Standard uses Wage Order 15 daily, weekly, double-time, and seventh-day rules. Personal attendant uses Wage Order 15 / LAB 1454 daily and weekly thresholds from settings.
+          overtime_policy_standard: Standard (Wage Order 15)
+          overtime_policy_personal_attendant: Personal attendant (Wage Order 15 / LAB 1454)
+          save_overtime_policy: Save Overtime Policy
         profile:
           communication: Communication
           demographics: Demographics

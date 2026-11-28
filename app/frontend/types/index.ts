@@ -3,7 +3,7 @@ export { type InputType } from "./InputTypes"
 export { type PaginatedModel } from "./PaginatedModel"
 export { type UserTablePreferences } from "./UserTablePreferences"
 export { type UserPreferences } from "./UserPreferences"
-export { type Money } from "./Money"
+export { isMoney, type Money } from "./Money"
 export {
 	type OvertimeExemptionCriteria,
 	type OvertimeExemptionCriterionCondition,
@@ -11,4 +11,3 @@ export {
 	type OvertimeExemptionCriterionGroup,
 	type OvertimeExemptionCriterionValue,
 } from "./OvertimeExemptionCriteria"
-

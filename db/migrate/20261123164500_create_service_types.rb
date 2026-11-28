@@ -5,6 +5,7 @@ class CreateServiceTypes < ActiveRecord::Migration[8.1]
       t.string :slug, null: false
       t.boolean :active, null: false, default: true
       t.boolean :system, null: false, default: false
+      t.boolean :assignable, null: false, default: true
       t.integer :position, null: false, default: 0
       t.boolean :billable, null: false, default: true
       t.boolean :payable, null: false, default: true

@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 import { Grid, Group, Text } from "@/components"
 import { Form, Submit } from "@/components/Form"
 import { DateTimeFormatter } from "@/components/Formatters"
-import { Routes } from "@/lib"
+import { formatter, Routes } from "@/lib"
 
 export interface ProcessOfferFormProps {
 	employee: Schema.EmployeesShow
@@ -20,7 +20,7 @@ export function ProcessOfferForm({ employee, offer }: ProcessOfferFormProps) {
 				<Text size="sm">
 					{ t("views.employees.status.process_offer.summary", {
 						title: jobTitleName,
-						rate: offer.rate,
+						rate: formatter.currency(offer.rate),
 						period: offer.period,
 					}) }
 				</Text>

@@ -1,5 +1,7 @@
 import { isPlainObject } from "es-toolkit"
 
+import { isMoney } from "@/types"
+
 export { NestedObject } from "./Collections/NestedObject"
 export { NestedURLSearchParams } from "./Collections/NestedURLSearchParams"
 
@@ -81,6 +83,8 @@ export const renameObjectWithAttributes = <T>(data: T, str = "_attributes"): T =
 
 function recursiveAppendString(data: Record<string, unknown>, str: string): void {
 	Object.entries(data).forEach(([key, value]) => {
+		if(isMoney(value)) return
+
 		if(isRecord(value)) {
 			renameKey(data, key, `${key}${str}`)
 			recursiveAppendString(value, str)
@@ -105,6 +109,11 @@ export function flattenToPaths(value: Record<string, unknown>) {
 	const entries: Array<[string, unknown]> = []
 
 	const walk = (current: unknown, prefix: string) => {
+		if(isMoney(current)) {
+			if(prefix) entries.push([prefix, current])
+			return
+		}
+
 		if(isRecord(current)) {
 			for(const [key, child] of Object.entries(current)) {
 				const path = prefix ? `${prefix}.${key}` : key

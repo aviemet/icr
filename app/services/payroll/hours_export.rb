@@ -11,6 +11,7 @@ module Payroll
       "period_ends_on",
       "regular_hours",
       "overtime_hours",
+      "double_time_hours",
       "pto_hours",
       "sick_hours",
       "holiday_hours",
@@ -47,6 +48,7 @@ module Payroll
           hours = hours_by_employee[employee_id.to_s] || {}
           regular_hours = hours[:regular_hours].to_f
           overtime_hours = hours[:ot_hours].to_f
+          double_time_hours = hours[:double_time_hours].to_f
           pto_hours = hours[:pto_hours].to_f
           sick_hours = hours[:sick_hours].to_f
           holiday_hours = hours[:holiday_hours].to_f
@@ -58,10 +60,14 @@ module Payroll
             period_ends_on,
             format("%.2f", regular_hours),
             format("%.2f", overtime_hours),
+            format("%.2f", double_time_hours),
             format("%.2f", pto_hours),
             format("%.2f", sick_hours),
             format("%.2f", holiday_hours),
-            format("%.2f", regular_hours + overtime_hours + pto_hours + sick_hours + holiday_hours),
+            format(
+              "%.2f",
+              regular_hours + overtime_hours + double_time_hours + pto_hours + sick_hours + holiday_hours,
+            ),
             timesheet.approved_at.iso8601,
             timesheet.id.to_s,
           ]

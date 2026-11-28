@@ -604,4 +604,3 @@ describe("EventForm edit recurrence", () => {
 		expect(captured.body?.calendar_event.occurrence_starts_at).toBe(occurrenceStartsAt)
 	})
 })
-

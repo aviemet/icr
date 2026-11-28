@@ -23,4 +23,3 @@ export function DaysHeading({ weekdays }: DaysHeadingProps) {
 		</div>
 	)
 }
-

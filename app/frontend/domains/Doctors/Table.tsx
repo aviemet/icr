@@ -1,4 +1,4 @@
-import {DataTable, Link, Presence, type TableColumn} from "@/components"
+import { DataTable, Link, Presence, type TableColumn } from "@/components"
 import { EditButton } from "@/components/Button"
 import { Routes } from "@/lib"
 

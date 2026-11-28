@@ -141,5 +141,47 @@ RSpec.describe Payroll::IhssHourClassifier do
       expect(result.first.ihss?).to be(true)
       expect(result.first.duration_hours).to eq(4.0)
     end
+
+    it "consumes multi-client assignments in stable client id order and tags the consuming client" do
+      employee = create(:employee)
+      first_client = create(:client)
+      second_client = create(:client)
+      low_id, high_id = [first_client.id.to_s, second_client.id.to_s].minmax
+      pay_period = create(:pay_period, starts_at: Date.new(2024, 3, 11), ends_at: Date.new(2024, 3, 17))
+      create(
+        :ihss_period_assignment,
+        pay_period: pay_period,
+        employee: employee,
+        client_id: low_id,
+        hours: 3.0,
+      )
+      create(
+        :ihss_period_assignment,
+        pay_period: pay_period,
+        employee: employee,
+        client_id: high_id,
+        hours: 5.0,
+      )
+
+      multi = interval(
+        employee_id: employee.id,
+        starts_at: Time.zone.local(2024, 3, 11, 9, 0, 0),
+        ends_at: Time.zone.local(2024, 3, 11, 17, 0, 0),
+        client_ids: [high_id, low_id],
+      )
+
+      ledger = described_class.call_with_ledger(
+        pay_period: pay_period,
+        intervals: [multi],
+        assignment_mode: "period",
+      )
+
+      ihss_pieces = ledger.intervals.select(&:ihss?)
+      expect(ihss_pieces.map { |piece| [piece.consuming_client_id.to_s, piece.duration_hours] }).to eq(
+        [[low_id, 3.0], [high_id, 5.0]],
+      )
+      expect(ledger.client_hours[low_id]).to eq(3.0)
+      expect(ledger.client_hours[high_id]).to eq(5.0)
+    end
   end
 end
