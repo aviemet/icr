@@ -12,6 +12,10 @@ module Payroll
           Setting.overtime_daily_double_time_hours.to_f
         end
 
+        def seventh_day_double_time_after
+          Setting.overtime_seventh_day_double_time_hours.to_f
+        end
+
         def weekly_ot_after
           Setting.overtime_weekly_hours.to_f
         end

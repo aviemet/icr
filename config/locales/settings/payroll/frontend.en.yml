@@ -52,6 +52,8 @@ en:
           daily_description: Hours over this in a day are overtime under the standard Wage Order 15 policy
           double_time_label: Daily double-time threshold (hours)
           double_time_description: Hours over this in a day are double-time under the standard Wage Order 15 policy
+          seventh_day_double_time_label: Seventh-day double-time threshold (hours)
+          seventh_day_double_time_description: On the seventh consecutive day worked in a workweek, hours up to this are overtime and hours over this are double-time under the standard Wage Order 15 policy
           workweek_start_label: Overtime workweek starts on
           workweek_start_description: Weekly overtime and seventh-day premiums use this workweek, independent of pay period start
           personal_attendant_daily_label: Daily threshold (hours)

@@ -18,6 +18,7 @@ declare global {
       overtime_daily_hours: integer
       overtime_personal_attendant_daily_hours: integer
       overtime_personal_attendant_weekly_hours: integer
+      overtime_seventh_day_double_time_hours: integer
       overtime_weekly_hours: integer
       overtime_workweek_start: string
       payroll_due_date_day_of_month: string

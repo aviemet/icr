@@ -3,13 +3,12 @@
 module Payroll
   module Hours
     class SegmentBuilder
-      def self.call(intervals, exemptions:)
-        new(intervals, exemptions: exemptions).call
+      def self.call(intervals)
+        new(intervals).call
       end
 
-      def initialize(intervals, exemptions:)
+      def initialize(intervals)
         @intervals = intervals
-        @exemptions = exemptions
       end
 
       def call
@@ -28,15 +27,11 @@ module Payroll
             starts_at: interval.starts_at,
             ihss: interval.ihss?,
             consuming_client_id: interval.try(:consuming_client_id),
-            criteria_exempt: exempt?(interval),
+            criteria_exempt: interval.criteria_exempt == true,
             leave_kind: interval.leave_kind,
             category: interval.category,
           )
         end
-      end
-
-      def exempt?(interval)
-        @exemptions.any? { |exemption| exemption.matches?(interval) }
       end
 
       def hours_by_date(interval)

@@ -77,6 +77,8 @@ module Payroll
     end
 
     def assignments_remaining
+      return Hash.new(0.0) if @pay_period.nil?
+
       Payroll::IhssPeriodAssignment
         .where(pay_period_id: @pay_period.id)
         .each_with_object(Hash.new(0.0)) do |assignment, hash|
@@ -139,6 +141,7 @@ module Payroll
         client_ids: interval.client_ids,
         leave_kind: interval.leave_kind,
         consuming_client_id: overrides[:consuming_client_id],
+        criteria_exempt: interval.criteria_exempt,
       )
     end
 

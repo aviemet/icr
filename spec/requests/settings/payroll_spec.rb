@@ -27,6 +27,51 @@ RSpec.describe "Settings::Payrolls", type: :request do
     end
   end
 
+  describe "PATCH /settings/payroll/overtime" do
+    before do
+      Setting.overtime_daily_hours = 8
+      Setting.overtime_daily_double_time_hours = 12
+      Setting.overtime_seventh_day_double_time_hours = 8
+    end
+
+    it "updates overtime thresholds" do
+      patch settings_payroll_overtime_url, params: {
+        settings: {
+          overtime_daily_hours: 9,
+          overtime_daily_double_time_hours: 13,
+          overtime_seventh_day_double_time_hours: 7,
+        },
+      }
+
+      expect(response).to redirect_to(settings_payroll_overtime_path)
+      expect(Setting.overtime_daily_hours).to eq(9)
+      expect(Setting.overtime_daily_double_time_hours).to eq(13)
+      expect(Setting.overtime_seventh_day_double_time_hours).to eq(7)
+    end
+
+    it "rejects a double-time threshold below the daily overtime threshold" do
+      patch settings_payroll_overtime_url, params: {
+        settings: { overtime_daily_hours: 10, overtime_daily_double_time_hours: 9 },
+      }
+
+      expect(response).to redirect_to(settings_payroll_overtime_path)
+      expect(flash[:alert][:message]).to eq(I18n.t("settings.errors.double_time_below_daily_overtime"))
+      expect(Setting.overtime_daily_hours).to eq(8)
+      expect(Setting.overtime_daily_double_time_hours).to eq(12)
+    end
+
+    it "rejects out-of-range thresholds without saving any of them" do
+      patch settings_payroll_overtime_url, params: {
+        settings: { overtime_daily_hours: 9, overtime_seventh_day_double_time_hours: 30 },
+      }
+
+      expect(response).to redirect_to(settings_payroll_overtime_path)
+      expect(flash[:alert][:message]).to eq(I18n.t("settings.errors.update_failed"))
+      expect(Setting.overtime_daily_hours).to eq(8)
+      expect(Setting.overtime_seventh_day_double_time_hours).to eq(8)
+    end
+  end
+
   describe "GET /settings/payroll/ihss" do
     it "renders a successful response" do
       get settings_payroll_ihss_url

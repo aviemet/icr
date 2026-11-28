@@ -20,6 +20,10 @@ unless Setting.unscoped.exists?(var: "overtime_daily_double_time_hours")
   Setting.overtime_daily_double_time_hours = 12
 end
 
+unless Setting.unscoped.exists?(var: "overtime_seventh_day_double_time_hours")
+  Setting.overtime_seventh_day_double_time_hours = 8
+end
+
 unless Setting.unscoped.exists?(var: "overtime_personal_attendant_daily_hours")
   Setting.overtime_personal_attendant_daily_hours = 9
 end

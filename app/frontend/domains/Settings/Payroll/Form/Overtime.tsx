@@ -59,6 +59,16 @@ export function Overtime() {
 					</Grid.Col>
 
 					<Grid.Col span={ { xs: 12, sm: 6 } }>
+						<NumberInput
+							name="settings.overtime_seventh_day_double_time_hours"
+							label={ t("views.settings.payroll.overtime.seventh_day_double_time_label") }
+							description={ t("views.settings.payroll.overtime.seventh_day_double_time_description") }
+							min={ 0 }
+							max={ 24 }
+						/>
+					</Grid.Col>
+
+					<Grid.Col span={ { xs: 12, sm: 6 } }>
 						<Select
 							name="settings.overtime_workweek_start"
 							label={ t("views.settings.payroll.overtime.workweek_start_label") }

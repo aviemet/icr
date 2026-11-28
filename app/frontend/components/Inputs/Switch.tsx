@@ -5,7 +5,7 @@ import {
 import clsx from "clsx"
 import React from "react"
 
-import { useFormFieldError } from "@/components/Form"
+import { useFormField, useFormFieldError } from "@/components/Form"
 
 import { InputWrapper } from "./InputWrapper"
 import * as classes from "./Switch.css"
@@ -24,11 +24,15 @@ export function Switch({
 	wrapperProps,
 	error,
 	className,
+	checked,
+	onChange,
 	ref,
 	...props
 }: SwitchProps) {
 	const fieldError = useFormFieldError(name)
+	const [fieldValue, setFieldValue] = useFormField(name)
 	const inputId = id ?? name
+	const resolvedChecked = checked ?? (typeof fieldValue === "boolean" ? fieldValue : undefined)
 
 	return (
 		<InputWrapper wrapper={ wrapper } wrapperProps={ wrapperProps }>
@@ -36,6 +40,11 @@ export function Switch({
 				ref={ ref }
 				id={ inputId }
 				name={ name }
+				checked={ resolvedChecked }
+				onChange={ (event) => {
+					setFieldValue(event.currentTarget.checked)
+					onChange?.(event)
+				} }
 				required={ props.required }
 				error={ error ?? fieldError }
 				className={ clsx(classes.root, className) }

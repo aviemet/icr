@@ -12,6 +12,10 @@ module Payroll
           Float::INFINITY
         end
 
+        def seventh_day_double_time_after
+          Float::INFINITY
+        end
+
         def weekly_ot_after
           Setting.overtime_personal_attendant_weekly_hours.to_f
         end

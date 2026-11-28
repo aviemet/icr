@@ -33,6 +33,15 @@ class Settings::PayrollsController < ApplicationController
   # @route PATCH /settings/payroll/overtime (settings_payroll_overtime)
   def update_overtime
     authorize Setting, :update?
+
+    if double_time_below_daily_overtime?
+      message = t("settings.errors.double_time_below_daily_overtime")
+      redirect_to settings_payroll_overtime_path,
+        alert: message,
+        inertia: { errors: { "settings.overtime_daily_double_time_hours" => message } }
+      return
+    end
+
     update_settings(settings_payroll_overtime_path)
   end
 
@@ -59,10 +68,22 @@ class Settings::PayrollsController < ApplicationController
       settings_params.each_key do |key|
         Setting.send("#{key}=", settings_params[key]) unless settings_params[key].nil?
       end
-
-      redirect_to redirect_path, success: t("settings.notices.updated")
-    rescue StandardError
-      redirect_to redirect_path, alert: t("settings.errors.update_failed"), inertia: { errors: ["There were errors"] }
     end
+
+    redirect_to redirect_path, success: t("settings.notices.updated")
+  rescue ActiveRecord::RecordInvalid => e
+    Setting.clear_cache
+    redirect_to redirect_path, alert: t("settings.errors.update_failed"), inertia: { errors: e.record.errors }
+  rescue StandardError
+    Setting.clear_cache
+    redirect_to redirect_path, alert: t("settings.errors.update_failed"), inertia: { errors: ["There were errors"] }
+  end
+
+  def double_time_below_daily_overtime?
+    daily = settings_params.fetch(:overtime_daily_hours, Setting.overtime_daily_hours)
+    double_time = settings_params.fetch(:overtime_daily_double_time_hours, Setting.overtime_daily_double_time_hours)
+    return false if daily.blank? || double_time.blank?
+
+    Integer(double_time.to_s, exception: false).to_i < Integer(daily.to_s, exception: false).to_i
   end
 end

@@ -33,7 +33,18 @@ module Payroll
           )
         end
 
-        exempt, premium_candidates = work_segments.partition(&:criteria_exempt?)
+        agency_segments, external_segments = work_segments.partition { |segment| ot_eligible?(segment) }
+        external_segments.each do |segment|
+          labels << Label.new(
+            kind: :ihss_external,
+            hours: segment.hours,
+            interval_id: segment.interval_id,
+            date: segment.date,
+            consuming_client_id: segment.consuming_client_id,
+          )
+        end
+
+        exempt, ot_pool = agency_segments.partition(&:criteria_exempt?)
         exempt.each do |segment|
           labels << Label.new(
             kind: :regular,
@@ -44,19 +55,7 @@ module Payroll
           )
         end
 
-        ot_pool, non_ot_pool = premium_candidates.partition { |segment| ot_eligible?(segment) }
-        non_ot_pool.each do |segment|
-          labels << Label.new(
-            kind: :regular,
-            hours: segment.hours,
-            interval_id: segment.interval_id,
-            date: segment.date,
-            consuming_client_id: segment.consuming_client_id,
-          )
-        end
-
         labels.concat(classify_ot_pool(ot_pool))
-        build_classification(labels, work_segments)
       end
 
       private
@@ -158,8 +157,9 @@ module Payroll
           remaining = segment.hours
           cursor = day_total
 
-          if cursor < 8.0
-            take = [remaining, 8.0 - cursor].min
+          seventh_day_dt_after = @policy.seventh_day_double_time_after
+          if cursor < seventh_day_dt_after
+            take = [remaining, seventh_day_dt_after - cursor].min
             labels << Label.new(
               kind: :ot,
               hours: take,
@@ -260,50 +260,6 @@ module Payroll
         end
 
         result
-      end
-
-      def build_classification(labels, work_segments)
-        totals = Hash.new(0.0)
-        shift_ot = Hash.new(0.0)
-        shift_dt = Hash.new(0.0)
-        client_ihss = Hash.new(0.0)
-
-        work_segments.each do |segment|
-          next if segment.interval_id.blank?
-
-          shift_ot[segment.interval_id] = 0.0
-          shift_dt[segment.interval_id] = 0.0
-        end
-
-        labels.each do |label|
-          totals[label.kind] += label.hours
-          case label.kind
-          when :ot
-            shift_ot[label.interval_id] += label.hours if label.interval_id.present?
-          when :double_time
-            shift_dt[label.interval_id] += label.hours if label.interval_id.present?
-          end
-        end
-
-        work_segments.select(&:ihss?).each do |segment|
-          next if segment.consuming_client_id.blank?
-
-          client_ihss[segment.consuming_client_id.to_s] += segment.hours
-        end
-
-        Classification.new(
-          regular_hours: totals[:regular],
-          ot_hours: totals[:ot],
-          double_time_hours: totals[:double_time],
-          shift_ot_hours: shift_ot,
-          shift_double_time_hours: shift_dt,
-          ihss_hours: work_segments.select(&:ihss?).sum(&:hours),
-          company_hours: work_segments.reject(&:ihss?).sum(&:hours),
-          pto_hours: totals[:pto],
-          sick_hours: totals[:sick],
-          holiday_hours: totals[:holiday],
-          client_ihss_hours: client_ihss,
-        )
       end
     end
   end

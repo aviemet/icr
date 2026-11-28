@@ -24,7 +24,8 @@ module Payroll
         employee_ids: employee_ids,
       )
       relevant = collected.select { |interval| interval.client_ids.intersect?(@client_ids) }
-      ledger = IhssHourClassifier.call_with_ledger(pay_period: @pay_period, intervals: relevant)
+      within = Hours::PeriodWindow.for(@pay_period).clip(relevant).within
+      ledger = IhssHourClassifier.call_with_ledger(pay_period: @pay_period, intervals: within)
 
       totals = empty.dup
       ledger.client_hours.each do |client_id, hours|

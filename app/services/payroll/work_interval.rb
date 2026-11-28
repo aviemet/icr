@@ -11,6 +11,7 @@ module Payroll
     :client_ids,
     :leave_kind,
     :consuming_client_id,
+    :criteria_exempt,
     keyword_init: true,
   ) do
     def start_time

@@ -10,6 +10,7 @@ RSpec.describe Payroll::Hours::Engine do
     Setting.overtime_weekly_hours = 40
     Setting.overtime_daily_hours = 8
     Setting.overtime_daily_double_time_hours = 12
+    Setting.overtime_seventh_day_double_time_hours = 8
     Setting.overtime_personal_attendant_daily_hours = 9
     Setting.overtime_personal_attendant_weekly_hours = 45
     Setting.ihss_co_employer = true
@@ -33,11 +34,12 @@ RSpec.describe Payroll::Hours::Engine do
   end
 
   def work_interval(employee, date, start_hour, end_hour, **attrs)
+    end_date = attrs[:end_date] || date
     Payroll::WorkInterval.new(
       id: attrs[:id] || SecureRandom.uuid,
       employee_id: employee.id,
       starts_at: Time.zone.local(date.year, date.month, date.day, start_hour, 0, 0),
-      ends_at: Time.zone.local(date.year, date.month, date.day, end_hour, 0, 0),
+      ends_at: Time.zone.local(end_date.year, end_date.month, end_date.day, end_hour, 0, 0),
       category: attrs[:category],
       ihss: attrs.fetch(:ihss, false),
       client_ids: attrs[:client_ids] || [],
@@ -127,6 +129,105 @@ RSpec.describe Payroll::Hours::Engine do
 
     expect(hours[:shift_ot_hours]["day-6"]).to eq(8.0)
     expect(hours[:shift_double_time_hours]["day-6"]).to eq(2.0)
+  end
+
+  it "uses the seventh-day double-time threshold from settings" do
+    Setting.overtime_seventh_day_double_time_hours = 6
+    pay_period = pay_period_for(Date.new(2024, 3, 11))
+    employee = create(:employee, overtime_policy: :standard)
+    intervals = (0..6).map do |offset|
+      date = Date.new(2024, 3, 11) + offset
+      work_interval(employee, date, 9, 17, id: "day-#{offset}")
+    end
+
+    result = described_class.call(pay_period, [employee.id], collector: stub_collector(intervals))
+    hours = result[employee.id.to_s]
+
+    expect(hours[:shift_ot_hours]["day-6"]).to eq(6.0)
+    expect(hours[:shift_double_time_hours]["day-6"]).to eq(2.0)
+  end
+
+  describe "shifts that cross a pay period boundary" do
+    it "reports overtime once, in the period of the workday that earned it" do
+      period_a = pay_period_for(Date.new(2024, 3, 11))
+      period_b = pay_period_for(Date.new(2024, 3, 18))
+      employee = create(:employee)
+      overnight = work_interval(
+        employee, Date.new(2024, 3, 17), 14, 4, id: "overnight", end_date: Date.new(2024, 3, 18),
+      )
+      collector = stub_collector([overnight])
+
+      hours_a = described_class.call(period_a, [employee.id], collector: collector)[employee.id.to_s]
+      hours_b = described_class.call(period_b, [employee.id], collector: collector)[employee.id.to_s]
+
+      expect(hours_a).to include(regular_hours: 8.0, ot_hours: 2.0, company_hours: 10.0)
+      expect(hours_a[:shift_ot_hours]["overnight"]).to eq(2.0)
+      expect(hours_b).to include(regular_hours: 4.0, ot_hours: 0.0, company_hours: 4.0)
+      expect(hours_b[:shift_ot_hours]["overnight"]).to eq(0.0)
+    end
+
+    it "keeps an exempt shift regular in both periods without double-counting" do
+      period_a = pay_period_for(Date.new(2024, 3, 11))
+      period_b = pay_period_for(Date.new(2024, 3, 18))
+      employee = create(:employee)
+      service_type = create(:service_type, name: "Overnight Sleep", slug: "overnight-sleep")
+      create(
+        :overtime_exemption,
+        name: "Overnight sleep",
+        active: true,
+        criteria: [
+          {
+            "category" => { "operator" => "equals", "value" => service_type.slug },
+            "duration" => { "operator" => "greater_than", "value" => 12 },
+          },
+        ],
+      )
+      overnight = work_interval(
+        employee, Date.new(2024, 3, 17), 14, 4, id: "overnight", end_date: Date.new(2024, 3, 18), category: service_type,
+      )
+      collector = stub_collector([overnight])
+
+      hours_a = described_class.call(period_a, [employee.id], collector: collector)[employee.id.to_s]
+      hours_b = described_class.call(period_b, [employee.id], collector: collector)[employee.id.to_s]
+
+      expect(hours_a).to include(regular_hours: 10.0, ot_hours: 0.0, double_time_hours: 0.0)
+      expect(hours_b).to include(regular_hours: 4.0, ot_hours: 0.0, double_time_hours: 0.0)
+    end
+  end
+
+  describe "period-mode IHSS" do
+    before do
+      Setting.ihss_assignment_mode = "period"
+      Setting.payroll_period_type = Setting::PAY_PERIOD_TYPES[:semi_monthly]
+    end
+
+    it "classifies lookback days against their own period and matches ClientPeriodIhssHours" do
+      prior_period = PayPeriod.for_period_dates(Date.new(2024, 3, 1), Date.new(2024, 3, 15))
+      pay_period = PayPeriod.for_period_dates(Date.new(2024, 3, 16), Date.new(2024, 3, 31))
+      employee = create(:employee)
+      client = create(:client)
+      Payroll::IhssPeriodAssignment.create!(pay_period: pay_period, employee: employee, client: client, hours: 12)
+      prior_timesheet = create(:timesheet, pay_period: prior_period, employee: employee)
+      timesheet = create(:timesheet, pay_period: pay_period, employee: employee)
+
+      [
+        [prior_timesheet, Time.zone.local(2024, 3, 14, 9, 0, 0), 8],
+        [prior_timesheet, Time.zone.local(2024, 3, 15, 20, 0, 0), 8],
+        [timesheet, Time.zone.local(2024, 3, 18, 9, 0, 0), 8],
+      ].each do |shift_timesheet, starts_at, hours|
+        event = create(:calendar_event, starts_at: starts_at, ends_at: starts_at + hours.hours)
+        event.event_participants.create!(participant: client)
+        create(:shift, employee: employee, timesheet: shift_timesheet, calendar_event: event, ihss: false)
+      end
+
+      hours = described_class.call(pay_period, [employee.id])[employee.id.to_s]
+      client_hours = Payroll::ClientPeriodIhssHours.call(pay_period: pay_period, client_ids: [client.id])
+
+      expect(hours[:client_ihss_hours][client.id.to_s]).to eq(12.0)
+      expect(hours[:ihss_hours]).to eq(12.0)
+      expect(hours[:company_hours]).to eq(0.0)
+      expect(client_hours[client.id.to_s]).to eq(hours[:client_ihss_hours][client.id.to_s])
+    end
   end
 
   it "uses lookback hours outside the period for weekly OT inside the period" do

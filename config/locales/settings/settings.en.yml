@@ -3,5 +3,6 @@ en:
   settings:
     errors:
       update_failed: Updating settings failed. Please notify your site administrator.
+      double_time_below_daily_overtime: The daily double-time threshold must be at least the daily overtime threshold.
     notices:
       updated: Settings have been updated successfully.

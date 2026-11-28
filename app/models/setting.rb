@@ -64,6 +64,7 @@ class Setting < RailsSettings::Base
     overtime_weekly_hours: 40,
     overtime_daily_hours: 8,
     overtime_daily_double_time_hours: 12,
+    overtime_seventh_day_double_time_hours: 8,
     overtime_workweek_start: "monday",
     overtime_personal_attendant_daily_hours: 9,
     overtime_personal_attendant_weekly_hours: 45,
@@ -117,15 +118,34 @@ class Setting < RailsSettings::Base
     }
   }
 
-  field :overtime_weekly_hours, type: :integer, default: 40, validates: { presence: true }
-  field :overtime_daily_hours, type: :integer, default: 8, validates: { presence: true }
-  field :overtime_daily_double_time_hours, type: :integer, default: 12, validates: { presence: true }
+  OVERTIME_DAILY_HOURS_VALIDATION = {
+    presence: true,
+    numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 24 },
+  }.freeze
+  OVERTIME_WEEKLY_HOURS_VALIDATION = {
+    presence: true,
+    numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 168 },
+  }.freeze
+
+  field :overtime_weekly_hours, type: :integer, default: DEFAULT_SETTINGS[:overtime_weekly_hours],
+    validates: OVERTIME_WEEKLY_HOURS_VALIDATION.dup
+  field :overtime_daily_hours, type: :integer, default: DEFAULT_SETTINGS[:overtime_daily_hours],
+    validates: OVERTIME_DAILY_HOURS_VALIDATION.dup
+  field :overtime_daily_double_time_hours, type: :integer, default: DEFAULT_SETTINGS[:overtime_daily_double_time_hours],
+    validates: OVERTIME_DAILY_HOURS_VALIDATION.dup
+  field :overtime_seventh_day_double_time_hours, type: :integer,
+    default: DEFAULT_SETTINGS[:overtime_seventh_day_double_time_hours],
+    validates: OVERTIME_DAILY_HOURS_VALIDATION.dup
   field :overtime_workweek_start, type: :string, default: DEFAULT_SETTINGS[:overtime_workweek_start], validates: {
     presence: true,
     inclusion: { in: WEEKDAYS },
   }
-  field :overtime_personal_attendant_daily_hours, type: :integer, default: 9, validates: { presence: true }
-  field :overtime_personal_attendant_weekly_hours, type: :integer, default: 45, validates: { presence: true }
+  field :overtime_personal_attendant_daily_hours, type: :integer,
+    default: DEFAULT_SETTINGS[:overtime_personal_attendant_daily_hours],
+    validates: OVERTIME_DAILY_HOURS_VALIDATION.dup
+  field :overtime_personal_attendant_weekly_hours, type: :integer,
+    default: DEFAULT_SETTINGS[:overtime_personal_attendant_weekly_hours],
+    validates: OVERTIME_WEEKLY_HOURS_VALIDATION.dup
 
   field :payroll_period_type, type: :string, default: DEFAULT_SETTINGS[:payroll_period_type], validates: {
     presence: true,
